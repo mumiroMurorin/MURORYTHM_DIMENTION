@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 647a90e2ca31e6640a354b3556febaf8, type: 3}
+  m_Name: kari
+  m_EditorClassIdentifier: 
+  music_name: "\u5B9F\u9A13\u30C7\u30FC\u30BF"
+  composer_name: "\u4EEE\u30C7\u30FC\u30BF"
+  music_spr: {fileID: 21300000, guid: c20a5d106028bbc45ba16da3bc4a4a67, type: 3}
+  theme_spr: {fileID: 0}
+  clip: {fileID: 8300000, guid: a0832b65e104cf646b5ea8dad5744df2, type: 3}
+  sample_clip: {fileID: 8300000, guid: b8af0c57880607b45b370c8d801e9f74, type: 3}
+  difficulities: 58000000000000000000000000000000
+  charts:
+  - {fileID: 4900000, guid: 42880846bd5dcac4db4c117fd5d4fc38, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  records:
+  - score: 0
+    rank: 0
+    combo_rank: 0
+    judge_num: 00000000000000000000000000000000
+  - score: 0
+    rank: 0
+    combo_rank: 0
+    judge_num: 00000000000000000000000000000000
+  - score: 0
+    rank: 0
+    combo_rank: 0
+    judge_num: 00000000000000000000000000000000
+  - score: 0
+    rank: 0
+    combo_rank: 0
+    judge_num: 00000000000000000000000000000000
