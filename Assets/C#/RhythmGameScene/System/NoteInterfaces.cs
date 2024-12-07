@@ -17,7 +17,7 @@ namespace Refactoring
     /// </summary>
     public interface ISliderJudgable
     {
-        public void SetSliderInputMonitor(ISliderInputMonitor inputData);
+        public void SetSliderInputMonitor(ISliderInputGetter inputData);
 
         public void SetJudgementRecorder(IJudgementRecorder judgementRecorder);
     }
@@ -27,7 +27,7 @@ namespace Refactoring
     /// </summary>
     public interface ISpaceJudgable
     {
-        public void SetSpaceInputMonitor(ISpaceInputMonitor inputData);
+        public void SetSpaceInputMonitor(ISpaceInputGetter inputData);
 
         public void SetJudgementRecorder(IJudgementRecorder judgementRecorder);
     }
@@ -76,7 +76,7 @@ namespace Refactoring
             this.judgementRecorder = judgementRecorder;
         }
 
-        public abstract void SetSliderInputMonitor(ISliderInputMonitor inputData);
+        public abstract void SetSliderInputMonitor(ISliderInputGetter inputData);
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ namespace Refactoring
             this.judgementRecorder = judgementRecorder;
         }
 
-        public abstract void SetSpaceInputMonitor(ISpaceInputMonitor inputData);
+        public abstract void SetSpaceInputMonitor(ISpaceInputGetter inputData);
 
     }
 }

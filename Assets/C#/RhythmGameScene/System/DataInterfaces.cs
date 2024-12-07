@@ -55,4 +55,78 @@ namespace Refactoring
     {
         public NoteObject Spawn(INoteSpawnData spawnData);
     }
+
+    // ================================================
+    //                   ノーツデータ
+    // ================================================
+
+    /// <summary>
+    /// グラウンドノートのデータ
+    /// </summary>
+    public class GroundNoteData : IGroundNoteGenerationData, INoteSpawnData
+    {
+        public int NoteLaneWidth { get; set; }
+
+        public Vector3 NoteEulerAngles { get; set; }
+
+        public GameObject NoteGameObject { get; set; }
+
+        public Vector3 SpawnPosition { get; set; }
+    }
+
+    /// <summary>
+    /// グラウンドダイナミック(右)ノーツのデータ
+    /// </summary>
+    public class GroundDynamicNoteRightData : IGroundNoteGenerationData, INoteSpawnData
+    {
+        public int NoteLaneWidth { get; set; }
+
+        public Vector3 NoteEulerAngles { get; set; }
+
+        public GameObject NoteGameObject { get; set; }
+
+        public Vector3 SpawnPosition { get; set; }
+    }
+
+    /// <summary>
+    /// グラウンドダイナミック(左)ノーツのデータ
+    /// </summary>
+    public class GroundDynamicNoteLeftData : IGroundNoteGenerationData, INoteSpawnData
+    {
+        public int NoteLaneWidth { get; set; }
+
+        public Vector3 NoteEulerAngles { get; set; }
+
+        public GameObject NoteGameObject { get; set; }
+
+        public Vector3 SpawnPosition { get; set; }
+    }
+
+    /// <summary>
+    /// グラウンドダイナミック(上)ノーツのデータ
+    /// </summary>
+    public class GroundDynamicNoteUpData : IGroundNoteGenerationData, INoteSpawnData
+    {
+        public int NoteLaneWidth { get; set; }
+
+        public Vector3 NoteEulerAngles { get; set; }
+
+        public GameObject NoteGameObject { get; set; }
+
+        public Vector3 SpawnPosition { get; set; }
+    }
+
+    /// <summary>
+    /// グラウンドダイナミック(下)ノーツのデータ
+    /// </summary>
+    public class GroundDynamicNoteDownData : IGroundNoteGenerationData, INoteSpawnData
+    {
+        public int NoteLaneWidth { get; set; }
+
+        public Vector3 NoteEulerAngles { get; set; }
+
+        public GameObject NoteGameObject { get; set; }
+
+        public Vector3 SpawnPosition { get; set; }
+    }
 }
