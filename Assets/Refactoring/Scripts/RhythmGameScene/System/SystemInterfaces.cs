@@ -20,4 +20,9 @@ namespace Refactoring
     {
         void RecordJudgement(Judgement judgement);
     }
+
+    public interface ITimeGetter
+    {
+        float Time { get; }
+    }
 }

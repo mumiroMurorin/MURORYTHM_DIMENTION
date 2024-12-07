@@ -17,9 +17,13 @@ namespace Refactoring
     /// </summary>
     public interface ISliderJudgable
     {
-        public void SetSliderInputMonitor(ISliderInputGetter inputData);
+        public void SetTimeCounter(ITimeGetter timeer);
+
+        public void SetSliderInputGetter(ISliderInputGetter inputData);
 
         public void SetJudgementRecorder(IJudgementRecorder judgementRecorder);
+
+        public void SetJudgementData(INoteSliderJudgementData judgeData);
     }
 
     /// <summary>
@@ -27,9 +31,37 @@ namespace Refactoring
     /// </summary>
     public interface ISpaceJudgable
     {
-        public void SetSpaceInputMonitor(ISpaceInputGetter inputData);
+        public void SetTimeCounter(ITimeGetter timer);
+
+        public void SetSpaceInputGetter(ISpaceInputGetter inputData);
 
         public void SetJudgementRecorder(IJudgementRecorder judgementRecorder);
+
+        public void SetJudgementData(INoteSpaceJudgementData judgeData);
+    }
+    
+    /// <summary>
+    /// Perfect～Goodまでの判定許容範囲をまとめたクラス
+    /// </summary>
+    [System.Serializable]
+    public class JudgementWindow
+    {
+        [SerializeField] float perfectWindow;
+        [SerializeField] float greatWindow;
+        [SerializeField] float goodWindow;
+
+        public float PerfectWindow { get { return perfectWindow; } }
+        public float GreatWindow { get { return greatWindow; } }
+        public float GoodWindow { get { return goodWindow; } }
+
+        public Judgement GetJudgement(float timingDiff)
+        {
+            if(timingDiff < perfectWindow) { return Judgement.Perfect; }
+            else if(timingDiff < greatWindow) { return Judgement.Great; }
+            else if(timingDiff < goodWindow) { return Judgement.Good; }
+
+            return Judgement.Miss;
+        }
     }
 
     /// <summary>
@@ -37,6 +69,8 @@ namespace Refactoring
     /// </summary>
     public abstract class NoteObject : MonoBehaviour, INoteStarter
     {
+        [SerializeField] protected JudgementWindow judgementWindow;
+
         protected bool isStartMovement;
         protected Vector3 movingVector;
 
@@ -48,6 +82,7 @@ namespace Refactoring
         {
             isStartMovement = true;
             this.movingVector = movingVector;
+            this.gameObject.SetActive(true);
         }
 
         /// <summary>
@@ -56,6 +91,11 @@ namespace Refactoring
         protected virtual void Move()
         {
             this.gameObject.transform.position += movingVector * Time.fixedDeltaTime;
+        }
+
+        private void Awake()
+        {
+            this.gameObject.SetActive(false);
         }
 
         private void FixedUpdate()
@@ -67,31 +107,16 @@ namespace Refactoring
     /// <summary>
     /// グラウンドノーツオブジェクトを制御する基底クラス
     /// </summary>
-    public abstract class GroundNoteObject : NoteObject, ISliderJudgable
+    public abstract class GroundNoteObject : NoteObject
     {
-        protected IJudgementRecorder judgementRecorder;
-
-        void ISliderJudgable.SetJudgementRecorder(IJudgementRecorder judgementRecorder)
-        {
-            this.judgementRecorder = judgementRecorder;
-        }
-
-        public abstract void SetSliderInputMonitor(ISliderInputGetter inputData);
+        
     }
 
     /// <summary>
     /// ダイナミックノーツの基底クラス
     /// </summary>
-    public abstract class DynamicNoteObject : NoteObject , ISpaceJudgable
+    public abstract class SpaceNoteObject : NoteObject
     {
-        protected IJudgementRecorder judgementRecorder;
-
-        void ISpaceJudgable.SetJudgementRecorder(IJudgementRecorder judgementRecorder)
-        {
-            this.judgementRecorder = judgementRecorder;
-        }
-
-        public abstract void SetSpaceInputMonitor(ISpaceInputGetter inputData);
-
+        
     }
 }
