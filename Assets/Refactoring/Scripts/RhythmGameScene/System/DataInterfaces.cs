@@ -14,14 +14,6 @@ namespace Refactoring
     }
 
     /// <summary>
-    /// グラウンドノートの生成を行う
-    /// </summary>
-    public interface IGroundNoteGenerator
-    {
-        GroundTouchNoteObject GenerateNote(IGroundNoteGenerationData generationData);
-    }
-
-    /// <summary>
     /// ノーツのスライダー判定に必要なデータの存在を保証する
     /// </summary>
     public interface INoteSliderJudgementData
@@ -42,14 +34,6 @@ namespace Refactoring
     }
 
     /// <summary>
-    /// スペースノートの生成を行う
-    /// </summary>
-    public interface ISpaceNoteGenerator
-    {
-        NoteObject GenerateNote(ISpaceNoteGenerationData generationData);
-    }
-
-    /// <summary>
     /// ノーツの空間判定に必要なデータの存在を保証する
     /// </summary>
     public interface INoteSpaceJudgementData
@@ -64,17 +48,33 @@ namespace Refactoring
     /// </summary>
     public interface INoteSpawnData
     {
-        GameObject NoteGameObject { get; }
+        GameObject NoteGameObject { get; set; }
 
         Vector3 SpawnPosition { get; }
     }
 
     /// <summary>
-    /// 生成されたノーツをスポーンさせる基底クラス (Factoryパターン)
+    /// タッチ(Slider判定依存)ノートの生成を行う
     /// </summary>
-    public interface INotePositionSetter
+    public interface ITouchNoteGenerator
     {
-        public void SetPosition(INoteSpawnData spawnData);
+        NoteObject GenerateNote(IGroundNoteGenerationData generationData, SliderJudgableDataSet judgableDataSet);
+    }
+
+    /// <summary>
+    /// グラウンドダイナミック(Space判定依存)ノートの生成を行う
+    /// </summary>
+    public interface IGroundDynamicNoteGenerator
+    {
+        NoteObject GenerateNote(IGroundNoteGenerationData generationData, SpaceJudgableDataSet judgableDataSet);
+    }
+
+    /// <summary>
+    /// ダイナミックノーツ(Space判定依存)の生成を行う
+    /// </summary>
+    public interface IDynamicNoteGenerator
+    {
+        NoteObject GenerateNote(ISpaceNoteGenerationData generationData, SpaceJudgableDataSet judgableDataSet);
     }
 
     // ================================================

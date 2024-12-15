@@ -3,23 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UniRx;
 
 public class SliderInput : MonoBehaviour
 {
-    //入力状態
-    public class InputCondition
-    {
-        public bool isFirst;
-        public bool isTouching;
-    }
-
     //対応するキー
     KeyCode[] KEY_CODES_16K = new KeyCode[16]
     {
-        KeyCode.A,KeyCode.S,KeyCode.D,KeyCode.F,
-        KeyCode.G,KeyCode.H,KeyCode.J, KeyCode.K,
-        KeyCode.L, KeyCode.Semicolon, KeyCode.Colon,KeyCode.RightBracket,
-        KeyCode.Z,KeyCode.X,KeyCode.C,KeyCode.V
+        KeyCode.X,KeyCode.W,KeyCode.V,KeyCode.U,
+        KeyCode.M,KeyCode.N,KeyCode.O, KeyCode.P,
+        KeyCode.L, KeyCode.K, KeyCode.J,KeyCode.I,
+        KeyCode.A,KeyCode.B,KeyCode.C,KeyCode.D
     };
 
     //対応するキー(3K)
@@ -50,23 +44,22 @@ public class SliderInput : MonoBehaviour
     [SerializeField] private bool isSerialMode;
     [SerializeField] private SerialHandler serial;
 
-    List<InputCondition> inputList;
+    ReactiveProperty<bool>[] inputs;
+    public IReadOnlyReactiveProperty<bool>[] InputsReactiveProperty { get { return inputs; } }
 
-    void Start()
+    private void Awake()
     {
-        inputList = new List<InputCondition>();
-        for (int i = 0; i < 16; i++) { inputList.Add(new InputCondition()); }
+        inputs = new ReactiveProperty<bool>[16];
+        for(int i = 0; i < 16; i++)
+        {
+            inputs[i] = new ReactiveProperty<bool>();
+        }
     }
 
     void Update()
     {
         //FixedUpdateで扱えるよう変換
         ConvertInputData();
-    }
-
-    private void FixedUpdate()
-    {
-        ResetInputData();   //入力データ(GetKeyDown)の初期化
     }
 
     //Updateで得た入力情報をFixedUpdateで扱えるようにクラスに代入
@@ -77,22 +70,8 @@ public class SliderInput : MonoBehaviour
         {
             for (int i = 0; i < 16; i++)
             {
-                //入力された直後？
-                if (!inputList[i].isTouching && IsReturnTouchDevice(SENSOR_INDEX[i]))
-                {
-                    inputList[i].isFirst = true;
-                    inputList[i].isTouching = true;
-                }
-                //入力されている最中？
-                else if (IsReturnTouchDevice(SENSOR_INDEX[i]))
-                {
-                    inputList[i].isTouching = true;
-                }
-                //なにもねぇ
-                else
-                {
-                    inputList[i].isTouching = false;
-                }
+                if (inputs[i].Value == IsReturnTouchDevice(SENSOR_INDEX[i])) { continue; }
+                inputs[i].Value = IsReturnTouchDevice(SENSOR_INDEX[i]);
             }
         }
         //キーボード入力モード
@@ -100,16 +79,8 @@ public class SliderInput : MonoBehaviour
         {
             for (int i = 0; i < 16; i++)
             {
-                //入力された直後？
-                if (Input.GetKeyDown(KEY_CODES_16K[i]))
-                {
-                    inputList[i].isFirst = true;
-                    inputList[i].isTouching = true;
-                }
-                //入力されている最中？
-                else if (Input.GetKey(KEY_CODES_16K[i])) { inputList[i].isTouching = true; }
-                //なにもねぇ
-                else { inputList[i].isTouching = false; }
+                if (inputs[i].Value == Input.GetKey(KEY_CODES_16K[i])) { continue; }
+                inputs[i].Value = Input.GetKey(KEY_CODES_16K[i]);
             }
         }
     }
@@ -131,30 +102,10 @@ public class SliderInput : MonoBehaviour
         return str[i] == '1' ? true : false;
     }
 
-    //FixedUpdateの最後で、入力情報をリセット
-    private void ResetInputData()
-    {
-        for (int i = 0; i < 16; i++)
-        {
-            inputList[i].isFirst = false;
-            //inputList[i].isTouching = false;
-        }
-    }
-
     //スライドがタッチされた瞬間か返す(配列)
-    public bool IsReturnSlidersFirstTouch(int[] nums)
+    public IReadOnlyReactiveProperty<bool> GetSliderReactiveProperty(int index)
     {
-        foreach (int i in nums)
-        {
-            if (IsReturnSliderFirstTouch(i)) { return true; }
-        }
-        return false;
-    }
-
-    //スライドがタッチされた瞬間か返す
-    public bool IsReturnSliderFirstTouch(int num)
-    {
-        return inputList[num].isFirst;
+        return InputsReactiveProperty[index];
     }
 
     //スライドがタッチされている最中か返す(配列)
@@ -170,7 +121,7 @@ public class SliderInput : MonoBehaviour
     //スライドがタッチされている最中か返す
     public bool IsReturnSliderTouching(int num)
     {
-        return inputList[num].isTouching;
+        return inputs[num].Value;
     }
 
     //専コン使用モードかどうか返す

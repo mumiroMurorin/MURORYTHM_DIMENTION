@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public class HoldNoteStart : MonoBehaviour
 {
@@ -16,15 +17,6 @@ public class HoldNoteStart : MonoBehaviour
     private bool isTouch;
     private bool isJudgeComp;
     private float speed;
-
-    void Start()
-    {
-        
-    }
-    private void Update()
-    {
-        isTouch = IsTouchSlider();
-    }
 
     void FixedUpdate()
     {
@@ -64,6 +56,19 @@ public class HoldNoteStart : MonoBehaviour
         material = mate;
         meshRenderer_ground = ground.GetComponentInChildren<MeshRenderer>();
         meshRenderer_ground.material = material[DEFAULT_MATERIAL_NUM];
+
+        Bind();
+    }
+
+    private void Bind()
+    {
+        for (int i = general.judge_lane[0]; i <= general.judge_lane[1]; i++)
+        {
+            playGame.GetSliderInputReactiveProperty(i)
+                .Where(isTouch => isTouch)
+                .Subscribe(_ => isTouch = true)
+                .AddTo(this.gameObject);
+        }
     }
 
     //-----------------判定関係-------------------
@@ -80,16 +85,6 @@ public class HoldNoteStart : MonoBehaviour
     {
         float now = playGame.ReturnNowTime();
         if(general.judge_time[num] <= now) { return true; }
-        return false;
-    }
-
-    //判スライダーが押されたかどうか
-    private bool IsTouchSlider()
-    {
-        //判定レーン全てについて調べる
-        for (int i = general.judge_lane[0]; i <= general.judge_lane[1]; i++){
-            if (playGame.IsReturnSliderFirstTouch(i)) { return true; }
-        }
         return false;
     }
 

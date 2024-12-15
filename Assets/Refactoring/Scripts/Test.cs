@@ -8,10 +8,18 @@ namespace Refactoring
     public class Test : MonoBehaviour
     {
         [SerializeField] GroundTouchNoteGenerator generator;
-        [SerializeField] GroundTouchNoteSpawner spawner;
+        //[SerializeField] GroundTouchNoteSpawner spawner;
         [SerializeField] TimeCounter timer;
 
         const float START_GROUND_Z = 183.25f;
+
+        ISliderInputGetter inputGetter;
+
+        [Inject]
+        public void Inject(ISliderInputGetter inputGetter)
+        {
+            this.inputGetter = inputGetter;
+        }
 
         void Start()
         {
@@ -23,14 +31,9 @@ namespace Refactoring
                 SpawnPosition = new Vector3(0, 0, START_GROUND_Z)
             };
 
-            GroundTouchNoteObject note = generator.GenerateNote(data);
-            data.NoteGameObject = note.gameObject;
-
-            note.SetJudgementData(data);
-            note.SetTimeCounter(timer);
-
-            spawner.SetPosition(data);
-            note.StartMovement(new Vector3(0, 0, -20f));
+            
+            timer.StartTimer();
+            // note.StartMovement(new Vector3(0, 0, -60f));
         }
 
         void Update()

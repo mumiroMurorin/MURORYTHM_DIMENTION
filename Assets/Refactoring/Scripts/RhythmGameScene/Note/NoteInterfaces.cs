@@ -9,7 +9,22 @@ namespace Refactoring
     /// </summary>
     public interface INoteStarter
     {
+        void SetPosition(Vector3 pos);
+     
+        void SetActive(bool isActive);
+
         void StartMovement(Vector3 movingVector);
+    }
+
+    /// <summary>
+    /// ISliderJudgableで渡す用のパッケージ
+    /// </summary>
+    public class SliderJudgableDataSet
+    {
+        public ITimeGetter Timer { get; set; }
+        public ISliderInputGetter SliderInput { get; set; }
+        public IJudgementRecorder JudgementRecorder { get; set; }
+        public INoteSliderJudgementData JudgementData { get; set; }
     }
 
     /// <summary>
@@ -17,13 +32,18 @@ namespace Refactoring
     /// </summary>
     public interface ISliderJudgable
     {
-        public void SetTimeCounter(ITimeGetter timeer);
+        public void SetSliderJudgableDatas(SliderJudgableDataSet datas);
+    }
 
-        public void SetSliderInputGetter(ISliderInputGetter inputData);
-
-        public void SetJudgementRecorder(IJudgementRecorder judgementRecorder);
-
-        public void SetJudgementData(INoteSliderJudgementData judgeData);
+    /// <summary>
+    /// ISpaceJudgableで渡す用のパッケージ
+    /// </summary>
+    public class SpaceJudgableDataSet
+    {
+        public ITimeGetter Timer { get; set; }
+        public ISpaceInputGetter SpaceInput { get; set; }
+        public IJudgementRecorder JudgementRecorder { get; set; }
+        public INoteSpaceJudgementData JudgementData { get; set; }
     }
 
     /// <summary>
@@ -31,15 +51,9 @@ namespace Refactoring
     /// </summary>
     public interface ISpaceJudgable
     {
-        public void SetTimeCounter(ITimeGetter timer);
-
-        public void SetSpaceInputGetter(ISpaceInputGetter inputData);
-
-        public void SetJudgementRecorder(IJudgementRecorder judgementRecorder);
-
-        public void SetJudgementData(INoteSpaceJudgementData judgeData);
+        public void SetSpaceJudgableDatas(SpaceJudgableDataSet datas);
     }
-    
+
     /// <summary>
     /// Perfect～Goodまでの判定許容範囲をまとめたクラス
     /// </summary>
@@ -54,13 +68,20 @@ namespace Refactoring
         public float GreatWindow { get { return greatWindow; } }
         public float GoodWindow { get { return goodWindow; } }
 
-        public Judgement GetJudgement(float timingDiff)
+        public Judgement GetJudgement(float currentTime, float judgeTime)
         {
-            if(timingDiff < perfectWindow) { return Judgement.Perfect; }
-            else if(timingDiff < greatWindow) { return Judgement.Great; }
-            else if(timingDiff < goodWindow) { return Judgement.Good; }
+            // Good判定前
+            if(judgeTime - goodWindow > currentTime) { return Judgement.None; }
+            // Good判定後
+            if(judgeTime + goodWindow < currentTime) { return Judgement.Miss; }
 
-            return Judgement.Miss;
+            float timingDiff = Mathf.Abs(judgeTime - currentTime);
+
+            if (timingDiff <= perfectWindow) { return Judgement.Perfect; }
+            else if(timingDiff <= greatWindow) { return Judgement.Great; }
+            else if(timingDiff <= goodWindow) { return Judgement.Good; }
+
+            return Judgement.None;
         }
     }
 
@@ -74,6 +95,16 @@ namespace Refactoring
         protected bool isStartMovement;
         protected Vector3 movingVector;
 
+        public void SetPosition(Vector3 pos)
+        {
+            this.gameObject.transform.position = pos;
+        }
+
+        public void SetActive(bool isActive)
+        {
+            this.gameObject.SetActive(isActive);
+        }
+
         /// <summary>
         /// 移動開始
         /// </summary>
@@ -82,7 +113,6 @@ namespace Refactoring
         {
             isStartMovement = true;
             this.movingVector = movingVector;
-            this.gameObject.SetActive(true);
         }
 
         /// <summary>
@@ -90,33 +120,66 @@ namespace Refactoring
         /// </summary>
         protected virtual void Move()
         {
+            if (!isStartMovement) { return; }
             this.gameObject.transform.position += movingVector * Time.fixedDeltaTime;
-        }
-
-        private void Awake()
-        {
-            this.gameObject.SetActive(false);
         }
 
         private void FixedUpdate()
         {
             Move();
         }
+
+        private void Awake()
+        {
+            this.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>
-    /// グラウンドノーツオブジェクトを制御する基底クラス
+    /// タッチノーツ(Slider判定依存)を制御する基底クラス
     /// </summary>
-    public abstract class GroundNoteObject : NoteObject
+    public abstract class TouchNoteObject : NoteObject, ISliderJudgable
     {
-        
+        protected ITimeGetter Timer;
+        protected IJudgementRecorder JudgementRecorder;
+        protected ISliderInputGetter SliderInputGetter;
+        protected INoteSliderJudgementData JudgementData;
+
+        /// <summary>
+        /// データセット
+        /// </summary>
+        /// <param name="datas"></param>
+        public void SetSliderJudgableDatas(SliderJudgableDataSet datas)
+        {
+            Timer = datas.Timer;
+            JudgementRecorder = datas.JudgementRecorder;
+            SliderInputGetter = datas.SliderInput;
+            JudgementData = datas.JudgementData;
+        }
+
     }
 
     /// <summary>
-    /// ダイナミックノーツの基底クラス
+    /// ダイナミックノーツ(Space判定依存)の基底クラス
     /// </summary>
-    public abstract class SpaceNoteObject : NoteObject
+    public abstract class DynamicNoteObject : NoteObject, ISpaceJudgable
     {
-        
+        protected ITimeGetter Timer;
+        protected IJudgementRecorder JudgementRecorder;
+        protected ISpaceInputGetter SpaceInputGetter;
+        protected INoteSpaceJudgementData JudgementData;
+
+        /// <summary>
+        /// データセット
+        /// </summary>
+        /// <param name="datas"></param>
+        public void SetSpaceJudgableDatas(SpaceJudgableDataSet datas)
+        {
+            Timer = datas.Timer;
+            JudgementRecorder = datas.JudgementRecorder;
+            SpaceInputGetter = datas.SpaceInput;
+            JudgementData = datas.JudgementData;
+        }
+
     }
 }

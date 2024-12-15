@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public class GeneralNoteObject : MonoBehaviour
 {
@@ -10,11 +11,6 @@ public class GeneralNoteObject : MonoBehaviour
     private bool isTouch;
     private bool isJudgeComp;
     private float speed;
-
-    private void Update()
-    {
-        isTouch = IsTouchSlider();
-    }
 
     void FixedUpdate()
     {
@@ -51,6 +47,20 @@ public class GeneralNoteObject : MonoBehaviour
         playGame = p;
         general = g;
         speed = s;
+
+        Bind();
+    }
+
+    private void Bind()
+    {
+        for (int i = general.judge_lane[0]; i <= general.judge_lane[1]; i++)
+        {
+            playGame.GetSliderInputReactiveProperty(i)
+                .Where(isTouch => isTouch)
+                .Subscribe(_ => isTouch = true)
+                .AddTo(this.gameObject);
+
+        }
     }
 
     //-----------------判定関係-------------------
@@ -67,16 +77,6 @@ public class GeneralNoteObject : MonoBehaviour
     {
         float now = playGame.ReturnNowTime();
         if(general.judge_time[num] <= now) { return true; }
-        return false;
-    }
-
-    //判スライダーが押されたかどうか
-    private bool IsTouchSlider()
-    {
-        //判定レーン全てについて調べる
-        for (int i = general.judge_lane[0]; i <= general.judge_lane[1]; i++){
-            if (playGame.IsReturnSliderFirstTouch(i)) { return true; }
-        }
         return false;
     }
 

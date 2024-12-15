@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using System.Linq;
 using Deform;
+using UniRx;
 
 public class PlayGame : MonoBehaviour
 {
@@ -854,9 +855,9 @@ public class PlayGame : MonoBehaviour
     }
 
     //スライドがタッチされた瞬間か返す
-    public bool IsReturnSliderFirstTouch(int num)
+    public IReadOnlyReactiveProperty<bool> GetSliderInputReactiveProperty(int index)
     {
-        return slider.IsReturnSliderFirstTouch(num);
+        return slider.GetSliderReactiveProperty(index);
     }
 
     //スライドがタッチされている最中か返す

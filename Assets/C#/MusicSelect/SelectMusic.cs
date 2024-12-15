@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
 using System.IO;
+using UniRx;
 
 public class SelectMusic : MonoBehaviour
 {
@@ -51,7 +52,7 @@ public class SelectMusic : MonoBehaviour
     {
         state_num = STATE_MUSIC_SELECTING;
 
-
+        Bind();
     }
 
     void Update()
@@ -86,6 +87,158 @@ public class SelectMusic : MonoBehaviour
         }
     }
 
+    private void Bind()
+    {
+        // 難易度＋
+        foreach (int index in DIFF_UP_SENSOR_NUMS)
+        {
+            slider.GetSliderReactiveProperty(index)
+                .Where(isTouch => isTouch)
+                .Subscribe(_ => UpDifficulty())
+                .AddTo(this.gameObject);
+        }
+
+        // 難易度-
+        foreach (int index in DIFF_DOWN_SENSOR_NUMS)
+        {
+            slider.GetSliderReactiveProperty(index)
+                .Where(isTouch => isTouch)
+                .Subscribe(_ => DownDifficulty())
+                .AddTo(this.gameObject);
+        }
+
+        // 次オプション
+        foreach (int index in OPTION_NEXT_SENSOR_NUMS)
+        {
+            slider.GetSliderReactiveProperty(index)
+                .Where(isTouch => isTouch)
+                .Subscribe(_ => NextOption())
+                .AddTo(this.gameObject);
+        }
+
+        // 前オプション
+        foreach (int index in OPTION_BACK_SENSOR_NUMS)
+        {
+            slider.GetSliderReactiveProperty(index)
+                .Where(isTouch => isTouch)
+                .Subscribe(_ => BackOption())
+                .AddTo(this.gameObject);
+        }
+
+        // 楽曲選択に戻る
+        foreach (int index in BACK_SELECT_SENSOR_NUMS)
+        {
+            slider.GetSliderReactiveProperty(index)
+                .Where(isTouch => isTouch)
+                .Subscribe(_ => BackSelectingMusic())
+                .AddTo(this.gameObject);
+        }
+
+        // 設定+
+        foreach (int index in OPTION_PLUS_SENSOR_NUMS)
+        {
+            slider.GetSliderReactiveProperty(index)
+                .Where(isTouch => isTouch)
+                .Subscribe(_ => PlusOptionValue())
+                .AddTo(this.gameObject);
+        }
+
+        // 設定-
+        foreach (int index in OPTION_MINUS_SENSOR_NUMS)
+        {
+            slider.GetSliderReactiveProperty(index)
+                .Where(isTouch => isTouch)
+                .Subscribe(_ => MinusOptionValue())
+                .AddTo(this.gameObject);
+        }
+
+        // 楽曲決定
+        foreach (int index in MUSIC_START_SENSOR_NUMS)
+        {
+            slider.GetSliderReactiveProperty(index)
+                .Where(isTouch => isTouch)
+                .Subscribe(_ => DesicionMusic())
+                .AddTo(this.gameObject);
+        }
+    }
+
+    private void UpDifficulty()
+    {
+        if (state_num != STATE_MUSIC_SELECTING) { return; }
+        if (isMovingTopic) { return; }
+        if ((int)select_diff >= Enum.GetNames(typeof(DifficulityName)).Length - 1) { return; }
+
+        touchUI.TouchFlag(DIFF_UP_SENSOR_NUMS);
+        ChangeDifficulity(++select_diff);
+    }
+
+    private void DownDifficulty()
+    {
+        if (state_num != STATE_MUSIC_SELECTING) { return; }
+        if (isMovingTopic) { return; }
+        if ((int)select_diff <= 0) { return; }
+
+        touchUI.TouchFlag(DIFF_DOWN_SENSOR_NUMS);
+        ChangeDifficulity(--select_diff);
+    }
+
+    private void NextOption()
+    {
+        if (state_num != STATE_MUSIC_SELECTING) { return; }
+        if (isMovingTopic) { return; }
+
+        touchUI.TouchFlag(OPTION_NEXT_SENSOR_NUMS);
+        ChangeSelectOption(true);
+    }
+
+    private void BackOption()
+    {
+        if (state_num != STATE_MUSIC_SELECTING) { return; }
+        if (isMovingTopic) { return; }
+
+        touchUI.TouchFlag(OPTION_BACK_SENSOR_NUMS);
+        ChangeSelectOption(false);
+    }
+
+    private void BackSelectingMusic()
+    {
+        if (state_num != STATE_MUSIC_DESISION) { return; }
+        if (isMovingTopic) { return; }
+
+        touchUI.TouchFlag(BACK_SELECT_SENSOR_NUMS);
+        BackMusicSelect();
+    }
+
+    private void PlusOptionValue()
+    {
+        if (state_num != STATE_MUSIC_DESISION) { return; }
+        if (state_option_num == 0) { return; }
+        if (isMovingTopic) { return; }
+
+        touchUI.TouchFlag(OPTION_PLUS_SENSOR_NUMS);
+        ChangeOption(true);
+    }
+
+    private void MinusOptionValue()
+    {
+        if (state_num != STATE_MUSIC_DESISION) { return; }
+        if (state_option_num != 0) { return; }
+        if (isMovingTopic) { return; }
+
+        touchUI.TouchFlag(OPTION_MINUS_SENSOR_NUMS);
+        ChangeOption(false);
+    }
+
+    private void DesicionMusic()
+    {
+        if (state_num != STATE_MUSIC_DESISION) { return; }
+        if (state_option_num != 0) { return; }
+        if (isMovingTopic) { return; }
+
+        touchUI.TouchFlag(MUSIC_START_SENSOR_NUMS);
+        MusicDesision();
+    }
+
     //入力関係
     private void InputFunc()
     {
@@ -108,57 +261,8 @@ public class SelectMusic : MonoBehaviour
             touchUI.TouchFlag(MUSIC_SELECT_SENSOR_NUMS);
             SelectMusicTopic();
         }
-        //難易度＋
-        else if (slider.IsReturnSlidersFirstTouch(DIFF_UP_SENSOR_NUMS) && state_num == STATE_MUSIC_SELECTING && !isMovingTopic
-            && (int)select_diff < Enum.GetNames(typeof(DifficulityName)).Length - 1)
-        {
-            touchUI.TouchFlag(DIFF_UP_SENSOR_NUMS);
-            ChangeDifficulity(++select_diff);
-        }
-        //難易度-
-        else if (slider.IsReturnSlidersFirstTouch(DIFF_DOWN_SENSOR_NUMS) && state_num == STATE_MUSIC_SELECTING && !isMovingTopic
-            && (int)select_diff > 0)
-        {
-            touchUI.TouchFlag(DIFF_DOWN_SENSOR_NUMS);
-            ChangeDifficulity(--select_diff);
-        }
         //ここから楽曲決定系
-        //次オプション
-        else if (slider.IsReturnSlidersFirstTouch(OPTION_NEXT_SENSOR_NUMS) && state_num == STATE_MUSIC_DESISION && !isMovingTopic)
-        {
-            touchUI.TouchFlag(OPTION_NEXT_SENSOR_NUMS);
-            ChangeSelectOption(true);
-        }
-        //前オプション
-        else if (slider.IsReturnSlidersFirstTouch(OPTION_BACK_SENSOR_NUMS) && state_num == STATE_MUSIC_DESISION && !isMovingTopic)
-        {
-            touchUI.TouchFlag(OPTION_BACK_SENSOR_NUMS);
-            ChangeSelectOption(false);
-        }
-        //セレクトに戻る
-        else if (slider.IsReturnSlidersTouching(BACK_SELECT_SENSOR_NUMS) && state_num == STATE_MUSIC_DESISION && !isMovingTopic)
-        {
-            touchUI.TouchFlag(BACK_SELECT_SENSOR_NUMS);
-            BackMusicSelect();
-        }
-        //オプション調整+
-        else if (slider.IsReturnSlidersFirstTouch(OPTION_PLUS_SENSOR_NUMS) && state_num == STATE_MUSIC_DESISION && state_option_num != 0 && !isMovingTopic)
-        {
-            touchUI.TouchFlag(OPTION_PLUS_SENSOR_NUMS);
-            ChangeOption(true);
-        }
-        //オプション調整-
-        else if (slider.IsReturnSlidersFirstTouch(OPTION_MINUS_SENSOR_NUMS) && state_num == STATE_MUSIC_DESISION && state_option_num != 0 && !isMovingTopic)
-        {
-            touchUI.TouchFlag(OPTION_MINUS_SENSOR_NUMS);
-            ChangeOption(false);
-        }
-        //最終決定
-        else if (slider.IsReturnSlidersFirstTouch(MUSIC_START_SENSOR_NUMS) && state_num == STATE_MUSIC_DESISION && state_option_num == 0 && !isMovingTopic)
-        {
-            touchUI.TouchFlag(MUSIC_START_SENSOR_NUMS);
-            MusicDesision(); 
-        }
+
 
         //管理者画面関係
         if (Input.GetKeyDown(KeyCode.Escape) && state_num == STATE_MUSIC_SELECTING && !isMovingTopic) {

@@ -5,7 +5,7 @@ using Deform;
 
 namespace Refactoring
 {
-    public class GroundTouchNoteGenerator : MonoBehaviour, IGroundNoteGenerator
+    public class GroundTouchNoteGenerator : MonoBehaviour, ITouchNoteGenerator
     {
         [SerializeField] GameObject noteObjectOriginPrefab;
         [SerializeField] Deformer groundBendDeformer;
@@ -16,16 +16,23 @@ namespace Refactoring
         [SerializeField] GameObject centerTilePrefab;
         [SerializeField] GameObject leftEdgeTilePrefab;
 
-        public GroundTouchNoteObject GenerateNote(IGroundNoteGenerationData generationData)
+        public NoteObject GenerateNote(IGroundNoteGenerationData generationData, SliderJudgableDataSet judgableDataSet)
         {
             GameObject origin = Instantiate(noteObjectOriginPrefab);
 
             // ノーツオブジェクトを生成してoriginにくっつける
             GenerateNoteObject(generationData.NoteLaneWidth).transform.SetParent(origin.transform);
 
+            // 角度(レーン)調整
             origin.transform.eulerAngles = generationData.NoteEulerAngles;
 
-            return origin.GetComponent<GroundTouchNoteObject>();
+            // コンポーネントを取得
+            GroundTouchNoteObject note = origin.GetComponent<GroundTouchNoteObject>();
+
+            // 判定用のデータを渡す
+            note.SetSliderJudgableDatas(judgableDataSet);
+
+            return note;
         }
 
         /// <summary>
