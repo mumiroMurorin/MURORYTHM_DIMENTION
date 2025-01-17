@@ -27,7 +27,7 @@ namespace Refactoring
         {
             for (int i = 0; i < keyBeams.Length; i++) 
             {
-                // UniRxの仕様か何か知らないがint型が参照されてしまうので
+                // UniRxの仕様か何か知らないがint型が参照渡しされてしまうので
                 // iを直接代入するのではなくindexを介す
                 int index = i;
 

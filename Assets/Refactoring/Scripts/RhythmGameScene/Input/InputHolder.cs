@@ -50,15 +50,19 @@ namespace Refactoring
         /// <param name="pos"></param>
         public void SetSpaceInput(SpaceTrackingTag tag, Vector3 pos)
         {
-            if(tag == SpaceTrackingTag.RightHand)
+            switch (tag)
             {
-                if (rightHandInput.Value == pos) { return; }
-                rightHandInput.Value = pos;
-            }
-            else
-            {
-                if (leftHandInput.Value == pos) { return; }
-                leftHandInput.Value = pos;
+                case SpaceTrackingTag.RightHand:
+                    if (rightHandInput.Value == pos) { break; }
+                    rightHandInput.Value = pos;
+                    break;
+                case SpaceTrackingTag.LeftHand:
+                    if (leftHandInput.Value == pos) { break; }
+                    leftHandInput.Value = pos;
+                    break;
+                default:
+                    Debug.LogWarning($"ÅyInputÅzê›íËÇ≥ÇÍÇƒÇ¢Ç»Ç¢É^ÉOÇ≈Ç∑: {tag}");
+                    return;
             }
         }
 
@@ -91,13 +95,15 @@ namespace Refactoring
         /// <returns></returns>
         public IReadOnlyReactiveProperty<Vector3> GetSpaceInputReactiveProperty(SpaceTrackingTag spaceTrackingTag)
         {
-            if (spaceTrackingTag == SpaceTrackingTag.RightHand)
+            switch (spaceTrackingTag)
             {
-                return rightHandInput;
-            }
-            else
-            {
-                return leftHandInput;
+                case SpaceTrackingTag.RightHand:
+                    return rightHandInput;
+                case SpaceTrackingTag.LeftHand:
+                    return leftHandInput;
+                default:
+                    Debug.LogWarning($"ÅyInputÅzê›íËÇ≥ÇÍÇƒÇ¢Ç»Ç¢É^ÉOÇ≈Ç∑: {spaceTrackingTag}");
+                    return null;
             }
         }
     }
