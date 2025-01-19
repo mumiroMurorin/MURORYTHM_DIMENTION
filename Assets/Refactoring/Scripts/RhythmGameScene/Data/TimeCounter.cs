@@ -38,4 +38,9 @@ namespace Refactoring
         void StopTimer();
     }
 
+    public interface ITimeGetter
+    {
+        float Time { get; }
+    }
+
 }

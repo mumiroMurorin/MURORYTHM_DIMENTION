@@ -6,6 +6,9 @@ namespace Refactoring
 {
     public class OptionHolder : INoteSpawnDataOptionHolder
     {
+        /// <summary>
+        /// ノーツが1秒間に動く(unity単位)速度
+        /// </summary>
         public float NoteSpeed { get; set; }
 
     }

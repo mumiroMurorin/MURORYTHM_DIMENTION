@@ -5,54 +5,51 @@ using UniRx;
 
 namespace Refactoring
 {
-    public class NoteObject_Touch : NoteObject<NoteData_Touch> , ISliderJudgable
+    /// <summary>
+    /// タッチノーツにアタッチされるクラス
+    /// </summary>
+    public class NoteObject_Touch : NoteObject<NoteData_Touch>
     {
         [SerializeField] JudgementWindow judgementWindow;
 
-        ISliderInputGetter sliderInput;
         NoteData_Touch noteData;
-
+        
         bool isJudged;
 
-        public override void Initialize(NoteData_Touch noteData)
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="data"></param>
+        public override void Initialize(NoteData_Touch data)
         {
-            this.noteData = noteData;
+            noteData = data;
+
+            Bind();
         }
 
-        public void SetSliderInput(ISliderInputGetter input)
+        private void Bind()
         {
-            sliderInput = input;
+            if(noteData == null) { return; }
 
-            // Bind
-            JudgeBind();
-        }
-
-        private void JudgeBind()
-        {
-            if (noteData == null)
-            {
-                Debug.LogWarning("【Note_Touch】NoteDataが割り当てられていません");
-                return;
-            }
-
-            /*
+            // 成功判定
             foreach (int index in noteData.Range)
             {
-                // 判定
-                sliderInput?.GetSliderInputReactiveProperty(index)
+                if(noteData.SliderInput == null) { break; }
+                if(noteData.Timer == null) { break; }
+
+                noteData.SliderInput?.GetSliderInputReactiveProperty(index)
                     // タッチされたとき且つ
                     .Where(isTouch => isTouch)
                     // 未判定のとき且つ
                     .Where(_ => !isJudged)
                     // Good判定時間に含まれているとき判定
-                    .Where(_ => judgementWindow.GetJudgement(Timer.Time, noteData.Timing) != Judgement.None)
+                    .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
                     .Subscribe(_ => {
                         Judge();
                         SetDisable();
                     })
                     .AddTo(this.gameObject);
             }
-            */
         }
 
         /// <summary>
@@ -61,10 +58,8 @@ namespace Refactoring
         private void Judge()
         {
             // 判定を得る
-            /*
-            Judgement judgement = judgementWindow.GetJudgement(Timer.Time, JudgementData.JudgeTime);
-            JudgementRecorder?.RecordJudgement(judgement);
-            */
+            Judgement judgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+            noteData.JudgementRecorder?.RecordJudgement(judgement);
             isJudged = true;
         }
 
@@ -74,6 +69,7 @@ namespace Refactoring
         private void SetDisable()
         {
             this.gameObject.SetActive(false);
+            Destroy(this.gameObject);
         }
 
         private void Update()
@@ -92,24 +88,29 @@ namespace Refactoring
         /// <returns></returns>
         private bool JudgeMiss()
         {
-            /*
+            if (noteData == null) { return false; }
+            if (noteData.Timer == null) { return false; }
+            if (judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.Miss) { return false; }
             if (isJudged) { return false; }
-            if (judgementWindow.GetJudgement(Timer.Time, JudgementData.JudgeTime) != Judgement.Miss) { return false; }
 
-            */
             return true;
         }
     }
 
+    /// <summary>
+    /// (初期化に必要な変数も含む)タッチノーツのデータ
+    /// </summary>
     public class NoteData_Touch : INoteData
     {
         public float Timing { get; set; }
 
         public int[] Range { get; set; }
 
-        //public ITimeGetter Timer { get; set; }
+        public ISliderInputGetter SliderInput { get; set; }
 
-        //public IJudgementHolder judgementHolder { get; set; } 
+        public ITimeGetter Timer { get; set; }
+
+        public IJudgementRecorder JudgementRecorder { get; set; } 
     }
 
 }

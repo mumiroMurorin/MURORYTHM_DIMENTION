@@ -5,10 +5,9 @@ using Deform;
 
 namespace Refactoring
 {
-    public class GroundTouchNoteGenerator : MonoBehaviour, ITouchNoteGenerator
+    public class NoteFactory_Touch : NoteFactory<NoteData_Touch>
     {
         [SerializeField] GameObject noteObjectOriginPrefab;
-        [SerializeField] Deformer groundBendDeformer;
 
         [Header("マスに応じたノーツタイル")]
         [SerializeField] GameObject singleTilePrefab;
@@ -16,21 +15,48 @@ namespace Refactoring
         [SerializeField] GameObject centerTilePrefab;
         [SerializeField] GameObject leftEdgeTilePrefab;
 
-        public NoteObject GenerateNote(IGroundNoteGenerationData generationData, SliderJudgableDataSet judgableDataSet)
+        Deformer groundDeformer;
+        INoteSpawnDataOptionHolder optionHolder;
+        GameObject groundObject;
+
+        public override void Initialize(NoteFactoryInitializingData initializingData)
+        {
+            this.optionHolder = initializingData.optionHolder;
+            this.groundObject = initializingData.groundObject;
+            this.groundDeformer = initializingData.groundDeformer;
+        }
+
+        public override NoteObject<NoteData_Touch> Spawn(NoteData_Touch data)
+        {
+            // 生成
+            NoteObject<NoteData_Touch> note = GenerateNoteInstance(data);
+
+            // 位置調整
+            SetTransform(note, data);
+
+            // 初期化
+            note.Initialize(data);
+
+            return note;
+        }
+
+        /// <summary>
+        /// ノーツをインスタンス化して返す
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public NoteObject<NoteData_Touch> GenerateNoteInstance(NoteData_Touch data)
         {
             GameObject origin = Instantiate(noteObjectOriginPrefab);
 
             // ノーツオブジェクトを生成してoriginにくっつける
-            GenerateNoteObject(generationData.NoteLaneWidth).transform.SetParent(origin.transform);
+            GenerateNoteObject(data.Range.Length).transform.SetParent(origin.transform);
 
             // 角度(レーン)調整
-            origin.transform.eulerAngles = generationData.NoteEulerAngles;
+            origin.transform.eulerAngles = new Vector3(0, 0, CalcNoteTransform.NoteAngle(data.Range));
 
             // コンポーネントを取得
-            GroundTouchNoteObject note = origin.GetComponent<GroundTouchNoteObject>();
-
-            // 判定用のデータを渡す
-            note.SetSliderJudgableDatas(judgableDataSet);
+            NoteObject<NoteData_Touch> note = origin.GetComponent<NoteObject<NoteData_Touch>>();
 
             return note;
         }
@@ -40,10 +66,10 @@ namespace Refactoring
         /// </summary>
         /// <param name="size"></param>
         /// <returns></returns>
-        private GameObject GenerateNoteObject(int size) 
+        private GameObject GenerateNoteObject(int size)
         {
             Vector3 pos, rot;
-            GameObject pre = new GameObject("NoteObject");   //まとめ役のオブジェクト生成
+            GameObject pre = new GameObject("NoteObjects");   //まとめ役のオブジェクト生成
 
             // 1マスずつ生成
             for (int i = 0; i < size; i++)
@@ -66,12 +92,27 @@ namespace Refactoring
             foreach (Transform t in pre.transform)
             {
                 Deformable d = t.GetComponentInChildren<Deformable>();
-                d.AddDeformer(groundBendDeformer);
+                d.AddDeformer(groundDeformer);
             }
 
             return pre;
         }
 
+        /// <summary>
+        /// 位置調整など
+        /// </summary>
+        private void SetTransform(NoteObject<NoteData_Touch> note, NoteData_Touch data)
+        {
+            // 位置の調整
+            note.transform.position = new Vector3(
+                note.transform.position.x,
+                note.transform.position.y,
+                optionHolder.NoteSpeed * data.Timing
+                );
+
+            // 動く地面を親登録
+            note.transform.SetParent(groundObject.transform);
+        }
     }
 
 }

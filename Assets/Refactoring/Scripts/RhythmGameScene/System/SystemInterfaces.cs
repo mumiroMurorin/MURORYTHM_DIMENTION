@@ -12,8 +12,11 @@ namespace Refactoring
         void RecordJudgement(Judgement judgement);
     }
 
-    public interface ITimeGetter
+    /// <summary>
+    /// データを基に譜面の生成を行う
+    /// </summary>
+    public interface IChartGenerator
     {
-        float Time { get; }
+        public void Generate(ChartData chartData);
     }
 }
