@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Refactoring
 {
@@ -58,6 +59,38 @@ namespace Refactoring
 
                 return result;
             });
+        }
+    }
+
+    public class JsonReader
+    {
+        /// <summary>
+        /// JSONを読み込み、List<string[]>に変換するメソッド
+        /// </summary>
+        /// <param name="jsonFile">読み込むJSONファイル</param>
+        /// <returns>JSONデータをList<string[]>に変換した結果</returns>
+        public async UniTask<List<string[]>> ParseJsonAsync(TextAsset jsonFile)
+        {
+            // JSONファイルの内容を読み込み
+            string jsonContent = jsonFile.text;
+
+            // JSONをList<string[]>に変換
+            List<string[]> result = await UniTask.RunOnThreadPool(() =>
+            {
+                // JSONのデシリアライズ
+                var data = JsonConvert.DeserializeObject<List<List<string>>>(jsonContent);
+
+                // List<List<string>> を List<string[]> に変換
+                List<string[]> list = new List<string[]>();
+                foreach (var sublist in data)
+                {
+                    list.Add(sublist.ToArray());
+                }
+
+                return list;
+            });
+
+            return result;
         }
     }
 }

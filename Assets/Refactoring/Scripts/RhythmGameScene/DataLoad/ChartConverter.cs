@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Refactoring
 {
-    public class ChartDataConverter : IChartDataConverter
-    {
-        public async UniTask<ChartData> ParseChartDataAsync(List<string[]> datas)
-        {
+    //public class ChartDataConverter : IChartDataConverter
+    //{
+    //    public async UniTask<ChartData> ParseChartDataAsync(List<string[]> datas)
+    //    {
             
-        }
-    }
+    //    }
+    //}
 
 }
