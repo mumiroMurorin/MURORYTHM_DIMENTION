@@ -45,6 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   judgementWindow:
-    perfectWindow: 0.25
-    greatWindow: 0.5
-    goodWindow: 1
+    perfectWindow: 0.03333
+    greatWindow: 0.06666
+    goodWindow: 0.1

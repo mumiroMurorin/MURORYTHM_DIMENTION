@@ -24,6 +24,9 @@ namespace Refactoring
 
         private void Update()
         {
+            // ‰¼
+            if (Input.GetKeyDown(KeyCode.Return)) { StartTimer(); }
+
             if (isCounting) { time += UnityEngine.Time.deltaTime; }
         }
     }

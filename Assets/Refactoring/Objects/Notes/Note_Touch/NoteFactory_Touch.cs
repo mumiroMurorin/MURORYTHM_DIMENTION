@@ -15,21 +15,27 @@ namespace Refactoring
         [SerializeField] GameObject centerTilePrefab;
         [SerializeField] GameObject leftEdgeTilePrefab;
 
-        Deformer groundDeformer;
         INoteSpawnDataOptionHolder optionHolder;
+        ISliderInputGetter sliderInputGetter;
+        IJudgementRecorder judgementRecorder;
+        ITimeGetter timer;
         GameObject groundObject;
+        Deformer groundDeformer;
 
         public override void Initialize(NoteFactoryInitializingData initializingData)
         {
-            this.optionHolder = initializingData.optionHolder;
-            this.groundObject = initializingData.groundObject;
-            this.groundDeformer = initializingData.groundDeformer;
+            this.optionHolder = initializingData.OptionHolder;
+            this.groundObject = initializingData.GroundObject;
+            this.groundDeformer = initializingData.GroundDeformer;
+            this.sliderInputGetter = initializingData.SliderInputGetter;
+            this.judgementRecorder = initializingData.JudgementRecorder;
+            this.timer = initializingData.Timer;
         }
 
         public override NoteObject<NoteData_Touch> Spawn(NoteData_Touch data)
         {
             // 生成
-            NoteObject<NoteData_Touch> note = GenerateNoteInstance(data);
+            NoteObject<NoteData_Touch> note = GenerateNoteInstance(ConvertNoteData(data));
 
             // 位置調整
             SetTransform(note, data);
@@ -41,11 +47,25 @@ namespace Refactoring
         }
 
         /// <summary>
+        /// ノートデータにさらなる情報を追加
+        /// </summary>
+        /// <param name="data"></param>
+        private NoteData_Touch ConvertNoteData(NoteData_Touch data)
+        {
+            // ノーツデータにいろいろ追加
+            data.SliderInput = this.sliderInputGetter;
+            data.Timer = this.timer;
+            data.JudgementRecorder = this.judgementRecorder;
+
+            return data;
+        }
+
+        /// <summary>
         /// ノーツをインスタンス化して返す
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public NoteObject<NoteData_Touch> GenerateNoteInstance(NoteData_Touch data)
+        private NoteObject<NoteData_Touch> GenerateNoteInstance(NoteData_Touch data)
         {
             GameObject origin = Instantiate(noteObjectOriginPrefab);
 

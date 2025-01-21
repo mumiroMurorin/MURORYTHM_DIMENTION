@@ -11,10 +11,18 @@ public class RootLifetimeScope : LifetimeScope
     {
         base.Configure(builder);
 
-        builder.Register<InputHolder>(Lifetime.Singleton); // インスタンスを1度だけ登録
+        // 入力関係
+        builder.Register<InputHolder>(Lifetime.Singleton);
         builder.Register<ISliderInputSetter>(resolver => resolver.Resolve<InputHolder>(), Lifetime.Singleton);
         builder.Register<ISpaceInputSetter>(resolver => resolver.Resolve<InputHolder>(), Lifetime.Singleton);
         builder.Register<ISliderInputGetter>(resolver => resolver.Resolve<InputHolder>(), Lifetime.Singleton);
         builder.Register<ISpaceInputGetter>(resolver => resolver.Resolve<InputHolder>(), Lifetime.Singleton);
+
+        // オプション
+        builder.Register<OptionHolder>(Lifetime.Singleton);
+        builder.Register<INoteSpawnDataOptionHolder>(resolver => resolver.Resolve<OptionHolder>(), Lifetime.Singleton);
+
+        // スコア
+        builder.Register<ScoreHolder>(Lifetime.Singleton);
     }
 }

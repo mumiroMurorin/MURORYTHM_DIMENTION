@@ -68,8 +68,8 @@ namespace Refactoring
         /// </summary>
         private void SetDisable()
         {
-            this.gameObject.SetActive(false);
-            Destroy(this.gameObject);
+             this.gameObject.SetActive(false);
+            // Destroy(this.gameObject);
         }
 
         private void Update()

@@ -9,7 +9,7 @@ namespace Refactoring
         /// <summary>
         /// ノーツが1秒間に動く(unity単位)速度
         /// </summary>
-        public float NoteSpeed { get; set; }
+        public float NoteSpeed { get; set; } = 100f;
 
     }
 

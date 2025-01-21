@@ -1130,6 +1130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1010482524}
+  - component: {fileID: 1010482525}
   m_Layer: 0
   m_Name: NoteParent(Ground)
   m_TagString: Untagged
@@ -1152,6 +1153,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 864898814}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1010482525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010482523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c5317408cbf06a4290cf14038cfc7a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1135208595
 GameObject:
   m_ObjectHideFlags: 0
@@ -1356,13 +1369,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1146634087}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.17364816, y: 0, z: 0, w: 0.9848078}
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 20, y: 0, z: 0}
 --- !u!1001 &1205106846
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2730,6 +2743,8 @@ MonoBehaviour:
   autoInjectGameObjects:
   - {fileID: 960448841}
   - {fileID: 914534752}
+  - {fileID: 2103325069}
+  - {fileID: 1010482523}
 --- !u!4 &2013225887
 Transform:
   m_ObjectHideFlags: 0
@@ -2798,6 +2813,8 @@ MonoBehaviour:
   touchNoteFactory: {fileID: 1261792716}
   groundObject: {fileID: 1010482523}
   groundDeformer: {fileID: 79835141}
+  timer:
+    obj: {fileID: 1605477129}
 --- !u!1001 &5509061306184089354
 PrefabInstance:
   m_ObjectHideFlags: 0

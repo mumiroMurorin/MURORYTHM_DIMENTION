@@ -14,8 +14,12 @@ namespace Refactoring
         [Header("Factoryの初期化に必要なデータ")]
         [SerializeField] GameObject groundObject;
         [SerializeField] Deformer groundDeformer;
+        [SerializeField] SerializeInterface<ITimeGetter> timer;
 
         INoteSpawnDataOptionHolder spawnDataOptionHolder;
+        ISliderInputGetter sliderInputGetter;
+        ISpaceInputGetter spaceInputGetter;
+        IJudgementRecorder judgementRecorder;
 
         private void Start()
         {
@@ -42,12 +46,6 @@ namespace Refactoring
                  }
             };
 
-            OptionHolder optionHolder = new OptionHolder
-            {
-                NoteSpeed = 10f
-            };
-            spawnDataOptionHolder = optionHolder;
-
             Initialize();
 
 
@@ -56,9 +54,13 @@ namespace Refactoring
         }
 
         [Inject]
-        public void Constructor(INoteSpawnDataOptionHolder optionHolder)
+        public void Constructor(INoteSpawnDataOptionHolder optionHolder, IJudgementRecorder judgementRecorder, 
+            ISliderInputGetter sliderInputGetter, ISpaceInputGetter spaceInputGetter)
         {
-            spawnDataOptionHolder = optionHolder;
+            this.spawnDataOptionHolder = optionHolder;
+            this.sliderInputGetter = sliderInputGetter;
+            this.spaceInputGetter = spaceInputGetter;
+            this.judgementRecorder = judgementRecorder;
         }
 
         /// <summary>
@@ -69,9 +71,13 @@ namespace Refactoring
             // 初期化データの生成
             NoteFactoryInitializingData data = new NoteFactoryInitializingData
             {
-                groundObject = this.groundObject,
-                groundDeformer = this.groundDeformer,
-                optionHolder = this.spawnDataOptionHolder
+                GroundObject = this.groundObject,
+                GroundDeformer = this.groundDeformer,
+                OptionHolder = this.spawnDataOptionHolder,
+                SliderInputGetter = this.sliderInputGetter,
+                SpaceInputGetter = this.spaceInputGetter,
+                Timer = this.timer.Value,
+                JudgementRecorder = this.judgementRecorder
             };
 
             touchNoteFactory.Initialize(data);

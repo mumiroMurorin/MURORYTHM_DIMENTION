@@ -7,14 +7,23 @@ namespace Refactoring
 {
     /// <summary>
     /// Factoryの初期化に必要なデータ
+    /// ノーツの初期化に必要な共通のデータはここに入れる
     /// </summary>
     public class NoteFactoryInitializingData
     {
-        public INoteSpawnDataOptionHolder optionHolder { get; set; }
+        public INoteSpawnDataOptionHolder OptionHolder { get; set; }
 
-        public GameObject groundObject { get; set; }
+        public ISliderInputGetter SliderInputGetter { get; set; }
 
-        public Deformer groundDeformer { get; set; }
+        public ISpaceInputGetter SpaceInputGetter { get; set; }
+
+        public ITimeGetter Timer { get; set; }
+
+        public IJudgementRecorder JudgementRecorder { get; set; }
+
+        public GameObject GroundObject { get; set; }
+
+        public Deformer GroundDeformer { get; set; }
     }
 
     /// <summary>
@@ -23,6 +32,7 @@ namespace Refactoring
     [System.Serializable]
     public class JudgementWindow
     {
+        [Header("それぞれの判定(±n秒)")]
         [SerializeField] float perfectWindow;
         [SerializeField] float greatWindow;
         [SerializeField] float goodWindow;

@@ -8,20 +8,20 @@ using Newtonsoft.Json;
 
 namespace Refactoring
 {
-    public class ChartLoader : MonoBehaviour
+    public class ChartLoader : MonoBehaviour, IChartLoader
     {
-        [SerializeField] TextAsset chartData;
+        [SerializeField] TextAsset csvData;
 
-        private async void LoadChart()
+        public async UniTask<ChartData> LoadChartData(TextAsset textAsset)
         {
-            if(chartData == null)
+            if (csvData == null || textAsset == null)
             {
                 Debug.LogError("【System】CSVファイルが参照されていません。");
-                return;
+                return null;
             }
 
-            List<string[]> data = await CSVReader.ParseCsvAsync(chartData);
-            
+            List<string[]> data = await CSVReader.ParseCsvAsync(textAsset != null ? textAsset : csvData);
+            return null;
         }
     }
 
