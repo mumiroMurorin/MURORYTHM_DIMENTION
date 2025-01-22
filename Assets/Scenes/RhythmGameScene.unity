@@ -353,6 +353,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &484755816
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 484755817}
+  - component: {fileID: 484755818}
+  m_Layer: 0
+  m_Name: ChartLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &484755817
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484755816}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1514032049}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &484755818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484755816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f01a858f82db76d45baa9e54d5974ae9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &522279676
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2232,9 +2276,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2013225887}
+  - {fileID: 1853263904}
+  - {fileID: 484755817}
   - {fileID: 960448844}
   - {fileID: 1605477130}
-  - {fileID: 1853263904}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1595744353
@@ -2767,7 +2812,7 @@ MonoBehaviour:
       type: {class: Transitioner_LoadData, ns: Refactoring, asm: Assembly-CSharp}
       data:
         chartLoader:
-          obj: {fileID: 0}
+          obj: {fileID: 484755816}
         phaseTransitionable:
           obj: {fileID: 1853263903}
     - rid: 8511984125785407489
@@ -2840,6 +2885,8 @@ MonoBehaviour:
   - {fileID: 914534752}
   - {fileID: 2103325069}
   - {fileID: 1010482523}
+  - {fileID: 2103325069}
+  - {fileID: 484755816}
 --- !u!4 &2013225887
 Transform:
   m_ObjectHideFlags: 0

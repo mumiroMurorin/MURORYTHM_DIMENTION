@@ -5,16 +5,31 @@ using UniRx;
 
 namespace Refactoring
 {
-    public class MusicDataHolder : IMusicDataSetter, IMusicDataGetter
+    public class MusicDataHolder : IMusicDataSetter, IMusicDataGetter, IChartDataSetter, IChartDataGetter
     {
         // 選択楽曲
-        ReactiveProperty<MusicData> musicSelected = new ReactiveProperty<MusicData>();
-        public IReadOnlyReactiveProperty<MusicData> MusicSelected { get { return musicSelected; } }
-        public void SetMusicData(MusicData musicData)
+        ReactiveProperty<MusicData> music = new ReactiveProperty<MusicData>();
+        public IReadOnlyReactiveProperty<MusicData> Music { get { return music; } }
+        public void SetMusicData(MusicData data)
         {
-            musicSelected.Value = musicData;
+            music.Value = data;
         }
 
+        // 選択難易度
+        ReactiveProperty<DifficulityName> difficulty = new ReactiveProperty<DifficulityName>(DifficulityName.Initiate);
+        public IReadOnlyReactiveProperty<DifficulityName> Difficulty { get { return difficulty; } }
+        public void SetDifficulty(DifficulityName difficulty)
+        {
+            this.difficulty.Value = difficulty;
+        }
+
+        // 譜面データ
+        ChartData chart;
+        ChartData IChartDataGetter.Chart { get { return chart; } }
+        void IChartDataSetter.SetChartData(ChartData data)
+        {
+            chart = data;
+        }
     }
 }
 

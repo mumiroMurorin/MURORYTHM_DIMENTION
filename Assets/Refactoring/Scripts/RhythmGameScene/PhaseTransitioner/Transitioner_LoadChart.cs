@@ -21,7 +21,7 @@ namespace Refactoring
         {
             Debug.Log("ÅyTransitionÅzTransition to \"LoadChart\"");
 
-            //chartGenerator.Value.Generate(, TransitionNextPhase);
+            chartGenerator.Value.Generate(TransitionNextPhase);
         }
 
         /// <summary>

@@ -8,10 +8,8 @@ using System;
 
 namespace Refactoring
 {
-    public class ChartLoaderJson : MonoBehaviour, IChartLoader
+    public class ChartLoaderDebug : MonoBehaviour, IChartLoader
     {
-        [SerializeField] TextAsset jsonData;
-
         IMusicDataGetter musicDataGetter;
         IChartDataSetter chartDataSetter;
 
@@ -34,28 +32,40 @@ namespace Refactoring
 
         void IChartLoader.LoadChart(Action callback)
         {
-            DifficulityName difficulty = musicDataGetter.Difficulty.Value;
-            ChartData chartData = LoadChartData(musicDataGetter.Music.Value.GetChart(difficulty));
-
-            chartDataSetter.SetChartData(chartData);
+            
+            chartDataSetter.SetChartData(LoadChartData());
             callback.Invoke();
         }
 
         /// <summary>
-        /// 非同期でデータを読み込む
+        /// データを読み込む
         /// </summary>
         /// <param name="textAsset"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public ChartData LoadChartData(TextAsset textAsset)
+        public ChartData LoadChartData()
         {
-            if (jsonData == null || textAsset == null)
+            ChartData chartData = new ChartData
             {
-                Debug.LogError("【System】CSVファイルが参照されていません。");
-                return null;
-            }
-
-            ChartData chartData = JsonUtility.FromJson<ChartData>(textAsset != null ? textAsset.text : jsonData.text);
+                noteData_Touches = new List<NoteData_Touch>
+                 {
+                      new NoteData_Touch
+                      {
+                           Range =  new int[]{ 0,1,2,3 },
+                           Timing = 1f
+                      },
+                      new NoteData_Touch
+                      {
+                           Range =  new int[]{ 0,1,2,3 },
+                           Timing = 2f
+                      },
+                      new NoteData_Touch
+                      {
+                           Range =  new int[]{ 4,5,6,7,8,9,10,11,12 },
+                           Timing = 3f
+                      }
+                 }
+            };
 
             return chartData;
         }

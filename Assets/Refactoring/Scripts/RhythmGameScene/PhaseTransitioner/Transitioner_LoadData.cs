@@ -12,16 +12,6 @@ namespace Refactoring
         
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.LoadData;
 
-        IMusicDataGetter musicDataGetter;
-
-        [Inject]
-        public Transitioner_LoadData(IMusicDataGetter musicDataGetter)
-        {
-            this.musicDataGetter = musicDataGetter;
-            Debug.Log("Ç´ÇøÇ·");
-        }
-
-
         bool IPhaseTransitioner.ConditionChecker(PhaseStatusInRhythmGame status)
         {
             return this.status == status;
@@ -31,7 +21,7 @@ namespace Refactoring
         {
             Debug.Log("ÅyTransitionÅzTransition to \"LoadData\"");
 
-            chartLoader.Value.LoadChartData(musicDataGetter.MusicSelected.Value.GetChart(DifficulityName.Initiate), TransitionNextPhase);
+            chartLoader?.Value.LoadChart(TransitionNextPhase);
         }
 
         /// <summary>

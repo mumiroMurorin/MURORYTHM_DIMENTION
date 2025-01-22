@@ -12,7 +12,7 @@ namespace Refactoring
     /// </summary>
     public interface IChartLoader
     {
-        public UniTask<ChartData> LoadChartData(TextAsset textAsset, Action callback = null);
+        public void LoadChart(Action callback = null);
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ namespace Refactoring
     /// </summary>
     public interface IChartGenerator
     {
-        public void Generate(ChartData chartData, Action callback = null);
+        public void Generate(Action callback = null);
     }
 
     /// <summary>
@@ -83,14 +83,34 @@ namespace Refactoring
     /// </summary>
     public interface IMusicDataSetter
     {
-        public void SetMusicData(MusicData musicData);
+        void SetMusicData(MusicData musicData);
+
+        void SetDifficulty(DifficulityName difficulty);
     }
 
     /// <summary>
-    /// 楽曲データのゲットが出来る
+    /// 楽曲データの取得が出来る
     /// </summary>
     public interface IMusicDataGetter
     {
-        IReadOnlyReactiveProperty<MusicData> MusicSelected { get; }
+        IReadOnlyReactiveProperty<MusicData> Music{ get; }
+
+        IReadOnlyReactiveProperty<DifficulityName> Difficulty { get; }
+    }
+
+    /// <summary>
+    /// 譜面データのセットができる
+    /// </summary>
+    public interface IChartDataSetter
+    {
+        void SetChartData(ChartData data);
+    }
+
+    /// <summary>
+    /// 譜面データの取得ができる
+    /// </summary>
+    public interface IChartDataGetter
+    {
+        ChartData Chart { get; }
     }
 }

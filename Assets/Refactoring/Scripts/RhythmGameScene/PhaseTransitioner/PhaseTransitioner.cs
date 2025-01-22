@@ -10,12 +10,10 @@ namespace Refactoring
 
         [SerializeReference,SubclassSelector] List<IPhaseTransitioner> transitioners;
 
-        private void Start()
+        void Start()
         {
             Initialize();
             TransitionPhase(FIRST_STATUS);
-
-            Transitioner_LoadData t = new Transitioner_LoadData();
         }
 
         private void Initialize()

@@ -30,6 +30,8 @@ namespace Refactoring
             this.sliderInputGetter = initializingData.SliderInputGetter;
             this.judgementRecorder = initializingData.JudgementRecorder;
             this.timer = initializingData.Timer;
+            Debug.Log(optionHolder);
+
         }
 
         public override NoteObject<NoteData_Touch> Spawn(NoteData_Touch data)
@@ -123,6 +125,7 @@ namespace Refactoring
         /// </summary>
         private void SetTransform(NoteObject<NoteData_Touch> note, NoteData_Touch data)
         {
+            Debug.Log(optionHolder);
             // à íuÇÃí≤êÆ
             note.transform.position = new Vector3(
                 note.transform.position.x,
