@@ -24,5 +24,10 @@ public class RootLifetimeScope : LifetimeScope
 
         // スコア
         builder.Register<ScoreHolder>(Lifetime.Singleton);
+
+        // 楽曲データ
+        builder.Register<MusicDataHolder>(Lifetime.Singleton);
+        builder.Register<IMusicDataGetter>(resolver => resolver.Resolve<MusicDataHolder>(), Lifetime.Singleton);
+        builder.Register<IMusicDataSetter>(resolver => resolver.Resolve<MusicDataHolder>(), Lifetime.Singleton);
     }
 }

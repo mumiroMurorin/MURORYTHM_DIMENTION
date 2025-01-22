@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using System;
+using UniRx;
 
 namespace Refactoring
 {
@@ -10,7 +12,7 @@ namespace Refactoring
     /// </summary>
     public interface IChartLoader
     {
-        public UniTask<ChartData> LoadChartData(TextAsset textAsset);
+        public UniTask<ChartData> LoadChartData(TextAsset textAsset, Action callback = null);
     }
 
     /// <summary>
@@ -39,7 +41,7 @@ namespace Refactoring
     /// </summary>
     public interface IChartGenerator
     {
-        public void Generate(ChartData chartData);
+        public void Generate(ChartData chartData, Action callback = null);
     }
 
     /// <summary>
@@ -51,5 +53,44 @@ namespace Refactoring
         /// 譜面の移動開始
         /// </summary>
         void StartGroundMove();
+    }
+
+    /// <summary>
+    /// フェーズ遷移を行うことが出来る
+    /// </summary>
+    public interface IPhaseTransitionable
+    {
+        public void TransitionPhase(PhaseStatusInRhythmGame phase);
+    }
+
+    /// <summary>
+    /// フェーズ遷移の際の処理を行う
+    /// </summary>
+    public interface IPhaseTransitioner
+    {
+        public void Transition();
+
+        /// <summary>
+        /// 遷移条件のチェック
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public bool ConditionChecker(PhaseStatusInRhythmGame status);
+    }
+
+    /// <summary>
+    /// 楽曲データのセットが行える
+    /// </summary>
+    public interface IMusicDataSetter
+    {
+        public void SetMusicData(MusicData musicData);
+    }
+
+    /// <summary>
+    /// 楽曲データのゲットが出来る
+    /// </summary>
+    public interface IMusicDataGetter
+    {
+        IReadOnlyReactiveProperty<MusicData> MusicSelected { get; }
     }
 }

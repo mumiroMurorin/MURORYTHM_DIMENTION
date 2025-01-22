@@ -5,6 +5,7 @@ using System.IO;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System;
 
 namespace Refactoring
 {
@@ -12,7 +13,7 @@ namespace Refactoring
     {
         [SerializeField] TextAsset csvData;
 
-        public async UniTask<ChartData> LoadChartData(TextAsset textAsset)
+        public async UniTask<ChartData> LoadChartData(TextAsset textAsset, Action callback = null)
         {
             if (csvData == null || textAsset == null)
             {
@@ -21,6 +22,8 @@ namespace Refactoring
             }
 
             List<string[]> data = await CSVReader.ParseCsvAsync(textAsset != null ? textAsset : csvData);
+
+            callback?.Invoke();
             return null;
         }
     }

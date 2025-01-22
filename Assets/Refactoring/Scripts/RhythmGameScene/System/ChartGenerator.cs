@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Deform;
 using VContainer;
+using System;
 
 namespace Refactoring
 {
@@ -24,33 +25,31 @@ namespace Refactoring
         private void Start()
         {
             // âº
-            ChartData data = new ChartData
-            {
-                noteData_Touches = new List<NoteData_Touch>
-                 {
-                      new NoteData_Touch
-                      {
-                           Range = new int[4] {0,1,2,3 },
-                           Timing = 1f,
-                      },
-                      new NoteData_Touch
-                      {
-                           Range = new int[5] {4,5,6,7,8 },
-                           Timing = 2f,
-                      },
-                      new NoteData_Touch
-                      {
-                           Range = new int[6] {9,10,11,12,13,14 },
-                           Timing = 3f,
-                      }
-                 }
-            };
+            //ChartData data = new ChartData
+            //{
+            //    noteData_Touches = new List<NoteData_Touch>
+            //     {
+            //          new NoteData_Touch
+            //          {
+            //               Range = new int[4] {0,1,2,3 },
+            //               Timing = 1f,
+            //          },
+            //          new NoteData_Touch
+            //          {
+            //               Range = new int[5] {4,5,6,7,8 },
+            //               Timing = 2f,
+            //          },
+            //          new NoteData_Touch
+            //          {
+            //               Range = new int[6] {9,10,11,12,13,14 },
+            //               Timing = 3f,
+            //          }
+            //     }
+            //};
 
             Initialize();
 
-
-
-            Generate(data);
+            //Generate(data);
         }
 
         [Inject]
@@ -87,9 +86,11 @@ namespace Refactoring
         /// ÉmÅ[ÉcëSëÃÇÃê∂ê¨
         /// </summary>
         /// <param name="chartData"></param>
-        public void Generate(ChartData chartData)
+        public void Generate(ChartData chartData, Action callback = null)
         {
             GenerateTouchNote(chartData.noteData_Touches);
+
+            callback?.Invoke();
         }
 
         /// <summary>
