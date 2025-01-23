@@ -98,8 +98,11 @@ namespace Refactoring
             for (int i = 0; i < size; i++)
             {
                 // ※ポジションと角度の計算
-                pos = new Vector3(10 * Mathf.Cos((((size - 1) / 2f - i) * 11.25f - 90f) * Mathf.Deg2Rad), 10 * Mathf.Sin((((size - 1) / 2f - i) * 11.25f - 90f) * Mathf.Deg2Rad), 0);
-                rot = new Vector3(0, 0, ((size - 1) / 2f - i) * 11.25f);
+                
+                //pos = new Vector3(10 * Mathf.Cos((((size - 1) / 2f - i) * 11.25f - 90f) * Mathf.Deg2Rad), 10 * Mathf.Sin((((size - 1) / 2f - i) * 11.25f - 90f) * Mathf.Deg2Rad), 0);
+                float radian = (5.625f * (2 * i - size + 1) - 90f) * Mathf.Deg2Rad;
+                pos = new Vector3(10 * Mathf.Cos(radian), 10 * Mathf.Sin(radian), 0);
+                rot = new Vector3(0, 0, ((size - 1) / 2f - (size - i - 1)) * 11.25f);
 
                 // 1マスノートの時
                 if (size == 1) { Instantiate(singleTilePrefab, pos, Quaternion.Euler(rot), pre.transform); }

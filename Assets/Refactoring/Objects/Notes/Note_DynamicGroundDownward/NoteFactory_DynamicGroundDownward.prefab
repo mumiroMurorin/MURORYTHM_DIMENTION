@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8581259717299761544
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2064485049643204070}
+  - component: {fileID: 1191086651413165152}
+  m_Layer: 0
+  m_Name: NoteFactory_DynamicGroundDownward
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2064485049643204070
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8581259717299761544}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1191086651413165152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8581259717299761544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a5a6ff7546bb704ca2301490c204363, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noteObjectOriginPrefab: {fileID: 8224908405846241423, guid: d166271555f16cc438e1d3683a7e1c3c, type: 3}
+  singleTilePrefab: {fileID: 2332773898725649534, guid: cbd880fdc9d7e984b8add4ac6e47513f, type: 3}
+  rightEdgeTilePrefab: {fileID: 2332773898725649534, guid: 6819b9f7aa0186840a426f30df5e710d, type: 3}
+  centerTilePrefab: {fileID: 2332773898725649534, guid: 1899025b7adcf4c4bb8d6a5e0328a696, type: 3}
+  leftEdgeTilePrefab: {fileID: 2332773898725649534, guid: 4c7a5519bcedb4a4da2120188aac754b, type: 3}

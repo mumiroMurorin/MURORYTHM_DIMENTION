@@ -11,6 +11,11 @@ namespace Refactoring
     {
         [Header("それぞれのNoteFactory")]
         [SerializeField] NoteFactory<NoteData_Touch> touchNoteFactory;
+        [SerializeField] NoteFactory<NoteData_DynamicGroundUpward> dynamicGroundUpwardNoteFactory;
+        [SerializeField] NoteFactory<NoteData_DynamicGroundRightward> dynamicGroundRightwardNoteFactory;
+        [SerializeField] NoteFactory<NoteData_DynamicGroundLeftward> dynamicGroundLeftwardNoteFactory;
+        [SerializeField] NoteFactory<NoteData_DynamicGroundDownward> dynamicGroundDownwardNoteFactory;
+        [SerializeField] NoteFactory<NoteData_HoldStart> holdNoteStartFactory;
 
         [Header("Factoryの初期化に必要なデータ")]
         [SerializeField] GameObject groundObject;
@@ -37,8 +42,6 @@ namespace Refactoring
             this.sliderInputGetter = sliderInputGetter;
             this.spaceInputGetter = spaceInputGetter;
             this.judgementRecorder = judgementRecorder;
-            Debug.Log(optionHolder);
-
         }
 
         /// <summary>
@@ -60,6 +63,11 @@ namespace Refactoring
 
             Debug.Log(data.OptionHolder);
             touchNoteFactory.Initialize(data);
+            dynamicGroundUpwardNoteFactory.Initialize(data);
+            dynamicGroundRightwardNoteFactory.Initialize(data);
+            dynamicGroundLeftwardNoteFactory.Initialize(data);
+            dynamicGroundDownwardNoteFactory.Initialize(data);
+            holdNoteStartFactory.Initialize(data);
         }
 
         /// <summary>
@@ -69,6 +77,11 @@ namespace Refactoring
         public void Generate(Action callback = null)
         {
             GenerateTouchNote(chartDataGetter.Chart.noteData_Touches);
+            GenerateDynamicGroundUpwardNote(chartDataGetter.Chart.noteData_DynamicGroundUpwards);
+            GenerateDynamicGroundRightwardNote(chartDataGetter.Chart.noteData_DynamicGroundRightwards);
+            GenerateDynamicGroundLeftwardNote(chartDataGetter.Chart.noteData_DynamicGroundLeftwards);
+            GenerateDynamicGroundDownwardNote(chartDataGetter.Chart.noteData_DynamicGroundDownwards);
+            GenerateHoldNoteStart(chartDataGetter.Chart.noteData_HoldStart);
 
             callback?.Invoke();
         }
@@ -77,13 +90,86 @@ namespace Refactoring
         /// タッチノーツの生成
         /// </summary>
         /// <param name="noteData_Touches"></param>
-        private void GenerateTouchNote(List<NoteData_Touch> noteData_Touches)
+        private void GenerateTouchNote(List<NoteData_Touch> noteDatas)
         {
-            foreach(NoteData_Touch data in noteData_Touches)
+            if (noteDatas == null) { return; }
+
+            foreach (NoteData_Touch data in noteDatas)
             {
                 touchNoteFactory.Spawn(data);
             }
         }
+
+        /// <summary>
+        /// ダイナミックグラウンド(↑)ノーツの生成
+        /// </summary>
+        /// <param name="noteData_Touches"></param>
+        private void GenerateDynamicGroundUpwardNote(List<NoteData_DynamicGroundUpward> noteDatas)
+        {
+            if(noteDatas == null) { return; }
+
+            foreach (NoteData_DynamicGroundUpward data in noteDatas)
+            {
+                dynamicGroundUpwardNoteFactory.Spawn(data);
+            }
+        }
+
+        /// <summary>
+        /// ダイナミックグラウンド(→)ノーツの生成
+        /// </summary>
+        /// <param name="noteData_Touches"></param>
+        private void GenerateDynamicGroundRightwardNote(List<NoteData_DynamicGroundRightward> noteDatas)
+        {
+            if (noteDatas == null) { return; }
+
+            foreach (NoteData_DynamicGroundRightward data in noteDatas)
+            {
+                dynamicGroundRightwardNoteFactory.Spawn(data);
+            }
+        }
+
+        /// <summary>
+        /// ダイナミックグラウンド(←)ノーツの生成
+        /// </summary>
+        /// <param name="noteData_Touches"></param>
+        private void GenerateDynamicGroundLeftwardNote(List<NoteData_DynamicGroundLeftward> noteDatas)
+        {
+            if (noteDatas == null) { return; }
+
+            foreach (NoteData_DynamicGroundLeftward data in noteDatas)
+            {
+                dynamicGroundLeftwardNoteFactory.Spawn(data);
+            }
+        }
+
+        /// <summary>
+        /// ダイナミックグラウンド(↓)ノーツの生成
+        /// </summary>
+        /// <param name="noteData_Touches"></param>
+        private void GenerateDynamicGroundDownwardNote(List<NoteData_DynamicGroundDownward> noteDatas)
+        {
+            if (noteDatas == null) { return; }
+
+            foreach (NoteData_DynamicGroundDownward data in noteDatas)
+            {
+                dynamicGroundDownwardNoteFactory.Spawn(data);
+            }
+        }
+
+        /// <summary>
+        /// ホールドノーツ始点の生成
+        /// </summary>
+        /// <param name="noteData_Touches"></param>
+        private void GenerateHoldNoteStart(List<NoteData_HoldStart> noteDatas)
+        {
+            if (noteDatas == null) { return; }
+
+            foreach (NoteData_HoldStart data in noteDatas)
+            {
+                holdNoteStartFactory.Spawn(data);
+            }
+        }
+
     }
 
 }

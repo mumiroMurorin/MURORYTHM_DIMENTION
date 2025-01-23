@@ -47,24 +47,43 @@ namespace Refactoring
         {
             ChartData chartData = new ChartData
             {
-                noteData_Touches = new List<NoteData_Touch>
-                 {
-                      new NoteData_Touch
+                noteData_HoldStart = new List<NoteData_HoldStart>
+                {
+                      new NoteData_HoldStart
                       {
                            Range =  new int[]{ 0,1,2,3 },
                            Timing = 1f
                       },
-                      new NoteData_Touch
+                      new NoteData_HoldStart
                       {
                            Range =  new int[]{ 0,1,2,3 },
                            Timing = 2f
                       },
-                      new NoteData_Touch
+                      new NoteData_HoldStart
                       {
                            Range =  new int[]{ 4,5,6,7,8,9,10,11,12 },
                            Timing = 3f
                       }
-                 }
+                },
+
+                noteData_DynamicGroundDownwards = new List<NoteData_DynamicGroundDownward>
+                {
+                      new NoteData_DynamicGroundDownward
+                      {
+                           Range =  new int[]{ 0,1,2,3 },
+                           Timing = 1f
+                      },
+                      new NoteData_DynamicGroundDownward
+                      {
+                           Range =  new int[]{ 0,1,2,3 },
+                           Timing = 2f
+                      },
+                      new NoteData_DynamicGroundDownward
+                      {
+                           Range =  new int[]{ 4,5,6,7,8,9,10,11,12 },
+                           Timing = 3f
+                      }
+                }
             };
 
             return chartData;
