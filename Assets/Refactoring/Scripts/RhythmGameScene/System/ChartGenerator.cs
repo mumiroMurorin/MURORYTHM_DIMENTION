@@ -15,7 +15,10 @@ namespace Refactoring
         [SerializeField] NoteFactory<NoteData_DynamicGroundRightward> dynamicGroundRightwardNoteFactory;
         [SerializeField] NoteFactory<NoteData_DynamicGroundLeftward> dynamicGroundLeftwardNoteFactory;
         [SerializeField] NoteFactory<NoteData_DynamicGroundDownward> dynamicGroundDownwardNoteFactory;
-        [SerializeField] NoteFactory<NoteData_HoldStart> holdNoteStartFactory;
+        [SerializeField] NoteFactory<NoteData_HoldStart> holdStartNoteFactory;
+        [SerializeField] NoteFactory<NoteData_HoldRelay> holdRelayNoteFactory;
+        [SerializeField] NoteFactory<NoteData_HoldEnd> holdEndNoteFactory;
+        [SerializeField] NoteFactory<NoteData_HoldMesh> holdMeshNoteFactory;
 
         [Header("Factoryの初期化に必要なデータ")]
         [SerializeField] GameObject groundObject;
@@ -67,7 +70,10 @@ namespace Refactoring
             dynamicGroundRightwardNoteFactory.Initialize(data);
             dynamicGroundLeftwardNoteFactory.Initialize(data);
             dynamicGroundDownwardNoteFactory.Initialize(data);
-            holdNoteStartFactory.Initialize(data);
+            holdStartNoteFactory.Initialize(data);
+            holdRelayNoteFactory.Initialize(data);
+            holdEndNoteFactory.Initialize(data);
+            holdMeshNoteFactory.Initialize(data);
         }
 
         /// <summary>
@@ -81,7 +87,10 @@ namespace Refactoring
             GenerateDynamicGroundRightwardNote(chartDataGetter.Chart.noteData_DynamicGroundRightwards);
             GenerateDynamicGroundLeftwardNote(chartDataGetter.Chart.noteData_DynamicGroundLeftwards);
             GenerateDynamicGroundDownwardNote(chartDataGetter.Chart.noteData_DynamicGroundDownwards);
-            GenerateHoldNoteStart(chartDataGetter.Chart.noteData_HoldStart);
+            GenerateHoldStartNote(chartDataGetter.Chart.noteData_HoldStarts);
+            GenerateHoldRelayNote(chartDataGetter.Chart.noteData_HoldRelays);
+            GenerateHoldEndNote(chartDataGetter.Chart.noteData_HoldEnds);
+            GenerateHoldMeshNote(chartDataGetter.Chart.noteData_HoldMeshes);
 
             callback?.Invoke();
         }
@@ -160,16 +169,57 @@ namespace Refactoring
         /// ホールドノーツ始点の生成
         /// </summary>
         /// <param name="noteData_Touches"></param>
-        private void GenerateHoldNoteStart(List<NoteData_HoldStart> noteDatas)
+        private void GenerateHoldStartNote(List<NoteData_HoldStart> noteDatas)
         {
             if (noteDatas == null) { return; }
 
             foreach (NoteData_HoldStart data in noteDatas)
             {
-                holdNoteStartFactory.Spawn(data);
+                holdStartNoteFactory.Spawn(data);
             }
         }
 
+        /// <summary>
+        /// ホールドノーツ中継点の生成
+        /// </summary>
+        /// <param name="noteData_Touches"></param>
+        private void GenerateHoldRelayNote(List<NoteData_HoldRelay> noteDatas)
+        {
+            if (noteDatas == null) { return; }
+
+            foreach (NoteData_HoldRelay data in noteDatas)
+            {
+                holdRelayNoteFactory.Spawn(data);
+            }
+        }
+
+        /// <summary>
+        /// ホールドノーツ終点の生成
+        /// </summary>
+        /// <param name="noteData_Touches"></param>
+        private void GenerateHoldEndNote(List<NoteData_HoldEnd> noteDatas)
+        {
+            if (noteDatas == null) { return; }
+
+            foreach (NoteData_HoldEnd data in noteDatas)
+            {
+                holdEndNoteFactory.Spawn(data);
+            }
+        }
+
+        /// <summary>
+        /// ホールドメッシュの生成
+        /// </summary>
+        /// <param name="noteData_Touches"></param>
+        private void GenerateHoldMeshNote(List<NoteData_HoldMesh> noteDatas)
+        {
+            if (noteDatas == null) { return; }
+
+            foreach (NoteData_HoldMesh data in noteDatas)
+            {
+                holdMeshNoteFactory.Spawn(data);
+            }
+        }
     }
 
 }

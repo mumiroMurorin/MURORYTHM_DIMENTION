@@ -100,16 +100,13 @@ namespace Refactoring
     {
         public List<NoteData_Touch> noteData_Touches { get; set; }
 
-        public List<NoteData_HoldStart> noteData_HoldStart { get; set; }
+        public List<NoteData_HoldStart> noteData_HoldStarts { get; set; }
 
-        //public List<NoteData_HoldRelay>
-        //{ get; set; }
+        public List<NoteData_HoldRelay> noteData_HoldRelays { get; set; }
 
-        //public List<NoteData_HoldEnd>
-        //{ get; set; }
+        public List<NoteData_HoldEnd> noteData_HoldEnds { get; set; }
 
-        //public List<NoteData_HoldMesh>
-        //{ get; set; }
+        public List<NoteData_HoldMesh> noteData_HoldMeshes { get; set; }
 
         public List<NoteData_DynamicGroundUpward> noteData_DynamicGroundUpwards { get; set; }
 
