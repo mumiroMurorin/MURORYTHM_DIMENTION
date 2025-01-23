@@ -30,8 +30,6 @@ namespace Refactoring
             this.sliderInputGetter = initializingData.SliderInputGetter;
             this.judgementRecorder = initializingData.JudgementRecorder;
             this.timer = initializingData.Timer;
-            Debug.Log(optionHolder);
-
         }
 
         public override NoteObject<NoteData_Touch> Spawn(NoteData_Touch data)
@@ -71,11 +69,14 @@ namespace Refactoring
         {
             GameObject origin = Instantiate(noteObjectOriginPrefab);
 
-            // ノーツオブジェクトを生成してoriginにくっつける
-            GenerateNoteObject(data.Range.Length).transform.SetParent(origin.transform);
+            // ノーツオブジェクトを生成
+            GameObject noteObj = GenerateNoteObject(data.Range.Length);
+
+            // originにくっつける
+            noteObj.transform.SetParent(origin.transform);
 
             // 角度(レーン)調整
-            origin.transform.eulerAngles = new Vector3(0, 0, CalcNoteTransform.NoteAngle(data.Range));
+            noteObj.transform.eulerAngles = new Vector3(0, 0, CalcNoteTransform.NoteAngle(data.Range));
 
             // コンポーネントを取得
             NoteObject<NoteData_Touch> note = origin.GetComponent<NoteObject<NoteData_Touch>>();
@@ -125,7 +126,6 @@ namespace Refactoring
         /// </summary>
         private void SetTransform(NoteObject<NoteData_Touch> note, NoteData_Touch data)
         {
-            Debug.Log(optionHolder);
             // 位置の調整
             note.transform.position = new Vector3(
                 note.transform.position.x,

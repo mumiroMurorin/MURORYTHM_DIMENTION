@@ -59,6 +59,41 @@ namespace Refactoring
     }
 
     /// <summary>
+    /// Perfect～Goodまでのエフェクトをまとめたクラス
+    /// </summary>
+    [System.Serializable]
+    public class JudgementEffects
+    {
+        [Header("エフェクト(非アクティブインスタンス済オブジェクト)")]
+        [SerializeField] GameObject perfectEffect;
+        [SerializeField] GameObject greatEffect;
+        [SerializeField] GameObject goodEffect;
+        [SerializeField] GameObject missEffect;
+
+        public void SetActive(Judgement judgement)
+        {
+            switch (judgement)
+            {
+                case Judgement.Perfect:
+                    perfectEffect.SetActive(true);
+                    break;
+                case Judgement.Great:
+                    greatEffect.SetActive(true);
+                    break;
+                case Judgement.Good:
+                    goodEffect.SetActive(true);
+                    break;
+                case Judgement.Miss:
+                    missEffect.SetActive(true);
+                    break;
+                default:
+                    Debug.LogWarning($"【note】設定されていないプロパティです: {judgement}");
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
     /// 各種ノーツデータのListをまとめたもの
     /// </summary>
     public class ChartData
