@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 7139205058428528011}
   - component: {fileID: 3575575781248271904}
   - component: {fileID: 636255701204829617}
-  - component: {fileID: 242844322218263283}
+  - component: {fileID: 8217329014282193694}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -99,7 +99,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 02f72122ffe8a884ca6e50a0df05f5eb, type: 2}
+  - {fileID: 2100000, guid: 7877522fa8fe9214ea83732429eb443a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -150,24 +150,19 @@ MonoBehaviour:
   customBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.25, y: 0.25, z: 0.25}
---- !u!95 &242844322218263283
-Animator:
-  serializedVersion: 5
+--- !u!114 &8217329014282193694
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2819554639042328546}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 2fb1ea7ab22ef304ba8df4dd2412df9a, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b349c58115e15a241ad31ee4153e7148, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 0}
+  rows: 3
+  columns: 3
+  frameRate: 60
