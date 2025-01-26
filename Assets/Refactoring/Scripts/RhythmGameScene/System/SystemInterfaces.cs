@@ -37,6 +37,41 @@ namespace Refactoring
     }
 
     /// <summary>
+    /// スコアのセット
+    /// </summary>
+    public interface IScoreSetter
+    {
+        /// <summary>
+        /// スコアのリセット
+        /// </summary>
+        void ResetScore();
+    }
+
+    /// <summary>
+    /// スコアの取得
+    /// </summary>
+    public interface IScoreGetter
+    {
+        public IReadOnlyReactiveProperty<int> PerfectNum { get;  }
+
+        public IReadOnlyReactiveProperty<int> GreatNum { get; }
+
+        public IReadOnlyReactiveProperty<int> GoodNum { get; }
+
+        public IReadOnlyReactiveProperty<int> MissNum { get; }
+
+        public IReadOnlyReactiveProperty<int> JudgedNum { get; }
+
+        public IReadOnlyReactiveProperty<int> Combo { get; }
+
+        public IReadOnlyReactiveProperty<float> Score { get; }
+
+        public IReadOnlyReactiveProperty<ComboRank> CurrentComboRank { get; }
+
+        public IReadOnlyReactiveProperty<ScoreRank> CurrentScoreRank { get; }
+    }
+
+    /// <summary>
     /// データを基に譜面の生成を行う
     /// </summary>
     public interface IChartGenerator
@@ -112,5 +147,36 @@ namespace Refactoring
     public interface IChartDataGetter
     {
         ChartData Chart { get; }
+    }
+
+    /// <summary>
+    /// 評価アニメの再生を行える
+    /// </summary>
+    public interface IAssessmentPlayer
+    {
+        public void PlayAnimation(Action callback = null);
+
+        /// <summary>
+        /// アニメーション条件のチェック
+        /// </summary>
+        /// <param name="rank"></param>
+        /// <returns></returns>
+        public bool ConditionChecker(ComboRank rank);
+    }
+
+    /// <summary>
+    /// 評価アニメのコントロールを行う
+    /// </summary>
+    public interface IAssessmentController
+    {
+        void PlayAnimation(Action callback = null);
+    }
+
+    /// <summary>
+    /// タイムラインの再生を行う
+    /// </summary>
+    public interface ITimelinePlayer
+    {
+        public void PlayAnimation(Action callback = null);
     }
 }

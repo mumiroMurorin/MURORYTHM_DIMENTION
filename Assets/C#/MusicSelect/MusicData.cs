@@ -89,9 +89,10 @@ public enum ScoreRank
 //ƒRƒ“ƒ{•]‰¿
 public enum ComboRank
 {
-    None,
-    TrackFailed,
-    TrackComplete,
-    FullCombo,
-    AllPerfect
+    None = 0,
+    TrackFailed = 1,
+    TrackComplete = 2,
+    FullCombo = 3,
+    GreatCombo = 4,
+    AllPerfect = 5
 }

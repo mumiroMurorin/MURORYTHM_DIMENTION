@@ -98,6 +98,8 @@ namespace Refactoring
     /// </summary>
     public class ChartData
     {
+        public int MaxCombo { get; set; }
+
         public List<NoteData_Touch> noteData_Touches { get; set; }
 
         public List<NoteData_HoldStart> noteData_HoldStarts { get; set; }

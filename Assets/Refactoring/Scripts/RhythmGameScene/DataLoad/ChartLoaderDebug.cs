@@ -47,6 +47,8 @@ namespace Refactoring
         {
             ChartData chartData = new ChartData
             {
+                MaxCombo = 3,
+
                 noteData_HoldMeshes = new List<NoteData_HoldMesh>
                 {
                       new NoteData_HoldMesh

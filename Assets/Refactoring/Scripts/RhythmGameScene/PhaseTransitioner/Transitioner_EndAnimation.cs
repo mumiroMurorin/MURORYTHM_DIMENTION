@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Playables;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
@@ -11,11 +10,9 @@ namespace Refactoring
     public class Transitioner_EndAnimation : IPhaseTransitioner
     {
         [SerializeField] SerializeInterface<IPhaseTransitionable> phaseTransitionable;
-        [Header("終了演出タイムライン")]
-        [SerializeField] PlayableDirector endPlayable;
+        [SerializeField] SerializeInterface<IAssessmentController> controller;
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.EndAnimation;
-        CancellationTokenSource cts;
 
         bool IPhaseTransitioner.ConditionChecker(PhaseStatusInRhythmGame status)
         {
@@ -26,37 +23,8 @@ namespace Refactoring
         {
             Debug.Log("【Transition】Transition to \"EndAnimation\"");
 
-            cts = new CancellationTokenSource();
-            PlayAnimation(cts.Token, TransitionNextPhase).Forget();
-        }
-
-        /// <summary>
-        /// スタートアニメーションの再生
-        /// </summary>
-        /// <returns></returns>
-        private async UniTaskVoid PlayAnimation(CancellationToken token, Action callback)
-        {
-            if (endPlayable == null)
-            {
-                callback.Invoke();
-                return;
-            }
-            endPlayable.Play();
-
-            try
-            {
-                // タイムラインを再生
-                endPlayable.Play();
-
-                // タイムラインの再生が終了するかキャンセルされるまで待機
-                await UniTask.WaitUntil(() => endPlayable.state != PlayState.Playing, cancellationToken: token);
-            }
-            catch (OperationCanceledException)
-            {
-                Debug.Log("【Transition】タイムラインの再生がキャンセルされました");
-            }
-
-            callback.Invoke();
+            // 評価アニメーションの再生
+            controller.Value.PlayAnimation(TransitionNextPhase);
         }
 
         /// <summary>

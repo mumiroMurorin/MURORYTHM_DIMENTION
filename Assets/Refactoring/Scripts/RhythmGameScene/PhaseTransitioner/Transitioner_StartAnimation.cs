@@ -12,10 +12,9 @@ namespace Refactoring
     {
         [SerializeField] SerializeInterface<IPhaseTransitionable> phaseTransitionable;
         [Header("スタート演出タイムライン")]
-        [SerializeField] PlayableDirector startPlayable;
+        [SerializeField] SerializeInterface<ITimelinePlayer> timelinePlayer;
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.StartAnimation;
-        CancellationTokenSource cts;
 
         bool IPhaseTransitioner.ConditionChecker(PhaseStatusInRhythmGame status)
         {
@@ -25,39 +24,9 @@ namespace Refactoring
         void IPhaseTransitioner.Transition()
         {
             Debug.Log("【Transition】Transition to \"StartAnimation\"");
-            
-            cts = new CancellationTokenSource();
-            PlayAnimation(cts.Token, TransitionNextPhase).Forget();
+
+            timelinePlayer?.Value.PlayAnimation(TransitionNextPhase);
         }
-
-        /// <summary>
-        /// スタートアニメーションの再生
-        /// </summary>
-        /// <returns></returns>
-        private async UniTaskVoid PlayAnimation(CancellationToken token, Action callback)
-        {
-            if(startPlayable == null) 
-            {
-                callback.Invoke();
-                return; 
-            }
-            startPlayable.Play();
-
-            try
-            {
-                // タイムラインを再生
-                startPlayable.Play();
-
-                // タイムラインの再生が終了するかキャンセルされるまで待機
-                await UniTask.WaitUntil(() => startPlayable.state != PlayState.Playing, cancellationToken: token);
-            }
-            catch (OperationCanceledException)
-            {
-                Debug.Log("【Transition】タイムラインの再生がキャンセルされました");
-            }
-
-            callback.Invoke();
-        } 
 
         /// <summary>
         /// 次のフェーズへの移動
