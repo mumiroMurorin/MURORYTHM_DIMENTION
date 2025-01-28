@@ -1142,6 +1142,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9218e324e41f854b9a5335a6cb97166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &801399394
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 801399395}
+  - component: {fileID: 801399396}
+  m_Layer: 0
+  m_Name: ChartEnder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &801399395
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801399394}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1514032049}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &801399396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801399394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2fe1d8811e6b0c44a92726c9972fdb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  phaseTransitionable:
+    obj: {fileID: 1853263903}
 --- !u!1001 &806503074
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3107,6 +3153,7 @@ Transform:
   - {fileID: 484755817}
   - {fileID: 960448844}
   - {fileID: 1605477130}
+  - {fileID: 801399395}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1525647252
@@ -3945,6 +3992,8 @@ MonoBehaviour:
       data:
         chartGenerator:
           obj: {fileID: 2103325069}
+        chartEnder:
+          obj: {fileID: 801399394}
         phaseTransitionable:
           obj: {fileID: 1853263903}
     - rid: 8511984125785407490
@@ -4256,8 +4305,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2408c48d4c03e7349aa0fa3ba558f309, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  phaseTransitionable:
-    obj: {fileID: 1853263903}
   touchNoteFactory: {fileID: 1261792716}
   dynamicGroundUpwardNoteFactory: {fileID: 3262171307820684294}
   dynamicGroundRightwardNoteFactory: {fileID: 993692313}

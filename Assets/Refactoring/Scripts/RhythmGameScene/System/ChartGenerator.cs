@@ -10,9 +10,6 @@ namespace Refactoring
 {
     public class ChartGenerator : MonoBehaviour, IChartGenerator
     {
-        [Header("フェーズ管理")]
-        [SerializeField] SerializeInterface<IPhaseTransitionable> phaseTransitionable;
-
         [Header("それぞれのNoteFactory")]
         [SerializeField] NoteFactory<NoteData_Touch> touchNoteFactory;
         [SerializeField] NoteFactory<NoteData_DynamicGroundUpward> dynamicGroundUpwardNoteFactory;
@@ -34,24 +31,22 @@ namespace Refactoring
         ISliderInputGetter sliderInputGetter;
         ISpaceInputGetter spaceInputGetter;
         IJudgementRecorder judgementRecorder;
-        IScoreGetter scoreGetter;
 
         private void Awake()
         {
             Initialize();
-            Bind();
         }
 
         [Inject]
         public void Constructor(IChartDataGetter chartDataGetter, INoteSpawnDataOptionHolder optionHolder, IJudgementRecorder judgementRecorder,
-            IScoreGetter scoreGetter, ISliderInputGetter sliderInputGetter, ISpaceInputGetter spaceInputGetter)
+            ISliderInputGetter sliderInputGetter, ISpaceInputGetter spaceInputGetter)
         {
             this.chartDataGetter = chartDataGetter;
             this.spawnDataOptionHolder = optionHolder;
             this.sliderInputGetter = sliderInputGetter;
             this.spaceInputGetter = spaceInputGetter;
             this.judgementRecorder = judgementRecorder;
-            this.scoreGetter = scoreGetter;
+            
         }
 
         /// <summary>
@@ -82,15 +77,6 @@ namespace Refactoring
             holdMeshNoteFactory.Initialize(data);
         }
 
-        private void Bind()
-        {
-            // 譜面終了処理を購読
-            scoreGetter.JudgedNum
-                .Where(num => num == chartDataGetter.Chart.MaxCombo)
-                .Subscribe(_ => OnFinishChart())
-                .AddTo(this.gameObject);
-        }
-
         /// <summary>
         /// ノーツ全体の生成
         /// </summary>
@@ -108,14 +94,6 @@ namespace Refactoring
             GenerateHoldMeshNote(chartDataGetter.Chart.noteData_HoldMeshes);
 
             callback?.Invoke();
-        }
-
-        /// <summary>
-        /// 最後のノーツの処理が終わったとき
-        /// </summary>
-        private void OnFinishChart()
-        {
-            phaseTransitionable.Value.TransitionPhase(PhaseStatusInRhythmGame.EndAnimation);
         }
 
         /// <summary>

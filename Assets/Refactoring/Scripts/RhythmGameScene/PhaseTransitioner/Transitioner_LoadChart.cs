@@ -8,6 +8,7 @@ namespace Refactoring
     public class Transitioner_LoadChart : IPhaseTransitioner
     {
         [SerializeField] SerializeInterface<IChartGenerator> chartGenerator;
+        [SerializeField] SerializeInterface<IChartEnder> chartEnder;
         [SerializeField] SerializeInterface<IPhaseTransitionable> phaseTransitionable;
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.LoadChart;
@@ -21,6 +22,7 @@ namespace Refactoring
         {
             Debug.Log("ÅyTransitionÅzTransition to \"LoadChart\"");
 
+            chartEnder.Value.BindOnEndChart();
             chartGenerator.Value.Generate(TransitionNextPhase);
         }
 

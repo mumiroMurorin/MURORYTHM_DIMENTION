@@ -179,4 +179,12 @@ namespace Refactoring
     {
         public void PlayAnimation(Action callback = null);
     }
+
+    /// <summary>
+    /// •ˆ–Ê‚ÌI—¹ˆ—‚ğw“Ç‚·‚é
+    /// </summary>
+    public interface IChartEnder
+    {
+        void BindOnEndChart(Action callback = null);
+    }
 }
