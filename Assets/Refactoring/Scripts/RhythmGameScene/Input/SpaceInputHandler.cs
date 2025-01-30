@@ -8,8 +8,9 @@ namespace Refactoring
 {
     public class SpaceInputHandler : MonoBehaviour
     {
-        [SerializeField] private BodySourceManager _manager;
-        
+        [SerializeField] BodySourceManager _manager;
+        [SerializeField] SerializeInterface<ITimeGetter> timer;
+
         Body[] bodies;
 
         Vector3 right_hand_pos = Vector3.zero;
@@ -67,8 +68,8 @@ namespace Refactoring
 
         private void SendData()
         {
-            spaceInputSetter?.SetSpaceInput(SpaceTrackingTag.RightHand, right_hand_pos);
-            spaceInputSetter?.SetSpaceInput(SpaceTrackingTag.LeftHand, left_hand_pos);
+            spaceInputSetter?.SetSpaceInput(SpaceTrackingTag.RightHand, right_hand_pos, timer.Value.Time);
+            spaceInputSetter?.SetSpaceInput(SpaceTrackingTag.LeftHand, left_hand_pos, timer.Value.Time);
             spaceInputSetter?.SetCanGetSpaceInput(isTracking);
         }
     }

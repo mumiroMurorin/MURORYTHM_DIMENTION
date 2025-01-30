@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System.Linq;
 
 namespace Refactoring
 {
@@ -13,10 +14,10 @@ namespace Refactoring
         ReactiveProperty<bool>[] sliderInput;
 
         // 空間入力(右手)
-        ReactiveProperty<Vector3> rightHandInput = new ReactiveProperty<Vector3>();
+        ReactiveDictionary<float, Vector3> rightHandInput = new ReactiveDictionary<float, Vector3>();
 
         // 空間入力(左手)
-        ReactiveProperty<Vector3> leftHandInput = new ReactiveProperty<Vector3>();
+        ReactiveDictionary<float, Vector3> leftHandInput = new ReactiveDictionary<float, Vector3>();
 
         // 空間入力中？
         ReactiveProperty<bool> canGetSpaceInput = new ReactiveProperty<bool>();
@@ -48,17 +49,17 @@ namespace Refactoring
         /// </summary>
         /// <param name="tag"></param>
         /// <param name="pos"></param>
-        public void SetSpaceInput(SpaceTrackingTag tag, Vector3 pos)
+        public void SetSpaceInput(SpaceTrackingTag tag, Vector3 pos, float time)
         {
             switch (tag)
             {
                 case SpaceTrackingTag.RightHand:
-                    if (rightHandInput.Value == pos) { break; }
-                    rightHandInput.Value = pos;
+                    if (rightHandInput.Last().Value == pos) { break; }
+                    rightHandInput.Add(time, pos);
                     break;
                 case SpaceTrackingTag.LeftHand:
-                    if (leftHandInput.Value == pos) { break; }
-                    leftHandInput.Value = pos;
+                    if (leftHandInput.Last().Value == pos) { break; }
+                    leftHandInput.Add(time, pos);
                     break;
                 default:
                     Debug.LogWarning($"【Input】設定されていないタグです: {tag}");
@@ -93,7 +94,7 @@ namespace Refactoring
         /// </summary>
         /// <param name="spaceTrackingTag"></param>
         /// <returns></returns>
-        public IReadOnlyReactiveProperty<Vector3> GetSpaceInputReactiveProperty(SpaceTrackingTag spaceTrackingTag)
+        public IReadOnlyReactiveDictionary<float,Vector3> GetSpaceInputReactiveDictionary(SpaceTrackingTag spaceTrackingTag)
         {
             switch (spaceTrackingTag)
             {
@@ -115,7 +116,7 @@ namespace Refactoring
 
     public interface ISpaceInputSetter
     {
-        public void SetSpaceInput(SpaceTrackingTag tag, Vector3 pos);
+        public void SetSpaceInput(SpaceTrackingTag tag, Vector3 pos, float time);
 
         public void SetCanGetSpaceInput(bool isGet);
     }

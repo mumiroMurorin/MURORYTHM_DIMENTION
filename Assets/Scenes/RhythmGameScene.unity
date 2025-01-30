@@ -2006,6 +2006,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _manager: {fileID: 960448845}
+  timer:
+    obj: {fileID: 1605477129}
 --- !u!114 &960448843
 MonoBehaviour:
   m_ObjectHideFlags: 0

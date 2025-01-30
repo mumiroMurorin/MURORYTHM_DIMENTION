@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System.Linq;
 
 namespace Refactoring
 {
@@ -15,6 +16,9 @@ namespace Refactoring
         NoteData_DynamicGroundDownward noteData;
         
         bool isJudged;
+        IReadOnlyReactiveDictionary<float, Vector3> timeToPositionRight;
+        IReadOnlyReactiveDictionary<float, Vector3> timeToPositionLeft;
+        Vector2ReactiveProperty maxDifference = new Vector2ReactiveProperty(Vector2.zero);
 
         /// <summary>
         /// 初期化
@@ -29,27 +33,47 @@ namespace Refactoring
 
         private void Bind()
         {
-            if(noteData == null) { return; }
+            if (noteData == null) { return; }
+            if (noteData.SpaceInput == null) { return; }
 
-            // 成功判定
-            foreach (int index in noteData.Range)
+            timeToPositionRight = noteData.SpaceInput?.GetSpaceInputReactiveDictionary(SpaceTrackingTag.RightHand);
+            timeToPositionLeft = noteData.SpaceInput?.GetSpaceInputReactiveDictionary(SpaceTrackingTag.LeftHand);
+
+            // 右手
+            timeToPositionRight.ObserveAdd()
+                .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
+                .Where(_ => isJudged)
+                .Subscribe(_ => UpdateMaxDifference(timeToPositionRight))
+                .AddTo(this);
+
+            // 左手
+            timeToPositionLeft.ObserveAdd()
+                .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
+                .Where(_ => isJudged)
+                .Subscribe(_ => UpdateMaxDifference(timeToPositionLeft))
+                .AddTo(this);
+
+
+        }
+
+        /// <summary>
+        /// 最大差を算出
+        /// </summary>
+        /// <param name="timeToPosition"></param>
+        private void UpdateMaxDifference(IReadOnlyReactiveDictionary<float, Vector3> timeToPosition)
+        {
+            if (timeToPosition == null || timeToPosition.Count < 2)
             {
-                if(noteData.SpaceInput == null) { break; }
-                if(noteData.Timer == null) { break; }
-
-                //noteData.SpaceInput?.GetSpaceInputReactiveProperty(SpaceTrackingTag.RightHand)
-                //    // タッチされたとき且つ
-                //    .Where(isTouch => isTouch)
-                //    // 未判定のとき且つ
-                //    .Where(_ => !isJudged)
-                //    // Good判定時間に含まれているとき判定
-                //    .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
-                //    .Subscribe(_ => {
-                //        Judge();
-                //        SetDisable();
-                //    })
-                //    .AddTo(this.gameObject);
+                maxDifference.Value = Vector2.zero;
+                return;
             }
+
+            var xValues = timeToPosition.Where(v => v.Key > ).Select(v => v.Value.x).ToList();
+            var yValues = timeToPosition.Select(v => v.Value.y).ToList();
+            float maxDiffX = xValues.Max() - xValues.Min();
+            float maxDiffY = yValues.Max() - yValues.Min();
+
+            maxDifference.Value = new Vector2(maxDiffX, maxDiffY);
         }
 
         /// <summary>

@@ -24,7 +24,7 @@ namespace Refactoring
     /// </summary>
     public interface ISpaceInputGetter
     {
-        IReadOnlyReactiveProperty<Vector3> GetSpaceInputReactiveProperty(SpaceTrackingTag spaceTrackingTag);
+        IReadOnlyReactiveDictionary<float, Vector3> GetSpaceInputReactiveDictionary(SpaceTrackingTag spaceTrackingTag);
 
         IReadOnlyReactiveProperty<bool> CanGetSpaceInputReactiveProperty { get; }
     }
