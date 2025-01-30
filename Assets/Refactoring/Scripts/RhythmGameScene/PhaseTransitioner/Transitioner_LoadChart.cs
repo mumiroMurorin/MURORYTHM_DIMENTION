@@ -31,7 +31,7 @@ namespace Refactoring
         /// </summary>
         private void TransitionNextPhase()
         {
-            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInRhythmGame.StartAnimation);
+            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInRhythmGame.FadeIn);
         }
     }
 

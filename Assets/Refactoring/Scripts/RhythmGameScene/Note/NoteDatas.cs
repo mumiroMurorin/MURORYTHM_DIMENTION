@@ -94,6 +94,20 @@ namespace Refactoring
     }
 
     /// <summary>
+    /// ノーツの判定情報を纏めたデータ
+    /// </summary>
+    public class NoteJudgementData
+    {
+        public INoteData NoteData { get; set; }
+
+        public Judgement Judgement { get; set; }
+
+        public float TimingError { get; set; }
+
+        public Vector3 PositionJudged { get; set; }
+    }
+
+    /// <summary>
     /// 各種ノーツデータのListをまとめたもの
     /// </summary>
     public class ChartData

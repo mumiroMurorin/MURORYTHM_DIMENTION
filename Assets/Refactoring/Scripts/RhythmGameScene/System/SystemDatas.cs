@@ -11,9 +11,12 @@ namespace Refactoring
     {
         LoadData,
         LoadChart,
+        FadeIn,
+        LoadBody,
         StartAnimation,
         Play,
         EndAnimation,
+        FadeOut,
         TransitionResultScene,
     }
 }

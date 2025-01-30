@@ -48,10 +48,12 @@ namespace Refactoring
     }
 
     /// <summary>
-    /// (初期化に必要な変数も含む)タッチノーツのデータ
+    /// (初期化に必要な変数も含む)ホールドメッシュノーツのデータ
     /// </summary>
     public class NoteData_HoldMesh : INoteData
     {
+        public NoteType NoteType => NoteType.HoldMesh;
+
         public float Timing { get; set; }
 
         public float EndTiming { get; set; }

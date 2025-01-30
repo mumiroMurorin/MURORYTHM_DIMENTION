@@ -25,8 +25,9 @@ namespace Refactoring
         void IChartEnder.BindOnEndChart(Action callback)
         {
             // •ˆ–ÊI—¹ˆ—‚ðw“Ç
-            scoreGetter.JudgedNum
-                .Where(num => num == chartDataGetter.Chart.MaxCombo)
+            scoreGetter.NoteJudgementDatas
+                .ObserveCountChanged()
+                .Where(count => count == chartDataGetter.Chart.MaxCombo)
                 .Subscribe(_ => {
                     callback?.Invoke();
                     OnEndChart();

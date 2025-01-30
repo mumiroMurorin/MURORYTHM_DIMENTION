@@ -24,9 +24,12 @@ namespace Refactoring
         ReactiveProperty<int> missNum = new ReactiveProperty<int>(0);
         public IReadOnlyReactiveProperty<int> MissNum { get { return missNum; } }
 
-        // Miss
-        ReactiveProperty<int> judgedNum = new ReactiveProperty<int>(0);
-        public IReadOnlyReactiveProperty<int> JudgedNum { get { return judgedNum; } }
+        // îªíËçœÇ›ÉmÅ[ÉcÇÃêî
+        //ReactiveProperty<int> judgedNum = new ReactiveProperty<int>(0);
+        //public IReadOnlyReactiveProperty<int> JudgedNum { get { return judgedNum; } }
+
+        ReactiveCollection<NoteJudgementData> noteJudgementDatas = new ReactiveCollection<NoteJudgementData>();
+        public IReadOnlyReactiveCollection<NoteJudgementData> NoteJudgementDatas { get { return noteJudgementDatas; } }
 
         // Combo
         ReactiveProperty<int> combo = new ReactiveProperty<int>(0);
@@ -53,7 +56,8 @@ namespace Refactoring
             greatNum.Value = 0;
             goodNum.Value = 0;
             missNum.Value = 0;
-            judgedNum.Value = 0;
+            //judgedNum.Value = 0;
+            noteJudgementDatas = new ReactiveCollection<NoteJudgementData>();
             combo.Value = 0;
             score.Value = 0;
             comboRank.Value = ComboRank.AllPerfect;
@@ -64,34 +68,35 @@ namespace Refactoring
         /// îªíËÇÃãLò^
         /// </summary>
         /// <param name="judgement"></param>
-        void IJudgementRecorder.RecordJudgement(Judgement judgement)
+        void IJudgementRecorder.RecordJudgement(NoteJudgementData judgementData)
         {
             // ÉfÉoÉbÉOóp
-            Debug.Log($"ÅyJudgementÅzîªíË {judgement}");
+            Debug.Log($"ÅyJudgementÅzîªíË {judgementData.Judgement}");
 
-            SetComboRank(judgement);
+            SetComboRank(judgementData.Judgement);
+            noteJudgementDatas.Add(judgementData);
 
-            switch (judgement)
+            switch (judgementData.Judgement)
             {
                 case Judgement.Perfect:
                     perfectNum.Value++;
                     combo.Value++;
-                    judgedNum.Value++;
+                    //judgedNum.Value++;
                     break;
                 case Judgement.Great:
                     greatNum.Value++;
                     combo.Value++;
-                    judgedNum.Value++;
+                    //judgedNum.Value++;
                     break;
                 case Judgement.Good:
                     goodNum.Value++;
-                    judgedNum.Value++;
+                    //judgedNum.Value++;
                     combo.Value++;
                     break;
                 case Judgement.Miss:
                     missNum.Value++;
                     combo.Value = 0;
-                    judgedNum.Value++;
+                    //judgedNum.Value++;
                     break;
             }
         }

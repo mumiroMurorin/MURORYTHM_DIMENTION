@@ -59,7 +59,15 @@ namespace Refactoring
         {
             // ”»’è‚ð“¾‚é
             Judgement judgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
-            noteData.JudgementRecorder?.RecordJudgement(judgement);
+
+            NoteJudgementData judgementData = new NoteJudgementData
+            {
+                Judgement = judgement,
+                NoteData = this.noteData,
+                TimingError = noteData.Timing - noteData.Timer.Time
+            };
+
+            noteData.JudgementRecorder?.RecordJudgement(judgementData);
             isJudged = true;
         }
 
@@ -102,6 +110,8 @@ namespace Refactoring
     /// </summary>
     public class NoteData_DynamicGroundRightward : INoteData
     {
+        public NoteType NoteType => NoteType.DynamicGroundRightward;
+
         public float Timing { get; set; }
 
         public int[] Range { get; set; }

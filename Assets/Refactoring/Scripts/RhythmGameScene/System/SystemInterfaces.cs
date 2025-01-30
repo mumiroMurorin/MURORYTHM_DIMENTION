@@ -33,7 +33,7 @@ namespace Refactoring
     /// </summary>
     public interface IJudgementRecorder
     {
-        void RecordJudgement(Judgement judgement);
+        void RecordJudgement(NoteJudgementData judgementData);
     }
 
     /// <summary>
@@ -60,7 +60,9 @@ namespace Refactoring
 
         public IReadOnlyReactiveProperty<int> MissNum { get; }
 
-        public IReadOnlyReactiveProperty<int> JudgedNum { get; }
+        //public IReadOnlyReactiveProperty<int> JudgedNum { get; }
+
+        public IReadOnlyReactiveCollection<NoteJudgementData> NoteJudgementDatas { get; }
 
         public IReadOnlyReactiveProperty<int> Combo { get; }
 
@@ -186,5 +188,13 @@ namespace Refactoring
     public interface IChartEnder
     {
         void BindOnEndChart(Action callback = null);
+    }
+
+    /// <summary>
+    /// 体のデータ取得を行う
+    /// </summary>
+    public interface IBodyLoader
+    {
+        void WaitForLoadBody(Action callback);
     }
 }

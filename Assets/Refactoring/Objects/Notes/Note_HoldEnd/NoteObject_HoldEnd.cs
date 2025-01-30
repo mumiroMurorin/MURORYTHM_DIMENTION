@@ -59,7 +59,15 @@ namespace Refactoring
         {
             // 判定を得る
             Judgement judgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
-            noteData.JudgementRecorder?.RecordJudgement(judgement);
+
+            NoteJudgementData judgementData = new NoteJudgementData
+            {
+                Judgement = judgement,
+                NoteData = this.noteData,
+                TimingError = noteData.Timing - noteData.Timer.Time
+            };
+
+            noteData.JudgementRecorder?.RecordJudgement(judgementData);
             isJudged = true;
         }
 
@@ -98,10 +106,12 @@ namespace Refactoring
     }
 
     /// <summary>
-    /// (初期化に必要な変数も含む)タッチノーツのデータ
+    /// (初期化に必要な変数も含む)ホールド終点ノーツのデータ
     /// </summary>
     public class NoteData_HoldEnd : INoteData
     {
+        public NoteType NoteType => NoteType.HoldEnd;
+
         public float Timing { get; set; }
 
         public int[] Range { get; set; }

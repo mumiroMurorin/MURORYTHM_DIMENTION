@@ -32,7 +32,7 @@ namespace Refactoring
         /// </summary>
         private void TransitionNextPhase()
         {
-            phaseTransitionable.Value.TransitionPhase(PhaseStatusInRhythmGame.TransitionResultScene);
+            phaseTransitionable.Value.TransitionPhase(PhaseStatusInRhythmGame.FadeOut);
         }
     }
 

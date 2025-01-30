@@ -59,7 +59,18 @@ namespace Refactoring
         {
             // ”»’è‚ð“¾‚é
             Judgement judgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
-            noteData.JudgementRecorder?.RecordJudgement(judgement);
+
+            float radian = (11.25f * ((noteData.Range[noteData.Range.Length - 1] - noteData.Range[0]) / 2f + 0.5f) - 180f) * Mathf.Deg2Rad;
+
+            NoteJudgementData judgementData = new NoteJudgementData
+            {
+                Judgement = judgement,
+                NoteData = this.noteData,
+                TimingError = noteData.Timing - noteData.Timer.Time,
+                PositionJudged = new Vector3(10 * Mathf.Cos(radian), 10 * Mathf.Sin(radian), 0)
+            };
+
+            noteData.JudgementRecorder?.RecordJudgement(judgementData);
             isJudged = true;
         }
 
@@ -102,6 +113,8 @@ namespace Refactoring
     /// </summary>
     public class NoteData_Touch : INoteData
     {
+        public NoteType NoteType => NoteType.Touch;
+
         public float Timing { get; set; }
 
         public int[] Range { get; set; }
