@@ -18,7 +18,7 @@ namespace Refactoring
 
         public override GameObject Spawn(NoteJudgementData judgementData)
         {
-            Debug.Log(judgementData.PositionJudged + "," + GetEularAngle(judgementData.PositionJudged, Vector3.zero));
+            //Debug.Log(judgementData.PositionJudged + "," + GetEularAngle(judgementData.PositionJudged, Vector3.zero));
             Vector3 eularAngle = GetEularAngle(judgementData.PositionJudged, Vector3.zero) - new Vector3(0, 0, 90);
 
             switch (judgementData.Judgement)

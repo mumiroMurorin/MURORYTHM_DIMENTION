@@ -43,18 +43,25 @@ namespace Refactoring
 
         public Judgement GetJudgement(float currentTime, float judgeTime)
         {
+            return GetJudgementAndError(currentTime, judgeTime).Judgement;
+        }
+
+        public JudgementAndErrorTime GetJudgementAndError(float currentTime, float judgeTime)
+        {
+            float error = judgeTime - currentTime;
+
             // Good”»’è‘O
-            if (judgeTime - goodWindow > currentTime) { return Judgement.None; }
+            if (judgeTime - goodWindow > currentTime) { return new JudgementAndErrorTime { Judgement = Judgement.None,Error = error }; }
             // Good”»’èŒã
-            if (judgeTime + goodWindow < currentTime) { return Judgement.Miss; }
+            if (judgeTime + goodWindow < currentTime) { return new JudgementAndErrorTime { Judgement = Judgement.Miss, Error = error }; }
 
             float timingDiff = Mathf.Abs(judgeTime - currentTime);
 
-            if (timingDiff <= perfectWindow) { return Judgement.Perfect; }
-            else if (timingDiff <= greatWindow) { return Judgement.Great; }
-            else if (timingDiff <= goodWindow) { return Judgement.Good; }
+            if (timingDiff <= perfectWindow) { return new JudgementAndErrorTime { Judgement = Judgement.Perfect, Error = error }; }
+            else if (timingDiff <= greatWindow) { return new JudgementAndErrorTime { Judgement = Judgement.Great, Error = error }; }
+            else if (timingDiff <= goodWindow) { return new JudgementAndErrorTime { Judgement = Judgement.Good, Error = error }; }
 
-            return Judgement.None;
+            return new JudgementAndErrorTime { Judgement = Judgement.None };
         }
     }
 
@@ -91,6 +98,13 @@ namespace Refactoring
                     break;
             }
         }
+    }
+
+    public struct JudgementAndErrorTime
+    {
+        public Judgement Judgement { get; set; }
+
+        public float Error { get; set; }
     }
 
     /// <summary>

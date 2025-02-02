@@ -93,24 +93,24 @@ namespace Refactoring
                       }
                 },
 
-                //noteData_DynamicGroundRightwards = new List<NoteData_DynamicGroundRightward>
-                //{
-                //      new NoteData_DynamicGroundRightward
-                //      {
-                //           Range =  new int[]{ 0 },
-                //           Timing = 1f
-                //      },
-                //      new NoteData_DynamicGroundRightward
-                //      {
-                //           Range =  new int[]{ 0,1,2,3 },
-                //           Timing = 2f
-                //      },
-                //      new NoteData_DynamicGroundRightward
-                //      {
-                //           Range =  new int[]{ 4,5,6,7,8,9,10,11,12 },
-                //           Timing = 3f
-                //      }
-                //}
+                noteData_DynamicGroundDownwards = new List<NoteData_DynamicGroundDownward>
+                {
+                      new NoteData_DynamicGroundDownward
+                      {
+                           Range =  new int[]{ 0 },
+                           Timing = 1f
+                      },
+                      new NoteData_DynamicGroundDownward
+                      {
+                           Range =  new int[]{ 0,1,2,3 },
+                           Timing = 2f
+                      },
+                      new NoteData_DynamicGroundDownward
+                      {
+                           Range =  new int[]{ 4,5,6,7,8,9,10,11,12 },
+                           Timing = 3f
+                      }
+                }
             };
 
             return chartData;

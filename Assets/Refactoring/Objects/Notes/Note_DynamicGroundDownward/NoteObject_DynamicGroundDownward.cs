@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using NoteJudgement;
 using System.Linq;
 
 namespace Refactoring
@@ -11,14 +12,15 @@ namespace Refactoring
     /// </summary>
     public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroundDownward>
     {
+        Vector3 JudgeVector => Vector3.down;
+
+        [SerializeField] float judgeTimeRange = 1f;
         [SerializeField] JudgementWindow judgementWindow;
+        [SerializeField] Vector3 judgeThreshold;
 
         NoteData_DynamicGroundDownward noteData;
-        
+        Judgement currentMaxJudgement = Judgement.Miss;
         bool isJudged;
-        IReadOnlyReactiveDictionary<float, Vector3> timeToPositionRight;
-        IReadOnlyReactiveDictionary<float, Vector3> timeToPositionLeft;
-        Vector2ReactiveProperty maxDifference = new Vector2ReactiveProperty(Vector2.zero);
 
         /// <summary>
         /// 初期化
@@ -28,6 +30,9 @@ namespace Refactoring
         {
             noteData = data;
 
+            // 判定閾値の更新
+            judgeThreshold = NoteJudgement.DynamicNote.CalcJudgementThresHold(JudgeVector);
+
             Bind();
         }
 
@@ -36,82 +41,40 @@ namespace Refactoring
             if (noteData == null) { return; }
             if (noteData.SpaceInput == null) { return; }
 
-            timeToPositionRight = noteData.SpaceInput?.GetSpaceInputReactiveDictionary(SpaceTrackingTag.RightHand);
-            timeToPositionLeft = noteData.SpaceInput?.GetSpaceInputReactiveDictionary(SpaceTrackingTag.LeftHand);
-
             // 右手
-            timeToPositionRight.ObserveAdd()
+            noteData.SpaceInput?.GetSpaceInputReactiveDictionary(SpaceTrackingTag.RightHand).ObserveAdd()
                 .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
                 .Where(_ => isJudged)
-                .Subscribe(_ => UpdateMaxDifference(timeToPositionRight))
-                .AddTo(this);
-
-            // 左手
-            timeToPositionLeft.ObserveAdd()
-                .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
-                .Where(_ => isJudged)
-                .Subscribe(_ => UpdateMaxDifference(timeToPositionLeft))
-                .AddTo(this);
-
-
+                .Subscribe(_ => Judge(noteData.SpaceInput.GetMaxDifference(judgeTimeRange)))
+                .AddTo(this.gameObject);
         }
 
-        /// <summary>
-        /// 最大差を算出
-        /// </summary>
-        /// <param name="timeToPosition"></param>
-        private void UpdateMaxDifference(IReadOnlyReactiveDictionary<float, Vector3> timeToPosition)
+        private void Update()
         {
-            if (timeToPosition == null || timeToPosition.Count < 2)
+            if (JudgeMiss()) 
             {
-                maxDifference.Value = Vector2.zero;
-                return;
+                RecordJudgement();
+                SetDisable();
             }
-
-            var xValues = timeToPosition.Where(v => v.Key > ).Select(v => v.Value.x).ToList();
-            var yValues = timeToPosition.Select(v => v.Value.y).ToList();
-            float maxDiffX = xValues.Max() - xValues.Min();
-            float maxDiffY = yValues.Max() - yValues.Min();
-
-            maxDifference.Value = new Vector2(maxDiffX, maxDiffY);
         }
 
         /// <summary>
         /// 判定
         /// </summary>
-        private void Judge()
+        private void Judge(Vector3 diff)
         {
-            // 判定を得る
-            Judgement judgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+            // 閾値から出てるか判定
+            if (!NoteJudgement.DynamicNote.JudgeThreshold(judgeThreshold, diff)) { return; }
 
-            NoteJudgementData judgementData = new NoteJudgementData
-            {
-                Judgement = judgement,
-                NoteData = this.noteData,
-                TimingError = noteData.Timing - noteData.Timer.Time
-            };
+            // 判定を更新
+            currentMaxJudgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
 
-            noteData.JudgementRecorder?.RecordJudgement(judgementData);
-            isJudged = true;
-        }
+            // Perfectだったときは問答無用でPerfect
+            if (currentMaxJudgement == Judgement.Perfect) { RecordJudgement(); }
 
-        /// <summary>
-        /// ノーツを機能停止する
-        /// </summary>
-        private void SetDisable()
-        {
-             this.gameObject.SetActive(false);
-            // Destroy(this.gameObject);
-        }
+            // Great以下だったときはMiss判定まで待ち
 
-        private void Update()
-        {
-            if (JudgeMiss())
-            {
-                Judge();
-                SetDisable();
-            }
-
+            return;
         }
 
         /// <summary>
@@ -127,6 +90,32 @@ namespace Refactoring
 
             return true;
         }
+
+        /// <summary>
+        /// 判定の記録
+        /// </summary>
+        private void RecordJudgement()
+        {
+            NoteJudgementData judgementData = new NoteJudgementData
+            {
+                Judgement = currentMaxJudgement,
+                NoteData = this.noteData,
+                TimingError = noteData.Timing - noteData.Timer.Time
+            };
+
+            noteData.JudgementRecorder?.RecordJudgement(judgementData);
+            isJudged = true;
+        }
+
+        /// <summary>
+        /// ノーツを機能停止する
+        /// </summary>
+        private void SetDisable()
+        {
+            this.gameObject.SetActive(false);
+            // Destroy(this.gameObject);
+        }
+
     }
 
     /// <summary>

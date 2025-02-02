@@ -27,5 +27,7 @@ namespace Refactoring
         IReadOnlyReactiveDictionary<float, Vector3> GetSpaceInputReactiveDictionary(SpaceTrackingTag spaceTrackingTag);
 
         IReadOnlyReactiveProperty<bool> CanGetSpaceInputReactiveProperty { get; }
+
+        Vector3 GetMaxDifference(float timeRange);
     }
 }
