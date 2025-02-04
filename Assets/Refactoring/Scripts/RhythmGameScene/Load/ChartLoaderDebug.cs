@@ -93,19 +93,19 @@ namespace Refactoring
                 //      }
                 //},
 
-                noteData_DynamicGroundDownwards = new List<NoteData_DynamicGroundDownward>
+                noteData_DynamicGroundUpwards = new List<NoteData_DynamicGroundUpward>
                 {
-                      new NoteData_DynamicGroundDownward
+                      new NoteData_DynamicGroundUpward
                       {
                            Range =  new int[]{ 0 },
                            Timing = 1f
                       },
-                      new NoteData_DynamicGroundDownward
+                      new NoteData_DynamicGroundUpward
                       {
                            Range =  new int[]{ 0,1,2,3 },
                            Timing = 2f
                       },
-                      new NoteData_DynamicGroundDownward
+                      new NoteData_DynamicGroundUpward
                       {
                            Range =  new int[]{ 4,5,6,7,8,9,10,11,12 },
                            Timing = 3f

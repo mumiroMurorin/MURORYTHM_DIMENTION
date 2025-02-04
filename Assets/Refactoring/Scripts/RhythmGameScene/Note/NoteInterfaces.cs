@@ -7,7 +7,6 @@ namespace Refactoring
 {
     /// <summary>
     /// 各種ノーツデータの基となるインターフェース
-    /// ビルダーパターンの使用
     /// </summary>
     public interface INoteData
     {
@@ -42,5 +41,14 @@ namespace Refactoring
         public abstract void Initialize(NoteFactoryInitializingData initializingData);
 
         public abstract NoteObject<T> Spawn(T data);
+    }
+
+    /// <summary>
+    /// ノーツインタラクトエフェクトの初期化など
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IInteractNoteEffectController<T> where T : INoteData
+    {
+        void SetEffect(T noteData);
     }
 }

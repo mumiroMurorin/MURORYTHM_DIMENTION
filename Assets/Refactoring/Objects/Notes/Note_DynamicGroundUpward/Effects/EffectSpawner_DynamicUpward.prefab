@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8224908405846241423
+--- !u!1 &1398145605877389100
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,44 +8,43 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4212254938933315147}
-  - component: {fileID: 8075949290047082630}
+  - component: {fileID: 3302472204600621028}
+  - component: {fileID: 3612840620186136964}
   m_Layer: 0
-  m_Name: DynamicGroundRightwardNoteOrigin
+  m_Name: EffectSpawner_DynamicUpward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4212254938933315147
+--- !u!4 &3302472204600621028
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8224908405846241423}
+  m_GameObject: {fileID: 1398145605877389100}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8075949290047082630
+--- !u!114 &3612840620186136964
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8224908405846241423}
+  m_GameObject: {fileID: 1398145605877389100}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9734b749d8991454aa7faba17806ebe0, type: 3}
+  m_Script: {fileID: 11500000, guid: a696e2e7445bbfa428bf223ad4edcf08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  judgeMagnitude: 0.3
-  judgementWindow:
-    perfectWindow: 0.0666666
-    greatWindow: 0.1
-    goodWindow: 0.1333333
+  parent: {fileID: 3302472204600621028}
+  perfectEffect: {fileID: 2483935840268213223, guid: 0886e0828994745448d02773556e0d44, type: 3}
+  greatEffect: {fileID: 2483935840268213223, guid: 960ac3b7777f46042842c1c8663afc1d, type: 3}
+  goodEffect: {fileID: 2483935840268213223, guid: c0a536af99f007d43985693c82728a6c, type: 3}

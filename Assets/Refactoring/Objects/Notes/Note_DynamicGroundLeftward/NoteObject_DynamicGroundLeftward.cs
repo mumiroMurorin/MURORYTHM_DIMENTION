@@ -10,10 +10,14 @@ namespace Refactoring
     /// </summary>
     public class NoteObject_DynamicGroundLeftward : NoteObject<NoteData_DynamicGroundLeftward>
     {
+        Vector3 JudgeVector => Vector3.left;
+
+        [SerializeField] float judgeMagnitude;
         [SerializeField] JudgementWindow judgementWindow;
 
         NoteData_DynamicGroundLeftward noteData;
-        
+        DynamicJudgement dynamicJudgement;
+        Judgement currentMaxJudgement = Judgement.Miss;
         bool isJudged;
 
         /// <summary>
@@ -24,70 +28,59 @@ namespace Refactoring
         {
             noteData = data;
 
+            dynamicJudgement = new DynamicJudgement(noteData.Range, JudgeVector, judgeMagnitude);
+
             Bind();
         }
 
         private void Bind()
         {
-            if(noteData == null) { return; }
+            if (noteData == null) { return; }
+            if (noteData.SpaceInput == null) { return; }
 
-            // 成功判定
-            foreach (int index in noteData.Range)
-            {
-                if(noteData.SpaceInput == null) { break; }
-                if(noteData.Timer == null) { break; }
+            // 右手
+            noteData.SpaceInput?.GetSpaceInputVelocity(SpaceTrackingTag.RightHand)
+                .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
+                .Where(_ => !isJudged)
+                .Subscribe(Judge)
+                .AddTo(this.gameObject);
 
-                //noteData.SpaceInput?.GetSpaceInputReactiveProperty(SpaceTrackingTag.RightHand)
-                //    // タッチされたとき且つ
-                //    .Where(isTouch => isTouch)
-                //    // 未判定のとき且つ
-                //    .Where(_ => !isJudged)
-                //    // Good判定時間に含まれているとき判定
-                //    .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
-                //    .Subscribe(_ => {
-                //        Judge();
-                //        SetDisable();
-                //    })
-                //    .AddTo(this.gameObject);
-            }
-        }
-
-        /// <summary>
-        /// 判定
-        /// </summary>
-        private void Judge()
-        {
-            // 判定を得る
-            Judgement judgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
-
-            NoteJudgementData judgementData = new NoteJudgementData
-            {
-                Judgement = judgement,
-                NoteData = this.noteData,
-                TimingError = noteData.Timing - noteData.Timer.Time
-            };
-
-            noteData.JudgementRecorder?.RecordJudgement(judgementData);
-            isJudged = true;
-        }
-
-        /// <summary>
-        /// ノーツを機能停止する
-        /// </summary>
-        private void SetDisable()
-        {
-             this.gameObject.SetActive(false);
-            // Destroy(this.gameObject);
+            // 左手
+            noteData.SpaceInput?.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand)
+                .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
+                .Where(_ => !isJudged)
+                .Subscribe(Judge)
+                .AddTo(this.gameObject);
         }
 
         private void Update()
         {
             if (JudgeMiss())
             {
-                Judge();
+                RecordJudgement();
                 SetDisable();
             }
+        }
 
+        /// <summary>
+        /// 判定
+        /// </summary>
+        private void Judge(Vector3 velocity)
+        {
+            //Debug.Log($"【Judge】Downward velocity:{velocity}, {dynamicJudgement.Judge(velocity)}, {this.gameObject.name}");
+
+            // 閾値から出てるか判定
+            if (!dynamicJudgement.Judge(velocity)) { return; }
+
+            // 判定を更新
+            currentMaxJudgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+
+            // Perfectだったときは問答無用でPerfect
+            if (currentMaxJudgement == Judgement.Perfect) { RecordJudgement(); }
+
+            // Great以下だったときはMiss判定まで待ち
+
+            return;
         }
 
         /// <summary>
@@ -103,6 +96,32 @@ namespace Refactoring
 
             return true;
         }
+
+        /// <summary>
+        /// 判定の記録
+        /// </summary>
+        private void RecordJudgement()
+        {
+            NoteJudgementData judgementData = new NoteJudgementData
+            {
+                Judgement = currentMaxJudgement,
+                NoteData = this.noteData,
+                TimingError = noteData.Timing - noteData.Timer.Time
+            };
+
+            noteData.JudgementRecorder?.RecordJudgement(judgementData);
+            isJudged = true;
+        }
+
+        /// <summary>
+        /// ノーツを機能停止する
+        /// </summary>
+        private void SetDisable()
+        {
+            this.gameObject.SetActive(false);
+            // Destroy(this.gameObject);
+        }
+
     }
 
     /// <summary>
