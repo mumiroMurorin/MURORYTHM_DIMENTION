@@ -60,8 +60,6 @@ namespace Refactoring
 
         public IReadOnlyReactiveProperty<int> MissNum { get; }
 
-        //public IReadOnlyReactiveProperty<int> JudgedNum { get; }
-
         public IReadOnlyReactiveCollection<NoteJudgementData> NoteJudgementDatas { get; }
 
         public IReadOnlyReactiveProperty<int> Combo { get; }

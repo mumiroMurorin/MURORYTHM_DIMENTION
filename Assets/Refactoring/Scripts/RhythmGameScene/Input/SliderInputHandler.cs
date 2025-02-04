@@ -44,6 +44,11 @@ namespace Refactoring
                 sliderInputSetter?.SetSliderInput(pair.Value, Input.GetKey(pair.Key));
             }
         }
+
+        private void OnDestroy()
+        {
+            sliderInputSetter?.Dispose();
+        }
     }
 
 }

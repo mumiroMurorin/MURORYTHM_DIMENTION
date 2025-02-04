@@ -15,10 +15,11 @@ namespace Refactoring
         Vector3 JudgeVector => Vector3.down;
 
         [SerializeField] float judgeTimeRange = 1f;
+        [SerializeField] float judgeMagnitude;
         [SerializeField] JudgementWindow judgementWindow;
-        [SerializeField] Vector3 judgeThreshold;
 
         NoteData_DynamicGroundDownward noteData;
+        DynamicJudgement dynamicJudgement;
         Judgement currentMaxJudgement = Judgement.Miss;
         bool isJudged;
 
@@ -30,8 +31,7 @@ namespace Refactoring
         {
             noteData = data;
 
-            // 判定閾値の更新
-            judgeThreshold = NoteJudgement.DynamicNote.CalcJudgementThresHold(JudgeVector);
+            dynamicJudgement = new DynamicJudgement(noteData.Range, JudgeVector, judgeMagnitude);
 
             Bind();
         }
@@ -42,10 +42,17 @@ namespace Refactoring
             if (noteData.SpaceInput == null) { return; }
 
             // 右手
-            noteData.SpaceInput?.GetSpaceInputReactiveDictionary(SpaceTrackingTag.RightHand).ObserveAdd()
+            noteData.SpaceInput?.GetSpaceInputVelocity(SpaceTrackingTag.RightHand)
                 .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
-                .Where(_ => isJudged)
-                .Subscribe(_ => Judge(noteData.SpaceInput.GetMaxDifference(judgeTimeRange)))
+                .Where(_ => !isJudged)
+                .Subscribe(Judge)
+                .AddTo(this.gameObject);
+
+            // 左手
+            noteData.SpaceInput?.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand)
+                .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
+                .Where(_ => !isJudged)
+                .Subscribe(Judge)
                 .AddTo(this.gameObject);
         }
 
@@ -61,10 +68,12 @@ namespace Refactoring
         /// <summary>
         /// 判定
         /// </summary>
-        private void Judge(Vector3 diff)
+        private void Judge(Vector3 velocity)
         {
+            //Debug.Log($"【Judge】Downward velocity:{velocity}, {dynamicJudgement.Judge(velocity)}, {this.gameObject.name}");
+
             // 閾値から出てるか判定
-            if (!NoteJudgement.DynamicNote.JudgeThreshold(judgeThreshold, diff)) { return; }
+            if (!dynamicJudgement.Judge(velocity)) { return; }
 
             // 判定を更新
             currentMaxJudgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);

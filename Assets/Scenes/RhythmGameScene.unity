@@ -4237,7 +4237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed07db9c99ac59f4e9da1284ad6c5307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUseKinectInput: 0
+  isUseKinectInput: 1
 --- !u!1001 &1826391570
 PrefabInstance:
   m_ObjectHideFlags: 0

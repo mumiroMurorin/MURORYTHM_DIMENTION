@@ -53,7 +53,7 @@ namespace Refactoring
                 judgeFieldCenter.z + position.z * (judgeFieldSize.z / 2f)
            );
 
-            Debug.Log($"ÅyCaptureÅz{handObject.name},{position}");
+            //Debug.Log($"ÅyCaptureÅz{handObject.name},{position}");
             handObject.transform.position = position; 
         }
     }

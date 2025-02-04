@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NoteJudgement;
+using System.Linq;
 using Deform;
 
 namespace Refactoring
@@ -65,38 +67,44 @@ namespace Refactoring
         }
     }
 
-    /// <summary>
-    /// Perfect～Goodまでのエフェクトをまとめたクラス
-    /// </summary>
-    [System.Serializable]
-    public class JudgementEffects
+    public class DynamicJudgement
     {
-        [Header("エフェクト(非アクティブインスタンス済オブジェクト)")]
-        [SerializeField] GameObject perfectEffect;
-        [SerializeField] GameObject greatEffect;
-        [SerializeField] GameObject goodEffect;
-        [SerializeField] GameObject missEffect;
+        List<Vector3> judgeVectors;
 
-        public void SetActive(Judgement judgement)
+        public DynamicJudgement(int[] range, Vector3 rotationVector, float magnitude)
         {
-            switch (judgement)
+            judgeVectors = new List<Vector3>();
+
+            // それぞれの判定ベクトルを調べる
+            for (int i = 0; i < range.Length; i++)
             {
-                case Judgement.Perfect:
-                    perfectEffect.SetActive(true);
-                    break;
-                case Judgement.Great:
-                    greatEffect.SetActive(true);
-                    break;
-                case Judgement.Good:
-                    goodEffect.SetActive(true);
-                    break;
-                case Judgement.Miss:
-                    missEffect.SetActive(true);
-                    break;
-                default:
-                    Debug.LogWarning($"【note】設定されていないプロパティです: {judgement}");
-                    break;
+                Vector3 vector = NoteJudgement.DynamicNote.CalcJudgementThresHold(10, range[i], rotationVector);
+
+                // 各要素が0でないか調べてmagnitudeを代入
+                if (vector.x > 0) { vector.x = magnitude; }
+                else if (vector.x < 0) { vector.x = -magnitude; }
+
+                if (vector.y > 0) { vector.y = magnitude; }
+                else if (vector.y < 0) { vector.y = -magnitude; }
+
+                if (vector.z > 0) { vector.z = magnitude; }
+                else if (vector.z < 0) { vector.z = -magnitude; }
+
+                judgeVectors.Add(vector);
             }
+
+            judgeVectors = judgeVectors.Distinct().ToList();
+            Debug.Log($"List: {string.Join(", ", judgeVectors)}");
+        }
+
+        public bool Judge(Vector3 diff)
+        {
+            foreach(Vector3 threshold in judgeVectors)
+            {
+                if (NoteJudgement.DynamicNote.JudgeThreshold(threshold, diff)) { return true; }
+            }
+
+            return false;
         }
     }
 

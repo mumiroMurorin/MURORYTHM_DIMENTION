@@ -24,10 +24,6 @@ namespace Refactoring
         ReactiveProperty<int> missNum = new ReactiveProperty<int>(0);
         public IReadOnlyReactiveProperty<int> MissNum { get { return missNum; } }
 
-        // îªíËçœÇ›ÉmÅ[ÉcÇÃêî
-        //ReactiveProperty<int> judgedNum = new ReactiveProperty<int>(0);
-        //public IReadOnlyReactiveProperty<int> JudgedNum { get { return judgedNum; } }
-
         ReactiveCollection<NoteJudgementData> noteJudgementDatas = new ReactiveCollection<NoteJudgementData>();
         public IReadOnlyReactiveCollection<NoteJudgementData> NoteJudgementDatas { get { return noteJudgementDatas; } }
 
@@ -56,7 +52,6 @@ namespace Refactoring
             greatNum.Value = 0;
             goodNum.Value = 0;
             missNum.Value = 0;
-            //judgedNum.Value = 0;
             noteJudgementDatas = new ReactiveCollection<NoteJudgementData>();
             combo.Value = 0;
             score.Value = 0;

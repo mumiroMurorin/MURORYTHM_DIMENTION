@@ -26,8 +26,24 @@ namespace Refactoring
     {
         IReadOnlyReactiveDictionary<float, Vector3> GetSpaceInputReactiveDictionary(SpaceTrackingTag spaceTrackingTag);
 
-        IReadOnlyReactiveProperty<bool> CanGetSpaceInputReactiveProperty { get; }
+        IReadOnlyReactiveProperty<Vector3> GetSpaceInputVelocity(SpaceTrackingTag spaceTrackingTag);
 
-        Vector3 GetMaxDifference(float timeRange);
+        IReadOnlyReactiveProperty<bool> CanGetSpaceInputReactiveProperty { get; }
+    }
+
+    public interface ISliderInputSetter
+    {
+        public void SetSliderInput(int index, bool isEnable);
+
+        public void Dispose();
+    }
+
+    public interface ISpaceInputSetter
+    {
+        public void SetSpaceInput(SpaceTrackingTag tag, Vector3 pos, float time);
+
+        public void SetCanGetSpaceInput(bool isGet);
+
+        public void Dispose();
     }
 }

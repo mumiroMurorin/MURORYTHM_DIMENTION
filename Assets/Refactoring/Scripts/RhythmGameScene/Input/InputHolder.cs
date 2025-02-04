@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using NoteJudgement;
 using System.Linq;
 
 namespace Refactoring
@@ -10,19 +11,26 @@ namespace Refactoring
     {
         const int SLIDER_MAX_COUNT = 16;
         const int MAX_RECORD_SPACE_INDEX = 60;
+        //const float VECTOR_MESUREMENT_TIME = 0.1f;
 
         // スライダーからの入力
         ReactiveProperty<bool>[] sliderInput;
 
         // 空間入力(右手)
         LimitedReactiveDictionary<float, Vector3> rightHandInput = new LimitedReactiveDictionary<float, Vector3>(MAX_RECORD_SPACE_INDEX);
+        // 右手の動きのベクトル
+        ReactiveProperty<Vector3> rightHandVelocity = new ReactiveProperty<Vector3>();
 
         // 空間入力(左手)
         LimitedReactiveDictionary<float, Vector3> leftHandInput = new LimitedReactiveDictionary<float, Vector3>(MAX_RECORD_SPACE_INDEX);
+        // 左手の動きのベクトル
+        ReactiveProperty<Vector3> leftHandVelocity = new ReactiveProperty<Vector3>();
 
         // 空間入力中？
         ReactiveProperty<bool> canGetSpaceInput = new ReactiveProperty<bool>();
         public IReadOnlyReactiveProperty<bool> CanGetSpaceInputReactiveProperty { get { return canGetSpaceInput; } }
+
+        private CompositeDisposable disposables = new CompositeDisposable();
 
         public InputHolder()
         {
@@ -31,6 +39,15 @@ namespace Refactoring
             {
                 sliderInput[i] = new ReactiveProperty<bool>();
             }
+
+            // 両手の動きをVector化する
+            rightHandInput.Dictionary.ObserveAdd()
+                .Subscribe(_ => SetHandVector(rightHandInput.Dictionary, rightHandVelocity))
+                .AddTo(disposables);
+
+            leftHandInput.Dictionary.ObserveAdd()
+                .Subscribe(_ => SetHandVector(leftHandInput.Dictionary, leftHandVelocity))
+                .AddTo(disposables);
         }
 
         /// <summary>
@@ -112,49 +129,40 @@ namespace Refactoring
         }
 
         /// <summary>
-        /// 最大差を計算して返す
+        /// 空間入力(ReactiveProperty)を返す
         /// </summary>
-        /// <param name="timeRange"></param>
+        /// <param name="spaceTrackingTag"></param>
         /// <returns></returns>
-        public Vector3 GetMaxDifference(float timeRange)
+        public IReadOnlyReactiveProperty<Vector3> GetSpaceInputVelocity(SpaceTrackingTag spaceTrackingTag)
         {
-            Vector3 rightDiff = MaxDifference(rightHandInput.Dictionary, timeRange);
-            Vector3 leftDiff = MaxDifference(leftHandInput.Dictionary, timeRange);
-
-            return new Vector3(
-                Mathf.Max(rightDiff.x, leftDiff.x),
-                Mathf.Max(rightDiff.y, leftDiff.y),
-                Mathf.Max(rightDiff.z, leftDiff.z)
-                );
-        }
-
-        private Vector3 MaxDifference(IReadOnlyReactiveDictionary<float,Vector3> timeToPosition, float timeRange)
-        {
-            if (timeToPosition == null || timeToPosition.Count < 2)
+            switch (spaceTrackingTag)
             {
-                return Vector3.zero;
+                case SpaceTrackingTag.RightHand:
+                    return rightHandVelocity;
+                case SpaceTrackingTag.LeftHand:
+                    return leftHandVelocity;
+                default:
+                    Debug.LogWarning($"【Input】設定されていないタグです: {spaceTrackingTag}");
+                    return null;
             }
-
-            var xValues = timeToPosition.Where(v => v.Key > timeRange).Select(v => v.Value.x).ToList();
-            var yValues = timeToPosition.Where(v => v.Key > timeRange).Select(v => v.Value.y).ToList();
-            var zValues = timeToPosition.Where(v => v.Key > timeRange).Select(v => v.Value.z).ToList();
-            float maxDiffX = xValues.Max() - xValues.Min();
-            float maxDiffY = yValues.Max() - yValues.Min();
-            float maxDiffZ = zValues.Max() - zValues.Min();
-
-            return new Vector3(maxDiffX, maxDiffY, maxDiffZ);
         }
-    }
 
-    public interface ISliderInputSetter
-    {
-        public void SetSliderInput(int index, bool isEnable);
-    }
+        /// <summary>
+        /// 手の座標から動きをベクトル化する
+        /// </summary>
+        /// <param name="handInput"></param>
+        private void SetHandVector(IReadOnlyReactiveDictionary<float, Vector3> handInput, ReactiveProperty<Vector3> recorder)
+        {
+            if(handInput == null || handInput.Count < 2) { return; }
 
-    public interface ISpaceInputSetter
-    {
-        public void SetSpaceInput(SpaceTrackingTag tag, Vector3 pos, float time);
+            var previous = handInput.ElementAt(handInput.Count - 2);
+            var current = handInput.Last();
+            recorder.Value = NoteJudgement.DynamicNote.CalculateVelocity((previous.Key, previous.Value), (current.Key, current.Value));
+        }
 
-        public void SetCanGetSpaceInput(bool isGet);
+        public void Dispose()
+        {
+            disposables.Dispose();
+        }
     }
 }
