@@ -47,7 +47,7 @@ namespace Refactoring
         {
             ChartData chartData = new ChartData
             {
-                MaxCombo = 3,
+                MaxCombo = 0,
 
                 //noteData_HoldMeshes = new List<NoteData_HoldMesh>
                 //{
@@ -93,22 +93,71 @@ namespace Refactoring
                 //      }
                 //},
 
-                noteData_DynamicGroundUpwards = new List<NoteData_DynamicGroundUpward>
+
+                //noteData_HoldStarts = new List<NoteData_HoldStart>
+                //{
+                //      new NoteData_HoldStart
+                //      {
+                //           Range =  new int[]{ 0 },
+                //           Timing = 1f
+                //      },
+                //      new NoteData_HoldStart
+                //      {
+                //           Range =  new int[]{ 0,1,2,3 },
+                //           Timing = 2f
+                //      },
+                //      new NoteData_HoldStart
+                //      {
+                //           Range =  new int[]{ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 },
+                //           Timing = 3f
+                //      }
+                //},
+
+                //noteData_DynamicGroundUpwards = new List<NoteData_DynamicGroundUpward>
+                //{
+                //      new NoteData_DynamicGroundUpward
+                //      {
+                //           Range =  new int[]{ 0 },
+                //           Timing = 1f
+                //      },
+                //      new NoteData_DynamicGroundUpward
+                //      {
+                //           Range =  new int[]{ 0,1,2,3 },
+                //           Timing = 2f
+                //      },
+                //      new NoteData_DynamicGroundUpward
+                //      {
+                //           Range =  new int[]{ 4,5,6,7,8,9,10,11,12 },
+                //           Timing = 3f
+                //      },
+                //      new NoteData_DynamicGroundUpward
+                //      {
+                //           Range =  new int[]{ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 },
+                //           Timing = 5f
+                //      }
+                //}
+
+                noteData_DynamicGroundDownwards = new List<NoteData_DynamicGroundDownward>
                 {
-                      new NoteData_DynamicGroundUpward
+                      new NoteData_DynamicGroundDownward
                       {
                            Range =  new int[]{ 0 },
                            Timing = 1f
                       },
-                      new NoteData_DynamicGroundUpward
+                      new NoteData_DynamicGroundDownward
                       {
                            Range =  new int[]{ 0,1,2,3 },
                            Timing = 2f
                       },
-                      new NoteData_DynamicGroundUpward
+                      new NoteData_DynamicGroundDownward
                       {
                            Range =  new int[]{ 4,5,6,7,8,9,10,11,12 },
                            Timing = 3f
+                      },
+                      new NoteData_DynamicGroundDownward
+                      {
+                           Range =  new int[]{ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 },
+                           Timing = 5f
                       }
                 }
             };

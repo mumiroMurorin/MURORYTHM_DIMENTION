@@ -17,7 +17,7 @@ namespace Refactoring
 
         public override GameObject Spawn(NoteJudgementData judgementData)
         {
-            Vector3 pos = judgementData.PositionJudged;
+            Vector3 pos = Vector3.zero;
             GameObject obj;
 
             switch (judgementData.Judgement)

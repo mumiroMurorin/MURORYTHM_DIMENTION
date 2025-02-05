@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3302472204600621028}
-  - component: {fileID: 2427439671762681259}
+  - component: {fileID: 1402708340547885360}
   m_Layer: 0
   m_Name: EffectSpawner_Touch
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2427439671762681259
+--- !u!114 &1402708340547885360
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,10 +41,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1398145605877389100}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fac382e902fa7f645b439197d04e21e6, type: 3}
+  m_Script: {fileID: 11500000, guid: cfa3db8858e3d5b4797e57d40f51bb06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 3302472204600621028}
-  perfectEffect: {fileID: 2483935840268213223, guid: fafbc2d058732e549938f95894964720, type: 3}
-  greatEffect: {fileID: 4631101400729981642, guid: 3d0f40ef4b0dbf8408b2fb67cc3077ca, type: 3}
-  goodEffect: {fileID: 3690469040984867087, guid: ba4e4c870846b46459449c7fdf27eaf7, type: 3}
+  perfectEffect: {fileID: 236632514292461701, guid: af9edccf2f77d9147953339db0e6bfa7, type: 3}
+  greatEffect: {fileID: 236632514292461701, guid: 93b21b2e93657244da18f479c981a993, type: 3}
+  goodEffect: {fileID: 236632514292461701, guid: b29dc4fd52e4d31449473227ea8170d2, type: 3}
