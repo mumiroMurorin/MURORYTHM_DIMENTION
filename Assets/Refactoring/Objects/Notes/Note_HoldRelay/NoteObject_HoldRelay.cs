@@ -13,8 +13,9 @@ namespace Refactoring
         [SerializeField] JudgementWindow judgementWindow;
 
         NoteData_HoldRelay noteData;
-        
+
         bool isJudged;
+        Judgement bestJudgement = Judgement.Miss;
 
         /// <summary>
         /// 初期化
@@ -23,46 +24,42 @@ namespace Refactoring
         public override void Initialize(NoteData_HoldRelay data)
         {
             noteData = data;
-
-            Bind();
         }
 
-        private void Bind()
+        private void Update()
         {
-            if(noteData == null) { return; }
-
-            // 成功判定
-            foreach (int index in noteData.Range)
+            // 判定時間内かつスライダーが押されているとき
+            if (IsInJudgementRange() && IsTouchingSlider())
             {
-                if(noteData.SliderInput == null) { break; }
-                if(noteData.Timer == null) { break; }
+                // 記録した判定よりいい判定だったとき判定の更新
+                Judgement currentJudgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+                if ((int)bestJudgement < (int)currentJudgement)
+                {
+                    bestJudgement = currentJudgement;
+                }
 
-                noteData.SliderInput?.GetSliderInputReactiveProperty(index)
-                    // タッチされたとき且つ
-                    .Where(isHoldRelay => isHoldRelay)
-                    // 未判定のとき且つ
-                    .Where(_ => !isJudged)
-                    // Good判定時間に含まれているとき判定
-                    .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
-                    .Subscribe(_ => {
-                        Judge();
-                        SetDisable();
-                    })
-                    .AddTo(this.gameObject);
+                // 最高判定のとき確定
+                if (bestJudgement == Judgement.Perfect)
+                {
+                    SendJudgementData();
+                }
+            }
+            // 判定時間を過ぎたとき
+            else if (IsPassJudgementRange())
+            {
+                SendJudgementData();
+                SetDisable();
             }
         }
 
         /// <summary>
-        /// 判定
+        /// 判定データを送信
         /// </summary>
-        private void Judge()
+        private void SendJudgementData()
         {
-            // 判定を得る
-            Judgement judgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
-
             NoteJudgementData judgementData = new NoteJudgementData
             {
-                Judgement = judgement,
+                Judgement = bestJudgement,
                 NoteData = this.noteData,
                 TimingError = noteData.Timing - noteData.Timer.Time
             };
@@ -76,25 +73,48 @@ namespace Refactoring
         /// </summary>
         private void SetDisable()
         {
-             this.gameObject.SetActive(false);
+            this.gameObject.SetActive(false);
             // Destroy(this.gameObject);
         }
 
-        private void Update()
+        /// <summary>
+        /// 判定範囲内か調べる
+        /// </summary>
+        /// <returns></returns>
+        private bool IsInJudgementRange()
         {
-            if (JudgeMiss())
-            {
-                Judge();
-                SetDisable();
-            }
+            if (noteData == null) { return false; }
+            if (noteData.Timer == null) { return false; }
+            if (isJudged) { return false; }
 
+            Judgement judgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+            if (judgement == Judgement.Miss || judgement == Judgement.None) { return false; }
+
+            return true;
         }
 
         /// <summary>
-        /// ミス判定
+        /// ノーツ範囲内のスライダーがタッチされているか判定
         /// </summary>
         /// <returns></returns>
-        private bool JudgeMiss()
+        private bool IsTouchingSlider()
+        {
+            if (noteData.SliderInput == null) { return false; }
+            if (noteData.Timer == null) { return false; }
+
+            foreach (int index in noteData.Range)
+            {
+                if (noteData.SliderInput.GetSliderInputReactiveProperty(index).Value) { return true; }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// ノーツ判定範囲外？
+        /// </summary>
+        /// <returns></returns>
+        private bool IsPassJudgementRange()
         {
             if (noteData == null) { return false; }
             if (noteData.Timer == null) { return false; }

@@ -163,11 +163,11 @@ namespace Refactoring
     /// </summary>
     public enum Judgement
     {
-        None,
-        Perfect,
-        Great,
-        Good,
-        Miss
+        Perfect = 1000,
+        Great = 100,
+        Good = 10,
+        Miss = 1,
+        None = 0,
     }
 
     /// <summary>

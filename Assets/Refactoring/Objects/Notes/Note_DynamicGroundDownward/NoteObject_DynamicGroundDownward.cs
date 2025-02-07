@@ -20,7 +20,7 @@ namespace Refactoring
 
         NoteData_DynamicGroundDownward noteData;
         DynamicJudgement dynamicJudgement;
-        Judgement currentMaxJudgement = Judgement.Miss;
+        Judgement bestJudgement = Judgement.Miss;
         bool isJudged;
 
         /// <summary>
@@ -76,10 +76,14 @@ namespace Refactoring
             if (!dynamicJudgement.Judge(velocity)) { return; }
 
             // ”»’è‚ğXV
-            currentMaxJudgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+            Judgement currentJudgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+            if ((int)bestJudgement < (int)currentJudgement)
+            {
+                bestJudgement = currentJudgement;
+            }
 
             // Perfect‚¾‚Á‚½‚Æ‚«‚Í–â“š–³—p‚ÅPerfect
-            if (currentMaxJudgement == Judgement.Perfect) { RecordJudgement(); }
+            if (bestJudgement == Judgement.Perfect) { RecordJudgement(); }
 
             // GreatˆÈ‰º‚¾‚Á‚½‚Æ‚«‚ÍMiss”»’è‚Ü‚Å‘Ò‚¿
 
@@ -107,7 +111,7 @@ namespace Refactoring
         {
             NoteJudgementData judgementData = new NoteJudgementData
             {
-                Judgement = currentMaxJudgement,
+                Judgement = bestJudgement,
                 NoteData = this.noteData,
                 TimingError = noteData.Timing - noteData.Timer.Time
             };
