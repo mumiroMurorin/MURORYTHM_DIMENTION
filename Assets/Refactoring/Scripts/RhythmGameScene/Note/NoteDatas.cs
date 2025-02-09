@@ -67,6 +67,41 @@ namespace Refactoring
         }
     }
 
+    /// <summary>
+    /// 判定に応じたSEの再生を纏めたクラス
+    /// </summary>
+    [System.Serializable]
+    public class JudgementSoundEffects
+    {
+        [System.Serializable]
+        public class JudgementToSE
+        {
+            [SerializeField] Judgement Judgement;
+            [SerializeField] AudioClip audioClip;
+
+            /// <summary>
+            /// 条件と照らし合わせ、TrueであればSEの再生を行う
+            /// </summary>
+            /// <param name="judgement"></param>
+            public bool CheckConditionAndPlaySE(Judgement judgement)
+            {
+                if (this.Judgement != judgement) { return false; }
+                SoundManager.Instance.PlaySE(audioClip);
+                return true;
+            }
+        }
+
+        [SerializeField] List<JudgementToSE> sounds;
+
+        public void PlaySE(Judgement judgement)
+        {
+            foreach(JudgementToSE judgementToSE in sounds)
+            {
+                if (judgementToSE.CheckConditionAndPlaySE(judgement)) { return; }
+            }
+        }
+    }
+
     public class DynamicJudgement
     {
         List<Vector3> judgeVectors;

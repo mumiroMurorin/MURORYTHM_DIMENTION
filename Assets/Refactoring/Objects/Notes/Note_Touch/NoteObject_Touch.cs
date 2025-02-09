@@ -11,6 +11,7 @@ namespace Refactoring
     public class NoteObject_Touch : NoteObject<NoteData_Touch>
     {
         [SerializeField] JudgementWindow judgementWindow;
+        [SerializeField] JudgementSoundEffects judgementSoundEffects;
 
         NoteData_Touch noteData;
         
@@ -71,6 +72,7 @@ namespace Refactoring
             };
 
             noteData.JudgementRecorder?.RecordJudgement(judgementData);
+            judgementSoundEffects.PlaySE(judgement);
             isJudged = true;
         }
 
