@@ -8,7 +8,7 @@ namespace Refactoring
     /// <summary>
     /// タッチノーツにアタッチされるクラス
     /// </summary>
-    public class NoteObject_HoldMesh : NoteObject<NoteData_HoldMesh>
+    public class NoteObject_HoldMeshSuper : NoteObject<NoteData_HoldMeshSuper>
     {
         [Header("meshのマテリアル(未判定時)")]
         [SerializeField] Material meshMaterialDefault;
@@ -17,7 +17,7 @@ namespace Refactoring
         [Header("meshのマテリアル(非タッチ時)")]
         [SerializeField] Material meshMaterialUntouching;
 
-        NoteData_HoldMesh noteData;
+        NoteData_HoldMeshSuper noteData;
         List<MeshRenderer> meshRenderers;
         bool isJudged;
 
@@ -25,7 +25,7 @@ namespace Refactoring
         /// 初期化
         /// </summary>
         /// <param name="data"></param>
-        public override void Initialize(NoteData_HoldMesh data)
+        public override void Initialize(NoteData_HoldMeshSuper data)
         {
             noteData = data;
 
@@ -77,17 +77,13 @@ namespace Refactoring
     /// <summary>
     /// (初期化に必要な変数も含む)ホールドメッシュノーツのデータ
     /// </summary>
-    public class NoteData_HoldMesh : INoteData
+    public class NoteData_HoldMeshSuper : INoteData
     {
         public NoteType NoteType => NoteType.HoldMesh;
 
         public float Timing { get; set; }
 
-        public float EndTiming { get; set; }
-
-        public int[] StartRange { get; set; }
-
-        public int[] EndRange { get; set; }
+        public List<TimeToRange> TimeToRanges { get; set; }
 
         public ISliderInputGetter SliderInput { get; set; }
 

@@ -14,6 +14,7 @@ namespace Refactoring
 
         [SerializeField] float judgeMagnitude;
         [SerializeField] JudgementWindow judgementWindow;
+        [SerializeField] JudgementSoundEffects judgementSoundEffects;
 
         NoteData_DynamicGroundUpward noteData;
         DynamicJudgement dynamicJudgement;
@@ -114,6 +115,7 @@ namespace Refactoring
             };
 
             noteData.JudgementRecorder?.RecordJudgement(judgementData);
+            judgementSoundEffects.PlaySE(bestJudgement);
             isJudged = true;
         }
 

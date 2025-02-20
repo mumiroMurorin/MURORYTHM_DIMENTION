@@ -6,7 +6,7 @@ using Deform;
 
 namespace Refactoring
 {
-    public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
+    public class NoteFactory_HoldMeshSuper : NoteFactory<NoteData_HoldMeshSuper>
     {
         [SerializeField] GameObject noteObjectOriginPrefab;
 
@@ -30,10 +30,10 @@ namespace Refactoring
             this.timer = initializingData.Timer;
         }
 
-        public override NoteObject<NoteData_HoldMesh> Spawn(NoteData_HoldMesh data)
+        public override NoteObject<NoteData_HoldMeshSuper> Spawn(NoteData_HoldMeshSuper data)
         {
             // 生成
-            NoteObject<NoteData_HoldMesh> note = GenerateNoteInstance(ConvertNoteData(data));
+            NoteObject<NoteData_HoldMeshSuper> note = GenerateNoteInstance(ConvertNoteData(data));
 
             // 位置調整
             SetTransform(note, data);
@@ -48,7 +48,7 @@ namespace Refactoring
         /// ノートデータにさらなる情報を追加
         /// </summary>
         /// <param name="data"></param>
-        private NoteData_HoldMesh ConvertNoteData(NoteData_HoldMesh data)
+        private NoteData_HoldMeshSuper ConvertNoteData(NoteData_HoldMeshSuper data)
         {
             // ノーツデータにいろいろ追加
             data.SliderInput = this.sliderInputGetter;
@@ -62,7 +62,7 @@ namespace Refactoring
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        private NoteObject<NoteData_HoldMesh> GenerateNoteInstance(NoteData_HoldMesh data)
+        private NoteObject<NoteData_HoldMeshSuper> GenerateNoteInstance(NoteData_HoldMeshSuper data)
         {
             GameObject origin = Instantiate(noteObjectOriginPrefab);
 
@@ -73,7 +73,7 @@ namespace Refactoring
             noteObj.transform.SetParent(origin.transform);
 
             // コンポーネントを取得
-            NoteObject<NoteData_HoldMesh> note = origin.GetComponent<NoteObject<NoteData_HoldMesh>>();
+            NoteObject<NoteData_HoldMeshSuper> note = origin.GetComponent<NoteObject<NoteData_HoldMeshSuper>>();
 
             return note;
         }
@@ -81,7 +81,7 @@ namespace Refactoring
         /// <summary>
         /// ホールドのメッシュ部分の生成
         /// </summary>
-        private GameObject GenerateMeshObject(NoteData_HoldMesh noteData)
+        private GameObject GenerateMeshObject(NoteData_HoldMeshSuper noteData)
         {
             GameObject obj = new GameObject("Mesh");
             MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
@@ -266,7 +266,7 @@ namespace Refactoring
         /// <summary>
         /// 位置調整など
         /// </summary>
-        private void SetTransform(NoteObject<NoteData_HoldMesh> note, NoteData_HoldMesh data)
+        private void SetTransform(NoteObject<NoteData_HoldMeshSuper> note, NoteData_HoldMeshSuper data)
         {
             // 位置の調整
             note.transform.position = new Vector3(
@@ -279,23 +279,4 @@ namespace Refactoring
             note.transform.SetParent(groundObject.transform);
         }
     }
-
-    public static class MeshGenerator
-    {
-        /// <summary>
-        /// メッシュを生成して返す
-        /// </summary>
-        /// <returns></returns>
-        public static Mesh GenerateMesh(List<Vector3> vertices, List<int> triangles)
-        {
-            Mesh mesh = new Mesh();
-
-            mesh.vertices = vertices.ToArray(); //代入
-            mesh.triangles = triangles.ToArray(); //代入
-            mesh.RecalculateNormals();
-
-            return mesh;
-        }
-    }
-
 }

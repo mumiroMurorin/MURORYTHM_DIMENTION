@@ -20,6 +20,7 @@ namespace Refactoring
         [SerializeField] NoteFactory<NoteData_HoldRelay> holdRelayNoteFactory;
         [SerializeField] NoteFactory<NoteData_HoldEnd> holdEndNoteFactory;
         [SerializeField] NoteFactory<NoteData_HoldMesh> holdMeshNoteFactory;
+        [SerializeField] NoteFactory<NoteData_HoldMeshSuper> holdMeshSuperNoteFactory;
 
         [Header("Factoryの初期化に必要なデータ")]
         [SerializeField] GameObject groundObject;
@@ -75,6 +76,7 @@ namespace Refactoring
             holdRelayNoteFactory.Initialize(data);
             holdEndNoteFactory.Initialize(data);
             holdMeshNoteFactory.Initialize(data);
+            holdMeshSuperNoteFactory.Initialize(data);
         }
 
         /// <summary>
@@ -92,6 +94,7 @@ namespace Refactoring
             GenerateHoldRelayNote(chartDataGetter.Chart.noteData_HoldRelays);
             GenerateHoldEndNote(chartDataGetter.Chart.noteData_HoldEnds);
             GenerateHoldMeshNote(chartDataGetter.Chart.noteData_HoldMeshes);
+            GenerateHoldMeshSuperNote(chartDataGetter.Chart.noteData_HoldMeshesSuper);
 
             callback?.Invoke();
         }
@@ -221,6 +224,19 @@ namespace Refactoring
                 holdMeshNoteFactory.Spawn(data);
             }
         }
-    }
 
+        /// <summary>
+        /// ホールドメッシュの生成
+        /// </summary>
+        /// <param name="noteData_Touches"></param>
+        private void GenerateHoldMeshSuperNote(List<NoteData_HoldMeshSuper> noteDatas)
+        {
+            if (noteDatas == null) { return; }
+
+            foreach (NoteData_HoldMeshSuper data in noteDatas)
+            {
+                holdMeshSuperNoteFactory.Spawn(data);
+            }
+        }
+    }
 }

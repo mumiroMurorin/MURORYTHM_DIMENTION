@@ -49,3 +49,11 @@ MonoBehaviour:
     perfectWindow: 0.0666666
     greatWindow: 0.1
     goodWindow: 0.1333333
+  judgementSoundEffects:
+    sounds:
+    - Judgement: 1000
+      audioClip: {fileID: 8300000, guid: 8bd5926b93d04594aa0e437f7e212207, type: 3}
+    - Judgement: 100
+      audioClip: {fileID: 8300000, guid: 8bd5926b93d04594aa0e437f7e212207, type: 3}
+    - Judgement: 10
+      audioClip: {fileID: 8300000, guid: 8bd5926b93d04594aa0e437f7e212207, type: 3}

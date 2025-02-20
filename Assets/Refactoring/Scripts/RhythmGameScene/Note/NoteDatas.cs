@@ -165,6 +165,15 @@ namespace Refactoring
     }
 
     /// <summary>
+    /// ホールドノーツ用の纏めクラス
+    /// </summary>
+    public class TimeToRange
+    {
+        public float Timing { get; set; }
+        public int[] Range { get; set; }
+    }
+
+    /// <summary>
     /// 各種ノーツデータのListをまとめたもの
     /// </summary>
     public class ChartData
@@ -180,6 +189,7 @@ namespace Refactoring
         public List<NoteData_HoldEnd> noteData_HoldEnds { get; set; }
 
         public List<NoteData_HoldMesh> noteData_HoldMeshes { get; set; }
+        public List<NoteData_HoldMeshSuper> noteData_HoldMeshesSuper { get; set; }
 
         public List<NoteData_DynamicGroundUpward> noteData_DynamicGroundUpwards { get; set; }
 
