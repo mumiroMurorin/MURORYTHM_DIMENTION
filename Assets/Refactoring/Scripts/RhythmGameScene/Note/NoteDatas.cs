@@ -170,7 +170,7 @@ namespace Refactoring
     public class TimeToRange
     {
         public float Timing { get; set; }
-        public int[] Range { get; set; }
+        public float[] Range { get; set; }
     }
 
     /// <summary>

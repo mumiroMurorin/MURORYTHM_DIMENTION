@@ -85,183 +85,128 @@ namespace Refactoring
         {
             GameObject obj = new GameObject("Mesh");
             MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
-            Mesh mesh = new Mesh();
             MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
+            Mesh mesh = new Mesh();
             meshFilter.mesh = mesh;
 
-            // Holdの長さ
-            float length = optionHolder.NoteSpeed * (noteData.EndTiming - noteData.Timing);
+            List<int> triangles = new List<int>();
+            List<Vector3> vertices = new List<Vector3>();
+            float currentStartZ = 0;
+            int currentMeshIndex = 0;
 
-            // ノート端のそれぞれのindex
-            int startLeft = noteData.StartRange[0];
-            int startRight = noteData.StartRange[noteData.StartRange.Length - 1];
-            int endLeft = noteData.EndRange[0];
-            int endRight = noteData.EndRange[noteData.EndRange.Length - 1];
-
-            // 横2辺の傾きを導出
-            float slopeLeft = length / (endLeft - startLeft);
-            float slopeRight = length / (endRight - startRight);
-
-            // ノート端～端までに入る分割インデックス
-            List<float> index_f = new List<float>();
-            List<float> index_l = new List<float>();
-
-            // ----- 分割インデックスリストに各メッシュ頂点を追加 -----
-            // --- StartRangeに追加 ---
-            float firstIndex = startLeft;
-            float endIndex = startRight + 1;
-
-            // 左辺の傾きが負の場合インデックスを変更 「＼」
-            if (slopeLeft < float.PositiveInfinity && slopeLeft < 0) 
+            for (int i = 0; i < noteData.TimeToRanges.Count - 1; i++)
             {
-                index_l.Add(startLeft);
-                firstIndex = endLeft;
+                float length = optionHolder.NoteSpeed * (noteData.TimeToRanges[i + 1].Timing - noteData.TimeToRanges[i].Timing);
+
+                // それぞれの端のインデックスを代入
+                float startLeft = noteData.TimeToRanges[i].Range[0];
+                float startRight = noteData.TimeToRanges[i].Range[^1];
+                float endLeft = noteData.TimeToRanges[i + 1].Range[0];
+                float endRight = noteData.TimeToRanges[i + 1].Range[^1];
+
+                // 傾きを計算
+                float slopeLeft = (endLeft - startLeft) == 0 ? float.PositiveInfinity : length / (endLeft - startLeft);
+                float slopeRight = (endRight - startRight) == 0 ? float.PositiveInfinity : length / (endRight - startRight);
+
+                // 頂点インデックスリストを作成
+                List<float> indexStart = GetMeshPointList(slopeLeft < float.PositiveInfinity && slopeLeft < 0 ? endLeft : startLeft,
+                    slopeRight < float.PositiveInfinity && slopeRight > 0 ? endRight + 1 : startRight + 1, meshDivisionNum);
+
+                List<float> indexEnd = GetMeshPointList(slopeLeft < float.PositiveInfinity && slopeLeft > 0 ? startLeft : endLeft,
+                   slopeRight < float.PositiveInfinity && slopeRight < 0 ? startRight + 1 : endRight + 1, meshDivisionNum);
+
+                //Debug.Log("indexStart: " + string.Join(",", indexStart.Select(n => n.ToString())));
+                //Debug.Log("indexEnd: " + string.Join(",", indexEnd.Select(n => n.ToString())));
+
+                // 頂点リストを生成
+                List<Vector3> verticesStart = GenerateVertices(indexStart, startLeft, startRight + 1, slopeLeft, slopeRight, currentStartZ);
+                List<Vector3> verticesEnd = GenerateVertices(indexEnd, endLeft, endRight + 1, slopeLeft, slopeRight, currentStartZ + length);
+
+                //Debug.Log("verticesStart: " + string.Join(",", verticesStart.Select(n => n.ToString())));
+                //Debug.Log("verticesEnd: " + string.Join(",", verticesEnd.Select(n => n.ToString())));
+
+                // 頂点リストの代入
+                vertices.AddRange(verticesStart);
+                vertices.AddRange(verticesEnd);
+
+                // トライアングルインデックスを生成、代入
+                triangles.AddRange(GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count));
+
+                //Debug.Log("triangles: " + string.Join(",", triangles.Select(n => n.ToString())));
+
+                currentStartZ += length;
+                currentMeshIndex += verticesStart.Count + verticesEnd.Count;
             }
 
-            // 右辺の傾きが正の場合インデックスを変更 「／」
-            if (slopeRight < float.PositiveInfinity && slopeRight > 0) 
-            {
-                index_l.Add(startRight + 1);
-                endIndex = endRight + 1;
-            }
-
-            // メッシュ生成の各点を導出、代入
-            index_f.AddRange(GetMeshPointList(firstIndex, endIndex, meshDivisionNum));
-
-            // --- EndRangeに追加 ---
-            firstIndex = endLeft;
-            endIndex = endRight + 1;
-
-            // 左辺の傾きが正の場合インデックスを変更 「／」
-            if (slopeLeft < float.PositiveInfinity && slopeLeft > 0)
-            {
-                index_f.Add(endLeft);
-                firstIndex = startLeft;
-            }
-
-            // 右辺の傾きが負の場合インデックスを変更 「＼」
-            if (slopeRight < float.PositiveInfinity && slopeRight < 0) 
-            {
-                index_f.Add(endRight + 1);
-                endIndex = startRight + 1;
-            }
-
-            // メッシュ生成の各点を導出、代入
-            index_l.AddRange(GetMeshPointList(firstIndex, endIndex, meshDivisionNum)); //リストに代入
-
-            index_f.Sort();                         //ソート
-            index_l.Sort();                         //ソート
-            index_f = index_f.Distinct().ToList();  //重複要素削除
-            index_l = index_l.Distinct().ToList();  //重複要素削除
-            if (slopeLeft < float.PositiveInfinity && slopeLeft != 0) { index_l.Remove(firstIndex); }  //傾きが0でない場合、最初の値を削除
-            if (slopeRight < float.PositiveInfinity && slopeRight != 0) { index_f.Remove(endIndex); }  //傾きが0でない場合、最後の値を削除
-
-            // ----- 点の座標を導出 -----
-            List<Vector3> vertices_f = new List<Vector3>();   //前ノート頂点座標リスト
-            List<Vector3> vertices_l = new List<Vector3>();   //後ノート頂点座標リスト
-
-            // Indexから座標を導出(Start)
-            foreach (float f in index_f)
-            {
-                float deg = (f - 16) * 11.25f * Mathf.Deg2Rad;
-                float z = 0;
-
-                // 斜め左辺の場合 「＼」
-                if (f < startLeft) { z = slopeLeft * (f - endLeft) + length; }
-                // 斜め右辺の場合 「／」
-                else if (f > startRight + 1){ z = slopeRight * (f - startRight - 1); }
-
-                vertices_f.Add(new Vector3(10 * Mathf.Cos(deg), 10 * Mathf.Sin(deg), z));
-            }
-
-            // Indexから座標を導出(End)
-            foreach (float f in index_l)
-            {
-                float deg = (f - 16) * 11.25f * Mathf.Deg2Rad;
-                float z = length;
-
-                // 斜め左辺の場合 「／」
-                if (f < endLeft) { z = slopeLeft * (f - startLeft); }
-                // 斜め右辺の場合 「＼」
-                else if (f > endRight + 1) { z = slopeRight * (f - endRight - 1) + length; }
-                vertices_l.Add(new Vector3(10 * Mathf.Cos(deg), 10 * Mathf.Sin(deg), z));
-            }
-
-            // メッシュ生成番号の割り振り
-            List<int> triangles = new List<int>();         // メッシュ生成番号
-            List<Vector3> vertices = new List<Vector3>();  // メッシュ生成(点)座標
-
-            // 結合
-            vertices.AddRange(vertices_f);
-            vertices.AddRange(vertices_l);
-
-            int num = 0;
-            int harfCount = vertices.Count % 2 != 0 && slopeLeft >= float.PositiveInfinity ?
-                (vertices.Count - 1) / 2 - 1 : (vertices.Count - 1) / 2;
-
-            // メッシュtriangleを計算
-            while (num + 1 <= harfCount)
-            {
-                triangles.Add(num + 1);
-                triangles.Add(num);
-                triangles.Add(num + 1 + harfCount);
-
-                if (num + 2 + harfCount >= vertices.Count) { break; }
-                triangles.Add(num + 1 + harfCount);
-                triangles.Add(num + 2 + harfCount);
-                triangles.Add(++num);
-            }
-
-            // 右辺の傾きのみ0(無限)のとき、最後のメッシュを追加
-            if (slopeLeft >= float.PositiveInfinity && slopeRight < float.PositiveInfinity)
-            {
-                triangles.Add(num + 1 + harfCount);
-                triangles.Add(num + 2 + harfCount);
-                triangles.Add(num);
-            }
-
-            // メッシュの点と面を設定して再計算
-            mesh.vertices = vertices.ToArray(); //代入
-            mesh.triangles = triangles.ToArray(); //代入
+            mesh.vertices = vertices.ToArray();
+            mesh.triangles = triangles.ToArray();
             mesh.RecalculateNormals();
 
-            //Debug.Log("頂点list: " + string.Join(",", vertices_f.Select(n => n.ToString())));
-            //Debug.Log("メッシュlist: " + string.Join(",", triangles.Select(n => n.ToString())));
-
-            // Deformの設定
-            Deformable d = obj.AddComponent<Deformable>();
-            d.AddDeformer(groundDeformer);
-
+            obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
             return obj;
         }
 
         /// <summary>
-        /// 範囲内のメッシュ頂点リストを返す(endに+1することを忘れないように)
+        /// 範囲内のメッシュ頂点リストを返す
         /// </summary>
-        /// <param name="first"></param>
-        /// <param name="end"></param>
-        /// <param name="div_num"></param>
-        /// <returns></returns>
-        private List<float> GetMeshPointList(float first, float end, int div_num)
+        private List<float> GetMeshPointList(float first, float end, int divNum)
         {
-            if (div_num == 0)
+            if (divNum <= 0)
             {
-                Debug.LogError("【Note】メッシュ分割数が0です");
-                return null;
+                Debug.LogError("【Note】メッシュ分割数が0以下です");
+                return new List<float>();
             }
 
             List<float> list = new List<float>();
-            float f = 0;
-            while (f < end)
+            for (float f = first; f <= end; f += 1f / divNum)
             {
-                if (first < f) { list.Add(f); }
-                f += 1f / div_num;
+                list.Add(f);
             }
-            list.Add(first);
             list.Add(end);
-            list.Sort();
-            return list;
+            return list.Distinct().OrderBy(x => x).ToList();
         }
+
+        /// <summary>
+        /// 指定したインデックスリストからメッシュの頂点座標を計算する
+        /// </summary>
+        private List<Vector3> GenerateVertices(List<float> indices, float left, float right, float slopeLeft, float slopeRight, float baseZ)
+        {
+            List<Vector3> vertices = new List<Vector3>();
+            foreach (float f in indices)
+            {
+                float deg = (f - 16) * 11.25f * Mathf.Deg2Rad;
+                float z = baseZ;
+
+                if (f < left) { z += slopeLeft * (f - left); }
+                else if (f > right) { z += slopeRight * (f - right); }
+
+                vertices.Add(new Vector3(10 * Mathf.Cos(deg), 10 * Mathf.Sin(deg), z));
+                //vertices.Add(new Vector3(f, -10, z));  // デバッグ用
+            }
+            return vertices;
+        }
+
+        /// <summary>
+        /// メッシュのトライアングルインデックスを生成
+        /// </summary>
+        private List<int> GenerateTriangles(int startIndex, int countStart, int countEnd)
+        {
+            List<int> triangles = new List<int>();
+            int halfCount = Mathf.Min(countStart, countEnd) - 1;
+
+            for (int i = 0; i < halfCount; i++)
+            {
+                triangles.Add(startIndex + i + 1);
+                triangles.Add(startIndex + i);
+                triangles.Add(startIndex + i + countStart);
+
+                triangles.Add(startIndex + i + 1);
+                triangles.Add(startIndex + i + countStart);
+                triangles.Add(startIndex + i + countStart + 1);
+            }
+            return triangles;
+        }
+
 
         /// <summary>
         /// 位置調整など

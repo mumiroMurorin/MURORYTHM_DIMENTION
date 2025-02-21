@@ -264,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   update: 1
-  angle: -12.230502
+  angle: 0
   factor: 1
   mode: 1
   top: -22.5
@@ -1706,6 +1706,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5493261185757931217, guid: 97fe1f5948ffe7844948f3f4a47afb57, type: 3}
+      propertyPath: meshDivisionNum
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8581259717299761544, guid: 97fe1f5948ffe7844948f3f4a47afb57, type: 3}
       propertyPath: m_Name
       value: NoteFactory_HoldMeshSuper
@@ -2181,6 +2185,18 @@ PrefabInstance:
     - target: {fileID: 3557880811985844621, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
       propertyPath: m_Name
       value: LoadingBody
+      objectReference: {fileID: 0}
+    - target: {fileID: 4071428474003185102, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344308489783075046, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7003494081260383716, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

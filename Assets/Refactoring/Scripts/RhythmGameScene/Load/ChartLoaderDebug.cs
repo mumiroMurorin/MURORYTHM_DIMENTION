@@ -156,25 +156,25 @@ namespace Refactoring
                 //{
                 //      new NoteData_HoldMesh
                 //      {
-                //           StartRange =  new int[]{ 0,1,2,3 },
-                //           EndRange =  new int[]{ 1,2,3,4 },
+                //           StartRange =  new int[]{ 7,8,9 },
+                //           EndRange =  new int[]{ 7,8 },
                 //           Timing = 1f,
-                //           EndTiming = 2f
+                //           EndTiming = 1.25f
                 //      },
-                //      new NoteData_HoldMesh
-                //      {
-                //           StartRange =  new int[]{ 4,5,6,7 },
-                //           EndRange =  new int[]{ 7,8,9,10,11,12 },
-                //           Timing = 2f,
-                //           EndTiming = 3f
-                //      },
-                //      new NoteData_HoldMesh
-                //      {
-                //           StartRange =  new int[]{ 15 },
-                //           EndRange =  new int[]{ 0,1 },
-                //           Timing = 3f,
-                //           EndTiming = 4f
-                //      }
+                //      //new NoteData_HoldMesh
+                //      //{
+                //      //     StartRange =  new int[]{ 4,5,6,7 },
+                //      //     EndRange =  new int[]{ 7,8,9,10,11,12 },
+                //      //     Timing = 2f,
+                //      //     EndTiming = 3f
+                //      //},
+                //      //new NoteData_HoldMesh
+                //      //{
+                //      //     StartRange =  new int[]{ 15 },
+                //      //     EndRange =  new int[]{ 0,1 },
+                //      //     Timing = 3f,
+                //      //     EndTiming = 4f
+                //      //}
                 //},
 
                 noteData_HoldMeshesSuper = new List<NoteData_HoldMeshSuper>
@@ -184,10 +184,9 @@ namespace Refactoring
                            Timing = 1f,
                            TimeToRanges = new List<TimeToRange>
                            {
-                               new TimeToRange{ Timing = 1f, Range =  new int[]{ 0,1,2 } },
-                               new TimeToRange{ Timing = 1.25f, Range =  new int[]{ 1,2,3 } },
-                               new TimeToRange{ Timing = 1.5f, Range =  new int[]{ 2,3,4 } },
-                               new TimeToRange{ Timing = 1.75f, Range =  new int[]{ 3,4,5 } },
+                               new TimeToRange{ Timing = 1f, Range =  new float[]{ 0,15 } },
+                               new TimeToRange{ Timing = 1.25f, Range =  new float[]{ 0,15f } },
+                               new TimeToRange{ Timing = 1.5f, Range =  new float[]{ 0,15 }},
                            },
                       },
                 },
