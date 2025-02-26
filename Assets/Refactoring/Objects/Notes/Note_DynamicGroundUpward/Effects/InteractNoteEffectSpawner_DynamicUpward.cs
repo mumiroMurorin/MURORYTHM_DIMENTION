@@ -36,6 +36,7 @@ namespace Refactoring
             }
 
             SetDataForEffect(obj, judgementData.NoteData as NoteData_DynamicGroundUpward);
+
             return obj;
         }
 
@@ -48,6 +49,7 @@ namespace Refactoring
         {
             if (!effectObject.TryGetComponent(out IInteractNoteEffectController<NoteData_DynamicGroundUpward> effect)) { return; }
             effect.SetEffect(noteData);
+            effect.Play();
         }
     }
 

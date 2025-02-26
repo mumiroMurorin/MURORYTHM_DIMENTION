@@ -48,6 +48,8 @@ namespace Refactoring
         {
             if (!effectObject.TryGetComponent(out IInteractNoteEffectController<NoteData_HoldRelay> effect)) { return; }
             effect.SetEffect(noteData);
+            effect.Play();
+
         }
     }
 

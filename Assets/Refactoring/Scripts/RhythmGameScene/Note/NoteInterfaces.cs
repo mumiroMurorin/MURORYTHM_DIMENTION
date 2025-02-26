@@ -50,5 +50,7 @@ namespace Refactoring
     public interface IInteractNoteEffectController<T> where T : INoteData
     {
         void SetEffect(T noteData);
+
+        void Play();
     }
 }

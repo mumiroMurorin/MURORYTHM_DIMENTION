@@ -189,7 +189,6 @@ namespace Refactoring
         public List<NoteData_HoldEnd> noteData_HoldEnds { get; set; }
 
         public List<NoteData_HoldMesh> noteData_HoldMeshes { get; set; }
-        public List<NoteData_HoldMeshSuper> noteData_HoldMeshesSuper { get; set; }
 
         public List<NoteData_DynamicGroundUpward> noteData_DynamicGroundUpwards { get; set; }
 

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2064485049643204070}
-  - component: {fileID: -2596877279381892646}
+  - component: {fileID: 5493261185757931217}
   m_Layer: 0
   m_Name: NoteFactory_HoldMesh
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-2596877279381892646
+--- !u!114 &5493261185757931217
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,11 +41,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8581259717299761544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f19327153e5062d4d99e9ad0eeb4538d, type: 3}
+  m_Script: {fileID: 11500000, guid: 32f5f8fb11a06584b944ea97f3ad9579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteObjectOriginPrefab: {fileID: 8224908405846241423, guid: 813c918f16da4cd4f83daedd8245f890, type: 3}
+  noteObjectOriginPrefab: {fileID: 8224908405846241423, guid: 06640eda8d0af4d4da60ca9a973a3838, type: 3}
   meshDivisionNum: 10
-  meshMaterialDefault: {fileID: 2100000, guid: d69567fbb2079f54da149d577bf24da7, type: 2}
-  meshMaterialTouched: {fileID: 2100000, guid: 4855c6ba9640ce54ba733357a9c185dd, type: 2}
-  meshMaterialNoneTouched: {fileID: 2100000, guid: 072de514cf9546440ac1dc651b4ea40e, type: 2}

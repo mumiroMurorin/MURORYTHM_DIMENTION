@@ -51,8 +51,8 @@ MonoBehaviour:
   judgementSoundEffects:
     sounds:
     - Judgement: 1000
-      audioClip: {fileID: 8300000, guid: b768f09f9c8db294da556922e0ea187f, type: 3}
+      audioClip: {fileID: 8300000, guid: be7a15aafe40bf74087713c374797887, type: 3}
     - Judgement: 100
-      audioClip: {fileID: 8300000, guid: fafe4932b52b9ce4db258532fae98ec1, type: 3}
+      audioClip: {fileID: 8300000, guid: 6e57a1218ef163741a2e2dc43f23cbc6, type: 3}
     - Judgement: 10
-      audioClip: {fileID: 8300000, guid: b343b6625cda9784da46feea182cecca, type: 3}
+      audioClip: {fileID: 8300000, guid: 822ea16d4873b4043b1197579567cadd, type: 3}

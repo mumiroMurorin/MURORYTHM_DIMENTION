@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4212254938933315147}
-  - component: {fileID: 8380549069438557942}
+  - component: {fileID: -5707855524373049870}
   m_Layer: 0
   m_Name: HoldMeshNoteOrigin
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8380549069438557942
+--- !u!114 &-5707855524373049870
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,9 +41,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8224908405846241423}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f109564cd4f3c54abc3515f4de5d89a, type: 3}
+  m_Script: {fileID: 11500000, guid: 10de6d37b52acbf45ab7ae8b57e529d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshMaterialDefault: {fileID: 2100000, guid: d69567fbb2079f54da149d577bf24da7, type: 2}
-  meshMaterialTouching: {fileID: 2100000, guid: 4855c6ba9640ce54ba733357a9c185dd, type: 2}
-  meshMaterialUntouching: {fileID: 2100000, guid: 072de514cf9546440ac1dc651b4ea40e, type: 2}
+  meshMaterialDefault: {fileID: 2100000, guid: f5800e54ce77a614db135da20199c2a2, type: 2}
+  meshMaterialTouching: {fileID: 2100000, guid: d635d3c6cd00be74fa243653eea69482, type: 2}
+  meshMaterialUntouching: {fileID: 2100000, guid: 239d4445fcd28eb419fb3bece9a947b1, type: 2}

@@ -46,6 +46,14 @@ namespace Refactoring
 
             }
         }
+
+        public void Play()
+        {
+            foreach (ParticleSystem particleSystem in particleSystems)
+            {
+                particleSystem.Play();
+            }
+        }
     }
 
 }
