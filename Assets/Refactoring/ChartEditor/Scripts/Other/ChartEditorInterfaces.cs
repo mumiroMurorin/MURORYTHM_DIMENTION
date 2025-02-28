@@ -36,11 +36,29 @@ namespace ChartEditor
         EditMode GetEditMode();
     }
 
+    public interface IDeployableObject
+    {
+        void OnInstantiate();
+
+        void OnDeploy();
+    }
+
+    public interface IMovableObject
+    {
+        GameObject gameObject { get; }
+
+        void OnMoveStart();
+
+        void OnMove();
+
+        void OnMoveEnd();
+    }
+
     public enum EditMode
     {
         none,
-        modify,
-        scaling,
-        move
+        deploy,
+        move,
+        scale,
     }
 }

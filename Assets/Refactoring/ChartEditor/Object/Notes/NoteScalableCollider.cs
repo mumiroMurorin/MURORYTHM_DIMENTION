@@ -4,13 +4,14 @@ using UnityEngine;
 
 namespace ChartEditor
 {
-    public class NoteDeployableCollider : MonoBehaviour, IInteractableCollider
+    public class NoteScalableCollider : MonoBehaviour, IInteractableCollider
     {
-        EditMode editMode => EditMode.deploy;
+        EditMode editMode => EditMode.scale;
 
         EditMode IInteractableCollider.GetEditMode()
         {
             return editMode;
         }
     }
+
 }

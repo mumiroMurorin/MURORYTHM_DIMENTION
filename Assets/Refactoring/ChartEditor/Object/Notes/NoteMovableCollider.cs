@@ -13,5 +13,4 @@ namespace ChartEditor
             return editMode;
         }
     }
-
 }

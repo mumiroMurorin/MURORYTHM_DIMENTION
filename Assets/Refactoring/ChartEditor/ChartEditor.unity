@@ -490,6 +490,7 @@ GameObject:
   m_Component:
   - component: {fileID: 619309498}
   - component: {fileID: 619309499}
+  - component: {fileID: 619309500}
   m_Layer: 0
   m_Name: NoteFactories
   m_TagString: Untagged
@@ -527,6 +528,19 @@ MonoBehaviour:
   viewCamera: {fileID: 2119177817}
   noteParent: {fileID: 1689940190}
   noteObj: {fileID: 5475620226950634511, guid: a3e1d74dfae71aa458e010bbb30b2e2a, type: 3}
+--- !u!114 &619309500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 619309497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 096c1e36b61a75f48a2b1c762cc9de67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewCamera: {fileID: 2119177817}
 --- !u!1001 &641644978
 PrefabInstance:
   m_ObjectHideFlags: 0

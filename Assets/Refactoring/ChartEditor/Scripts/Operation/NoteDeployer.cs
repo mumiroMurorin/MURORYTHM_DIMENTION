@@ -44,7 +44,7 @@ namespace ChartEditor
         private void UpdateNotePosition()
         {
             // 配置モードでない際は返す
-            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.modify) { return; }
+            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.deploy) { return; }
 
             Transform interactedTransform = GetTransformUnderCursor();
             if (interactedTransform == null) { return; }
@@ -79,8 +79,13 @@ namespace ChartEditor
         private void DeployNote()
         {
             // 配置モードでない際は返す
-            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.modify) { return; }
+            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.deploy) { return; }
             if (!Input.GetMouseButtonDown(0)) { return; }
+
+            if (deployingNote.TryGetComponent(out IDeployableObject deployable))
+            {
+                deployable.OnDeploy();
+            }
 
             InstantiateNote();
         }
@@ -91,6 +96,11 @@ namespace ChartEditor
         private void InstantiateNote()
         {
             deployingNote = Instantiate(noteObj);
+
+            if (deployingNote.TryGetComponent(out IDeployableObject deployable))
+            {
+                deployable.OnInstantiate();
+            }
         }
     }
 }
