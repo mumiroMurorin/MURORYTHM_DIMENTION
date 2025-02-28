@@ -8,7 +8,7 @@ namespace ChartEditor
 {
     public class NoteDeployer : MonoBehaviour
     {
-        [SerializeField] Camera viewCamera;
+        [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
         [SerializeField] Transform noteParent;
         [SerializeField] GameObject noteObj;
 
@@ -23,19 +23,20 @@ namespace ChartEditor
 
         private void Start()
         {
-            InstantiateNote(); // 仮
             Bind();
         }
 
         private void Bind()
         {
-
+            chartEditorDataGetter.CurrentEditMode
+                .Subscribe(editMode => ActiveNote(editMode == EditMode.deploy))
+                .AddTo(this.gameObject);
         }
 
         void Update()
         {
             UpdateNotePosition();
-            DeployNote();
+            if (Input.GetMouseButtonDown(0)) { DeployNote(); }
         }
 
         /// <summary>
@@ -60,15 +61,10 @@ namespace ChartEditor
         /// <returns></returns>
         private Transform GetTransformUnderCursor()
         {
-            Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            // オブジェクトがなかったらnullを返す
-            if (!Physics.Raycast(ray, out hit)) { return null; }
-
             // インタラクトオブジェクト出なければnullを返す
-            GameObject hitObject = hit.collider.gameObject;
-            if (!hitObject.TryGetComponent(out IInteractableCollider interactable)) { return null; }
+            GameObject hitObject = cursorInteracter.Value.GetObjectUnderCursor();
+            if (hitObject == null) { return null; }
+            if (!hitObject.TryGetComponent(out IDeployableCollider deployable)) { return null; }
 
             return hitObject.transform;
         }
@@ -80,7 +76,7 @@ namespace ChartEditor
         {
             // 配置モードでない際は返す
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.deploy) { return; }
-            if (!Input.GetMouseButtonDown(0)) { return; }
+            if (GetTransformUnderCursor() == null) { return; }
 
             if (deployingNote.TryGetComponent(out IDeployableObject deployable))
             {
@@ -101,6 +97,16 @@ namespace ChartEditor
             {
                 deployable.OnInstantiate();
             }
+        }
+
+        /// <summary>
+        /// ノートの(非)アクティブ化
+        /// </summary>
+        /// <param name="isActive"></param>
+        private void ActiveNote(bool isActive)
+        {
+            if(deployingNote == null) { InstantiateNote(); }
+            deployingNote?.SetActive(isActive);
         }
     }
 }

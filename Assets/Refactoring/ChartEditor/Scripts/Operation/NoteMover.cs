@@ -7,7 +7,7 @@ namespace ChartEditor
 {
     public class NoteMover : MonoBehaviour
     {
-        [SerializeField] Camera viewCamera;
+        [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
 
         IChartEditorDataGetter chartEditorDataGetter;
         IMovableObject movedNote;
@@ -26,6 +26,7 @@ namespace ChartEditor
         void Update()
         {
             if (Input.GetMouseButtonDown(0)) { StartMoveNote(); }
+            else if (Input.GetMouseButton(0)) { MoveNote(); } 
             else if (Input.GetMouseButtonUp(0)) { EndMoveNote(); }
         }
 
@@ -50,8 +51,9 @@ namespace ChartEditor
             if (interactedTransform == null) { return; }
             if (movedNote.gameObject.transform.position == interactedTransform.position) { return; }
 
-            movedNote.gameObject.transform.position = interactedTransform.position;
+            movedNote.gameObject.transform.position = new Vector3(interactedTransform.position.x, movedNote.gameObject.transform.position.y, interactedTransform.position.z);
             movedNote.gameObject.transform.SetParent(interactedTransform);
+            movedNote.OnMove();
         }
 
         private void EndMoveNote()
@@ -68,14 +70,10 @@ namespace ChartEditor
         /// <returns></returns>
         private IMovableObject GetMovableObjectUnderCursor()
         {
-            Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            // オブジェクトがなかったらnullを返す
-            if (!Physics.Raycast(ray, out hit)) { return null; }
+            GameObject hitObject = cursorInteracter.Value.GetObjectUnderCursor();
+            if(hitObject == null) { return null; }
 
             // 動かせるオブジェクトでなければnullを返す
-            GameObject hitObject = hit.collider.gameObject;
             if (!hitObject.transform.parent.TryGetComponent(out IMovableObject movable)) { return null; }
 
             return movable;
@@ -87,14 +85,8 @@ namespace ChartEditor
         /// <returns></returns>
         private Transform GetTransformUnderCursor()
         {
-            Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            // オブジェクトがなかったらnullを返す
-            if (!Physics.Raycast(ray, out hit)) { return null; }
-
-            // インタラクトオブジェクト出なければnullを返す
-            GameObject hitObject = hit.collider.gameObject;
+            GameObject hitObject = cursorInteracter.Value.GetObjectUnderCursor();
+            if (hitObject == null) { return null; }
             if (!hitObject.TryGetComponent(out IInteractableCollider interactable)) { return null; }
 
             return hitObject.transform;

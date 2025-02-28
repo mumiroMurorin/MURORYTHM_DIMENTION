@@ -36,6 +36,11 @@ namespace ChartEditor
         EditMode GetEditMode();
     }
 
+    public interface IDeployableCollider
+    {
+
+    }
+
     public interface IDeployableObject
     {
         void OnInstantiate();
@@ -52,6 +57,12 @@ namespace ChartEditor
         void OnMove();
 
         void OnMoveEnd();
+    }
+
+    public interface IScalableObject
+    {
+        GameObject gameObject { get; }
+
     }
 
     public enum EditMode

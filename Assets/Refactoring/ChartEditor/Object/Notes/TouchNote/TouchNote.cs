@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChartEditor
 {
-    public class TouchNote : MonoBehaviour , IDeployableObject, IMovableObject
+    public class TouchNote : MonoBehaviour , IDeployableObject, IMovableObject, IScalableObject
     {
         [SerializeField] Renderer _renderer;
         [SerializeField] Collider[] _colliders;
