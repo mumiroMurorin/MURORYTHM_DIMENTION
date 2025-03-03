@@ -10,7 +10,7 @@ namespace Refactoring
         /// <summary>
         /// ƒm[ƒc‚ª1•bŠÔ‚É“®‚­(unity’PˆÊ)‘¬“x
         /// </summary>
-        public float NoteSpeed { get; set; } = 200f;
+        public float NoteSpeed { get; set; } = 80f;
 
         // SEŠÖŒW
         ReactiveProperty<float> seVolume = new ReactiveProperty<float>(0.8f);

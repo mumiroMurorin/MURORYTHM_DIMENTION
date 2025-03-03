@@ -10,8 +10,11 @@ namespace Refactoring
     {
         [SerializeField] GameObject noteObjectOriginPrefab;
 
-        [Header("meshの分割数")]
-        [SerializeField] int meshDivisionNum = 10;
+        [Header("meshの1レーン内の分割数")]
+        [SerializeField] int meshHorizontalDivisionNum = 10;
+
+        [Header("meshの1距離あたりの分割数")]
+        [SerializeField] int meshVerticalDivisionNum = 10;
 
         INoteSpawnDataOptionHolder optionHolder;
         ISliderInputGetter sliderInputGetter;
@@ -91,7 +94,9 @@ namespace Refactoring
 
             List<int> triangles = new List<int>();
             List<Vector3> vertices = new List<Vector3>();
+            List<Vector2> uvs = new List<Vector2>();
             float currentStartZ = 0;
+            float maxLength = optionHolder.NoteSpeed * (noteData.TimeToRanges[^1].Timing - noteData.TimeToRanges[0].Timing);
             int currentMeshIndex = 0;
 
             for (int i = 0; i < noteData.TimeToRanges.Count - 1; i++)
@@ -110,10 +115,10 @@ namespace Refactoring
 
                 // 頂点インデックスリストを作成
                 List<float> indexStart = GetMeshPointList(slopeLeft < float.PositiveInfinity && slopeLeft < 0 ? endLeft : startLeft,
-                    slopeRight < float.PositiveInfinity && slopeRight > 0 ? endRight + 1 : startRight + 1, meshDivisionNum);
+                    slopeRight < float.PositiveInfinity && slopeRight > 0 ? endRight + 1 : startRight + 1, meshHorizontalDivisionNum);
 
                 List<float> indexEnd = GetMeshPointList(slopeLeft < float.PositiveInfinity && slopeLeft > 0 ? startLeft : endLeft,
-                   slopeRight < float.PositiveInfinity && slopeRight < 0 ? startRight + 1 : endRight + 1, meshDivisionNum);
+                   slopeRight < float.PositiveInfinity && slopeRight < 0 ? startRight + 1 : endRight + 1, meshHorizontalDivisionNum);
 
                 //Debug.Log("indexStart: " + string.Join(",", indexStart.Select(n => n.ToString())));
                 //Debug.Log("indexEnd: " + string.Join(",", indexEnd.Select(n => n.ToString())));
@@ -129,6 +134,12 @@ namespace Refactoring
                 vertices.AddRange(verticesStart);
                 vertices.AddRange(verticesEnd);
 
+                // UV座標の生成,代入
+                List<Vector2> uvListStart = GetUVPositionList(verticesStart, currentStartZ, maxLength);
+                List<Vector2> uvListEnd = GetUVPositionList(verticesEnd, currentStartZ + length, maxLength);
+                uvs.AddRange(uvListStart);
+                uvs.AddRange(uvListEnd);
+
                 // トライアングルインデックスを生成、代入
                 triangles.AddRange(GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count));
 
@@ -142,7 +153,9 @@ namespace Refactoring
             mesh.triangles = triangles.ToArray();
             mesh.RecalculateNormals();
 
-            UpdateMeshUV(mesh);
+            mesh.uv = uvs.ToArray();
+
+            //UpdateMeshUV(mesh);
 
             obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
             return obj;
@@ -189,6 +202,32 @@ namespace Refactoring
         }
 
         /// <summary>
+        /// 引数ラインのUV頂点座標を生成
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        private List<Vector2> GetUVPositionList(List<Vector3> vertices, float baseZ, float length)
+        {
+            List<Vector2> uvList = new List<Vector2>();
+
+            Vector3 firstMatch = vertices.FirstOrDefault(v => Mathf.Approximately(v.z, baseZ));
+            Vector3 lastMatch = vertices.LastOrDefault(v => Mathf.Approximately(v.z, baseZ));
+            float minX = firstMatch.x;
+            float maxX = lastMatch.x;
+
+            foreach (Vector3 pos in vertices)
+            {
+                Vector2 uv = new Vector2();
+                uv.x = Mathf.Clamp((pos.x - minX) / (maxX - minX), 0f, 1f);
+                uv.y = pos.z / length;
+                uvList.Add(uv);
+            }
+
+            return uvList;
+        }
+
+        /// <summary>
         /// メッシュのトライアングルインデックスを生成
         /// </summary>
         private List<int> GenerateTriangles(int startIndex, int countStart, int countEnd)
@@ -207,26 +246,6 @@ namespace Refactoring
                 triangles.Add(startIndex + i + countStart + 1);
             }
             return triangles;
-        }
-
-        public static void UpdateMeshUV(Mesh mesh)
-        {
-            Vector3[] vertices = mesh.vertices;
-            Vector2[] uvs = new Vector2[vertices.Length];
-            Bounds bounds = mesh.bounds;
-            Vector3 min = bounds.min;
-            Vector3 size = bounds.size;
-
-            // UV計算x/z
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                // XZ平面の場合：X座標とZ座標でUVを計算
-                uvs[i] = new Vector2(
-                    (vertices[i].x - min.x) / size.x,
-                    (vertices[i].z - min.z) / size.z
-                );
-            }
-            mesh.uv = uvs;
         }
 
         /// <summary>

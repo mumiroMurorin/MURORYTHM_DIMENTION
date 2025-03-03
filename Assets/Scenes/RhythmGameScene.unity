@@ -5023,6 +5023,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5493261185757931217, guid: 97fe1f5948ffe7844948f3f4a47afb57, type: 3}
+      propertyPath: meshDivisionNum
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8581259717299761544, guid: 97fe1f5948ffe7844948f3f4a47afb57, type: 3}
       propertyPath: m_Name
       value: NoteFactory_HoldMesh
@@ -5250,7 +5254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed07db9c99ac59f4e9da1284ad6c5307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUseKinectInput: 1
+  isUseKinectInput: 0
 --- !u!1001 &1826391570
 PrefabInstance:
   m_ObjectHideFlags: 0

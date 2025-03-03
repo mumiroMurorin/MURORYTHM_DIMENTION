@@ -63,6 +63,7 @@ namespace ChartEditor
     {
         GameObject gameObject { get; }
 
+        void OnScale();
     }
 
     public enum EditMode

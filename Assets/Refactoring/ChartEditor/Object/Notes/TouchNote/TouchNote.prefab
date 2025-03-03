@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f046f1657c5d044e826673a7dd8b7c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  origin: {fileID: 3934986967309432180}
   _renderer: {fileID: 5893660377328454484}
   _colliders:
   - {fileID: 8359331944818234350}
