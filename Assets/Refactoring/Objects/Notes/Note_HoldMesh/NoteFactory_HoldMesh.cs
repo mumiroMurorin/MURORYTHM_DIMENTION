@@ -13,8 +13,8 @@ namespace Refactoring
         [Header("meshの1レーン内の分割数")]
         [SerializeField] int meshHorizontalDivisionNum = 10;
 
-        [Header("meshの1距離あたりの分割数")]
-        [SerializeField] int meshVerticalDivisionNum = 10;
+        [Header("三角形の最大高さ(長さ)")]
+        [SerializeField] float maxTriangleLength = 0.5f;
 
         INoteSpawnDataOptionHolder optionHolder;
         ISliderInputGetter sliderInputGetter;
@@ -103,6 +103,8 @@ namespace Refactoring
             {
                 float length = optionHolder.NoteSpeed * (noteData.TimeToRanges[i + 1].Timing - noteData.TimeToRanges[i].Timing);
 
+                //for(float )
+
                 // それぞれの端のインデックスを代入
                 float startLeft = noteData.TimeToRanges[i].Range[0];
                 float startRight = noteData.TimeToRanges[i].Range[^1];
@@ -120,15 +122,9 @@ namespace Refactoring
                 List<float> indexEnd = GetMeshPointList(slopeLeft < float.PositiveInfinity && slopeLeft > 0 ? startLeft : endLeft,
                    slopeRight < float.PositiveInfinity && slopeRight < 0 ? startRight + 1 : endRight + 1, meshHorizontalDivisionNum);
 
-                //Debug.Log("indexStart: " + string.Join(",", indexStart.Select(n => n.ToString())));
-                //Debug.Log("indexEnd: " + string.Join(",", indexEnd.Select(n => n.ToString())));
-
                 // 頂点リストを生成
                 List<Vector3> verticesStart = GenerateVertices(indexStart, startLeft, startRight + 1, slopeLeft, slopeRight, currentStartZ);
                 List<Vector3> verticesEnd = GenerateVertices(indexEnd, endLeft, endRight + 1, slopeLeft, slopeRight, currentStartZ + length);
-
-                //Debug.Log("verticesStart: " + string.Join(",", verticesStart.Select(n => n.ToString())));
-                //Debug.Log("verticesEnd: " + string.Join(",", verticesEnd.Select(n => n.ToString())));
 
                 // 頂点リストの代入
                 vertices.AddRange(verticesStart);
@@ -143,19 +139,14 @@ namespace Refactoring
                 // トライアングルインデックスを生成、代入
                 triangles.AddRange(GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count));
 
-                //Debug.Log("triangles: " + string.Join(",", triangles.Select(n => n.ToString())));
-
                 currentStartZ += length;
                 currentMeshIndex += verticesStart.Count + verticesEnd.Count;
             }
 
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
-            mesh.RecalculateNormals();
-
             mesh.uv = uvs.ToArray();
-
-            //UpdateMeshUV(mesh);
+            mesh.RecalculateNormals();
 
             obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
             return obj;
