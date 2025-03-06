@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.unity.2d.pixel-perfect": "5.0.3",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.addressables": "1.21.18",
@@ -59,6 +60,13 @@
       "url": "https://registry.npmjs.org",
       "scopes": [
         "com.unityfx"
+      ]
+    },
+    {
+      "name": "OpenUPM",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.github.homuler"
       ]
     }
   ]

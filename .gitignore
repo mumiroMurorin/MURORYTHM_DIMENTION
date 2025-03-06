@@ -50,6 +50,11 @@ ExportedObj/
 # TextMeshPro TextAsset
 Assets/TextMesh Pro/Fonts/HGRSGU SDF.asset
 
+#MediaPipe
+Packages/com.github.homuler.mediapipe/Runtime/Plugins/Android/mediapipe_android.aar
+Packages/com.github.homuler.mediapipe/Runtime/Plugins/iOS/MediaPipeUnity.framework/MediaPipeUnity
+
+
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta
