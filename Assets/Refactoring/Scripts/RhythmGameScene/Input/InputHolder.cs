@@ -11,7 +11,6 @@ namespace Refactoring
     {
         const int SLIDER_MAX_COUNT = 16;
         const int MAX_RECORD_SPACE_INDEX = 60;
-        //const float VECTOR_MESUREMENT_TIME = 0.1f;
 
         // スライダーからの入力
         ReactiveProperty<bool>[] sliderInput;
@@ -69,6 +68,7 @@ namespace Refactoring
         /// <param name="pos"></param>
         public void SetSpaceInput(SpaceTrackingTag tag, Vector3 pos, float time)
         {
+            Debug.Log("きちゃ");
             switch (tag)
             {
                 case SpaceTrackingTag.RightHand:

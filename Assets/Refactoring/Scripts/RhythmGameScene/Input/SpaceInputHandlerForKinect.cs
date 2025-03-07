@@ -6,7 +6,7 @@ using VContainer;
 
 namespace Refactoring
 {
-    public class SpaceInputHandler : MonoBehaviour
+    public class SpaceInputHandlerForKinect : MonoBehaviour
     {
         [SerializeField] BodySourceManager _manager;
         [SerializeField] SerializeInterface<ITimeGetter> timer;
@@ -24,7 +24,7 @@ namespace Refactoring
         ISpaceInputSetter spaceInputSetter;
 
         [Inject]
-        public void Inject(ISpaceInputSetter inputSetter)
+        public void Construct(ISpaceInputSetter inputSetter)
         {
             spaceInputSetter = inputSetter;
         }
