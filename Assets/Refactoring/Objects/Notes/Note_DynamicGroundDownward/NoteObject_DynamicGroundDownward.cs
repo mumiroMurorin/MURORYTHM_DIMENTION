@@ -14,7 +14,6 @@ namespace Refactoring
     {
         Vector3 JudgeVector => Vector3.down;
 
-        [SerializeField] float judgeTimeRange = 1f;
         [SerializeField] float judgeMagnitude;
         [SerializeField] JudgementWindow judgementWindow;
 

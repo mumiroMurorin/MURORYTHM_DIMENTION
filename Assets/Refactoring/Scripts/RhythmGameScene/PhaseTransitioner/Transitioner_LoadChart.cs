@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
-namespace Refactoring
+namespace Refactoring.TransitionerInRhythmGameScene
 {
-    public class Transitioner_LoadChart : IPhaseTransitioner
+    public class Transitioner_LoadChart : IPhaseTransitionerInRhythmGameScene
     {
         [SerializeField] SerializeInterface<IChartGenerator> chartGenerator;
         [SerializeField] SerializeInterface<IChartEnder> chartEnder;
-        [SerializeField] SerializeInterface<IPhaseTransitionable> phaseTransitionable;
+        [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.LoadChart;
 
-        bool IPhaseTransitioner.ConditionChecker(PhaseStatusInRhythmGame status)
+        bool IPhaseTransitionerInRhythmGameScene.ConditionChecker(PhaseStatusInRhythmGame status)
         {
             return this.status == status;
         }
 
-        void IPhaseTransitioner.Transition()
+        void IPhaseTransitionerInRhythmGameScene.Transition()
         {
             Debug.Log("ÅyTransitionÅzTransition to \"LoadChart\"");
 

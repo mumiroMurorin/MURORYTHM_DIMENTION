@@ -19,4 +19,16 @@ namespace Refactoring
         FadeOut,
         TransitionResultScene,
     }
+
+    /// <summary>
+    /// リザルトシーンの内部ステータス
+    /// </summary>
+    public enum PhaseStatusInResultScene
+    {
+        LoadData,
+        FadeIn,
+        Result,
+        FadeOut,
+        TransitionSelectScene,
+    }
 }

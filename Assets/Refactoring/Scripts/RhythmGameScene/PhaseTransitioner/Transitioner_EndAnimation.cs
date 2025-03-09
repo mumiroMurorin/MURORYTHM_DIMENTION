@@ -5,21 +5,21 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 
-namespace Refactoring
+namespace Refactoring.TransitionerInRhythmGameScene
 {
-    public class Transitioner_EndAnimation : IPhaseTransitioner
+    public class Transitioner_EndAnimation : IPhaseTransitionerInRhythmGameScene
     {
-        [SerializeField] SerializeInterface<IPhaseTransitionable> phaseTransitionable;
+        [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
         [SerializeField] SerializeInterface<IAssessmentController> controller;
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.EndAnimation;
 
-        bool IPhaseTransitioner.ConditionChecker(PhaseStatusInRhythmGame status)
+        bool IPhaseTransitionerInRhythmGameScene.ConditionChecker(PhaseStatusInRhythmGame status)
         {
             return this.status == status;
         }
 
-        void IPhaseTransitioner.Transition()
+        void IPhaseTransitionerInRhythmGameScene.Transition()
         {
             Debug.Log("ÅyTransitionÅzTransition to \"EndAnimation\"");
 

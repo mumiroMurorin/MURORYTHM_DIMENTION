@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
-namespace Refactoring
+namespace Refactoring.TransitionerInRhythmGameScene
 {
-    public class Transitioner_Play : IPhaseTransitioner
+    public class Transitioner_Play : IPhaseTransitionerInRhythmGameScene
     {
-        [SerializeField] SerializeInterface<IPhaseTransitionable> phaseTransitionable;
+        [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
         [SerializeField] SerializeInterface<IGroundController> groundController;
         [SerializeField] SerializeInterface<ITimeController> timer;
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.Play;
 
-        bool IPhaseTransitioner.ConditionChecker(PhaseStatusInRhythmGame status)
+        bool IPhaseTransitionerInRhythmGameScene.ConditionChecker(PhaseStatusInRhythmGame status)
         {
             return this.status == status;
         }
 
-        void IPhaseTransitioner.Transition()
+        void IPhaseTransitionerInRhythmGameScene.Transition()
         {
             Debug.Log("ÅyTransitionÅzTransition to \"Play\"");
             StartRhythmGame();

@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
-namespace Refactoring
+namespace Refactoring.TransitionerInRhythmGameScene
 {
-    public class Transitioner_LoadBody : IPhaseTransitioner
+    public class Transitioner_LoadBody : IPhaseTransitionerInRhythmGameScene
     {
-        [SerializeField] SerializeInterface<IPhaseTransitionable> phaseTransitionable;
+        [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
         [SerializeField] SerializeInterface<IBodyLoader> bodyLoader;
         [SerializeField] SerializeInterface<ITimelinePlayer> openLodingBodyUI; 
         [SerializeField] SerializeInterface<ITimelinePlayer> closeLodingBodyUI; 
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.LoadBody;
 
-        bool IPhaseTransitioner.ConditionChecker(PhaseStatusInRhythmGame status)
+        bool IPhaseTransitionerInRhythmGameScene.ConditionChecker(PhaseStatusInRhythmGame status)
         {
             return this.status == status;
         }
 
-        void IPhaseTransitioner.Transition()
+        void IPhaseTransitionerInRhythmGameScene.Transition()
         {
             Debug.Log("ÅyTransitionÅzTransition to \"LoadBody\"");
 

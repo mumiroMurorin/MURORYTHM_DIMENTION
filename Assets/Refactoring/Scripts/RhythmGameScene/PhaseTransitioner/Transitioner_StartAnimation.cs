@@ -6,22 +6,22 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 
-namespace Refactoring
+namespace Refactoring.TransitionerInRhythmGameScene
 {
-    public class Transitioner_StartAnimation : IPhaseTransitioner
+    public class Transitioner_StartAnimation : IPhaseTransitionerInRhythmGameScene
     {
-        [SerializeField] SerializeInterface<IPhaseTransitionable> phaseTransitionable;
+        [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
         [Header("スタート演出タイムライン")]
         [SerializeField] SerializeInterface<ITimelinePlayer> timelinePlayer;
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.StartAnimation;
 
-        bool IPhaseTransitioner.ConditionChecker(PhaseStatusInRhythmGame status)
+        bool IPhaseTransitionerInRhythmGameScene.ConditionChecker(PhaseStatusInRhythmGame status)
         {
             return this.status == status;
         }
 
-        void IPhaseTransitioner.Transition()
+        void IPhaseTransitionerInRhythmGameScene.Transition()
         {
             Debug.Log("【Transition】Transition to \"StartAnimation\"");
 

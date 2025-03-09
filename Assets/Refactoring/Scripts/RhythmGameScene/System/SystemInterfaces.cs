@@ -93,7 +93,7 @@ namespace Refactoring
     /// <summary>
     /// フェーズ遷移を行うことが出来る
     /// </summary>
-    public interface IPhaseTransitionable
+    public interface IPhaseTransitionableInRhythmGameScene
     {
         public void TransitionPhase(PhaseStatusInRhythmGame phase);
     }
@@ -101,7 +101,7 @@ namespace Refactoring
     /// <summary>
     /// フェーズ遷移の際の処理を行う
     /// </summary>
-    public interface IPhaseTransitioner
+    public interface IPhaseTransitionerInRhythmGameScene
     {
         public void Transition();
 
@@ -111,6 +111,29 @@ namespace Refactoring
         /// <param name="status"></param>
         /// <returns></returns>
         public bool ConditionChecker(PhaseStatusInRhythmGame status);
+    }
+
+    /// <summary>
+    /// フェーズ遷移を行うことが出来る
+    /// </summary>
+    public interface IPhaseTransitionableInResultScene
+    {
+        public void TransitionPhase(PhaseStatusInResultScene phase);
+    }
+
+    /// <summary>
+    /// フェーズ遷移の際の処理を行う
+    /// </summary>
+    public interface IPhaseTransitionerInResultScene
+    {
+        public void Transition();
+
+        /// <summary>
+        /// 遷移条件のチェック
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public bool ConditionChecker(PhaseStatusInResultScene status);
     }
 
     /// <summary>

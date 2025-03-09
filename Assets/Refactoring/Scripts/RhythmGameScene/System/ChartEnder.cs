@@ -10,7 +10,7 @@ namespace Refactoring
     public class ChartEnder : MonoBehaviour, IChartEnder
     {
         [Header("フェーズ遷移管理")]
-        [SerializeField] SerializeInterface<IPhaseTransitionable> phaseTransitionable; 
+        [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable; 
 
         IScoreGetter scoreGetter;
         IChartDataGetter chartDataGetter;

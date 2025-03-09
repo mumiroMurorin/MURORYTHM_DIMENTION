@@ -68,7 +68,6 @@ namespace Refactoring
         /// <param name="pos"></param>
         public void SetSpaceInput(SpaceTrackingTag tag, Vector3 pos, float time)
         {
-            Debug.Log("‚«‚¿‚á");
             switch (tag)
             {
                 case SpaceTrackingTag.RightHand:

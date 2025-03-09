@@ -10,7 +10,7 @@ namespace Refactoring
 {
     public class BodyLoader : MonoBehaviour, IBodyLoader
     {
-        [SerializeField] bool isUseKinectInput;
+        [SerializeField] bool isUseSpaceInput;
 
         ISpaceInputGetter spaceInputGetter;
         CancellationTokenSource cts;
@@ -23,7 +23,7 @@ namespace Refactoring
 
         void IBodyLoader.WaitForLoadBody(Action callback)
         {
-            if (!isUseKinectInput)
+            if (!isUseSpaceInput)
             {
                 callback.Invoke();
                 return;

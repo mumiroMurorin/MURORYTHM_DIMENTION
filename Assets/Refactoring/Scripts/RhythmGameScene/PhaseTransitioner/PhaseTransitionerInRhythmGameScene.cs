@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Refactoring
+namespace Refactoring.TransitionerInRhythmGameScene
 {
-    public class PhaseTransitioner : MonoBehaviour, IPhaseTransitionable
+    public class PhaseTransitionerInRhythmGameScene : MonoBehaviour, IPhaseTransitionableInRhythmGameScene
     {
         const PhaseStatusInRhythmGame FIRST_STATUS = PhaseStatusInRhythmGame.LoadData;
 
-        [SerializeReference,SubclassSelector] List<IPhaseTransitioner> transitioners;
+        [SerializeReference,SubclassSelector] List<IPhaseTransitionerInRhythmGameScene> transitioners;
 
         void Start()
         {
@@ -31,7 +31,7 @@ namespace Refactoring
         /// </summary>
         private bool Transition(PhaseStatusInRhythmGame phase)
         {
-            foreach (IPhaseTransitioner transitioner in transitioners)
+            foreach (IPhaseTransitionerInRhythmGameScene transitioner in transitioners)
             {
                 if (transitioner.ConditionChecker(phase))
                 {

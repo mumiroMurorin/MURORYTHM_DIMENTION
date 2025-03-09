@@ -5,21 +5,21 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 
-namespace Refactoring.TransitionerInRhythmGameScene
+namespace Refactoring.TransitionerInResultScene
 {
-    public class Transitioner_FadeIn : IPhaseTransitionerInRhythmGameScene
+    public class Transitioner_FadeIn : IPhaseTransitionerInResultScene
     {
-        [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
+        [SerializeField] SerializeInterface<IPhaseTransitionableInResultScene> phaseTransitionable;
         [SerializeField] SerializeInterface<ITimelinePlayer> timelinePlayer;
 
-        readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.FadeIn;
+        readonly PhaseStatusInResultScene status = PhaseStatusInResultScene.FadeIn;
 
-        bool IPhaseTransitionerInRhythmGameScene.ConditionChecker(PhaseStatusInRhythmGame status)
+        bool IPhaseTransitionerInResultScene.ConditionChecker(PhaseStatusInResultScene status)
         {
             return this.status == status;
         }
 
-        void IPhaseTransitionerInRhythmGameScene.Transition()
+        void IPhaseTransitionerInResultScene.Transition()
         {
             Debug.Log("ÅyTransitionÅzTransition to \"FadeIn\"");
 
@@ -32,7 +32,7 @@ namespace Refactoring.TransitionerInRhythmGameScene
         /// </summary>
         private void TransitionNextPhase()
         {
-            phaseTransitionable.Value.TransitionPhase(PhaseStatusInRhythmGame.LoadBody);
+            phaseTransitionable.Value.TransitionPhase(PhaseStatusInResultScene.Result);
         }
     }
 
