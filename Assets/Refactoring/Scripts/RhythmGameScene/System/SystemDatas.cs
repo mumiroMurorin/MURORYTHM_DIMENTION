@@ -31,4 +31,17 @@ namespace Refactoring
         FadeOut,
         TransitionSelectScene,
     }
+
+    /// <summary>
+    /// セレクトシーンの内部ステータス
+    /// </summary>
+    public enum PhaseStatusInSelectScene
+    {
+        LoadData,
+        FadeIn,
+        MusicSelect,
+        DetailSelect,
+        FadeOut,
+        TransitionRhythmGameScene,
+    }
 }

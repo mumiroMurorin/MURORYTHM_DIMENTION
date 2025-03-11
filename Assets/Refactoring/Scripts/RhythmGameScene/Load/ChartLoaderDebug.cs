@@ -47,7 +47,7 @@ namespace Refactoring
         {
             ChartData chartData = new ChartData
             {
-                MaxCombo = 24,
+                MaxCombo = 4,
 
                 //noteData_Touches = new List<NoteData_Touch>
                 //{

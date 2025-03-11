@@ -6,26 +6,26 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using UnityEngine.SceneManagement;
 
-namespace Refactoring.TransitionerInRhythmGameScene
+namespace Refactoring.TransitionerInSelectScene
 {
-    public class Transitioner_TransitionResultScene : IPhaseTransitionerInRhythmGameScene
+    public class Transitioner_TransitionSelectScene : IPhaseTransitionerInSelectScene
     {
-        const string NEXT_SCENE_NAME = "ResultScene";
+        const string NEXT_SCENE_NAME = "RhythmGameScene";
 
-        [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
+        [SerializeField] SerializeInterface<IPhaseTransitionableInSelectScene> phaseTransitionable;
         [SerializeField] float waitTime = 0.5f;
 
-        readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.TransitionResultScene;
+        readonly PhaseStatusInSelectScene status = PhaseStatusInSelectScene.TransitionRhythmGameScene;
         CancellationTokenSource cts = new CancellationTokenSource();
 
-        bool IPhaseTransitionerInRhythmGameScene.ConditionChecker(PhaseStatusInRhythmGame status)
+        bool IPhaseTransitionerInSelectScene.ConditionChecker(PhaseStatusInSelectScene status)
         {
             return this.status == status;
         }
 
-        void IPhaseTransitionerInRhythmGameScene.Transition()
+        void IPhaseTransitionerInSelectScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"TransitionResultScene\"");
+            Debug.Log("ÅyTransitionÅzTransition to \"TransitionRhythmGameScene\"");
             LoadSceneAsync(cts.Token).Forget();
         }
 

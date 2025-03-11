@@ -129,7 +129,7 @@ namespace Refactoring
             }
 
             judgeVectors = judgeVectors.Distinct().ToList();
-            Debug.Log($"List: {string.Join(", ", judgeVectors)}");
+            // Debug.Log($"List: {string.Join(", ", judgeVectors)}");
         }
 
         public bool Judge(Vector3 diff)
