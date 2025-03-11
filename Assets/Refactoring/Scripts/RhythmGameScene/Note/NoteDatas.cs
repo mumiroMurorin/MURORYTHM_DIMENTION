@@ -174,6 +174,16 @@ namespace Refactoring
     }
 
     /// <summary>
+    /// スペースホールドノーツ用の纏めクラス
+    /// </summary>
+    public class TimeToVertices
+    {
+        public float Timing { get; set; }
+        public Vector2[] Vertices { get; set; }
+    }
+
+
+    /// <summary>
     /// 各種ノーツデータのListをまとめたもの
     /// </summary>
     public class ChartData
@@ -190,6 +200,8 @@ namespace Refactoring
 
         public List<NoteData_HoldMesh> noteData_HoldMeshes { get; set; }
 
+
+
         public List<NoteData_DynamicGroundUpward> noteData_DynamicGroundUpwards { get; set; }
 
         public List<NoteData_DynamicGroundRightward> noteData_DynamicGroundRightwards { get; set; }
@@ -197,6 +209,10 @@ namespace Refactoring
         public List<NoteData_DynamicGroundLeftward> noteData_DynamicGroundLeftwards { get; set; }
 
         public List<NoteData_DynamicGroundDownward> noteData_DynamicGroundDownwards { get; set; }
+
+        public List<NoteData_SpaceHoldMesh> noteData_SpaceHoldMeshes { get; set; }
+
+        public List<NoteData_SpaceHoldRelay> noteData_SpaceHoldRelays { get; set; }
 
         //public List<NoteData_DynamicSpace>
         //{ get; set; }
@@ -224,6 +240,8 @@ namespace Refactoring
         HoldRelay,
         HoldEnd,
         HoldMesh,
+        SpaceHoldMesh,
+        SpaceHoldRelay,
         DynamicGroundUpward,
         DynamicGroundDownward,
         DynamicGroundRightward,

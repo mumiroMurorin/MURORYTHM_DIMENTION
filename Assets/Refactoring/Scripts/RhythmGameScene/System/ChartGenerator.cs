@@ -20,6 +20,8 @@ namespace Refactoring
         [SerializeField] NoteFactory<NoteData_HoldRelay> holdRelayNoteFactory;
         [SerializeField] NoteFactory<NoteData_HoldEnd> holdEndNoteFactory;
         [SerializeField] NoteFactory<NoteData_HoldMesh> holdMeshNoteFactory;
+        [SerializeField] NoteFactory<NoteData_SpaceHoldMesh> spaceHoldMeshNoteFactory;
+        [SerializeField] NoteFactory<NoteData_SpaceHoldRelay> spaceHoldRelayNoteFactory;
 
         [Header("Factoryの初期化に必要なデータ")]
         [SerializeField] GameObject groundObject;
@@ -75,6 +77,8 @@ namespace Refactoring
             holdRelayNoteFactory.Initialize(data);
             holdEndNoteFactory.Initialize(data);
             holdMeshNoteFactory.Initialize(data);
+            spaceHoldMeshNoteFactory.Initialize(data);
+            spaceHoldRelayNoteFactory.Initialize(data);
         }
 
         /// <summary>
@@ -92,6 +96,8 @@ namespace Refactoring
             GenerateHoldRelayNote(chartDataGetter.Chart.noteData_HoldRelays);
             GenerateHoldEndNote(chartDataGetter.Chart.noteData_HoldEnds);
             GenerateHoldMeshNote(chartDataGetter.Chart.noteData_HoldMeshes);
+            GenerateSpaceHoldMeshNote(chartDataGetter.Chart.noteData_SpaceHoldMeshes);
+            GenerateSpaceHoldRelayNote(chartDataGetter.Chart.noteData_SpaceHoldRelays);
 
             callback?.Invoke();
         }
@@ -219,6 +225,35 @@ namespace Refactoring
             foreach (NoteData_HoldMesh data in noteDatas)
             {
                 holdMeshNoteFactory.Spawn(data);
+            }
+        }
+
+        /// <summary>
+        /// スペースホールドメッシュの生成
+        /// </summary>
+        /// <param name="noteData_Touches"></param>
+        private void GenerateSpaceHoldMeshNote(List<NoteData_SpaceHoldMesh> noteDatas)
+        {
+            if (noteDatas == null) { return; }
+
+            foreach (NoteData_SpaceHoldMesh data in noteDatas)
+            {
+                spaceHoldMeshNoteFactory.Spawn(data);
+            }
+        }
+
+
+        /// <summary>
+        /// スペースホールド中点の生成
+        /// </summary>
+        /// <param name="noteData_Touches"></param>
+        private void GenerateSpaceHoldRelayNote(List<NoteData_SpaceHoldRelay> noteDatas)
+        {
+            if (noteDatas == null) { return; }
+
+            foreach (NoteData_SpaceHoldRelay data in noteDatas)
+            {
+                spaceHoldRelayNoteFactory.Spawn(data);
             }
         }
     }
