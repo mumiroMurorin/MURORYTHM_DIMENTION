@@ -9,6 +9,13 @@ namespace Refactoring
         [SerializeField] List<MusicData> musicDataList;
 
         List<MusicData> musicDataListSorted;
+        int currentSelectIndex = 0;
+
+        private void Start()
+        {
+            musicDataListSorted.AddRange(musicDataList); 
+        }
+
 
 
     }

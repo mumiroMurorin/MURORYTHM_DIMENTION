@@ -13,6 +13,8 @@ namespace Refactoring
         readonly float RADIUS = 10f; 
 
         [SerializeField] GameObject noteObjectOriginPrefab;
+        [Header("【強調線】太さ")]
+        [SerializeField] float enphasisLineWidth = 0.1f;
 
         INoteSpawnDataOptionHolder optionHolder;
         ISliderInputGetter sliderInputGetter;
@@ -70,6 +72,8 @@ namespace Refactoring
             // ノーツオブジェクト(表)を生成
             GameObject noteObj = GenerateMeshObject(data);
             noteObj.transform.SetParent(origin.transform);
+            //GameObject emphasisLineObj = GenerateEmphasisLine(data);
+            //emphasisLineObj.transform.SetParent(origin.transform);
 
             // コンポーネントを取得
             NoteObject<NoteData_SpaceHoldRelay> note = origin.GetComponent<NoteObject<NoteData_SpaceHoldRelay>>();
@@ -104,7 +108,7 @@ namespace Refactoring
         /// </summary>
         /// <param name="vertices"></param>
         /// <returns></returns>
-        public Mesh GenerateMesh(List<Vector2> vertices)
+        private Mesh GenerateMesh(List<Vector2> vertices)
         {
             if (vertices == null || vertices.Count < 3)
             {
@@ -151,6 +155,31 @@ namespace Refactoring
             mesh.RecalculateBounds();
 
             return mesh;
+        }
+
+        /// <summary>
+        /// 強調線の生成
+        /// </summary>
+        /// <param name="noteData"></param>
+        /// <returns></returns>
+        private GameObject GenerateEmphasisLine(NoteData_SpaceHoldRelay noteData)
+        {
+            GameObject lineObj = new GameObject("EnphasisLine");
+            var lineRenderer = lineObj.AddComponent<LineRenderer>();
+
+            // 各種設定
+            lineRenderer.loop = true;
+            lineRenderer.startWidth = lineRenderer.endWidth = enphasisLineWidth;
+            lineRenderer.useWorldSpace = false;
+
+            // 線を引く
+            var positions = noteData.Vertices.Select(v => new Vector3((v.x - CENTER_PIVOT.x) * RADIUS, (v.y - CENTER_PIVOT.y) * RADIUS, 0f)).ToArray();
+            lineRenderer.positionCount = positions.Length;
+            lineRenderer.SetPositions(positions);
+
+            lineObj.AddComponent<Deformable>().AddDeformer(groundDeformer);
+
+            return lineObj;
         }
 
         /// <summary>

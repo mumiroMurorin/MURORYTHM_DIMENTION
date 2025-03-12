@@ -50,8 +50,9 @@ namespace Refactoring
             position = new Vector3(
                 judgeFieldCenter.x + position.x * (judgeFieldSize.x / 2f),
                 judgeFieldCenter.y + position.y * (judgeFieldSize.y / 2f),
-                judgeFieldCenter.z + position.z * (judgeFieldSize.z / 2f)
-           );
+                //judgeFieldCenter.z + position.z * (judgeFieldSize.z / 2f)
+                0
+            );
 
             //Debug.Log($"ÅyCaptureÅz{handObject.name},{position}");
             handObject.transform.position = position; 
