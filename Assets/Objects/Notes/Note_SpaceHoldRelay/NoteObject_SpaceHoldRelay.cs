@@ -11,15 +11,7 @@ namespace Refactoring
     /// </summary>
     public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     {
-        [Header("meshのマテリアル(未判定時)")]
-        [SerializeField] Material meshMaterialDefault;
-        [Header("meshのマテリアル(タッチ時)")]
-        [SerializeField] Material meshMaterialTouching;
-        [Header("meshのマテリアル(非タッチ時)")]
-        [SerializeField] Material meshMaterialUntouching;
-
         NoteData_SpaceHoldRelay noteData;
-        List<MeshRenderer> meshRenderers;
 
         List<int> judgeRange = new List<int>();
         bool isJudged;
@@ -31,17 +23,6 @@ namespace Refactoring
         public override void Initialize(NoteData_SpaceHoldRelay data)
         {
             noteData = data;
-
-            // マテリアルの設定
-            meshRenderers = new List<MeshRenderer>();
-            foreach (Transform child in this.gameObject.transform)
-            {
-                if (child.TryGetComponent(out MeshRenderer meshRenderer))
-                {
-                    meshRenderers.Add(meshRenderer);
-                    meshRenderer.material = meshMaterialDefault;
-                }
-            }
 
             Bind();
         }
@@ -138,10 +119,10 @@ namespace Refactoring
         /// <param name="isTouching"></param>
         public void SetTouchStatus(bool isTouching)
         {
-            foreach(MeshRenderer meshRenderer in meshRenderers)
-            {
-                meshRenderer.material = isTouching ? meshMaterialTouching : meshMaterialUntouching;
-            }
+            //foreach(MeshRenderer meshRenderer in meshRenderers)
+            //{
+            //    meshRenderer.material = isTouching ? meshMaterialTouching : meshMaterialUntouching;
+            //}
         }
 
         /// <summary>

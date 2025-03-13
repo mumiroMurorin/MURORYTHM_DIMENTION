@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using MeshGenerate;
 using Deform;
 
 namespace Refactoring
@@ -13,7 +14,7 @@ namespace Refactoring
         [Header("meshの1レーン内の分割数")]
         [SerializeField] int meshHorizontalDivisionNum = 10;
 
-        [Header("三角形の最大高さ(長さ)")]
+        [Header("mesh1単位の最大長さ")]
         [SerializeField] float maxTriangleLength = 0.5f;
 
         INoteSpawnDataOptionHolder optionHolder;
@@ -89,154 +90,11 @@ namespace Refactoring
             GameObject obj = new GameObject("Mesh");
             MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
             MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
-            Mesh mesh = new Mesh();
+            Mesh mesh = MeshGenerator.GenerateGroundHoldMesh_(noteData.TimeToRanges, optionHolder.NoteSpeed, meshHorizontalDivisionNum, maxTriangleLength);
             meshFilter.mesh = mesh;
-
-            List<int> triangles = new List<int>();
-            List<Vector3> vertices = new List<Vector3>();
-            List<Vector2> uvs = new List<Vector2>();
-            float currentStartZ = 0;
-            float maxLength = optionHolder.NoteSpeed * (noteData.TimeToRanges[^1].Timing - noteData.TimeToRanges[0].Timing);
-            int currentMeshIndex = 0;
-
-            for (int i = 0; i < noteData.TimeToRanges.Count - 1; i++)
-            {
-                float length = optionHolder.NoteSpeed * (noteData.TimeToRanges[i + 1].Timing - noteData.TimeToRanges[i].Timing);
-
-                //for(float )
-
-                // それぞれの端のインデックスを代入
-                float startLeft = noteData.TimeToRanges[i].Range[0];
-                float startRight = noteData.TimeToRanges[i].Range[^1];
-                float endLeft = noteData.TimeToRanges[i + 1].Range[0];
-                float endRight = noteData.TimeToRanges[i + 1].Range[^1];
-
-                // 傾きを計算
-                float slopeLeft = (endLeft - startLeft) == 0 ? float.PositiveInfinity : length / (endLeft - startLeft);
-                float slopeRight = (endRight - startRight) == 0 ? float.PositiveInfinity : length / (endRight - startRight);
-
-                // 頂点インデックスリストを作成
-                List<float> indexStart = GetMeshPointList(slopeLeft < float.PositiveInfinity && slopeLeft < 0 ? endLeft : startLeft,
-                    slopeRight < float.PositiveInfinity && slopeRight > 0 ? endRight + 1 : startRight + 1, meshHorizontalDivisionNum);
-
-                List<float> indexEnd = GetMeshPointList(slopeLeft < float.PositiveInfinity && slopeLeft > 0 ? startLeft : endLeft,
-                   slopeRight < float.PositiveInfinity && slopeRight < 0 ? startRight + 1 : endRight + 1, meshHorizontalDivisionNum);
-
-                // 頂点リストを生成
-                List<Vector3> verticesStart = GenerateVertices(indexStart, startLeft, startRight + 1, slopeLeft, slopeRight, currentStartZ);
-                List<Vector3> verticesEnd = GenerateVertices(indexEnd, endLeft, endRight + 1, slopeLeft, slopeRight, currentStartZ + length);
-
-                // 頂点リストの代入
-                vertices.AddRange(verticesStart);
-                vertices.AddRange(verticesEnd);
-
-                // UV座標の生成,代入
-                List<Vector2> uvListStart = GetUVPositionList(verticesStart, currentStartZ, maxLength);
-                List<Vector2> uvListEnd = GetUVPositionList(verticesEnd, currentStartZ + length, maxLength);
-                uvs.AddRange(uvListStart);
-                uvs.AddRange(uvListEnd);
-
-                // トライアングルインデックスを生成、代入
-                triangles.AddRange(GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count));
-
-                currentStartZ += length;
-                currentMeshIndex += verticesStart.Count + verticesEnd.Count;
-            }
-
-            mesh.vertices = vertices.ToArray();
-            mesh.triangles = triangles.ToArray();
-            mesh.uv = uvs.ToArray();
-            mesh.RecalculateNormals();
 
             obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
             return obj;
-        }
-
-        /// <summary>
-        /// 範囲内のメッシュ頂点リストを返す
-        /// </summary>
-        private List<float> GetMeshPointList(float first, float end, int divNum)
-        {
-            if (divNum <= 0)
-            {
-                Debug.LogError("【Note】メッシュ分割数が0以下です");
-                return new List<float>();
-            }
-
-            List<float> list = new List<float>();
-            for (float f = first; f <= end; f += 1f / divNum)
-            {
-                list.Add(f);
-            }
-            list.Add(end);
-            return list.Distinct().OrderBy(x => x).ToList();
-        }
-
-        /// <summary>
-        /// 指定したインデックスリストからメッシュの頂点座標を計算する
-        /// </summary>
-        private List<Vector3> GenerateVertices(List<float> indices, float left, float right, float slopeLeft, float slopeRight, float baseZ)
-        {
-            List<Vector3> vertices = new List<Vector3>();
-            foreach (float f in indices)
-            {
-                float deg = (f - 16) * 11.25f * Mathf.Deg2Rad;
-                float z = baseZ;
-
-                if (f < left) { z += slopeLeft * (f - left); }
-                else if (f > right) { z += slopeRight * (f - right); }
-
-                vertices.Add(new Vector3(10 * Mathf.Cos(deg), 10 * Mathf.Sin(deg), z));
-                //vertices.Add(new Vector3(f, -10, z));  // デバッグ用
-            }
-            return vertices;
-        }
-
-        /// <summary>
-        /// 引数ラインのUV頂点座標を生成
-        /// </summary>
-        /// <param name="vertices"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
-        private List<Vector2> GetUVPositionList(List<Vector3> vertices, float baseZ, float length)
-        {
-            List<Vector2> uvList = new List<Vector2>();
-
-            Vector3 firstMatch = vertices.FirstOrDefault(v => Mathf.Approximately(v.z, baseZ));
-            Vector3 lastMatch = vertices.LastOrDefault(v => Mathf.Approximately(v.z, baseZ));
-            float minX = firstMatch.x;
-            float maxX = lastMatch.x;
-
-            foreach (Vector3 pos in vertices)
-            {
-                Vector2 uv = new Vector2();
-                uv.x = Mathf.Clamp((pos.x - minX) / (maxX - minX), 0f, 1f);
-                uv.y = pos.z / length;
-                uvList.Add(uv);
-            }
-
-            return uvList;
-        }
-
-        /// <summary>
-        /// メッシュのトライアングルインデックスを生成
-        /// </summary>
-        private List<int> GenerateTriangles(int startIndex, int countStart, int countEnd)
-        {
-            List<int> triangles = new List<int>();
-            int halfCount = Mathf.Min(countStart, countEnd) - 1;
-
-            for (int i = 0; i < halfCount; i++)
-            {
-                triangles.Add(startIndex + i + 1);
-                triangles.Add(startIndex + i);
-                triangles.Add(startIndex + i + countStart);
-
-                triangles.Add(startIndex + i + 1);
-                triangles.Add(startIndex + i + countStart);
-                triangles.Add(startIndex + i + countStart + 1);
-            }
-            return triangles;
         }
 
         /// <summary>

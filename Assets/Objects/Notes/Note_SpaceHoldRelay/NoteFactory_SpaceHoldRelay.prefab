@@ -45,5 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noteObjectOriginPrefab: {fileID: 8224908405846241423, guid: d05fb8cfed4d4f04fb746b621b194a7f, type: 3}
-  meshDivisionNum: 10
-  maxTriangleLength: 0.5
+  enphasisLineWidth: 0.1
+  mainMaterial: {fileID: 2100000, guid: d0fb1e7840b242840bc210fca8b71c70, type: 2}
+  edgeMaterial: {fileID: 2100000, guid: d2fa97aecb969c4469dc1d8789468e28, type: 2}

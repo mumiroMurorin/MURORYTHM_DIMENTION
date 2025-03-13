@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using LibTessDotNet;
+using MeshGenerate;
 using Deform;
 
 namespace Refactoring
@@ -15,6 +15,10 @@ namespace Refactoring
         [SerializeField] GameObject noteObjectOriginPrefab;
         [Header("【強調線】太さ")]
         [SerializeField] float enphasisLineWidth = 0.1f;
+        [Header("メインメッシュのマテリアル")]
+        [SerializeField] Material mainMaterial;
+        [Header("強調線のマテリアル")]
+        [SerializeField] Material edgeMaterial;
 
         INoteSpawnDataOptionHolder optionHolder;
         ISliderInputGetter sliderInputGetter;
@@ -72,8 +76,10 @@ namespace Refactoring
             // ノーツオブジェクト(表)を生成
             GameObject noteObj = GenerateMeshObject(data);
             noteObj.transform.SetParent(origin.transform);
-            //GameObject emphasisLineObj = GenerateEmphasisLine(data);
-            //emphasisLineObj.transform.SetParent(origin.transform);
+
+            // 強調線の生成
+            GameObject emphasisLineObj = GeneratEmphasisLineObject(data);
+            emphasisLineObj.transform.SetParent(origin.transform);
 
             // コンポーネントを取得
             NoteObject<NoteData_SpaceHoldRelay> note = origin.GetComponent<NoteObject<NoteData_SpaceHoldRelay>>();
@@ -89,97 +95,36 @@ namespace Refactoring
             GameObject obj = new GameObject("Mesh");
             MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
             MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
-            Mesh mesh = GenerateMesh(noteData.Vertices.ToList());
+            var points = noteData.Vertices.Select(v => MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToList();
+            Mesh mesh = MeshGenerator.GenerateMesh(points);
             meshFilter.mesh = mesh;
 
             if(mesh == null) { return obj; }
 
-            List<Vector2> uvs = new List<Vector2>();
-
-            //mesh.uv = uvs.ToArray();
-            mesh.RecalculateNormals();
+            meshRenderer.material = mainMaterial;
 
             obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
             return obj;
         }
 
         /// <summary>
-        /// メッシュ(自己交差なし)の生成
+        /// ホールドの強調線の生成
         /// </summary>
-        /// <param name="vertices"></param>
-        /// <returns></returns>
-        private Mesh GenerateMesh(List<Vector2> vertices)
+        private GameObject GeneratEmphasisLineObject(NoteData_SpaceHoldRelay noteData)
         {
-            if (vertices == null || vertices.Count < 3)
-            {
-                Debug.LogWarning("【Note】頂点リストが無効です（3点以上必要）");
-                return null;
-            }
+            GameObject obj = new GameObject("EmphasisLine");
+            MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
+            MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
+            var points = noteData.Vertices.Select(v => MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToList();
+            Mesh mesh = MeshGenerator.GenerateLineMesh(points, enphasisLineWidth, isLoop: true);
+            meshFilter.mesh = mesh;
 
-            // LibTessDotNetの初期化
-            Tess tess = new Tess();
-            ContourVertex[] contour = new ContourVertex[vertices.Count];
+            if (mesh == null) { return obj; }
+            
+            meshRenderer.material = edgeMaterial;
 
-            for (int i = 0; i < vertices.Count; i++)
-            {
-                contour[i] = new ContourVertex
-                {
-                    Position = new Vec3((vertices[i].x - CENTER_PIVOT.x) * RADIUS, (vertices[i].y - CENTER_PIVOT.y) * RADIUS, 0)
-                };
-            }
-
-            // 頂点リストを輪郭として追加
-            tess.AddContour(contour, ContourOrientation.Original);
-
-            // 三角形分割を実行
-            tess.Tessellate(WindingRule.EvenOdd, ElementType.Polygons, 3);
-
-            // Mesh作成
-            Mesh mesh = new Mesh();
-            Vector3[] meshVertices = new Vector3[tess.Vertices.Length];
-            int[] meshTriangles = new int[tess.Elements.Length];
-
-            for (int i = 0; i < tess.Vertices.Length; i++)
-            {
-                meshVertices[i] = new Vector3(tess.Vertices[i].Position.X, tess.Vertices[i].Position.Y, 0);
-            }
-
-            for (int i = 0; i < tess.Elements.Length; i++)
-            {
-                meshTriangles[i] = tess.Elements[i];
-            }
-
-            mesh.vertices = meshVertices;
-            mesh.triangles = meshTriangles;
-            mesh.RecalculateNormals();
-            mesh.RecalculateBounds();
-
-            return mesh;
-        }
-
-        /// <summary>
-        /// 強調線の生成
-        /// </summary>
-        /// <param name="noteData"></param>
-        /// <returns></returns>
-        private GameObject GenerateEmphasisLine(NoteData_SpaceHoldRelay noteData)
-        {
-            GameObject lineObj = new GameObject("EnphasisLine");
-            var lineRenderer = lineObj.AddComponent<LineRenderer>();
-
-            // 各種設定
-            lineRenderer.loop = true;
-            lineRenderer.startWidth = lineRenderer.endWidth = enphasisLineWidth;
-            lineRenderer.useWorldSpace = false;
-
-            // 線を引く
-            var positions = noteData.Vertices.Select(v => new Vector3((v.x - CENTER_PIVOT.x) * RADIUS, (v.y - CENTER_PIVOT.y) * RADIUS, 0f)).ToArray();
-            lineRenderer.positionCount = positions.Length;
-            lineRenderer.SetPositions(positions);
-
-            lineObj.AddComponent<Deformable>().AddDeformer(groundDeformer);
-
-            return lineObj;
+            obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
+            return obj;
         }
 
         /// <summary>
