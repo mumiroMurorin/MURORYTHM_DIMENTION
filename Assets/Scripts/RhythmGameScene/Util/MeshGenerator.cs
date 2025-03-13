@@ -71,70 +71,8 @@ namespace MeshGenerate
         {
             Mesh mesh = new Mesh();
 
-            List<int> triangles = new List<int>();
-            List<Vector3> vertices = new List<Vector3>();
-            List<Vector2> uvs = new List<Vector2>();
-            float currentStartZ = 0;
-            float maxLength = speed * (timeToRanges[^1].Timing - timeToRanges[0].Timing);
-            int currentMeshIndex = 0;
-
-            for (int i = 0; i < timeToRanges.Count - 1; i++)
-            {
-                float length = speed * (timeToRanges[i + 1].Timing - timeToRanges[i].Timing);
-
-                // それぞれの端のインデックスを代入
-                float startLeft = timeToRanges[i].Range[0];
-                float startRight = timeToRanges[i].Range[^1];
-                float endLeft = timeToRanges[i + 1].Range[0];
-                float endRight = timeToRanges[i + 1].Range[^1];
-
-                // 傾きを計算
-                float slopeLeft = (endLeft - startLeft) == 0 ? float.PositiveInfinity : length / (endLeft - startLeft);
-                float slopeRight = (endRight - startRight) == 0 ? float.PositiveInfinity : length / (endRight - startRight);
-
-                // 頂点インデックスリストを作成
-                List<float> indexStart = GetMeshPointList(slopeLeft < float.PositiveInfinity && slopeLeft < 0 ? endLeft : startLeft,
-                    slopeRight < float.PositiveInfinity && slopeRight > 0 ? endRight + 1 : startRight + 1, horizontalDivisionNum);
-
-                List<float> indexEnd = GetMeshPointList(slopeLeft < float.PositiveInfinity && slopeLeft > 0 ? startLeft : endLeft,
-                   slopeRight < float.PositiveInfinity && slopeRight < 0 ? startRight + 1 : endRight + 1, horizontalDivisionNum);
-
-                // 頂点リストを生成
-                List<Vector3> verticesStart = GenerateVertices(indexStart, startLeft, startRight + 1, slopeLeft, slopeRight, currentStartZ, radius);
-                List<Vector3> verticesEnd = GenerateVertices(indexEnd, endLeft, endRight + 1, slopeLeft, slopeRight, currentStartZ + length, radius);
-
-                // 頂点リストの代入
-                vertices.AddRange(verticesStart);
-                vertices.AddRange(verticesEnd);
-
-                // UV座標の生成,代入
-                List<Vector2> uvListStart = GetUVPositionList(verticesStart, currentStartZ, maxLength);
-                List<Vector2> uvListEnd = GetUVPositionList(verticesEnd, currentStartZ + length, maxLength);
-                uvs.AddRange(uvListStart);
-                uvs.AddRange(uvListEnd);
-
-                // トライアングルインデックスを生成、代入
-                triangles.AddRange(GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count, false));
-
-                currentStartZ += length;
-                currentMeshIndex += verticesStart.Count + verticesEnd.Count;
-            }
-
-            mesh.vertices = vertices.ToArray();
-            mesh.triangles = triangles.ToArray();
-            mesh.uv = uvs.ToArray();
-            mesh.RecalculateNormals();
-
-            return mesh;
-        }
-
-        /// <summary>
-        /// グラウンド沿いのメッシュを生成する
-        /// </summary>
-        /// <returns></returns>
-        public static Mesh GenerateGroundHoldMesh_(List<TimeToRange> timeToRanges, float speed, int horizontalDivisionNum, float limitLength, float radius = 10f)
-        {
-            Mesh mesh = new Mesh();
+            // triangleのindexを32ビットにしてデカいホールドにも対応させる
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
             List<int> triangles = new List<int>();
             List<Vector3> vertices = new List<Vector3>();
@@ -156,43 +94,49 @@ namespace MeshGenerate
                 // 傾きを計算
                 float slopeLeft = (endLeft - startLeft) == 0 ? float.PositiveInfinity : length / (endLeft - startLeft);
                 float slopeRight = (endRight - startRight) == 0 ? float.PositiveInfinity : length / (endRight - startRight);
+
 
                 // さらにMeshを分割する
-                float divLength = length / (int)(length / limitLength);
-                for (int j = 0; j < length / limitLength; j++)
+                float divLength = length / Mathf.Ceil(length / limitLength);
+                float localZ = 0;
+                for (int j = 0; j < Mathf.Ceil(length / limitLength); j++)
                 {
-                    float startLeftDiv = GetXInLinearFunction(slopeLeft, 0, currentStartZ) + startLeft;
-                    float startRightDiv = GetXInLinearFunction(slopeRight, 0, currentStartZ) + startRight;
-                    float endLeftDiv = GetXInLinearFunction(slopeLeft, 0, currentStartZ + divLength) + startLeft;
-                    float endRightDiv = GetXInLinearFunction(slopeRight, 0, currentStartZ + divLength) + startRight;
+                    float startLeftDiv = GetXInLinearFunction(slopeLeft, 0, localZ) + startLeft;
+                    float startRightDiv = GetXInLinearFunction(slopeRight, 0, localZ) + startRight;
+                    float endLeftDiv = GetXInLinearFunction(slopeLeft, 0, localZ + divLength) + startLeft;
+                    float endRightDiv = GetXInLinearFunction(slopeRight, 0, localZ + divLength) + startRight;
 
                     // 頂点インデックスリストを作成
                     List<float> indexStart = GetMeshPointList(slopeLeft < float.PositiveInfinity && slopeLeft < 0 ? endLeftDiv : startLeftDiv,
-                        slopeRight < float.PositiveInfinity && slopeRight > 0 ? endRightDiv + 1 : startRightDiv + 1, horizontalDivisionNum);
+                        slopeRight < float.PositiveInfinity && slopeRight > 0 ? endRightDiv + 1 : startRightDiv + 1, horizontalDivisionNum,
+                        new float[] { startLeftDiv, startRightDiv + 1, endLeftDiv, endRightDiv + 1 });
 
                     List<float> indexEnd = GetMeshPointList(slopeLeft < float.PositiveInfinity && slopeLeft > 0 ? startLeftDiv : endLeftDiv,
-                       slopeRight < float.PositiveInfinity && slopeRight < 0 ? startRightDiv + 1 : endRightDiv + 1, horizontalDivisionNum);
+                       slopeRight < float.PositiveInfinity && slopeRight < 0 ? startRightDiv + 1 : endRightDiv + 1, horizontalDivisionNum,
+                       new float[] { startLeftDiv, startRightDiv + 1, endLeftDiv, endRightDiv + 1 });
 
                     // 頂点リストを生成
-                    List<Vector3> verticesStart = GenerateVertices(indexStart, startLeftDiv, startRightDiv + 1, slopeLeft, slopeRight, currentStartZ, radius);
-                    List<Vector3> verticesEnd = GenerateVertices(indexEnd, endLeftDiv, endRightDiv + 1, slopeLeft, slopeRight, currentStartZ + divLength, radius);
+                    List<Vector3> verticesStart = GenerateVertices(indexStart, startLeftDiv, startRightDiv + 1, slopeLeft, slopeRight, currentStartZ + localZ, radius);
+                    List<Vector3> verticesEnd = GenerateVertices(indexEnd, endLeftDiv, endRightDiv + 1, slopeLeft, slopeRight, currentStartZ + localZ + divLength, radius);
 
                     // 頂点リストの代入
                     vertices.AddRange(verticesStart);
                     vertices.AddRange(verticesEnd);
 
                     // UV座標の生成,代入
-                    List<Vector2> uvListStart = GetUVPositionList(verticesStart, currentStartZ, maxLength);
-                    List<Vector2> uvListEnd = GetUVPositionList(verticesEnd, currentStartZ + divLength, maxLength);
+                    List<Vector2> uvListStart = GetUVPositionList(verticesStart, currentStartZ + localZ, maxLength);
+                    List<Vector2> uvListEnd = GetUVPositionList(verticesEnd, currentStartZ + localZ + divLength, maxLength);
                     uvs.AddRange(uvListStart);
                     uvs.AddRange(uvListEnd);
 
                     // トライアングルインデックスを生成、代入
                     triangles.AddRange(GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count, false));
 
-                    currentStartZ += divLength;
+                    localZ += divLength;
                     currentMeshIndex += verticesStart.Count + verticesEnd.Count;
                 }
+
+                currentStartZ += length;
             }
 
             mesh.vertices = vertices.ToArray();
@@ -211,7 +155,7 @@ namespace MeshGenerate
         /// <summary>
         /// 範囲内のメッシュ頂点リストを返す
         /// </summary>
-        private static List<float> GetMeshPointList(float first, float end, int divNum)
+        private static List<float> GetMeshPointList(float first, float end, int divNum, float[] addIndex)
         {
             if (divNum <= 0)
             {
@@ -224,6 +168,12 @@ namespace MeshGenerate
             {
                 list.Add(f);
             }
+
+            foreach(float f in addIndex)
+            {
+                list.Add(f);
+            }
+
             list.Add(end);
             return list.Distinct().OrderBy(x => x).ToList();
         }
@@ -306,6 +256,8 @@ namespace MeshGenerate
         public static Mesh GenerateSpaceEdgeMesh(List<TimeToVertices> timeToVertices, float speed, int meshDivisionNum, bool isMeshReverse)
         {
             Mesh mesh = new Mesh();
+            // ドデカイメッシュに対応
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
             List<int> triangles = new List<int>();
             List<Vector3> vertices = new List<Vector3>();
