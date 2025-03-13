@@ -253,7 +253,7 @@ namespace MeshGenerate
         /// <param name="meshDivisionNum"></param>
         /// <param name="isMeshReverse"></param>
         /// <returns></returns>
-        public static Mesh GenerateSpaceEdgeMesh(List<TimeToVertices> timeToVertices, float speed, int meshDivisionNum, bool isMeshReverse)
+        public static Mesh GenerateSpaceEdgeMesh(List<TimeToVertices> timeToVertices, float speed, int meshDivisionNum, float limitLength, bool isMeshReverse)
         {
             Mesh mesh = new Mesh();
             // ドデカイメッシュに対応
@@ -265,6 +265,13 @@ namespace MeshGenerate
             float currentStartZ = 0;
             float maxLength = speed * (timeToVertices[^1].Timing - timeToVertices[0].Timing);
             int currentMeshIndex = 0;
+
+            // 最大頂点数を調べて分割数を更新する
+            foreach(var timeToVertice in timeToVertices)
+            {
+                if(meshDivisionNum < timeToVertice.Vertices.Length) 
+                { meshDivisionNum = timeToVertice.Vertices.Length; }
+            }
 
             for (int i = 0; i < timeToVertices.Count - 1; i++)
             {

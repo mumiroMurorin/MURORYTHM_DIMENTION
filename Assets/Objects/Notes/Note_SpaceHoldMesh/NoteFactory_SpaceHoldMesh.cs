@@ -17,7 +17,7 @@ namespace Refactoring
         [Header("mesh‚Ì•ªŠ„”")]
         [SerializeField] int meshDivisionNum = 10;
 
-        [Header("OŠpŒ`‚ÌÅ‘å‚‚³(’·‚³)")]
+        [Header("mesh1’PˆÊ‚ÌÅ‘å’·‚³")]
         [SerializeField] float maxTriangleLength = 0.5f;
 
         INoteSpawnDataOptionHolder optionHolder;
@@ -105,7 +105,7 @@ namespace Refactoring
                 });
             }
 
-            Mesh mesh = MeshGenerator.GenerateSpaceEdgeMesh(timeToVertices, optionHolder.NoteSpeed, meshDivisionNum, isMeshReverse);
+            Mesh mesh = MeshGenerator.GenerateSpaceEdgeMesh(timeToVertices, optionHolder.NoteSpeed, meshDivisionNum, maxTriangleLength, isMeshReverse);
             meshFilter.mesh = mesh;
 
             obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
