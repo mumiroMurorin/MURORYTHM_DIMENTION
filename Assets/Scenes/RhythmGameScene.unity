@@ -264,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   update: 1
-  angle: -5
+  angle: 0
   factor: 1
   mode: 1
   top: -22.5

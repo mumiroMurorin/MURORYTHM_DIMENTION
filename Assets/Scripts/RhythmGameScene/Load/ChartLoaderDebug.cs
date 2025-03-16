@@ -106,15 +106,16 @@ namespace Refactoring
                 }
             };
 
+            float interval = 0.025f;
+            float timing = 2f;
+
+            /*
             NoteData_SpaceHoldMesh spaceHoldMesh = new NoteData_SpaceHoldMesh();
             spaceHoldMesh.Timing = 2f;
             spaceHoldMesh.TimeToVertices = new List<TimeToVertices>();
             chartData.noteData_SpaceHoldMeshes.Add(spaceHoldMesh);
 
-            float interval = 0.01875f;
-            float timing = 2f;
-
-            for(int j = 0; j < 5; j++)
+            for (int j = 0; j < 5; j++)
             {
                 // ○形
                 for (int i = 0; i < 60; i++)
@@ -241,29 +242,26 @@ namespace Refactoring
                 }
 
             }
+            */
 
             // ダイナミックノーツ、タッチノーツ
             timing = 2f;
-            for(int i = 0; i < 1500; i++)
+            int before = -1;
+            for (int i = 0; i < 1200; i++)
             {
-                System.Random rand = new System.Random();
-
-                int start = rand.Next(0, 16);
-                int end = rand.Next(start, 16);
-                int[] rangeArray = Enumerable.Range(start, end - start + 1).ToArray();
-
-                switch (i % 12)
+                switch (i % 4)
                 {
                     case 0:
-                        chartData.noteData_DynamicGroundRightwards.Add(new NoteData_DynamicGroundRightward { Timing = timing, Range = rangeArray });
-                        chartData.noteData_Touches.Add(new NoteData_Touch { Timing = timing, Range = rangeArray });
-                        break;
-                    case 4:
-                        chartData.noteData_DynamicGroundLeftwards.Add(new NoteData_DynamicGroundLeftward { Timing = timing, Range = rangeArray });
-                        chartData.noteData_Touches.Add(new NoteData_Touch { Timing = timing, Range = rangeArray });
-                        break;
-                    case 8:
-                        chartData.noteData_DynamicGroundUpwards.Add(new NoteData_DynamicGroundUpward { Timing = timing, Range = rangeArray });
+                        System.Random rand = new System.Random();
+
+                        int start;
+                        do
+                        {
+                            start = rand.Next(0, 5) * 2 + 3;
+                        } while (before == start);
+                        before = start;
+
+                        int[] rangeArray = Enumerable.Range(start, 2).ToArray();
                         chartData.noteData_Touches.Add(new NoteData_Touch { Timing = timing, Range = rangeArray });
                         break;
                 }
@@ -271,40 +269,40 @@ namespace Refactoring
                 timing += interval;
             }
 
-            // ホールドノーツ
-            timing = 2f;
+                //// ホールドノーツ
+                //timing = 2f;
 
-            NoteData_HoldMesh holdMesh = new NoteData_HoldMesh();
-            chartData.noteData_HoldMeshes.Add(holdMesh);
-            holdMesh.Timing = 2f;
-            holdMesh.TimeToRanges = new List<TimeToRange>();
+                //NoteData_HoldMesh holdMesh = new NoteData_HoldMesh();
+                //chartData.noteData_HoldMeshes.Add(holdMesh);
+                //holdMesh.Timing = 2f;
+                //holdMesh.TimeToRanges = new List<TimeToRange>();
 
-            holdMesh.TimeToRanges.Add(new TimeToRange { Timing = timing, Range = new float[] { 6, 7, 8, 9 } });
-            chartData.noteData_HoldStarts.Add(new NoteData_HoldStart { Timing = timing, Range = new int[] { 6, 7, 8, 9 } });
-            timing += interval;
+                //holdMesh.TimeToRanges.Add(new TimeToRange { Timing = timing, Range = new float[] { 6, 7, 8, 9 } });
+                //chartData.noteData_HoldStarts.Add(new NoteData_HoldStart { Timing = timing, Range = new int[] { 6, 7, 8, 9 } });
+                //timing += interval;
 
-            for (int i = 1; i < 150; i++)
-            {
-                if(i % 4 == 0)
-                {
-                    System.Random rand = new System.Random();
+                //for (int i = 1; i < 150; i++)
+                //{
+                //    if(i % 4 == 0)
+                //    {
+                //        System.Random rand = new System.Random();
 
-                    int start = rand.Next(0, 16);
-                    int end = rand.Next(start, 16);
-                    float[] rangeArray = Enumerable.Range(start, end - start + 1).Select(r => (float)r).ToArray();
+                //        int start = rand.Next(0, 16);
+                //        int end = rand.Next(start, 16);
+                //        float[] rangeArray = Enumerable.Range(start, end - start + 1).Select(r => (float)r).ToArray();
 
-                    holdMesh.TimeToRanges.Add(new TimeToRange { Timing = timing, Range = rangeArray });
+                //        holdMesh.TimeToRanges.Add(new TimeToRange { Timing = timing, Range = rangeArray });
 
-                    if (i % 16 == 0)
-                    {
-                        chartData.noteData_HoldRelays.Add(new NoteData_HoldRelay { Timing = timing, Range = rangeArray.Select(r => (int)r).ToArray() });
-                    }
-                }
+                //        if (i % 16 == 0)
+                //        {
+                //            chartData.noteData_HoldRelays.Add(new NoteData_HoldRelay { Timing = timing, Range = rangeArray.Select(r => (int)r).ToArray() });
+                //        }
+                //    }
 
-                timing += interval;
-            }
+                //    timing += interval;
+                //}
 
-            return chartData;
+                return chartData;
         }
     }
 }
