@@ -14,6 +14,7 @@ namespace Refactoring.TransitionerInSelectScene
         private int[] BACK_SELECT_INDEXES = new int[] { 0, 15 };
         private int[] MUSIC_START_INDEXES = new int[] { 5, 6, 7, 8, 9, 10 };
 
+        [SerializeField] float inputProhibitDuration = 0.5f;
         [SerializeField] SerializeInterface<IPhaseTransitionableInSelectScene> phaseTransitionable;
         [SerializeField] SerializeInterface<IInputHandler> inputHandler;
 
@@ -30,6 +31,13 @@ namespace Refactoring.TransitionerInSelectScene
 
             inputHandler?.Value.Dispose();
 
+            // ちょっと遅れて実行
+            // 待たないと次のフェーズまで行っちゃう
+            _ = DelayedExecutor.ExecuteAfterDelay(inputProhibitDuration, SetEvent);
+        }
+
+        private void SetEvent()
+        {
             inputHandler?.Value.OnTouchSlider(MUSIC_START_INDEXES, TransitionRhythmGamePhase);
             inputHandler?.Value.OnTouchSlider(BACK_SELECT_INDEXES, TransitionMusicSelectPhase);
         }

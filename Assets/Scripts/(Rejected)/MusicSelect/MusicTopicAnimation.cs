@@ -9,7 +9,7 @@ public class MusicTopicAnimation : MonoBehaviour
     //移動の終了
     public void FinishMoveTopic(int i)
     {
-        selectMusic.FinishMoveTopic(i == 1 ? true : false);
+        selectMusic.FinishMoveTopic(i == 1);
     }
 
     //その他アニメーションの終了
