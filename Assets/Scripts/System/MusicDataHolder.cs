@@ -26,9 +26,18 @@ namespace Refactoring
         // 譜面データ
         ChartData chart;
         ChartData IChartDataGetter.Chart { get { return chart; } }
+
         void IChartDataSetter.SetChartData(ChartData data)
         {
             chart = data;
+        }
+
+        // 選択インデックス
+        ReactiveProperty<int> musicIndexSelected = new ReactiveProperty<int>(0);
+        IReadOnlyReactiveProperty<int> IMusicDataGetter.MusicIndexSelected => musicIndexSelected;
+        void IMusicDataSetter.SetMusicIndexSelected(int value)
+        {
+            musicIndexSelected.Value = value;
         }
     }
 }

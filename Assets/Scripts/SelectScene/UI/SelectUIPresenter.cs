@@ -8,12 +8,12 @@ namespace Refactoring.UIInSelectScene
 {
     public class SelectUIPresenter : MonoBehaviour
     {
-        
+        IMusicDataGetter musicData_model;
 
         [Inject] 
-        public void Construct()
+        public void Construct(IMusicDataGetter musicDataGetter)
         {
-            
+            musicData_model = musicDataGetter;
         }
 
         private void Start()

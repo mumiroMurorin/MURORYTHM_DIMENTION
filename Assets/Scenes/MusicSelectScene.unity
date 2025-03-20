@@ -5620,12 +5620,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5680490754427080322, guid: 72b33bec0550f1043989c44d34cdb9ff, type: 3}
       propertyPath: autoInjectGameObjects.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5680490754427080322, guid: 72b33bec0550f1043989c44d34cdb9ff, type: 3}
       propertyPath: autoInjectGameObjects.Array.data[0]
       value: 
       objectReference: {fileID: 69001549}
+    - target: {fileID: 5680490754427080322, guid: 72b33bec0550f1043989c44d34cdb9ff, type: 3}
+      propertyPath: autoInjectGameObjects.Array.data[1]
+      value: 
+      objectReference: {fileID: 478797377}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

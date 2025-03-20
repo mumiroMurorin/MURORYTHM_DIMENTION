@@ -5,19 +5,19 @@ using UniRx;
 
 namespace Refactoring
 {
-    public class MusicDataListHolder : MonoBehaviour, ISelectSceneDataGetter, ISelectSceneDataSetter
+    public class MusicDataListHolder : MonoBehaviour//, ISelectSceneDataGetter, ISelectSceneDataSetter
     {
         [SerializeField] List<MusicData> musicDataList;
 
         List<MusicData> musicDataListSorted;
         ReactiveProperty<int> currentSelectIndex = new ReactiveProperty<int>(0);
 
-        IReadOnlyReactiveProperty<int> ISelectSceneDataGetter.CurrentSelectIndex { get { return currentSelectIndex; } }
+        //IReadOnlyReactiveProperty<int> ISelectSceneDataGetter.CurrentSelectIndex { get { return currentSelectIndex; } }
 
-        void ISelectSceneDataSetter.SetSelectIndex(int value)
-        {
-            currentSelectIndex.Value = value;
-        }
+        //void ISelectSceneDataSetter.SetSelectIndex(int value)
+        //{
+        //    currentSelectIndex.Value = value;
+        //}
 
         private void Start()
         {
