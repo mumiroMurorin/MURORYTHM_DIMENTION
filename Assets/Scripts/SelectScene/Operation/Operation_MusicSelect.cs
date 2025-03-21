@@ -8,6 +8,13 @@ namespace Refactoring
 {
     public class Operation_MusicSelect : MonoBehaviour
     {
+        [Header("各項目に対応するスライダーUIの表示色")]
+        [SerializeField] Color musicSelectColor;
+        [SerializeField] Color rightMoveColor;
+        [SerializeField] Color leftMoveColor;
+        [SerializeField] Color difficultyUpColor;
+        [SerializeField] Color difficultyDownColor;
+
         [SerializeField] SerializeInterface<IOperationSetter> operationSetter;
         [SerializeField] SerializeInterface<IPhaseTransitionableInSelectScene> phaseTransitionable;
         [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter;
@@ -52,11 +59,11 @@ namespace Refactoring
 
         private void SetOperation()
         {
-            operationSetter.Value.SetOperate(MUSIC_SELECT_INDEXES, TransitionNextPhase);
-            operationSetter.Value.SetOperate(RIGHT_MOVE_INDEXES, () => MoveMusicTopic(+1));
-            operationSetter.Value.SetOperate(LEFT_MOVE_INDEXES, () => MoveMusicTopic(-1));
-            operationSetter.Value.SetOperate(DIFF_UP_INDEXES, () => ChangeDifficulty(+1));
-            operationSetter.Value.SetOperate(DIFF_DOWN_INDEXES, () => ChangeDifficulty(-1));
+            operationSetter.Value.SetOperate(new SliderTouchData(MUSIC_SELECT_INDEXES, TransitionNextPhase, musicSelectColor));
+            operationSetter.Value.SetOperate(new SliderTouchData(RIGHT_MOVE_INDEXES, () => MoveMusicTopic(+1), rightMoveColor));
+            operationSetter.Value.SetOperate(new SliderTouchData(LEFT_MOVE_INDEXES, () => MoveMusicTopic(-1), leftMoveColor));
+            operationSetter.Value.SetOperate(new SliderTouchData(DIFF_UP_INDEXES, () => ChangeDifficulty(+1), difficultyUpColor));
+            operationSetter.Value.SetOperate(new SliderTouchData(DIFF_DOWN_INDEXES, () => ChangeDifficulty(-1), difficultyDownColor));
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace Refactoring.UIInSelectScene
 {
-    public class MusicTopicController : MonoBehaviour
+    public class MusicTopicControllerView : MonoBehaviour
     {
         [SerializeField] Animator animator;
 
