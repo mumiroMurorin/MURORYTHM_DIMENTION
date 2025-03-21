@@ -1,14 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 namespace Refactoring.TransitionerInSelectScene
 {
-    public class PhaseTransitionerInSelectScene : MonoBehaviour, IPhaseTransitionableInSelectScene
+    public class PhaseTransitionerInSelectScene : MonoBehaviour, IPhaseTransitionableInSelectScene, IPhaseStatusGetterInSelectScene
     {
         const PhaseStatusInSelectScene FIRST_STATUS = PhaseStatusInSelectScene.LoadData;
 
         [SerializeReference, SubclassSelector] List<IPhaseTransitionerInSelectScene> transitioners;
+
+        ReactiveProperty<PhaseStatusInSelectScene> phaseStatus = new ReactiveProperty<PhaseStatusInSelectScene>(FIRST_STATUS);
+        IReadOnlyReactiveProperty<PhaseStatusInSelectScene> IPhaseStatusGetterInSelectScene.PhaseStatus => phaseStatus;
 
         void Start()
         {
@@ -23,6 +27,7 @@ namespace Refactoring.TransitionerInSelectScene
 
         public void TransitionPhase(PhaseStatusInSelectScene phase)
         {
+            phaseStatus.Value = phase;
             Transition(phase);
         }
 

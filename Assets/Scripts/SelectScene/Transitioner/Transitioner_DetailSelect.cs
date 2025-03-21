@@ -29,11 +29,11 @@ namespace Refactoring.TransitionerInSelectScene
         {
             Debug.Log("【Transition】Transition to \"DetailSelect\"");
 
-            inputHandler?.Value.Dispose();
+            //inputHandler?.Value.Dispose();
 
             // ちょっと遅れて実行
             // 待たないと次のフェーズまで行っちゃう
-            _ = DelayedExecutor.ExecuteAfterDelay(inputProhibitDuration, SetEvent);
+            //_ = DelayedExecutor.ExecuteAfterDelay(inputProhibitDuration, SetEvent);
         }
 
         private void SetEvent()

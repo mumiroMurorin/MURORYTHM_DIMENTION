@@ -18,22 +18,22 @@ namespace Refactoring
         // スライダー(キーボード) → ゲーム内入力
         Dictionary<KeyCode, int> keyCodeToSliderIndex = new Dictionary<KeyCode, int>
         {
-            {KeyCode.X , 7},
-            {KeyCode.W , 6},
-            {KeyCode.V , 5},
-            {KeyCode.U , 4},
-            {KeyCode.M , 3},
-            {KeyCode.N , 2},
-            {KeyCode.O , 1},
             {KeyCode.P , 0},
-            {KeyCode.L , 15},
-            {KeyCode.K , 14},
-            {KeyCode.J , 13},
-            {KeyCode.I , 12},
-            {KeyCode.A , 11},
-            {KeyCode.B , 10},
-            {KeyCode.C , 9},
+            {KeyCode.O , 1},
+            {KeyCode.N , 2},
+            {KeyCode.M , 3},
+            {KeyCode.U , 4},
+            {KeyCode.V , 5},
+            {KeyCode.W , 6},
+            {KeyCode.X , 7},
             {KeyCode.D , 8},
+            {KeyCode.C , 9},
+            {KeyCode.B , 10},
+            {KeyCode.A , 11},
+            {KeyCode.I , 12},
+            {KeyCode.J , 13},
+            {KeyCode.K , 14},
+            {KeyCode.L , 15},
         };
 
         void Update()

@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 using VContainer;
-
 
 namespace Refactoring.UIInSelectScene
 {
     public class SelectUIPresenter : MonoBehaviour
     {
+        [SerializeField] MusicTopicController musicTopicController_view;
+
         IMusicDataGetter musicData_model;
 
         [Inject] 
@@ -24,7 +26,10 @@ namespace Refactoring.UIInSelectScene
 
         private void Bind()
         {
-            
+            musicData_model?.MusicIndexSelected
+                .Pairwise()
+                .Subscribe(pair => _ = musicTopicController_view.OnChangeSelectedTopic(pair.Current - pair.Previous))
+                .AddTo(this.gameObject);
         }
 
         private void SetEvent()

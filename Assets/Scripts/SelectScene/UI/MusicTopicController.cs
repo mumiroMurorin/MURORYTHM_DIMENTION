@@ -19,8 +19,8 @@ namespace Refactoring.UIInSelectScene
 
             for(int i = 0; i < Mathf.Abs(deltaValue); i++)
             {
-                if(deltaValue > 0) { animator.SetTrigger("Left"); }
-                else { animator.SetTrigger("Right"); }
+                if(deltaValue > 0) { animator.SetTrigger("Right"); }
+                else { animator.SetTrigger("Left"); }
 
                 isMoving = true;
                 await UniTask.WaitUntil(() => !isMoving);

@@ -10,14 +10,6 @@ namespace Refactoring
         [SerializeField] List<MusicData> musicDataList;
 
         List<MusicData> musicDataListSorted;
-        ReactiveProperty<int> currentSelectIndex = new ReactiveProperty<int>(0);
-
-        //IReadOnlyReactiveProperty<int> ISelectSceneDataGetter.CurrentSelectIndex { get { return currentSelectIndex; } }
-
-        //void ISelectSceneDataSetter.SetSelectIndex(int value)
-        //{
-        //    currentSelectIndex.Value = value;
-        //}
 
         private void Start()
         {

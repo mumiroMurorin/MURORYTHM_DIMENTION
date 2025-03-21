@@ -144,6 +144,11 @@ namespace Refactoring
         public void TransitionPhase(PhaseStatusInSelectScene phase);
     }
 
+    public interface IPhaseStatusGetterInSelectScene
+    {
+        IReadOnlyReactiveProperty<PhaseStatusInSelectScene> PhaseStatus { get; }
+    }
+
     /// <summary>
     /// フェーズ遷移の際の処理を行う
     /// </summary>
