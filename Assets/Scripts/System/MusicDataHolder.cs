@@ -16,9 +16,9 @@ namespace Refactoring
         }
 
         // ‘I‘ð“ïˆÕ“x
-        ReactiveProperty<DifficulityName> difficulty = new ReactiveProperty<DifficulityName>(DifficulityName.Initiate);
-        public IReadOnlyReactiveProperty<DifficulityName> Difficulty { get { return difficulty; } }
-        public void SetDifficulty(DifficulityName difficulty)
+        ReactiveProperty<Difficulty> difficulty = new ReactiveProperty<Difficulty>(global::Difficulty.Initiate);
+        public IReadOnlyReactiveProperty<Difficulty> Difficulty { get { return difficulty; } }
+        public void SetDifficulty(Difficulty difficulty)
         {
             this.difficulty.Value = difficulty;
         }

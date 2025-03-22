@@ -31,17 +31,17 @@ public class MusicData : ScriptableObject
     public AudioClip SampleClip { get { return sample_clip; } }
 
     [Header("“ïˆÕ“x")]
-    [SerializeField] private int[] difficulities = new int[Enum.GetNames(typeof(DifficulityName)).Length];
-    public int GetDifficulity(DifficulityName name) { return difficulities[(int)name]; }
+    [SerializeField] private int[] difficulities = new int[Enum.GetNames(typeof(Difficulty)).Length];
+    public int GetDifficulity(Difficulty name) { return difficulities[(int)name]; }
 
     [Header("•ˆ–Ê")]
-    [SerializeField] private TextAsset[] charts = new TextAsset[Enum.GetNames(typeof(DifficulityName)).Length];
-    public TextAsset GetChart(DifficulityName name) { return charts[(int)name]; }
+    [SerializeField] private TextAsset[] charts = new TextAsset[Enum.GetNames(typeof(Difficulty)).Length];
+    public TextAsset GetChart(Difficulty name) { return charts[(int)name]; }
 
     [Header("‹L˜^")]
-    [SerializeField] private MusicRecord[] records = new MusicRecord[Enum.GetNames(typeof(DifficulityName)).Length];
-    public MusicRecord GetMusicRecord(DifficulityName name) { return records[(int)name]; }
-    public void SetMusicRecord(DifficulityName name, MusicRecord new_record) { records[(int)name] = new_record; }
+    [SerializeField] private MusicRecord[] records = new MusicRecord[Enum.GetNames(typeof(Difficulty)).Length];
+    public MusicRecord GetMusicRecord(Difficulty name) { return records[(int)name]; }
+    public void SetMusicRecord(Difficulty name, MusicRecord new_record) { records[(int)name] = new_record; }
 }
 
 [Serializable]
@@ -54,7 +54,7 @@ public class MusicRecord
 }
 
 //“ïˆÕ“x
-public enum DifficulityName
+public enum Difficulty
 {
     Initiate = 0,
     Fanatic = 1,
@@ -71,7 +71,9 @@ public enum TimingJudge
     miss = 3
 }
 
-//ƒ‰ƒ“ƒN•]‰¿
+/// <summary>
+/// SSS,AA“™‚Ìƒ‰ƒ“ƒN•]‰¿
+/// </summary>
 public enum ScoreRank
 {
     None,
@@ -86,7 +88,9 @@ public enum ScoreRank
     MAX
 }
 
-//ƒRƒ“ƒ{•]‰¿
+/// <summary>
+/// AllPerfect,FullCombo“™ƒRƒ“ƒ{•]‰¿
+/// </summary>
 public enum ComboRank
 {
     None = 0,

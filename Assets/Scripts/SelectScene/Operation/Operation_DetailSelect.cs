@@ -6,12 +6,11 @@ using UniRx;
 
 namespace Refactoring
 {
-    public class Operation_MusicSelect : MonoBehaviour
+    public class Operation_DetailSelect : MonoBehaviour
     {
         [Header("各項目に対応するスライダーUIの表示色")]
-        [SerializeField] Color musicSelectColor;
-        [SerializeField] Color rightMoveColor;
-        [SerializeField] Color leftMoveColor;
+        [SerializeField] Color musicStartColor;
+        [SerializeField] Color backSelectColor;
         [SerializeField] Color difficultyUpColor;
         [SerializeField] Color difficultyDownColor;
 
@@ -20,11 +19,12 @@ namespace Refactoring
         [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter;
         [SerializeField] float delaySeconds = 0.5f;
 
-        private int[] RIGHT_MOVE_INDICES = new int[] { 14, 15 };
-        private int[] LEFT_MOVE_INDICES = new int[] { 0, 1 };
+        private int[] OPTION_NEXT_INDICES = new int[] { 12, 13 };
+        private int[] OPTION_BACK_INDICES = new int[] { 2, 3 };
+        private int[] BACK_SELECT_INDICES = new int[] { 0, 15 };
+        private int[] MUSIC_START_INDICES = new int[] { 5, 6, 7, 8, 9, 10 };
         private int[] DIFF_UP_INDICES = new int[] { 11, 12, 13 };
         private int[] DIFF_DOWN_INDICES = new int[] { 2, 3, 4 };
-        private int[] MUSIC_SELECT_INDICES = new int[] { 5, 6, 7, 8, 9, 10 };
 
         IMusicDataSetter musicDataSetter;
         IMusicDataGetter musicDataGetter;
@@ -44,7 +44,7 @@ namespace Refactoring
         private void Bind()
         {
             phaseStatusGetter?.Value.PhaseStatus
-                .Where(value => value == PhaseStatusInSelectScene.MusicSelect)
+                .Where(value => value == PhaseStatusInSelectScene.DetailSelect)
                 .Subscribe(_ => UpdateOperation())
                 .AddTo(this.gameObject);
         }
@@ -59,21 +59,12 @@ namespace Refactoring
 
         private void SetOperation()
         {
-            operationSetter.Value.SetOperate(new SliderTouchData(MUSIC_SELECT_INDICES, TransitionNextPhase, musicSelectColor));
-            operationSetter.Value.SetOperate(new SliderTouchData(RIGHT_MOVE_INDICES, () => MoveMusicTopic(+1), rightMoveColor));
-            operationSetter.Value.SetOperate(new SliderTouchData(LEFT_MOVE_INDICES, () => MoveMusicTopic(-1), leftMoveColor));
+            operationSetter.Value.SetOperate(new SliderTouchData(MUSIC_START_INDICES, TransitionRhythmGamePhase, musicStartColor));
+            operationSetter.Value.SetOperate(new SliderTouchData(BACK_SELECT_INDICES, TransitionMusicSelectPhase, backSelectColor));
             operationSetter.Value.SetOperate(new SliderTouchData(DIFF_UP_INDICES, () => ChangeDifficulty(+1), difficultyUpColor));
             operationSetter.Value.SetOperate(new SliderTouchData(DIFF_DOWN_INDICES, () => ChangeDifficulty(-1), difficultyDownColor));
         }
 
-        /// <summary>
-        /// MusicTopicの移動
-        /// </summary>
-        /// <param name="index"></param>
-        private void MoveMusicTopic(int delta)
-        {
-            musicDataSetter.SetMusicIndexSelected(musicDataGetter.MusicIndexSelected.Value + delta);
-        }
 
         /// <summary>
         /// 難易度の変更
@@ -85,11 +76,19 @@ namespace Refactoring
         }
 
         /// <summary>
-        /// 次のフェーズへの移動
+        /// 楽曲選択に戻る
         /// </summary>
-        private void TransitionNextPhase()
+        private void TransitionMusicSelectPhase()
         {
-            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.DetailSelect);
+            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.MusicSelect);
+        }
+
+        /// <summary>
+        /// 楽曲決定
+        /// </summary>
+        private void TransitionRhythmGamePhase()
+        {
+            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.FadeOut);
         }
     }
 

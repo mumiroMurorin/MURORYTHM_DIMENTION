@@ -9,7 +9,7 @@ using System.Text;
 
 public class SerialHandler : MonoBehaviour
 {
-    [SerializeField] private SliderInput slider;
+    //[SerializeField] private SliderInput slider;
     public string portName = "COM7";
     public int baudRate = 9600;
 
@@ -128,7 +128,7 @@ public class SerialHandler : MonoBehaviour
     //受信スタート
     public void StartSerial()
     {
-        if (slider.IsReturnSerialMode())
+        //if (slider.IsReturnSerialMode())
         {
             lastrcvd = "";
             Open();

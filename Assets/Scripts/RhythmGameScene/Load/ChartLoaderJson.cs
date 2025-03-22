@@ -34,7 +34,7 @@ namespace Refactoring
 
         void IChartLoader.LoadChart(Action callback)
         {
-            DifficulityName difficulty = musicDataGetter.Difficulty.Value;
+            Difficulty difficulty = musicDataGetter.Difficulty.Value;
             ChartData chartData = LoadChartData(musicDataGetter.Music.Value.GetChart(difficulty));
 
             chartDataSetter.SetChartData(chartData);

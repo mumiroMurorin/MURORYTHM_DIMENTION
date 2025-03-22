@@ -11,6 +11,7 @@ namespace Refactoring.UIInSelectScene
         [SerializeField] MusicTopicControllerView musicTopicController_view;
         [SerializeField] SliderUnitsControllerView sliderUnitsController_view;
         [SerializeField] SerializeInterface<IOperationGetter> operationGetter_model;
+        [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter_model;
 
         IMusicDataGetter musicData_model;
 
@@ -31,7 +32,24 @@ namespace Refactoring.UIInSelectScene
             // トピックの移動
             musicData_model?.MusicIndexSelected
                 .Pairwise()
-                .Subscribe(pair => _ = musicTopicController_view.OnChangeSelectedTopic(pair.Current - pair.Previous))
+                .Subscribe(pair => _ = musicTopicController_view.OnChangeSelectedMusic(pair.Current - pair.Previous))
+                .AddTo(this.gameObject);
+
+            // 楽曲の選択(決定)
+            phaseStatusGetter_model?.Value.PhaseStatus
+                .Where(status => status == PhaseStatusInSelectScene.DetailSelect)
+                .Subscribe(_ => musicTopicController_view.OnSelectMusic())
+                .AddTo(this.gameObject);
+
+            // 楽曲選択に戻る
+            phaseStatusGetter_model?.Value.PhaseStatus
+                .Where(status => status == PhaseStatusInSelectScene.MusicSelect)
+                .Subscribe(_ => musicTopicController_view.OnBackSelectPhase())
+                .AddTo(this.gameObject);
+
+            // 難易度の変更
+            musicData_model?.Difficulty
+                .Subscribe(musicTopicController_view.OnChangeDifficulty)
                 .AddTo(this.gameObject);
 
             // スライダーUI

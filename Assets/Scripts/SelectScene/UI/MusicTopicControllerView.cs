@@ -9,10 +9,16 @@ namespace Refactoring.UIInSelectScene
     public class MusicTopicControllerView : MonoBehaviour
     {
         [SerializeField] Animator animator;
+        [SerializeField] MusicTopicUI[] musicTopicUIs;
 
         bool isMoving;
 
-        public async UniTask OnChangeSelectedTopic(int deltaValue)
+        /// <summary>
+        /// 選択楽曲変更
+        /// </summary>
+        /// <param name="deltaValue"></param>
+        /// <returns></returns>
+        public async UniTask OnChangeSelectedMusic(int deltaValue)
         {
             // 倍速
             animator.SetFloat("MoveSpeedMagnitude", Mathf.Abs(deltaValue));
@@ -26,7 +32,35 @@ namespace Refactoring.UIInSelectScene
                 await UniTask.WaitUntil(() => !isMoving);
             }
         }
+
+        /// <summary>
+        /// 難易度変更
+        /// </summary>
+        /// <param name="difficulty"></param>
+        public void OnChangeDifficulty(Difficulty difficulty)
+        {
+            foreach(var musicTopic in musicTopicUIs)
+            {
+                musicTopic.SetDifficulty(difficulty);
+            }
+        }
         
+        /// <summary>
+        /// 楽曲選択時
+        /// </summary>
+        public void OnSelectMusic()
+        {
+            animator.SetTrigger("Select");
+        }
+
+        /// <summary>
+        /// 楽曲選択画面に戻る
+        /// </summary>
+        public void OnBackSelectPhase()
+        {
+            animator.SetTrigger("SelectBack");
+        }
+
         /// <summary>
         /// アニメーション側から呼ばれる
         /// </summary>

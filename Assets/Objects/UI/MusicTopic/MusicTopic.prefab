@@ -918,7 +918,7 @@ GameObject:
   - component: {fileID: 3650380004033381586}
   - component: {fileID: 3889563029487165459}
   m_Layer: 5
-  m_Name: SubMusicTopicPar
+  m_Name: MusicTopic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -966,6 +966,15 @@ MonoBehaviour:
   comp_obj: {fileID: 5444029374045183262}
   fc_obj: {fileID: 5427645417626253262}
   ap_obj: {fileID: 5467854466272764739}
+  difficultyToSprites:
+  - difficulty: 0
+    sprite: {fileID: 21300000, guid: fa1c5f839b9f88e4eaf5e625efa2a730, type: 3}
+  - difficulty: 1
+    sprite: {fileID: 21300000, guid: 8eb54ce43eff13b4ba3347deadc8ede3, type: 3}
+  - difficulty: 2
+    sprite: {fileID: 21300000, guid: f0092c22bcd0bdf4c8c933449ff7755b, type: 3}
+  - difficulty: 3
+    sprite: {fileID: 21300000, guid: b7fc574db6e9d3b479509759ec576b48, type: 3}
 --- !u!1 &4808372035697631361
 GameObject:
   m_ObjectHideFlags: 0
@@ -1024,7 +1033,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3584906, g: 0.096830145, b: 0.042516388, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

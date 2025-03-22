@@ -7,14 +7,8 @@ namespace Refactoring.TransitionerInSelectScene
 {
     public class Transitioner_DetailSelect : IPhaseTransitionerInSelectScene
     {
-        private int[] OPTION_NEXT_INDEXES = new int[] { 12, 13 };
-        private int[] OPTION_BACK_INDEXES = new int[] { 2, 3 };
-        private int[] OPTION_PLUS_INDEXES = new int[] { 8, 9, 10 };
-        private int[] OPTION_MINUS_INDEXES = new int[] { 5, 6, 7 };
-        private int[] BACK_SELECT_INDEXES = new int[] { 0, 15 };
-        private int[] MUSIC_START_INDEXES = new int[] { 5, 6, 7, 8, 9, 10 };
 
-        [SerializeField] float inputProhibitDuration = 0.5f;
+
         [SerializeField] SerializeInterface<IPhaseTransitionableInSelectScene> phaseTransitionable;
         [SerializeField] SerializeInterface<IInputHandler> inputHandler;
 
@@ -29,33 +23,7 @@ namespace Refactoring.TransitionerInSelectScene
         {
             Debug.Log("【Transition】Transition to \"DetailSelect\"");
 
-            //inputHandler?.Value.Dispose();
 
-            // ちょっと遅れて実行
-            // 待たないと次のフェーズまで行っちゃう
-            //_ = DelayedExecutor.ExecuteAfterDelay(inputProhibitDuration, SetEvent);
-        }
-
-        private void SetEvent()
-        {
-            inputHandler?.Value.OnTouchSlider(MUSIC_START_INDEXES, TransitionRhythmGamePhase);
-            inputHandler?.Value.OnTouchSlider(BACK_SELECT_INDEXES, TransitionMusicSelectPhase);
-        }
-
-        /// <summary>
-        /// 次のフェーズへの移動
-        /// </summary>
-        private void TransitionRhythmGamePhase()
-        {
-            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.FadeOut);
-        }
-
-        /// <summary>
-        /// 次のフェーズへの移動
-        /// </summary>
-        private void TransitionMusicSelectPhase()
-        {
-            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.MusicSelect);
         }
     }
 }

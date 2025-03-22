@@ -721,7 +721,7 @@ MonoBehaviour:
     obj: {fileID: 1012713960}
   phaseStatusGetter:
     obj: {fileID: 1012713960}
-  delaySeconds: 0
+  delaySeconds: 0.1
 --- !u!1 &269109077
 GameObject:
   m_ObjectHideFlags: 0
@@ -928,6 +928,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 260343095}
+  - {fileID: 343832511}
   m_Father: {fileID: 1528082574}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &332814020
@@ -944,6 +945,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputHandler:
     obj: {fileID: 69001549}
+--- !u!1 &343832510
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 343832511}
+  - component: {fileID: 343832512}
+  m_Layer: 0
+  m_Name: Operation_DetailSelect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &343832511
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343832510}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 332814019}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &343832512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343832510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78a360bd98121174c9dc66fab446e6b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicStartColor: {r: 1, g: 0.8117647, b: 0, a: 1}
+  backSelectColor: {r: 0, g: 0.48032904, b: 1, a: 1}
+  difficultyUpColor: {r: 0.8156863, g: 0.03529412, b: 0.83137256, a: 1}
+  difficultyDownColor: {r: 0.8156863, g: 0.03529412, b: 0.83137256, a: 1}
+  operationSetter:
+    obj: {fileID: 332814018}
+  phaseTransitionable:
+    obj: {fileID: 1012713960}
+  phaseStatusGetter:
+    obj: {fileID: 1012713960}
+  delaySeconds: 0.1
 --- !u!1 &392213440
 GameObject:
   m_ObjectHideFlags: 0
@@ -1233,6 +1289,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 406159314}
+  musicTopicUIs:
+  - {fileID: 2762194123296085331}
+  - {fileID: 2046321825}
+  - {fileID: 964295529}
+  - {fileID: 986842716}
+  - {fileID: 458252900}
+  - {fileID: 159988000}
+  - {fileID: 1380404366}
 --- !u!1001 &458252898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1394,6 +1458,8 @@ MonoBehaviour:
   sliderUnitsController_view: {fileID: 1974952399}
   operationGetter_model:
     obj: {fileID: 332814018}
+  phaseStatusGetter_model:
+    obj: {fileID: 1012713960}
 --- !u!1 &575467939
 GameObject:
   m_ObjectHideFlags: 0
@@ -2944,7 +3010,6 @@ MonoBehaviour:
     - rid: 4334588427697127443
       type: {class: Transitioner_DetailSelect, ns: Refactoring.TransitionerInSelectScene, asm: Assembly-CSharp}
       data:
-        inputProhibitDuration: 0.5
         phaseTransitionable:
           obj: {fileID: 1012713960}
         inputHandler:
@@ -3087,12 +3152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8309b49037e7646bdd6abbebde25fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rootCanvas_obj: {fileID: 1839293354}
-  com_input: {fileID: 1886500324}
-  speed_input: {fileID: 269109079}
-  kinect_tog: {fileID: 2131380567}
-  slider_tog: {fileID: 254970755}
-  spaceSensitivity_input: {fileID: 822586542}
 --- !u!1 &1037695744
 GameObject:
   m_ObjectHideFlags: 0
@@ -3967,17 +4026,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b36d1bdfce4c1d646931acf6df8d588b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicData_list:
-  - {fileID: 11400000, guid: bdfe358c702151845b648830b7043759, type: 2}
-  - {fileID: 11400000, guid: 37a1863b6a5b727458278e6ef429a0a4, type: 2}
-  - {fileID: 11400000, guid: 11edc30a66d666f42bbdc54eb1c29516, type: 2}
-  - {fileID: 11400000, guid: c6d2ba301e3d1314aab06965b2679473, type: 2}
-  selectUI: {fileID: 1758494264}
-  rootUI: {fileID: 1027944403}
-  audioCtrl: {fileID: 0}
-  slider: {fileID: 0}
-  touchUI: {fileID: 0}
-  fade: {fileID: 0}
 --- !u!1 &1486561529
 GameObject:
   m_ObjectHideFlags: 0
@@ -4893,29 +4941,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78cd459186d700f41a9c136e27554dd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  changeBack_interval: 0.5
-  cursolBack_color:
-    serializedVersion: 2
-    rgba: 3875536895
-  generalBack_color:
-    serializedVersion: 2
-    rgba: 2526451350
-  thumbneil_obj: {fileID: 213433460}
-  musicTopic_anim: {fileID: 406159314}
-  musicTopics:
-  - {fileID: 2762194123296085331}
-  - {fileID: 2046321825}
-  - {fileID: 964295529}
-  - {fileID: 1380404366}
-  - {fileID: 986842716}
-  - {fileID: 458252900}
-  - {fileID: 159988000}
-  dontCompOptionpopUp_obj: {fileID: 1318847980}
-  option_obj: {fileID: 788513499}
-  noteSpeedBack_ima: {fileID: 1176112056}
-  noteSpeed_tmp: {fileID: 1037695746}
-  offsetBack_ima: {fileID: 404473251}
-  offset_tmp: {fileID: 2126772504}
 --- !u!1 &1839293354
 GameObject:
   m_ObjectHideFlags: 0
