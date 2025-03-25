@@ -484,6 +484,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 205437913}
   m_CullTransparentMesh: 1
+--- !u!1001 &236317805
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 394946494}
+    m_Modifications:
+    - target: {fileID: 725189946168866810, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
+      propertyPath: m_Name
+      value: SliderInputHandler
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974557688898039621, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974557688898039621, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974557688898039621, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974557688898039621, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974557688898039621, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974557688898039621, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974557688898039621, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974557688898039621, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974557688898039621, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974557688898039621, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
 --- !u!1 &250127024
 GameObject:
   m_ObjectHideFlags: 0
@@ -764,7 +821,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 394946494}
-  - component: {fileID: 394946496}
   - component: {fileID: 394946495}
   m_Layer: 0
   m_Name: Input
@@ -785,7 +841,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1964920608}
   m_Father: {fileID: 2051875843}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &394946495
@@ -798,18 +855,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 866771cbcfa5e8d4c9ec5faadecd9a03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &394946496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 394946493}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b13d70ff569c23940a0e9b935ea02394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &454947449
@@ -3791,6 +3836,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1942043234}
   m_CullTransparentMesh: 1
+--- !u!4 &1964920608 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6974557688898039621, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
+  m_PrefabInstance: {fileID: 236317805}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1993396469
 GameObject:
   m_ObjectHideFlags: 0

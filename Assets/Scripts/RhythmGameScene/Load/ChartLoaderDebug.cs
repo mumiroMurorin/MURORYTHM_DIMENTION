@@ -257,7 +257,7 @@ namespace Refactoring
                         int start;
                         do
                         {
-                            start = rand.Next(0, 5) * 2 + 3;
+                            start = rand.Next(0, 4) * 2 + 4;
                         } while (before == start);
                         before = start;
 
