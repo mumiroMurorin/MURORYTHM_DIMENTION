@@ -21,15 +21,7 @@ namespace Refactoring.TransitionerInResultScene
         {
             Debug.Log("【Transition】Transition to \"Result\"");
 
-            inputHandler?.Value.OnTouchSlider(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }, TransitionNextPhase);
         }
 
-        /// <summary>
-        /// 次のフェーズへの移動
-        /// </summary>
-        private void TransitionNextPhase()
-        {
-            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInResultScene.FadeOut);
-        }
     }
 }

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using UniRx;
-using Refactoring.TransitionerInSelectScene;
+using Refactoring.TransitionerInResultScene;
 
 namespace Refactoring
 {
-    public class Operation_TransitionRhythmGameScene : MonoBehaviour
+    public class Operation_TransitionNextScene : MonoBehaviour
     {
         [SerializeField] SerializeInterface<IOperationSetter> operationSetter;
-        [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter;
+        [SerializeField] SerializeInterface<IPhaseStatusGetterInResultScene> phaseStatusGetter;
 
         private void Start()
         {
@@ -20,7 +20,7 @@ namespace Refactoring
         private void Bind()
         {
             phaseStatusGetter?.Value.PhaseStatus
-                .Where(value => value == PhaseStatusInSelectScene.FadeOut || value == PhaseStatusInSelectScene.TransitionRhythmGameScene)
+                .Where(value => value == PhaseStatusInResultScene.FadeOut)
                 .Subscribe(_ => UpdateOperation())
                 .AddTo(this.gameObject);
         }

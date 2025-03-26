@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/MusicSelectScene.unity
     guid: 48b60a8f945d12547be9d2b11f192390
   - enabled: 1

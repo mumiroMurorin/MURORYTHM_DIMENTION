@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using System.Linq;
 using VContainer;
+using Refactoring.TransitionerInSelectScene;
 
 namespace Refactoring.UIInSelectScene
 {
@@ -57,7 +58,10 @@ namespace Refactoring.UIInSelectScene
             // ‘€ì‚Ì’Ç‰Á
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveAdd()
-                .Subscribe(value => sliderUnitsController_view.OnChangeSliderData(value.Value))
+                .Subscribe(value => {
+                    SetInteractionSliderEvent(value.Value);
+                    sliderUnitsController_view.OnChangeSliderData(value.Value);
+                })
                 .AddTo(this.gameObject);
 
             // ‘€ì‚ÌˆêV
@@ -70,6 +74,11 @@ namespace Refactoring.UIInSelectScene
         private void SetEvent()
         {
 
+        }
+
+        private void SetInteractionSliderEvent(SliderTouchData sliderTouchData)
+        {
+            sliderTouchData.Callback += () => sliderUnitsController_view.OnTouchSlider(sliderTouchData);
         }
     }
 }

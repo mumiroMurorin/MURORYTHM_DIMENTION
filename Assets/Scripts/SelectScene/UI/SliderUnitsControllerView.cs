@@ -10,6 +10,10 @@ namespace Refactoring
         [SerializeField] SliderUnitUI[] sliderUnits;
         [Header("通常時色")]
         [SerializeField] Color nonActionColor;
+        [Header("タッチ時補正")]
+        [SerializeField] float pressedDecrmentionColorValue;
+        [Header("タッチ時色変更時間")]
+        [SerializeField] float interactSliderSeconds;
 
         /// <summary>
         /// 操作が追加された時の処理
@@ -36,6 +40,24 @@ namespace Refactoring
             foreach(var sliderUnit in sliderUnits)
             {
                 sliderUnit.SetSliderData(new SliderTouchData(new int[0], null, nonActionColor));
+            }
+        }
+
+        /// <summary>
+        /// タッチされた時の処理
+        /// </summary>
+        /// <param name="sliderTouchData"></param>
+        public void OnTouchSlider(SliderTouchData sliderTouchData)
+        {
+            foreach (int i in sliderTouchData.SliderIndices)
+            {
+                if (sliderUnits.Length <= i)
+                {
+                    Debug.LogError($"【UI】スライダーUIがアタッチされていません。 index:{i}");
+                    return;
+                }
+
+                sliderUnits[i].InteractSlider(sliderTouchData, pressedDecrmentionColorValue, interactSliderSeconds);
             }
         }
     }

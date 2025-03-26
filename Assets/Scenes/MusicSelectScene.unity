@@ -710,7 +710,7 @@ MonoBehaviour:
     obj: {fileID: 1012713960}
   phaseStatusGetter:
     obj: {fileID: 1012713960}
-  delaySeconds: 0.1
+  delaySeconds: 0.2
 --- !u!1 &269109077
 GameObject:
   m_ObjectHideFlags: 0
@@ -5601,12 +5601,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: TouchUI
       objectReference: {fileID: 0}
-    - target: {fileID: 8514367759329729346, guid: 590205180e157b143a7db215d41875fd, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 0}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

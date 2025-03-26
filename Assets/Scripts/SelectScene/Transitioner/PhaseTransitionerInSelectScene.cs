@@ -49,4 +49,32 @@ namespace Refactoring.TransitionerInSelectScene
             return false;
         }
     }
+
+    /// <summary>
+    /// フェーズ遷移を行うことが出来る
+    /// </summary>
+    public interface IPhaseTransitionableInSelectScene
+    {
+        public void TransitionPhase(PhaseStatusInSelectScene phase);
+    }
+
+    public interface IPhaseStatusGetterInSelectScene
+    {
+        IReadOnlyReactiveProperty<PhaseStatusInSelectScene> PhaseStatus { get; }
+    }
+
+    /// <summary>
+    /// フェーズ遷移の際の処理を行う
+    /// </summary>
+    public interface IPhaseTransitionerInSelectScene
+    {
+        public void Transition();
+
+        /// <summary>
+        /// 遷移条件のチェック
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public bool ConditionChecker(PhaseStatusInSelectScene status);
+    }
 }

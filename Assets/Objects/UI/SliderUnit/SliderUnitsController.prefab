@@ -82,6 +82,8 @@ MonoBehaviour:
   - {fileID: 5038244397020443319}
   - {fileID: 4517615315740199490}
   nonActionColor: {r: 0.254717, g: 0.254717, b: 0.254717, a: 0.56078434}
+  pressedDecrmentionColorValue: 0.4
+  interactSliderSeconds: 0.1
 --- !u!1001 &243184794638948366
 PrefabInstance:
   m_ObjectHideFlags: 0

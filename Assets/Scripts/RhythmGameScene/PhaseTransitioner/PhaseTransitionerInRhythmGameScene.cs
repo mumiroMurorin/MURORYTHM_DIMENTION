@@ -44,4 +44,27 @@ namespace Refactoring.TransitionerInRhythmGameScene
             return false;
         }
     }
+
+    /// <summary>
+    /// フェーズ遷移を行うことが出来る
+    /// </summary>
+    public interface IPhaseTransitionableInRhythmGameScene
+    {
+        public void TransitionPhase(PhaseStatusInRhythmGame phase);
+    }
+
+    /// <summary>
+    /// フェーズ遷移の際の処理を行う
+    /// </summary>
+    public interface IPhaseTransitionerInRhythmGameScene
+    {
+        public void Transition();
+
+        /// <summary>
+        /// 遷移条件のチェック
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public bool ConditionChecker(PhaseStatusInRhythmGame status);
+    }
 }

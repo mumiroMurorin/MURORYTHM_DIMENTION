@@ -14,7 +14,7 @@ namespace Refactoring
 
         [Header("コンポーザー")]
         [SerializeField] private string composer_name;
-        public string ComposerName { get { return music_name; } }
+        public string ComposerName { get { return composer_name; } }
 
         [Header("サムネイル")]
         [SerializeField] private Sprite music_spr;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using UniRx;
+using Refactoring.TransitionerInSelectScene;
 
 namespace Refactoring
 {
@@ -90,8 +91,9 @@ namespace Refactoring
         /// </summary>
         private void TransitionRhythmGamePhase()
         {
-            // 難易度の確定
+            // 難易度と楽曲の確定
             musicDataSetter.SetDifficulty(selectSceneDataGetter.Difficulty.Value);
+            musicDataSetter.SetMusicData(selectSceneDataGetter.GetMusicData(selectSceneDataGetter.CurrentSelectIndex.Value));
 
             phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.FadeOut);
         }

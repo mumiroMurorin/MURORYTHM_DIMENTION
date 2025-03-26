@@ -52,7 +52,7 @@ namespace Refactoring
         {
             ChartData chartData = new ChartData
             {
-                MaxCombo = 1000,
+                MaxCombo = 150,
 
                 noteData_Touches = new List<NoteData_Touch>
                 {
@@ -251,7 +251,7 @@ namespace Refactoring
             // ダイナミックノーツ、タッチノーツ
             timing = 2f;
             int before = -1;
-            for (int i = 0; i < 1200; i++)
+            for (int i = 0; i < 600; i++)
             {
                 switch (i % 4)
                 {

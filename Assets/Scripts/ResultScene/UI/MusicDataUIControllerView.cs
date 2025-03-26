@@ -10,6 +10,7 @@ namespace Refactoring.UIInResultScene
     {
         [SerializeField] TextMeshProUGUI musicTitle_text;
         [SerializeField] TextMeshProUGUI composer_text;
+        [SerializeField] TextMeshProUGUI difficulty_text;
         [SerializeField] Image thumbnail_image;
 
         public void SetMusicData(MusicData musicData)
@@ -19,6 +20,11 @@ namespace Refactoring.UIInResultScene
             if (musicTitle_text && musicData.MusicName != null) { musicTitle_text.text = musicData.MusicName; }
             if (composer_text && musicData.ComposerName != null) { composer_text.text = musicData.ComposerName; }
             if (thumbnail_image && musicData.MusicSprite != null) { thumbnail_image.sprite = musicData.MusicSprite; }
+        }
+
+        public void SetDifficulty(Difficulty difficulty)
+        {
+            if (difficulty_text) { difficulty_text.text = difficulty.ToString().ToUpper(); }
         }
     }
 
