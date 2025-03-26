@@ -18,8 +18,10 @@ namespace Refactoring.UIInSelectScene
         /// </summary>
         /// <param name="deltaValue"></param>
         /// <returns></returns>
-        public async UniTask OnChangeSelectedMusic(int deltaValue)
+        public async UniTask OnChangeSelectedMusic(int currentIndex, int previousIndex, ISelectSceneDataGetter selectSceneDataGetter)
         {
+            int deltaValue = currentIndex - previousIndex;
+
             // 倍速
             animator.SetFloat("MoveSpeedMagnitude", Mathf.Abs(deltaValue));
 
@@ -30,7 +32,33 @@ namespace Refactoring.UIInSelectScene
 
                 isMoving = true;
                 await UniTask.WaitUntil(() => !isMoving);
+
+                SetMusicDatas(deltaValue > 0 ? previousIndex + i + 1 : previousIndex - i - 1, selectSceneDataGetter);
             }
+        }
+
+        /// <summary>
+        /// トピックに楽曲データをセットする
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="musicDatas"></param>
+        private void SetMusicDatas(int index, ISelectSceneDataGetter selectSceneDataGetter)
+        {
+            for (int i = 0; i < musicTopicUIs.Length; i++) 
+            {
+                int indexLocal = index - musicTopicUIs.Length / 2 + i;
+                MusicData data = selectSceneDataGetter.GetMusicData(indexLocal);
+
+                if (data == null)
+                {
+                    musicTopicUIs[i].SetObjActive(false);
+                    continue;
+                }
+
+                musicTopicUIs[i].SetObjActive(true);
+                musicTopicUIs[i].SetMusicTopic(data);
+            }
+
         }
 
         /// <summary>

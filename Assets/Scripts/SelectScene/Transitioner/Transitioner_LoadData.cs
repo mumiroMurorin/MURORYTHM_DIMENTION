@@ -8,7 +8,8 @@ namespace Refactoring.TransitionerInSelectScene
     public class Transitioner_LoadData : IPhaseTransitionerInSelectScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInSelectScene> phaseTransitionable;
-        
+        [SerializeField] SerializeInterface<IMusicDataListLoader> musicDataListLoader;
+
         readonly PhaseStatusInSelectScene status = PhaseStatusInSelectScene.LoadData;
 
         bool IPhaseTransitionerInSelectScene.ConditionChecker(PhaseStatusInSelectScene status)
@@ -19,6 +20,9 @@ namespace Refactoring.TransitionerInSelectScene
         void IPhaseTransitionerInSelectScene.Transition()
         {
             Debug.Log("【Transition】Transition to \"LoadData\"");
+
+            // 楽曲データリストの読み込みとセット
+            musicDataListLoader.Value.LoadMusicDataList();
 
             TransitionNextPhase();
         }

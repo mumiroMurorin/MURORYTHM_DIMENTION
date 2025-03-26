@@ -26,14 +26,14 @@ namespace Refactoring
         private int[] DIFF_DOWN_INDICES = new int[] { 2, 3, 4 };
         private int[] MUSIC_SELECT_INDICES = new int[] { 5, 6, 7, 8, 9, 10 };
 
-        IMusicDataSetter musicDataSetter;
-        IMusicDataGetter musicDataGetter;
+        ISelectSceneDataSetter selectSceneDataSetter;
+        ISelectSceneDataGetter selectSceneDataGetter;
 
         [Inject]
-        public void Construct(IMusicDataSetter musicDataSetter, IMusicDataGetter musicDataGetter)
+        public void Construct(ISelectSceneDataSetter selectSceneDataSetter, ISelectSceneDataGetter selectSceneDataGetter)
         {
-            this.musicDataSetter = musicDataSetter;
-            this.musicDataGetter = musicDataGetter;
+            this.selectSceneDataSetter = selectSceneDataSetter;
+            this.selectSceneDataGetter = selectSceneDataGetter;
         }
 
         private void Start()
@@ -72,7 +72,7 @@ namespace Refactoring
         /// <param name="index"></param>
         private void MoveMusicTopic(int delta)
         {
-            musicDataSetter.SetMusicIndexSelected(musicDataGetter.MusicIndexSelected.Value + delta);
+            selectSceneDataSetter.SetSelectIndex(selectSceneDataGetter.CurrentSelectIndex.Value + delta);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Refactoring
         /// <param name="diff"></param>
         private void ChangeDifficulty(int delta)
         {
-            musicDataSetter.SetDifficulty(musicDataGetter.Difficulty.Value + delta);
+            selectSceneDataSetter.SetDifficulty(selectSceneDataGetter.Difficulty.Value + delta);
         }
 
         /// <summary>

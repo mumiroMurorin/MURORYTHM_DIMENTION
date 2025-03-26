@@ -26,14 +26,16 @@ namespace Refactoring
         private int[] DIFF_UP_INDICES = new int[] { 11, 12, 13 };
         private int[] DIFF_DOWN_INDICES = new int[] { 2, 3, 4 };
 
+        ISelectSceneDataGetter selectSceneDataGetter;
+        ISelectSceneDataSetter selectSceneDataSetter;
         IMusicDataSetter musicDataSetter;
-        IMusicDataGetter musicDataGetter;
 
         [Inject]
-        public void Construct(IMusicDataSetter musicDataSetter, IMusicDataGetter musicDataGetter)
+        public void Construct(IMusicDataSetter musicDataSetter, ISelectSceneDataGetter selectSceneDataGetter, ISelectSceneDataSetter selectSceneDataSetter)
         {
             this.musicDataSetter = musicDataSetter;
-            this.musicDataGetter = musicDataGetter;
+            this.selectSceneDataGetter = selectSceneDataGetter;
+            this.selectSceneDataSetter = selectSceneDataSetter;
         }
 
         private void Start()
@@ -72,7 +74,7 @@ namespace Refactoring
         /// <param name="diff"></param>
         private void ChangeDifficulty(int delta)
         {
-            musicDataSetter.SetDifficulty(musicDataGetter.Difficulty.Value + delta);
+            selectSceneDataSetter.SetDifficulty(selectSceneDataGetter.Difficulty.Value + delta);
         }
 
         /// <summary>
@@ -88,6 +90,9 @@ namespace Refactoring
         /// </summary>
         private void TransitionRhythmGamePhase()
         {
+            // “ïˆÕ“x‚ÌŠm’è
+            musicDataSetter.SetDifficulty(selectSceneDataGetter.Difficulty.Value);
+
             phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.FadeOut);
         }
     }

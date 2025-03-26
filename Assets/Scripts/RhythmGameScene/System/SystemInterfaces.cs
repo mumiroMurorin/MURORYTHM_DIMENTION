@@ -172,9 +172,6 @@ namespace Refactoring
         void SetMusicData(MusicData musicData);
 
         void SetDifficulty(Difficulty difficulty);
-
-        // 楽曲トピックインデックスの選択
-        void SetMusicIndexSelected(int value);
     }
 
     /// <summary>
@@ -182,9 +179,6 @@ namespace Refactoring
     /// </summary>
     public interface IMusicDataGetter
     {
-        // 選択中のトピックインデックス
-        IReadOnlyReactiveProperty<int> MusicIndexSelected { get; }
-
         IReadOnlyReactiveProperty<MusicData> Music{ get; }
 
         IReadOnlyReactiveProperty<Difficulty> Difficulty { get; }

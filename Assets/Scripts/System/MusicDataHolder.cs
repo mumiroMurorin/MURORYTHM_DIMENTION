@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System;
+using System.Linq;
 
 namespace Refactoring
 {
-    public class MusicDataHolder : IMusicDataSetter, IMusicDataGetter, IChartDataSetter, IChartDataGetter
+    public class MusicDataHolder : IMusicDataSetter, IMusicDataGetter
     {
         // 選択楽曲
         ReactiveProperty<MusicData> music = new ReactiveProperty<MusicData>();
@@ -16,28 +18,14 @@ namespace Refactoring
         }
 
         // 選択難易度
-        ReactiveProperty<Difficulty> difficulty = new ReactiveProperty<Difficulty>(global::Difficulty.Initiate);
+        ReactiveProperty<Difficulty> difficulty = new ReactiveProperty<Difficulty>(Refactoring.Difficulty.Initiate);
         public IReadOnlyReactiveProperty<Difficulty> Difficulty { get { return difficulty; } }
         public void SetDifficulty(Difficulty difficulty)
         {
-            this.difficulty.Value = difficulty;
-        }
+            // 列挙型の値を取得して int 配列に変換
+            int[] values = Enum.GetValues(typeof(Difficulty)).Cast<int>().ToArray();
 
-        // 譜面データ
-        ChartData chart;
-        ChartData IChartDataGetter.Chart { get { return chart; } }
-
-        void IChartDataSetter.SetChartData(ChartData data)
-        {
-            chart = data;
-        }
-
-        // 選択インデックス
-        ReactiveProperty<int> musicIndexSelected = new ReactiveProperty<int>(0);
-        IReadOnlyReactiveProperty<int> IMusicDataGetter.MusicIndexSelected => musicIndexSelected;
-        void IMusicDataSetter.SetMusicIndexSelected(int value)
-        {
-            musicIndexSelected.Value = value;
+            this.difficulty.Value = (Difficulty)Mathf.Clamp((int)difficulty, values.Min(), values.Max());
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace Refactoring
 {
@@ -43,5 +44,53 @@ namespace Refactoring
         DetailSelect,
         FadeOut,
         TransitionRhythmGameScene,
+    }
+
+    //“ïˆÕ“x
+    public enum Difficulty
+    {
+        Initiate = 0,
+        Fanatic = 1,
+        Skyclad = 2,
+        Dream = 3
+    }
+
+    /// <summary>
+    /// SSS,AA“™‚Ìƒ‰ƒ“ƒN•]‰¿
+    /// </summary>
+    public enum ScoreRank
+    {
+        None,
+        E,
+        D,
+        C,
+        B,
+        A,
+        A_plus,
+        S,
+        S_plus,
+        MAX
+    }
+
+    /// <summary>
+    /// AllPerfect,FullCombo“™ƒRƒ“ƒ{•]‰¿
+    /// </summary>
+    public enum ComboRank
+    {
+        None = 0,
+        TrackFailed = 1,
+        TrackComplete = 2,
+        FullCombo = 3,
+        GreatCombo = 4,
+        AllPerfect = 5
+    }
+
+    [System.Serializable]
+    public class MusicRecord
+    {
+        public int Score { get; set; } = 0;
+        public ScoreRank ScoreRank { get; set; } = ScoreRank.None;
+        public ComboRank ComboRank { get; set; } = ComboRank.None;
+        public int[] JudgementCount { get; set; } = new int[Enum.GetNames(typeof(Refactoring.Judgement)).Length];
     }
 }

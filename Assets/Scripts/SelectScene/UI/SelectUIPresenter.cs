@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System.Linq;
 using VContainer;
 
 namespace Refactoring.UIInSelectScene
@@ -13,12 +14,12 @@ namespace Refactoring.UIInSelectScene
         [SerializeField] SerializeInterface<IOperationGetter> operationGetter_model;
         [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter_model;
 
-        IMusicDataGetter musicData_model;
+        ISelectSceneDataGetter selectSceneDataGetter_model;
 
         [Inject] 
-        public void Construct(IMusicDataGetter musicDataGetter)
+        public void Construct(ISelectSceneDataGetter selectSceneDataGetter)
         {
-            musicData_model = musicDataGetter;
+            selectSceneDataGetter_model = selectSceneDataGetter;
         }
 
         private void Start()
@@ -30,9 +31,9 @@ namespace Refactoring.UIInSelectScene
         private void Bind()
         {
             // トピックの移動
-            musicData_model?.MusicIndexSelected
+            selectSceneDataGetter_model?.CurrentSelectIndex
                 .Pairwise()
-                .Subscribe(pair => _ = musicTopicController_view.OnChangeSelectedMusic(pair.Current - pair.Previous))
+                .Subscribe(pair => _ = musicTopicController_view.OnChangeSelectedMusic(pair.Current, pair.Previous, selectSceneDataGetter_model))
                 .AddTo(this.gameObject);
 
             // 楽曲の選択(決定)
@@ -48,7 +49,7 @@ namespace Refactoring.UIInSelectScene
                 .AddTo(this.gameObject);
 
             // 難易度の変更
-            musicData_model?.Difficulty
+            selectSceneDataGetter_model?.Difficulty
                 .Subscribe(musicTopicController_view.OnChangeDifficulty)
                 .AddTo(this.gameObject);
 

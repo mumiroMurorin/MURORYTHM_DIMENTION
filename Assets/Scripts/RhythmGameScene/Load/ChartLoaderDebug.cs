@@ -15,9 +15,14 @@ namespace Refactoring
         IChartDataSetter chartDataSetter;
 
         [Inject]
-        public void Constructor(IMusicDataGetter musicDataGetter, IChartDataSetter chartDataSetter)
+        public void Constructor(IMusicDataGetter musicDataGetter)
         {
             this.musicDataGetter = musicDataGetter;
+        }
+
+        [Inject]
+        public void Constructor(IChartDataSetter chartDataSetter)
+        {
             this.chartDataSetter = chartDataSetter;
         }
 
@@ -33,7 +38,6 @@ namespace Refactoring
 
         void IChartLoader.LoadChart(Action callback)
         {
-            
             chartDataSetter.SetChartData(LoadChartData());
             callback.Invoke();
         }
