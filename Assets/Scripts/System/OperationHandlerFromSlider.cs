@@ -9,7 +9,7 @@ namespace Refactoring
     /// <summary>
     /// ëÄçÏä÷åWÇÃìùäáÉNÉâÉX
     /// </summary>
-    public class OperationHandlerInMusicSelectScene : MonoBehaviour, IOperationSetter, IOperationGetter
+    public class OperationHandlerFromSlider : MonoBehaviour, IOperationSetter, IOperationGetter
     {
         [SerializeField] SerializeInterface<IInputHandler> inputHandler;
 
@@ -19,7 +19,7 @@ namespace Refactoring
         void IOperationSetter.SetOperate(SliderTouchData sliderTouchData)
         {
             sliderTouchDatas.Add(sliderTouchData);
-            inputHandler?.Value.OnTouchSlider(sliderTouchData.SliderIndices, sliderTouchData.Callback);
+            inputHandler?.Value.OnTouchSlider(sliderTouchData.SliderIndices, sliderTouchData.ExecuteAction);
         }
 
         void IOperationSetter.Dispose()
@@ -46,17 +46,52 @@ namespace Refactoring
     /// </summary>
     public class SliderTouchData
     {
-        public SliderTouchData(int[] sliderIndices, Action callback, Color imageColor)
+        public SliderTouchData(int[] sliderIndices, Action callback, Color imageColor = default, string text = default, SliderCoolDownHandler coolDownHandler = default)
         {
             SliderIndices = sliderIndices;
             Callback = callback;
             ImageColor = imageColor;
+            Text = text;
+            this.coolDownHandler = coolDownHandler;
         }
+
+        SliderCoolDownHandler coolDownHandler;
 
         public int[] SliderIndices { get; set; }
 
         public Action Callback { get; set; }
 
         public Color ImageColor { get; set; }
+
+        public string Text { get; set; }
+
+        public void ExecuteAction()
+        {
+            if (coolDownHandler != null && coolDownHandler.IsWaiting) { return; }
+            
+            Callback.Invoke();
+            coolDownHandler?.ResetCoolTime();
+        }
+    }
+
+    /// <summary>
+    /// SliderTouchDataÇÃã§í ë“Çøéûä‘Ç…égÇ§
+    /// </summary>
+    public class SliderCoolDownHandler
+    {
+        public SliderCoolDownHandler(float coolDownSeconds)
+        {
+            this.coolDownSeconds = coolDownSeconds;
+        }
+
+        private float coolDownSeconds;
+
+        public bool IsWaiting { get; private set; }
+
+        public void ResetCoolTime()
+        {
+            IsWaiting = true;
+            _ = DelayedExecutor.ExecuteAfterDelay(coolDownSeconds, () => { IsWaiting = false; });
+        }
     }
 }

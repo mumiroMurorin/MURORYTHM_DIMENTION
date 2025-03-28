@@ -9,17 +9,24 @@ namespace Refactoring
 {
     public class Operation_MusicSelect : MonoBehaviour
     {
-        [Header("各項目に対応するスライダーUIの表示色")]
+        [Header("各項目に対応するスライダーUIの表示色と表示テキスト")]
         [SerializeField] Color musicSelectColor;
+        [SerializeField] string musicSelectText = "楽曲選択";
         [SerializeField] Color rightMoveColor;
+        [SerializeField] string rightMoveText = "右→";
         [SerializeField] Color leftMoveColor;
+        [SerializeField] string leftMoveText = "←左";
         [SerializeField] Color difficultyUpColor;
+        [SerializeField] string difficultyUpText = "難易度UP";
         [SerializeField] Color difficultyDownColor;
+        [SerializeField] string difficultyDownText = "難易度DOWN";
 
         [SerializeField] SerializeInterface<IOperationSetter> operationSetter;
         [SerializeField] SerializeInterface<IPhaseTransitionableInSelectScene> phaseTransitionable;
         [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter;
-        [SerializeField] float delaySeconds = 0.5f;
+
+        [SerializeField] float afterMovingCoolTime = 0.1f;
+        [SerializeField] float firstDelaySeconds = 0.5f;
 
         private int[] RIGHT_MOVE_INDICES = new int[] { 14, 15 };
         private int[] LEFT_MOVE_INDICES = new int[] { 0, 1 };
@@ -55,16 +62,18 @@ namespace Refactoring
             operationSetter.Value.Dispose();
 
             // 少し入力許可を遅らせる
-            _ = DelayedExecutor.ExecuteAfterDelay(delaySeconds, () => SetOperation());
+            _ = DelayedExecutor.ExecuteAfterDelay(firstDelaySeconds, () => SetOperation());
         }
 
         private void SetOperation()
         {
-            operationSetter.Value.SetOperate(new SliderTouchData(MUSIC_SELECT_INDICES, TransitionNextPhase, musicSelectColor));
-            operationSetter.Value.SetOperate(new SliderTouchData(RIGHT_MOVE_INDICES, () => MoveMusicTopic(+1), rightMoveColor));
-            operationSetter.Value.SetOperate(new SliderTouchData(LEFT_MOVE_INDICES, () => MoveMusicTopic(-1), leftMoveColor));
-            operationSetter.Value.SetOperate(new SliderTouchData(DIFF_UP_INDICES, () => ChangeDifficulty(+1), difficultyUpColor));
-            operationSetter.Value.SetOperate(new SliderTouchData(DIFF_DOWN_INDICES, () => ChangeDifficulty(-1), difficultyDownColor));
+            operationSetter.Value.SetOperate(new SliderTouchData(MUSIC_SELECT_INDICES, TransitionNextPhase, musicSelectColor, musicSelectText));
+            operationSetter.Value.SetOperate(new SliderTouchData(DIFF_UP_INDICES, () => ChangeDifficulty(+1), difficultyUpColor, difficultyUpText));
+            operationSetter.Value.SetOperate(new SliderTouchData(DIFF_DOWN_INDICES, () => ChangeDifficulty(-1), difficultyDownColor, difficultyDownText));
+
+            SliderCoolDownHandler coolDownHandler = new SliderCoolDownHandler(afterMovingCoolTime);
+            operationSetter.Value.SetOperate(new SliderTouchData(RIGHT_MOVE_INDICES, () => MoveMusicTopic(+1), rightMoveColor, rightMoveText, coolDownHandler));
+            operationSetter.Value.SetOperate(new SliderTouchData(LEFT_MOVE_INDICES, () => MoveMusicTopic(-1), leftMoveColor, leftMoveText, coolDownHandler));
         }
 
         /// <summary>

@@ -9,20 +9,25 @@ namespace Refactoring
 {
     public class Operation_DetailSelect : MonoBehaviour
     {
-        [Header("各項目に対応するスライダーUIの表示色")]
+        [Header("各項目に対応するスライダーUIの表示色と表示テキスト")]
         [SerializeField] Color musicStartColor;
+        [SerializeField] string musicStartText = "楽曲スタート！";
         [SerializeField] Color backSelectColor;
+        [SerializeField] string backSelectText = "楽曲選択に戻る";
         [SerializeField] Color difficultyUpColor;
+        [SerializeField] string difficultyUpText = "難易度UP";        
         [SerializeField] Color difficultyDownColor;
+        [SerializeField] string difficultyDownText = "難易度DOWN";
+        [SerializeField] Color optionColor;
+        [SerializeField] string optionText = "設定";
 
         [SerializeField] SerializeInterface<IOperationSetter> operationSetter;
         [SerializeField] SerializeInterface<IPhaseTransitionableInSelectScene> phaseTransitionable;
         [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter;
         [SerializeField] float delaySeconds = 0.5f;
 
-        private int[] OPTION_NEXT_INDICES = new int[] { 12, 13 };
-        private int[] OPTION_BACK_INDICES = new int[] { 2, 3 };
-        private int[] BACK_SELECT_INDICES = new int[] { 0, 15 };
+        private int[] OPTION_INDICES = new int[] { 14, 15 };
+        private int[] BACK_SELECT_INDICES = new int[] { 0, 1 };
         private int[] MUSIC_START_INDICES = new int[] { 5, 6, 7, 8, 9, 10 };
         private int[] DIFF_UP_INDICES = new int[] { 11, 12, 13 };
         private int[] DIFF_DOWN_INDICES = new int[] { 2, 3, 4 };
@@ -62,10 +67,11 @@ namespace Refactoring
 
         private void SetOperation()
         {
-            operationSetter.Value.SetOperate(new SliderTouchData(MUSIC_START_INDICES, TransitionRhythmGamePhase, musicStartColor));
-            operationSetter.Value.SetOperate(new SliderTouchData(BACK_SELECT_INDICES, TransitionMusicSelectPhase, backSelectColor));
-            operationSetter.Value.SetOperate(new SliderTouchData(DIFF_UP_INDICES, () => ChangeDifficulty(+1), difficultyUpColor));
-            operationSetter.Value.SetOperate(new SliderTouchData(DIFF_DOWN_INDICES, () => ChangeDifficulty(-1), difficultyDownColor));
+            operationSetter.Value.SetOperate(new SliderTouchData(MUSIC_START_INDICES, TransitionRhythmGamePhase, musicStartColor, musicStartText));
+            operationSetter.Value.SetOperate(new SliderTouchData(BACK_SELECT_INDICES, TransitionMusicSelectPhase, backSelectColor, backSelectText));
+            operationSetter.Value.SetOperate(new SliderTouchData(DIFF_UP_INDICES, () => ChangeDifficulty(+1), difficultyUpColor, difficultyUpText));
+            operationSetter.Value.SetOperate(new SliderTouchData(DIFF_DOWN_INDICES, () => ChangeDifficulty(-1), difficultyDownColor, difficultyDownText));
+            operationSetter.Value.SetOperate(new SliderTouchData(OPTION_INDICES, () => { }, optionColor, optionText));
         }
 
 

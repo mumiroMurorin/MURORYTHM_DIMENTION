@@ -1668,7 +1668,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 758050358}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e2fef7edab35f94eb28004b24a0d01e, type: 3}
+  m_Script: {fileID: 11500000, guid: 2c603fe4459339e4c97cebc2c284518d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inputHandler:
@@ -2163,6 +2163,7 @@ MonoBehaviour:
   musicDataUIController_view: {fileID: 879537742}
   scoreDataUIController_view: {fileID: 879537743}
   sliderUnitsController_view: {fileID: 1855606732}
+  topicTextsController_view: {fileID: 1855606733}
   operationGetter_model:
     obj: {fileID: 758050358}
 --- !u!1 &1005090829
@@ -3961,6 +3962,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f4830a849888c04d87bc3c46948fe9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1855606733 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7921102673827137349, guid: 590205180e157b143a7db215d41875fd, type: 3}
+  m_PrefabInstance: {fileID: 1855606730}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e44533d584e20944399fa917eb95702a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1870562759

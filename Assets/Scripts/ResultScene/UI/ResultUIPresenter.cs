@@ -11,6 +11,7 @@ namespace Refactoring.UIInResultScene
         [SerializeField] MusicDataUIControllerView musicDataUIController_view;
         [SerializeField] ScoreDataUIControllerView scoreDataUIController_view;
         [SerializeField] SliderUnitsControllerView sliderUnitsController_view;
+        [SerializeField] SliderTopicTextsControllerView topicTextsController_view;
 
         [SerializeField] SerializeInterface<IOperationGetter> operationGetter_model;
 
@@ -43,19 +44,31 @@ namespace Refactoring.UIInResultScene
             // ‘€ì‚Ì’Ç‰Á
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveAdd()
-                .Subscribe(value => sliderUnitsController_view.OnChangeSliderData(value.Value))
+                .Subscribe(value => {
+                    SetInteractionSliderEvent(value.Value);
+                    sliderUnitsController_view.OnChangeSliderData(value.Value);
+                    topicTextsController_view?.OnChangeSliderData(value.Value);
+                })
                 .AddTo(this.gameObject);
 
             // ‘€ì‚ÌˆêV
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveReset()
-                .Subscribe(_ => sliderUnitsController_view.OnClearSliderData())
+                .Subscribe(_ => { 
+                    sliderUnitsController_view.OnClearSliderData();
+                    topicTextsController_view?.OnClearSliderData();
+                })
                 .AddTo(this.gameObject);
         }
 
         private void SetEvent()
         {
 
+        }
+
+        private void SetInteractionSliderEvent(SliderTouchData sliderTouchData)
+        {
+            sliderTouchData.Callback += () => sliderUnitsController_view.OnTouchSlider(sliderTouchData);
         }
     }
 }

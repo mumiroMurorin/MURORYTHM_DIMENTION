@@ -42,7 +42,7 @@ namespace Refactoring.UIInSelectScene
         /// </summary>
         /// <param name="index"></param>
         /// <param name="musicDatas"></param>
-        private void SetMusicDatas(int index, ISelectSceneDataGetter selectSceneDataGetter)
+        public void SetMusicDatas(int index, ISelectSceneDataGetter selectSceneDataGetter)
         {
             for (int i = 0; i < musicTopicUIs.Length; i++) 
             {

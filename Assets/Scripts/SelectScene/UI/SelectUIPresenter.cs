@@ -12,6 +12,7 @@ namespace Refactoring.UIInSelectScene
     {
         [SerializeField] MusicTopicControllerView musicTopicController_view;
         [SerializeField] SliderUnitsControllerView sliderUnitsController_view;
+        [SerializeField] SliderTopicTextsControllerView topicTextsController_view;
         [SerializeField] SerializeInterface<IOperationGetter> operationGetter_model;
         [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter_model;
 
@@ -31,6 +32,11 @@ namespace Refactoring.UIInSelectScene
 
         private void Bind()
         {
+            // 楽曲リストの更新
+            selectSceneDataGetter_model?.MusicDatasSorted.ObserveCountChanged()
+                .Subscribe(_ => musicTopicController_view.SetMusicDatas(selectSceneDataGetter_model.CurrentSelectIndex.Value, selectSceneDataGetter_model))
+                .AddTo(this.gameObject);
+
             // トピックの移動
             selectSceneDataGetter_model?.CurrentSelectIndex
                 .Pairwise()
@@ -60,14 +66,18 @@ namespace Refactoring.UIInSelectScene
                 .ObserveAdd()
                 .Subscribe(value => {
                     SetInteractionSliderEvent(value.Value);
-                    sliderUnitsController_view.OnChangeSliderData(value.Value);
+                    sliderUnitsController_view?.OnChangeSliderData(value.Value);
+                    topicTextsController_view?.OnChangeSliderData(value.Value);
                 })
                 .AddTo(this.gameObject);
 
             // 操作の一新
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveReset()
-                .Subscribe(_ => sliderUnitsController_view.OnClearSliderData())
+                .Subscribe(_ => {
+                    sliderUnitsController_view?.OnClearSliderData();
+                    topicTextsController_view?.OnClearSliderData();
+                })
                 .AddTo(this.gameObject);
         }
 

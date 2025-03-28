@@ -21,13 +21,12 @@ namespace Refactoring
     // SEä«óù
     public enum SE_Type
     {
-        CursorOnButton = 10,
-        ButtonClicked1 = 21,
-        ButtonClicked2 = 22,
-        ButtonClicked3 = 23,
-        BackButtonClicked1 = 31,
-        Correct = 100,
-        Incorrect = 110,
+        MoveTopic = 100,
+        UpDifficulty = 110,
+        DownDifficulty = 111,
+        SelectMusic = 120,
+        DesicionMusic = 130,
+        BackTopic1 = 140,
     }
 
     /// <summary>
