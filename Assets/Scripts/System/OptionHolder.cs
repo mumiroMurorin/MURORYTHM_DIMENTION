@@ -3,48 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
-namespace Refactoring
+public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IVolumeSetter
 {
-    public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IVolumeSetter
+    /// <summary>
+    /// ÉmÅ[ÉcÇ™1ïbä‘Ç…ìÆÇ≠(unityíPà )ë¨ìx
+    /// </summary>
+    public float NoteSpeed { get; set; } = 250f;
+
+    // SEä÷åW
+    ReactiveProperty<float> seVolume = new ReactiveProperty<float>(0.8f);
+    IReadOnlyReactiveProperty<float> IVolumeGetter.SEVolume => seVolume;
+    void IVolumeSetter.SetSEVolume(float value)
     {
-        /// <summary>
-        /// ÉmÅ[ÉcÇ™1ïbä‘Ç…ìÆÇ≠(unityíPà )ë¨ìx
-        /// </summary>
-        public float NoteSpeed { get; set; } = 250f;
-
-        // SEä÷åW
-        ReactiveProperty<float> seVolume = new ReactiveProperty<float>(0.8f);
-        IReadOnlyReactiveProperty<float> IVolumeGetter.SEVolume => seVolume;
-        void IVolumeSetter.SetSEVolume(float value)
-        {
-            seVolume.Value = value;
-        }
-
-        // BGMä÷åW
-        ReactiveProperty<float> bgmVolume = new ReactiveProperty<float>(0.8f);
-        IReadOnlyReactiveProperty<float> IVolumeGetter.BGMVolume => bgmVolume;
-        void IVolumeSetter.SetBGMVolume(float value)
-        {
-            bgmVolume.Value = value;
-        }
+        seVolume.Value = value;
     }
 
-    public interface INoteSpawnDataOptionHolder
+    // BGMä÷åW
+    ReactiveProperty<float> bgmVolume = new ReactiveProperty<float>(0.8f);
+    IReadOnlyReactiveProperty<float> IVolumeGetter.BGMVolume => bgmVolume;
+    void IVolumeSetter.SetBGMVolume(float value)
     {
-        public float NoteSpeed { get; }
+        bgmVolume.Value = value;
     }
+}
 
-    public interface IVolumeGetter
-    {
-        IReadOnlyReactiveProperty<float> SEVolume { get; }
+public interface INoteSpawnDataOptionHolder
+{
+    public float NoteSpeed { get; }
+}
 
-        IReadOnlyReactiveProperty<float> BGMVolume { get; }
-    }
+public interface IVolumeGetter
+{
+    IReadOnlyReactiveProperty<float> SEVolume { get; }
 
-    public interface IVolumeSetter
-    {
-        void SetSEVolume(float value);
+    IReadOnlyReactiveProperty<float> BGMVolume { get; }
+}
 
-        void SetBGMVolume(float value);
-    }
+public interface IVolumeSetter
+{
+    void SetSEVolume(float value);
+
+    void SetBGMVolume(float value);
 }

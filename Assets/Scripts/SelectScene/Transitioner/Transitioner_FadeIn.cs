@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 
-namespace Refactoring.TransitionerInSelectScene
+namespace TransitionerInSelectScene
 {
     public class Transitioner_FadeIn : IPhaseTransitionerInSelectScene
     {

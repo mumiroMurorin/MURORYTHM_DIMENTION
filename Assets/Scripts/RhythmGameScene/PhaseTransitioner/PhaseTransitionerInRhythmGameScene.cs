@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Refactoring.TransitionerInRhythmGameScene
+namespace TransitionerInRhythmGameScene
 {
     public class PhaseTransitionerInRhythmGameScene : MonoBehaviour, IPhaseTransitionableInRhythmGameScene
     {

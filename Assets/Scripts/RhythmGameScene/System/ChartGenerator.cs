@@ -6,255 +6,252 @@ using VContainer;
 using System;
 using UniRx;
 
-namespace Refactoring
+public class ChartGenerator : MonoBehaviour, IChartGenerator
 {
-    public class ChartGenerator : MonoBehaviour, IChartGenerator
+    [Header("それぞれのNoteFactory")]
+    [SerializeField] NoteFactory<NoteData_Touch> touchNoteFactory;
+    [SerializeField] NoteFactory<NoteData_DynamicGroundUpward> dynamicGroundUpwardNoteFactory;
+    [SerializeField] NoteFactory<NoteData_DynamicGroundRightward> dynamicGroundRightwardNoteFactory;
+    [SerializeField] NoteFactory<NoteData_DynamicGroundLeftward> dynamicGroundLeftwardNoteFactory;
+    [SerializeField] NoteFactory<NoteData_DynamicGroundDownward> dynamicGroundDownwardNoteFactory;
+    [SerializeField] NoteFactory<NoteData_HoldStart> holdStartNoteFactory;
+    [SerializeField] NoteFactory<NoteData_HoldRelay> holdRelayNoteFactory;
+    [SerializeField] NoteFactory<NoteData_HoldEnd> holdEndNoteFactory;
+    [SerializeField] NoteFactory<NoteData_HoldMesh> holdMeshNoteFactory;
+    [SerializeField] NoteFactory<NoteData_SpaceHoldMesh> spaceHoldMeshNoteFactory;
+    [SerializeField] NoteFactory<NoteData_SpaceHoldRelay> spaceHoldRelayNoteFactory;
+
+    [Header("Factoryの初期化に必要なデータ")]
+    [SerializeField] GameObject groundObject;
+    [SerializeField] Deformer groundDeformer;
+    [SerializeField] SerializeInterface<ITimeGetter> timer;
+
+    IChartDataGetter chartDataGetter;
+    INoteSpawnDataOptionHolder spawnDataOptionHolder;
+    ISliderInputGetter sliderInputGetter;
+    ISpaceInputGetter spaceInputGetter;
+    IJudgementRecorder judgementRecorder;
+
+    private void Awake()
     {
-        [Header("それぞれのNoteFactory")]
-        [SerializeField] NoteFactory<NoteData_Touch> touchNoteFactory;
-        [SerializeField] NoteFactory<NoteData_DynamicGroundUpward> dynamicGroundUpwardNoteFactory;
-        [SerializeField] NoteFactory<NoteData_DynamicGroundRightward> dynamicGroundRightwardNoteFactory;
-        [SerializeField] NoteFactory<NoteData_DynamicGroundLeftward> dynamicGroundLeftwardNoteFactory;
-        [SerializeField] NoteFactory<NoteData_DynamicGroundDownward> dynamicGroundDownwardNoteFactory;
-        [SerializeField] NoteFactory<NoteData_HoldStart> holdStartNoteFactory;
-        [SerializeField] NoteFactory<NoteData_HoldRelay> holdRelayNoteFactory;
-        [SerializeField] NoteFactory<NoteData_HoldEnd> holdEndNoteFactory;
-        [SerializeField] NoteFactory<NoteData_HoldMesh> holdMeshNoteFactory;
-        [SerializeField] NoteFactory<NoteData_SpaceHoldMesh> spaceHoldMeshNoteFactory;
-        [SerializeField] NoteFactory<NoteData_SpaceHoldRelay> spaceHoldRelayNoteFactory;
+        Initialize();
+    }
 
-        [Header("Factoryの初期化に必要なデータ")]
-        [SerializeField] GameObject groundObject;
-        [SerializeField] Deformer groundDeformer;
-        [SerializeField] SerializeInterface<ITimeGetter> timer;
+    [Inject]
+    public void Constructor(IChartDataGetter chartDataGetter, INoteSpawnDataOptionHolder optionHolder, IJudgementRecorder judgementRecorder,
+        ISliderInputGetter sliderInputGetter, ISpaceInputGetter spaceInputGetter)
+    {
+        this.chartDataGetter = chartDataGetter;
+        this.spawnDataOptionHolder = optionHolder;
+        this.sliderInputGetter = sliderInputGetter;
+        this.spaceInputGetter = spaceInputGetter;
+        this.judgementRecorder = judgementRecorder;
 
-        IChartDataGetter chartDataGetter;
-        INoteSpawnDataOptionHolder spawnDataOptionHolder;
-        ISliderInputGetter sliderInputGetter;
-        ISpaceInputGetter spaceInputGetter;
-        IJudgementRecorder judgementRecorder;
+    }
 
-        private void Awake()
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    private void Initialize()
+    {
+        // 初期化データの生成
+        NoteFactoryInitializingData data = new NoteFactoryInitializingData
         {
-            Initialize();
+            GroundObject = this.groundObject,
+            GroundDeformer = this.groundDeformer,
+            OptionHolder = this.spawnDataOptionHolder,
+            SliderInputGetter = this.sliderInputGetter,
+            SpaceInputGetter = this.spaceInputGetter,
+            Timer = this.timer.Value,
+            JudgementRecorder = this.judgementRecorder
+        };
+
+        touchNoteFactory.Initialize(data);
+        dynamicGroundUpwardNoteFactory.Initialize(data);
+        dynamicGroundRightwardNoteFactory.Initialize(data);
+        dynamicGroundLeftwardNoteFactory.Initialize(data);
+        dynamicGroundDownwardNoteFactory.Initialize(data);
+        holdStartNoteFactory.Initialize(data);
+        holdRelayNoteFactory.Initialize(data);
+        holdEndNoteFactory.Initialize(data);
+        holdMeshNoteFactory.Initialize(data);
+        spaceHoldMeshNoteFactory.Initialize(data);
+        spaceHoldRelayNoteFactory.Initialize(data);
+    }
+
+    /// <summary>
+    /// ノーツ全体の生成
+    /// </summary>
+    /// <param name="chartData"></param>
+    public void Generate(Action callback = null)
+    {
+        GenerateTouchNote(chartDataGetter.Chart.noteData_Touches);
+        GenerateDynamicGroundUpwardNote(chartDataGetter.Chart.noteData_DynamicGroundUpwards);
+        GenerateDynamicGroundRightwardNote(chartDataGetter.Chart.noteData_DynamicGroundRightwards);
+        GenerateDynamicGroundLeftwardNote(chartDataGetter.Chart.noteData_DynamicGroundLeftwards);
+        GenerateDynamicGroundDownwardNote(chartDataGetter.Chart.noteData_DynamicGroundDownwards);
+        GenerateHoldStartNote(chartDataGetter.Chart.noteData_HoldStarts);
+        GenerateHoldRelayNote(chartDataGetter.Chart.noteData_HoldRelays);
+        GenerateHoldEndNote(chartDataGetter.Chart.noteData_HoldEnds);
+        GenerateHoldMeshNote(chartDataGetter.Chart.noteData_HoldMeshes);
+        GenerateSpaceHoldMeshNote(chartDataGetter.Chart.noteData_SpaceHoldMeshes);
+        GenerateSpaceHoldRelayNote(chartDataGetter.Chart.noteData_SpaceHoldRelays);
+
+        callback?.Invoke();
+    }
+
+    /// <summary>
+    /// タッチノーツの生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateTouchNote(List<NoteData_Touch> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (NoteData_Touch data in noteDatas)
+        {
+            touchNoteFactory.Spawn(data);
         }
+    }
 
-        [Inject]
-        public void Constructor(IChartDataGetter chartDataGetter, INoteSpawnDataOptionHolder optionHolder, IJudgementRecorder judgementRecorder,
-            ISliderInputGetter sliderInputGetter, ISpaceInputGetter spaceInputGetter)
+    /// <summary>
+    /// ダイナミックグラウンド(↑)ノーツの生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateDynamicGroundUpwardNote(List<NoteData_DynamicGroundUpward> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (NoteData_DynamicGroundUpward data in noteDatas)
         {
-            this.chartDataGetter = chartDataGetter;
-            this.spawnDataOptionHolder = optionHolder;
-            this.sliderInputGetter = sliderInputGetter;
-            this.spaceInputGetter = spaceInputGetter;
-            this.judgementRecorder = judgementRecorder;
-            
+            dynamicGroundUpwardNoteFactory.Spawn(data);
         }
+    }
 
-        /// <summary>
-        /// 初期化
-        /// </summary>
-        private void Initialize()
+    /// <summary>
+    /// ダイナミックグラウンド(→)ノーツの生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateDynamicGroundRightwardNote(List<NoteData_DynamicGroundRightward> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (NoteData_DynamicGroundRightward data in noteDatas)
         {
-            // 初期化データの生成
-            NoteFactoryInitializingData data = new NoteFactoryInitializingData
-            {
-                GroundObject = this.groundObject,
-                GroundDeformer = this.groundDeformer,
-                OptionHolder = this.spawnDataOptionHolder,
-                SliderInputGetter = this.sliderInputGetter,
-                SpaceInputGetter = this.spaceInputGetter,
-                Timer = this.timer.Value,
-                JudgementRecorder = this.judgementRecorder
-            };
-
-            touchNoteFactory.Initialize(data);
-            dynamicGroundUpwardNoteFactory.Initialize(data);
-            dynamicGroundRightwardNoteFactory.Initialize(data);
-            dynamicGroundLeftwardNoteFactory.Initialize(data);
-            dynamicGroundDownwardNoteFactory.Initialize(data);
-            holdStartNoteFactory.Initialize(data);
-            holdRelayNoteFactory.Initialize(data);
-            holdEndNoteFactory.Initialize(data);
-            holdMeshNoteFactory.Initialize(data);
-            spaceHoldMeshNoteFactory.Initialize(data);
-            spaceHoldRelayNoteFactory.Initialize(data);
+            dynamicGroundRightwardNoteFactory.Spawn(data);
         }
+    }
 
-        /// <summary>
-        /// ノーツ全体の生成
-        /// </summary>
-        /// <param name="chartData"></param>
-        public void Generate(Action callback = null)
+    /// <summary>
+    /// ダイナミックグラウンド(←)ノーツの生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateDynamicGroundLeftwardNote(List<NoteData_DynamicGroundLeftward> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (NoteData_DynamicGroundLeftward data in noteDatas)
         {
-            GenerateTouchNote(chartDataGetter.Chart.noteData_Touches);
-            GenerateDynamicGroundUpwardNote(chartDataGetter.Chart.noteData_DynamicGroundUpwards);
-            GenerateDynamicGroundRightwardNote(chartDataGetter.Chart.noteData_DynamicGroundRightwards);
-            GenerateDynamicGroundLeftwardNote(chartDataGetter.Chart.noteData_DynamicGroundLeftwards);
-            GenerateDynamicGroundDownwardNote(chartDataGetter.Chart.noteData_DynamicGroundDownwards);
-            GenerateHoldStartNote(chartDataGetter.Chart.noteData_HoldStarts);
-            GenerateHoldRelayNote(chartDataGetter.Chart.noteData_HoldRelays);
-            GenerateHoldEndNote(chartDataGetter.Chart.noteData_HoldEnds);
-            GenerateHoldMeshNote(chartDataGetter.Chart.noteData_HoldMeshes);
-            GenerateSpaceHoldMeshNote(chartDataGetter.Chart.noteData_SpaceHoldMeshes);
-            GenerateSpaceHoldRelayNote(chartDataGetter.Chart.noteData_SpaceHoldRelays);
-
-            callback?.Invoke();
+            dynamicGroundLeftwardNoteFactory.Spawn(data);
         }
+    }
 
-        /// <summary>
-        /// タッチノーツの生成
-        /// </summary>
-        /// <param name="noteData_Touches"></param>
-        private void GenerateTouchNote(List<NoteData_Touch> noteDatas)
+    /// <summary>
+    /// ダイナミックグラウンド(↓)ノーツの生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateDynamicGroundDownwardNote(List<NoteData_DynamicGroundDownward> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (NoteData_DynamicGroundDownward data in noteDatas)
         {
-            if (noteDatas == null) { return; }
-
-            foreach (NoteData_Touch data in noteDatas)
-            {
-                touchNoteFactory.Spawn(data);
-            }
+            dynamicGroundDownwardNoteFactory.Spawn(data);
         }
+    }
 
-        /// <summary>
-        /// ダイナミックグラウンド(↑)ノーツの生成
-        /// </summary>
-        /// <param name="noteData_Touches"></param>
-        private void GenerateDynamicGroundUpwardNote(List<NoteData_DynamicGroundUpward> noteDatas)
+    /// <summary>
+    /// ホールドノーツ始点の生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateHoldStartNote(List<NoteData_HoldStart> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (NoteData_HoldStart data in noteDatas)
         {
-            if(noteDatas == null) { return; }
-
-            foreach (NoteData_DynamicGroundUpward data in noteDatas)
-            {
-                dynamicGroundUpwardNoteFactory.Spawn(data);
-            }
+            holdStartNoteFactory.Spawn(data);
         }
+    }
 
-        /// <summary>
-        /// ダイナミックグラウンド(→)ノーツの生成
-        /// </summary>
-        /// <param name="noteData_Touches"></param>
-        private void GenerateDynamicGroundRightwardNote(List<NoteData_DynamicGroundRightward> noteDatas)
+    /// <summary>
+    /// ホールドノーツ中継点の生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateHoldRelayNote(List<NoteData_HoldRelay> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (NoteData_HoldRelay data in noteDatas)
         {
-            if (noteDatas == null) { return; }
-
-            foreach (NoteData_DynamicGroundRightward data in noteDatas)
-            {
-                dynamicGroundRightwardNoteFactory.Spawn(data);
-            }
+            holdRelayNoteFactory.Spawn(data);
         }
+    }
 
-        /// <summary>
-        /// ダイナミックグラウンド(←)ノーツの生成
-        /// </summary>
-        /// <param name="noteData_Touches"></param>
-        private void GenerateDynamicGroundLeftwardNote(List<NoteData_DynamicGroundLeftward> noteDatas)
+    /// <summary>
+    /// ホールドノーツ終点の生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateHoldEndNote(List<NoteData_HoldEnd> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (NoteData_HoldEnd data in noteDatas)
         {
-            if (noteDatas == null) { return; }
-
-            foreach (NoteData_DynamicGroundLeftward data in noteDatas)
-            {
-                dynamicGroundLeftwardNoteFactory.Spawn(data);
-            }
+            holdEndNoteFactory.Spawn(data);
         }
+    }
 
-        /// <summary>
-        /// ダイナミックグラウンド(↓)ノーツの生成
-        /// </summary>
-        /// <param name="noteData_Touches"></param>
-        private void GenerateDynamicGroundDownwardNote(List<NoteData_DynamicGroundDownward> noteDatas)
+    /// <summary>
+    /// ホールドメッシュの生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateHoldMeshNote(List<NoteData_HoldMesh> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (NoteData_HoldMesh data in noteDatas)
         {
-            if (noteDatas == null) { return; }
-
-            foreach (NoteData_DynamicGroundDownward data in noteDatas)
-            {
-                dynamicGroundDownwardNoteFactory.Spawn(data);
-            }
+            holdMeshNoteFactory.Spawn(data);
         }
+    }
 
-        /// <summary>
-        /// ホールドノーツ始点の生成
-        /// </summary>
-        /// <param name="noteData_Touches"></param>
-        private void GenerateHoldStartNote(List<NoteData_HoldStart> noteDatas)
+    /// <summary>
+    /// スペースホールドメッシュの生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateSpaceHoldMeshNote(List<NoteData_SpaceHoldMesh> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (NoteData_SpaceHoldMesh data in noteDatas)
         {
-            if (noteDatas == null) { return; }
-
-            foreach (NoteData_HoldStart data in noteDatas)
-            {
-                holdStartNoteFactory.Spawn(data);
-            }
+            spaceHoldMeshNoteFactory.Spawn(data);
         }
+    }
 
-        /// <summary>
-        /// ホールドノーツ中継点の生成
-        /// </summary>
-        /// <param name="noteData_Touches"></param>
-        private void GenerateHoldRelayNote(List<NoteData_HoldRelay> noteDatas)
+
+    /// <summary>
+    /// スペースホールド中点の生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateSpaceHoldRelayNote(List<NoteData_SpaceHoldRelay> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (NoteData_SpaceHoldRelay data in noteDatas)
         {
-            if (noteDatas == null) { return; }
-
-            foreach (NoteData_HoldRelay data in noteDatas)
-            {
-                holdRelayNoteFactory.Spawn(data);
-            }
-        }
-
-        /// <summary>
-        /// ホールドノーツ終点の生成
-        /// </summary>
-        /// <param name="noteData_Touches"></param>
-        private void GenerateHoldEndNote(List<NoteData_HoldEnd> noteDatas)
-        {
-            if (noteDatas == null) { return; }
-
-            foreach (NoteData_HoldEnd data in noteDatas)
-            {
-                holdEndNoteFactory.Spawn(data);
-            }
-        }
-
-        /// <summary>
-        /// ホールドメッシュの生成
-        /// </summary>
-        /// <param name="noteData_Touches"></param>
-        private void GenerateHoldMeshNote(List<NoteData_HoldMesh> noteDatas)
-        {
-            if (noteDatas == null) { return; }
-
-            foreach (NoteData_HoldMesh data in noteDatas)
-            {
-                holdMeshNoteFactory.Spawn(data);
-            }
-        }
-
-        /// <summary>
-        /// スペースホールドメッシュの生成
-        /// </summary>
-        /// <param name="noteData_Touches"></param>
-        private void GenerateSpaceHoldMeshNote(List<NoteData_SpaceHoldMesh> noteDatas)
-        {
-            if (noteDatas == null) { return; }
-
-            foreach (NoteData_SpaceHoldMesh data in noteDatas)
-            {
-                spaceHoldMeshNoteFactory.Spawn(data);
-            }
-        }
-
-
-        /// <summary>
-        /// スペースホールド中点の生成
-        /// </summary>
-        /// <param name="noteData_Touches"></param>
-        private void GenerateSpaceHoldRelayNote(List<NoteData_SpaceHoldRelay> noteDatas)
-        {
-            if (noteDatas == null) { return; }
-
-            foreach (NoteData_SpaceHoldRelay data in noteDatas)
-            {
-                spaceHoldRelayNoteFactory.Spawn(data);
-            }
+            spaceHoldRelayNoteFactory.Spawn(data);
         }
     }
 }

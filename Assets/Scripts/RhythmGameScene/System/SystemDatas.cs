@@ -3,94 +3,91 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace Refactoring
+/// <summary>
+/// インゲーム部の内部ステータスの列挙型
+/// </summary>
+public enum PhaseStatusInRhythmGame
 {
-    /// <summary>
-    /// インゲーム部の内部ステータスの列挙型
-    /// </summary>
-    public enum PhaseStatusInRhythmGame
-    {
-        LoadData,
-        LoadChart,
-        FadeIn,
-        LoadBody,
-        StartAnimation,
-        Play,
-        EndAnimation,
-        FadeOut,
-        TransitionResultScene,
-    }
+    LoadData,
+    LoadChart,
+    FadeIn,
+    LoadBody,
+    StartAnimation,
+    Play,
+    EndAnimation,
+    FadeOut,
+    TransitionResultScene,
+}
 
-    /// <summary>
-    /// リザルトシーンの内部ステータス
-    /// </summary>
-    public enum PhaseStatusInResultScene
-    {
-        LoadData,
-        FadeIn,
-        Result,
-        FadeOut,
-        TransitionSelectScene,
-    }
+/// <summary>
+/// リザルトシーンの内部ステータス
+/// </summary>
+public enum PhaseStatusInResultScene
+{
+    LoadData,
+    FadeIn,
+    Result,
+    FadeOut,
+    TransitionSelectScene,
+}
 
-    /// <summary>
-    /// セレクトシーンの内部ステータス
-    /// </summary>
-    public enum PhaseStatusInSelectScene
-    {
-        LoadData,
-        FadeIn,
-        MusicSelect,
-        DetailSelect,
-        FadeOut,
-        TransitionRhythmGameScene,
-    }
+/// <summary>
+/// セレクトシーンの内部ステータス
+/// </summary>
+public enum PhaseStatusInSelectScene
+{
+    LoadData,
+    FadeIn,
+    MusicSelect,
+    DetailSelect,
+    FadeOut,
+    TransitionRhythmGameScene,
+}
 
-    //難易度
-    public enum Difficulty
-    {
-        Initiate = 0,
-        Fanatic = 1,
-        Skyclad = 2,
-        Dream = 3
-    }
+//難易度
+public enum Difficulty
+{
+    Initiate = 0,
+    Fanatic = 1,
+    Skyclad = 2,
+    Dream = 3
+}
 
-    /// <summary>
-    /// SSS,AA等のランク評価
-    /// </summary>
-    public enum ScoreRank
-    {
-        None,
-        E,
-        D,
-        C,
-        B,
-        A,
-        A_plus,
-        S,
-        S_plus,
-        MAX
-    }
+/// <summary>
+/// SSS,AA等のランク評価
+/// </summary>
+public enum ScoreRank
+{
+    None,
+    E,
+    D,
+    C,
+    B,
+    A,
+    A_plus,
+    S,
+    S_plus,
+    MAX
+}
 
-    /// <summary>
-    /// AllPerfect,FullCombo等コンボ評価
-    /// </summary>
-    public enum ComboRank
-    {
-        None = 0,
-        TrackFailed = 1,
-        TrackComplete = 2,
-        FullCombo = 3,
-        GreatCombo = 4,
-        AllPerfect = 5
-    }
+/// <summary>
+/// AllPerfect,FullCombo等コンボ評価
+/// </summary>
+public enum ComboRank
+{
+    None = 0,
+    TrackFailed = 1,
+    TrackComplete = 2,
+    FullCombo = 3,
+    GreatCombo = 4,
+    AllPerfect = 5
+}
 
-    [System.Serializable]
-    public class MusicRecord
-    {
-        public int Score { get; set; } = 0;
-        public ScoreRank ScoreRank { get; set; } = ScoreRank.None;
-        public ComboRank ComboRank { get; set; } = ComboRank.None;
-        public int[] JudgementCount { get; set; } = new int[Enum.GetNames(typeof(Refactoring.Judgement)).Length];
-    }
+[System.Serializable]
+public class MusicRecord
+{
+    public int Score { get; set; } = 0;
+    public ScoreRank ScoreRank { get; set; } = ScoreRank.None;
+    public ComboRank ComboRank { get; set; } = ComboRank.None;
+    public int[] JudgementCount { get; set; } = new int[Enum.GetNames(typeof(Judgement)).Length];
 }

@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 
-namespace Refactoring.TransitionerInResultScene
+namespace TransitionerInResultScene
 {
     public class Transitioner_FadeOut : IPhaseTransitionerInResultScene
     {

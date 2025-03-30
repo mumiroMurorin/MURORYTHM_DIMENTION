@@ -5713,27 +5713,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitioners:
-  - rid: 4334588427697127425
-  - rid: 4334588427697127426
-  - rid: 4334588427697127427
-  - rid: 4334588427697127428
-  - rid: 4334588427697127429
-  - rid: 4334588427697127430
-  - rid: 4334588427697127432
-  - rid: 4334588427697127433
-  - rid: 4334588427697127434
+  - rid: 4334588895060557824
+  - rid: 4334588895060557825
+  - rid: 4334588895060557826
+  - rid: 4334588895060557827
+  - rid: 4334588895060557828
+  - rid: 4334588895060557829
+  - rid: 4334588895060557831
+  - rid: 4334588895060557832
+  - rid: 4334588895060557833
   references:
     version: 2
     RefIds:
-    - rid: 4334588427697127425
-      type: {class: Transitioner_LoadData, ns: Refactoring.TransitionerInRhythmGameScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557824
+      type: {class: Transitioner_LoadData, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
       data:
         chartLoader:
           obj: {fileID: 484755816}
         phaseTransitionable:
           obj: {fileID: 1853263903}
-    - rid: 4334588427697127426
-      type: {class: Transitioner_LoadChart, ns: Refactoring.TransitionerInRhythmGameScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557825
+      type: {class: Transitioner_LoadChart, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
       data:
         chartGenerator:
           obj: {fileID: 2103325069}
@@ -5741,15 +5741,15 @@ MonoBehaviour:
           obj: {fileID: 801399394}
         phaseTransitionable:
           obj: {fileID: 1853263903}
-    - rid: 4334588427697127427
-      type: {class: Transitioner_FadeIn, ns: Refactoring.TransitionerInRhythmGameScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557826
+      type: {class: Transitioner_FadeIn, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 1853263903}
         timelinePlayer:
           obj: {fileID: 194697723}
-    - rid: 4334588427697127428
-      type: {class: Transitioner_LoadBody, ns: Refactoring.TransitionerInRhythmGameScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557827
+      type: {class: Transitioner_LoadBody, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 1853263903}
@@ -5759,15 +5759,15 @@ MonoBehaviour:
           obj: {fileID: 549738574}
         closeLodingBodyUI:
           obj: {fileID: 844015253}
-    - rid: 4334588427697127429
-      type: {class: Transitioner_StartAnimation, ns: Refactoring.TransitionerInRhythmGameScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557828
+      type: {class: Transitioner_StartAnimation, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 1853263903}
         timelinePlayer:
           obj: {fileID: 546990428}
-    - rid: 4334588427697127430
-      type: {class: Transitioner_Play, ns: Refactoring.TransitionerInRhythmGameScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557829
+      type: {class: Transitioner_Play, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 1853263903}
@@ -5775,26 +5775,26 @@ MonoBehaviour:
           obj: {fileID: 1010482523}
         timer:
           obj: {fileID: 1605477129}
-    - rid: 4334588427697127432
-      type: {class: Transitioner_EndAnimation, ns: Refactoring.TransitionerInRhythmGameScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557831
+      type: {class: Transitioner_EndAnimation, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 1853263903}
         controller:
           obj: {fileID: 1617607291}
-    - rid: 4334588427697127433
-      type: {class: Transitioner_FadeOut, ns: Refactoring.TransitionerInRhythmGameScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557832
+      type: {class: Transitioner_FadeOut, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 1853263903}
         timelinePlayer:
           obj: {fileID: 1949332415}
-    - rid: 4334588427697127434
-      type: {class: Transitioner_TransitionResultScene, ns: Refactoring.TransitionerInRhythmGameScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557833
+      type: {class: Transitioner_TransitionResultScene, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 1853263903}
-        waitTime: 0.25
+        waitTime: 0.5
 --- !u!1001 &1875145849
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7098,8 +7098,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 1146634090}
   - {fileID: 409419987}
+  - {fileID: 234263435}
   - {fileID: 864898814}
   - {fileID: 1514032049}
   - {fileID: 2103325071}
-  - {fileID: 234263435}
   - {fileID: 1979446466}

@@ -3,28 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
-namespace Refactoring 
+public class MusicDataListLoader : MonoBehaviour, IMusicDataListLoader
 {
-    public class MusicDataListLoader : MonoBehaviour, IMusicDataListLoader
+    [SerializeField] MusicDataList musicDataList;
+
+    ISelectSceneDataSetter selectSceneDataSetter;
+
+    [Inject]
+    public void Construct(ISelectSceneDataSetter selectSceneDataSetter)
     {
-        [SerializeField] MusicDataList musicDataList;
-
-        ISelectSceneDataSetter selectSceneDataSetter;
-
-        [Inject]
-        public void Construct(ISelectSceneDataSetter selectSceneDataSetter)
-        {
-            this.selectSceneDataSetter = selectSceneDataSetter;
-        }
-
-        void IMusicDataListLoader.LoadMusicDataList()
-        {
-            selectSceneDataSetter.SetMusicList(musicDataList.MusicDatas);
-        }
+        this.selectSceneDataSetter = selectSceneDataSetter;
     }
 
-    public interface IMusicDataListLoader
+    void IMusicDataListLoader.LoadMusicDataList()
     {
-        void LoadMusicDataList();
+        selectSceneDataSetter.SetMusicList(musicDataList.MusicDatas);
     }
+}
+
+public interface IMusicDataListLoader
+{
+    void LoadMusicDataList();
 }

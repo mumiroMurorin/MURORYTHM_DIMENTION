@@ -4,7 +4,7 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 
-namespace Refactoring.UIInSelectScene
+namespace UIInSelectScene
 {
     public class MusicTopicControllerView : MonoBehaviour
     {

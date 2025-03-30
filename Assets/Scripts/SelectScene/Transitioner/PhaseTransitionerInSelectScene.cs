@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
-namespace Refactoring.TransitionerInSelectScene
+namespace TransitionerInSelectScene
 {
     public class PhaseTransitionerInSelectScene : MonoBehaviour, IPhaseTransitionableInSelectScene, IPhaseStatusGetterInSelectScene
     {

@@ -5,142 +5,139 @@ using System.Linq;
 using MeshGenerate;
 using Deform;
 
-namespace Refactoring
+public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
 {
-    public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
+    readonly Vector3 CENTER_PIVOT = Vector3.zero;
+    readonly float RADIUS = 10f;
+
+    [SerializeField] GameObject noteObjectOriginPrefab;
+    [Header("【強調線】太さ")]
+    [SerializeField] float enphasisLineWidth = 0.1f;
+    [Header("メインメッシュのマテリアル")]
+    [SerializeField] Material mainMaterial;
+    [Header("強調線のマテリアル")]
+    [SerializeField] Material edgeMaterial;
+
+    INoteSpawnDataOptionHolder optionHolder;
+    ISliderInputGetter sliderInputGetter;
+    IJudgementRecorder judgementRecorder;
+    ITimeGetter timer;
+    GameObject groundObject;
+    Deformer groundDeformer;
+
+    public override void Initialize(NoteFactoryInitializingData initializingData)
     {
-        readonly Vector3 CENTER_PIVOT = Vector3.zero;
-        readonly float RADIUS = 10f; 
+        this.optionHolder = initializingData.OptionHolder;
+        this.groundObject = initializingData.GroundObject;
+        this.groundDeformer = initializingData.GroundDeformer;
+        this.sliderInputGetter = initializingData.SliderInputGetter;
+        this.judgementRecorder = initializingData.JudgementRecorder;
+        this.timer = initializingData.Timer;
+    }
 
-        [SerializeField] GameObject noteObjectOriginPrefab;
-        [Header("【強調線】太さ")]
-        [SerializeField] float enphasisLineWidth = 0.1f;
-        [Header("メインメッシュのマテリアル")]
-        [SerializeField] Material mainMaterial;
-        [Header("強調線のマテリアル")]
-        [SerializeField] Material edgeMaterial;
+    public override NoteObject<NoteData_SpaceHoldRelay> Spawn(NoteData_SpaceHoldRelay data)
+    {
+        // 生成
+        NoteObject<NoteData_SpaceHoldRelay> note = GenerateNoteInstance(ConvertNoteData(data));
 
-        INoteSpawnDataOptionHolder optionHolder;
-        ISliderInputGetter sliderInputGetter;
-        IJudgementRecorder judgementRecorder;
-        ITimeGetter timer;
-        GameObject groundObject;
-        Deformer groundDeformer;
+        // 位置調整
+        SetTransform(note, data);
 
-        public override void Initialize(NoteFactoryInitializingData initializingData)
-        {
-            this.optionHolder = initializingData.OptionHolder;
-            this.groundObject = initializingData.GroundObject;
-            this.groundDeformer = initializingData.GroundDeformer;
-            this.sliderInputGetter = initializingData.SliderInputGetter;
-            this.judgementRecorder = initializingData.JudgementRecorder;
-            this.timer = initializingData.Timer;
-        }
+        // 初期化
+        note.Initialize(data);
 
-        public override NoteObject<NoteData_SpaceHoldRelay> Spawn(NoteData_SpaceHoldRelay data)
-        {
-            // 生成
-            NoteObject<NoteData_SpaceHoldRelay> note = GenerateNoteInstance(ConvertNoteData(data));
+        return note;
+    }
 
-            // 位置調整
-            SetTransform(note, data);
+    /// <summary>
+    /// ノートデータにさらなる情報を追加
+    /// </summary>
+    /// <param name="data"></param>
+    private NoteData_SpaceHoldRelay ConvertNoteData(NoteData_SpaceHoldRelay data)
+    {
+        // ノーツデータにいろいろ追加
+        data.SliderInput = this.sliderInputGetter;
+        data.Timer = this.timer;
 
-            // 初期化
-            note.Initialize(data);
+        return data;
+    }
 
-            return note;
-        }
+    /// <summary>
+    /// ノーツをインスタンス化して返す
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    private NoteObject<NoteData_SpaceHoldRelay> GenerateNoteInstance(NoteData_SpaceHoldRelay data)
+    {
+        GameObject origin = Instantiate(noteObjectOriginPrefab);
 
-        /// <summary>
-        /// ノートデータにさらなる情報を追加
-        /// </summary>
-        /// <param name="data"></param>
-        private NoteData_SpaceHoldRelay ConvertNoteData(NoteData_SpaceHoldRelay data)
-        {
-            // ノーツデータにいろいろ追加
-            data.SliderInput = this.sliderInputGetter;
-            data.Timer = this.timer;
+        // ノーツオブジェクト(表)を生成
+        GameObject noteObj = GenerateMeshObject(data);
+        noteObj.transform.SetParent(origin.transform);
 
-            return data;
-        }
+        // 強調線の生成
+        GameObject emphasisLineObj = GeneratEmphasisLineObject(data);
+        emphasisLineObj.transform.SetParent(origin.transform);
 
-        /// <summary>
-        /// ノーツをインスタンス化して返す
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        private NoteObject<NoteData_SpaceHoldRelay> GenerateNoteInstance(NoteData_SpaceHoldRelay data)
-        {
-            GameObject origin = Instantiate(noteObjectOriginPrefab);
+        // コンポーネントを取得
+        NoteObject<NoteData_SpaceHoldRelay> note = origin.GetComponent<NoteObject<NoteData_SpaceHoldRelay>>();
 
-            // ノーツオブジェクト(表)を生成
-            GameObject noteObj = GenerateMeshObject(data);
-            noteObj.transform.SetParent(origin.transform);
+        return note;
+    }
 
-            // 強調線の生成
-            GameObject emphasisLineObj = GeneratEmphasisLineObject(data);
-            emphasisLineObj.transform.SetParent(origin.transform);
+    /// <summary>
+    /// ホールドのメッシュ部分の生成
+    /// </summary>
+    private GameObject GenerateMeshObject(NoteData_SpaceHoldRelay noteData)
+    {
+        GameObject obj = new GameObject("Mesh");
+        MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
+        MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
+        var points = noteData.Vertices.Select(v => MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToList();
+        Mesh mesh = MeshGenerator.GenerateMesh(points);
+        meshFilter.mesh = mesh;
 
-            // コンポーネントを取得
-            NoteObject<NoteData_SpaceHoldRelay> note = origin.GetComponent<NoteObject<NoteData_SpaceHoldRelay>>();
+        if (mesh == null) { return obj; }
 
-            return note;
-        }
+        meshRenderer.material = mainMaterial;
 
-        /// <summary>
-        /// ホールドのメッシュ部分の生成
-        /// </summary>
-        private GameObject GenerateMeshObject(NoteData_SpaceHoldRelay noteData)
-        {
-            GameObject obj = new GameObject("Mesh");
-            MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
-            MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
-            var points = noteData.Vertices.Select(v => MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToList();
-            Mesh mesh = MeshGenerator.GenerateMesh(points);
-            meshFilter.mesh = mesh;
+        obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
+        return obj;
+    }
 
-            if(mesh == null) { return obj; }
+    /// <summary>
+    /// ホールドの強調線の生成
+    /// </summary>
+    private GameObject GeneratEmphasisLineObject(NoteData_SpaceHoldRelay noteData)
+    {
+        GameObject obj = new GameObject("EmphasisLine");
+        MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
+        MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
+        var points = noteData.Vertices.Select(v => MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToList();
+        Mesh mesh = MeshGenerator.GenerateLineMesh(points, enphasisLineWidth, isLoop: true);
+        meshFilter.mesh = mesh;
 
-            meshRenderer.material = mainMaterial;
+        if (mesh == null) { return obj; }
 
-            obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
-            return obj;
-        }
+        meshRenderer.material = edgeMaterial;
 
-        /// <summary>
-        /// ホールドの強調線の生成
-        /// </summary>
-        private GameObject GeneratEmphasisLineObject(NoteData_SpaceHoldRelay noteData)
-        {
-            GameObject obj = new GameObject("EmphasisLine");
-            MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
-            MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
-            var points = noteData.Vertices.Select(v => MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToList();
-            Mesh mesh = MeshGenerator.GenerateLineMesh(points, enphasisLineWidth, isLoop: true);
-            meshFilter.mesh = mesh;
+        obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
+        return obj;
+    }
 
-            if (mesh == null) { return obj; }
-            
-            meshRenderer.material = edgeMaterial;
+    /// <summary>
+    /// 位置調整など
+    /// </summary>
+    private void SetTransform(NoteObject<NoteData_SpaceHoldRelay> note, NoteData_SpaceHoldRelay data)
+    {
+        // 位置の調整
+        note.transform.position = new Vector3(
+            note.transform.position.x,
+            note.transform.position.y,
+            optionHolder.NoteSpeed * data.Timing
+            );
 
-            obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
-            return obj;
-        }
-
-        /// <summary>
-        /// 位置調整など
-        /// </summary>
-        private void SetTransform(NoteObject<NoteData_SpaceHoldRelay> note, NoteData_SpaceHoldRelay data)
-        {
-            // 位置の調整
-            note.transform.position = new Vector3(
-                note.transform.position.x,
-                note.transform.position.y,
-                optionHolder.NoteSpeed * data.Timing
-                );
-
-            // 動く地面を親登録
-            note.transform.SetParent(groundObject.transform);
-        }
+        // 動く地面を親登録
+        note.transform.SetParent(groundObject.transform);
     }
 }

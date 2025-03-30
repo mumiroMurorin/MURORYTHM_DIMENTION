@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
-namespace Refactoring.TransitionerInRhythmGameScene
+namespace TransitionerInRhythmGameScene
 {
     public class Transitioner_LoadChart : IPhaseTransitionerInRhythmGameScene
     {

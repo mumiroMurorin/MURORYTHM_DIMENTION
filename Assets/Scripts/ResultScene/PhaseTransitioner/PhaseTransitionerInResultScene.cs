@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
-namespace Refactoring.TransitionerInResultScene
+namespace TransitionerInResultScene
 {
     public class PhaseTransitionerInResultScene : MonoBehaviour, IPhaseTransitionableInResultScene, IPhaseStatusGetterInResultScene
     {

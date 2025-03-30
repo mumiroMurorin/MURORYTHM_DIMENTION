@@ -2684,54 +2684,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitioners:
-  - rid: 4334588427697127439
-  - rid: 4334588427697127438
-  - rid: 4334588427697127440
-  - rid: 4334588427697127443
-  - rid: 4334588427697127441
-  - rid: 4334588427697127442
+  - rid: 4334588895060557839
+  - rid: 4334588895060557840
+  - rid: 4334588895060557841
+  - rid: 4334588895060557842
+  - rid: 4334588895060557843
+  - rid: 4334588895060557844
   references:
     version: 2
     RefIds:
-    - rid: 4334588427697127438
-      type: {class: Transitioner_FadeIn, ns: Refactoring.TransitionerInSelectScene, asm: Assembly-CSharp}
-      data:
-        phaseTransitionable:
-          obj: {fileID: 1012713960}
-        timelinePlayer:
-          obj: {fileID: 2095174724}
-    - rid: 4334588427697127439
-      type: {class: Transitioner_LoadData, ns: Refactoring.TransitionerInSelectScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557839
+      type: {class: Transitioner_LoadData, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 1012713960}
         musicDataListLoader:
           obj: {fileID: 277925326}
-    - rid: 4334588427697127440
-      type: {class: Transitioner_MusicSelect, ns: Refactoring.TransitionerInSelectScene, asm: Assembly-CSharp}
-      data:
-        phaseTransitionable:
-          obj: {fileID: 1012713960}
-    - rid: 4334588427697127441
-      type: {class: Transitioner_FadeOut, ns: Refactoring.TransitionerInSelectScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557840
+      type: {class: Transitioner_FadeIn, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 1012713960}
         timelinePlayer:
-          obj: {fileID: 1190065811}
-    - rid: 4334588427697127442
-      type: {class: Transitioner_TransitionSelectScene, ns: Refactoring.TransitionerInSelectScene, asm: Assembly-CSharp}
+          obj: {fileID: 2095174724}
+    - rid: 4334588895060557841
+      type: {class: Transitioner_MusicSelect, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 1012713960}
-        waitTime: 0.25
-    - rid: 4334588427697127443
-      type: {class: Transitioner_DetailSelect, ns: Refactoring.TransitionerInSelectScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557842
+      type: {class: Transitioner_DetailSelect, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 1012713960}
         inputHandler:
           obj: {fileID: 69001549}
+    - rid: 4334588895060557843
+      type: {class: Transitioner_FadeOut, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
+      data:
+        phaseTransitionable:
+          obj: {fileID: 1012713960}
+        timelinePlayer:
+          obj: {fileID: 1190065811}
+    - rid: 4334588895060557844
+      type: {class: Transitioner_TransitionSelectScene, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
+      data:
+        phaseTransitionable:
+          obj: {fileID: 1012713960}
+        waitTime: 0.5
 --- !u!1 &1021714052
 GameObject:
   m_ObjectHideFlags: 0

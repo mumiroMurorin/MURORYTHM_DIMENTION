@@ -3,54 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 using Deform;
 
-namespace Refactoring
+/// <summary>
+/// 各種ノーツデータの基となるインターフェース
+/// </summary>
+public interface INoteData
 {
-    /// <summary>
-    /// 各種ノーツデータの基となるインターフェース
-    /// </summary>
-    public interface INoteData
-    {
-        public NoteType NoteType { get; }
-
-        /// <summary>
-        /// 楽曲開始からn秒後にノーツの判定
-        /// </summary>
-        public float Timing { get; set; }
-
-        public ITimeGetter Timer { get; set; }
-
-    }
+    public NoteType NoteType { get; }
 
     /// <summary>
-    /// 各種ノーツの生成を行う
+    /// 楽曲開始からn秒後にノーツの判定
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface INoteFactory<T> where T : INoteData
-    {
-        void Initialize(NoteFactoryInitializingData initializingData);
+    public float Timing { get; set; }
 
-        NoteObject<T> Spawn(T data);
-    }
+    public ITimeGetter Timer { get; set; }
 
-    /// <summary>
-    /// インスペクターで設定できるように基底クラスでラップ
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public abstract class NoteFactory<T> : MonoBehaviour, INoteFactory<T> where T : INoteData
-    {
-        public abstract void Initialize(NoteFactoryInitializingData initializingData);
+}
 
-        public abstract NoteObject<T> Spawn(T data);
-    }
+/// <summary>
+/// 各種ノーツの生成を行う
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public interface INoteFactory<T> where T : INoteData
+{
+    void Initialize(NoteFactoryInitializingData initializingData);
 
-    /// <summary>
-    /// ノーツインタラクトエフェクトの初期化など
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IInteractNoteEffectController<T> where T : INoteData
-    {
-        void SetEffect(T noteData);
+    NoteObject<T> Spawn(T data);
+}
 
-        void Play();
-    }
+/// <summary>
+/// インスペクターで設定できるように基底クラスでラップ
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public abstract class NoteFactory<T> : MonoBehaviour, INoteFactory<T> where T : INoteData
+{
+    public abstract void Initialize(NoteFactoryInitializingData initializingData);
+
+    public abstract NoteObject<T> Spawn(T data);
+}
+
+/// <summary>
+/// ノーツインタラクトエフェクトの初期化など
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public interface IInteractNoteEffectController<T> where T : INoteData
+{
+    void SetEffect(T noteData);
+
+    void Play();
 }

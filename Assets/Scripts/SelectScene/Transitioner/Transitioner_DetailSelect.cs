@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
-namespace Refactoring.TransitionerInSelectScene
+namespace TransitionerInSelectScene
 {
     public class Transitioner_DetailSelect : IPhaseTransitionerInSelectScene
     {

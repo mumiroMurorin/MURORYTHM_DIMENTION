@@ -1451,46 +1451,46 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitioners:
-  - rid: 4334588396630179840
-  - rid: 4334588396630179841
-  - rid: 4334588427697127435
-  - rid: 4334588427697127436
-  - rid: 4334588427697127437
+  - rid: 4334588895060557834
+  - rid: 4334588895060557835
+  - rid: 4334588895060557836
+  - rid: 4334588895060557837
+  - rid: 4334588895060557838
   references:
     version: 2
     RefIds:
-    - rid: 4334588396630179840
-      type: {class: Transitioner_LoadData, ns: Refactoring.TransitionerInResultScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557834
+      type: {class: Transitioner_LoadData, ns: TransitionerInResultScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 709638090}
-    - rid: 4334588396630179841
-      type: {class: Transitioner_FadeIn, ns: Refactoring.TransitionerInResultScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557835
+      type: {class: Transitioner_FadeIn, ns: TransitionerInResultScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 709638090}
         timelinePlayer:
           obj: {fileID: 1281762433}
-    - rid: 4334588427697127435
-      type: {class: Transitioner_Result, ns: Refactoring.TransitionerInResultScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557836
+      type: {class: Transitioner_Result, ns: TransitionerInResultScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 709638090}
         inputHandler:
           obj: {fileID: 394946493}
-    - rid: 4334588427697127436
-      type: {class: Transitioner_FadeOut, ns: Refactoring.TransitionerInResultScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557837
+      type: {class: Transitioner_FadeOut, ns: TransitionerInResultScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 709638090}
         timelinePlayer:
           obj: {fileID: 1281762434}
-    - rid: 4334588427697127437
-      type: {class: Transitioner_TransitionSelectScene, ns: Refactoring.TransitionerInResultScene, asm: Assembly-CSharp}
+    - rid: 4334588895060557838
+      type: {class: Transitioner_TransitionSelectScene, ns: TransitionerInResultScene, asm: Assembly-CSharp}
       data:
         phaseTransitionable:
           obj: {fileID: 709638090}
-        waitTime: 0.25
+        waitTime: 0.5
 --- !u!1 &723385916
 GameObject:
   m_ObjectHideFlags: 0

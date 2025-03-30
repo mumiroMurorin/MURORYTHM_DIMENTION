@@ -6,7 +6,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using UnityEngine.SceneManagement;
 
-namespace Refactoring.TransitionerInSelectScene
+namespace TransitionerInSelectScene
 {
     public class Transitioner_TransitionSelectScene : IPhaseTransitionerInSelectScene
     {

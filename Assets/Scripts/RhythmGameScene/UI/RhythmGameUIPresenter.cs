@@ -4,7 +4,7 @@ using UnityEngine;
 using VContainer;
 using UniRx;
 
-namespace Refactoring.UIInRhythmGameScene
+namespace UIInRhythmGameScene
 {
     public class RhythmGameUIPresenter : MonoBehaviour
     {

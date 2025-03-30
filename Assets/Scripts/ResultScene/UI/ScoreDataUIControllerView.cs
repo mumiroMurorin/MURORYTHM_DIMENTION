@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-namespace Refactoring.UIInResultScene
+namespace UIInResultScene
 {
     public class ScoreDataUIControllerView : MonoBehaviour
     {

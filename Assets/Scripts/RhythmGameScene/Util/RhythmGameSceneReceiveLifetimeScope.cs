@@ -1,6 +1,5 @@
 using VContainer;
 using VContainer.Unity;
-using Refactoring;
 
 public sealed class RhythmGameSceneReceiveLifetimeScope : LifetimeScope
 {

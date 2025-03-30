@@ -4,9 +4,9 @@ using UnityEngine;
 using UniRx;
 using System.Linq;
 using VContainer;
-using Refactoring.TransitionerInSelectScene;
+using TransitionerInSelectScene;
 
-namespace Refactoring.UIInSelectScene
+namespace UIInSelectScene
 {
     public class SelectUIPresenter : MonoBehaviour
     {
@@ -18,7 +18,7 @@ namespace Refactoring.UIInSelectScene
 
         ISelectSceneDataGetter selectSceneDataGetter_model;
 
-        [Inject] 
+        [Inject]
         public void Construct(ISelectSceneDataGetter selectSceneDataGetter)
         {
             selectSceneDataGetter_model = selectSceneDataGetter;
@@ -64,7 +64,8 @@ namespace Refactoring.UIInSelectScene
             // ‘€ì‚Ì’Ç‰Á
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveAdd()
-                .Subscribe(value => {
+                .Subscribe(value =>
+                {
                     SetInteractionSliderEvent(value.Value);
                     sliderUnitsController_view?.OnChangeSliderData(value.Value);
                     topicTextsController_view?.OnChangeSliderData(value.Value);
@@ -74,7 +75,8 @@ namespace Refactoring.UIInSelectScene
             // ‘€ì‚ÌˆêV
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveReset()
-                .Subscribe(_ => {
+                .Subscribe(_ =>
+                {
                     sliderUnitsController_view?.OnClearSliderData();
                     topicTextsController_view?.OnClearSliderData();
                 })

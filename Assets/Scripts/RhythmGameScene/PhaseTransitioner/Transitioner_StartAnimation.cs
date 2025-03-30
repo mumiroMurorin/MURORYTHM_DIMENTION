@@ -6,7 +6,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 
-namespace Refactoring.TransitionerInRhythmGameScene
+namespace TransitionerInRhythmGameScene
 {
     public class Transitioner_StartAnimation : IPhaseTransitionerInRhythmGameScene
     {

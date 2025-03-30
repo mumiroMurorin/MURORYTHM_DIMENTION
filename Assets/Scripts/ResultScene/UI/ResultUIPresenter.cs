@@ -4,7 +4,7 @@ using UnityEngine;
 using VContainer;
 using UniRx;
 
-namespace Refactoring.UIInResultScene
+namespace UIInResultScene
 {
     public class ResultUIPresenter : MonoBehaviour
     {

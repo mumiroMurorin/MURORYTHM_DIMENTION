@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
-namespace Refactoring.TransitionerInResultScene
+namespace TransitionerInResultScene
 {
     public class Transitioner_LoadData : IPhaseTransitionerInResultScene
     {

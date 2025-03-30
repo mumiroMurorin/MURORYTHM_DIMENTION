@@ -6,43 +6,40 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 
-namespace Refactoring
+public class BodyLoader : MonoBehaviour, IBodyLoader
 {
-    public class BodyLoader : MonoBehaviour, IBodyLoader
+    [SerializeField] bool isUseSpaceInput;
+
+    ISpaceInputGetter spaceInputGetter;
+    CancellationTokenSource cts;
+
+    [Inject]
+    public void Constructor(ISpaceInputGetter spaceInputGetter)
     {
-        [SerializeField] bool isUseSpaceInput;
+        this.spaceInputGetter = spaceInputGetter;
+    }
 
-        ISpaceInputGetter spaceInputGetter;
-        CancellationTokenSource cts;
-
-        [Inject]
-        public void Constructor(ISpaceInputGetter spaceInputGetter)
+    void IBodyLoader.WaitForLoadBody(Action callback)
+    {
+        if (!isUseSpaceInput)
         {
-            this.spaceInputGetter = spaceInputGetter;
-        }
-
-        void IBodyLoader.WaitForLoadBody(Action callback)
-        {
-            if (!isUseSpaceInput)
-            {
-                callback.Invoke();
-                return;
-            }
-
-            cts = new CancellationTokenSource();
-            LoadBodyAsync(callback, cts.Token).Forget();
-        }
-
-        async UniTaskVoid LoadBodyAsync(Action callback, CancellationToken token)
-        {
-            await UniTask.WaitUntil(() => spaceInputGetter.CanGetSpaceInputReactiveProperty.Value, cancellationToken: token);
             callback.Invoke();
+            return;
         }
 
-        private void OnDestroy()
-        {
-            cts?.Cancel();
-            cts?.Dispose();
-        }
+        cts = new CancellationTokenSource();
+        LoadBodyAsync(callback, cts.Token).Forget();
+    }
+
+    async UniTaskVoid LoadBodyAsync(Action callback, CancellationToken token)
+    {
+        await UniTask.WaitUntil(() => spaceInputGetter.CanGetSpaceInputReactiveProperty.Value, cancellationToken: token);
+        callback.Invoke();
+    }
+
+    private void OnDestroy()
+    {
+        cts?.Cancel();
+        cts?.Dispose();
     }
 }

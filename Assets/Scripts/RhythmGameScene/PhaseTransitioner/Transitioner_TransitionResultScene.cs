@@ -6,7 +6,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using UnityEngine.SceneManagement;
 
-namespace Refactoring.TransitionerInRhythmGameScene
+namespace TransitionerInRhythmGameScene
 {
     public class Transitioner_TransitionResultScene : IPhaseTransitionerInRhythmGameScene
     {
