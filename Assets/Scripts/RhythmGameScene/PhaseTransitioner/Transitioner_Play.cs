@@ -31,6 +31,8 @@ namespace Refactoring.TransitionerInRhythmGameScene
         {
             // グラウンドを走らせる
             groundController?.Value.StartGroundMove();
+            // 楽曲を流す
+
             // 時を進める
             timer?.Value.StartTimer();
         }

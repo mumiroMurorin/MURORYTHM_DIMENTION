@@ -3,29 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-namespace Refactoring
+public class Combo_View : MonoBehaviour
 {
-    public class Combo_View : MonoBehaviour
+    [Header("何コンボから表示するか")]
+    [SerializeField] int comboThreshold = 5;
+    [SerializeField] TextMeshPro textMeshPro;
+    [SerializeField] Animator animator;
+
+    public void OnChangeCombo(int comboNum)
     {
-        [Header("何コンボから表示するか")]
-        [SerializeField] int comboThreshold = 5;
-        [SerializeField] TextMeshPro textMeshPro;
-        [SerializeField] Animator animator;
+        textMeshPro.text = comboNum.ToString();
 
-        public void OnChangeCombo(int comboNum)
+        if (comboThreshold > comboNum)
         {
-            textMeshPro.text = comboNum.ToString();
-
-            if(comboThreshold > comboNum)
-            {
-                textMeshPro.gameObject.SetActive(false);
-            }
-            else
-            {
-                textMeshPro.gameObject.SetActive(true);
-                animator.SetTrigger("combo");
-            }
+            textMeshPro.gameObject.SetActive(false);
+        }
+        else
+        {
+            textMeshPro.gameObject.SetActive(true);
+            animator.SetTrigger("combo");
         }
     }
-
 }
