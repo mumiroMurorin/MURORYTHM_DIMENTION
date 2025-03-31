@@ -97,7 +97,7 @@ public class Operation_DetailSelect : MonoBehaviour
     {
         // “ïˆÕ“x‚ÆŠy‹È‚ÌŠm’è
         musicDataSetter.SetDifficulty(selectSceneDataGetter.Difficulty.Value);
-        musicDataSetter.SetMusicData(selectSceneDataGetter.GetMusicData(selectSceneDataGetter.CurrentSelectIndex.Value));
+        musicDataSetter.SetMusicData(selectSceneDataGetter.CurrentMusicData.Value);
 
         phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.FadeOut);
     }

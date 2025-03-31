@@ -9,6 +9,7 @@ namespace TransitionerInRhythmGameScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
         [SerializeField] SerializeInterface<IGroundController> groundController;
+        [SerializeField] SerializeInterface<IMusicPlayerInRhythmGameScene> musicPlayer;
         [SerializeField] SerializeInterface<ITimeController> timer;
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.Play;
@@ -32,7 +33,7 @@ namespace TransitionerInRhythmGameScene
             // グラウンドを走らせる
             groundController?.Value.StartGroundMove();
             // 楽曲を流す
-
+            musicPlayer?.Value.PlayMusic();
             // 時を進める
             timer?.Value.StartTimer();
         }

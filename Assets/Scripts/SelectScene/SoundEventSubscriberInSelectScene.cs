@@ -29,7 +29,16 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
         // トピックの移動
         selectSceneDataGetter?.CurrentSelectIndex
             .Skip(1)
-            .Subscribe(_ => soundManager.PlaySE(SE_Type.MoveTopic))
+            .Subscribe(_ => {
+                soundManager.PlaySE(SE_Type.MoveTopic);
+            })
+            .AddTo(this.gameObject);
+
+        // 選択楽曲の変更
+        selectSceneDataGetter?.CurrentMusicData
+            .Subscribe(value => {
+                soundManager.PlayBGM(value.SampleClip);
+            })
             .AddTo(this.gameObject);
 
         // 難易度UP

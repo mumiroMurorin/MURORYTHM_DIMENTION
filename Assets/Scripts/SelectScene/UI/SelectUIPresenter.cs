@@ -13,6 +13,7 @@ namespace UIInSelectScene
         [SerializeField] MusicTopicControllerView musicTopicController_view;
         [SerializeField] SliderUnitsControllerView sliderUnitsController_view;
         [SerializeField] SliderTopicTextsControllerView topicTextsController_view;
+        [SerializeField] BackGroundControllerView backGroundController_view;
         [SerializeField] SerializeInterface<IOperationGetter> operationGetter_model;
         [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter_model;
 
@@ -34,13 +35,28 @@ namespace UIInSelectScene
         {
             // 楽曲リストの更新
             selectSceneDataGetter_model?.MusicDatasSorted.ObserveCountChanged()
-                .Subscribe(_ => musicTopicController_view.SetMusicDatas(selectSceneDataGetter_model.CurrentSelectIndex.Value, selectSceneDataGetter_model))
+                .Subscribe(_ => {
+                    int index = selectSceneDataGetter_model.CurrentSelectIndex.Value;
+                    // トピックの更新
+                    musicTopicController_view.SetMusicDatas(index, selectSceneDataGetter_model);
+                })
                 .AddTo(this.gameObject);
 
             // トピックの移動
             selectSceneDataGetter_model?.CurrentSelectIndex
                 .Pairwise()
-                .Subscribe(pair => _ = musicTopicController_view.OnChangeSelectedMusic(pair.Current, pair.Previous, selectSceneDataGetter_model))
+                .Subscribe(pair => { 
+                    // トピックの更新
+                    _ = musicTopicController_view.OnChangeSelectedMusic(pair.Current, pair.Previous, selectSceneDataGetter_model);
+                })
+                .AddTo(this.gameObject);
+
+            // 選択楽曲の変更
+            selectSceneDataGetter_model?.CurrentMusicData
+                .Subscribe(value => {
+                    // 背景の更新
+                    backGroundController_view.OnChangeMusicTopic(selectSceneDataGetter_model.CurrentMusicData.Value);
+                })
                 .AddTo(this.gameObject);
 
             // 楽曲の選択(決定)
