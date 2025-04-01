@@ -6,7 +6,7 @@ namespace ChartEditor
 {
     public class NoteDeployableCollider : MonoBehaviour, IInteractableCollider, IDeployableCollider
     {
-        EditMode editMode => EditMode.deploy;
+        EditMode editMode => EditMode.Deploy;
 
         EditMode IInteractableCollider.GetEditMode()
         {

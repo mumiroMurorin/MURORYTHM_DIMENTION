@@ -153,7 +153,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 84794a0467fabb04dad8cba7fc6dee00, type: 2}
+  - {fileID: 2100000, guid: 2bef2f59a6b87ec47a627195d281cd68, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -184,10 +184,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8919827025346925897}
-  - component: {fileID: 1727658991382057172}
+  - component: {fileID: 3601072010388164060}
   - component: {fileID: 891076736748630361}
   m_Layer: 0
-  m_Name: TouchNote
+  m_Name: DynamicNoteUpward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -209,7 +209,7 @@ Transform:
   - {fileID: 7566191513661227692}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1727658991382057172
+--- !u!114 &3601072010388164060
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -218,14 +218,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5475620226950634511}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f046f1657c5d044e826673a7dd8b7c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 9dda012b7c63d5443b211edc89d6ac1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   origin: {fileID: 3934986967309432180}
   noteRenderer: {fileID: 5893660377328454484}
   colliders:
-  - {fileID: 8764774069622436691}
   - {fileID: 7947380020270672316}
+  - {fileID: 8764774069622436691}
   outline: {fileID: 891076736748630361}
   outlineColorOnMove: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &891076736748630361
@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 8764774069622436691}
   - component: {fileID: 2157796484451768983}
   - component: {fileID: 4470041986374099085}
-  - component: {fileID: 1275047894595005607}
+  - component: {fileID: 3346037862960293443}
   m_Layer: 0
   m_Name: MovableCollider
   m_TagString: Untagged
@@ -336,7 +336,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   note:
     obj: {fileID: 5475620226950634511}
---- !u!114 &1275047894595005607
+--- !u!114 &3346037862960293443
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

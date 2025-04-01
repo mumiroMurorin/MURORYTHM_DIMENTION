@@ -31,7 +31,7 @@ namespace ChartEditor
         {
             EditMode raycastEditMode = GetEditModeUnderCursor();
 
-            if (raycastEditMode == EditMode.none) { return; }
+            if (raycastEditMode == EditMode.None) { return; }
 
             chartEditorDataSetter.SetEditMode(raycastEditMode);
         }
@@ -45,7 +45,7 @@ namespace ChartEditor
             GameObject hitObject = GetObjectUnderCursor();
 
             // 同じく
-            if(!hitObject.TryGetComponent(out IInteractableCollider interactable)) { return EditMode.none; }
+            if(!hitObject.TryGetComponent(out IInteractableCollider interactable)) { return EditMode.None; }
 
             return interactable.GetEditMode();
         }
@@ -61,6 +61,7 @@ namespace ChartEditor
                 chartEditorDataSetter.SetDeployableCollider(null);
                 chartEditorDataSetter.SetMovableObject(null);
                 chartEditorDataSetter.SetScalableObject(null);
+                chartEditorDataSetter.SetDestroyableObject(null);
 
                 return;
             }
@@ -75,7 +76,7 @@ namespace ChartEditor
                 chartEditorDataSetter.SetDeployableCollider(null);
             }
 
-            // インタラクトされているノーツの更新
+            // インタラクトされているノーツの更新 (移動)
             if (obj.TryGetComponent(out IMovableCollider movable))
             {
                 chartEditorDataSetter.SetMovableObject(movable.Note);
@@ -85,7 +86,7 @@ namespace ChartEditor
                 chartEditorDataSetter.SetMovableObject(null);
             }
 
-            // インタラクトされているノーツの更新
+            // インタラクトされているノーツの更新 (拡大縮小)
             if (obj.TryGetComponent(out IScalableCollider scalable))
             {
                 chartEditorDataSetter.SetScalableObject(scalable.Note);
@@ -93,6 +94,16 @@ namespace ChartEditor
             else
             {
                 chartEditorDataSetter.SetScalableObject(null);
+            }
+
+            // インタラクトされているノーツの更新 (削除)
+            if (obj.TryGetComponent(out IDestroyableCollider destroyable))
+            {
+                chartEditorDataSetter.SetDestroyableObject(destroyable.Note);
+            }
+            else
+            {
+                chartEditorDataSetter.SetDestroyableObject(null);
             }
         }
 

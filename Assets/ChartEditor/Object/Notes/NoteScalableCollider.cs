@@ -8,7 +8,7 @@ namespace ChartEditor
     {
         [SerializeField] SerializeInterface<IScalableObject> note;
 
-        EditMode editMode => EditMode.scale;
+        EditMode editMode => EditMode.Scale;
 
         IScalableObject IScalableCollider.Note => note.Value;
 

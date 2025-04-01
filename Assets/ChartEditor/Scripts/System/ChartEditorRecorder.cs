@@ -7,13 +7,23 @@ namespace ChartEditor
 {
     public class ChartEditorRecorder : IChartEditorDataGetter, IChartEditorDataSetter
     {
-        ReactiveProperty<EditMode> currentEditMode = new ReactiveProperty<EditMode>(EditMode.none);
+        // エディットモード
+        ReactiveProperty<EditMode> currentEditMode = new ReactiveProperty<EditMode>(EditMode.None);
         IReadOnlyReactiveProperty<EditMode> IChartEditorDataGetter.CurrentEditMode => currentEditMode;
 
         void IChartEditorDataSetter.SetEditMode(EditMode editMode) 
         {
             currentEditMode.Value = editMode;
             Debug.Log($"Change Edit Mode: {currentEditMode.Value}");
+        }
+
+        // 配置ノーツ
+        ReactiveProperty<DeploymentNoteType> deploymentNoteType = new ReactiveProperty<DeploymentNoteType>(ChartEditor.DeploymentNoteType.TouchNote);
+        IReadOnlyReactiveProperty<DeploymentNoteType> IChartEditorDataGetter.DeploymentNoteType => deploymentNoteType;
+        void IChartEditorDataSetter.SetNoteType(DeploymentNoteType noteType)
+        {
+            deploymentNoteType.Value = noteType;
+            Debug.Log($"Change Deployment Note: {deploymentNoteType.Value}");
         }
 
         // 配置場所の更新
@@ -35,7 +45,6 @@ namespace ChartEditor
             if (movableObject.Value == mObject) { return; }
 
             movableObject.Value = mObject;
-            Debug.Log($"mObj: {mObject}");
         }
 
         // スケーリングできるオブジェクト(ノーツ)
@@ -47,7 +56,16 @@ namespace ChartEditor
             if(scalableObject.Value == sObject) { return; }
 
             scalableObject.Value = sObject;
-            Debug.Log($"sObj: {sObject}");
+        }
+
+        // 消せるノーツ
+        ReactiveProperty<IDestroyableObject> destroyableObject = new ReactiveProperty<IDestroyableObject>();
+        IReadOnlyReactiveProperty<IDestroyableObject> IChartEditorDataGetter.DestroyableObject => destroyableObject;
+        void IChartEditorDataSetter.SetDestroyableObject(IDestroyableObject dObject)
+        {
+            if (destroyableObject.Value == dObject) { return; }
+
+            destroyableObject.Value = dObject;
         }
     }
 
@@ -55,22 +73,29 @@ namespace ChartEditor
     {
         IReadOnlyReactiveProperty<EditMode> CurrentEditMode { get; }
 
+        IReadOnlyReactiveProperty<DeploymentNoteType> DeploymentNoteType { get; }
+
         IReadOnlyReactiveProperty<IDeployableCollider> DeployableCollider { get; }
 
         IReadOnlyReactiveProperty<IMovableObject> MovableObject { get; }
 
         IReadOnlyReactiveProperty<IScalableObject> ScalableObject { get; }
 
+        IReadOnlyReactiveProperty<IDestroyableObject> DestroyableObject { get; }
     }
 
     public interface IChartEditorDataSetter
     {
         void SetEditMode(EditMode editMode);
 
+        void SetNoteType(DeploymentNoteType noteType);
+
         void SetDeployableCollider(IDeployableCollider collider);
 
         void SetMovableObject(IMovableObject mObject);
 
         void SetScalableObject(IScalableObject sObject);
+
+        void SetDestroyableObject(IDestroyableObject dObject);
     }
 }

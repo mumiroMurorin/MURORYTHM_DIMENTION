@@ -27,10 +27,9 @@ namespace ChartEditor
 
         private void StartMoveNote()
         {
-            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.move) { return; }
+            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Move) { return; }
 
             IMovableObject movableObject = chartEditorDataGetter.MovableObject.Value;
-            Debug.Log(movableObject?.gameObject.name);
             if (movableObject == null) { return; }
 
             movableObject.OnMoveStart();
@@ -40,7 +39,7 @@ namespace ChartEditor
         private void MoveNote()
         {
             // 配置モードでない際は返す
-            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.move) { return; }
+            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Move) { return; }
             if (movedNote == null) { return; }
 
             // カーソル下の親取得
@@ -53,7 +52,7 @@ namespace ChartEditor
 
         private void EndMoveNote()
         {
-            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.move) { return; }
+            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Move) { return; }
 
             movedNote?.OnMoveEnd();
             movedNote = null;

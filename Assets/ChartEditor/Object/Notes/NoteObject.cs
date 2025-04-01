@@ -9,7 +9,7 @@ namespace ChartEditor
     /// 譜面上のノーツオブジェクト。Unity のコンポーネントとして動作し、
     /// 各種操作はピュアクラスに委譲する。
     /// </summary>
-    public abstract class NoteObject : MonoBehaviour, IDeployableObject, IMovableObject, IScalableObject
+    public abstract class NoteObject : MonoBehaviour, IDeployableObject, IMovableObject, IScalableObject, IDestroyableObject
     {
         [Header("Basic Settings")]
         [Tooltip("配置時の元となる GameObject")]
@@ -27,6 +27,7 @@ namespace ChartEditor
         private DeployableNotePure deployableNote;
         private MovableNotePure movableNote;
         private ScalableNotePure scalableNote;
+        private DestroyableNotePure destroyableNote;
 
         private void Awake()
         {
@@ -39,7 +40,8 @@ namespace ChartEditor
             deployableNote = new DeployableNotePure(
                 gameObject,
                 noteRenderer,
-                SetCollidersActive);
+                SetCollidersActive,
+                Destroy);
 
             // 例として移動開始時のアウトライン色は引数で渡す
             movableNote = new MovableNotePure(
@@ -53,12 +55,14 @@ namespace ChartEditor
                 noteData,
                 origin,
                 gameObject);
+
+            destroyableNote = new DestroyableNotePure(Destroy);
         }
 
         #region Utility Methods
 
         /// <summary>
-        /// 全てのコライダーの有効／無効を切り替えます。
+        /// 全てのコライダーの有効／無効を切り替える
         /// </summary>
         private void SetCollidersActive(bool isActive)
         {
@@ -69,7 +73,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// アウトラインカラーの設定用メソッド（実際の OutlineBehaviour への反映は各自実装）
+        /// アウトラインカラーの設定用メソッド
         /// </summary>
         private void SetOutlineColor(Color color)
         {
@@ -77,11 +81,19 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// アウトラインのON/OFFを切り替えます。
+        /// アウトラインのON/OFFを切り替える
         /// </summary>
         private void SetOutlineActive(bool active)
         {
             if (outline != null) { outline.enabled = active; }
+        }
+
+        /// <summary>
+        /// このオブジェクトの削除
+        /// </summary>
+        private void Destroy()
+        {
+            Destroy(this.gameObject);
         }
 
         #endregion
@@ -96,7 +108,7 @@ namespace ChartEditor
 
         void IDeployableObject.OnDisable() => deployableNote.OnDisable();
 
-        #endregion
+            #endregion
 
         #region IMovableObject Implementation
 
@@ -113,24 +125,30 @@ namespace ChartEditor
         void IScalableObject.OnScale() => scalableNote.OnScale();
 
         #endregion
+
+        #region IDestroyable Implemention
+
+        void IDestroyableObject.OnDestroy() => destroyableNote.OnDestroy();
+
+        #endregion
     }
 
     /// <summary>
     /// ピュアクラス：配置（Deploy）処理を実装。
-    /// Unity依存の操作（GameObject のアクティブ化、Renderer の色変更など）は、
-    /// 必要なオブジェクト・delegate を NoteObject 側から渡す。
     /// </summary>
     public class DeployableNotePure : IDeployableObject
     {
         private readonly GameObject noteGO;
         private readonly Renderer renderer;
         private readonly System.Action<bool> setCollidersActive;
+        private readonly System.Action destroy;
 
-        public DeployableNotePure(GameObject noteGO, Renderer renderer, System.Action<bool> setCollidersActive)
+        public DeployableNotePure(GameObject noteGO, Renderer renderer, System.Action<bool> setCollidersActive, System.Action destroy)
         {
             this.noteGO = noteGO;
             this.renderer = renderer;
             this.setCollidersActive = setCollidersActive;
+            this.destroy = destroy;
         }
 
         public void OnInstantiate()
@@ -159,14 +177,12 @@ namespace ChartEditor
 
         public void OnDisable()
         {
-            // 配置解除時の処理（必要なら外部で Destroy するなど）
-            noteGO.SetActive(false);
+            destroy.Invoke();
         }
     }
 
     /// <summary>
     /// ピュアクラス：移動（Move）処理を実装。
-    /// 外部からアウトライン色設定とアウトラインの ON/OFF 切替用 delegate を受け取ります。
     /// </summary>
     public class MovableNotePure : IMovableObject
     {
@@ -212,7 +228,6 @@ namespace ChartEditor
 
     /// <summary>
     /// ピュアクラス：拡大縮小（Scale）処理を実装。
-    /// NoteData を用いたロジック部分を担当し、更新処理は NoteObject 側で購読する形も想定。
     /// </summary>
     public class ScalableNotePure : IScalableObject
     {
@@ -264,6 +279,24 @@ namespace ChartEditor
         public void OnChangeHorizontalPosition()
         {
             Debug.Log("Horizontal position updated in pure ScalableNote.");
+        }
+    }
+
+    /// <summary>
+    /// ピュアクラス：削除（Destroy）処理を実装。
+    /// </summary>
+    public class DestroyableNotePure : IDestroyableObject
+    {
+        private readonly System.Action destroy;
+
+        public DestroyableNotePure(System.Action destroy) 
+        {
+            this.destroy = destroy;
+        }
+
+        public void OnDestroy()
+        {
+            destroy.Invoke();
         }
     }
 }

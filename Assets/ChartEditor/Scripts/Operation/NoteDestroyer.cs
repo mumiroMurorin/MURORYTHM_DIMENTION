@@ -5,12 +5,11 @@ using VContainer;
 
 namespace ChartEditor
 {
-    public class NoteScaler : MonoBehaviour
+    public class NoteDestroyer : MonoBehaviour
     {
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
 
         IChartEditorDataGetter chartEditorDataGetter;
-        IScalableObject scaledNote;
 
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter)
@@ -20,17 +19,18 @@ namespace ChartEditor
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0)) { ScaleNote(); }
+            if (Input.GetMouseButtonDown(0)) { DestroyNote(); }
         }
 
-        private void ScaleNote()
+        private void DestroyNote()
         {
-            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Scale) { return; }
+            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Destroy) { return; }
 
-            IScalableObject scalableObject = chartEditorDataGetter.ScalableObject.Value;
-            if (scalableObject == null) { return; }
+            IDestroyableObject destroyableObject = chartEditorDataGetter.DestroyableObject.Value;
+            if (destroyableObject == null) { return; }
 
-            scalableObject.OnScale();
+            Debug.Log("‚«‚¿‚á1");
+            destroyableObject.OnDestroy();
         }
     }
 

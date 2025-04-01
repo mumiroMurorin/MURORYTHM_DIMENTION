@@ -80,11 +80,36 @@ namespace ChartEditor
         void OnScale();
     }
 
+    public interface IDestroyableCollider
+    {
+        IDestroyableObject Note { get; }
+    }
+
+    public interface IDestroyableObject
+    {
+        void OnDestroy();
+    }
+
+    /// <summary>
+    /// エディットモード一覧
+    /// </summary>
     public enum EditMode
     {
-        none,
-        deploy,
-        move,
-        scale,
+        None,
+        Deploy,
+        Destroy,
+        Move,
+        Scale,
+    }
+
+    /// <summary>
+    /// 配置ノーツ一覧
+    /// </summary>
+    public enum DeploymentNoteType
+    {
+        TouchNote,
+        DynamicNoteUpward,
+        DynamicNoteRightward,
+        DynamicNoteLeftward,
     }
 }

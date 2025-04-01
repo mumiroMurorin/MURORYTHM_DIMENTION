@@ -6,7 +6,7 @@ using System;
 
 namespace ChartEditor
 {
-    public class ChangeEditModeButton : MonoBehaviour
+    public class ChangeEditModeButtonView : MonoBehaviour
     {
         [SerializeField] Button button;
 
