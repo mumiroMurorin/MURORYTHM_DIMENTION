@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System.Linq;
+using UnityFx.Outline;
 
 namespace ChartEditor
 {
     public abstract class NoteObject : MonoBehaviour , IDeployableObject, IMovableObject, IScalableObject
     {
+        [Tooltip("移動時のOutline色")]
+        [SerializeField] Color outlineColorOnMoving;
+
+        [SerializeField] OutlineBehaviour outline;
         [SerializeField] GameObject origin;
         [SerializeField] Renderer _renderer;
         [SerializeField] Collider[] _colliders;
@@ -61,17 +66,28 @@ namespace ChartEditor
 
         void IMovableObject.OnMoveStart()
         {
+            // 色の変更
+            outline.OutlineColor = outlineColorOnMoving;
+            outline.enabled = true;
+
+            // 持ち上げる
             transform.position += new Vector3(0, 2f, 0);
         }
 
         void IMovableObject.OnMoveEnd()
         {
+            outline.enabled = false;
             transform.position -= new Vector3(0, 2f, 0);
         }
 
-        void IMovableObject.OnMove()
+        /// <summary>
+        /// ノートの移動
+        /// </summary>
+        /// <param name="parent"></param>
+        void IMovableObject.OnMove(Transform parent)
         {
-
+            transform.position = new Vector3(parent.position.x, transform.position.y, parent.position.z);
+            transform.SetParent(parent);
         }
 
         void IScalableObject.OnScale()

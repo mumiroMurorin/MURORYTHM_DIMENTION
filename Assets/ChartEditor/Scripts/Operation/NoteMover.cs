@@ -18,11 +18,6 @@ namespace ChartEditor
             this.chartEditorDataGetter = chartEditorDataGetter;
         }
 
-        void Start()
-        {
-
-        }
-
         void Update()
         {
             if (Input.GetMouseButtonDown(0)) { StartMoveNote(); }
@@ -47,13 +42,12 @@ namespace ChartEditor
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.move) { return; }
             if (movedNote == null) { return; }
 
-            Transform interactedTransform = GetTransformUnderCursor();
-            if (interactedTransform == null) { return; }
-            if (movedNote.gameObject.transform.position == interactedTransform.position) { return; }
-
-            movedNote.gameObject.transform.position = new Vector3(interactedTransform.position.x, movedNote.gameObject.transform.position.y, interactedTransform.position.z);
-            movedNote.gameObject.transform.SetParent(interactedTransform);
-            movedNote.OnMove();
+            // カーソル下の親取得
+            Transform noteParent = GetTransformUnderCursor();
+            if (noteParent == null) { return; }
+            if (movedNote.gameObject.transform.position == noteParent.position) { return; }
+           
+            movedNote.OnMove(noteParent);
         }
 
         private void EndMoveNote()
@@ -87,7 +81,7 @@ namespace ChartEditor
         {
             GameObject hitObject = cursorInteracter.Value.GetObjectUnderCursor();
             if (hitObject == null) { return null; }
-            if (!hitObject.TryGetComponent(out IInteractableCollider interactable)) { return null; }
+            if (!hitObject.TryGetComponent(out IDeployableCollider d)) { return null; }
 
             return hitObject.transform;
         }

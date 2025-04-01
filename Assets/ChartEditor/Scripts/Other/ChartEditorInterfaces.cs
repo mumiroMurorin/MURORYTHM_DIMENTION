@@ -54,7 +54,7 @@ namespace ChartEditor
 
         void OnMoveStart();
 
-        void OnMove();
+        void OnMove(Transform parent);
 
         void OnMoveEnd();
     }
