@@ -20,6 +20,7 @@ namespace ChartEditor
 
         private void Update()
         {
+            UpdateObjectUnderCursor();
             //SetEditorMode();
         }
 
@@ -47,6 +48,52 @@ namespace ChartEditor
             if(!hitObject.TryGetComponent(out IInteractableCollider interactable)) { return EditMode.none; }
 
             return interactable.GetEditMode();
+        }
+
+        /// <summary>
+        /// カーソル下のオブジェクトについて更新
+        /// </summary>
+        private void UpdateObjectUnderCursor()
+        {
+            GameObject obj = GetObjectUnderCursor();
+            if(obj == null) 
+            {
+                chartEditorDataSetter.SetDeployableCollider(null);
+                chartEditorDataSetter.SetMovableObject(null);
+                chartEditorDataSetter.SetScalableObject(null);
+
+                return;
+            }
+
+            // ノーツ配置場所の更新
+            if(obj.TryGetComponent(out IDeployableCollider deployable))
+            {
+                chartEditorDataSetter.SetDeployableCollider(deployable);
+            }
+            else
+            {
+                chartEditorDataSetter.SetDeployableCollider(null);
+            }
+
+            // インタラクトされているノーツの更新
+            if (obj.TryGetComponent(out IMovableCollider movable))
+            {
+                chartEditorDataSetter.SetMovableObject(movable.Note);
+            }
+            else
+            {
+                chartEditorDataSetter.SetMovableObject(null);
+            }
+
+            // インタラクトされているノーツの更新
+            if (obj.TryGetComponent(out IScalableCollider scalable))
+            {
+                chartEditorDataSetter.SetScalableObject(scalable.Note);
+            }
+            else
+            {
+                chartEditorDataSetter.SetScalableObject(null);
+            }
         }
 
         /// <summary>

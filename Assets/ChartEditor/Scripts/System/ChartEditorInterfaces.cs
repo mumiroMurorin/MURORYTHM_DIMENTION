@@ -38,14 +38,23 @@ namespace ChartEditor
 
     public interface IDeployableCollider
     {
-
+        Transform transform { get; }
     }
 
     public interface IDeployableObject
     {
         void OnInstantiate();
 
+        void OnMove(Transform parent);
+
         void OnDeploy();
+
+        void OnDisable();
+    }
+
+    public interface IMovableCollider
+    {
+        IMovableObject Note { get; }
     }
 
     public interface IMovableObject
@@ -57,6 +66,11 @@ namespace ChartEditor
         void OnMove(Transform parent);
 
         void OnMoveEnd();
+    }
+
+    public interface IScalableCollider
+    {
+        IScalableObject Note { get; }
     }
 
     public interface IScalableObject

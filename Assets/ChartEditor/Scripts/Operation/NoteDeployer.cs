@@ -12,7 +12,7 @@ namespace ChartEditor
         [SerializeField] Transform noteParent;
         [SerializeField] GameObject noteObj;
 
-        GameObject deployingNote;
+        IDeployableObject deployingNote;
         IChartEditorDataGetter chartEditorDataGetter;
 
         [Inject]
@@ -28,45 +28,39 @@ namespace ChartEditor
 
         private void Bind()
         {
+            // ノーツの出現
             chartEditorDataGetter.CurrentEditMode
-                .Subscribe(editMode => ActiveNote(editMode == EditMode.deploy))
+                .Where(editMode => editMode == EditMode.deploy)
+                .Subscribe(editMode => InstantiateNote())
+                .AddTo(this.gameObject);
+
+            // ノーツの削除
+            chartEditorDataGetter.CurrentEditMode
+                .Where(editMode => editMode != EditMode.deploy)
+                .Subscribe(editMode => DestroyNote())
+                .AddTo(this.gameObject);
+
+            // ノーツの仮配置
+            chartEditorDataGetter.DeployableCollider
+                .Subscribe(collider => UpdateNotePosition(collider))
                 .AddTo(this.gameObject);
         }
 
         void Update()
         {
-            UpdateNotePosition();
             if (Input.GetMouseButtonDown(0)) { DeployNote(); }
         }
 
         /// <summary>
         /// 配置中のノーツの位置を更新する
         /// </summary>
-        private void UpdateNotePosition()
+        private void UpdateNotePosition(IDeployableCollider deployable)
         {
             // 配置モードでない際は返す
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.deploy) { return; }
+            if (deployable == null) { return; }
 
-            Transform interactedTransform = GetTransformUnderCursor();
-            if (interactedTransform == null) { return; }
-            if (deployingNote.transform.position == interactedTransform.position)  { return; }
-
-            deployingNote.transform.position = interactedTransform.position;
-            deployingNote.transform.SetParent(interactedTransform);
-        }
-
-        /// <summary>
-        /// カーソルに乗っかているコライダーのTransformを返す
-        /// </summary>
-        /// <returns></returns>
-        private Transform GetTransformUnderCursor()
-        {
-            // インタラクトオブジェクト出なければnullを返す
-            GameObject hitObject = cursorInteracter.Value.GetObjectUnderCursor();
-            if (hitObject == null) { return null; }
-            if (!hitObject.TryGetComponent(out IDeployableCollider deployable)) { return null; }
-
-            return hitObject.transform;
+            deployingNote.OnMove(deployable.transform);
         }
 
         /// <summary>
@@ -76,13 +70,9 @@ namespace ChartEditor
         {
             // 配置モードでない際は返す
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.deploy) { return; }
-            if (GetTransformUnderCursor() == null) { return; }
+            if (chartEditorDataGetter.DeployableCollider.Value == null) { return; }
 
-            if (deployingNote.TryGetComponent(out IDeployableObject deployable))
-            {
-                deployable.OnDeploy();
-            }
-
+            deployingNote.OnDeploy();
             InstantiateNote();
         }
 
@@ -91,22 +81,26 @@ namespace ChartEditor
         /// </summary>
         private void InstantiateNote()
         {
-            deployingNote = Instantiate(noteObj);
-
-            if (deployingNote.TryGetComponent(out IDeployableObject deployable))
+            GameObject obj = Instantiate(noteObj);
+            if(!obj.TryGetComponent(out IDeployableObject deployable))
             {
-                deployable.OnInstantiate();
+                Debug.LogWarning("ノーツにIDeployableObjectがくっついてねぇぞ！");
+                return;
             }
+
+            deployable.OnInstantiate();
+
+            deployingNote = deployable;
         }
 
         /// <summary>
-        /// ノートの(非)アクティブ化
+        /// ノートの削除
         /// </summary>
-        /// <param name="isActive"></param>
-        private void ActiveNote(bool isActive)
+        private void DestroyNote()
         {
-            if(deployingNote == null) { InstantiateNote(); }
-            deployingNote?.SetActive(isActive);
+            if (deployingNote == null) { return; }
+            deployingNote.OnDisable();
+            deployingNote = null;
         }
     }
 }

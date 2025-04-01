@@ -4,9 +4,13 @@ using UnityEngine;
 
 namespace ChartEditor
 {
-    public class NoteScalableCollider : MonoBehaviour, IInteractableCollider
+    public class NoteScalableCollider : MonoBehaviour, IInteractableCollider, IScalableCollider
     {
+        [SerializeField] SerializeInterface<IScalableObject> note;
+
         EditMode editMode => EditMode.scale;
+
+        IScalableObject IScalableCollider.Note => note.Value;
 
         EditMode IInteractableCollider.GetEditMode()
         {

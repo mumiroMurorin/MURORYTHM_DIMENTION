@@ -29,7 +29,8 @@ namespace ChartEditor
         {
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.move) { return; }
 
-            IMovableObject movableObject = GetMovableObjectUnderCursor();
+            IMovableObject movableObject = chartEditorDataGetter.MovableObject.Value;
+            Debug.Log(movableObject?.gameObject.name);
             if (movableObject == null) { return; }
 
             movableObject.OnMoveStart();
@@ -43,11 +44,11 @@ namespace ChartEditor
             if (movedNote == null) { return; }
 
             // カーソル下の親取得
-            Transform noteParent = GetTransformUnderCursor();
-            if (noteParent == null) { return; }
-            if (movedNote.gameObject.transform.position == noteParent.position) { return; }
+            IDeployableCollider deployable = chartEditorDataGetter.DeployableCollider.Value;
+            if (deployable == null) { return; }
+            if (movedNote.gameObject.transform.position == deployable.transform.position)  { return; }
            
-            movedNote.OnMove(noteParent);
+            movedNote.OnMove(deployable.transform);
         }
 
         private void EndMoveNote()
@@ -56,34 +57,6 @@ namespace ChartEditor
 
             movedNote?.OnMoveEnd();
             movedNote = null;
-        }
-
-        /// <summary>
-        /// カーソルに乗っかているコライダーのMovableObjectを返す
-        /// </summary>
-        /// <returns></returns>
-        private IMovableObject GetMovableObjectUnderCursor()
-        {
-            GameObject hitObject = cursorInteracter.Value.GetObjectUnderCursor();
-            if(hitObject == null) { return null; }
-
-            // 動かせるオブジェクトでなければnullを返す
-            if (!hitObject.transform.parent.TryGetComponent(out IMovableObject movable)) { return null; }
-
-            return movable;
-        }
-
-        /// <summary>
-        /// カーソルに乗っかているコライダーのTransformを返す
-        /// </summary>
-        /// <returns></returns>
-        private Transform GetTransformUnderCursor()
-        {
-            GameObject hitObject = cursorInteracter.Value.GetObjectUnderCursor();
-            if (hitObject == null) { return null; }
-            if (!hitObject.TryGetComponent(out IDeployableCollider d)) { return null; }
-
-            return hitObject.transform;
         }
     }
 }
