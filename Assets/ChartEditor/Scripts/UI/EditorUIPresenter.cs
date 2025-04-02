@@ -12,6 +12,7 @@ namespace ChartEditor
         [SerializeField] List<ToolButtonToEditMode> toolButtons_view;
         [SerializeField] List<NoteButtonToEditMode> noteButtons_view;
         [SerializeField] NotesViewportView notesViewport_view;
+        [SerializeField] MusicBrowseButtonView musicBrowseButton_view;
 
         IChartEditorDataSetter dataSetter_model;
         IChartEditorDataGetter dataGetter_model;
@@ -61,6 +62,8 @@ namespace ChartEditor
                 button.SetEvent(() => { dataSetter_model.SetNoteType(button.NoteType); });
             }
         }
+
+        #region その他まとめクラス
 
         /// <summary>
         /// ツールボタンに対するアクション他
@@ -113,6 +116,8 @@ namespace ChartEditor
                 noteButton_view.OnClickedListner += action;
             }
         }
+
+        #endregion
     }
 
 }
