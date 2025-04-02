@@ -11,6 +11,7 @@ namespace ChartEditor
 
         List<BarLine> barLines = new List<BarLine>();
         int barCount = 0;
+        float currentScale = 1f;
 
         void ILaneDeployable.Initialize()
         {
@@ -40,7 +41,6 @@ namespace ChartEditor
             return obj;
         }
 
-        float currentScale = 1f;
         void ILaneDeployable.Scaling(float scale)
         {
             foreach (BarLine barLine in barLines)

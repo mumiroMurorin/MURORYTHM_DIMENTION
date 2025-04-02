@@ -89,27 +89,4 @@ namespace ChartEditor
     {
         void OnDestroy();
     }
-
-    /// <summary>
-    /// エディットモード一覧
-    /// </summary>
-    public enum EditMode
-    {
-        None,
-        Deploy,
-        Destroy,
-        Move,
-        Scale,
-    }
-
-    /// <summary>
-    /// 配置ノーツ一覧
-    /// </summary>
-    public enum DeploymentNoteType
-    {
-        TouchNote,
-        DynamicNoteUpward,
-        DynamicNoteRightward,
-        DynamicNoteLeftward,
-    }
 }

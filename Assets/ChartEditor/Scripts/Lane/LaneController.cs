@@ -1,73 +1,90 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
+using VContainer;
 
 namespace ChartEditor
 {
     public class LaneController : MonoBehaviour
     {
         [SerializeField] List<SerializeInterface<ILaneDeployable>> deplayables;
-
         [SerializeField] GameObject viewCamera;
+        [SerializeField] GameObject ground;
 
-        [Header("拡大縮小の感度")]
-        [SerializeField] float scalingSensitivity = 0.1f;
-        [Header("視点移動の感度")]
-        [SerializeField] float moveSensitivity = 0.1f;
+        IChartEditorDataGetter chartEditorDataGetter;
+        float currentScale = 1f;
 
-        float chartViewScale = 1f;
+        [Inject]
+        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        {
+            this.chartEditorDataGetter = chartEditorDataGetter;
+        }
 
         void Start()
         {
             Initialize();
-
+            Bind();
         }
 
         private void Initialize()
         {
-            chartViewScale = 1f;
 
-            foreach(SerializeInterface<ILaneDeployable> deployable in deplayables)
-            {
-                deployable.Value.Scaling(chartViewScale);
-            }
         }
 
-        private void Update()
+        private void Bind()
         {
-            OperateChartViewScale();
-            OperateViewCamera();
+            // 拡大率
+            chartEditorDataGetter?.ChartViewScale
+                .Subscribe(scale => {
+                    OnChangeChartViewScale(scale);
+                    OnChangePlaybackProgress(chartEditorDataGetter.PlaybackProgress.Value);
+                })
+                .AddTo(this.gameObject);
+
+            // 再生位置
+            chartEditorDataGetter?.PlaybackProgress
+                .Subscribe(OnChangePlaybackProgress)
+                .AddTo(this.gameObject);
         }
 
         /// <summary>
-        /// 拡大率の操作
+        /// 拡大率より拡大縮小を行う
         /// </summary>
-        private void OperateChartViewScale()
+        /// <param name="scale"></param>
+        private void OnChangeChartViewScale(float scale)
         {
-            var scroll = Input.mouseScrollDelta.y;
-
-            if (Mathf.Abs(scroll) < 0.01f) { return; }
-            if (!Input.GetKey(KeyCode.LeftControl)) { return; }
-
-            chartViewScale = Mathf.Clamp(chartViewScale + scroll * scalingSensitivity, 0.1f, float.MaxValue);
-
+            // 各線
             foreach (SerializeInterface<ILaneDeployable> deployable in deplayables)
             {
-                deployable.Value.Scaling(chartViewScale);
+                deployable.Value.Scaling(scale);
             }
+
+            // グラウンド
+            ground.transform.localScale = new Vector3(
+                ground.transform.localScale.x,
+                ground.transform.localScale.y * (scale / currentScale),
+                ground.transform.localScale.z);
+
+            ground.transform.position = new Vector3(
+                ground.transform.position.x,
+                ground.transform.position.y,
+                ground.transform.localScale.y / 2f
+                );
+
+            currentScale = scale;
         }
 
         /// <summary>
-        /// 始点の操作
+        /// カメラ視点の移動
         /// </summary>
-        private void OperateViewCamera() 
+        private void OnChangePlaybackProgress(float ratio) 
         {
-            var scroll = Input.mouseScrollDelta.y;
-
-            if (Mathf.Abs(scroll) < 0.01f) { return; }
-            if (Input.GetKey(KeyCode.LeftControl)) { return; }
-
-            viewCamera.transform.position += Vector3.forward * scroll * moveSensitivity;
+            viewCamera.transform.position = new Vector3(
+                viewCamera.transform.position.x,
+                viewCamera.transform.position.y,
+                ground.transform.localScale.y * ratio
+                );
         }
     }
 

@@ -23,4 +23,36 @@ namespace ChartEditor
             range.Insert(isAddLast ? range.Count : 0, value);
         }
     }
+
+    /// <summary>
+    /// エディットモード一覧
+    /// </summary>
+    public enum EditMode
+    {
+        None,
+        Deploy,
+        Destroy,
+        Move,
+        Scale,
+    }
+
+    /// <summary>
+    /// 音楽再生モード
+    /// </summary>
+    public enum PlayMode
+    {
+        Stop,
+        Play,
+    }
+
+    /// <summary>
+    /// 配置ノーツ一覧
+    /// </summary>
+    public enum DeploymentNoteType
+    {
+        TouchNote,
+        DynamicNoteUpward,
+        DynamicNoteRightward,
+        DynamicNoteLeftward,
+    }
 }

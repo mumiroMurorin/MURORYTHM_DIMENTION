@@ -8,7 +8,7 @@ namespace ChartEditor
     {
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.Register<ChartEditorRecorder>(Lifetime.Singleton)
+            builder.Register<ChartEditorDataHolder>(Lifetime.Singleton)
                .As<IChartEditorDataGetter>()
                .As<IChartEditorDataSetter>();
         }

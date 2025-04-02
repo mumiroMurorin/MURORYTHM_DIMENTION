@@ -49,6 +49,7 @@ namespace ChartEditor
             chartEditorDataGetter.DeploymentNoteType
                 .Subscribe(noteType =>
                 {
+                    if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
                     DestroyNote();
                     InstantiateNote();
                 })
