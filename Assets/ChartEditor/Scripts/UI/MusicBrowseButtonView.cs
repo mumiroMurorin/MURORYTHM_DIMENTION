@@ -9,7 +9,7 @@ namespace ChartEditor
     {
         [SerializeField] Button button;
 
-        public System.Action OnClickedListner { get; }
+        public System.Action OnClickedListner { get; set; }
 
         public void OnChangePlayMode(PlayMode playMode)
         {

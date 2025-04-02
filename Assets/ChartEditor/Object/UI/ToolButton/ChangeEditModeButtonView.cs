@@ -10,7 +10,7 @@ namespace ChartEditor
     {
         [SerializeField] Button button;
 
-        public Action OnClickedListner;
+        public Action OnClickedListner { get; set; }
 
         private void Start()
         {

@@ -7,9 +7,6 @@ namespace ChartEditor
 {
     public class InputHandler : MonoBehaviour
     {
-        [SerializeField] AudioClip kariMusic;
-        [SerializeField] float kariBpm;
-
         [SerializeField] KeyCode playKey = KeyCode.Space;
 
         [Header("マウス関係")]
@@ -26,27 +23,11 @@ namespace ChartEditor
         {
             this.chartEditorDataSetter = chartEditorDataSetter;
             this.chartEditorDataGetter = chartEditorDataGetter;
-
-            chartEditorDataSetter.SetMusic(kariMusic);
-            chartEditorDataSetter.SetMainBpm(kariBpm);
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(playKey))
-            {
-                switch (chartEditorDataGetter.PlayMode.Value)
-                {
-                    case PlayMode.Play:
-                        chartEditorDataSetter.SetPlayMode(PlayMode.Stop);
-                        break;
-                    case PlayMode.Stop:
-                        // 音楽を流す
-                        chartEditorDataSetter?.SetPlayMode(PlayMode.Play);
-                        break;
-                }
-            }
-
+            OperateMusicPlay();
             OperateChartViewScale();
             OperatePlaybackProgress();
         }
@@ -80,6 +61,27 @@ namespace ChartEditor
             // スクロール感度と拡大率によって変える
             float ratio = moveSensitivity * Mathf.Clamp(10f - chartEditorDataGetter.ChartViewScale.Value / 0.15f, 1f, 10f);
             chartEditorDataSetter?.SetPlaybackProgress(chartEditorDataGetter.PlaybackProgress.Value + scroll * ratio);
+        }
+
+        /// <summary>
+        /// 楽曲再生/停止の操作
+        /// </summary>
+        private void OperateMusicPlay()
+        {
+            if (!Input.GetKeyDown(playKey)) { return; }
+            if (chartEditorDataGetter.Music.Value == null) { return; }
+            if(chartEditorDataGetter.MainBpm.Value <= 0) { return; }
+
+            switch (chartEditorDataGetter.PlayMode.Value)
+            {
+                case PlayMode.Play:
+                    chartEditorDataSetter?.SetPlayMode(PlayMode.Stop);
+                    break;
+                case PlayMode.Stop:
+                    chartEditorDataSetter?.SetPlayMode(PlayMode.Play);
+                    break;
+            }
+
         }
     }
 }

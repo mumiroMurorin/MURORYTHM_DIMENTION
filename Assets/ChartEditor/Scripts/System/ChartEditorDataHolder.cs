@@ -146,6 +146,18 @@ namespace ChartEditor
         }
 
         #endregion
+
+        #region Offset オフセット
+
+        ReactiveProperty<float> offset = new ReactiveProperty<float>(0);
+        IReadOnlyReactiveProperty<float> IChartEditorDataGetter.Offset => offset;
+
+        void IChartEditorDataSetter.SetOffset(float offset)
+        {
+            this.offset.Value = offset;
+        }
+
+        #endregion
     }
 
     public interface IChartEditorDataGetter
@@ -169,6 +181,8 @@ namespace ChartEditor
         IReadOnlyReactiveProperty<float> ChartViewScale { get; }
 
         IReadOnlyReactiveProperty<float> MainBpm { get; }
+
+        IReadOnlyReactiveProperty<float> Offset { get; }
 
         IReadOnlyReactiveProperty<AudioClip> Music { get; }
 
@@ -195,6 +209,8 @@ namespace ChartEditor
         void SetChartViewScale(float scale);
 
         void SetMainBpm(float bpm);
+
+        void SetOffset(float offset);
 
         void SetMusic(AudioClip clip);
     }

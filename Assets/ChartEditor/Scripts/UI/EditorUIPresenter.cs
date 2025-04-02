@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using Cysharp.Threading.Tasks;
+using System.Threading;
 using VContainer;
 using System;
 
@@ -13,9 +15,15 @@ namespace ChartEditor
         [SerializeField] List<NoteButtonToEditMode> noteButtons_view;
         [SerializeField] NotesViewportView notesViewport_view;
         [SerializeField] MusicBrowseButtonView musicBrowseButton_view;
+        [SerializeField] BPMInputFieldView bpmInputField_view;
+        [SerializeField] OffsetInputFieldView offsetInputField_view;
+
+        AudioFileSelector audioFileSelector = new AudioFileSelector();
 
         IChartEditorDataSetter dataSetter_model;
         IChartEditorDataGetter dataGetter_model;
+
+        CancellationTokenSource soundLoadCts;
 
         [Inject]
         public void Construct(IChartEditorDataSetter chartEditorDataSetter, IChartEditorDataGetter chartEditorDataGetter)
@@ -48,18 +56,72 @@ namespace ChartEditor
             dataGetter_model?.CurrentEditMode
                 .Subscribe(notesViewport_view.OnChangeEditMode)
                 .AddTo(this.gameObject);
+
+            // 楽曲選択の可視不可視
+            dataGetter_model?.PlayMode
+                .Subscribe(musicBrowseButton_view.OnChangePlayMode)
+                .AddTo(this.gameObject);
+
+            // bpmフィールドの可視不可視
+            dataGetter_model?.PlayMode
+                .Subscribe(bpmInputField_view.OnChangePlayMode)
+                .AddTo(this.gameObject);
+
+            // オフセットフィールドの可視不可視
+            dataGetter_model?.PlayMode
+                .Subscribe(offsetInputField_view.OnChangePlayMode)
+                .AddTo(this.gameObject);
         }
 
         private void SetEvent()
         {
+            // ツールボタン
             foreach (var button in toolButtons_view)
             {
                 button.SetEvent(() => { dataSetter_model.SetEditMode(button.EditMode); });
             }
 
+            // ノーツボタン
             foreach(var button in noteButtons_view)
             {
                 button.SetEvent(() => { dataSetter_model.SetNoteType(button.NoteType); });
+            }
+
+            // 曲選択ボタン
+            musicBrowseButton_view.OnClickedListner += BrowseAudioFile;
+
+            // bpm変更フィールド
+            bpmInputField_view.OnValueChangedListner += dataSetter_model.SetMainBpm;
+
+            // オフセットフィールド
+            offsetInputField_view.OnValueChangedListner += dataSetter_model.SetOffset;
+
+        }
+
+        /// <summary>
+        /// 楽曲ファイルをセット
+        /// </summary>
+        private async void BrowseAudioFile()
+        {
+            if (soundLoadCts != null)
+            {
+                soundLoadCts.Cancel();  
+                soundLoadCts.Dispose();
+            }
+
+            soundLoadCts = new CancellationTokenSource();
+
+            AudioClip clip = await audioFileSelector.SelectAudioFile(soundLoadCts.Token);
+            dataSetter_model.SetMusic(clip);
+        }
+
+        private void OnDestroy()
+        {
+            if (soundLoadCts != null)
+            {
+                soundLoadCts.Cancel();
+                soundLoadCts.Dispose();
+                soundLoadCts = null;
             }
         }
 
@@ -119,5 +181,4 @@ namespace ChartEditor
 
         #endregion
     }
-
 }
