@@ -19,7 +19,7 @@ namespace ChartEditor
         /// Šg‘åk¬
         /// </summary>
         /// <param name="scale"></param>
-        void Scaling(float scale);
+        void Scaling(float current, float previous);
 
         /// <summary>
         /// ‰Šú‰»

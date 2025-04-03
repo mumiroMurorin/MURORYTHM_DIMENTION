@@ -17,6 +17,7 @@ namespace ChartEditor
         [SerializeField] MusicBrowseButtonView musicBrowseButton_view;
         [SerializeField] BPMInputFieldView bpmInputField_view;
         [SerializeField] OffsetInputFieldView offsetInputField_view;
+        [SerializeField] MusicNameView musicName_view;
 
         AudioFileSelector audioFileSelector = new AudioFileSelector();
 
@@ -70,6 +71,11 @@ namespace ChartEditor
             // オフセットフィールドの可視不可視
             dataGetter_model?.PlayMode
                 .Subscribe(offsetInputField_view.OnChangePlayMode)
+                .AddTo(this.gameObject);
+
+            // 楽曲名の変更
+            dataGetter_model?.Music
+                .Subscribe(musicName_view.OnChangeMusic)
                 .AddTo(this.gameObject);
         }
 

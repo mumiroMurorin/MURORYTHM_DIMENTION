@@ -113,7 +113,7 @@ namespace ChartEditor
 
         #region PlaybackProgress ägëÂó¶
 
-        ReactiveProperty<float> chartViewScale = new ReactiveProperty<float>(1f);
+        ReactiveProperty<float> chartViewScale = new ReactiveProperty<float>(5f);
         IReadOnlyReactiveProperty<float> IChartEditorDataGetter.ChartViewScale => chartViewScale;
 
         void IChartEditorDataSetter.SetChartViewScale(float scale)
@@ -178,6 +178,9 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<float> PlaybackProgress { get; }
 
+        /// <summary>
+        /// ÉGÉfÉBÉ^ÇÃägëÂî{ó¶ÅA1ïbÇ†ÇΩÇËÇÃUnityí∑ [z/sec]
+        /// </summary>
         IReadOnlyReactiveProperty<float> ChartViewScale { get; }
 
         IReadOnlyReactiveProperty<float> MainBpm { get; }

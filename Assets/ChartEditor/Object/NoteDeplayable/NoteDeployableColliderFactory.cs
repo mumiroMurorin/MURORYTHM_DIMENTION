@@ -36,16 +36,13 @@ namespace ChartEditor
             return obj;
         }
 
-        float currentScale = 1f;
-        void ILaneDeployable.Scaling(float scale)
+        void ILaneDeployable.Scaling(float current, float previous)
         {
             foreach (NoteDeployableGroup noteDeployableCollider in noteDeployableColliders) 
             {
                 Vector3 pos = noteDeployableCollider.gameObject.transform.position;
-                noteDeployableCollider.gameObject.transform.position = new Vector3(pos.x, pos.y, pos.z * (scale / currentScale));
+                noteDeployableCollider.gameObject.transform.position = new Vector3(pos.x, pos.y, pos.z * (current / previous));
             }
-
-            currentScale = scale;
         }
     }
 }

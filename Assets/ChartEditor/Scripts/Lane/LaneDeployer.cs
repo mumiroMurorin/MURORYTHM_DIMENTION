@@ -9,7 +9,6 @@ namespace ChartEditor
     public class LaneDeployer : MonoBehaviour
     {
         [Tooltip("1¬ß‚Ì’·‚³(Šg‘å—¦1‚Ì‚Æ‚«)")]
-        [SerializeField] float lengthInBarLine = 10f;
         [SerializeField] SerializeInterface<ILaneDeployable> barLineDeplayable;
         [SerializeField] SerializeInterface<ILaneDeployable> beatLineDeployable;
         [SerializeField] SerializeInterface<ILaneDeployable> subdivisionLineDeployable;
@@ -63,10 +62,12 @@ namespace ChartEditor
             ClearLane();
 
             // ƒŒ[ƒ“‚Ì¶¬
-            // ¬ßü‚Ì” (‹È‚Ì’·‚³[•ª] ~ 1•ªŠÔ’†‚Ì¬ß”[ŒÂ])
-            int barLineNum = (int)Mathf.Ceil((musicLength / 60f) * (mainBpm / 4f));
-            // 1¬ß‚Ì’·‚³
-            float lengthInBarLine = this.lengthInBarLine * chartEditorDataGetter.ChartViewScale.Value;
+            // ¬ßü‚Ì” (= ‹È‚Ì’·‚³[•ª] ~ 1•ªŠÔ’†‚Ì¬ß”[ŒÂ])
+            float barLineNum = (musicLength / 60f) * (mainBpm / 4f);
+            // •ˆ–Ê‘S‘Ì‚Ì’·‚³[z] (= ‹È‚Ì’·‚³[sec] * Šg‘å”{—¦[z/sec])
+            float chartLength = musicLength * chartEditorDataGetter.ChartViewScale.Value;
+            // 1¬ß‚Ì’·‚³[z] (= •ˆ–Ê’·[z] / ¬ß”)
+            float lengthInBarLine = chartLength / barLineNum;
 
             // Šy‹È‚Ì’·‚³‚ğ’´‚¦‚é‚Ü‚ÅŒJ‚è•Ô‚·
             // 1¬ß (4•ª‰¹•„ ~ 4)
@@ -95,7 +96,7 @@ namespace ChartEditor
             // ƒOƒ‰ƒEƒ“ƒh‚Ì¶¬
             ground.transform.localScale = new Vector3(
                 ground.transform.localScale.x,
-                barLineNum * lengthInBarLine,
+                chartLength,
                 ground.transform.localScale.z);
 
             ground.transform.position = new Vector3(

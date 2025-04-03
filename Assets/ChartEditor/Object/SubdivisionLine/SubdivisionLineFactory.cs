@@ -36,16 +36,13 @@ namespace ChartEditor
             return obj;
         }
 
-        float currentScale = 1f;
-        void ILaneDeployable.Scaling(float scale)
+        void ILaneDeployable.Scaling(float current, float previous)
         {
             foreach (SubdivisionLine subdivisionLine in subdivisionLines) 
             {
                 Vector3 pos = subdivisionLine.gameObject.transform.position;
-                subdivisionLine.gameObject.transform.position = new Vector3(pos.x, pos.y, pos.z * (scale / currentScale));
+                subdivisionLine.gameObject.transform.position = new Vector3(pos.x, pos.y, pos.z * (current / previous));
             }
-
-            currentScale = scale;
         }
     }
 }

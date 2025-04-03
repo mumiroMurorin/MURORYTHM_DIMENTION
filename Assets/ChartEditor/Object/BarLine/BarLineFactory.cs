@@ -11,7 +11,6 @@ namespace ChartEditor
 
         List<BarLine> barLines = new List<BarLine>();
         int barCount = 0;
-        float currentScale = 1f;
 
         void ILaneDeployable.Initialize()
         {
@@ -41,15 +40,13 @@ namespace ChartEditor
             return obj;
         }
 
-        void ILaneDeployable.Scaling(float scale)
+        void ILaneDeployable.Scaling(float current, float previous)
         {
             foreach (BarLine barLine in barLines)
             {
                 Vector3 pos = barLine.gameObject.transform.position;
-                barLine.gameObject.transform.position = new Vector3(pos.x, pos.y, pos.z * (scale / currentScale));
+                barLine.gameObject.transform.position = new Vector3(pos.x, pos.y, pos.z * (current / previous));
             }
-
-            currentScale = scale;
         }
     }
 }

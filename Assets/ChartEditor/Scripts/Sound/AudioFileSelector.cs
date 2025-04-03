@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using SFB;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -38,7 +39,13 @@ public class AudioFileSelector
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                return DownloadHandlerAudioClip.GetContent(www);
+                AudioClip clip = DownloadHandlerAudioClip.GetContent(www);
+
+                // ƒtƒ@ƒCƒ‹–¼‚ğæ“¾‚µ‚Ä AudioClip ‚Éİ’è
+                string fileName = Path.GetFileNameWithoutExtension(path);
+                clip.name = fileName;
+
+                return clip;
             }
             else
             {
