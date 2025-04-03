@@ -255,30 +255,18 @@ namespace ChartEditor
             noteData.Range.ObserveCountChanged()
                 .Subscribe(OnChangeScale)
                 .AddTo(noteGO);
-
-            // 値の置き換え通知に対して横位置更新
-            noteData.Range.ObserveReplace()
-                .Subscribe(_ => OnChangeHorizontalPosition())
-                .AddTo(noteGO);
         }
 
         public void OnScale()
         {
-            // 例：noteData の範囲に基づき拡大縮小処理を実行
             noteData.AddRange(true);
         }
 
-        // ※ 以下は NoteObject 側で購読する場合など、追加の更新メソッドとして利用可能
         public void OnChangeScale(int size)
         {
             Transform tr = originGO.transform;
             tr.localScale = new Vector3(size, tr.localScale.y, tr.localScale.z);
             tr.localPosition = new Vector3((size - 1) / 2f, tr.localPosition.y, tr.localPosition.z);
-        }
-
-        public void OnChangeHorizontalPosition()
-        {
-            Debug.Log("Horizontal position updated in pure ScalableNote.");
         }
     }
 
