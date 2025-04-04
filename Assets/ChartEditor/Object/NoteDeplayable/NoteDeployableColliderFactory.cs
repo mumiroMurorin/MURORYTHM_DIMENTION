@@ -39,8 +39,8 @@ namespace ChartEditor
         {
             foreach (NoteDeployableGroup noteDeployableCollider in noteDeployableColliders) 
             {
-                Vector3 pos = noteDeployableCollider.gameObject.transform.position;
-                noteDeployableCollider.gameObject.transform.position = new Vector3(pos.x, pos.y, pos.z * (current / previous));
+                Vector3 pos = noteDeployableCollider.gameObject.transform.localPosition;
+                noteDeployableCollider.gameObject.transform.localPosition = new Vector3(pos.x, pos.y, pos.z * (current / previous));
             }
         }
     }

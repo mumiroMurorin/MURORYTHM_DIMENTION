@@ -39,8 +39,8 @@ namespace ChartEditor
         {
             foreach (BeatLine beatLine in beatLines)
             {
-                Vector3 pos = beatLine.gameObject.transform.position;
-                beatLine.gameObject.transform.position = new Vector3(pos.x, pos.y, pos.z * (current / previous));
+                Vector3 pos = beatLine.gameObject.transform.localPosition;
+                beatLine.gameObject.transform.localPosition = new Vector3(pos.x, pos.y, pos.z * (current / previous));
             }
         }
     }

@@ -12,6 +12,7 @@ namespace ChartEditor
 
         IChartEditorDataGetter chartEditorDataGetter;
         List<BarLine> barLines = new List<BarLine>();
+        BarDataInChart backData;
         int barCount = 0;
 
         [Inject]
@@ -42,10 +43,13 @@ namespace ChartEditor
             if(obj.TryGetComponent(out BarLine line))
             {
                 // è¨êﬂÇÃê›íË
-                line.SetBarData(barData, barLines.LastOrDefault(), chartEditorDataGetter, ++barCount);
+                line.Initialize(barData, backData, barLines.LastOrDefault(), chartEditorDataGetter, ++barCount);
 
                 barLines?.Add(line);
             }
+
+            // ÉfÅ[É^Çï€ë∂
+            backData = barData;
 
             return obj;
         }
@@ -54,8 +58,10 @@ namespace ChartEditor
         {
             foreach (BarLine barLine in barLines)
             {
-                Vector3 pos = barLine.gameObject.transform.position;
-                barLine.gameObject.transform.position = new Vector3(pos.x, pos.y, pos.z * (current / previous));
+                barLine.Scaling(current, previous);
+
+                Vector3 pos = barLine.gameObject.transform.localPosition;
+                barLine.gameObject.transform.localPosition = new Vector3(pos.x, pos.y, pos.z * (current / previous));
             }
         }
     }

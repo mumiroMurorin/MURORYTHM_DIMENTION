@@ -9,9 +9,6 @@ namespace ChartEditor
     public class LaneController : MonoBehaviour
     {
         [SerializeField] SerializeInterface<ILaneDeployable<BarDataInChart>> barLineDeplayable;
-        [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> beatLineDeployable;
-        [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> subdivisionLineDeployable;
-        [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> colliderDeployableGroup;
         [SerializeField] GameObject ground;
 
         IChartEditorDataGetter chartEditorDataGetter;
@@ -50,9 +47,6 @@ namespace ChartEditor
         {
             // 各線でスケーリング
             barLineDeplayable?.Value.Scaling(pairScale.Current, pairScale.Previous);
-            beatLineDeployable?.Value.Scaling(pairScale.Current, pairScale.Previous);
-            subdivisionLineDeployable?.Value.Scaling(pairScale.Current, pairScale.Previous);
-            colliderDeployableGroup?.Value.Scaling(pairScale.Current, pairScale.Previous);
 
             // グラウンド
             ground.transform.localScale = new Vector3(

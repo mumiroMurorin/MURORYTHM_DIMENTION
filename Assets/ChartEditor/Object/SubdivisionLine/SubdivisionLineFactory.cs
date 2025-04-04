@@ -39,8 +39,8 @@ namespace ChartEditor
         {
             foreach (SubdivisionLine subdivisionLine in subdivisionLines) 
             {
-                Vector3 pos = subdivisionLine.gameObject.transform.position;
-                subdivisionLine.gameObject.transform.position = new Vector3(pos.x, pos.y, pos.z * (current / previous));
+                Vector3 pos = subdivisionLine.gameObject.transform.localPosition;
+                subdivisionLine.gameObject.transform.localPosition = new Vector3(pos.x, pos.y, pos.z * (current / previous));
             }
         }
     }

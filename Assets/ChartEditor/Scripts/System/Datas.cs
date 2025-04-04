@@ -153,8 +153,9 @@ namespace ChartEditor
 
         public void SetBeatCount(int beatCount) 
         {
-            this.beatCount.Value = (int)Mathf.Clamp(beatCount, 0, float.MaxValue);
-            UpdateSubDivisionData(this.beatCount.Value, this.beatUnit.Value, this.divisionNum.Value);
+            beatCount = (int)Mathf.Clamp(beatCount, 0, float.MaxValue);
+            UpdateSubDivisionData(beatCount, this.beatUnit.Value, this.divisionNum.Value);
+            this.beatCount.Value = beatCount;
         }
 
         /// <summary>
@@ -166,8 +167,9 @@ namespace ChartEditor
 
         public void SetBeatUnit(float beatUnit)
         {
-            this.beatUnit.Value = Mathf.Clamp(beatUnit, 0, float.MaxValue);
-            UpdateSubDivisionData(this.beatCount.Value, this.beatUnit.Value, this.divisionNum.Value);
+            beatUnit = Mathf.Clamp(beatUnit, 0, float.MaxValue);
+            UpdateSubDivisionData(this.beatCount.Value, beatUnit, this.divisionNum.Value);
+            this.beatUnit.Value = beatUnit;
         }
 
         /// <summary>
@@ -179,8 +181,9 @@ namespace ChartEditor
 
         public void SetDivisionNum(int divisionNum)
         {
-            this.divisionNum.Value = (int)Mathf.Clamp(divisionNum, 0, float.MaxValue);
-            UpdateSubDivisionData(this.beatCount.Value, this.beatUnit.Value, this.divisionNum.Value);
+            divisionNum = (int)Mathf.Clamp(divisionNum, 0, float.MaxValue);
+            UpdateSubDivisionData(this.beatCount.Value, this.beatUnit.Value, divisionNum);
+            this.divisionNum.Value = divisionNum;
         }
 
         #endregion
