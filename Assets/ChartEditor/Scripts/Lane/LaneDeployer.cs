@@ -28,6 +28,20 @@ namespace ChartEditor
             Bind();
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Backspace))
+            {
+                ChartData data = chartEditorDataGetter.ChartData.Value;
+                data.BarDatas[2].SetBeatUnit(data.BarDatas[2].BeatUnit.Value - 1);
+                data.BarDatas[3].SetBeatUnit(data.BarDatas[3].BeatUnit.Value - 1);
+                data.BarDatas[4].SetBeatUnit(data.BarDatas[4].BeatUnit.Value - 2);
+                data.BarDatas[5].SetBeatUnit(data.BarDatas[5].BeatUnit.Value - 2);
+                data.BarDatas[6].SetBeatUnit(data.BarDatas[6].BeatUnit.Value - 3);
+                data.BarDatas[7].SetBeatUnit(data.BarDatas[7].BeatUnit.Value - 3);
+            }
+        }
+
         private void Bind()
         {
             // •ˆ–Ê¶¬
@@ -83,6 +97,7 @@ namespace ChartEditor
 
             float beatUnit = barData.BeatUnit.Value;
             int divNum = barData.DivisionNum.Value;
+            float addZ = 0;
 
             // ü‚Ì”‚¾‚¯ŒJ‚è•Ô‚·
             for (int i = 0; i < barData.BeatCount.Value; i++) 
@@ -91,9 +106,11 @@ namespace ChartEditor
                 {
                     // •ªü‚Ì¶¬
                     SubDivisionDataInBeat subDivisionData = barData.SubDivisionDatas[i * divNum + j];
-                    GenerateSubDivisionUnit(subDivisionData, quarterNoteLength, beatUnit, divNum, ref currentZ, barObj.transform, j == 0);
+                    GenerateSubDivisionUnit(subDivisionData, quarterNoteLength, beatUnit, divNum, ref addZ, barObj.transform, j == 0);
                 }
-            }  
+            }
+
+            currentZ += addZ;
         }
 
         /// <summary>

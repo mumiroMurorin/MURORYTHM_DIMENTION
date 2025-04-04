@@ -108,11 +108,11 @@ namespace ChartEditor
         /// <summary>
         /// 分線の代入、クリアの監視
         /// </summary>
-        public IReadOnlyReactiveCollection<SubDivisionDataInBeat> SubDivisionDatas => SubDivisionDatas;
+        public IReadOnlyReactiveCollection<SubDivisionDataInBeat> SubDivisionDatas => subDivisionDatas;
 
         public void SetSubDivisionDatas(List<SubDivisionDataInBeat> subDivisionDatas)
         {
-            subDivisionDatas.Clear();
+            this.subDivisionDatas.Clear();
             this.subDivisionDatas = new ReactiveCollection<SubDivisionDataInBeat>(subDivisionDatas); 
         }
 
@@ -193,14 +193,13 @@ namespace ChartEditor
     {
         public ChartData(float musicLength, float bpm, int beatCount = 4, float beatUnit = 4, int divNum = 2)
         {
-            BarDataInChart barData = new BarDataInChart(beatCount, beatUnit, divNum, bpm);
-
             // 全体の小節数 = 曲の長さ[min] / 小節数[回/min]
             //              = (曲の長さ[sec] / 60f) * (bpm[回/min] / 小節内のビート数)
             float beatNum = (musicLength / 60f) * (bpm / beatCount);
 
             for(int i = 0; i < beatNum; i++)
             {
+                BarDataInChart barData = new BarDataInChart(beatCount, beatUnit, divNum, bpm);
                 barDatas.Add(barData);
             }
         }
