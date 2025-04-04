@@ -4,14 +4,13 @@ using UnityEngine;
 
 namespace ChartEditor
 {
-    public class SubdivisionLineFactory : MonoBehaviour, ILaneDeployable
+    public class SubdivisionLineFactory : MonoBehaviour, ILaneDeployable<SubDivisionDataInBeat>
     {
-        [SerializeField] Transform subdivisionLineParent;
         [SerializeField] GameObject subdivisionLineObj;
 
         List<SubdivisionLine> subdivisionLines = new List<SubdivisionLine>();
 
-        void ILaneDeployable.Initialize()
+        void ILaneDeployable<SubDivisionDataInBeat>.Initialize()
         {
             foreach (SubdivisionLine subdivisionLine in subdivisionLines)
             {
@@ -21,10 +20,10 @@ namespace ChartEditor
             subdivisionLines = new List<SubdivisionLine>();
         }
 
-        GameObject ILaneDeployable.Deploy(Vector3 pos)
+        GameObject ILaneDeployable<SubDivisionDataInBeat>.Deploy(SubDivisionDataInBeat subDivisionData, Vector3 pos,Transform parent)
         {
             GameObject obj = Instantiate(subdivisionLineObj);
-            if (subdivisionLineParent) { obj.transform.SetParent(subdivisionLineParent); }
+            if (parent) { obj.transform.SetParent(parent); }
             obj.transform.localPosition = pos;
 
             // ê∂ê¨ÇµÇΩÉâÉCÉìÇÉäÉXÉgÇ…äiî[
@@ -36,7 +35,7 @@ namespace ChartEditor
             return obj;
         }
 
-        void ILaneDeployable.Scaling(float current, float previous)
+        void ILaneDeployable<SubDivisionDataInBeat>.Scaling(float current, float previous)
         {
             foreach (SubdivisionLine subdivisionLine in subdivisionLines) 
             {

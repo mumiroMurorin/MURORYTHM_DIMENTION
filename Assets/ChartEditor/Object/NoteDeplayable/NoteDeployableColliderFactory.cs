@@ -4,14 +4,13 @@ using UnityEngine;
 
 namespace ChartEditor
 {
-    public class NoteDeployableGroupFactory : MonoBehaviour, ILaneDeployable
+    public class NoteDeployableGroupFactory : MonoBehaviour, ILaneDeployable<SubDivisionDataInBeat>
     {
-        [SerializeField] Transform noteDeployableColliderParent;
         [SerializeField] GameObject noteDeployableColliderObj;
 
         List<NoteDeployableGroup> noteDeployableColliders = new List<NoteDeployableGroup>();
 
-        void ILaneDeployable.Initialize()
+        void ILaneDeployable<SubDivisionDataInBeat>.Initialize()
         {
             foreach (NoteDeployableGroup noteDeployableCollider in noteDeployableColliders)
             {
@@ -21,10 +20,10 @@ namespace ChartEditor
             noteDeployableColliders = new List<NoteDeployableGroup>();
         }
 
-        GameObject ILaneDeployable.Deploy(Vector3 pos)
+        GameObject ILaneDeployable<SubDivisionDataInBeat>.Deploy(SubDivisionDataInBeat subDivisionData, Vector3 pos, Transform parent)
         {
             GameObject obj = Instantiate(noteDeployableColliderObj);
-            if (noteDeployableColliderParent) { obj.transform.SetParent(noteDeployableColliderParent); }
+            if (parent) { obj.transform.SetParent(parent); }
             obj.transform.localPosition = pos + new Vector3(0, 0.01f, 0);
 
             // ê∂ê¨ÇµÇΩÉâÉCÉìÇÉäÉXÉgÇ…äiî[
@@ -36,7 +35,7 @@ namespace ChartEditor
             return obj;
         }
 
-        void ILaneDeployable.Scaling(float current, float previous)
+        void ILaneDeployable<SubDivisionDataInBeat>.Scaling(float current, float previous)
         {
             foreach (NoteDeployableGroup noteDeployableCollider in noteDeployableColliders) 
             {

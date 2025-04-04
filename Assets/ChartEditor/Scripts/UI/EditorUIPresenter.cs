@@ -97,7 +97,11 @@ namespace ChartEditor
             musicBrowseButton_view.OnClickedListner += BrowseAudioFile;
 
             // bpm変更フィールド
-            bpmInputField_view.OnValueChangedListner += dataSetter_model.SetMainBpm;
+            bpmInputField_view.OnValueChangedListner += (value) => 
+            { 
+                dataSetter_model.SetMainBpm(value);
+                dataSetter_model.InitializeChartData();
+            };
 
             // オフセットフィールド
             offsetInputField_view.OnValueChangedListner += dataSetter_model.SetOffset;
@@ -119,6 +123,7 @@ namespace ChartEditor
 
             AudioClip clip = await audioFileSelector.SelectAudioFile(soundLoadCts.Token);
             dataSetter_model.SetMusic(clip);
+            dataSetter_model.InitializeChartData();
         }
 
         private void OnDestroy()

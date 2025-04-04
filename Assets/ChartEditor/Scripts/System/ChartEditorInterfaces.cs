@@ -7,13 +7,13 @@ namespace ChartEditor
     /// <summary>
     /// レーンに配置できる
     /// </summary>
-    public interface ILaneDeployable
+    public interface ILaneDeployable<T>
     {
         /// <summary>
         /// 配置
         /// </summary>
         /// <param name="pos"></param>
-        GameObject Deploy(Vector3 pos);
+        GameObject Deploy(T lineData, Vector3 pos, Transform parent = null);
 
         /// <summary>
         /// 拡大縮小

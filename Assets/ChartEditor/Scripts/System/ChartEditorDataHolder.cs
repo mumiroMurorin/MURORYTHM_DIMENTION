@@ -7,6 +7,33 @@ namespace ChartEditor
 {
     public class ChartEditorDataHolder : IChartEditorDataGetter, IChartEditorDataSetter
     {
+        #region Chart 譜面関係
+
+        ReactiveProperty<ChartData> chartData = new ReactiveProperty<ChartData>();
+
+        public IReadOnlyReactiveProperty<ChartData> ChartData => chartData;
+
+        public void InitializeChartData()
+        {
+            if(mainBpm.Value <= 0) { return; }
+            if(music.Value == null) { return; }
+
+            chartData.Value = new ChartData(music.Value.length, mainBpm.Value);
+        }
+
+        /// <summary>
+        /// メインBPM
+        /// </summary>
+        ReactiveProperty<float> mainBpm = new ReactiveProperty<float>(0);
+        IReadOnlyReactiveProperty<float> IChartEditorDataGetter.MainBpm => mainBpm;
+
+        void IChartEditorDataSetter.SetMainBpm(float bpm)
+        {
+            mainBpm.Value = bpm;
+        }
+
+        #endregion
+
         #region EditMode エディットモード関係
 
         ReactiveProperty<EditMode> currentEditMode = new ReactiveProperty<EditMode>(EditMode.None);
@@ -111,8 +138,11 @@ namespace ChartEditor
 
         #endregion
 
-        #region PlaybackProgress 拡大率
+        #region Scale 拡大率
 
+        /// <summary>
+        /// 四分音符の長さ
+        /// </summary>
         ReactiveProperty<float> chartViewScale = new ReactiveProperty<float>(5f);
         IReadOnlyReactiveProperty<float> IChartEditorDataGetter.ChartViewScale => chartViewScale;
 
@@ -135,18 +165,6 @@ namespace ChartEditor
 
         #endregion
 
-        #region BPM メインBPM
-
-        ReactiveProperty<float> mainBpm = new ReactiveProperty<float>(0);
-        IReadOnlyReactiveProperty<float> IChartEditorDataGetter.MainBpm => mainBpm;
-
-        void IChartEditorDataSetter.SetMainBpm(float bpm)
-        {
-            mainBpm.Value = bpm;
-        }
-
-        #endregion
-
         #region Offset オフセット
 
         ReactiveProperty<float> offset = new ReactiveProperty<float>(0);
@@ -162,6 +180,8 @@ namespace ChartEditor
 
     public interface IChartEditorDataGetter
     {
+        IReadOnlyReactiveProperty<ChartData> ChartData { get; }
+
         IReadOnlyReactiveProperty<EditMode> CurrentEditMode { get; }
 
         IReadOnlyReactiveProperty<DeploymentNoteType> DeploymentNoteType { get; }
@@ -193,6 +213,8 @@ namespace ChartEditor
 
     public interface IChartEditorDataSetter
     {
+        public void InitializeChartData();
+
         void SetEditMode(EditMode editMode);
 
         void SetNoteType(DeploymentNoteType noteType);

@@ -4463,7 +4463,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ff81620b41b1a443b4db331c1691064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lengthInBarLine: 10
   barLineDeplayable:
     obj: {fileID: 1091189661}
   beatLineDeployable:
@@ -4472,6 +4471,7 @@ MonoBehaviour:
     obj: {fileID: 1489293180}
   colliderDeployableGroup:
     obj: {fileID: 1629046459}
+  lineParent: {fileID: 2019691097}
   ground: {fileID: 403046138}
 --- !u!114 &1517439685
 MonoBehaviour:
@@ -4485,11 +4485,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 594db56ca17370c4492d590c3d1c75db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deplayables:
-  - obj: {fileID: 1091189661}
-  - obj: {fileID: 1785499433}
-  - obj: {fileID: 1489293180}
-  - obj: {fileID: 1629046459}
+  barLineDeplayable:
+    obj: {fileID: 0}
+  beatLineDeployable:
+    obj: {fileID: 0}
+  subdivisionLineDeployable:
+    obj: {fileID: 0}
+  colliderDeployableGroup:
+    obj: {fileID: 0}
   ground: {fileID: 403046138}
 --- !u!224 &1547042616 stripped
 RectTransform:
@@ -6225,7 +6228,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewCameraParent: {fileID: 2119177814}
   offsetAxis: {fileID: 894179518}
-  ground: {fileID: 403046138}
 --- !u!1 &2124361329
 GameObject:
   m_ObjectHideFlags: 0

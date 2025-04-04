@@ -1,18 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using VContainer;
 
 namespace ChartEditor
 {
-    public class BarLineFactory : MonoBehaviour, ILaneDeployable
+    public class BarLineFactory : MonoBehaviour, ILaneDeployable<BarDataInChart>
     {
-        [SerializeField] Transform barLineParent;
         [SerializeField] GameObject barLineObj;
 
+        IChartEditorDataGetter chartEditorDataGetter;
         List<BarLine> barLines = new List<BarLine>();
         int barCount = 0;
 
-        void ILaneDeployable.Initialize()
+        [Inject]
+        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        {
+            this.chartEditorDataGetter = chartEditorDataGetter;
+        }
+
+        void ILaneDeployable<BarDataInChart>.Initialize()
         {
             foreach(BarLine barLine in barLines)
             {
@@ -23,24 +31,26 @@ namespace ChartEditor
             barCount = 0;
         }
 
-        GameObject ILaneDeployable.Deploy(Vector3 pos)
+        GameObject ILaneDeployable<BarDataInChart>.Deploy(BarDataInChart barData, Vector3 pos, Transform parent)
         {
+            // インスタンス化、設定
             GameObject obj = Instantiate(barLineObj);
-            if (barLineParent) { obj.transform.SetParent(barLineParent); }
+            if (parent) { obj.transform.SetParent(parent); }
             obj.transform.localPosition = pos;
 
             // 生成したラインをリストに格納
             if(obj.TryGetComponent(out BarLine line))
             {
+                // 小節の設定
+                line.SetBarData(barData, barLines.LastOrDefault(), chartEditorDataGetter, ++barCount);
+
                 barLines?.Add(line);
-                // 小節番号の設定
-                line.SetBarNumber(++barCount);
             }
 
             return obj;
         }
 
-        void ILaneDeployable.Scaling(float current, float previous)
+        void ILaneDeployable<BarDataInChart>.Scaling(float current, float previous)
         {
             foreach (BarLine barLine in barLines)
             {
