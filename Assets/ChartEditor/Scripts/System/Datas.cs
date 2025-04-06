@@ -213,6 +213,32 @@ namespace ChartEditor
         /// 譜面内の全小節データ
         /// </summary>
         public IReadOnlyReactiveCollection<BarDataInChart> BarDatas => barDatas;
+
+        /// <summary>
+        /// 特定の分線から後のBPMを一括で変更する
+        /// </summary>
+        /// <param name="subDivisionData"></param>
+        public void SetBPMFromSubDivisionUnit(SubDivisionDataInBeat findData, float bpm)
+        {
+            if(barDatas == null) { return; }
+
+            bool isFound = false;
+
+            // 特定のデータをしらみつぶしに探す
+            foreach (var bar in barDatas)
+            {
+                foreach (var sub in bar.SubDivisionDatas)
+                {
+                    // 見つかったらフラグオン
+                    if (sub == findData) { isFound = true; }
+
+                    // フラグオンならBPM変更
+                    if (isFound) { sub.SetBpm(bpm); }
+                }
+            }
+        }
+
+
     }
 
     /// <summary>

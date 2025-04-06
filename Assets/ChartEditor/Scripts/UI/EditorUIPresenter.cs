@@ -119,7 +119,7 @@ namespace ChartEditor
                 .Where(value => value.Current == null)
                 .Subscribe(value =>
                 {
-                    rhythmConfigSubDivision_view.SetData(value.Previous.SubDivisionDataGetter.SubDivisionData);
+                    rhythmConfigSubDivision_view.SetData(value.Previous.SubDivisionDataGetter.SubDivisionData, dataGetter_model.ChartData.Value);
                     rhythmConfigSubDivision_view.SetActive(false);
                 })
                 .AddTo(this.gameObject);

@@ -71,6 +71,7 @@ namespace ChartEditor
         /// </summary>
         private void MoveCamera(float ratio)
         {
+            return;
             viewCameraParent.transform.position = new Vector3(
                 viewCameraParent.transform.position.x,
                 viewCameraParent.transform.position.y,

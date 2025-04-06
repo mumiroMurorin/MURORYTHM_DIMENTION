@@ -229,7 +229,7 @@ namespace ChartEditor
         IReadOnlyReactiveProperty<float> PlaybackProgress { get; }
 
         /// <summary>
-        /// エディタの拡大倍率、1秒あたりのUnity長 [z/sec]
+        /// エディタの拡大倍率、4分音符あたりのUnity長 [z/sec]
         /// </summary>
         IReadOnlyReactiveProperty<float> ChartViewScale { get; }
 

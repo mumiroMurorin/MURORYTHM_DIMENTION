@@ -44,6 +44,19 @@ namespace ChartEditor
             }
         }
 
+        /// <summary>
+        ///  以降の分線全部BPMセット
+        /// </summary>
+        /// <param name="subDivisionData"></param>
+        public void SetData(SubDivisionDataInBeat subDivisionData, ChartData chart)
+        {
+            // BPMのセット
+            if (!string.IsNullOrWhiteSpace(bpmField.text) && float.TryParse(bpmField.text, out float bpm))
+            {
+                chart.SetBPMFromSubDivisionUnit(subDivisionData, bpm);
+            }
+        }
+
         public void OnClickedApplyButton()
         {
             OnClickedApplyButtonListner.Invoke();
