@@ -6,9 +6,10 @@ using System.Linq;
 
 namespace ChartEditor
 {
-    public class BarLine : MonoBehaviour, IBarDataGetter
+    public class BarLine : MonoBehaviour, IBarDataGetter, ISubDivisionDataGetter
     {
         [SerializeField] BarLineInfoView lineInfo_view;
+        [SerializeField] SubdivisionLineInfoView subInfo_view;
         [Header("LineFactories")]
         [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> beatLineFactory;
         [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> subdivisionLineFactory;
@@ -27,6 +28,7 @@ namespace ChartEditor
 
         BarDataInChart IBarDataGetter.BarData => barData;
 
+        SubDivisionDataInBeat ISubDivisionDataGetter.SubDivisionData => barData.SubDivisionDatas[0];
 
         #region Initialize 初期化系
 
@@ -67,9 +69,6 @@ namespace ChartEditor
         {
             // 小節番号
             int barNumber = this.barNumber;
-            // BPM
-            float bpm = barNumber == 1 || thisData.SubDivisionDatas[0].Bpm.Value != backData.SubDivisionDatas.Last().Bpm.Value ? 
-                thisData.SubDivisionDatas[0].Bpm.Value : -1;
             // M
             int beatCount = barNumber == 1 || thisData.BeatCount.Value != backData.BeatCount.Value || thisData.BeatUnit.Value != backData.BeatUnit.Value ?
                 thisData.BeatCount.Value : -1;
@@ -80,7 +79,20 @@ namespace ChartEditor
             int divNum = barNumber == 1 || thisData.DivisionNum.Value != backData.DivisionNum.Value ?
                 thisData.DivisionNum.Value : -1;
 
-            lineInfo_view.SetDatas(barNumber, bpm, beatCount, beatUnit, divNum);
+            lineInfo_view.SetDatas(barNumber, beatCount, beatUnit, divNum);
+        }
+
+        /// <summary>
+        /// 分線上のデータ更新
+        /// </summary>
+        /// <param name="barData"></param>
+        private void SetSubDivisionLineData(SubDivisionDataInBeat thisData, SubDivisionDataInBeat backData)
+        {
+            // BPM
+            float bpm = backData == null || thisData.Bpm.Value != backData.Bpm.Value ?
+                thisData.Bpm.Value : -1;
+
+            subInfo_view.SetDatas(bpm);
         }
 
         private void Bind(BarLine previousBar)
@@ -113,6 +125,36 @@ namespace ChartEditor
                 .Subscribe(_ => { 
                     ReDeployOtherLineOnChangeBarData(barData);
                     SetBarLineData(barData, backData);
+                })
+                .AddTo(this.gameObject);
+
+            // BPM変化
+            barData?.SubDivisionDatas[0].Bpm
+                .Subscribe(bpm => {
+                    var data = barData.SubDivisionDatas[0];
+                    var backData = this.backData?.SubDivisionDatas.Last();
+                    SetSubDivisionLineData(data, backData);
+                })
+                .AddTo(this.gameObject);
+
+            // 前データが変わった時情報を更新する
+            backData?.BeatCount
+                .Subscribe(_ => SetBarLineData(barData, backData))
+                .AddTo(this.gameObject);
+
+            backData?.BeatUnit
+                .Subscribe(_ => SetBarLineData(barData, backData))
+                .AddTo(this.gameObject);
+
+            backData?.DivisionNum
+                .Subscribe(_ => SetBarLineData(barData, backData))
+                .AddTo(this.gameObject);
+
+            backData?.SubDivisionDatas.Last().Bpm
+                .Subscribe(bpm => {
+                    var data = barData.SubDivisionDatas[0];
+                    var backData = this.backData?.SubDivisionDatas.Last();
+                    SetSubDivisionLineData(data, backData);
                 })
                 .AddTo(this.gameObject);
         }
@@ -186,9 +228,12 @@ namespace ChartEditor
             {
                 for (int j = 0; j < divNum; j++)
                 {
+                    bool isBarTiming = i == 0 && j == 0;
+
                     // 分線の生成
                     SubDivisionDataInBeat subDivisionData = barData.SubDivisionDatas[i * divNum + j];
-                    GenerateSubDivisionUnit(subDivisionData, localZ, this.gameObject.transform, j == 0, i == 0 && j == 0);
+                    SubDivisionDataInBeat backData = isBarTiming ? null : barData.SubDivisionDatas[i * divNum + j - 1];
+                    GenerateSubDivisionUnit(subDivisionData, backData, localZ, this.gameObject.transform, j == 0, isBarTiming);
 
                     // zの追加
                     // += M分音符あたりの距離 / 分割数
@@ -205,22 +250,31 @@ namespace ChartEditor
         /// <param name="divNum">分割数</param>
         /// <param name="currentZ">現Z、参照渡し</param>
         /// <param name="isBeatTiming">拍が打たれる？</param>
-        private void GenerateSubDivisionUnit(SubDivisionDataInBeat subDivisionData, float currentZ, Transform parent, bool isBeatTiming, bool isBarTiming)
+        private void GenerateSubDivisionUnit(SubDivisionDataInBeat thisData, SubDivisionDataInBeat backData, float currentZ, Transform parent, bool isBeatTiming, bool isBarTiming)
         {
             // コライダーの設置
-            colliderFactory?.Value.Deploy(subDivisionData, Vector3.forward * currentZ, parent);
+            colliderFactory?.Value.Deploy(thisData, Vector3.forward * currentZ, parent);
 
             // 小節線があるため置かない
-            if (isBarTiming) { return; }
+            if (isBarTiming) 
+            {
+                return;
+            }
             // 拍線
             else if (isBeatTiming)
             {
-                beatLineFactory?.Value.Deploy(subDivisionData, Vector3.forward * currentZ, parent);
+                GameObject obj = beatLineFactory?.Value.Deploy(thisData, Vector3.forward * currentZ, parent);
+
+                if (!obj.TryGetComponent(out BeatLine beatLine)) { return; }
+                beatLine.Initialize(thisData, backData);
             }
             // 分線
             else
             {
-                subdivisionLineFactory?.Value.Deploy(subDivisionData, Vector3.forward * currentZ, parent);
+                GameObject obj = subdivisionLineFactory?.Value.Deploy(thisData, Vector3.forward * currentZ, parent);
+
+                if (!obj.TryGetComponent(out SubdivisionLine subDivisionLine)) { return; }
+                subDivisionLine.Initialize(thisData, backData);
             }
         }
 

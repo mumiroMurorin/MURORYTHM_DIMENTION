@@ -72,15 +72,28 @@ namespace ChartEditor
 
         #endregion
 
-        #region SetBar è¨êﬂê¸Ç…ëŒÇ∑ÇÈê›íË
+        #region BarConfig è¨êﬂê¸Ç…ëŒÇ∑ÇÈê›íË
 
-        ReactiveProperty<IRhythmConfigurableCollider> rhythmConfigurable = new ReactiveProperty<IRhythmConfigurableCollider>();
-        IReadOnlyReactiveProperty<IRhythmConfigurableCollider> IChartEditorDataGetter.RhythmConfigurable => rhythmConfigurable;
+        ReactiveProperty<IRhythmConfigurableBarCollider> rhythmConfigurableBar = new ReactiveProperty<IRhythmConfigurableBarCollider>();
+        IReadOnlyReactiveProperty<IRhythmConfigurableBarCollider> IChartEditorDataGetter.RhythmConfigurableBar => rhythmConfigurableBar;
 
-        void IChartEditorDataSetter.SetRhythmConfigurable(IRhythmConfigurableCollider rCollider)
+        void IChartEditorDataSetter.SetRhythmConfigurableBar(IRhythmConfigurableBarCollider rCollider)
         {
-            if (rhythmConfigurable.Value == rCollider) { return; }
-            rhythmConfigurable.Value = rCollider;
+            if (rhythmConfigurableBar.Value == rCollider) { return; }
+            rhythmConfigurableBar.Value = rCollider;
+        }
+
+        #endregion
+
+        #region SubDivisionConfig ï™ê¸(îèê¸)Ç…ëŒÇ∑ÇÈê›íË
+
+        ReactiveProperty<IRhythmConfigurableSubDivisionCollider> rhythmConfigurableSubDivision = new ReactiveProperty<IRhythmConfigurableSubDivisionCollider>();
+        IReadOnlyReactiveProperty<IRhythmConfigurableSubDivisionCollider> IChartEditorDataGetter.RhythmConfigurableSubDivision => rhythmConfigurableSubDivision;
+
+        void IChartEditorDataSetter.SetRhythmConfigurableSubDivision(IRhythmConfigurableSubDivisionCollider sCollider)
+        {
+            if (rhythmConfigurableSubDivision.Value == sCollider) { return; }
+            rhythmConfigurableSubDivision.Value = sCollider;
         }
 
         #endregion
@@ -197,7 +210,9 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<EditMode> CurrentEditMode { get; }
 
-        IReadOnlyReactiveProperty<IRhythmConfigurableCollider> RhythmConfigurable { get; }
+        IReadOnlyReactiveProperty<IRhythmConfigurableBarCollider> RhythmConfigurableBar { get; }
+
+        IReadOnlyReactiveProperty<IRhythmConfigurableSubDivisionCollider> RhythmConfigurableSubDivision { get; }
 
         IReadOnlyReactiveProperty<DeploymentNoteType> DeploymentNoteType { get; }
 
@@ -234,7 +249,9 @@ namespace ChartEditor
 
         void SetNoteType(DeploymentNoteType noteType);
 
-        void SetRhythmConfigurable(IRhythmConfigurableCollider rCollider);
+        void SetRhythmConfigurableBar(IRhythmConfigurableBarCollider rCollider);
+
+        void SetRhythmConfigurableSubDivision(IRhythmConfigurableSubDivisionCollider rCollider);
 
         void SetDeployableCollider(IDeployableCollider collider);
 

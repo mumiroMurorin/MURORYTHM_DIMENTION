@@ -108,13 +108,14 @@ namespace ChartEditor
 
             // インタラクトされているRhythmConfigurableColliderの更新
             // あんまりよくないけどクリック処理もここでやっちゃう
-            if (obj.TryGetComponent(out IRhythmConfigurableCollider configurable))
+            if (obj.TryGetComponent(out IRhythmConfigurableBarCollider configurableBar))
             {
-                if (Input.GetMouseButtonDown(0)) { chartEditorDataSetter.SetRhythmConfigurable(configurable); }
+                if (Input.GetMouseButtonDown(0)) { chartEditorDataSetter.SetRhythmConfigurableBar(configurableBar); }
             }
-            else
+
+            if (obj.TryGetComponent(out IRhythmConfigurableSubDivisionCollider configurableSub))
             {
-                //chartEditorDataSetter.SetRhythmConfigurable(null);
+                if (Input.GetMouseButtonDown(0)) { chartEditorDataSetter.SetRhythmConfigurableSubDivision(configurableSub); }
             }
         }
 

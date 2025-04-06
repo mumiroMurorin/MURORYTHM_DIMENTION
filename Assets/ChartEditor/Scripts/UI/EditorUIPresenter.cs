@@ -18,7 +18,8 @@ namespace ChartEditor
         [SerializeField] BPMInputFieldView bpmInputField_view;
         [SerializeField] OffsetInputFieldView offsetInputField_view;
         [SerializeField] MusicNameView musicName_view;
-        [SerializeField] RhythmConfigView rhythmConfig_view;
+        [SerializeField] RhythmConfigBarView rhythmConfigBar_view;
+        [SerializeField] RhythmConfigSubView rhythmConfigSubDivision_view;
 
         AudioFileSelector audioFileSelector = new AudioFileSelector();
 
@@ -79,28 +80,49 @@ namespace ChartEditor
                 .Subscribe(musicName_view.OnChangeMusic)
                 .AddTo(this.gameObject);
 
-            // リズムコンフィグのクリック
-            dataGetter_model?.RhythmConfigurable
+            // リズムコンフィグ(小節線)のクリック
+            dataGetter_model?.RhythmConfigurableBar
                 .Where(value => value != null)
                 .Subscribe(value =>
                 {
                     BarDataInChart data = value.BarDataGetter.BarData;
-                    rhythmConfig_view.SetDataOnUI(data.SubDivisionDatas[0].Bpm.Value, data.BeatCount.Value, data.BeatUnit.Value, data.DivisionNum.Value);
-                    rhythmConfig_view.SetActive(true);
+                    rhythmConfigBar_view.SetDataOnUI(data.BeatCount.Value, data.BeatUnit.Value, data.DivisionNum.Value);
+                    rhythmConfigBar_view.SetActive(true);
                 })
                 .AddTo(this.gameObject);
 
-            // リズムコンフィグを閉じる
-            dataGetter_model?.RhythmConfigurable
+            // リズムコンフィグ(分線)のクリック
+            dataGetter_model?.RhythmConfigurableSubDivision
+                .Where(value => value != null)
+                .Subscribe(value =>
+                {
+                    SubDivisionDataInBeat data = value.SubDivisionDataGetter.SubDivisionData;
+                    rhythmConfigSubDivision_view.SetDataOnUI(data.Bpm.Value);
+                    rhythmConfigSubDivision_view.SetActive(true);
+                })
+                .AddTo(this.gameObject);
+
+            // リズムコンフィグ(小節線)を閉じる
+            dataGetter_model?.RhythmConfigurableBar
                 .Pairwise()
                 .Where(value => value.Current == null)
                 .Subscribe(value =>
                 {
-                    rhythmConfig_view.SetData(value.Previous.BarDataGetter.BarData);
-                    rhythmConfig_view.SetActive(false);
+                    rhythmConfigBar_view.SetData(value.Previous.BarDataGetter.BarData);
+                    rhythmConfigBar_view.SetActive(false);
                 })
                 .AddTo(this.gameObject);
 
+            // リズムコンフィグ(分線)を閉じる
+            dataGetter_model?.RhythmConfigurableSubDivision
+                .Pairwise()
+                .Where(value => value.Current == null)
+                .Subscribe(value =>
+                {
+                    rhythmConfigSubDivision_view.SetData(value.Previous.SubDivisionDataGetter.SubDivisionData);
+                    rhythmConfigSubDivision_view.SetActive(false);
+                })
+                .AddTo(this.gameObject);
         }
 
         private void SetEvent()
@@ -131,7 +153,8 @@ namespace ChartEditor
             offsetInputField_view.OnValueChangedListner += dataSetter_model.SetOffset;
 
             // リズムコンフィグ
-            rhythmConfig_view.OnClickedDecisionButtonListner += () => dataSetter_model.SetRhythmConfigurable(null);
+            rhythmConfigBar_view.OnClickedApplyButtonListner += () => dataSetter_model.SetRhythmConfigurableBar(null);
+            rhythmConfigSubDivision_view.OnClickedApplyButtonListner += () => dataSetter_model.SetRhythmConfigurableSubDivision(null);
         }
 
         /// <summary>
