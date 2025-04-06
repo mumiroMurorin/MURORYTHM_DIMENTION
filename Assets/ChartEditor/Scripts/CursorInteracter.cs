@@ -105,6 +105,17 @@ namespace ChartEditor
             {
                 chartEditorDataSetter.SetDestroyableObject(null);
             }
+
+            // インタラクトされているRhythmConfigurableColliderの更新
+            // あんまりよくないけどクリック処理もここでやっちゃう
+            if (obj.TryGetComponent(out IRhythmConfigurableCollider configurable))
+            {
+                if (Input.GetMouseButtonDown(0)) { chartEditorDataSetter.SetRhythmConfigurable(configurable); }
+            }
+            else
+            {
+                //chartEditorDataSetter.SetRhythmConfigurable(null);
+            }
         }
 
         /// <summary>

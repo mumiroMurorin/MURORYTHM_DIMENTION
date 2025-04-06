@@ -6,7 +6,7 @@ using UniRx;
 
 namespace ChartEditor
 {
-    public class LineInfoView : MonoBehaviour
+    public class BarLineInfoView : MonoBehaviour
     {
         [Header("UIs")]
         [SerializeField] TextMeshPro[] numberTmps;

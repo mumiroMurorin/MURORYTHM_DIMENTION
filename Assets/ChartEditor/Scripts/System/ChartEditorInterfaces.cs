@@ -89,4 +89,9 @@ namespace ChartEditor
     {
         void OnDestroy();
     }
+
+    public interface IRhythmConfigurableCollider
+    {
+        IBarDataGetter BarDataGetter { get; }
+    }
 }

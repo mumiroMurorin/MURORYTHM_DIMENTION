@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace ChartEditor
 {
-    public class BarLine : MonoBehaviour
+    public class BarLine : MonoBehaviour, IBarDataGetter
     {
-        [SerializeField] LineInfoView lineInfo_view;
+        [SerializeField] BarLineInfoView lineInfo_view;
         [Header("LineFactories")]
         [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> beatLineFactory;
         [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> subdivisionLineFactory;
@@ -24,6 +24,8 @@ namespace ChartEditor
         /// </summary>
         ReactiveProperty<float> nextZ = new ReactiveProperty<float>();
         public IReadOnlyReactiveProperty<float> NextZ => nextZ;
+
+        BarDataInChart IBarDataGetter.BarData => barData;
 
 
         #region Initialize èâä˙âªån
@@ -232,5 +234,10 @@ namespace ChartEditor
             subdivisionLineFactory?.Value.Scaling(current, previous);
             colliderFactory?.Value.Scaling(current, previous);
         }
+    }
+
+    public interface IBarDataGetter
+    {
+        BarDataInChart BarData { get; }
     }
 }

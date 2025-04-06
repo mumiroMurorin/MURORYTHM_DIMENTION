@@ -18,6 +18,7 @@ namespace ChartEditor
         [SerializeField] BPMInputFieldView bpmInputField_view;
         [SerializeField] OffsetInputFieldView offsetInputField_view;
         [SerializeField] MusicNameView musicName_view;
+        [SerializeField] RhythmConfigView rhythmConfig_view;
 
         AudioFileSelector audioFileSelector = new AudioFileSelector();
 
@@ -77,6 +78,29 @@ namespace ChartEditor
             dataGetter_model?.Music
                 .Subscribe(musicName_view.OnChangeMusic)
                 .AddTo(this.gameObject);
+
+            // リズムコンフィグのクリック
+            dataGetter_model?.RhythmConfigurable
+                .Where(value => value != null)
+                .Subscribe(value =>
+                {
+                    BarDataInChart data = value.BarDataGetter.BarData;
+                    rhythmConfig_view.SetDataOnUI(data.SubDivisionDatas[0].Bpm.Value, data.BeatCount.Value, data.BeatUnit.Value, data.DivisionNum.Value);
+                    rhythmConfig_view.SetActive(true);
+                })
+                .AddTo(this.gameObject);
+
+            // リズムコンフィグを閉じる
+            dataGetter_model?.RhythmConfigurable
+                .Pairwise()
+                .Where(value => value.Current == null)
+                .Subscribe(value =>
+                {
+                    rhythmConfig_view.SetData(value.Previous.BarDataGetter.BarData);
+                    rhythmConfig_view.SetActive(false);
+                })
+                .AddTo(this.gameObject);
+
         }
 
         private void SetEvent()
@@ -106,6 +130,8 @@ namespace ChartEditor
             // オフセットフィールド
             offsetInputField_view.OnValueChangedListner += dataSetter_model.SetOffset;
 
+            // リズムコンフィグ
+            rhythmConfig_view.OnClickedDecisionButtonListner += () => dataSetter_model.SetRhythmConfigurable(null);
         }
 
         /// <summary>

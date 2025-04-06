@@ -25,20 +25,6 @@ namespace ChartEditor
             Bind();
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Backspace))
-            {
-                ChartData data = chartEditorDataGetter.ChartData.Value;
-                data.BarDatas[2].SetDivisionNum(3);
-                data.BarDatas[3].SetDivisionNum(3);
-                data.BarDatas[4].SetDivisionNum(4);
-                data.BarDatas[5].SetDivisionNum(4);
-                data.BarDatas[6].SetDivisionNum(8);
-                data.BarDatas[7].SetDivisionNum(8);
-            }
-        }
-
         private void Bind()
         {
             // ïàñ ê∂ê¨

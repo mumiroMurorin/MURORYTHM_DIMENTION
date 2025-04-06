@@ -72,6 +72,19 @@ namespace ChartEditor
 
         #endregion
 
+        #region SetBar è¨êﬂê¸Ç…ëŒÇ∑ÇÈê›íË
+
+        ReactiveProperty<IRhythmConfigurableCollider> rhythmConfigurable = new ReactiveProperty<IRhythmConfigurableCollider>();
+        IReadOnlyReactiveProperty<IRhythmConfigurableCollider> IChartEditorDataGetter.RhythmConfigurable => rhythmConfigurable;
+
+        void IChartEditorDataSetter.SetRhythmConfigurable(IRhythmConfigurableCollider rCollider)
+        {
+            if (rhythmConfigurable.Value == rCollider) { return; }
+            rhythmConfigurable.Value = rCollider;
+        }
+
+        #endregion
+
         #region Move ìÆÇ©Ç∑
 
         ReactiveProperty<IMovableObject> movableObject= new ReactiveProperty<IMovableObject>();
@@ -184,6 +197,8 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<EditMode> CurrentEditMode { get; }
 
+        IReadOnlyReactiveProperty<IRhythmConfigurableCollider> RhythmConfigurable { get; }
+
         IReadOnlyReactiveProperty<DeploymentNoteType> DeploymentNoteType { get; }
 
         IReadOnlyReactiveProperty<IDeployableCollider> DeployableCollider { get; }
@@ -218,6 +233,8 @@ namespace ChartEditor
         void SetEditMode(EditMode editMode);
 
         void SetNoteType(DeploymentNoteType noteType);
+
+        void SetRhythmConfigurable(IRhythmConfigurableCollider rCollider);
 
         void SetDeployableCollider(IDeployableCollider collider);
 
