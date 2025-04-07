@@ -28,8 +28,8 @@ namespace ChartEditor
         BarDataInChart barData;
         public BarDataInChart BarData => barData;
 
-        SubDivisionDataInBeat subDivisionData;
-        public SubDivisionDataInBeat SubDivisionData => subDivisionData;
+        ReactiveProperty<SubDivisionDataInBeat> subDivisionData = new ReactiveProperty<SubDivisionDataInBeat>();
+        public SubDivisionDataInBeat SubDivisionData => subDivisionData.Value;
 
         /// <summary>
         /// 分線の最後尾
@@ -52,6 +52,7 @@ namespace ChartEditor
             this.backData = backData;
             this.barNumber = number;
             this.chartEditorDataGetter = chartEditorDataGetter;
+            this.subDivisionData.Value = barData.SubDivisionDatas[0];
 
             InitializeFactories();
             DeployOtherLine(barData);
@@ -125,16 +126,33 @@ namespace ChartEditor
             backData?.SubDivisionData.Bpm
                 .Subscribe(bpm =>
                 {
-                    SetSubDivisionLineData(subDivisionData, backData.SubDivisionData);
+                    SetSubDivisionLineData(SubDivisionData, backData.SubDivisionData);
+                })
+                .AddTo(this.gameObject);
+        }
+
+        private void BindForSubDivisionData(SubDivisionDataInBeat subDivisionData)
+        {
+            // BPM変化
+            subDivisionData?.Bpm
+                .Subscribe(bpm =>
+                {
+                    AdjustPositionOnChangeLineData();
+                    SetSubDivisionLineData(subDivisionData, backData?.Value.SubDivisionData);
                 })
                 .AddTo(this.gameObject);
         }
 
         private void Bind()
         {
-            // 前データが変わった際のメソッド
+            // 前データが変わった際
             backData?
                 .Subscribe(BindForBackData)
+                .AddTo(this.gameObject);
+
+            // 分線データが変わった際
+            subDivisionData?
+                .Subscribe(BindForSubDivisionData)
                 .AddTo(this.gameObject);
 
             // 小節データに購読
@@ -156,20 +174,13 @@ namespace ChartEditor
                 .Subscribe(_ => SetBarLineData(barData, backData?.Value.BarData))
                 .AddTo(this.gameObject);
 
-            // BPM変化
-            subDivisionData?.Bpm
-                .Subscribe(bpm =>
-                {
-                    Debug.Log($"BPM {bpm}");
-                    AdjustPositionOnChangeLineData();
-                    SetSubDivisionLineData(subDivisionData, backData?.Value.SubDivisionData);
-                })
-                .AddTo(this.gameObject);
-
+            // 分線の数が変わった時生成しなおす
             barData.SubDivisionDatas.ObserveCountChanged()
                 .Where(count => count == barData.BeatCount.Value * barData.DivisionNum.Value)
                 .Subscribe(count => {
-                    Debug.Log($"CountChange: {count}");
+                    // 一つ目の分線の更新
+                    this.subDivisionData.Value = barData.SubDivisionDatas[0];
+
                     ReDeployOtherLineOnChangeBarData(barData);
                     AdjustPositionOnChangeLineData();
                 })
@@ -208,7 +219,7 @@ namespace ChartEditor
 
             float chartLengthParSecond = chartEditorDataGetter.ChartViewScale.Value;
             float beatUnit = barData.BeatUnit.Value;
-            float bpm = subDivisionData.Bpm.Value;
+            float bpm = SubDivisionData.Bpm.Value;
             int divNum = barData.DivisionNum.Value;
 
             // zの追加
@@ -224,7 +235,7 @@ namespace ChartEditor
         {
             float chartLengthParSecond = chartEditorDataGetter.ChartViewScale.Value;
             float beatUnit = barData.BeatUnit.Value;
-            float bpm = subDivisionData.Bpm.Value;
+            float bpm = SubDivisionData.Bpm.Value;
             int divNum = barData.DivisionNum.Value;
 
             // zの追加
@@ -261,7 +272,7 @@ namespace ChartEditor
 
                     // 分線の生成
                     SubDivisionDataInBeat subDivisionData = barData.SubDivisionDatas[i * divNum + j];
-                    ILinePositioner backData = null;
+                    ILinePositioner backData = this;
 
                     if (backObj != null && !backObj.TryGetComponent(out backData)){ return; }
                     backObj = GenerateSubDivisionUnit(subDivisionData, backData, localZ, this.gameObject.transform, j == 0, isBarTiming);
@@ -275,7 +286,6 @@ namespace ChartEditor
             }
 
             subDivisionLast.Value = backObj.GetComponent<ILinePositioner>();
-            this.subDivisionData = barData.SubDivisionDatas[0];
         }
 
         /// <summary>
