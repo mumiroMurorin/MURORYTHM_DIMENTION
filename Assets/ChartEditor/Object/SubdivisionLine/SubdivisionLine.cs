@@ -5,35 +5,54 @@ using UniRx;
 
 namespace ChartEditor
 {
-    public class SubdivisionLine : MonoBehaviour, ISubDivisionDataGetter
+    public class SubdivisionLine : MonoBehaviour, ISubDivisionDataGetter, ILinePositioner
     {
         [SerializeField] SubdivisionLineInfoView lineInfo_view;
 
-        SubDivisionDataInBeat thisData;
-        SubDivisionDataInBeat backData;
+        ILinePositioner backData;
+        IChartEditorDataGetter chartEditorDataGetter;
 
-        SubDivisionDataInBeat ISubDivisionDataGetter.SubDivisionData => thisData;
+        /// <summary>
+        /// 次の線の開始位置
+        /// </summary>
+        ReactiveProperty<float> nextZ = new ReactiveProperty<float>();
+        IReadOnlyReactiveProperty<float> ILinePositioner.NextZ => nextZ;
 
-        public void Initialize(SubDivisionDataInBeat thisData, SubDivisionDataInBeat backData)
+        SubDivisionDataInBeat subDivisionData;
+        public SubDivisionDataInBeat SubDivisionData => subDivisionData;
+
+        BarDataInChart barData;
+        BarDataInChart ILinePositioner.BarData => barData;
+
+        public void Initialize(SubDivisionDataInBeat subDivisionData, ILinePositioner backData, IChartEditorDataGetter chartEditorDataGetter)
         {
-            this.thisData = thisData;
+            this.subDivisionData = subDivisionData;
             this.backData = backData;
+            this.barData = backData.BarData;
+            this.chartEditorDataGetter = chartEditorDataGetter;
 
             Bind();
         }
 
         private void Bind()
         {
+            // 前のバーにポジションが変わった時のメソッドを購読
+            backData?.NextZ
+                .Subscribe(AdjustPositionOnChangeNextZ)
+                .AddTo(this.gameObject);
+
             // BPM変化
-            thisData?.Bpm
+            subDivisionData?.Bpm
                 .Subscribe(value => {
-                    SetSubDivisionLineData(thisData, backData);
+                    AdjustPositionOnChangeLineData();
+                    SetSubDivisionLineData(subDivisionData, backData.SubDivisionData);
                 })
                 .AddTo(this.gameObject);
 
-            backData?.Bpm
+            // 前のBPMが変わった時
+            backData.SubDivisionData?.Bpm
                 .Subscribe(value => {
-                    SetSubDivisionLineData(thisData, backData);
+                    SetSubDivisionLineData(subDivisionData, backData.SubDivisionData);
                 })
                 .AddTo(this.gameObject);
         }
@@ -43,13 +62,52 @@ namespace ChartEditor
         /// 分線上のデータ更新
         /// </summary>
         /// <param name="barData"></param>
-        private void SetSubDivisionLineData(SubDivisionDataInBeat thisData, SubDivisionDataInBeat backData)
+        private void SetSubDivisionLineData(SubDivisionDataInBeat subDivisionData, SubDivisionDataInBeat backData)
         {
             // BPM
-            float bpm = backData == null || thisData.Bpm.Value != backData.Bpm.Value ?
-                thisData.Bpm.Value : -1;
+            float bpm = backData == null || subDivisionData.Bpm.Value != backData.Bpm.Value ?
+                subDivisionData.Bpm.Value : -1;
 
             lineInfo_view.SetDatas(bpm);
+        }
+
+        /// <summary>
+        /// 前の線位置がずれたとき、この線位置も調整する(数珠繋ぎ)
+        /// </summary>
+        private void AdjustPositionOnChangeNextZ(float currentZ)
+        {
+            // このオブジェクトの位置調整
+            transform.position = new Vector3(
+                transform.position.x,
+                transform.position.y,
+                currentZ
+                );
+
+            float chartLengthParSecond = chartEditorDataGetter.ChartViewScale.Value;
+            float beatUnit = backData.BarData.BeatUnit.Value;
+            float bpm = subDivisionData.Bpm.Value;
+            int divNum = backData.BarData.DivisionNum.Value;
+
+            // zの追加
+            // += 1秒あたりのz距離 * 秒数
+            //  = 1秒あたりのz距離 * (60f / bpm) * (4f / beatUnit) / 分割数
+            nextZ.Value = currentZ += chartLengthParSecond * (60f / bpm) * (4f / beatUnit) / divNum;
+        }
+
+        /// <summary>
+        /// 小節データが変わった時、次の小節位置を調整する
+        /// </summary>
+        private void AdjustPositionOnChangeLineData()
+        {
+            float chartLengthParSecond = chartEditorDataGetter.ChartViewScale.Value;
+            float beatUnit = backData.BarData.BeatUnit.Value;
+            float bpm = subDivisionData.Bpm.Value;
+            int divNum = backData.BarData.DivisionNum.Value;
+
+            // zの追加
+            // += 1秒あたりのz距離 * 秒数
+            //  = 1秒あたりのz距離 * (60f / bpm) * (4f / beatUnit) / 分割数
+            nextZ.Value = transform.position.z + chartLengthParSecond * (60f / bpm) * (4f / beatUnit) / divNum;
         }
 
     }

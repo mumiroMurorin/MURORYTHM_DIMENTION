@@ -167,7 +167,7 @@ namespace ChartEditor
         #region Scale 拡大率
 
         /// <summary>
-        /// 四分音符の長さ
+        /// 1秒間のグラウンド長さ
         /// </summary>
         ReactiveProperty<float> chartViewScale = new ReactiveProperty<float>(5f);
         IReadOnlyReactiveProperty<float> IChartEditorDataGetter.ChartViewScale => chartViewScale;
@@ -229,7 +229,7 @@ namespace ChartEditor
         IReadOnlyReactiveProperty<float> PlaybackProgress { get; }
 
         /// <summary>
-        /// エディタの拡大倍率、4分音符あたりのUnity長 [z/sec]
+        /// エディタの拡大倍率、1秒間のUnity長 [z/sec]
         /// </summary>
         IReadOnlyReactiveProperty<float> ChartViewScale { get; }
 

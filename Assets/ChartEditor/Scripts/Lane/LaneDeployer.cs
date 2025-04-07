@@ -44,14 +44,10 @@ namespace ChartEditor
             // まず初期化
             ClearLane();
 
-            // 四分音符当たりの距離
-            float quarterNoteLength = chartEditorDataGetter.ChartViewScale.Value;
-            float currentZ = 0;
-
             // 小節線の数だけ繰り返す
             for (int i = 0; i < chartData.BarDatas.Count; i++)
             {
-                GenerateBarUnit(chartData.BarDatas[i], quarterNoteLength, ref currentZ, lineParent, i);
+                GenerateBarUnit(chartData.BarDatas[i], lineParent, i);
             }
 
             // グラウンドの生成
@@ -72,10 +68,10 @@ namespace ChartEditor
         /// </summary>
         /// <param name="barData"></param>
         /// <param name="currentZ"></param>
-        private void GenerateBarUnit(BarDataInChart barData, float quarterNoteLength, ref float currentZ, Transform parent, int count)
+        private void GenerateBarUnit(BarDataInChart barData, Transform parent, int count)
         {
             // 小節線のインスタンス化
-            GameObject barObj = barLineDeplayable.Value.Deploy(barData, Vector3.forward * currentZ, parent);
+            GameObject barObj = barLineDeplayable.Value.Deploy(barData, Vector3.zero, parent);
             barObj.name = $"Bar_{count + 1}";
         }
 

@@ -8,16 +8,16 @@ namespace ChartEditor
     {
         [SerializeField] GameObject beatLineObj;
 
-        List<BeatLine> beatLines = new List<BeatLine>();
+        List<SubdivisionLine> beatLines = new List<SubdivisionLine>();
 
         void ILaneDeployable<SubDivisionDataInBeat>.Initialize()
         {
-            foreach (BeatLine beatLine in beatLines)
+            foreach (var beatLine in beatLines)
             {
                 Destroy(beatLine.gameObject);
             }
 
-            beatLines = new List<BeatLine>();
+            beatLines = new List<SubdivisionLine>();
         }
 
         GameObject ILaneDeployable<SubDivisionDataInBeat>.Deploy(SubDivisionDataInBeat subDivisionData, Vector3 pos, Transform parent)
@@ -27,7 +27,7 @@ namespace ChartEditor
             obj.transform.localPosition = pos;
 
             // ê∂ê¨ÇµÇΩÉâÉCÉìÇÉäÉXÉgÇ…äiî[
-            if (obj.TryGetComponent(out BeatLine line))
+            if (obj.TryGetComponent(out SubdivisionLine line))
             {
                 beatLines?.Add(line);
             }
@@ -37,7 +37,7 @@ namespace ChartEditor
 
         void ILaneDeployable<SubDivisionDataInBeat>.Scaling(float current, float previous)
         {
-            foreach (BeatLine beatLine in beatLines)
+            foreach (SubdivisionLine beatLine in beatLines)
             {
                 Vector3 pos = beatLine.gameObject.transform.localPosition;
                 beatLine.gameObject.transform.localPosition = new Vector3(pos.x, pos.y, pos.z * (current / previous));

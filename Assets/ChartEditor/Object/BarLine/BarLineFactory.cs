@@ -12,7 +12,6 @@ namespace ChartEditor
 
         IChartEditorDataGetter chartEditorDataGetter;
         List<BarLine> barLines = new List<BarLine>();
-        BarDataInChart backData;
         int barCount = 0;
 
         [Inject]
@@ -43,13 +42,10 @@ namespace ChartEditor
             if(obj.TryGetComponent(out BarLine line))
             {
                 // è¨êﬂÇÃê›íË
-                line.Initialize(barData, backData, barLines.LastOrDefault(), chartEditorDataGetter, ++barCount);
+                line.Initialize(barData, barLines.LastOrDefault()?.SubDivisionLast, chartEditorDataGetter, ++barCount);
 
                 barLines?.Add(line);
             }
-
-            // ÉfÅ[É^Çï€ë∂
-            backData = barData;
 
             return obj;
         }
