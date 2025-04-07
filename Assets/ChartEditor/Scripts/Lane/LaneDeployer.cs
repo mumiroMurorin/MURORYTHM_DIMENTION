@@ -50,17 +50,19 @@ namespace ChartEditor
                 GenerateBarUnit(chartData.BarDatas[i], lineParent, i);
             }
 
-            // グラウンドの生成
-            //ground.transform.localScale = new Vector3(
-            //    ground.transform.localScale.x,
-            //    chartLength,
-            //    ground.transform.localScale.z);
+            float chartLength = chartEditorDataGetter.ChartViewScale.Value * chartEditorDataGetter.Music.Value.length;
 
-            //ground.transform.position = new Vector3(
-            //    ground.transform.position.x,
-            //    ground.transform.position.y,
-            //    ground.transform.localScale.y / 2f
-            //    );
+            // グラウンドの生成
+            ground.transform.localScale = new Vector3(
+                ground.transform.localScale.x,
+                chartLength,
+                ground.transform.localScale.z);
+
+            ground.transform.position = new Vector3(
+                ground.transform.position.x,
+                ground.transform.position.y,
+                ground.transform.localScale.y / 2f
+                );
         }
 
         /// <summary>

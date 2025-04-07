@@ -71,7 +71,6 @@ namespace ChartEditor
         /// </summary>
         private void MoveCamera(float ratio)
         {
-            return;
             viewCameraParent.transform.position = new Vector3(
                 viewCameraParent.transform.position.x,
                 viewCameraParent.transform.position.y,
@@ -86,7 +85,9 @@ namespace ChartEditor
         {
             if (chartEditorDataGetter.Music.Value == null) { return; }
 
-            float z = offset / 1000 * (chartLength / chartEditorDataGetter.Music.Value.length);
+            float musicLength = chartEditorDataGetter.Music.Value.length;
+
+            float z = offset / 1000 * (chartLength / musicLength);
             offsetAxis.transform.localPosition = new Vector3(
                 offsetAxis.transform.localPosition.x,
                 z,
