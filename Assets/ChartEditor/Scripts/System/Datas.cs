@@ -11,10 +11,14 @@ namespace ChartEditor
     /// </summary>
     public class NoteData
     {
+        public DeploymentNoteType NoteType { get; set; }
+
+        public AddressInChart Address { get; set; }
+
         /// <summary>
         /// 配置範囲 (基本0～15)
         /// </summary>
-        ReactiveCollection<float> range = new ReactiveCollection<float>();
+        ReactiveCollection<float> range = new ReactiveCollection<float>() { 0 };
 
         /// <summary>
         /// ノーツの移動、拡大縮小の監視
@@ -23,7 +27,12 @@ namespace ChartEditor
 
         public void SetRange(List<float> range)
         {
-            this.range = new ReactiveCollection<float>(range);
+            this.range.Clear(); 
+
+            foreach(float index in range)
+            {
+                this.range.Add(index);
+            }
         }
 
         public void AddRange(bool isAddLast)
@@ -38,10 +47,15 @@ namespace ChartEditor
     /// </summary>
     public class SubDivisionDataInBeat
     {
-        public SubDivisionDataInBeat(float bpm)
+        public SubDivisionDataInBeat(float bpm, int barIndex, int subIndex)
         {
             SetBpm(bpm);
+            BarIndex = barIndex;
+            SubDivisionIndex = subIndex;
         }
+
+        public int BarIndex { get; }
+        public int SubDivisionIndex { get; }
 
         #region ノーツデータ
 
@@ -92,13 +106,17 @@ namespace ChartEditor
     /// </summary>
     public class BarDataInChart
     {
-        public BarDataInChart(int beatCount, float beatUnit, int divNum, float bpm)
+        public BarDataInChart(int beatCount, float beatUnit, int divNum, float bpm, int barIndex)
         {
             this.beatCount.Value = beatCount;
             this.beatUnit.Value = beatUnit;
             this.divisionNum.Value = divNum;
+            this.barIndex = barIndex;
+
             UpdateSubDivisionData(beatCount, beatUnit, divNum, bpm);
         }
+
+        int barIndex;
 
         /// <summary>
         /// 小節内の分線データ
@@ -138,7 +156,7 @@ namespace ChartEditor
             // カウント数 * 分割数が分線の数
             for (int i = 0; i < beatCount * divNum; i++)
             {
-                subDivisionDatas.Add(new SubDivisionDataInBeat(bpm));
+                subDivisionDatas.Add(new SubDivisionDataInBeat(bpm, barIndex, i));
             }
 
             // データセット
@@ -205,7 +223,7 @@ namespace ChartEditor
 
             for(int i = 0; i < beatNum; i++)
             {
-                BarDataInChart barData = new BarDataInChart(beatCount, beatUnit, divNum, bpm);
+                BarDataInChart barData = new BarDataInChart(beatCount, beatUnit, divNum, bpm, i);
                 barDatas.Add(barData);
             }
         }
@@ -241,7 +259,56 @@ namespace ChartEditor
             }
         }
 
+        /// <summary>
+        /// ノーツを追加する
+        /// </summary>
+        public void AddNote(NoteData noteData, AddressInChart address)
+        {
+            // 新たな場所に追加
+            SubDivisionDataInBeat newSubDivision = BarDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
+            newSubDivision.AddNote(noteData);
 
+            noteData.Address = address;
+            Debug.Log($"【System】配置: #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
+        }
+
+        /// <summary>
+        /// ノーツの場所を移動させる
+        /// </summary>
+        /// <param name="noteData"></param>
+        /// <param name="newAddress"></param>
+        /// <returns></returns>
+        public bool ChangeNoteAddress(NoteData noteData, AddressInChart newAddress)
+        {
+            AddressInChart oldAddress = noteData.Address;
+
+            // 古い場所から削除
+            SubDivisionDataInBeat oldSubDivision = BarDatas[oldAddress.BarIndex].SubDivisionDatas[oldAddress.SubDivisionIndex];
+            if (!oldSubDivision.RemoveNote(noteData)) 
+            { 
+                Debug.LogWarning("【System】該当するノートが見つかりません"); 
+                return false; 
+            }
+
+            // 新たな場所に追加
+            SubDivisionDataInBeat newSubDivision = BarDatas[newAddress.BarIndex].SubDivisionDatas[newAddress.SubDivisionIndex];
+            newSubDivision.AddNote(noteData);
+
+            noteData.Address = newAddress;
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// 譜面中の「小節番号」「分節番号」「スライダーインデックス」をまとめたクラス
+    /// </summary>
+    public class AddressInChart
+    {
+        public int BarIndex { get; set; }
+
+        public int SubDivisionIndex { get; set; }
+
+        public float SliderIndex { get; set; }
     }
 
     /// <summary>

@@ -47,7 +47,7 @@ namespace ChartEditor
             // “¯‚¶‚­
             if(!hitObject.TryGetComponent(out IInteractableCollider interactable)) { return EditMode.None; }
 
-            return interactable.GetEditMode();
+            return interactable.EditMode;
         }
 
         /// <summary>

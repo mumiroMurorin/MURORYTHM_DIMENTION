@@ -33,17 +33,21 @@ namespace ChartEditor
         /// エディットモードの変更
         /// </summary>
         /// <returns></returns>
-        EditMode GetEditMode();
+        EditMode EditMode { get; }
     }
 
     public interface IDeployableCollider
     {
-        Transform transform { get; }
+        Transform deployParent { get; }
+
+        AddressInChart Address { get; }
     }
 
     public interface IDeployableObject
     {
-        void OnInstantiate();
+        NoteObject Note { get; }
+
+        void OnInstantiate(NoteData noteData);
 
         void OnMove(Transform parent);
 
@@ -59,11 +63,11 @@ namespace ChartEditor
 
     public interface IMovableObject
     {
-        GameObject gameObject { get; }
+        NoteObject Note { get; }
 
         void OnMoveStart();
 
-        void OnMove(Transform parent);
+        void OnMove(IDeployableCollider deployableCollider);
 
         void OnMoveEnd();
     }

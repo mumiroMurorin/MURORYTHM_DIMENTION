@@ -29,6 +29,7 @@ namespace ChartEditor
             // ¶¬‚µ‚½ƒ‰ƒCƒ“‚ğƒŠƒXƒg‚ÉŠi”[
             if (obj.TryGetComponent(out NoteDeployableGroup line))
             {
+                line.SetAddress(subDivisionData.BarIndex, subDivisionData.SubDivisionIndex);
                 noteDeployableColliders?.Add(line);
             }
 

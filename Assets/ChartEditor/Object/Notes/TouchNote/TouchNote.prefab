@@ -253,6 +253,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8919827025346925897}
   - component: {fileID: 1727658991382057172}
+  - component: {fileID: 7126901341016802860}
+  - component: {fileID: 5680730002281049432}
+  - component: {fileID: 8571971541714523689}
+  - component: {fileID: 2042939825380956139}
   - component: {fileID: 891076736748630361}
   m_Layer: 0
   m_Name: TouchNote
@@ -289,14 +293,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f046f1657c5d044e826673a7dd8b7c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 3934986967309432180}
   noteRenderer: {fileID: 5893660377328454484}
   colliders:
   - {fileID: 8764774069622436691}
   - {fileID: 7947380020270672316}
   - {fileID: 8906610331341616456}
   outline: {fileID: 891076736748630361}
-  outlineColorOnMove: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &7126901341016802860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5475620226950634511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69510d7ddfd43574fa6add420035ad59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noteRenderer: {fileID: 5893660377328454484}
+--- !u!114 &5680730002281049432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5475620226950634511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc92915a8710724bb7fba33fdc3614b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineColorOnMove: {r: 1, g: 0, b: 0, a: 0.78431374}
+  addHeightOnMove: 1
+--- !u!114 &8571971541714523689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5475620226950634511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67df3ba5d04963d4a99b15fa0945bd25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  origin: {fileID: 3934986967309432180}
+--- !u!114 &2042939825380956139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5475620226950634511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5e4ecdfbef92314d8aa5f412679e880, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &891076736748630361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,7 +367,7 @@ MonoBehaviour:
   _outlineSettings:
     _outlineSettings: {fileID: 0}
     _outlineColor: {r: 1, g: 0, b: 0, a: 1}
-    _outlineWidth: 7
+    _outlineWidth: 6
     _outlineIntensity: 2
     _outlineAlphaCutoff: 0.9
     _outlineMode: 0

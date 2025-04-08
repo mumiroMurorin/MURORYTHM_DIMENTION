@@ -70,7 +70,7 @@ namespace ChartEditor
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
             if (deployable == null) { return; }
 
-            deployingNote.OnMove(deployable.transform);
+            deployingNote.OnMove(deployable.deployParent);
         }
 
         /// <summary>
@@ -82,6 +82,11 @@ namespace ChartEditor
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
             if (chartEditorDataGetter.DeployableCollider.Value == null) { return; }
 
+            // データ上の追加
+            AddressInChart address = chartEditorDataGetter.DeployableCollider.Value.Address;
+            chartEditorDataGetter.ChartData.Value.AddNote(deployingNote.Note.NoteData, address);
+            
+            // オブジェクトの設置
             deployingNote.OnDeploy();
             InstantiateNote();
         }
@@ -92,13 +97,15 @@ namespace ChartEditor
         private void InstantiateNote()
         {
             GameObject obj = Instantiate(GetNote(chartEditorDataGetter.DeploymentNoteType.Value));
-            if(!obj.TryGetComponent(out IDeployableObject deployable))
+
+            if (!obj.TryGetComponent(out IDeployableObject deployable))
             {
                 Debug.LogWarning("ノーツにIDeployableObjectがくっついてねぇぞ！");
                 return;
             }
 
-            deployable.OnInstantiate();
+            NoteData noteData = new NoteData() { NoteType = chartEditorDataGetter.DeploymentNoteType.Value };
+            deployable.OnInstantiate(noteData);
 
             deployingNote = deployable;
         }

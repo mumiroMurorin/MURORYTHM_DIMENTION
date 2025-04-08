@@ -8,13 +8,8 @@ namespace ChartEditor
     {
         [SerializeField] SerializeInterface<IMovableObject> note;
 
-        EditMode editMode => EditMode.Move;
+        public EditMode EditMode => EditMode.Move;
 
         IMovableObject IMovableCollider.Note => note.Value;
-
-        EditMode IInteractableCollider.GetEditMode()
-        {
-            return editMode;
-        }
     }
 }

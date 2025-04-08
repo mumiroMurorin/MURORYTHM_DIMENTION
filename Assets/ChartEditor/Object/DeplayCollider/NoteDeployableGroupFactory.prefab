@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 723996234795637411}
   - component: {fileID: 8790177350070445923}
   m_Layer: 0
-  m_Name: NoteDeployableCollidersFactory
+  m_Name: NoteDeployableGroupFactory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

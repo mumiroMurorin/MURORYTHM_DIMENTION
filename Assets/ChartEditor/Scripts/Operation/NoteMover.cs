@@ -45,9 +45,13 @@ namespace ChartEditor
             // カーソル下の親取得
             IDeployableCollider deployable = chartEditorDataGetter.DeployableCollider.Value;
             if (deployable == null) { return; }
-            if (movedNote.gameObject.transform.position == deployable.transform.position)  { return; }
-           
-            movedNote.OnMove(deployable.transform);
+            if (movedNote.Note.transform.position == deployable.deployParent.position)  { return; }
+
+            // アドレスの移動
+            chartEditorDataGetter.ChartData.Value.ChangeNoteAddress(movedNote.Note.NoteData, deployable.Address);
+
+            // オブジェクトの移動
+            movedNote.OnMove(deployable);
         }
 
         private void EndMoveNote()
