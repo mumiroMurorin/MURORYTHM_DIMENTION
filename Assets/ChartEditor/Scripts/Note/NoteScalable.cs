@@ -33,9 +33,31 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
         }
 
-        void IScalableObject.OnScale()
+        void IScalableObject.OnStartScale()
         {
-            noteObject.NoteData.AddRange(true);
+            noteObject.SetCollidersActive(false);
+        }
+
+        void IScalableObject.OnScale(IDeployableCollider deployableCollider)
+        {
+            AddressInChart address = deployableCollider.Address;
+            
+            if(address.SliderIndex < noteObject.NoteData.Address.SliderIndex) 
+            {
+                Transform parent = deployableCollider.deployParent;
+
+                Vector3 pos = new Vector3(parent.position.x, this.transform.position.y, parent.position.z);
+                this.transform.position = pos;
+                this.transform.SetParent(parent);
+            }
+
+            noteObject.NoteData.ChangeRange(address.SliderIndex);
+        }
+
+        void IScalableObject.OnFinishScale()
+        {
+            noteObject.SetCollidersActive(true);
+
         }
 
         public void OnChangeScale(int size)

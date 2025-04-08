@@ -81,7 +81,11 @@ namespace ChartEditor
     {
         GameObject gameObject { get; }
 
-        void OnScale();
+        void OnStartScale();
+
+        void OnScale(IDeployableCollider deployableCollider);
+
+        void OnFinishScale();
     }
 
     public interface IDestroyableCollider

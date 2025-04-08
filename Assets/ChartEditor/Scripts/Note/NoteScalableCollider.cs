@@ -10,7 +10,7 @@ namespace ChartEditor
 
         public EditMode EditMode => EditMode.Scale;
 
-        IScalableObject IScalableCollider.Note => note.Value;
+        public IScalableObject Note => note.Value;
     }
 
 }

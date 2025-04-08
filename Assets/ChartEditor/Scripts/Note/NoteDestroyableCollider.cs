@@ -8,6 +8,6 @@ namespace ChartEditor
     {
         [SerializeField] SerializeInterface<IDestroyableObject> note;
 
-        IDestroyableObject IDestroyableCollider.Note => note.Value;
+        public IDestroyableObject Note => note.Value;
     }
 }

@@ -13,7 +13,7 @@ namespace ChartEditor
     {
         public DeploymentNoteType NoteType { get; set; }
 
-        public AddressInChart Address { get; set; }
+        public AddressInChart Address { get; private set; }
 
         /// <summary>
         /// îzíuîÕàÕ (äÓñ{0Å`15)
@@ -33,12 +33,44 @@ namespace ChartEditor
             {
                 this.range.Add(index);
             }
+
+            Address.SliderIndex = this.range.First();
         }
 
-        public void AddRange(bool isAddLast)
+        public void ChangeRange(float index)
         {
-            float value = isAddLast ? range.Last() + 1 : range[0] - 1;
-            range.Insert(isAddLast ? range.Count : 0, value);
+            List<float> shifted = new List<float>();
+            float min = range.First();
+            float max = range.Last();
+
+            if (index < min)
+            {
+                for (float i = index; i <= max; i++) { shifted.Add(i); }
+            }
+            else if (index > max)
+            {
+                for (float i = min; i <= index; i++) { shifted.Add(i); }
+            }
+            //else if()
+            //{
+
+
+            //}
+
+            SetRange(shifted);
+            Debug.Log($"ägëÂ: {string.Join(",", range)}");
+        }
+
+        public void SetAddress(AddressInChart address)
+        {
+            Address = address;
+
+            int startIndex = (int)address.SliderIndex;
+            List<float> currentRange = range.ToList();
+            List<float> shifted = currentRange.Select(i => i - currentRange[0] + startIndex).ToList();
+
+            SetRange(shifted);
+            Debug.Log($"à⁄ìÆ: {string.Join(",", shifted)}");
         }
     }
 
@@ -268,7 +300,7 @@ namespace ChartEditor
             SubDivisionDataInBeat newSubDivision = BarDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
             newSubDivision.AddNote(noteData);
 
-            noteData.Address = address;
+            noteData.SetAddress(address);
             Debug.Log($"ÅySystemÅzîzíu: #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
         }
 
@@ -294,7 +326,7 @@ namespace ChartEditor
             SubDivisionDataInBeat newSubDivision = BarDatas[newAddress.BarIndex].SubDivisionDatas[newAddress.SubDivisionIndex];
             newSubDivision.AddNote(noteData);
 
-            noteData.Address = newAddress;
+            noteData.SetAddress(newAddress);
             return true;
         }
     }

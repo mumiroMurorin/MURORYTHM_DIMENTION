@@ -20,17 +20,41 @@ namespace ChartEditor
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0)) { ScaleNote(); }
+            if (Input.GetMouseButtonDown(0)) { StartScaleNote(); }
+            if (Input.GetMouseButton(0)) { ScaleNote(); }
+            if (Input.GetMouseButtonUp(0)) { FinishScaleNote(); }
         }
 
-        private void ScaleNote()
+        private void StartScaleNote()
         {
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Scale) { return; }
 
             IScalableObject scalableObject = chartEditorDataGetter.ScalableObject.Value;
             if (scalableObject == null) { return; }
 
-            scalableObject.OnScale();
+            scalableObject.OnStartScale();
+            scaledNote = scalableObject;
+        }
+
+        private void ScaleNote()
+        {
+            // 配置モードでない際は返す
+            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Scale) { return; }
+            if (scaledNote == null) { return; }
+
+            // カーソル下の親取得
+            IDeployableCollider deployable = chartEditorDataGetter.DeployableCollider.Value;
+            if (deployable == null) { return; }
+
+            scaledNote.OnScale(deployable);
+        }
+
+        private void FinishScaleNote()
+        {
+            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Scale) { return; }
+
+            scaledNote?.OnFinishScale();
+            scaledNote = null;
         }
     }
 

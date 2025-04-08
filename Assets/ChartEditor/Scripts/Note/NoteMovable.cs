@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UniRx;
+using Cysharp.Threading.Tasks;
+using System.Threading;
 
 namespace ChartEditor
 {
@@ -37,11 +40,7 @@ namespace ChartEditor
             this.transform.position = pos;
             this.transform.SetParent(parent);
 
-            int startIndex = (int)deployableCollider.Address.SliderIndex;
-            List<float> currentRange = noteObject.NoteData.Range.ToList();
-            List<float> shifted = currentRange.Select(i => i - currentRange[0] + startIndex).ToList();
-
-            noteObject.NoteData.SetRange(shifted);
+            noteObject.NoteData.SetAddress(deployableCollider.Address);
         }
 
         void IMovableObject.OnMoveEnd()

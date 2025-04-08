@@ -10,6 +10,6 @@ namespace ChartEditor
 
         public EditMode EditMode => EditMode.Move;
 
-        IMovableObject IMovableCollider.Note => note.Value;
+        public IMovableObject Note => note.Value;
     }
 }
