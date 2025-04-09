@@ -18,6 +18,7 @@ namespace ChartEditor
         [SerializeField] BPMInputFieldView bpmInputField_view;
         [SerializeField] OffsetInputFieldView offsetInputField_view;
         [SerializeField] MusicNameView musicName_view;
+        [SerializeField] AutoEditModeButtonView autoEditModeButton_view;
         [SerializeField] RhythmConfigBarView rhythmConfigBar_view;
         [SerializeField] RhythmConfigSubView rhythmConfigSubDivision_view;
 
@@ -78,6 +79,11 @@ namespace ChartEditor
             // 楽曲名の変更
             dataGetter_model?.Music
                 .Subscribe(musicName_view.OnChangeMusic)
+                .AddTo(this.gameObject);
+
+            // オートエディットモードの変更
+            dataGetter_model?.AutoEditMode
+                .Subscribe(autoEditModeButton_view.OnChangeAutoEditMode)
                 .AddTo(this.gameObject);
 
             // リズムコンフィグ(小節線)のクリック
@@ -147,6 +153,13 @@ namespace ChartEditor
             { 
                 dataSetter_model.SetMainBpm(value);
                 dataSetter_model.InitializeChartData();
+            };
+
+            // オートエディットモードボタン
+            autoEditModeButton_view.OnClickedListner += () =>
+            {
+                bool currentMode = dataGetter_model.AutoEditMode.Value;
+                dataSetter_model.SetAutoEditMode(!currentMode);
             };
 
             // オフセットフィールド

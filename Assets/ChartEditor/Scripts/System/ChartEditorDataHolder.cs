@@ -36,6 +36,7 @@ namespace ChartEditor
 
         #region EditMode エディットモード関係
 
+        // エディットモード
         ReactiveProperty<EditMode> currentEditMode = new ReactiveProperty<EditMode>(EditMode.None);
         IReadOnlyReactiveProperty<EditMode> IChartEditorDataGetter.CurrentEditMode => currentEditMode;
 
@@ -46,6 +47,20 @@ namespace ChartEditor
             currentEditMode.Value = editMode;
             Debug.Log($"Change Edit Mode: {currentEditMode.Value}");
         }
+
+
+        // 自動エディット設定モード
+        ReactiveProperty<bool> autoEditMode = new ReactiveProperty<bool>();
+        IReadOnlyReactiveProperty<bool> IChartEditorDataGetter.AutoEditMode => autoEditMode;
+
+        void IChartEditorDataSetter.SetAutoEditMode(bool isEnable)
+        {
+            if (autoEditMode.Value == isEnable) { return; }
+
+            autoEditMode.Value = isEnable;
+            Debug.Log($"Change Auto Edit Mode: {autoEditMode.Value}");
+        }
+
 
         #endregion
 
@@ -100,8 +115,9 @@ namespace ChartEditor
 
         #endregion
 
-        #region Move 動かす
+        #region ChartEdit 譜面の編集系
 
+        // ノーツの再配置
         ReactiveProperty<IMovableObject> movableObject= new ReactiveProperty<IMovableObject>();
         IReadOnlyReactiveProperty<IMovableObject> IChartEditorDataGetter.MovableObject => movableObject;
 
@@ -112,10 +128,7 @@ namespace ChartEditor
             movableObject.Value = mObject;
         }
 
-        #endregion
-
-        #region Scaling 拡大縮小
-
+        // ノーツの拡大縮小
         bool isRightAnchored;
         bool IChartEditorDataGetter.IsRightAnchored => isRightAnchored;
 
@@ -130,10 +143,7 @@ namespace ChartEditor
             this.isRightAnchored = isRightAnchored;
         }
 
-        #endregion
-
-        #region Destoroy 削除
-
+        // ノーツの削除
         ReactiveProperty<IDestroyableObject> destroyableObject = new ReactiveProperty<IDestroyableObject>();
         IReadOnlyReactiveProperty<IDestroyableObject> IChartEditorDataGetter.DestroyableObject => destroyableObject;
         void IChartEditorDataSetter.SetDestroyableObject(IDestroyableObject dObject)
@@ -216,6 +226,8 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<EditMode> CurrentEditMode { get; }
 
+        IReadOnlyReactiveProperty<bool> AutoEditMode { get; }
+
         IReadOnlyReactiveProperty<IRhythmConfigurableBarCollider> RhythmConfigurableBar { get; }
 
         IReadOnlyReactiveProperty<IRhythmConfigurableSubDivisionCollider> RhythmConfigurableSubDivision { get; }
@@ -254,6 +266,8 @@ namespace ChartEditor
         public void InitializeChartData();
 
         void SetEditMode(EditMode editMode);
+
+        void SetAutoEditMode(bool isEnable);
 
         void SetNoteType(DeploymentNoteType noteType);
 

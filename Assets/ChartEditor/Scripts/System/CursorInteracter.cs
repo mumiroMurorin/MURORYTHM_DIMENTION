@@ -37,6 +37,8 @@ namespace ChartEditor
             if (raycastEditMode == EditMode.None) { return; }
             // 削除モード中は無効
             if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.Destroy) { return; }
+            // オートモード中じゃなければ無効
+            if (!chartEditorDataGetter.AutoEditMode.Value) { return; }
 
             // 長押し中は無効
             if (Input.GetMouseButton(0)) { return; }
