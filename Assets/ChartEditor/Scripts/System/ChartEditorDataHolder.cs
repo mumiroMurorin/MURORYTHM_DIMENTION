@@ -41,6 +41,8 @@ namespace ChartEditor
 
         void IChartEditorDataSetter.SetEditMode(EditMode editMode) 
         {
+            if(currentEditMode.Value == editMode) { return; }
+
             currentEditMode.Value = editMode;
             Debug.Log($"Change Edit Mode: {currentEditMode.Value}");
         }

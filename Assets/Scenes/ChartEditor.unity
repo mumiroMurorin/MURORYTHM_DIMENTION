@@ -1598,7 +1598,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00004059635}
+  m_AnchoredPosition: {x: 0, y: -0.000084877014}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &332016924
@@ -1976,7 +1976,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 688924458}
   m_HandleRect: {fileID: 688924457}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4130,7 +4130,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00004059635}
+  m_AnchoredPosition: {x: 0, y: -0.000084877014}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &832480302
@@ -6156,7 +6156,7 @@ MonoBehaviour:
   - noteType: 0
     noteObject: {fileID: 5475620226950634511, guid: a3e1d74dfae71aa458e010bbb30b2e2a, type: 3}
   - noteType: 1
-    noteObject: {fileID: 5475620226950634511, guid: b87fdfc900b943b44aaaf4ebe145d28e, type: 3}
+    noteObject: {fileID: 5475620226950634511, guid: 3397deb5cc08664408f85453b7a11802, type: 3}
 --- !u!1 &1281706906
 GameObject:
   m_ObjectHideFlags: 0
@@ -8470,7 +8470,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1001074132}
   m_HandleRect: {fileID: 1001074131}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

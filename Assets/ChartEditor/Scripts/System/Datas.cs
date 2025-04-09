@@ -43,6 +43,11 @@ namespace ChartEditor
             float min = range.First();
             float max = range.Last();
 
+            // 右固定で左側とindexが一緒のとき返す
+            if (isRightAnchored && (int)min == index) { return; }
+            // 左固定で右側とindexが一緒のとき返す
+            if (!isRightAnchored && (int)max == index) { return; }
+
             // 右固定で左側に伸ばす
             if(isRightAnchored && index <= max)
             {
@@ -64,6 +69,9 @@ namespace ChartEditor
 
         public void SetAddress(AddressInChart address)
         {
+            // 同じアドレスなら返す
+            if (Address != null && Address.IsSameAddress(address)) { return; }
+
             Address = address.Copy();
 
             int startIndex = (int)address.SliderIndex;
@@ -346,6 +354,16 @@ namespace ChartEditor
         public AddressInChart Copy()
         {
             return new AddressInChart { BarIndex = this.BarIndex, SubDivisionIndex = this.SubDivisionIndex, SliderIndex = this.SliderIndex };
+        }
+
+        /// <summary>
+        /// 同じアドレスか調べる
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public bool IsSameAddress(AddressInChart address)
+        {
+            return address.BarIndex == this.BarIndex && address.SubDivisionIndex == this.SubDivisionIndex && address.SliderIndex == this.SliderIndex;
         }
     }
 

@@ -23,7 +23,7 @@ namespace ChartEditor
         private void Update()
         {
             UpdateObjectUnderCursor();
-            //SetEditorMode();
+            SetEditorMode();
         }
 
         /// <summary>
@@ -33,7 +33,15 @@ namespace ChartEditor
         {
             EditMode raycastEditMode = GetEditModeUnderCursor();
 
+            // カーソル下に何もないときは無効
             if (raycastEditMode == EditMode.None) { return; }
+            // 削除モード中は無効
+            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.Destroy) { return; }
+
+            // 長押し中は無効
+            if (Input.GetMouseButton(0)) { return; }
+            if (Input.GetMouseButtonUp(0)) { return; }
+            if (Input.GetMouseButtonDown(0)) { return; }
 
             chartEditorDataSetter.SetEditMode(raycastEditMode);
         }
@@ -46,7 +54,7 @@ namespace ChartEditor
         {
             GameObject hitObject = GetObjectUnderCursor();
 
-            // 同じく
+            if(hitObject == null) { return EditMode.None; }
             if(!hitObject.TryGetComponent(out IInteractableCollider interactable)) { return EditMode.None; }
 
             return interactable.EditMode;
