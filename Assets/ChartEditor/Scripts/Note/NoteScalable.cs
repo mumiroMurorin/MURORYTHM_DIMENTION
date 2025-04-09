@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using System.Linq;
 
 namespace ChartEditor
 {
@@ -38,11 +39,13 @@ namespace ChartEditor
             noteObject.SetCollidersActive(false);
         }
 
-        void IScalableObject.OnScale(IDeployableCollider deployableCollider)
+        void IScalableObject.OnScale(IDeployableCollider deployableCollider, bool isRightAnchored)
         {
             AddressInChart address = deployableCollider.Address;
-            
-            if(address.SliderIndex < noteObject.NoteData.Address.SliderIndex) 
+
+            noteObject.NoteData.ChangeRange(address.SliderIndex, isRightAnchored);
+
+            if (isRightAnchored && address.SliderIndex <= noteObject.NoteData.Range.Last())
             {
                 Transform parent = deployableCollider.deployParent;
 
@@ -50,14 +53,11 @@ namespace ChartEditor
                 this.transform.position = pos;
                 this.transform.SetParent(parent);
             }
-
-            noteObject.NoteData.ChangeRange(address.SliderIndex);
         }
 
         void IScalableObject.OnFinishScale()
         {
             noteObject.SetCollidersActive(true);
-
         }
 
         public void OnChangeScale(int size)

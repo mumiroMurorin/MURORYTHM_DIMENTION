@@ -75,6 +75,8 @@ namespace ChartEditor
     public interface IScalableCollider
     {
         IScalableObject Note { get; }
+
+        bool IsRightEdge { get; }
     }
 
     public interface IScalableObject
@@ -83,7 +85,7 @@ namespace ChartEditor
 
         void OnStartScale();
 
-        void OnScale(IDeployableCollider deployableCollider);
+        void OnScale(IDeployableCollider deployableCollider, bool isRightAnchored);
 
         void OnFinishScale();
     }

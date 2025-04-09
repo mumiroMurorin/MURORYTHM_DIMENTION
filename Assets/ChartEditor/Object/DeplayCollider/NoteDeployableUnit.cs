@@ -14,7 +14,6 @@ namespace ChartEditor
         {
             Address = new AddressInChart() { BarIndex = barIndex, SubDivisionIndex = subIndex, SliderIndex = index };
         }
-
     }
 
 }

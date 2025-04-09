@@ -11,6 +11,7 @@ namespace ChartEditor
 
         IChartEditorDataGetter chartEditorDataGetter;
         IScalableObject scaledNote;
+        AddressInChart scaledAddress;
 
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter)
@@ -32,6 +33,8 @@ namespace ChartEditor
             IScalableObject scalableObject = chartEditorDataGetter.ScalableObject.Value;
             if (scalableObject == null) { return; }
 
+            scaledAddress = null;
+
             scalableObject.OnStartScale();
             scaledNote = scalableObject;
         }
@@ -46,7 +49,12 @@ namespace ChartEditor
             IDeployableCollider deployable = chartEditorDataGetter.DeployableCollider.Value;
             if (deployable == null) { return; }
 
-            scaledNote.OnScale(deployable);
+            if (scaledAddress == null) { scaledAddress = deployable.Address.Copy(); } 
+
+            if (scaledAddress.BarIndex != deployable.Address.BarIndex) { return; }
+            if (scaledAddress.SubDivisionIndex != deployable.Address.SubDivisionIndex) { return; }
+
+            scaledNote.OnScale(deployable, chartEditorDataGetter.IsRightAnchored);
         }
 
         private void FinishScaleNote()

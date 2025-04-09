@@ -11,11 +11,13 @@ namespace ChartEditor
         [SerializeField] Camera viewCamera;
 
         IChartEditorDataSetter chartEditorDataSetter;
+        IChartEditorDataGetter chartEditorDataGetter;
 
         [Inject]
-        public void Construct(IChartEditorDataSetter chartEditorDataSetter)
+        public void Construct(IChartEditorDataSetter chartEditorDataSetter, IChartEditorDataGetter chartEditorDataGetter)
         {
             this.chartEditorDataSetter = chartEditorDataSetter;
+            this.chartEditorDataGetter = chartEditorDataGetter;
         }
 
         private void Update()
@@ -60,7 +62,7 @@ namespace ChartEditor
             {
                 chartEditorDataSetter.SetDeployableCollider(null);
                 chartEditorDataSetter.SetMovableObject(null);
-                chartEditorDataSetter.SetScalableObject(null);
+                chartEditorDataSetter.SetScalableObject(null, chartEditorDataGetter.IsRightAnchored);
                 chartEditorDataSetter.SetDestroyableObject(null);
 
                 return;
@@ -89,11 +91,11 @@ namespace ChartEditor
             // インタラクトされているノーツの更新 (拡大縮小)
             if (obj.TryGetComponent(out IScalableCollider scalable))
             {
-                chartEditorDataSetter.SetScalableObject(scalable.Note);
+                chartEditorDataSetter.SetScalableObject(scalable.Note, !scalable.IsRightEdge);
             }
             else
             {
-                chartEditorDataSetter.SetScalableObject(null);
+                chartEditorDataSetter.SetScalableObject(null, chartEditorDataGetter.IsRightAnchored);
             }
 
             // インタラクトされているノーツの更新 (削除)

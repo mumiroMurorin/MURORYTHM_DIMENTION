@@ -37,33 +37,34 @@ namespace ChartEditor
             Address.SliderIndex = this.range.First();
         }
 
-        public void ChangeRange(float index)
+        public void ChangeRange(float index, bool isRightAnchored)
         {
             List<float> shifted = new List<float>();
             float min = range.First();
             float max = range.Last();
 
-            if (index < min)
+            // ‰EŒÅ’è‚Å¶‘¤‚ÉL‚Î‚·
+            if(isRightAnchored && index <= max)
             {
                 for (float i = index; i <= max; i++) { shifted.Add(i); }
             }
-            else if (index > max)
+            // ¶ŒÅ’è‚Å‰E‘¤‚ÉL‚Î‚·
+            else if (!isRightAnchored && index >= min) 
             {
                 for (float i = min; i <= index; i++) { shifted.Add(i); }
             }
-            //else if()
-            //{
-
-
-            //}
+            else
+            {
+                return;
+            }
 
             SetRange(shifted);
-            Debug.Log($"Šg‘å: {string.Join(",", range)}");
+            Debug.Log($"Šg‘å: range:{string.Join(",", range)}");
         }
 
         public void SetAddress(AddressInChart address)
         {
-            Address = address;
+            Address = address.Copy();
 
             int startIndex = (int)address.SliderIndex;
             List<float> currentRange = range.ToList();
@@ -341,6 +342,11 @@ namespace ChartEditor
         public int SubDivisionIndex { get; set; }
 
         public float SliderIndex { get; set; }
+
+        public AddressInChart Copy()
+        {
+            return new AddressInChart { BarIndex = this.BarIndex, SubDivisionIndex = this.SubDivisionIndex, SliderIndex = this.SliderIndex };
+        }
     }
 
     /// <summary>

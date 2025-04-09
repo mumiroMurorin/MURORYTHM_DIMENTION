@@ -114,14 +114,18 @@ namespace ChartEditor
 
         #region Scaling Šg‘åk¬
 
+        bool isRightAnchored;
+        bool IChartEditorDataGetter.IsRightAnchored => isRightAnchored;
+
         ReactiveProperty<IScalableObject> scalableObject = new ReactiveProperty<IScalableObject>();
         IReadOnlyReactiveProperty<IScalableObject> IChartEditorDataGetter.ScalableObject => scalableObject;
 
-        void IChartEditorDataSetter.SetScalableObject(IScalableObject sObject)
+        void IChartEditorDataSetter.SetScalableObject(IScalableObject sObject, bool isRightAnchored)
         {
             if(scalableObject.Value == sObject) { return; }
 
             scalableObject.Value = sObject;
+            this.isRightAnchored = isRightAnchored;
         }
 
         #endregion
@@ -220,6 +224,8 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<IMovableObject> MovableObject { get; }
 
+        bool IsRightAnchored { get; }
+
         IReadOnlyReactiveProperty<IScalableObject> ScalableObject { get; }
 
         IReadOnlyReactiveProperty<IDestroyableObject> DestroyableObject { get; }
@@ -257,7 +263,7 @@ namespace ChartEditor
 
         void SetMovableObject(IMovableObject mObject);
 
-        void SetScalableObject(IScalableObject sObject);
+        void SetScalableObject(IScalableObject sObject, bool isRightAnchored);
 
         void SetDestroyableObject(IDestroyableObject dObject);
 
