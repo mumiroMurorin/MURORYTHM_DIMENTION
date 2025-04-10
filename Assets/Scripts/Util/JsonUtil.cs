@@ -77,5 +77,87 @@ namespace JsonUtil
             return true;
         }
     }
+
+    public static class JsonLoader
+    {
+        /// <summary>
+        /// 指定されたパスのJSONファイルを読み込み、T型にデシリアライズします。
+        /// </summary>
+        /// <typeparam name="T">変換対象のクラス型</typeparam>
+        /// <param name="filePath">JSONファイルのフルパス</param>
+        /// <param name="result">読み込まれたT型のインスタンス。失敗時はdefault。</param>
+        /// <returns>成功したらtrue、失敗したらfalse</returns>
+        public static bool TryLoadFromJsonFile<T>(string filePath, out T result)
+        {
+            result = default;
+
+            if (string.IsNullOrEmpty(filePath))
+            {
+                UnityEngine.Debug.LogError("【JsonLoader】ファイルパスが無効です。");
+                return false;
+            }
+
+            if (!File.Exists(filePath))
+            {
+                UnityEngine.Debug.LogError($"【JsonLoader】ファイルが見つかりません: {filePath}");
+                return false;
+            }
+
+            try
+            {
+                string json = File.ReadAllText(filePath);
+                result = JsonConvert.DeserializeObject<T>(json);
+                return true;
+            }
+            catch (JsonException ex)
+            {
+                UnityEngine.Debug.LogError($"【JsonLoader】JSONの解析に失敗しました: {ex.Message}");
+            }
+            catch (IOException ex)
+            {
+                UnityEngine.Debug.LogError($"【JsonLoader】ファイルの読み込みに失敗しました: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                UnityEngine.Debug.LogError($"【JsonLoader】予期しないエラーが発生しました: {ex.Message}");
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// TextAsset から JSON をデシリアライズして T 型のインスタンスを返します。
+        /// </summary>
+        /// <typeparam name="T">変換対象のクラス型</typeparam>
+        /// <param name="jsonAsset">JSONデータが含まれる TextAsset</param>
+        /// <param name="result">デシリアライズされた結果（成功時）</param>
+        /// <returns>成功したら true、失敗したら false</returns>
+        public static bool TryLoadFromTextAsset<T>(TextAsset jsonAsset, out T result)
+        {
+            result = default;
+
+            if (jsonAsset == null)
+            {
+                Debug.LogError("【JsonLoader】TextAsset が null です。");
+                return false;
+            }
+
+            try
+            {
+                result = JsonConvert.DeserializeObject<T>(jsonAsset.text);
+                return true;
+            }
+            catch (JsonException ex)
+            {
+                Debug.LogError($"【JsonLoader】JSONの解析に失敗しました: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"【JsonLoader】予期しないエラーが発生しました: {ex.Message}");
+            }
+
+            return false;
+        }
+    }
 }
 #endif

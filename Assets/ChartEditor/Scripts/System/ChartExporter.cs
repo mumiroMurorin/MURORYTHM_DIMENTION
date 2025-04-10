@@ -4,13 +4,14 @@ using UnityEngine;
 using System.Linq;
 using ChartEditor;
 using JsonUtil;
+using System;
 
 namespace ChartConvert
 {
     public class ChartExporter
     {
         // ここに変換関数を記述していく
-        private List<INoteDataConvertableToOrigin> converters = new List<INoteDataConvertableToOrigin>()
+        private List<INoteDataConvertable> converters = new List<INoteDataConvertable>()
         {
             new TouchNoteConverter(),
             new DynamicUpwardConverter(),
@@ -108,7 +109,7 @@ namespace ChartConvert
                 foreach (var converter in converters)
                 {
                     // 変換出来たらこのループを出る
-                    if (converter.CheckAndAddData(noteData, dataOrigin)) 
+                    if (converter.CheckAndAddDataForOrigin(noteData, dataOrigin)) 
                     {
                         isSucceed_ = true;
                         break;
@@ -134,19 +135,21 @@ namespace ChartConvert
     /// <summary>
     /// ChartEditor.NoteDataを変換してSubDivisionDataOriginにぶち込む
     /// </summary>
-    public interface INoteDataConvertableToOrigin
+    public interface INoteDataConvertable
     {
-        bool CheckAndAddData(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin);
+        bool CheckAndAddDataForOrigin(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin);
+
+        bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, Func<float, float> calcTiming);
     }
 
     /// <summary>
     /// タッチノーツ
     /// </summary>
-    public class TouchNoteConverter : INoteDataConvertableToOrigin
+    public class TouchNoteConverter : INoteDataConvertable
     {
         DeploymentNoteType type = DeploymentNoteType.TouchNote;
 
-        public bool CheckAndAddData(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        public bool CheckAndAddDataForOrigin(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
             if(noteDataInEditor.NoteType != type) { return false; }
 
@@ -165,16 +168,37 @@ namespace ChartConvert
             dataOrigin.TouchNoteData.Add(data);
             return true;
         }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, Func<float, float> calcTiming)
+        {
+            if(chartData.noteData_Touches == null)
+            {
+                chartData.noteData_Touches = new List<NoteData_Touch>();
+            }
+
+            foreach(var noteOrigin in dataOrigin.TouchNoteData)
+            {
+                NoteData_Touch noteData = new NoteData_Touch
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    Timing = calcTiming(dataOrigin.Bpm)
+                };
+
+                chartData.noteData_Touches.Add(noteData);
+            }
+
+            return true;
+        }
     }
 
     /// <summary>
     /// ↑ダイナミック↑ノーツ
     /// </summary>
-    public class DynamicUpwardConverter : INoteDataConvertableToOrigin
+    public class DynamicUpwardConverter : INoteDataConvertable
     {
         DeploymentNoteType type = DeploymentNoteType.DynamicGroundUpward;
 
-        public bool CheckAndAddData(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        public bool CheckAndAddDataForOrigin(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
             if (noteDataInEditor.NoteType != type) { return false; }
 
@@ -191,6 +215,27 @@ namespace ChartConvert
             };
 
             dataOrigin.DynamicUpwardData.Add(data);
+            return true;
+        }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, Func<float, float> calcTiming)
+        {
+            if (chartData.noteData_DynamicGroundUpwards == null)
+            {
+                chartData.noteData_DynamicGroundUpwards = new List<NoteData_DynamicGroundUpward>();
+            }
+
+            foreach (var noteOrigin in dataOrigin.DynamicUpwardData)
+            {
+                NoteData_DynamicGroundUpward noteData = new NoteData_DynamicGroundUpward
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    Timing = calcTiming(dataOrigin.Bpm)
+                };
+
+                chartData.noteData_DynamicGroundUpwards.Add(noteData);
+            }
+
             return true;
         }
     }

@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
-using Newtonsoft.Json;
+using JsonUtil;
+using ChartConvert;
 using VContainer;
 using System;
 
@@ -40,7 +40,7 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
     }
 
     /// <summary>
-    /// 非同期でデータを読み込む
+    /// データを読み込む
     /// </summary>
     /// <param name="textAsset"></param>
     /// <param name="callback"></param>
@@ -49,12 +49,19 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
     {
         if (jsonData == null || textAsset == null)
         {
-            Debug.LogError("【System】CSVファイルが参照されていません。");
+            Debug.LogError("【System】Jsonファイルが参照されていません。");
             return null;
         }
 
-        ChartData chartData = JsonUtility.FromJson<ChartData>(textAsset != null ? textAsset.text : jsonData.text);
+        // データの変換
+        if(!JsonLoader.TryLoadFromTextAsset(textAsset != null ? textAsset : jsonData, out ChartDataOrigin chartDataOrigin))
+        {
+            // 失敗
+            return null;
+        }
 
-        return chartData;
+
+
+        return null;
     }
 }
