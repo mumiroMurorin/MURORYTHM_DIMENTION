@@ -584,6 +584,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 832480301}
     m_Modifications:
+    - target: {fileID: 3555472810679899760, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 08d24f6fc35258d4f8891044d2c49dfe, type: 3}
     - target: {fileID: 3621809594783352364, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
       propertyPath: m_Name
       value: DynamicNoteLeftward
@@ -6138,6 +6142,10 @@ MonoBehaviour:
     noteObject: {fileID: 5475620226950634511, guid: a3e1d74dfae71aa458e010bbb30b2e2a, type: 3}
   - noteType: 1
     noteObject: {fileID: 5475620226950634511, guid: 3397deb5cc08664408f85453b7a11802, type: 3}
+  - noteType: 2
+    noteObject: {fileID: 5475620226950634511, guid: b4c8dbf155d492040944ebc39aacc04f, type: 3}
+  - noteType: 3
+    noteObject: {fileID: 5475620226950634511, guid: b8fc40cf9c4a5f14aa8827b14533cc14, type: 3}
 --- !u!1 &1281706906
 GameObject:
   m_ObjectHideFlags: 0
@@ -7554,6 +7562,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 832480301}
     m_Modifications:
+    - target: {fileID: 3555472810679899760, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 08d24f6fc35258d4f8891044d2c49dfe, type: 3}
     - target: {fileID: 3621809594783352364, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
       propertyPath: m_Name
       value: DynamicNoteUpward
@@ -9029,6 +9041,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 832480301}
     m_Modifications:
+    - target: {fileID: 1850184984043773619, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1850184984043773619, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1850184984043773619, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3555472810679899760, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3555472810679899760, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 08d24f6fc35258d4f8891044d2c49dfe, type: 3}
     - target: {fileID: 3621809594783352364, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
       propertyPath: m_Name
       value: DynamicNoteRightward

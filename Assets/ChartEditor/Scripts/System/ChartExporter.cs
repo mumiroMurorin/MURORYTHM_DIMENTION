@@ -15,6 +15,8 @@ namespace ChartConvert
         {
             new TouchNoteConverter(),
             new DynamicUpwardConverter(),
+            new DynamicRightwardConverter(),
+            new DynamicLeftwardConverter(),
         };
 
         public void Export(ChartEditor.ChartData chartData, float offset)
@@ -136,6 +138,8 @@ namespace ChartConvert
         {
             new TouchNoteConverter(),
             new DynamicUpwardConverter(),
+            new DynamicRightwardConverter(),
+            new DynamicLeftwardConverter(),
         };
 
         public ChartData Import(ChartDataOrigin dataOrigin, INoteSpawnDataOptionHolder optionHolder)
@@ -258,7 +262,7 @@ namespace ChartConvert
     /// </summary>
     public class TouchNoteConverter : INoteDataConvertable
     {
-        DeploymentNoteType type = DeploymentNoteType.TouchNote;
+        readonly DeploymentNoteType type = DeploymentNoteType.TouchNote;
 
         public bool CheckAndAddDataForOrigin(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
@@ -309,7 +313,7 @@ namespace ChartConvert
     /// </summary>
     public class DynamicUpwardConverter : INoteDataConvertable
     {
-        DeploymentNoteType type = DeploymentNoteType.DynamicGroundUpward;
+        readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundUpward;
 
         public bool CheckAndAddDataForOrigin(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
@@ -349,6 +353,108 @@ namespace ChartConvert
                 };
 
                 chartData.noteData_DynamicGroundUpwards.Add(noteData);
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// →ダイナミック→ノーツ
+    /// </summary>
+    public class DynamicRightwardConverter : INoteDataConvertable
+    {
+        readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundRightward;
+
+        public bool CheckAndAddDataForOrigin(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        {
+            if (noteDataInEditor.NoteType != type) { return false; }
+
+            // 新たにインスタンス化
+            if (dataOrigin.DynamicRightwardData == null)
+            {
+                dataOrigin.DynamicRightwardData = new List<NoteDataOrigin_DynamicRightward>();
+            }
+
+            // 追加するデータのインスタンス化
+            NoteDataOrigin_DynamicRightward data = new NoteDataOrigin_DynamicRightward()
+            {
+                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+            };
+
+            dataOrigin.DynamicRightwardData.Add(data);
+            return true;
+        }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (chartData.noteData_DynamicGroundRightwards == null)
+            {
+                chartData.noteData_DynamicGroundRightwards = new List<NoteData_DynamicGroundRightward>();
+            }
+
+            if (dataOrigin.DynamicRightwardData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.DynamicRightwardData)
+            {
+                NoteData_DynamicGroundRightward noteData = new NoteData_DynamicGroundRightward
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    Timing = timing
+                };
+
+                chartData.noteData_DynamicGroundRightwards.Add(noteData);
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// ←ダイナミック←ノーツ
+    /// </summary>
+    public class DynamicLeftwardConverter : INoteDataConvertable
+    {
+        readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundLeftward;
+
+        public bool CheckAndAddDataForOrigin(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        {
+            if (noteDataInEditor.NoteType != type) { return false; }
+
+            // 新たにインスタンス化
+            if (dataOrigin.DynamicLeftwardData == null)
+            {
+                dataOrigin.DynamicLeftwardData = new List<NoteDataOrigin_DynamicLeftward>();
+            }
+
+            // 追加するデータのインスタンス化
+            NoteDataOrigin_DynamicLeftward data = new NoteDataOrigin_DynamicLeftward()
+            {
+                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+            };
+
+            dataOrigin.DynamicLeftwardData.Add(data);
+            return true;
+        }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (chartData.noteData_DynamicGroundLeftwards == null)
+            {
+                chartData.noteData_DynamicGroundLeftwards = new List<NoteData_DynamicGroundLeftward>();
+            }
+
+            if (dataOrigin.DynamicLeftwardData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.DynamicLeftwardData)
+            {
+                NoteData_DynamicGroundLeftward noteData = new NoteData_DynamicGroundLeftward
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    Timing = timing
+                };
+
+                chartData.noteData_DynamicGroundLeftwards.Add(noteData);
             }
 
             return true;
