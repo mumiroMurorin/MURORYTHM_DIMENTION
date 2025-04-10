@@ -70,7 +70,6 @@ namespace ChartEditor
         {
             if (!Input.GetKeyDown(playKey)) { return; }
             if (chartEditorDataGetter.Music.Value == null) { return; }
-            if(chartEditorDataGetter.MainBpm.Value <= 0) { return; }
 
             switch (chartEditorDataGetter.PlayMode.Value)
             {

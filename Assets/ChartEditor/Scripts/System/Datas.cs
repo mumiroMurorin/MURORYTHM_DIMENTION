@@ -125,7 +125,7 @@ namespace ChartEditor
         #region BPM
 
         const float BPM_MIN = 1f;
-        const float BPM_MAX = 1000f;
+        const float BPM_MAX = 500f;
 
         /// <summary>
         /// BPM•Ï‰»
@@ -394,8 +394,8 @@ namespace ChartEditor
     public enum DeploymentNoteType
     {
         TouchNote,
-        DynamicNoteUpward,
-        DynamicNoteRightward,
-        DynamicNoteLeftward,
+        DynamicGroundUpward,
+        DynamicGroundRightward,
+        DynamicGroundLeftward,
     }
 }

@@ -15,17 +15,18 @@ namespace ChartEditor
         [SerializeField] List<NoteButtonToEditMode> noteButtons_view;
         [SerializeField] NotesViewportView notesViewport_view;
         [SerializeField] MusicBrowseButtonView musicBrowseButton_view;
-        [SerializeField] BPMInputFieldView bpmInputField_view;
         [SerializeField] OffsetInputFieldView offsetInputField_view;
         [SerializeField] MusicNameView musicName_view;
         [SerializeField] AutoEditModeButtonView autoEditModeButton_view;
         [SerializeField] RhythmConfigBarView rhythmConfigBar_view;
         [SerializeField] RhythmConfigSubView rhythmConfigSubDivision_view;
+        [SerializeField] ExportButtonView exportButton_view;
 
         AudioFileSelector audioFileSelector = new AudioFileSelector();
 
         IChartEditorDataSetter dataSetter_model;
         IChartEditorDataGetter dataGetter_model;
+        ChartConvert.ChartExporter chartExporter = new ChartConvert.ChartExporter();
 
         CancellationTokenSource soundLoadCts;
 
@@ -66,14 +67,13 @@ namespace ChartEditor
                 .Subscribe(musicBrowseButton_view.OnChangePlayMode)
                 .AddTo(this.gameObject);
 
-            // bpmフィールドの可視不可視
+            // オフセットフィールドのインタラクト可不可
+            // エクスポートフィールドのインタラクト可不可
             dataGetter_model?.PlayMode
-                .Subscribe(bpmInputField_view.OnChangePlayMode)
-                .AddTo(this.gameObject);
-
-            // オフセットフィールドの可視不可視
-            dataGetter_model?.PlayMode
-                .Subscribe(offsetInputField_view.OnChangePlayMode)
+                .Subscribe(value => { 
+                    offsetInputField_view.OnChangePlayMode(value);
+                    exportButton_view.OnChangePlayMode(value);
+                })
                 .AddTo(this.gameObject);
 
             // 楽曲名の変更
@@ -148,13 +148,6 @@ namespace ChartEditor
             // 曲選択ボタン
             musicBrowseButton_view.OnClickedListner += BrowseAudioFile;
 
-            // bpm変更フィールド
-            bpmInputField_view.OnValueChangedListner += (value) => 
-            { 
-                dataSetter_model.SetMainBpm(value);
-                dataSetter_model.InitializeChartData();
-            };
-
             // オートエディットモードボタン
             autoEditModeButton_view.OnClickedListner += () =>
             {
@@ -164,6 +157,9 @@ namespace ChartEditor
 
             // オフセットフィールド
             offsetInputField_view.OnValueChangedListner += dataSetter_model.SetOffset;
+
+            // エクスポートボタン
+            exportButton_view.OnClickedListner += () => chartExporter.Export(dataGetter_model.ChartData.Value, dataGetter_model.Offset.Value);
 
             // リズムコンフィグ
             rhythmConfigBar_view.OnClickedApplyButtonListner += () => dataSetter_model.SetRhythmConfigurableBar(null);

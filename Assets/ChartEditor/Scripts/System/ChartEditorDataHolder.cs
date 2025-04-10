@@ -15,21 +15,9 @@ namespace ChartEditor
 
         public void InitializeChartData()
         {
-            if(mainBpm.Value <= 0) { return; }
             if(music.Value == null) { return; }
 
-            chartData.Value = new ChartData(music.Value.length, mainBpm.Value);
-        }
-
-        /// <summary>
-        /// ÉÅÉCÉìBPM
-        /// </summary>
-        ReactiveProperty<float> mainBpm = new ReactiveProperty<float>(0);
-        IReadOnlyReactiveProperty<float> IChartEditorDataGetter.MainBpm => mainBpm;
-
-        void IChartEditorDataSetter.SetMainBpm(float bpm)
-        {
-            mainBpm.Value = bpm;
+            chartData.Value = new ChartData(music.Value.length, 256);
         }
 
         #endregion
@@ -253,8 +241,6 @@ namespace ChartEditor
         /// </summary>
         IReadOnlyReactiveProperty<float> ChartViewScale { get; }
 
-        IReadOnlyReactiveProperty<float> MainBpm { get; }
-
         IReadOnlyReactiveProperty<float> Offset { get; }
 
         IReadOnlyReactiveProperty<AudioClip> Music { get; }
@@ -288,8 +274,6 @@ namespace ChartEditor
         void SetPlaybackProgress(float value);
 
         void SetChartViewScale(float scale);
-
-        void SetMainBpm(float bpm);
 
         void SetOffset(float offset);
 

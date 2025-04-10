@@ -2,33 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChartDataOrigin
-{
-    public int MainBpm { get; set; }
-
-}
-
-public enum ChartTopicType
-{
-    SetDivisionNum, // 分割数(〇分音符)
-    SetBPM,         // BPM変化
-    SetBeat,        // 拍子変化
-
-    // ノーツ
-    Touch,
-    HoldStart,
-    HoldRelay,
-    HoldEnd,
-    HoldMesh,
-    SpaceHoldMesh,
-    SpaceHoldRelay,
-    DynamicGroundUpward,
-    DynamicGroundDownward,
-    DynamicGroundRightward,
-    DynamicGroundLeftward,
-    DynamicSpace
-}
-
 /// <summary>
 /// 各種ノーツデータのListをまとめたもの
 /// </summary>
