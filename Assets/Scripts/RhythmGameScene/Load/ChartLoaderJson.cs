@@ -11,13 +11,15 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
     [SerializeField] TextAsset jsonData;
 
     IMusicDataGetter musicDataGetter;
+    INoteSpawnDataOptionHolder optionGetter;
     IChartDataSetter chartDataSetter;
 
     [Inject]
-    public void Constructor(IMusicDataGetter musicDataGetter, IChartDataSetter chartDataSetter)
+    public void Constructor(IMusicDataGetter musicDataGetter, IChartDataSetter chartDataSetter, INoteSpawnDataOptionHolder optionGetter)
     {
         this.musicDataGetter = musicDataGetter;
         this.chartDataSetter = chartDataSetter;
+        this.optionGetter = optionGetter;
     }
 
     private void Start()
@@ -47,21 +49,23 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
     /// <returns></returns>
     public ChartData LoadChartData(TextAsset textAsset)
     {
-        if (jsonData == null || textAsset == null)
+        if (jsonData == null && textAsset == null)
         {
             Debug.LogError("【System】Jsonファイルが参照されていません。");
             return null;
         }
 
-        // データの変換
+        // Jsonデータの変換
         if(!JsonLoader.TryLoadFromTextAsset(textAsset != null ? textAsset : jsonData, out ChartDataOrigin chartDataOrigin))
         {
             // 失敗
             return null;
         }
 
+        // 譜面データの変換
+        ChartImporter chartImporter = new ChartImporter();
+        ChartData chart = chartImporter.Import(chartDataOrigin, optionGetter);
 
-
-        return null;
+        return chart;
     }
 }

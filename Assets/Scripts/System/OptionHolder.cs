@@ -25,11 +25,21 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IVolumeSe
     {
         bgmVolume.Value = value;
     }
+
+    // オフセット関係
+    ReactiveProperty<float> offset = new ReactiveProperty<float>(0);
+    IReadOnlyReactiveProperty<float> INoteSpawnDataOptionHolder.OffsetMs => offset;
+    void SetOffset(float value)
+    {
+        offset.Value = value;
+    }
 }
 
 public interface INoteSpawnDataOptionHolder
 {
     public float NoteSpeed { get; }
+
+    IReadOnlyReactiveProperty<float> OffsetMs { get; }
 }
 
 public interface IVolumeGetter

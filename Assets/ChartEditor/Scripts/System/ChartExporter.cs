@@ -129,6 +129,117 @@ namespace ChartConvert
 
     }
 
+    public class ChartImporter
+    {
+        // ここに変換関数を記述していく
+        private List<INoteDataConvertable> converters = new List<INoteDataConvertable>()
+        {
+            new TouchNoteConverter(),
+            new DynamicUpwardConverter(),
+        };
+
+        public ChartData Import(ChartDataOrigin dataOrigin, INoteSpawnDataOptionHolder optionHolder)
+        {
+            bool isSucceed = true;
+
+            ChartData chartData = new ChartData();
+            CalcTimingClass calcTiming = new CalcTimingClass(dataOrigin.OffsetMs, optionHolder.OffsetMs.Value);
+
+            // 分線を一つずつ取り出す
+            foreach(var bar in dataOrigin.BarDatas)
+            {
+                if (!SetdataFromBarData(bar, chartData, calcTiming))
+                {
+                    isSucceed = false;
+                }
+            }
+
+            if (isSucceed) { Debug.Log("【Converter】譜面データの変換成功"); }
+            else { Debug.LogWarning("【Converter】譜面データの変換失敗。ログを確かめてください"); }
+
+            return chartData;
+        }
+
+        /// <summary>
+        /// 小節データから分節データを抽出してノーツデータに変換
+        /// </summary>
+        /// <param name="barDataOrigin"></param>
+        /// <param name="chartData"></param>
+        /// <returns></returns>
+        private bool SetdataFromBarData(BarDataOrigin barDataOrigin, ChartData chartData, CalcTimingClass calcTiming)
+        {
+            bool isSucceed = true;
+
+            // 拍子、分割数の取得
+            int beatCount = barDataOrigin.BeatCount;
+            float beatUnit = barDataOrigin.BeatUnit;
+            int divNum = barDataOrigin.DivisionNum;
+
+            // 小節データを一つ一つ取り出してデータを代入
+            foreach(var sub in barDataOrigin.SubDivisionDatas)
+            {
+                float bpm = sub.Bpm;
+                float timing = calcTiming.CalcNextTiming(beatUnit, divNum, bpm);
+
+                if (!SetDataFromSubDivisionData(sub, chartData, timing)) 
+                {
+                    isSucceed = false;
+                }
+            }
+
+            return isSucceed;
+        }
+
+        /// <summary>
+        /// 分節データからノーツデータに一つ一つ変換
+        /// </summary>
+        /// <param name="dataOrigin"></param>
+        /// <param name="chartData"></param>
+        /// <param name="calcTiming"></param>
+        /// <returns></returns>
+        private bool SetDataFromSubDivisionData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float secondsPassed)
+        {
+            bool isSucceed = true;
+
+            // 一つずつ取り出して変換
+            foreach(var converter in converters)
+            {
+                if (!converter.CheckAndAddDataFromOrigin(dataOrigin, chartData, secondsPassed))
+                {
+                    isSucceed = false;
+                }
+            }
+
+            return isSucceed;
+        }
+
+        /// <summary>
+        /// ノーツが流れてくる時間を計算するクラス
+        /// </summary>
+        private class CalcTimingClass
+        {
+            float timePassedSec;
+
+            public CalcTimingClass(float musicOffsetMs, float optionOffsetMs)
+            {
+                timePassedSec = (musicOffsetMs + optionOffsetMs) / 1000f;
+            }
+
+            public float CalcNextTiming(float beatUnit, float divNum, float bpm)
+            {
+                // 1分節の時間[sec]
+                // = 1秒間に打たれる4分音符の数 * (BeatUnit / 4f) / 分割数
+                // = (60f / 1分間に打たれる4分音符の数(BPM)) * (4f / BeatUnit) / 分割数  
+                float subDivisionSeconds = (60f / bpm) * (4f / beatUnit) / divNum;
+
+                // 次の分節の時間[sec]
+                // = 経過時間[sec] + 1分節の時間[sec]
+                timePassedSec += subDivisionSeconds;
+                return timePassedSec;
+            }
+        }
+    }
+
 
     #region ノーツ変換関数
 
@@ -139,7 +250,7 @@ namespace ChartConvert
     {
         bool CheckAndAddDataForOrigin(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin);
 
-        bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, Func<float, float> calcTiming);
+        bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing);
     }
 
     /// <summary>
@@ -169,19 +280,21 @@ namespace ChartConvert
             return true;
         }
 
-        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, Func<float, float> calcTiming)
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
             if(chartData.noteData_Touches == null)
             {
                 chartData.noteData_Touches = new List<NoteData_Touch>();
             }
 
+            if(dataOrigin.TouchNoteData == null) { return true; }
+
             foreach(var noteOrigin in dataOrigin.TouchNoteData)
             {
                 NoteData_Touch noteData = new NoteData_Touch
                 {
                     Range = (int[])noteOrigin.Range.Clone(),
-                    Timing = calcTiming(dataOrigin.Bpm)
+                    Timing = timing
                 };
 
                 chartData.noteData_Touches.Add(noteData);
@@ -218,19 +331,21 @@ namespace ChartConvert
             return true;
         }
 
-        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, Func<float, float> calcTiming)
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
             if (chartData.noteData_DynamicGroundUpwards == null)
             {
                 chartData.noteData_DynamicGroundUpwards = new List<NoteData_DynamicGroundUpward>();
             }
 
+            if (dataOrigin.DynamicUpwardData == null) { return true; }
+
             foreach (var noteOrigin in dataOrigin.DynamicUpwardData)
             {
                 NoteData_DynamicGroundUpward noteData = new NoteData_DynamicGroundUpward
                 {
                     Range = (int[])noteOrigin.Range.Clone(),
-                    Timing = calcTiming(dataOrigin.Bpm)
+                    Timing = timing
                 };
 
                 chartData.noteData_DynamicGroundUpwards.Add(noteData);
