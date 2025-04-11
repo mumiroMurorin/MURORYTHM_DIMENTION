@@ -9,6 +9,8 @@ namespace ChartEditor
     {
         NoteObject noteObject;
 
+        public NoteObject Note => noteObject;
+
         private void Start()
         {
             noteObject = GetComponent<NoteObject>();

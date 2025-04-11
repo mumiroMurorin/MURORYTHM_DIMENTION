@@ -97,6 +97,8 @@ namespace ChartEditor
 
     public interface IDestroyableObject
     {
+        NoteObject Note { get; }
+
         void OnDestroy();
     }
 }

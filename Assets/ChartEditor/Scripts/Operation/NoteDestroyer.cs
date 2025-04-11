@@ -29,6 +29,8 @@ namespace ChartEditor
             IDestroyableObject destroyableObject = chartEditorDataGetter.DestroyableObject.Value;
             if (destroyableObject == null) { return; }
 
+            chartEditorDataGetter.ChartData.Value.RemoveNote(destroyableObject.Note.NoteData);
+
             destroyableObject.OnDestroy();
         }
     }

@@ -443,7 +443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b089f07c24e90b8408e898cd4cab8f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicData_debug: {fileID: 11400000, guid: 11edc30a66d666f42bbdc54eb1c29516, type: 2}
+  musicData_debug: {fileID: 11400000, guid: c6d2ba301e3d1314aab06965b2679473, type: 2}
 --- !u!1001 &135123126
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1379,7 +1379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b34ac413261e51b4891d0e321f518678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jsonData: {fileID: 4900000, guid: 7fcce72354f2561448ab7ef72da8d3ea, type: 3}
+  jsonData: {fileID: 4900000, guid: 84dd2a016dae3b745b16833c845546e7, type: 3}
 --- !u!1001 &522279676
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -320,6 +320,25 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// ƒm[ƒc‚ğíœ‚·‚é
+        /// </summary>
+        public void RemoveNote(NoteData noteData)
+        {
+            AddressInChart address = noteData.Address;
+            SubDivisionDataInBeat subDivision = barDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
+
+            if (!subDivision.RemoveNote(noteData))
+            {
+                Debug.LogError($"ySystemzíœ‚É¸”s‚µ‚Ü‚µ‚½: #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
+            }
+            else
+            {
+                Debug.Log($"ySystemzíœ: #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
+
+            }
+        }
+
+        /// <summary>
         /// ƒm[ƒc‚ÌêŠ‚ğˆÚ“®‚³‚¹‚é
         /// </summary>
         /// <param name="noteData"></param>
