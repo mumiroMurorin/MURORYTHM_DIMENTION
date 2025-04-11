@@ -299,11 +299,15 @@ namespace ChartEditor
         private GameObject GenerateSubDivisionUnit(SubDivisionDataInBeat subData, ILinePositioner backData, float currentZ, Transform parent, bool isBeatTiming, bool isBarTiming)
         {
             // コライダーの設置
-            colliderFactory?.Value.Deploy(subData, Vector3.forward * currentZ, parent);
+            GameObject deployableCollider = colliderFactory?.Value.Deploy(subData, Vector3.forward * currentZ, parent);
 
             // 小節線があるため置かない
             // この小節線をリターンする
-            if (isBarTiming) { return this.gameObject; }
+            if (isBarTiming) 
+            {
+                deployableCollider.transform.SetParent(this.gameObject.transform);
+                return this.gameObject; 
+            }
 
             GameObject obj;
             if (isBeatTiming)
@@ -315,6 +319,8 @@ namespace ChartEditor
             {
                 obj = subdivisionLineFactory?.Value.Deploy(subData, Vector3.forward * currentZ, parent);
             }
+
+            deployableCollider.transform.SetParent(obj.transform);
 
             // 初期化
             if (!obj.TryGetComponent(out SubdivisionLine subDivisionLine)) { return null; }

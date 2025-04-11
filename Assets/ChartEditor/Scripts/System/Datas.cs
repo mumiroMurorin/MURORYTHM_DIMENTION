@@ -216,6 +216,8 @@ namespace ChartEditor
         public void SetBeatCount(int beatCount) 
         {
             beatCount = (int)Mathf.Clamp(beatCount, 0, float.MaxValue);
+            if(this.beatCount.Value == beatCount) { return; }
+
             this.beatCount.Value = beatCount;
             UpdateSubDivisionData(beatCount, this.beatUnit.Value, this.divisionNum.Value);
         }
@@ -230,6 +232,8 @@ namespace ChartEditor
         public void SetBeatUnit(float beatUnit)
         {
             beatUnit = Mathf.Clamp(beatUnit, 0, float.MaxValue);
+            if (this.beatUnit.Value == beatUnit) { return; }
+
             this.beatUnit.Value = beatUnit;
             //UpdateSubDivisionData(this.beatCount.Value, beatUnit, this.divisionNum.Value);
         }
@@ -244,6 +248,8 @@ namespace ChartEditor
         public void SetDivisionNum(int divisionNum)
         {
             divisionNum = (int)Mathf.Clamp(divisionNum, 0, float.MaxValue);
+            if (this.divisionNum.Value == divisionNum) { return; }
+
             this.divisionNum.Value = divisionNum;
             UpdateSubDivisionData(this.beatCount.Value, this.beatUnit.Value, divisionNum);
         }
