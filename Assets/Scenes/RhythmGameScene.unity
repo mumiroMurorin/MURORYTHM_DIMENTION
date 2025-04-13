@@ -1379,7 +1379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b34ac413261e51b4891d0e321f518678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jsonData: {fileID: 4900000, guid: 84dd2a016dae3b745b16833c845546e7, type: 3}
+  jsonData: {fileID: 4900000, guid: 2f877fecc6732c64ca54f7c1b0bb1b53, type: 3}
 --- !u!1001 &522279676
 PrefabInstance:
   m_ObjectHideFlags: 0

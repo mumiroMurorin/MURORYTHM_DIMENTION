@@ -64,7 +64,7 @@ namespace ChartEditor
             }
 
             SetRange(shifted);
-            Debug.Log($"Šg‘å: range:{string.Join(",", range)}");
+            LogUI.Instance.Log($"yŠg‘åz\n range:{string.Join(",", range)}");
         }
 
         public void SetAddress(AddressInChart address)
@@ -79,7 +79,7 @@ namespace ChartEditor
             List<float> shifted = currentRange.Select(i => i - currentRange[0] + startIndex).ToList();
 
             SetRange(shifted);
-            Debug.Log($"ˆÚ“®: {string.Join(",", shifted)}");
+            LogUI.Instance.Log($"yˆÚ“®z\n {string.Join(",", shifted)}");
         }
     }
 
@@ -316,7 +316,7 @@ namespace ChartEditor
             newSubDivision.AddNote(noteData);
 
             noteData.SetAddress(address);
-            Debug.Log($"ySystemz”z’u: #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
+            LogUI.Instance.Log($"y”z’uz:\n #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
         }
 
         /// <summary>
@@ -329,12 +329,11 @@ namespace ChartEditor
 
             if (!subDivision.RemoveNote(noteData))
             {
-                Debug.LogError($"ySystemzíœ‚É¸”s‚µ‚Ü‚µ‚½: #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
+                LogUI.Instance.LogError($"yíœzíœ‚É¸”s‚µ‚Ü‚µ‚½:\n #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
             }
             else
             {
-                Debug.Log($"ySystemzíœ: #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
-
+                LogUI.Instance.Log($"yíœz:\n #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
             }
         }
 
@@ -351,8 +350,8 @@ namespace ChartEditor
             // ŒÃ‚¢êŠ‚©‚çíœ
             SubDivisionDataInBeat oldSubDivision = BarDatas[oldAddress.BarIndex].SubDivisionDatas[oldAddress.SubDivisionIndex];
             if (!oldSubDivision.RemoveNote(noteData)) 
-            { 
-                Debug.LogWarning("ySystemzŠY“–‚·‚éƒm[ƒg‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ"); 
+            {
+                LogUI.Instance.LogError($"yˆÚ“®zíœ‚É¸”s‚µ‚Ü‚µ‚½\n ŠY“–‚·‚éƒm[ƒc‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
                 return false; 
             }
 
