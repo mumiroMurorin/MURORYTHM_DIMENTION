@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace ChartEditor
 {
@@ -45,9 +46,7 @@ namespace ChartEditor
 
     public interface IDeployableObject
     {
-        NoteObject Note { get; }
-
-        void OnInstantiate(NoteData noteData);
+        void OnInstantiate(NoteData noteData, Func<AddressInChart, Transform> getParentTransformFunc);
 
         void OnMove(Transform parent);
 
@@ -67,7 +66,7 @@ namespace ChartEditor
 
         void OnMoveStart();
 
-        void OnMove(IDeployableCollider deployableCollider);
+        void OnMove();
 
         void OnMoveEnd();
     }
@@ -81,11 +80,11 @@ namespace ChartEditor
 
     public interface IScalableObject
     {
-        GameObject gameObject { get; }
+        NoteObject Note { get; }
 
         void OnStartScale();
 
-        void OnScale(IDeployableCollider deployableCollider, bool isRightAnchored);
+        void OnScale();
 
         void OnFinishScale();
     }

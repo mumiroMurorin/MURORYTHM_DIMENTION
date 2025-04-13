@@ -9,11 +9,11 @@ namespace ChartEditor
     public class NoteDeployer : MonoBehaviour
     {
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
-        [SerializeField] Transform noteParent;
         [SerializeField] NoteTypeToNoteObject[] notes;
 
         IDeployableObject deployingNote;
         IChartEditorDataGetter chartEditorDataGetter;
+        NoteData deployingNoteData;
 
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter)
@@ -84,7 +84,7 @@ namespace ChartEditor
 
             // データ上の追加
             AddressInChart address = chartEditorDataGetter.DeployableCollider.Value.Address;
-            chartEditorDataGetter.ChartData.Value.AddNote(deployingNote.Note.NoteData, address);
+            chartEditorDataGetter.ChartData.Value.AddNote(deployingNoteData, address);
             
             // オブジェクトの設置
             deployingNote.OnDeploy();
@@ -104,8 +104,8 @@ namespace ChartEditor
                 return;
             }
 
-            NoteData noteData = new NoteData() { NoteType = chartEditorDataGetter.DeploymentNoteType.Value };
-            deployable.OnInstantiate(noteData);
+            deployingNoteData = new NoteData() { NoteType = chartEditorDataGetter.DeploymentNoteType.Value };
+            deployable.OnInstantiate(deployingNoteData, GetNoteParentTransform);
 
             deployingNote = deployable;
         }
@@ -118,6 +118,7 @@ namespace ChartEditor
             if (deployingNote == null) { return; }
             deployingNote.OnDisable();
             deployingNote = null;
+            deployingNoteData = null;
         }
 
         /// <summary>
@@ -134,6 +135,11 @@ namespace ChartEditor
 
             Debug.LogWarning($"対応するノーツが存在しませんでした: {noteType}");
             return null;
+        }
+
+        private Transform GetNoteParentTransform(AddressInChart address)
+        {
+            return chartEditorDataGetter.ChartData.Value.GetPlacementLocation(address);
         }
 
         [System.Serializable]

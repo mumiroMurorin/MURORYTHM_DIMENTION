@@ -15,5 +15,17 @@ namespace ChartEditor
                 unit.SetAddress(barIndex, subIndex);
             }
         }
+
+        public Transform[] GetNoteDeployableUnitTransforms()
+        {
+            List<Transform> transforms = new List<Transform>();
+
+            foreach(var unit in units)
+            {
+                transforms.Add(unit.transform);
+            }
+
+            return transforms.ToArray();
+        }
     }
 }

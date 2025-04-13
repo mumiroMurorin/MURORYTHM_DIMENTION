@@ -49,12 +49,20 @@ namespace ChartEditor
             IDeployableCollider deployable = chartEditorDataGetter.DeployableCollider.Value;
             if (deployable == null) { return; }
 
-            if (scaledAddress == null) { scaledAddress = deployable.Address.Copy(); } 
+            // アドレスの取得
+            AddressInChart address = deployable.Address;
 
-            if (scaledAddress.BarIndex != deployable.Address.BarIndex) { return; }
-            if (scaledAddress.SubDivisionIndex != deployable.Address.SubDivisionIndex) { return; }
+            if (scaledAddress == null) { scaledAddress = address.Copy(); } 
 
-            scaledNote.OnScale(deployable, chartEditorDataGetter.IsRightAnchored);
+            // カーソル下のコライダーがその列のコライダーでなければ返す
+            if (scaledAddress.BarIndex != address.BarIndex) { return; }
+            if (scaledAddress.SubDivisionIndex != address.SubDivisionIndex) { return; }
+
+            // データの更新
+            scaledNote.Note.NoteData.ChangeRange(address.SliderIndex, chartEditorDataGetter.IsRightAnchored);
+
+            // オブジェクトの動作
+            scaledNote.OnScale();
         }
 
         private void FinishScaleNote()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace ChartEditor
 {
@@ -10,20 +11,20 @@ namespace ChartEditor
         [SerializeField] private Renderer noteRenderer;
 
         NoteObject noteObject;
-        NoteObject IDeployableObject.Note => noteObject;
 
         private void Awake()
         {
             noteObject = GetComponent<NoteObject>();
         }
 
-        void IDeployableObject.OnInstantiate(NoteData noteData)
+        void IDeployableObject.OnInstantiate(NoteData noteData, Func<AddressInChart, Transform> getParentTransformFunc)
         {
             noteRenderer.material.color *= new Color(1, 1, 1, 0.5f);
             this.gameObject.SetActive(false);
             noteObject.SetCollidersActive(false);
 
             noteObject.NoteData = noteData;
+            noteObject.GetParentTransformFunc = getParentTransformFunc;
         }
 
         void IDeployableObject.OnDeploy()
@@ -35,6 +36,7 @@ namespace ChartEditor
         void IDeployableObject.OnMove(Transform parent)
         {
             // 親オブジェクトに合わせた位置調整（Y 座標は維持）
+            // まだ設置していないので引数のTransformを参照
             Vector3 pos = new Vector3(parent.position.x, this.transform.position.y, parent.position.z);
             this.transform.position = pos;
             this.transform.SetParent(parent);

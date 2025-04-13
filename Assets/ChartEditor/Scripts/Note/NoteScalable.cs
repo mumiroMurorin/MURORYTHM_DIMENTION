@@ -17,6 +17,8 @@ namespace ChartEditor
         NoteObject noteObject;
         CancellationTokenSource cts = new CancellationTokenSource();
 
+        public NoteObject Note => noteObject;
+
         private void Start()
         {
             noteObject = GetComponent<NoteObject>();
@@ -39,20 +41,9 @@ namespace ChartEditor
             noteObject.SetCollidersActive(false);
         }
 
-        void IScalableObject.OnScale(IDeployableCollider deployableCollider, bool isRightAnchored)
+        void IScalableObject.OnScale()
         {
-            AddressInChart address = deployableCollider.Address;
-
-            noteObject.NoteData.ChangeRange(address.SliderIndex, isRightAnchored);
-
-            if (isRightAnchored && address.SliderIndex <= noteObject.NoteData.Range.Last())
-            {
-                Transform parent = deployableCollider.deployParent;
-
-                Vector3 pos = new Vector3(parent.position.x, this.transform.position.y, parent.position.z);
-                this.transform.position = pos;
-                this.transform.SetParent(parent);
-            }
+            
         }
 
         void IScalableObject.OnFinishScale()
@@ -62,6 +53,7 @@ namespace ChartEditor
 
         public void OnChangeScale(int size)
         {
+            // ‘å‚«‚³‚ÌXV
             Transform tr = origin.transform;
             tr.localScale = new Vector3(size, tr.localScale.y, tr.localScale.z);
             tr.localPosition = new Vector3((size - 1) / 2f, tr.localPosition.y, tr.localPosition.z);

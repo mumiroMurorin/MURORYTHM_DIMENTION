@@ -3074,7 +3074,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00015598003}
+  m_AnchoredPosition: {x: 0, y: -0.0000069998205}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &639970725
@@ -6552,7 +6552,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorInteracter:
     obj: {fileID: 1038807069}
-  noteParent: {fileID: 0}
   notes:
   - noteType: 0
     noteObject: {fileID: 5475620226950634511, guid: a3e1d74dfae71aa458e010bbb30b2e2a, type: 3}

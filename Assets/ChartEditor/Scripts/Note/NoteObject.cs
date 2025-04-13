@@ -19,6 +19,8 @@ namespace ChartEditor
 
         public NoteData NoteData { get; set; }
 
+        public Func<AddressInChart, Transform> GetParentTransformFunc;
+        
         /// <summary>
         /// 全てのコライダーの有効／無効を切り替える
         /// </summary>

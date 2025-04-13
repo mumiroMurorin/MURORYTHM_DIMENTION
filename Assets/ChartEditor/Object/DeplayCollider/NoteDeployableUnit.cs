@@ -10,9 +10,9 @@ namespace ChartEditor
 
         public AddressInChart Address { get; private set; }
 
-        public void SetAddress(int barIndex,int subIndex)
+        public void SetAddress(int barIndex, int subIndex)
         {
-            Address = new AddressInChart() { BarIndex = barIndex, SubDivisionIndex = subIndex, SliderIndex = index };
+            Address = new AddressInChart(barIndex, subIndex, index);
         }
     }
 

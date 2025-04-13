@@ -50,8 +50,8 @@ namespace ChartEditor
             // アドレスの移動
             chartEditorDataGetter.ChartData.Value.ChangeNoteAddress(movedNote.Note.NoteData, deployable.Address);
 
-            // オブジェクトの移動
-            movedNote.OnMove(deployable);
+            // オブジェクト側の行動
+            movedNote.OnMove();
         }
 
         private void EndMoveNote()

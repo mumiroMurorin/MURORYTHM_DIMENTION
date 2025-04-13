@@ -34,7 +34,7 @@ namespace ChartEditor
                 this.range.Add(index);
             }
 
-            Address.SliderIndex = this.range.First();
+            Address.SetSliderIndex(this.range.First());
         }
 
         public void ChangeRange(float index, bool isRightAnchored)
@@ -72,14 +72,18 @@ namespace ChartEditor
             // 同じアドレスなら返す
             if (Address != null && Address.IsSameAddress(address)) { return; }
 
-            Address = address.Copy();
+            if (Address == null) { Address = address.Copy(); }
+            else 
+            {
+                LogUI.Instance.Log($"【移動】:\n #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
+                Address.SetSameAddress(address);
+            }
 
             int startIndex = (int)address.SliderIndex;
             List<float> currentRange = range.ToList();
             List<float> shifted = currentRange.Select(i => i - currentRange[0] + startIndex).ToList();
 
             SetRange(shifted);
-            LogUI.Instance.Log($"【移動】\n {string.Join(",", shifted)}");
         }
     }
 
@@ -97,6 +101,8 @@ namespace ChartEditor
 
         public int BarIndex { get; }
         public int SubDivisionIndex { get; }
+
+        public Transform[] PlacementLocation { private get; set; }
 
         #region ノーツデータ
 
@@ -118,6 +124,21 @@ namespace ChartEditor
         public bool RemoveNote(NoteData noteData)
         {
             return noteDatas.Remove(noteData);
+        }
+
+        public Transform GetPlacementLocation(AddressInChart address)
+        {
+            if(address.SliderIndex > 15) {
+                Debug.LogError($"【System】値が15を超えています: {address.SliderIndex}");
+                return null; 
+            }
+
+            return PlacementLocation[(int)address.SliderIndex];
+        }
+
+        public void SetPlacementLocation(Transform[] locates)
+        {
+            PlacementLocation = locates;
         }
 
         #endregion
@@ -202,6 +223,17 @@ namespace ChartEditor
 
             // データセット
             SetSubDivisionDatas(subDivisionDatas);
+        }
+
+        public Transform GetPlacementLocation(AddressInChart address)
+        {
+            if (address.SubDivisionIndex > subDivisionDatas.Count)
+            {
+                Debug.LogError($"【System】値が分線の数を超えています: {address.SubDivisionIndex}");
+                return null;
+            }
+
+            return subDivisionDatas[address.SubDivisionIndex].GetPlacementLocation(address);
         }
 
         #region その他データ
@@ -362,6 +394,17 @@ namespace ChartEditor
             noteData.SetAddress(newAddress);
             return true;
         }
+
+        public Transform GetPlacementLocation(AddressInChart address)
+        {
+            if (address.BarIndex > barDatas.Count)
+            {
+                Debug.LogError($"【System】値が小節線の数を超えています: {address.BarIndex}");
+                return null;
+            }
+
+            return barDatas[address.BarIndex].GetPlacementLocation(address);
+        }
     }
 
     /// <summary>
@@ -369,15 +412,59 @@ namespace ChartEditor
     /// </summary>
     public class AddressInChart
     {
-        public int BarIndex { get; set; }
+        public AddressInChart(int barIndex = 0, int subDivisionIndex = 0, float sliderIndex = 0)
+        {
+            this.barIndex = new ReactiveProperty<int>(barIndex);
+            this.subDivisionIndex = new ReactiveProperty<int>(subDivisionIndex);
+            this.sliderIndex = new ReactiveProperty<float>(sliderIndex);
+        }
 
-        public int SubDivisionIndex { get; set; }
 
-        public float SliderIndex { get; set; }
+        /// <summary>
+        /// 小節線番号
+        /// </summary>
+        ReactiveProperty<int> barIndex;
+        public int BarIndex { get { return barIndex.Value; } }
+        public IReadOnlyReactiveProperty<int> BarIndexRP { get { return barIndex; } }
+        public void SetBarIndex(int index)
+        {
+            barIndex.Value = index;
+        }
+
+
+        /// <summary>
+        /// 分節番号
+        /// </summary>
+        ReactiveProperty<int> subDivisionIndex;
+        public int SubDivisionIndex { get { return subDivisionIndex.Value; } }
+        public IReadOnlyReactiveProperty<int> SubDivisionIndexRP { get { return subDivisionIndex; } }
+        public void SetSubDivisionIndex(int index)
+        {
+            subDivisionIndex.Value = index;
+        }
+
+
+        /// <summary>
+        /// スライダー番号
+        /// </summary>
+        ReactiveProperty<float> sliderIndex;
+        public float SliderIndex { get { return sliderIndex.Value; } }
+        public IReadOnlyReactiveProperty<float> SliderIndexRP { get { return sliderIndex; } }
+        public void SetSliderIndex(float index)
+        {
+            sliderIndex.Value = index;
+        }
 
         public AddressInChart Copy()
         {
-            return new AddressInChart { BarIndex = this.BarIndex, SubDivisionIndex = this.SubDivisionIndex, SliderIndex = this.SliderIndex };
+            return new AddressInChart(this.barIndex.Value, this.subDivisionIndex.Value, this.sliderIndex.Value);
+        }
+
+        public void SetSameAddress(AddressInChart address)
+        {
+            this.barIndex.Value = address.BarIndex;
+            this.subDivisionIndex.Value = address.SubDivisionIndex;
+            this.sliderIndex.Value = address.SliderIndex;
         }
 
         /// <summary>
