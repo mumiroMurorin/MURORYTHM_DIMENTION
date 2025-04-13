@@ -19,6 +19,7 @@ namespace ChartEditor
             LogItem item = obj.GetComponent<LogItem>();
 
             obj.transform.SetParent(logParent);
+            obj.transform.SetAsFirstSibling();
 
             item.SetLogData(logData);
         }

@@ -14,6 +14,7 @@ namespace ChartEditor
         IDeployableObject deployingNote;
         IChartEditorDataGetter chartEditorDataGetter;
         NoteData deployingNoteData;
+        bool isDeployedTentative;
 
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter)
@@ -71,6 +72,7 @@ namespace ChartEditor
             if (deployable == null) { return; }
 
             deployingNote.OnMove(deployable.deployParent);
+            isDeployedTentative = true;
         }
 
         /// <summary>
@@ -81,6 +83,7 @@ namespace ChartEditor
             // 配置モードでない際は返す
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
             if (chartEditorDataGetter.DeployableCollider.Value == null) { return; }
+            if (!isDeployedTentative) { return; }
 
             // データ上の追加
             AddressInChart address = chartEditorDataGetter.DeployableCollider.Value.Address;
@@ -108,6 +111,7 @@ namespace ChartEditor
             deployable.OnInstantiate(deployingNoteData, GetNoteParentTransform);
 
             deployingNote = deployable;
+            isDeployedTentative = false;
         }
 
         /// <summary>
