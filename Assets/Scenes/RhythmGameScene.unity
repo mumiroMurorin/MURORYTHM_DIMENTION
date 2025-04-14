@@ -3062,6 +3062,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c5317408cbf06a4290cf14038cfc7a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timer:
+    obj: {fileID: 1605477129}
 --- !u!1001 &1022076316
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5920,12 +5922,11 @@ MonoBehaviour:
       data:
         phaseTransitionable:
           obj: {fileID: 1853263903}
-        groundController:
-          obj: {fileID: 1010482523}
         musicPlayer:
           obj: {fileID: 1737290705}
         timer:
           obj: {fileID: 1605477129}
+        waitDuration: 0.5
     - rid: 4334588895060557831
       type: {class: Transitioner_EndAnimation, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
       data:

@@ -20,12 +20,12 @@ public class TimeCounter : MonoBehaviour, ITimeGetter, ITimeController
         isCounting = false;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        // ‰¼
-        if (Input.GetKeyDown(KeyCode.Return)) { StartTimer(); }
-
-        if (isCounting) { time += UnityEngine.Time.deltaTime; }
+        if (isCounting) 
+        {
+            time += UnityEngine.Time.fixedDeltaTime;
+        }
     }
 }
 

@@ -226,7 +226,7 @@ namespace ChartConvert
 
             public CalcTimingClass(float musicOffsetMs, float optionOffsetMs)
             {
-                timePassedSec = (musicOffsetMs + optionOffsetMs) / 1000f;
+                timePassedSec = -(musicOffsetMs + optionOffsetMs) / 1000f;
             }
 
             public float CalcNextTiming(float beatUnit, float divNum, float bpm)

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
-public class GroundContoroller : MonoBehaviour, IGroundController
+public class GroundContoroller : MonoBehaviour
 {
-    INoteSpawnDataOptionHolder optionHolder;
+    [SerializeField] SerializeInterface<ITimeGetter> timer;
 
-    bool isMoving;
+    INoteSpawnDataOptionHolder optionHolder;
 
     [Inject]
     public void Constructor(INoteSpawnDataOptionHolder optionHolder)
@@ -15,24 +15,17 @@ public class GroundContoroller : MonoBehaviour, IGroundController
         this.optionHolder = optionHolder;
     }
 
-    void IGroundController.StartGroundMove()
-    {
-        isMoving = true;
-    }
-
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return)) { isMoving = true; }
-        if (isMoving) { MoveGround(); }
+        MoveGround();
     }
 
     /// <summary>
     /// グラウンドを動かす
-    /// Time.deltaTime基準で動かすので注意
     /// </summary>
     private void MoveGround()
     {
         // 譜面を進める
-        this.gameObject.transform.position += Vector3.back * optionHolder.NoteSpeed * Time.deltaTime;
+        this.gameObject.transform.position = Vector3.back * optionHolder.NoteSpeed * timer.Value.Time;
     }
 }

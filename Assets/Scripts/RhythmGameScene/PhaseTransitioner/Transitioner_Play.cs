@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using System.Threading;
 
 namespace TransitionerInRhythmGameScene
 {
     public class Transitioner_Play : IPhaseTransitionerInRhythmGameScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
-        [SerializeField] SerializeInterface<IGroundController> groundController;
         [SerializeField] SerializeInterface<IMusicPlayerInRhythmGameScene> musicPlayer;
         [SerializeField] SerializeInterface<ITimeController> timer;
+
+        [Tooltip("フェーズ遷移までの時間")]
+        [SerializeField] float waitDuration = 0.5f;
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.Play;
 
@@ -22,7 +25,8 @@ namespace TransitionerInRhythmGameScene
         void IPhaseTransitionerInRhythmGameScene.Transition()
         {
             Debug.Log("【Transition】Transition to \"Play\"");
-            StartRhythmGame();
+
+            _ = DelayedExecutor.ExecuteAfterDelay(waitDuration, StartRhythmGame);
         }
 
         /// <summary>
@@ -30,8 +34,6 @@ namespace TransitionerInRhythmGameScene
         /// </summary>
         private void StartRhythmGame()
         {
-            // グラウンドを走らせる
-            groundController?.Value.StartGroundMove();
             // 楽曲を流す
             musicPlayer?.Value.PlayMusic();
             // 時を進める

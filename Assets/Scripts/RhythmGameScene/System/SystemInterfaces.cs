@@ -78,17 +78,6 @@ public interface IChartGenerator
 }
 
 /// <summary>
-/// 譜面(グラウンド)のコントロールを行う
-/// </summary>
-public interface IGroundController
-{
-    /// <summary>
-    /// 譜面の移動開始
-    /// </summary>
-    void StartGroundMove();
-}
-
-/// <summary>
 /// 楽曲データのセットが行える
 /// </summary>
 public interface IMusicDataSetter
