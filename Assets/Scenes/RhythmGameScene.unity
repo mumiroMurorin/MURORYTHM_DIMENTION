@@ -5881,6 +5881,8 @@ MonoBehaviour:
       data:
         chartLoader:
           obj: {fileID: 484755816}
+        musicPlayer:
+          obj: {fileID: 1737290705}
         phaseTransitionable:
           obj: {fileID: 1853263903}
     - rid: 4334588895060557825
