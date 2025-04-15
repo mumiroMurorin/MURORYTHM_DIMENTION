@@ -27,7 +27,7 @@ public class MusicPlayerInRhythmGameScene : MonoBehaviour, IMusicPlayerInRhythmG
     private async UniTask LoadMusicAsync(AudioClip clip, Action onEndLoading, CancellationToken token)
     {
         clip.LoadAudioData();
-        await UniTask.WaitUntil(() => clip.loadState == AudioDataLoadState.Loading, cancellationToken: token);
+        await UniTask.WaitUntil(() => clip.loadState == AudioDataLoadState.Loaded, cancellationToken: token);
 
         SoundManager.Instance.SetBGM(clip, BGM_Type.MusicTrack);
 
