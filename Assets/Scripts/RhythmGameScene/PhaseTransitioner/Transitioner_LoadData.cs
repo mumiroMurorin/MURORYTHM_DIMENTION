@@ -8,6 +8,7 @@ namespace TransitionerInRhythmGameScene
     public class Transitioner_LoadData : IPhaseTransitionerInRhythmGameScene
     {
         [SerializeField] SerializeInterface<IChartLoader> chartLoader;
+        [SerializeField] SerializeInterface<IMusicPlayerInRhythmGameScene> musicPlayer;
         [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
         
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.LoadData;
@@ -21,6 +22,9 @@ namespace TransitionerInRhythmGameScene
         {
             Debug.Log("ÅyTransitionÅzTransition to \"LoadData\"");
 
+            // äyã»ÇÃì«Ç›çûÇ›
+            musicPlayer?.Value.LoadMusic();
+            // ïàñ ÇÃì«Ç›çûÇ›
             chartLoader?.Value.LoadChart(TransitionNextPhase);
         }
 

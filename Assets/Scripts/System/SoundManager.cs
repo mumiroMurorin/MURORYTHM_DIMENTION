@@ -12,6 +12,7 @@ using Cysharp.Threading.Tasks;
 public enum BGM_Type
 {
     Title = 10,
+    MusicTrack = 500,
     Result = 800,
     SILENCE = 999, // 無音状態
 }
@@ -57,8 +58,8 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
     public bool Mute = false;
 
     // === AudioClip ===
-    [SerializeField] BGMTypeToAudioClip[] bgmClips;
-    [SerializeField] SETypeToAudioClip[] seClips;
+    [SerializeField] List<BGMTypeToAudioClip> bgmClips;
+    [SerializeField] List<SETypeToAudioClip> seClips;
 
     // === AudioMixer ===
     [SerializeField] AudioMixerGroup audioMixerGroupSE;
@@ -303,6 +304,22 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
             if (s.type == type) { return s.clip; }
         }
         return null;
+    }
+
+    public void SetBGM(AudioClip clip, BGM_Type bgm_Type)
+    {
+        // すでにタグにAudioがセットされている場合、セットしなおすs
+        foreach(var set in bgmClips)
+        {
+            if(set.type == bgm_Type)
+            {
+                set.clip = clip;
+                return;
+            }
+        }
+
+        // そうでない場合、新たに追加する
+        bgmClips.Add(new BGMTypeToAudioClip { type = bgm_Type, clip = clip });
     }
 
     /// <summary>
