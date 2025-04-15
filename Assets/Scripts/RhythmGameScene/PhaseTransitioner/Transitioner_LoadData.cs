@@ -13,6 +13,9 @@ namespace TransitionerInRhythmGameScene
         
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.LoadData;
 
+        bool isLoadedMusic;
+        bool isLoadedChart;
+
         bool IPhaseTransitionerInRhythmGameScene.ConditionChecker(PhaseStatusInRhythmGame status)
         {
             return this.status == status;
@@ -23,9 +26,21 @@ namespace TransitionerInRhythmGameScene
             Debug.Log("yTransitionzTransition to \"LoadData\"");
 
             // Šy‹È‚Ì“Ç‚Ýž‚Ý
-            musicPlayer?.Value.LoadMusic();
+            musicPlayer?.Value.LoadMusic(() => { 
+                isLoadedMusic = true;
+                if (CheckTransitionable()) { TransitionNextPhase(); }
+            });
+
             // •ˆ–Ê‚Ì“Ç‚Ýž‚Ý
-            chartLoader?.Value.LoadChart(TransitionNextPhase);
+            chartLoader?.Value.LoadChart(() => {
+                isLoadedChart = true;
+                if (CheckTransitionable()) { TransitionNextPhase(); }
+            });
+        }
+
+        private bool CheckTransitionable()
+        {
+            return isLoadedMusic && isLoadedChart;
         }
 
         /// <summary>
