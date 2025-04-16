@@ -16,6 +16,8 @@ public class Operation_Option : MonoBehaviour
     [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter;
     [SerializeField] float delaySeconds = 0.5f;
 
+    private int[] RIGHT_MOVE_INDICES = new int[] { 11, 12, 13 };
+    private int[] LEFT_MOVE_INDICES = new int[] { 2, 3, 4 };
     private int[] BACK_DETAILSELECT_INDICES = new int[] { 14, 15 };
 
     ISelectSceneDataGetter selectSceneDataGetter;

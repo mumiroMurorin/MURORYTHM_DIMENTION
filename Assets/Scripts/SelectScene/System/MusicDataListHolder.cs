@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using UniRx;
 
-public class MusicDataListHolder : ISelectSceneDataGetter, ISelectSceneDataSetter
+public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSetter
 {
     // 楽曲リスト
     List<MusicData> musicDataListOrigin = new List<MusicData>();
@@ -29,15 +29,23 @@ public class MusicDataListHolder : ISelectSceneDataGetter, ISelectSceneDataSette
         currentMusicData.Value = musicDataListSorted[musicIndexSelected.Value];
     }
 
-    // 選択インデックス
+    // 選択楽曲インデックス
     ReactiveProperty<int> musicIndexSelected = new ReactiveProperty<int>(0);
-    IReadOnlyReactiveProperty<int> ISelectSceneDataGetter.CurrentSelectIndex => musicIndexSelected;
-    void ISelectSceneDataSetter.SetSelectIndex(int value)
+    IReadOnlyReactiveProperty<int> ISelectSceneDataGetter.CurrentMusicIndex => musicIndexSelected;
+    void ISelectSceneDataSetter.SetMusicIndex(int value)
     {
         if (value < 0) { musicIndexSelected.Value = musicDataListSorted.Count - 1; }
         else { musicIndexSelected.Value = value % musicDataListSorted.Count; }
 
         currentMusicData.Value = musicDataListSorted[musicIndexSelected.Value];
+    }
+
+    // 選択オプションインデックス
+    ReactiveProperty<int> optionIndexSelected = new ReactiveProperty<int>(0);
+    IReadOnlyReactiveProperty<int> ISelectSceneDataGetter.CurrentOptionIndex => optionIndexSelected;
+    void ISelectSceneDataSetter.SetOptionIndex(int value)
+    {
+        optionIndexSelected.Value = value;
     }
 
     // 選択楽曲
@@ -70,6 +78,8 @@ public interface ISelectSceneDataGetter
 
     IReadOnlyReactiveProperty<int> CurrentSelectIndex { get; }
 
+    IReadOnlyReactiveProperty<int> CurrentOptionIndex { get; }
+
     IReadOnlyReactiveProperty<Difficulty> Difficulty { get; }
 
     IReadOnlyReactiveProperty<MusicData> CurrentMusicData { get; }
@@ -79,7 +89,9 @@ public interface ISelectSceneDataGetter
 
 public interface ISelectSceneDataSetter
 {
-    void SetSelectIndex(int value);
+    void SetMusicIndex(int value);
+
+    void SetOptionIndex(int value);
 
     void SetDifficulty(Difficulty difficulty);
 

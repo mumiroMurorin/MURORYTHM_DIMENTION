@@ -8,8 +8,8 @@ public sealed class MusicSelectSceneReceiveLifetimeScope : LifetimeScope
     {
         base.Configure(builder);
 
-        builder.Register<MusicDataListHolder>(Lifetime.Singleton);
-        builder.Register<ISelectSceneDataGetter>(resolver => resolver.Resolve<MusicDataListHolder>(), Lifetime.Singleton);
-        builder.Register<ISelectSceneDataSetter>(resolver => resolver.Resolve<MusicDataListHolder>(), Lifetime.Singleton);
+        builder.Register<SelectSceneDataHolder>(Lifetime.Singleton);
+        builder.Register<ISelectSceneDataGetter>(resolver => resolver.Resolve<SelectSceneDataHolder>(), Lifetime.Singleton);
+        builder.Register<ISelectSceneDataSetter>(resolver => resolver.Resolve<SelectSceneDataHolder>(), Lifetime.Singleton);
     }
 }
