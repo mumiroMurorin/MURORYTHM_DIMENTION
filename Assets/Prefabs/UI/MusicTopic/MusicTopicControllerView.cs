@@ -90,6 +90,22 @@ namespace UIInSelectScene
         }
 
         /// <summary>
+        /// オプション選択時
+        /// </summary>
+        public void OnSelectOption()
+        {
+            animator.SetTrigger("SelectOption");
+        }
+
+        /// <summary>
+        /// 楽曲確認画面に戻る
+        /// </summary>
+        public void OnBackDetailSelectPhase()
+        {
+            animator.SetTrigger("CloseOption");
+        }
+
+        /// <summary>
         /// アニメーション側から呼ばれる
         /// </summary>
         public void OnFinishMoveAnimation()

@@ -65,11 +65,16 @@ public class Operation_DetailSelect : MonoBehaviour
 
     private void SetOperation()
     {
+        // 楽曲スタート
         operationSetter.Value.SetOperate(new SliderTouchData(MUSIC_START_INDICES, TransitionRhythmGamePhase, musicStartColor, musicStartText));
+        // 楽曲選択に戻る
         operationSetter.Value.SetOperate(new SliderTouchData(BACK_SELECT_INDICES, TransitionMusicSelectPhase, backSelectColor, backSelectText));
+        // 難易度上昇
         operationSetter.Value.SetOperate(new SliderTouchData(DIFF_UP_INDICES, () => ChangeDifficulty(+1), difficultyUpColor, difficultyUpText));
+        // 難易度下降
         operationSetter.Value.SetOperate(new SliderTouchData(DIFF_DOWN_INDICES, () => ChangeDifficulty(-1), difficultyDownColor, difficultyDownText));
-        operationSetter.Value.SetOperate(new SliderTouchData(OPTION_INDICES, () => { }, optionColor, optionText));
+        // オプション選択
+        operationSetter.Value.SetOperate(new SliderTouchData(OPTION_INDICES, TransitionOptionPhase, optionColor, optionText));
     }
 
 
@@ -88,6 +93,14 @@ public class Operation_DetailSelect : MonoBehaviour
     private void TransitionMusicSelectPhase()
     {
         phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.MusicSelect);
+    }
+
+    /// <summary>
+    /// オプション
+    /// </summary>
+    private void TransitionOptionPhase()
+    {
+        phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.MusicOption);
     }
 
     /// <summary>

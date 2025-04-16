@@ -7,31 +7,13 @@ using VContainer;
 public class SliderInputHandler : MonoBehaviour
 {
 
-    [Header("スライダーからの入力(必ず長さ16に)")]
-    [SerializeField] KeyCode[] keyCodes;
+    [Header("対応する入力(必ず長さ16に)")]
+    [SerializeField] KeyCodeConfig[] configs;
 
     ISliderInputSetter sliderInputSetter;
 
     // スライダー(キーボード) → ゲーム内入力
-    Dictionary<KeyCode, int> keyCodeToSliderIndex = new Dictionary<KeyCode, int>
-        {
-            {KeyCode.A , 0},
-            {KeyCode.B , 1},
-            {KeyCode.C , 2},
-            {KeyCode.D , 3},
-            {KeyCode.E , 4},
-            {KeyCode.F , 5},
-            {KeyCode.G , 6},
-            {KeyCode.H , 7},
-            {KeyCode.I , 8},
-            {KeyCode.J , 9},
-            {KeyCode.K , 10},
-            {KeyCode.L , 11},
-            {KeyCode.M , 12},
-            {KeyCode.N , 13},
-            {KeyCode.O , 14},
-            {KeyCode.P , 15},
-        };
+    List<Dictionary<KeyCode, int>> keyCodeToSliderIndexList = new List<Dictionary<KeyCode, int>>();
 
     [Inject]
     public void Inject(ISliderInputSetter inputSetter)
@@ -47,29 +29,60 @@ public class SliderInputHandler : MonoBehaviour
     void Update()
     {
         // 全てのキー入力を監視
-        foreach (var pair in keyCodeToSliderIndex)
+        foreach(var keyCodeToSliderIndex in keyCodeToSliderIndexList)
         {
-            sliderInputSetter?.SetSliderInput(pair.Value, Input.GetKey(pair.Key));
+            foreach (var pair in keyCodeToSliderIndex)
+            {
+                sliderInputSetter?.SetSliderInput(pair.Value, Input.GetKey(pair.Key));
+            }
         }
     }
 
     private void CheckSliderKeyCodes()
     {
-        if (keyCodes == null) { return; }
-        if (keyCodes.Length != 16) { return; }
+        if (configs == null) { return; }
 
-        keyCodeToSliderIndex.Clear();
+        keyCodeToSliderIndexList.Clear();
+        keyCodeToSliderIndexList = new List<Dictionary<KeyCode, int>>();
 
-        for (int i = 0; i < 16; i++)
+        foreach (var config in configs)
         {
-            keyCodeToSliderIndex.Add(keyCodes[i], i);
-        }
+            if (config.KeyCodes.Length != 16) 
+            {
+                Debug.LogError("【入力】対応するキーの数が16でありません");
+                continue;
+            }
 
+            if (!config.IsActive) { continue; }
+
+            var dictionary = new Dictionary<KeyCode, int>();
+            keyCodeToSliderIndexList.Add(dictionary);
+
+            for (int i = 0; i < 16; i++)
+            {
+                dictionary.Add(config.KeyCodes[i], i);
+            }
+        }
     }
 
     private void OnDestroy()
     {
         sliderInputSetter?.Dispose();
+    }
+
+    [System.Serializable]
+    public class KeyCodeConfig
+    {
+        [SerializeField] string configName;
+
+        [Header("対応する入力(必ず長さ16に)")]
+        [SerializeField] KeyCode[] keyCodes;
+
+        [SerializeField] bool isActive;
+
+        public KeyCode[] KeyCodes { get { return keyCodes; } }
+
+        public bool IsActive { get { return isActive; } }
     }
 }
 

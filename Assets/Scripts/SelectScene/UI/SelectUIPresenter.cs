@@ -27,11 +27,15 @@ namespace UIInSelectScene
 
         private void Start()
         {
-            Bind();
+            BindMusicTopic();
+            BindOptionTopic();
+            BindSliderUI();
+            BindOther();
+
             SetEvent();
         }
 
-        private void Bind()
+        private void BindMusicTopic()
         {
             // 楽曲リストの更新
             selectSceneDataGetter_model?.MusicDatasSorted.ObserveCountChanged()
@@ -48,14 +52,6 @@ namespace UIInSelectScene
                 .Subscribe(pair => { 
                     // トピックの更新
                     _ = musicTopicController_view.OnChangeSelectedMusic(pair.Current, pair.Previous, selectSceneDataGetter_model);
-                })
-                .AddTo(this.gameObject);
-
-            // 選択楽曲の変更
-            selectSceneDataGetter_model?.CurrentMusicData
-                .Subscribe(value => {
-                    // 背景の更新
-                    backGroundController_view.OnChangeMusicTopic(selectSceneDataGetter_model.CurrentMusicData.Value);
                 })
                 .AddTo(this.gameObject);
 
@@ -76,7 +72,31 @@ namespace UIInSelectScene
                 .Subscribe(musicTopicController_view.OnChangeDifficulty)
                 .AddTo(this.gameObject);
 
-            // スライダーUI
+            // オプションの選択
+            phaseStatusGetter_model?.Value.PhaseStatus
+                .Where(status => status == PhaseStatusInSelectScene.MusicOption)
+                .Subscribe(_ => { 
+                    musicTopicController_view.OnSelectOption(); 
+                })
+                .AddTo(this.gameObject);
+
+            // オプションから戻る
+            phaseStatusGetter_model?.Value.PhaseStatus
+                .Pairwise()
+                .Where(pair => pair.Previous == PhaseStatusInSelectScene.MusicOption && pair.Current == PhaseStatusInSelectScene.DetailSelect)
+                .Subscribe(_ => { 
+                    musicTopicController_view.OnBackDetailSelectPhase(); 
+                })
+                .AddTo(this.gameObject);
+        }
+
+        private void BindOptionTopic()
+        {
+
+        }
+
+        private void BindSliderUI()
+        {
             // 操作の追加
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveAdd()
@@ -95,6 +115,17 @@ namespace UIInSelectScene
                 {
                     sliderUnitsController_view?.OnClearSliderData();
                     topicTextsController_view?.OnClearSliderData();
+                })
+                .AddTo(this.gameObject);
+        }
+
+        private void BindOther()
+        {
+            // 選択楽曲の変更
+            selectSceneDataGetter_model?.CurrentMusicData
+                .Subscribe(value => {
+                    // 背景の更新
+                    backGroundController_view.OnChangeMusicTopic(selectSceneDataGetter_model.CurrentMusicData.Value);
                 })
                 .AddTo(this.gameObject);
         }

@@ -40,6 +40,7 @@ public enum PhaseStatusInSelectScene
     FadeIn,
     MusicSelect,
     DetailSelect,
+    MusicOption,
     FadeOut,
     TransitionRhythmGameScene,
 }

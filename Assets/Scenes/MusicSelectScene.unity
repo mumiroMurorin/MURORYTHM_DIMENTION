@@ -928,6 +928,7 @@ Transform:
   m_Children:
   - {fileID: 260343095}
   - {fileID: 343832511}
+  - {fileID: 952883369}
   - {fileID: 288092412}
   m_Father: {fileID: 1528082574}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2104,6 +2105,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2433445089735746849, guid: d94736c3e6b4e334eb6b762c1e04f6be, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7967314930253927826, guid: d94736c3e6b4e334eb6b762c1e04f6be, type: 3}
       propertyPath: m_Name
       value: OptionTopicController
@@ -2383,6 +2388,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 942931598}
   m_CullTransparentMesh: 1
+--- !u!1 &952883368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 952883369}
+  - component: {fileID: 952883370}
+  m_Layer: 0
+  m_Name: Operation_Option
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &952883369
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952883368}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 332814019}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &952883370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952883368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93f336c1743b683438bf14411e0bac92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backDetailColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+  backDetailText: "\u623B\u308B"
+  operationSetter:
+    obj: {fileID: 332814018}
+  phaseTransitionable:
+    obj: {fileID: 1012713960}
+  phaseStatusGetter:
+    obj: {fileID: 1012713960}
+  delaySeconds: 0.2
 --- !u!1 &994993973
 GameObject:
   m_ObjectHideFlags: 0
@@ -2723,9 +2781,15 @@ MonoBehaviour:
   - rid: 4334588895060557842
   - rid: 4334588895060557843
   - rid: 4334588895060557844
+  - rid: 2463229670824869888
   references:
     version: 2
     RefIds:
+    - rid: 2463229670824869888
+      type: {class: Transitioner_MusicOption, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
+      data:
+        phaseTransitionable:
+          obj: {fileID: 1012713960}
     - rid: 4334588895060557839
       type: {class: Transitioner_LoadData, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
       data:
@@ -5042,6 +5106,10 @@ PrefabInstance:
     - target: {fileID: 7967314930253927826, guid: a293c865af27fef4493960d8b48ebfb4, type: 3}
       propertyPath: m_Name
       value: MusicTopicController
+      objectReference: {fileID: 0}
+    - target: {fileID: 7967314930253927826, guid: a293c865af27fef4493960d8b48ebfb4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
