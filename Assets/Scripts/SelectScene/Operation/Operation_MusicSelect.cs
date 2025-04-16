@@ -80,7 +80,7 @@ public class Operation_MusicSelect : MonoBehaviour
     /// <param name="index"></param>
     private void MoveMusicTopic(int delta)
     {
-        selectSceneDataSetter.SetSelectIndex(selectSceneDataGetter.CurrentSelectIndex.Value + delta);
+        selectSceneDataSetter.SetMusicIndex(selectSceneDataGetter.CurrentMusicIndex.Value + delta);
     }
 
     /// <summary>

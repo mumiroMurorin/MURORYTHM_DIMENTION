@@ -27,7 +27,7 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
     private void Bind()
     {
         // トピックの移動
-        selectSceneDataGetter?.CurrentSelectIndex
+        selectSceneDataGetter?.CurrentMusicIndex
             .Skip(1)
             .Subscribe(_ => {
                 soundManager.PlaySE(SE_Type.MoveTopic);

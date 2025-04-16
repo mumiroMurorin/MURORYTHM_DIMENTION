@@ -41,14 +41,14 @@ namespace UIInSelectScene
             // 楽曲リストの更新
             selectSceneDataGetter_model?.MusicDatasSorted.ObserveCountChanged()
                 .Subscribe(_ => {
-                    int index = selectSceneDataGetter_model.CurrentSelectIndex.Value;
+                    int index = selectSceneDataGetter_model.CurrentMusicIndex.Value;
                     // トピックの更新
                     musicTopicController_view.SetMusicDatas(index, selectSceneDataGetter_model);
                 })
                 .AddTo(this.gameObject);
 
             // トピックの移動
-            selectSceneDataGetter_model?.CurrentSelectIndex
+            selectSceneDataGetter_model?.CurrentMusicIndex
                 .Pairwise()
                 .Subscribe(pair => { 
                     // トピックの更新

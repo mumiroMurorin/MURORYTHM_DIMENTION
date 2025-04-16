@@ -76,7 +76,7 @@ public interface ISelectSceneDataGetter
 {
     IReadOnlyReactiveCollection<MusicData> MusicDatasSorted { get; }
 
-    IReadOnlyReactiveProperty<int> CurrentSelectIndex { get; }
+    IReadOnlyReactiveProperty<int> CurrentMusicIndex { get; }
 
     IReadOnlyReactiveProperty<int> CurrentOptionIndex { get; }
 
