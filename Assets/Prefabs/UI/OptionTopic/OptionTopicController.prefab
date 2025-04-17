@@ -853,7 +853,7 @@ GameObject:
   m_Component:
   - component: {fileID: 25890907867018739}
   - component: {fileID: 8676448757617917503}
-  - component: {fileID: 5953541313401542389}
+  - component: {fileID: -4954271636022454467}
   m_Layer: 5
   m_Name: OptionTopicController
   m_TagString: Untagged
@@ -908,7 +908,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5953541313401542389
+--- !u!114 &-4954271636022454467
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -920,6 +920,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 915094271dfbd6345b7dbdc7a63d36c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  optionPrefabList:
+  - optionType: 1
+    prefab: {fileID: 511264936851410521, guid: 5d9bcefabf2816d43aa021ea365d03c6, type: 3}
+  - optionType: 2
+    prefab: {fileID: 511264936851410521, guid: 5d9bcefabf2816d43aa021ea365d03c6, type: 3}
+  - optionType: 3
+    prefab: {fileID: 511264936851410521, guid: 5d9bcefabf2816d43aa021ea365d03c6, type: 3}
+  - optionType: 4
+    prefab: {fileID: 511264936851410521, guid: 5d9bcefabf2816d43aa021ea365d03c6, type: 3}
+  optionTopicParents:
+  - {fileID: 2524149636159914954}
+  - {fileID: 9049028904321639789}
+  - {fileID: 7868147088391745370}
+  - {fileID: 7194485318261131886}
+  - {fileID: 4686244474227729714}
+  - {fileID: 5961482489208791821}
+  - {fileID: 5783576707093057251}
+  optionObjectParent: {fileID: 0}
   animator: {fileID: 8676448757617917503}
 --- !u!1 &8496447396734687576
 GameObject:

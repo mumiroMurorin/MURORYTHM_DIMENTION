@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
-public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IVolumeSetter
+public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IVolumeSetter, IOptionGetter
 {
     /// <summary>
     /// ÉmÅ[ÉcÇ™1ïbä‘Ç…ìÆÇ≠(unityíPà )ë¨ìx
@@ -17,7 +17,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IVolumeSe
 
     // SEä÷åW
     ReactiveProperty<float> seVolume = new ReactiveProperty<float>(0.8f);
-    IReadOnlyReactiveProperty<float> IVolumeGetter.SEVolume => seVolume;
+    public IReadOnlyReactiveProperty<float> SEVolume => seVolume;
     void IVolumeSetter.SetSEVolume(float value)
     {
         seVolume.Value = value;
@@ -25,7 +25,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IVolumeSe
 
     // BGMä÷åW
     ReactiveProperty<float> bgmVolume = new ReactiveProperty<float>(0.8f);
-    IReadOnlyReactiveProperty<float> IVolumeGetter.BGMVolume => bgmVolume;
+    public IReadOnlyReactiveProperty<float> BGMVolume => bgmVolume;
     void IVolumeSetter.SetBGMVolume(float value)
     {
         bgmVolume.Value = value;
@@ -33,7 +33,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IVolumeSe
 
     // ÉIÉtÉZÉbÉgä÷åW
     ReactiveProperty<float> offset = new ReactiveProperty<float>(0);
-    IReadOnlyReactiveProperty<float> INoteSpawnDataOptionHolder.OffsetMs => offset;
+    public IReadOnlyReactiveProperty<float> OffsetMs => offset;
     void SetOffset(float value)
     {
         offset.Value = value;
@@ -63,5 +63,11 @@ public interface IVolumeSetter
 
 public interface IOptionGetter
 {
+    IReadOnlyReactiveProperty<float> NoteSpeed { get; }
 
+    IReadOnlyReactiveProperty<float> OffsetMs { get; }
+
+    IReadOnlyReactiveProperty<float> SEVolume { get; }
+
+    IReadOnlyReactiveProperty<float> BGMVolume { get; }
 }

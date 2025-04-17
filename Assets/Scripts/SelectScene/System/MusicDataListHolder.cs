@@ -28,6 +28,14 @@ public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSet
         // 選択楽曲の更新
         currentMusicData.Value = musicDataListSorted[musicIndexSelected.Value];
     }
+    MusicData ISelectSceneDataGetter.GetMusicData(int index)
+    {
+        if (index >= musicDataListSorted.Count) { return null; }
+        if (index < 0) { return null; }
+
+        return musicDataListSorted[index];
+    }
+
 
     // 選択楽曲インデックス
     ReactiveProperty<int> musicIndexSelected = new ReactiveProperty<int>(0);
@@ -40,17 +48,38 @@ public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSet
         currentMusicData.Value = musicDataListSorted[musicIndexSelected.Value];
     }
 
+
+    // オプションリスト
+    List<OptionType> optionList = new List<OptionType>() { 
+         OptionType.NoteSpeed,
+    };
+    void ISelectSceneDataSetter.SetOptionList(List<OptionType> optionTypes)
+    {
+        optionList = new List<OptionType>(optionTypes);
+    }
+    OptionType ISelectSceneDataGetter.GetOptionType(int index)
+    {
+        if (index >= optionList.Count) { return OptionType.None; }
+        if (index < 0) { return OptionType.None; }
+
+        return optionList[index];
+    }
+
+
     // 選択オプションインデックス
     ReactiveProperty<int> optionIndexSelected = new ReactiveProperty<int>(0);
     IReadOnlyReactiveProperty<int> ISelectSceneDataGetter.CurrentOptionIndex => optionIndexSelected;
     void ISelectSceneDataSetter.SetOptionIndex(int value)
     {
-        optionIndexSelected.Value = value;
+        if (value < 0) { optionIndexSelected.Value = optionList.Count - 1; }
+        else { optionIndexSelected.Value = value % optionList.Count; }
     }
+
 
     // 選択楽曲
     ReactiveProperty<MusicData> currentMusicData = new ReactiveProperty<MusicData>();
     IReadOnlyReactiveProperty<MusicData> ISelectSceneDataGetter.CurrentMusicData => currentMusicData;
+
 
     // 選択難易度
     ReactiveProperty<Difficulty> difficulty = new ReactiveProperty<Difficulty>(Difficulty.Initiate);
@@ -63,13 +92,7 @@ public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSet
         this.difficulty.Value = (Difficulty)Mathf.Clamp((int)difficulty, values.Min(), values.Max());
     }
 
-    MusicData ISelectSceneDataGetter.GetMusicData(int index)
-    {
-        if (index >= musicDataListSorted.Count) { return null; }
-        if (index < 0) { return null; }
 
-        return musicDataListSorted[index];
-    }
 }
 
 public interface ISelectSceneDataGetter
@@ -85,11 +108,15 @@ public interface ISelectSceneDataGetter
     IReadOnlyReactiveProperty<MusicData> CurrentMusicData { get; }
 
     MusicData GetMusicData(int index);
+
+    OptionType GetOptionType(int index);
 }
 
 public interface ISelectSceneDataSetter
 {
     void SetMusicIndex(int value);
+
+    void SetOptionList(List<OptionType> optionTypes);
 
     void SetOptionIndex(int value);
 

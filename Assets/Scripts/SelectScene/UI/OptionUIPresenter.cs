@@ -12,10 +12,7 @@ namespace UIInSelectScene
 {
     public class OptionUIPresenter : MonoBehaviour
     {
-        [SerializeField] Animator animator;
-        [SerializeField] GameObject[] optionTopicPrefabs;
-        [SerializeField] GameObject[] topics;
-        [SerializeField] OptionTopicControllerView optionTopicController_view;
+        [SerializeField] OptionTopicController optionTopicController_view;
         [SerializeField] SerializeInterface<IOperationGetter> operationGetter_model;
         [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter_model;
 
@@ -51,60 +48,23 @@ namespace UIInSelectScene
                     optionTopicController_view.OnBackDetailSelectPhase();
                 })
                 .AddTo(this.gameObject);
+
+            // トピックの移動
+            selectSceneDataGetter_model?.CurrentOptionIndex
+                .Pairwise()
+                .Subscribe(pair => {
+                    // トピックの更新
+                    _ = optionTopicController_view.OnChangeSelectedOption(pair.Current, pair.Previous, selectSceneDataGetter_model);
+                })
+                .AddTo(this.gameObject);
         }
-
-        ///// <summary>
-        ///// 選択楽曲変更
-        ///// </summary>
-        ///// <param name="deltaValue"></param>
-        ///// <returns></returns>
-        //public async UniTask OnChangeSelectedMusic(int currentIndex, int previousIndex, ISelectSceneDataGetter selectSceneDataGetter)
-        //{
-        //    int deltaValue = currentIndex - previousIndex;
-
-        //    // 倍速
-        //    animator.SetFloat("MoveSpeedMagnitude", Mathf.Abs(deltaValue));
-
-        //    for (int i = 0; i < Mathf.Abs(deltaValue); i++)
-        //    {
-        //        if (deltaValue > 0) { animator.SetTrigger("Right"); }
-        //        else { animator.SetTrigger("Left"); }
-
-        //        isMoving = true;
-        //        await UniTask.WaitUntil(() => !isMoving);
-
-        //        SetMusicDatas(deltaValue > 0 ? previousIndex + i + 1 : previousIndex - i - 1, selectSceneDataGetter);
-        //    }
-        //}
-
-        ///// <summary>
-        ///// トピックに楽曲データをセットする
-        ///// </summary>
-        ///// <param name="index"></param>
-        ///// <param name="musicDatas"></param>
-        //public void SetMusicDatas(int index, ISelectSceneDataGetter selectSceneDataGetter)
-        //{
-        //    for (int i = 0; i < topics.Length; i++)
-        //    {
-        //        int indexLocal = index - topics.Length / 2 + i;
-        //        MusicData data = selectSceneDataGetter.GetMusicData(indexLocal);
-
-        //        if (data == null)
-        //        {
-        //            musicTopicUIs[i].SetObjActive(false);
-        //            continue;
-        //        }
-
-        //        musicTopicUIs[i].SetObjActive(true);
-        //        musicTopicUIs[i].SetMusicTopic(data);
-        //    }
-
-        //}
     }
 
     public interface IOptionTopicPresenter
     {
-        //public void Bind(INoteSpawnDataOptionHolder)
+        public void Bind(IOptionGetter optionGetter);
+
+        public void SetEvent(IOptionGetter optionGetter);
     }
 }
 

@@ -45,6 +45,15 @@ public enum PhaseStatusInSelectScene
     TransitionRhythmGameScene,
 }
 
+public enum OptionType
+{
+    None,
+    NoteSpeed,
+    Offset,
+    SEVolume,
+    BGMVolume,
+}
+
 //“ïˆÕ“x
 public enum Difficulty
 {
