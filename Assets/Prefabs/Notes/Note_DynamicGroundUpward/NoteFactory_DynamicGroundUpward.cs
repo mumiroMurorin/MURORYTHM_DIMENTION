@@ -131,7 +131,7 @@ public class NoteFactory_DynamicGroundUpward : NoteFactory<NoteData_DynamicGroun
         note.transform.position = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
-            optionHolder.NoteSpeed * data.Timing
+            optionHolder.NoteSpeed.Value * data.Timing
             );
 
         // “®‚­’n–Ê‚ðe“o˜^

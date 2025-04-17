@@ -8,7 +8,12 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IVolumeSe
     /// <summary>
     /// ÉmÅ[ÉcÇ™1ïbä‘Ç…ìÆÇ≠(unityíPà )ë¨ìx
     /// </summary>
-    public float NoteSpeed { get; set; } = 250f;
+    ReactiveProperty<float> noteSpeed = new ReactiveProperty<float>(1f);
+    public IReadOnlyReactiveProperty<float> NoteSpeed => noteSpeed;
+    public void SetNoteSpeed(float speed)
+    {
+        noteSpeed.Value = speed;
+    }
 
     // SEä÷åW
     ReactiveProperty<float> seVolume = new ReactiveProperty<float>(0.8f);
@@ -37,7 +42,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IVolumeSe
 
 public interface INoteSpawnDataOptionHolder
 {
-    public float NoteSpeed { get; }
+    IReadOnlyReactiveProperty<float> NoteSpeed { get; }
 
     IReadOnlyReactiveProperty<float> OffsetMs { get; }
 }
@@ -54,4 +59,9 @@ public interface IVolumeSetter
     void SetSEVolume(float value);
 
     void SetBGMVolume(float value);
+}
+
+public interface IOptionGetter
+{
+
 }

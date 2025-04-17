@@ -131,7 +131,7 @@ public class NoteFactory_DynamicGroundRightward : NoteFactory<NoteData_DynamicGr
         note.transform.position = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
-            optionHolder.NoteSpeed * data.Timing
+            optionHolder.NoteSpeed.Value * data.Timing
             );
 
         // “®‚­’n–Ê‚ðe“o˜^

@@ -134,7 +134,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
         note.transform.position = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
-            optionHolder.NoteSpeed * data.Timing
+            optionHolder.NoteSpeed.Value * data.Timing
             );
 
         // ìÆÇ≠ínñ Çêeìoò^

@@ -130,7 +130,7 @@ public class NoteFactory_Touch : NoteFactory<NoteData_Touch>
         note.transform.position = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
-            optionHolder.NoteSpeed * data.Timing
+            optionHolder.NoteSpeed.Value * data.Timing
             );
 
         // ìÆÇ≠ínñ Çêeìoò^

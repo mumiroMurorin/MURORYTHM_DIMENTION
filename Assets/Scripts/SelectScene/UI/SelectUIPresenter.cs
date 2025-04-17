@@ -11,7 +11,6 @@ namespace UIInSelectScene
     public class SelectUIPresenter : MonoBehaviour
     {
         [SerializeField] MusicTopicControllerView musicTopicController_view;
-        [SerializeField] OptionTopicControllerView optionTopicController_view;
         [SerializeField] SliderUnitsControllerView sliderUnitsController_view;
         [SerializeField] SliderTopicTextsControllerView topicTextsController_view;
         [SerializeField] BackGroundControllerView backGroundController_view;
@@ -29,7 +28,6 @@ namespace UIInSelectScene
         private void Start()
         {
             BindMusicTopic();
-            BindOptionTopic();
             BindSliderUI();
             BindOther();
 
@@ -92,25 +90,6 @@ namespace UIInSelectScene
                 .AddTo(this.gameObject);
         }
 
-        private void BindOptionTopic()
-        {
-            // オプションの選択
-            phaseStatusGetter_model?.Value.PhaseStatus
-                .Where(status => status == PhaseStatusInSelectScene.MusicOption)
-                .Subscribe(_ => {
-                    optionTopicController_view.OnSelectOption();
-                })
-                .AddTo(this.gameObject);
-
-            // オプションから戻る
-            phaseStatusGetter_model?.Value.PhaseStatus
-                .Pairwise()
-                .Where(pair => pair.Previous == PhaseStatusInSelectScene.MusicOption && pair.Current == PhaseStatusInSelectScene.DetailSelect)
-                .Subscribe(_ => {
-                    optionTopicController_view.OnBackDetailSelectPhase();
-                })
-                .AddTo(this.gameObject);
-        }
 
         private void BindSliderUI()
         {

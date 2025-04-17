@@ -26,6 +26,6 @@ public class GroundContoroller : MonoBehaviour
     private void MoveGround()
     {
         // ïàñ ÇêiÇﬂÇÈ
-        this.gameObject.transform.position = Vector3.back * optionHolder.NoteSpeed * timer.Value.Time;
+        this.gameObject.transform.position = Vector3.back * optionHolder.NoteSpeed.Value * timer.Value.Time;
     }
 }

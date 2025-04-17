@@ -88,7 +88,7 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
         GameObject obj = new GameObject("Mesh");
         MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
-        Mesh mesh = MeshGenerator.GenerateGroundHoldMesh(noteData.TimeToRanges, optionHolder.NoteSpeed, meshHorizontalDivisionNum, maxTriangleLength);
+        Mesh mesh = MeshGenerator.GenerateGroundHoldMesh(noteData.TimeToRanges, optionHolder.NoteSpeed.Value, meshHorizontalDivisionNum, maxTriangleLength);
         meshFilter.mesh = mesh;
 
         obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
@@ -104,7 +104,7 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
         note.transform.position = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
-            optionHolder.NoteSpeed * data.Timing
+            optionHolder.NoteSpeed.Value * data.Timing
             );
 
         // ìÆÇ≠ínñ Çêeìoò^
