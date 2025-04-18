@@ -2471,7 +2471,7 @@ MonoBehaviour:
   phaseStatusGetter:
     obj: {fileID: 1012713960}
   delaySeconds: 0.2
-  afterMovingCoolTime: 0.1
+  afterMovingCoolTime: 0.175
 --- !u!1 &994993973
 GameObject:
   m_ObjectHideFlags: 0

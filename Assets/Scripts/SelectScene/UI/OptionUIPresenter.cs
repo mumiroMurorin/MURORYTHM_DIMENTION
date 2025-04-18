@@ -17,7 +17,6 @@ namespace UIInSelectScene
         [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter_model;
 
         ISelectSceneDataGetter selectSceneDataGetter_model;
-        bool isMoving;
 
         [Inject]
         public void Construct(ISelectSceneDataGetter selectSceneDataGetter)

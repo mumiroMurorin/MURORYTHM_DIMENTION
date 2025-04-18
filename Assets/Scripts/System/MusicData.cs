@@ -31,15 +31,14 @@ public class MusicData : ScriptableObject
     public AudioClip SampleClip { get { return sample_clip; } }
 
     [Header("“ïˆÕ“x")]
-    [SerializeField] private int[] difficulities = new int[Enum.GetNames(typeof(Difficulty)).Length];
+    [SerializeField] private int[] difficulities = new int[4];
     public int GetDifficulity(Difficulty name) { return difficulities[(int)name]; }
 
     [Header("•ˆ–Ê")]
-    [SerializeField] private TextAsset[] charts = new TextAsset[Enum.GetNames(typeof(Difficulty)).Length];
+    [SerializeField] private TextAsset[] charts = new TextAsset[4];
     public TextAsset GetChart(Difficulty name) { return charts[(int)name]; }
 
-    [Header("‹L˜^")]
-    [SerializeField] private MusicRecord[] records = new MusicRecord[Enum.GetNames(typeof(Difficulty)).Length];
+    MusicRecord[] records = new MusicRecord[4];
     public MusicRecord GetMusicRecord(Difficulty name) { return records[(int)name]; }
     public void SetMusicRecord(Difficulty name, MusicRecord new_record) { records[(int)name] = new_record; }
 }

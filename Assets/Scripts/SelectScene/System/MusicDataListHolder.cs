@@ -52,6 +52,9 @@ public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSet
     // オプションリスト
     List<OptionType> optionList = new List<OptionType>() { 
          OptionType.NoteSpeed,
+         OptionType.Offset,
+         OptionType.BGMVolume,
+         OptionType.SEVolume,
     };
     void ISelectSceneDataSetter.SetOptionList(List<OptionType> optionTypes)
     {

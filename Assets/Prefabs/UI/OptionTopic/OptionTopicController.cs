@@ -28,7 +28,7 @@ namespace UIInSelectScene
             // オプションプレハブを一斉にインスタンス化
             foreach(var pair in optionPrefabList)
             {
-                pair.InstantiatePrefab(optionGetter);
+                pair.InstantiatePrefab(optionGetter, optionObjectParent);
             }
         }
 
@@ -137,6 +137,8 @@ namespace UIInSelectScene
 
                 obj.transform.SetParent(parent);
                 obj.transform.position = parent.position;
+                obj.transform.rotation = parent.rotation;
+                obj.transform.localScale = Vector3.one;
             }
 
             public GameObject CheckAndGetGameObject(OptionType type)
