@@ -2464,6 +2464,10 @@ MonoBehaviour:
   rightMoveText: "\u53F3\u2192"
   leftMoveColor: {r: 0, g: 0.8666667, b: 0.8117647, a: 1}
   leftMoveText: "\u2190\u5DE6"
+  nextValueColor: {r: 1, g: 0.2971698, b: 0.2971698, a: 1}
+  nextValueText: "\u8A2D\u5B9A\u9805\u76EE+"
+  previousValueColor: {r: 0.3066038, g: 0.48274672, b: 1, a: 1}
+  previousValueText: "\u8A2D\u5B9A\u9805\u76EE-"
   operationSetter:
     obj: {fileID: 332814018}
   phaseTransitionable:
@@ -2472,6 +2476,7 @@ MonoBehaviour:
     obj: {fileID: 1012713960}
   delaySeconds: 0.2
   afterMovingCoolTime: 0.175
+  afterChangeValueCoolTime: 0.1
 --- !u!1 &994993973
 GameObject:
   m_ObjectHideFlags: 0

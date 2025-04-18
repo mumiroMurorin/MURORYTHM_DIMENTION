@@ -22,6 +22,7 @@ public class RootLifetimeScope : LifetimeScope
         builder.Register<OptionHolder>(Lifetime.Singleton);
         builder.Register<INoteSpawnDataOptionHolder>(resolver => resolver.Resolve<OptionHolder>(), Lifetime.Singleton);
         builder.Register<IOptionGetter>(resolver => resolver.Resolve<OptionHolder>(), Lifetime.Singleton);
+        builder.Register<IOptionSetter>(resolver => resolver.Resolve<OptionHolder>(), Lifetime.Singleton);
 
         // ÉXÉRÉA
         builder.Register<ScoreHolder>(Lifetime.Singleton);

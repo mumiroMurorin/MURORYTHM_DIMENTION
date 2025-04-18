@@ -14,27 +14,34 @@ public class Operation_Option : MonoBehaviour
     [SerializeField] string rightMoveText = "âEÅ®";
     [SerializeField] Color leftMoveColor;
     [SerializeField] string leftMoveText = "Å©ç∂";
+    [SerializeField] Color nextValueColor;
+    [SerializeField] string nextValueText = "ê›íËçÄñ⁄+";
+    [SerializeField] Color previousValueColor;
+    [SerializeField] string previousValueText = "ê›íËçÄñ⁄-";
 
     [SerializeField] SerializeInterface<IOperationSetter> operationSetter;
     [SerializeField] SerializeInterface<IPhaseTransitionableInSelectScene> phaseTransitionable;
     [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter;
     [SerializeField] float delaySeconds = 0.5f;
     [SerializeField] float afterMovingCoolTime = 0.1f;
+    [SerializeField] float afterChangeValueCoolTime = 0.1f;
 
     private int[] RIGHT_MOVE_INDICES = new int[] { 11, 12, 13 };
     private int[] LEFT_MOVE_INDICES = new int[] { 2, 3, 4 };
+    private int[] NEXT_VALUE_INDICES = new int[] { 8, 9, 10 };
+    private int[] PREVIOUS_VALUE_INDICES = new int[] { 5, 6, 7 };
     private int[] BACK_DETAILSELECT_INDICES = new int[] { 14, 15 };
 
     ISelectSceneDataGetter selectSceneDataGetter;
     ISelectSceneDataSetter selectSceneDataSetter;
-    IMusicDataSetter musicDataSetter;
+    IOptionSetter optionSetter;
 
     [Inject]
-    public void Construct(IMusicDataSetter musicDataSetter, ISelectSceneDataGetter selectSceneDataGetter, ISelectSceneDataSetter selectSceneDataSetter)
+    public void Construct(ISelectSceneDataGetter selectSceneDataGetter, ISelectSceneDataSetter selectSceneDataSetter, IOptionSetter optionSetter)
     {
-        this.musicDataSetter = musicDataSetter;
         this.selectSceneDataGetter = selectSceneDataGetter;
         this.selectSceneDataSetter = selectSceneDataSetter;
+        this.optionSetter = optionSetter;
     }
 
     private void Start()
@@ -60,9 +67,15 @@ public class Operation_Option : MonoBehaviour
 
     private void SetOperation()
     {
-        SliderCoolDownHandler coolDownHandler = new SliderCoolDownHandler(afterMovingCoolTime);
-        operationSetter.Value.SetOperate(new SliderTouchData(RIGHT_MOVE_INDICES, () => MoveOptionTopic(+1), rightMoveColor, rightMoveText, coolDownHandler));
-        operationSetter.Value.SetOperate(new SliderTouchData(LEFT_MOVE_INDICES, () => MoveOptionTopic(-1), leftMoveColor, leftMoveText, coolDownHandler));
+        // çÄñ⁄ÇÃà⁄ìÆ
+        SliderCoolDownHandler moveCoolDown = new SliderCoolDownHandler(afterMovingCoolTime);
+        operationSetter.Value.SetOperate(new SliderTouchData(RIGHT_MOVE_INDICES, () => MoveOptionTopic(+1), rightMoveColor, rightMoveText, moveCoolDown));
+        operationSetter.Value.SetOperate(new SliderTouchData(LEFT_MOVE_INDICES, () => MoveOptionTopic(-1), leftMoveColor, leftMoveText, moveCoolDown));
+
+        // ílÇÃâ¡å∏éZ
+        SliderCoolDownHandler changeValueCoolDown = new SliderCoolDownHandler(afterChangeValueCoolTime);
+        operationSetter.Value.SetOperate(new SliderTouchData(NEXT_VALUE_INDICES, () => ChangeTopicValue(+1), nextValueColor, nextValueText, changeValueCoolDown));
+        operationSetter.Value.SetOperate(new SliderTouchData(PREVIOUS_VALUE_INDICES, () => ChangeTopicValue(-1), previousValueColor, previousValueText, changeValueCoolDown));
 
         // å≥Ç…ñﬂÇÈ
         operationSetter.Value.SetOperate(new SliderTouchData(BACK_DETAILSELECT_INDICES, TransitionDetailSelectPhase, backDetailColor, backDetailText));
@@ -75,6 +88,12 @@ public class Operation_Option : MonoBehaviour
     private void MoveOptionTopic(int delta)
     {
         selectSceneDataSetter.SetOptionIndex(selectSceneDataGetter.CurrentOptionIndex.Value + delta);
+    }
+
+    private void ChangeTopicValue(int delta)
+    {
+        OptionType currentType = selectSceneDataGetter.GetOptionType(selectSceneDataGetter.CurrentOptionIndex.Value);
+        optionSetter.SetOption(currentType, delta);
     }
 
     /// <summary>

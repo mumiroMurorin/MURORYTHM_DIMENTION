@@ -5,14 +5,14 @@ using UniRx;
 
 namespace UIInSelectScene
 {
-    public class OptionTopicPresenter_NoteSpeed : MonoBehaviour, IOptionTopicPresenter
+    public class OptionTopicPresenter_Offset : MonoBehaviour, IOptionTopicPresenter
     {
-        [SerializeField] OptionTopicView_NoteSpeed view;
+        [SerializeField] OptionTopicView_Offset view;
 
         public void Bind(IOptionGetter optionGetter)
         {
-            optionGetter.NoteSpeed
-                .Subscribe(_ => view.OnChangeSpeed(optionGetter.NoteSpeedDisplay))
+            optionGetter.OffsetMs
+                .Subscribe(_ => view.OnChangeOffset(optionGetter.OffsetDisplay))
                 .AddTo(this.gameObject);
         }
 

@@ -35,6 +35,9 @@ namespace UIInSelectScene
             phaseStatusGetter_model?.Value.PhaseStatus
                 .Where(status => status == PhaseStatusInSelectScene.MusicOption)
                 .Subscribe(_ => {
+                    // オプショントピックのセット
+                    int index = selectSceneDataGetter_model.CurrentOptionIndex.Value;
+                    optionTopicController_view.SetOptionDatas(index, selectSceneDataGetter_model);
                     optionTopicController_view.OnSelectOption();
                 })
                 .AddTo(this.gameObject);
