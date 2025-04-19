@@ -26,7 +26,7 @@ public class ChartEnder : MonoBehaviour, IChartEnder
         // •ˆ–ÊI—¹ˆ—‚ðw“Ç
         scoreGetter.NoteJudgementDatas
             .ObserveCountChanged()
-            .Where(count => count == chartDataGetter.Chart.MaxCombo)
+            .Where(count => count == chartDataGetter.Chart.NoteNum)
             .Subscribe(_ =>
             {
                 callback?.Invoke();

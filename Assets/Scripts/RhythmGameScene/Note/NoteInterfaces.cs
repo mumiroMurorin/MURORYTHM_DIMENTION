@@ -10,6 +10,8 @@ public interface INoteData
 {
     public NoteType NoteType { get; }
 
+    public bool IsJudgable { get; }
+
     /// <summary>
     /// 楽曲開始からn秒後にノーツの判定
     /// </summary>

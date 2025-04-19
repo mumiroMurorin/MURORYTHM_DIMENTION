@@ -139,6 +139,8 @@ public class NoteData_SpaceHoldRelay : INoteData
 {
     public NoteType NoteType => NoteType.SpaceHoldRelay;
 
+    public bool IsJudgable => true;
+
     public float Timing { get; set; }
 
     public Vector2[] Vertices { get; set; }

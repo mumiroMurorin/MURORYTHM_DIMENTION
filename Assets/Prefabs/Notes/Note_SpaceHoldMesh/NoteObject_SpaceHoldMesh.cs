@@ -158,6 +158,8 @@ public class NoteData_SpaceHoldMesh : INoteData
 {
     public NoteType NoteType => NoteType.SpaceHoldMesh;
 
+    public bool IsJudgable => false;
+
     public float Timing { get; set; }
 
     public List<TimeToVertices> TimeToVertices { get; set; }

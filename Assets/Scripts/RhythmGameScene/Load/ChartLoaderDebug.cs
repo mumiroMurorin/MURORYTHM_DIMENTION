@@ -50,8 +50,6 @@ public class ChartLoaderDebug : MonoBehaviour, IChartLoader
     {
         ChartData chartData = new ChartData
         {
-            MaxCombo = 150,
-
             noteData_Touches = new List<NoteData_Touch>
             {
 

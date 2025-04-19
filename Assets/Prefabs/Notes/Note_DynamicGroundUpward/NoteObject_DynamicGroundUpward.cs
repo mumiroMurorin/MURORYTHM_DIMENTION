@@ -135,6 +135,8 @@ public class NoteData_DynamicGroundUpward : INoteData
 {
     public NoteType NoteType => NoteType.DynamicGroundUpward;
 
+    public bool IsJudgable => true;
+
     public float Timing { get; set; }
 
     public int[] Range { get; set; }

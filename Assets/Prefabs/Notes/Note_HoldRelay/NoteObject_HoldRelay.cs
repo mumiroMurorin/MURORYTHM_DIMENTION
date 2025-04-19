@@ -130,6 +130,8 @@ public class NoteData_HoldRelay : INoteData
 {
     public NoteType NoteType => NoteType.HoldRelay;
 
+    public bool IsJudgable => true;
+
     public float Timing { get; set; }
 
     public int[] Range { get; set; }

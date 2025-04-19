@@ -149,6 +149,7 @@ namespace ChartConvert
             ChartData chartData = new ChartData();
             CalcTimingClass calcTiming = new CalcTimingClass(dataOrigin.OffsetMs, optionHolder.OffsetMs.Value);
 
+
             // •ªü‚ğˆê‚Â‚¸‚Âæ‚èo‚·
             foreach(var bar in dataOrigin.BarDatas)
             {

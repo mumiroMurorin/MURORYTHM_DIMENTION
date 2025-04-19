@@ -158,6 +158,8 @@ public class NoteData_HoldMesh : INoteData
 {
     public NoteType NoteType => NoteType.HoldMesh;
 
+    public bool IsJudgable => false;
+
     public float Timing { get; set; }
 
     public List<TimeToRange> TimeToRanges { get; set; }
@@ -165,5 +167,6 @@ public class NoteData_HoldMesh : INoteData
     public ISliderInputGetter SliderInput { get; set; }
 
     public ITimeGetter Timer { get; set; }
+
 }
 
