@@ -21,10 +21,13 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
     void Start()
     {
         soundManager = SoundManager.Instance;
-        Bind();
+
+        BindInSelectMusicPhase();
+        BindInMusicDetailSelectPhase();
+        BindInOptionSelectPhase();
     }
 
-    private void Bind()
+    private void BindInSelectMusicPhase()
     {
         // トピックの移動
         selectSceneDataGetter?.CurrentMusicIndex
@@ -62,6 +65,10 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
             .Subscribe(_ => soundManager.PlaySE(SE_Type.SelectMusic))
             .AddTo(this.gameObject);
 
+    }
+
+    private void BindInMusicDetailSelectPhase()
+    {
         // 楽曲の決定
         phaseStatusGetter?.Value.PhaseStatus
             .Pairwise()
@@ -75,6 +82,32 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
             .Where(pair => pair.Current == PhaseStatusInSelectScene.MusicSelect && pair.Previous == PhaseStatusInSelectScene.DetailSelect)
             .Subscribe(_ => soundManager.PlaySE(SE_Type.BackTopic1))
             .AddTo(this.gameObject);
+
+        // オプションの選択
+        phaseStatusGetter?.Value.PhaseStatus
+            .Pairwise()
+            .Where(pair => pair.Current == PhaseStatusInSelectScene.MusicOption && pair.Previous == PhaseStatusInSelectScene.DetailSelect)
+            .Subscribe(_ => soundManager.PlaySE(SE_Type.SelectOption))
+            .AddTo(this.gameObject);
+    }
+
+    private void BindInOptionSelectPhase()
+    {
+        // トピックの移動
+        selectSceneDataGetter?.CurrentOptionIndex
+            .Skip(1)
+            .Subscribe(_ => {
+                soundManager.PlaySE(SE_Type.MoveTopic);
+            })
+            .AddTo(this.gameObject);
+
+        // 楽曲確認に戻る
+        phaseStatusGetter?.Value.PhaseStatus
+            .Pairwise()
+            .Where(pair => pair.Current == PhaseStatusInSelectScene.DetailSelect && pair.Previous == PhaseStatusInSelectScene.MusicOption)
+            .Subscribe(_ => soundManager.PlaySE(SE_Type.BackTopic1))
+            .AddTo(this.gameObject);
+
     }
 }
 

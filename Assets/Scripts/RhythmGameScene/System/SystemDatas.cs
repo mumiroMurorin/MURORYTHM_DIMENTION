@@ -50,8 +50,9 @@ public enum OptionType
     None,
     NoteSpeed,
     Offset,
-    SEVolume,
-    BGMVolume,
+    MasterVolume,
+    NoteSEVolume,
+    MusicVolume,
 }
 
 //“ïˆÕ“x

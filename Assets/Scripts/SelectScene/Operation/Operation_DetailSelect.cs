@@ -19,10 +19,15 @@ public class Operation_DetailSelect : MonoBehaviour
     [SerializeField] Color optionColor;
     [SerializeField] string optionText = "設定";
 
+    [Header("クールタイム")]
+    [Tooltip("難易度変更後のクールタイム")]
+    [SerializeField] float afterChangeDifficultyCoolTime = 0.1f;
+    [Tooltip("最初に触れるようになるまでのクールタイム")]
+    [SerializeField] float delaySeconds = 0.5f;
+
     [SerializeField] SerializeInterface<IOperationSetter> operationSetter;
     [SerializeField] SerializeInterface<IPhaseTransitionableInSelectScene> phaseTransitionable;
     [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter;
-    [SerializeField] float delaySeconds = 0.5f;
 
     private int[] OPTION_INDICES = new int[] { 14, 15 };
     private int[] BACK_SELECT_INDICES = new int[] { 0, 1 };
@@ -69,10 +74,12 @@ public class Operation_DetailSelect : MonoBehaviour
         operationSetter.Value.SetOperate(new SliderTouchData(MUSIC_START_INDICES, TransitionRhythmGamePhase, musicStartColor, musicStartText));
         // 楽曲選択に戻る
         operationSetter.Value.SetOperate(new SliderTouchData(BACK_SELECT_INDICES, TransitionMusicSelectPhase, backSelectColor, backSelectText));
-        // 難易度上昇
-        operationSetter.Value.SetOperate(new SliderTouchData(DIFF_UP_INDICES, () => ChangeDifficulty(+1), difficultyUpColor, difficultyUpText));
-        // 難易度下降
-        operationSetter.Value.SetOperate(new SliderTouchData(DIFF_DOWN_INDICES, () => ChangeDifficulty(-1), difficultyDownColor, difficultyDownText));
+
+        // 難易度変更
+        SliderCoolDownHandler DifficultyCoolDown = new SliderCoolDownHandler(afterChangeDifficultyCoolTime);
+        operationSetter.Value.SetOperate(new SliderTouchData(DIFF_UP_INDICES, () => ChangeDifficulty(+1), difficultyUpColor, difficultyUpText, DifficultyCoolDown));
+        operationSetter.Value.SetOperate(new SliderTouchData(DIFF_DOWN_INDICES, () => ChangeDifficulty(-1), difficultyDownColor, difficultyDownText, DifficultyCoolDown));
+
         // オプション選択
         operationSetter.Value.SetOperate(new SliderTouchData(OPTION_INDICES, TransitionOptionPhase, optionColor, optionText));
     }

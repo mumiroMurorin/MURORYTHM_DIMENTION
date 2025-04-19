@@ -24,7 +24,8 @@ namespace TransitionerInSelectScene
             // 楽曲データリストの読み込みとセット
             musicDataListLoader.Value.LoadMusicDataList();
 
-            TransitionNextPhase();
+            // 楽曲サンプル音源の読み込み
+            musicDataListLoader.Value.LoadAudioDatas(TransitionNextPhase);
         }
 
         /// <summary>

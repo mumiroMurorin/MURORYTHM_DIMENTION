@@ -23,7 +23,12 @@ public class Operation_MusicSelect : MonoBehaviour
     [SerializeField] SerializeInterface<IPhaseTransitionableInSelectScene> phaseTransitionable;
     [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter;
 
+    [Header("クールタイム")]
+    [Tooltip("トピック移動中のクールタイム")]
     [SerializeField] float afterMovingCoolTime = 0.1f;
+    [Tooltip("難易度変更後のクールタイム")]
+    [SerializeField] float afterChangeDifficultyCoolTime = 0.1f;
+    [Tooltip("最初に触れるようになるまでのクールタイム")]
     [SerializeField] float firstDelaySeconds = 0.5f;
 
     private int[] RIGHT_MOVE_INDICES = new int[] { 14, 15 };
@@ -65,13 +70,18 @@ public class Operation_MusicSelect : MonoBehaviour
 
     private void SetOperation()
     {
+        // 楽曲選択
         operationSetter.Value.SetOperate(new SliderTouchData(MUSIC_SELECT_INDICES, TransitionNextPhase, musicSelectColor, musicSelectText));
-        operationSetter.Value.SetOperate(new SliderTouchData(DIFF_UP_INDICES, () => ChangeDifficulty(+1), difficultyUpColor, difficultyUpText));
-        operationSetter.Value.SetOperate(new SliderTouchData(DIFF_DOWN_INDICES, () => ChangeDifficulty(-1), difficultyDownColor, difficultyDownText));
 
-        SliderCoolDownHandler coolDownHandler = new SliderCoolDownHandler(afterMovingCoolTime);
-        operationSetter.Value.SetOperate(new SliderTouchData(RIGHT_MOVE_INDICES, () => MoveMusicTopic(+1), rightMoveColor, rightMoveText, coolDownHandler));
-        operationSetter.Value.SetOperate(new SliderTouchData(LEFT_MOVE_INDICES, () => MoveMusicTopic(-1), leftMoveColor, leftMoveText, coolDownHandler));
+        // 難易度変更
+        SliderCoolDownHandler difficultyCoolDown = new SliderCoolDownHandler(afterMovingCoolTime);
+        operationSetter.Value.SetOperate(new SliderTouchData(DIFF_UP_INDICES, () => ChangeDifficulty(+1), difficultyUpColor, difficultyUpText, difficultyCoolDown));
+        operationSetter.Value.SetOperate(new SliderTouchData(DIFF_DOWN_INDICES, () => ChangeDifficulty(-1), difficultyDownColor, difficultyDownText, difficultyCoolDown));
+
+        // トピックの移動
+        SliderCoolDownHandler topicCoolDown = new SliderCoolDownHandler(afterMovingCoolTime);
+        operationSetter.Value.SetOperate(new SliderTouchData(RIGHT_MOVE_INDICES, () => MoveMusicTopic(+1), rightMoveColor, rightMoveText, topicCoolDown));
+        operationSetter.Value.SetOperate(new SliderTouchData(LEFT_MOVE_INDICES, () => MoveMusicTopic(-1), leftMoveColor, leftMoveText, topicCoolDown));
     }
 
     /// <summary>

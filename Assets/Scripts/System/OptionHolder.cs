@@ -20,10 +20,12 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
             case OptionType.Offset:
                 AddOffset(delta);
                 break;
-            case OptionType.BGMVolume:
+                // ‰¼
+            case OptionType.MusicVolume:
                 AddBGMVolume(delta);
                 break;
-            case OptionType.SEVolume:
+                // ‰¼
+            case OptionType.NoteSEVolume:
                 AddSEVolume(delta);
                 break;
         }
