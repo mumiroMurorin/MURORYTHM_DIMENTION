@@ -34,7 +34,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
 
     #region NoteSpeed
 
-    const int MAX_NOTESPEED = 300;
+    const int MAX_NOTESPEED = 500;
     const int MIN_NOTESPEED = 20;
 
     /// <summary>
