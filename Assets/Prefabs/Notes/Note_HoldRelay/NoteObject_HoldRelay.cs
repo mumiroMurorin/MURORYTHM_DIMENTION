@@ -130,7 +130,7 @@ public class NoteData_HoldRelay : INoteData
 {
     public NoteType NoteType => NoteType.HoldRelay;
 
-    public bool IsJudgable => true;
+    public JudgementType JudgementType => JudgementType.General;
 
     public float Timing { get; set; }
 

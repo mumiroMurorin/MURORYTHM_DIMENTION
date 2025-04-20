@@ -130,7 +130,7 @@ public class NoteData_HoldEnd : INoteData
 {
     public NoteType NoteType => NoteType.HoldEnd;
 
-    public bool IsJudgable => true;
+    public JudgementType JudgementType => JudgementType.General;
 
     public float Timing { get; set; }
 

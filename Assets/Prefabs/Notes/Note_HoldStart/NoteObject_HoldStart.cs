@@ -111,7 +111,7 @@ public class NoteData_HoldStart : INoteData
 {
     public NoteType NoteType => NoteType.HoldStart;
 
-    public bool IsJudgable => true;
+    public JudgementType JudgementType => JudgementType.Clipped;
 
     public float Timing { get; set; }
 

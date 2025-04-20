@@ -245,6 +245,15 @@ namespace ChartConvert
         }
     }
 
+    public class JudgementWindowAdjuster
+    {
+
+
+        //public ChartData AdjustJudgementWindow(ChartData chartData)
+        //{
+
+        //}
+    }
 
     #region ÉmÅ[Écïœä∑ä÷êî
 
@@ -287,11 +296,6 @@ namespace ChartConvert
 
         public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
-            if(chartData.noteData_Touches == null)
-            {
-                chartData.noteData_Touches = new List<NoteData_Touch>();
-            }
-
             if(dataOrigin.TouchNoteData == null) { return true; }
 
             foreach(var noteOrigin in dataOrigin.TouchNoteData)
@@ -302,7 +306,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.noteData_Touches.Add(noteData);
+                chartData.AddNoteData(noteData);
             }
 
             return true;
@@ -338,11 +342,6 @@ namespace ChartConvert
 
         public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
-            if (chartData.noteData_DynamicGroundUpwards == null)
-            {
-                chartData.noteData_DynamicGroundUpwards = new List<NoteData_DynamicGroundUpward>();
-            }
-
             if (dataOrigin.DynamicUpwardData == null) { return true; }
 
             foreach (var noteOrigin in dataOrigin.DynamicUpwardData)
@@ -353,7 +352,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.noteData_DynamicGroundUpwards.Add(noteData);
+                chartData.AddNoteData(noteData);
             }
 
             return true;
@@ -389,10 +388,6 @@ namespace ChartConvert
 
         public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
-            if (chartData.noteData_DynamicGroundRightwards == null)
-            {
-                chartData.noteData_DynamicGroundRightwards = new List<NoteData_DynamicGroundRightward>();
-            }
 
             if (dataOrigin.DynamicRightwardData == null) { return true; }
 
@@ -404,7 +399,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.noteData_DynamicGroundRightwards.Add(noteData);
+                chartData.AddNoteData(noteData);
             }
 
             return true;
@@ -440,11 +435,6 @@ namespace ChartConvert
 
         public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
-            if (chartData.noteData_DynamicGroundLeftwards == null)
-            {
-                chartData.noteData_DynamicGroundLeftwards = new List<NoteData_DynamicGroundLeftward>();
-            }
-
             if (dataOrigin.DynamicLeftwardData == null) { return true; }
 
             foreach (var noteOrigin in dataOrigin.DynamicLeftwardData)
@@ -455,7 +445,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.noteData_DynamicGroundLeftwards.Add(noteData);
+                chartData.AddNoteData(noteData);
             }
 
             return true;

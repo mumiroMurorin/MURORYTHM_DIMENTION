@@ -50,64 +50,64 @@ public class ChartLoaderDebug : MonoBehaviour, IChartLoader
     {
         ChartData chartData = new ChartData
         {
-            noteData_Touches = new List<NoteData_Touch>
-            {
+            //noteData_Touches = new List<NoteData_Touch>
+            //{
 
-            },
+            //},
 
-            noteData_HoldStarts = new List<NoteData_HoldStart>
-            {
+            //noteData_HoldStarts = new List<NoteData_HoldStart>
+            //{
 
-            },
+            //},
 
-            noteData_HoldRelays = new List<NoteData_HoldRelay>
-            {
+            //noteData_HoldRelays = new List<NoteData_HoldRelay>
+            //{
 
-            },
+            //},
 
-            noteData_HoldMeshes = new List<NoteData_HoldMesh>
-            {
+            //noteData_HoldMeshes = new List<NoteData_HoldMesh>
+            //{
 
-            },
+            //},
 
-            noteData_HoldEnds = new List<NoteData_HoldEnd>
-            {
+            //noteData_HoldEnds = new List<NoteData_HoldEnd>
+            //{
 
-            },
+            //},
 
-            noteData_DynamicGroundUpwards = new List<NoteData_DynamicGroundUpward>
-            {
+            //noteData_DynamicGroundUpwards = new List<NoteData_DynamicGroundUpward>
+            //{
 
-            },
+            //},
 
-            noteData_DynamicGroundDownwards = new List<NoteData_DynamicGroundDownward>
-            {
+            //noteData_DynamicGroundDownwards = new List<NoteData_DynamicGroundDownward>
+            //{
 
-            },
+            //},
 
-            noteData_DynamicGroundRightwards = new List<NoteData_DynamicGroundRightward>
-            {
+            //noteData_DynamicGroundRightwards = new List<NoteData_DynamicGroundRightward>
+            //{
 
-            },
+            //},
 
-            noteData_DynamicGroundLeftwards = new List<NoteData_DynamicGroundLeftward>
-            {
+            //noteData_DynamicGroundLeftwards = new List<NoteData_DynamicGroundLeftward>
+            //{
 
-            },
+            //},
 
-            noteData_SpaceHoldRelays = new List<NoteData_SpaceHoldRelay>
-            {
+            //noteData_SpaceHoldRelays = new List<NoteData_SpaceHoldRelay>
+            //{
 
-            },
+            //},
 
-            noteData_SpaceHoldMeshes = new List<NoteData_SpaceHoldMesh>
-            {
+            //noteData_SpaceHoldMeshes = new List<NoteData_SpaceHoldMesh>
+            //{
 
-            }
+            //}
         };
 
-        float interval = 0.025f;
-        float timing = 2f;
+        //float interval = 0.025f;
+        //float timing = 2f;
 
         /*
         NoteData_SpaceHoldMesh spaceHoldMesh = new NoteData_SpaceHoldMesh();
@@ -245,29 +245,29 @@ public class ChartLoaderDebug : MonoBehaviour, IChartLoader
         */
 
         // ダイナミックノーツ、タッチノーツ
-        timing = 2f;
-        int before = -1;
-        for (int i = 0; i < 600; i++)
-        {
-            switch (i % 4)
-            {
-                case 0:
-                    System.Random rand = new System.Random();
+        //timing = 2f;
+        //int before = -1;
+        //for (int i = 0; i < 600; i++)
+        //{
+        //    switch (i % 4)
+        //    {
+        //        case 0:
+        //            System.Random rand = new System.Random();
 
-                    int start;
-                    do
-                    {
-                        start = rand.Next(0, 4) * 2 + 4;
-                    } while (before == start);
-                    before = start;
+        //            int start;
+        //            do
+        //            {
+        //                start = rand.Next(0, 4) * 2 + 4;
+        //            } while (before == start);
+        //            before = start;
 
-                    int[] rangeArray = Enumerable.Range(start, 2).ToArray();
-                    chartData.noteData_Touches.Add(new NoteData_Touch { Timing = timing, Range = rangeArray });
-                    break;
-            }
+        //            int[] rangeArray = Enumerable.Range(start, 2).ToArray();
+        //            chartData.noteData_Touches.Add(new NoteData_Touch { Timing = timing, Range = rangeArray });
+        //            break;
+        //    }
 
-            timing += interval;
-        }
+        //    timing += interval;
+        //}
 
         //// ホールドノーツ
         //timing = 2f;

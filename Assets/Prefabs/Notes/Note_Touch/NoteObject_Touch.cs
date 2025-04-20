@@ -116,7 +116,7 @@ public class NoteData_Touch : INoteData
 {
     public NoteType NoteType => NoteType.Touch;
 
-    public bool IsJudgable => true;
+    public JudgementType JudgementType => JudgementType.Clipped;
 
     public float Timing { get; set; }
 

@@ -27,45 +27,6 @@ public class NoteFactoryInitializingData
 }
 
 /// <summary>
-/// Perfect～Goodまでの判定許容範囲をまとめたクラス
-/// </summary>
-[System.Serializable]
-public class JudgementWindow
-{
-    [Header("それぞれの判定(±n秒)")]
-    [SerializeField] float perfectWindow;
-    [SerializeField] float greatWindow;
-    [SerializeField] float goodWindow;
-
-    public float PerfectWindow { get { return perfectWindow; } }
-    public float GreatWindow { get { return greatWindow; } }
-    public float GoodWindow { get { return goodWindow; } }
-
-    public Judgement GetJudgement(float currentTime, float judgeTime)
-    {
-        return GetJudgementAndError(currentTime, judgeTime).Judgement;
-    }
-
-    public JudgementAndErrorTime GetJudgementAndError(float currentTime, float judgeTime)
-    {
-        float error = judgeTime - currentTime;
-
-        // Good判定前
-        if (judgeTime - goodWindow > currentTime) { return new JudgementAndErrorTime { Judgement = Judgement.None, Error = error }; }
-        // Good判定後
-        if (judgeTime + goodWindow < currentTime) { return new JudgementAndErrorTime { Judgement = Judgement.Miss, Error = error }; }
-
-        float timingDiff = Mathf.Abs(judgeTime - currentTime);
-
-        if (timingDiff <= perfectWindow) { return new JudgementAndErrorTime { Judgement = Judgement.Perfect, Error = error }; }
-        else if (timingDiff <= greatWindow) { return new JudgementAndErrorTime { Judgement = Judgement.Great, Error = error }; }
-        else if (timingDiff <= goodWindow) { return new JudgementAndErrorTime { Judgement = Judgement.Good, Error = error }; }
-
-        return new JudgementAndErrorTime { Judgement = Judgement.None };
-    }
-}
-
-/// <summary>
 /// 判定に応じたSEの再生を纏めたクラス
 /// </summary>
 [System.Serializable]
@@ -209,4 +170,11 @@ public enum NoteType
     DynamicGroundRightward,
     DynamicGroundLeftward,
     DynamicSpace
+}
+
+public enum JudgementType
+{
+    None,
+    General,
+    Clipped
 }

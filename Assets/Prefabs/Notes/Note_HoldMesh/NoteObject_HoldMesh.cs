@@ -158,7 +158,7 @@ public class NoteData_HoldMesh : INoteData
 {
     public NoteType NoteType => NoteType.HoldMesh;
 
-    public bool IsJudgable => false;
+    public JudgementType JudgementType => JudgementType.None;
 
     public float Timing { get; set; }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using Deform;
 using VContainer;
 using System;
+using System.Linq;
 using UniRx;
 
 public class ChartGenerator : MonoBehaviour, IChartGenerator
@@ -85,17 +86,17 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
     /// <param name="chartData"></param>
     public void Generate(Action callback = null)
     {
-        GenerateTouchNote(chartDataGetter.Chart.noteData_Touches);
-        GenerateDynamicGroundUpwardNote(chartDataGetter.Chart.noteData_DynamicGroundUpwards);
-        GenerateDynamicGroundRightwardNote(chartDataGetter.Chart.noteData_DynamicGroundRightwards);
-        GenerateDynamicGroundLeftwardNote(chartDataGetter.Chart.noteData_DynamicGroundLeftwards);
-        GenerateDynamicGroundDownwardNote(chartDataGetter.Chart.noteData_DynamicGroundDownwards);
-        GenerateHoldStartNote(chartDataGetter.Chart.noteData_HoldStarts);
-        GenerateHoldRelayNote(chartDataGetter.Chart.noteData_HoldRelays);
-        GenerateHoldEndNote(chartDataGetter.Chart.noteData_HoldEnds);
-        GenerateHoldMeshNote(chartDataGetter.Chart.noteData_HoldMeshes);
-        GenerateSpaceHoldMeshNote(chartDataGetter.Chart.noteData_SpaceHoldMeshes);
-        GenerateSpaceHoldRelayNote(chartDataGetter.Chart.noteData_SpaceHoldRelays);
+        GenerateTouchNote(chartDataGetter.Chart.GetNoteDataList(NoteType.Touch).OfType<NoteData_Touch>().ToList());
+        GenerateDynamicGroundUpwardNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DynamicGroundUpward).OfType<NoteData_DynamicGroundUpward>().ToList());
+        GenerateDynamicGroundRightwardNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DynamicGroundRightward).OfType<NoteData_DynamicGroundRightward>().ToList());
+        GenerateDynamicGroundLeftwardNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DynamicGroundLeftward).OfType<NoteData_DynamicGroundLeftward>().ToList());
+        GenerateDynamicGroundDownwardNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DynamicGroundDownward).OfType<NoteData_DynamicGroundDownward>().ToList());
+        GenerateHoldStartNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldStart).OfType<NoteData_HoldStart>().ToList());
+        GenerateHoldRelayNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldRelay).OfType<NoteData_HoldRelay>().ToList());
+        GenerateHoldEndNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldEnd).OfType<NoteData_HoldEnd>().ToList());
+        GenerateHoldMeshNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldMesh).OfType<NoteData_HoldMesh>().ToList());
+        GenerateSpaceHoldMeshNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceHoldMesh).OfType<NoteData_SpaceHoldMesh>().ToList());
+        GenerateSpaceHoldRelayNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceHoldRelay).OfType<NoteData_SpaceHoldRelay>().ToList());
 
         callback?.Invoke();
     }

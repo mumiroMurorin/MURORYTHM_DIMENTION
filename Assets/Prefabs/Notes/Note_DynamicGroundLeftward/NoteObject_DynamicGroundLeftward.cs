@@ -133,7 +133,7 @@ public class NoteData_DynamicGroundLeftward : INoteData
 {
     public NoteType NoteType => NoteType.DynamicGroundLeftward;
 
-    public bool IsJudgable => true;
+    public JudgementType JudgementType => JudgementType.General;
 
     public float Timing { get; set; }
 

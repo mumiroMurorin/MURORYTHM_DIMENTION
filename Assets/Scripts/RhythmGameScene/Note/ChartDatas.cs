@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 /// <summary>
 /// 各種ノーツデータのListをまとめたもの
@@ -9,47 +10,78 @@ public class ChartData
 {
     public int NoteNum 
     { 
-        get { 
-            return noteData_Touches.Count + noteData_HoldStarts.Count + noteData_HoldRelays.Count +
-                noteData_HoldEnds.Count + noteData_HoldMeshes.Count + noteData_DynamicGroundUpwards.Count +
-                noteData_DynamicGroundRightwards.Count + noteData_DynamicGroundLeftwards.Count + noteData_DynamicGroundDownwards.Count +
-                noteData_SpaceHoldMeshes.Count + noteData_SpaceHoldRelays.Count;
+        get
+        {
+            int count = 0;
+            foreach (var noteList in AllNoteDataLists)
+            {
+                count += noteList.Count;
+            }
+
+            return count;
         }
     }
 
     public int MaxCombo { 
         get {
-            return noteData_Touches.Count + noteData_HoldStarts.Count + noteData_HoldRelays.Count +
-                noteData_HoldEnds.Count + noteData_DynamicGroundUpwards.Count +
-                noteData_DynamicGroundRightwards.Count + noteData_DynamicGroundLeftwards.Count + noteData_DynamicGroundDownwards.Count +
-                noteData_SpaceHoldRelays.Count;
+            int count = 0;
+            foreach (var noteList in AllNoteDataLists) 
+            {
+                if (noteList.Count > 0 && noteList[0].JudgementType != JudgementType.None)
+                {
+                    count += noteList.Count;
+                }
+            }
+
+            return count;
         }
     }
 
-    public List<NoteData_Touch> noteData_Touches { get; set; } = new List<NoteData_Touch>();
+    /// <summary>
+    /// 全てのノーツ(リスト)を纏めたプロパティ
+    /// </summary>
+    private List<List<INoteData>> AllNoteDataLists = new List<List<INoteData>>();
 
-    public List<NoteData_HoldStart> noteData_HoldStarts { get; set; } = new List<NoteData_HoldStart>();
+    /// <summary>
+    /// ノーツデータの追加
+    /// </summary>
+    /// <param name="noteData"></param>
+    public void AddNoteData(INoteData noteData)
+    {
+        // 引数のデータのノーツリストが存在するか確認
+        foreach(var noteList in AllNoteDataLists)
+        {
+            // 存在する場合は追加して終了
+            if (noteList.Count > 0 && noteList[0].NoteType == noteData.NoteType)
+            {
+                noteList.Add(noteData);
+                return;
+            }
+        }
 
-    public List<NoteData_HoldRelay> noteData_HoldRelays { get; set; } = new List<NoteData_HoldRelay>();
+        // 存在しない場合は新しくListを作って追加
+        AllNoteDataLists.Add(new List<INoteData>() { noteData });
+    }
 
-    public List<NoteData_HoldEnd> noteData_HoldEnds { get; set; } = new List<NoteData_HoldEnd>();
+    /// <summary>
+    /// ノーツリストを返す
+    /// </summary>
+    /// <param name="noteType"></param>
+    /// <returns></returns>
+    public List<INoteData> GetNoteDataList(NoteType noteType)
+    {
+        // 引数のデータのノーツリストが存在するか確認
+        foreach (var noteList in AllNoteDataLists)
+        {
+            // 存在する場合は追加して終了
+            if (noteList.Count > 0 && noteList[0].NoteType == noteType)
+            {
+                return noteList;
+            }
+        }
 
-    public List<NoteData_HoldMesh> noteData_HoldMeshes { get; set; } = new List<NoteData_HoldMesh>();
+        // 存在しない場合は空のリストを返す
+        return new List<INoteData>();
+    }
 
-
-
-    public List<NoteData_DynamicGroundUpward> noteData_DynamicGroundUpwards { get; set; } = new List<NoteData_DynamicGroundUpward>();
-
-    public List<NoteData_DynamicGroundRightward> noteData_DynamicGroundRightwards { get; set; } = new List<NoteData_DynamicGroundRightward>();
-
-    public List<NoteData_DynamicGroundLeftward> noteData_DynamicGroundLeftwards { get; set; } = new List<NoteData_DynamicGroundLeftward>();
-
-    public List<NoteData_DynamicGroundDownward> noteData_DynamicGroundDownwards { get; set; } = new List<NoteData_DynamicGroundDownward>();
-
-    public List<NoteData_SpaceHoldMesh> noteData_SpaceHoldMeshes { get; set; } = new List<NoteData_SpaceHoldMesh>();
-
-    public List<NoteData_SpaceHoldRelay> noteData_SpaceHoldRelays { get; set; } = new List<NoteData_SpaceHoldRelay>();
-
-    //public List<NoteData_DynamicSpace>
-    //{ get; set; }
 }

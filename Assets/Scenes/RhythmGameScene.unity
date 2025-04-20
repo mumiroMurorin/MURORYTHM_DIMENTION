@@ -443,7 +443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b089f07c24e90b8408e898cd4cab8f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicData_debug: {fileID: 11400000, guid: c6d2ba301e3d1314aab06965b2679473, type: 2}
+  musicData_debug: {fileID: 11400000, guid: 30288d79747cd934cb1aaf6520d08a08, type: 2}
 --- !u!1001 &135123126
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6870,6 +6870,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6974557688898039621, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027494514981776746, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
+      propertyPath: configs.Array.data[1].isActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
