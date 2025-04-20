@@ -9,6 +9,7 @@ using System;
 public class ChartLoaderJson : MonoBehaviour, IChartLoader
 {
     [SerializeField] TextAsset jsonData;
+    [SerializeField] List<NoteTypeToJudgementWindow> judgementWindows;
 
     IMusicDataGetter musicDataGetter;
     INoteSpawnDataOptionHolder optionGetter;
@@ -65,6 +66,11 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
         // •ˆ–Êƒf[ƒ^‚Ì•ÏŠ·
         ChartImporter chartImporter = new ChartImporter();
         ChartData chart = chartImporter.Import(chartDataOrigin, optionGetter);
+
+        // ”»’è˜g‚Ì’²®
+        JudgementWindowAdjuster judgementWindowAdjuster = new JudgementWindowAdjuster();
+        judgementWindowAdjuster.AdjustJudgementWindow(chart, judgementWindows);
+
 
         return chart;
     }

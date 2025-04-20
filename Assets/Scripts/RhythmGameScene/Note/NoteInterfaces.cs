@@ -10,8 +10,6 @@ public interface INoteData
 {
     public NoteType NoteType { get; }
 
-    public JudgementType JudgementType { get; }
-
     /// <summary>
     /// 楽曲開始からn秒後にノーツの判定
     /// </summary>
@@ -19,6 +17,28 @@ public interface INoteData
 
     public ITimeGetter Timer { get; set; }
 
+}
+
+/// <summary>
+/// 判定が存在するノーツ
+/// </summary>
+public interface IJudgableNoteData
+{
+    JudgementWindow JudgementWindow { get; set; }
+
+    NoteType NoteType { get; }
+}
+
+/// <summary>
+/// 削り判定が存在するノーツ
+/// </summary>
+public interface IClippedJudgableNote
+{
+    public JudgementWindow JudgementWindow { get; set; }
+
+    NoteType NoteType { get; }
+
+    float Timing { get; }
 }
 
 /// <summary>

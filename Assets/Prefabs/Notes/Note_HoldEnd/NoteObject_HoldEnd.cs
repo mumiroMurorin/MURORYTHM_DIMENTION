@@ -126,13 +126,13 @@ public class NoteObject_HoldEnd : NoteObject<NoteData_HoldEnd>
 /// <summary>
 /// (初期化に必要な変数も含む)ホールド終点ノーツのデータ
 /// </summary>
-public class NoteData_HoldEnd : INoteData
+public class NoteData_HoldEnd : INoteData, IJudgableNoteData
 {
     public NoteType NoteType => NoteType.HoldEnd;
 
-    public JudgementType JudgementType => JudgementType.General;
-
     public float Timing { get; set; }
+
+    public JudgementWindow JudgementWindow { get; set; }
 
     public int[] Range { get; set; }
 

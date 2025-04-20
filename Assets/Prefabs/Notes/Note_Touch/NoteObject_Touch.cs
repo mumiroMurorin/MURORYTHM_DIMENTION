@@ -112,13 +112,13 @@ public class NoteObject_Touch : NoteObject<NoteData_Touch>
 /// <summary>
 /// (初期化に必要な変数も含む)タッチノーツのデータ
 /// </summary>
-public class NoteData_Touch : INoteData
+public class NoteData_Touch : INoteData, IClippedJudgableNote
 {
     public NoteType NoteType => NoteType.Touch;
 
-    public JudgementType JudgementType => JudgementType.Clipped;
-
     public float Timing { get; set; }
+
+    public JudgementWindow JudgementWindow { get; set; }
 
     public int[] Range { get; set; }
 

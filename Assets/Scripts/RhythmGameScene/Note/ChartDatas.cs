@@ -40,7 +40,7 @@ public class ChartData
     /// <summary>
     /// 全てのノーツ(リスト)を纏めたプロパティ
     /// </summary>
-    private List<List<INoteData>> AllNoteDataLists = new List<List<INoteData>>();
+    public List<List<INoteData>> AllNoteDataLists { get; private set; } = new List<List<INoteData>>();
 
     /// <summary>
     /// ノーツデータの追加

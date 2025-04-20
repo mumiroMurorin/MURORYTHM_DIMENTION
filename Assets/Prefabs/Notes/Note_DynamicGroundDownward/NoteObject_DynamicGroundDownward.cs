@@ -131,13 +131,13 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
 /// <summary>
 /// (初期化に必要な変数も含む)ダイナミックノーツ(アップ)のデータ
 /// </summary>
-public class NoteData_DynamicGroundDownward : INoteData
+public class NoteData_DynamicGroundDownward : INoteData, IJudgableNoteData
 {
     public NoteType NoteType => NoteType.DynamicGroundDownward;
 
-    public JudgementType JudgementType => JudgementType.General;
-
     public float Timing { get; set; }
+
+    public JudgementWindow JudgementWindow { get; set; }
 
     public int[] Range { get; set; }
 

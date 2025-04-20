@@ -158,8 +158,6 @@ public class NoteData_HoldMesh : INoteData
 {
     public NoteType NoteType => NoteType.HoldMesh;
 
-    public JudgementType JudgementType => JudgementType.None;
-
     public float Timing { get; set; }
 
     public List<TimeToRange> TimeToRanges { get; set; }

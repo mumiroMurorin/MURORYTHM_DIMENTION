@@ -107,13 +107,13 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
 /// <summary>
 /// (初期化に必要な変数も含む)ホールド始点ノーツのデータ
 /// </summary>
-public class NoteData_HoldStart : INoteData
+public class NoteData_HoldStart : INoteData, IClippedJudgableNote
 {
     public NoteType NoteType => NoteType.HoldStart;
 
-    public JudgementType JudgementType => JudgementType.Clipped;
-
     public float Timing { get; set; }
+
+    public JudgementWindow JudgementWindow { get; set; }
 
     public int[] Range { get; set; }
 

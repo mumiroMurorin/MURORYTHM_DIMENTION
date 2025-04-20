@@ -126,13 +126,13 @@ public class NoteObject_HoldRelay : NoteObject<NoteData_HoldRelay>
 /// <summary>
 /// (初期化に必要な変数も含む)ホールド中点ノーツのデータ
 /// </summary>
-public class NoteData_HoldRelay : INoteData
+public class NoteData_HoldRelay : INoteData, IJudgableNoteData
 {
     public NoteType NoteType => NoteType.HoldRelay;
 
-    public JudgementType JudgementType => JudgementType.General;
-
     public float Timing { get; set; }
+
+    public JudgementWindow JudgementWindow { get; set; }
 
     public int[] Range { get; set; }
 

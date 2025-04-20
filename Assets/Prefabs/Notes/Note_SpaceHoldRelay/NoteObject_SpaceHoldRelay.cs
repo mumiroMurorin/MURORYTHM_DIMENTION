@@ -135,13 +135,13 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
 /// <summary>
 /// (初期化に必要な変数も含む)ホールドメッシュノーツのデータ
 /// </summary>
-public class NoteData_SpaceHoldRelay : INoteData
+public class NoteData_SpaceHoldRelay : INoteData, IJudgableNoteData
 {
     public NoteType NoteType => NoteType.SpaceHoldRelay;
 
-    public JudgementType JudgementType => JudgementType.General;
-
     public float Timing { get; set; }
+
+    public JudgementWindow JudgementWindow { get; set; }
 
     public Vector2[] Vertices { get; set; }
 
