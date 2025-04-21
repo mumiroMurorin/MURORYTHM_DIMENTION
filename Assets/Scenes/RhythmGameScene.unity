@@ -264,10 +264,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   update: 1
-  angle: 0
+  angle: -5
   factor: 1
   mode: 1
-  top: -22.5
+  top: 100
   bottom: -84.4
   axis: {fileID: 79835142}
 --- !u!4 &79835142
