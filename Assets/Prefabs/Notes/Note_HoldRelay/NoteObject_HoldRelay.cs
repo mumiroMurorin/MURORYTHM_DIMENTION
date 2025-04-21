@@ -8,8 +8,6 @@ using UniRx;
 /// </summary>
 public class NoteObject_HoldRelay : NoteObject<NoteData_HoldRelay>
 {
-    [SerializeField] JudgementWindow judgementWindow;
-
     NoteData_HoldRelay noteData;
 
     bool isJudged;
@@ -30,7 +28,7 @@ public class NoteObject_HoldRelay : NoteObject<NoteData_HoldRelay>
         if (IsInJudgementRange() && IsTouchingSlider())
         {
             // ãLò^ÇµÇΩîªíËÇÊÇËÇ¢Ç¢îªíËÇæÇ¡ÇΩÇ∆Ç´îªíËÇÃçXêV
-            Judgement currentJudgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+            Judgement currentJudgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
             if ((int)bestJudgement < (int)currentJudgement)
             {
                 bestJudgement = currentJudgement;
@@ -85,7 +83,7 @@ public class NoteObject_HoldRelay : NoteObject<NoteData_HoldRelay>
         if (noteData.Timer == null) { return false; }
         if (isJudged) { return false; }
 
-        Judgement judgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+        Judgement judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
         if (judgement == Judgement.Miss || judgement == Judgement.None) { return false; }
 
         return true;
@@ -116,7 +114,7 @@ public class NoteObject_HoldRelay : NoteObject<NoteData_HoldRelay>
     {
         if (noteData == null) { return false; }
         if (noteData.Timer == null) { return false; }
-        if (judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.Miss) { return false; }
+        if (noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.Miss) { return false; }
         if (isJudged) { return false; }
 
         return true;

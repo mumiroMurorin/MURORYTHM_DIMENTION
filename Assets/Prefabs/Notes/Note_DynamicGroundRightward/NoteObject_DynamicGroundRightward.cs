@@ -11,8 +11,7 @@ public class NoteObject_DynamicGroundRightward : NoteObject<NoteData_DynamicGrou
     Vector3 JudgeVector => Vector3.right;
 
     [SerializeField] float judgeMagnitude;
-    [SerializeField] JudgementWindow judgementWindow;
-
+    
     NoteData_DynamicGroundRightward noteData;
     DynamicJudgement dynamicJudgement;
     Judgement bestJudgement = Judgement.Miss;
@@ -38,14 +37,14 @@ public class NoteObject_DynamicGroundRightward : NoteObject<NoteData_DynamicGrou
 
         // ‰EŽè
         noteData.SpaceInput?.GetSpaceInputVelocity(SpaceTrackingTag.RightHand)
-            .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
+            .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
             .Where(_ => !isJudged)
             .Subscribe(Judge)
             .AddTo(this.gameObject);
 
         // ¶Žè
         noteData.SpaceInput?.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand)
-            .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
+            .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
             .Where(_ => !isJudged)
             .Subscribe(Judge)
             .AddTo(this.gameObject);
@@ -71,7 +70,7 @@ public class NoteObject_DynamicGroundRightward : NoteObject<NoteData_DynamicGrou
         if (!dynamicJudgement.Judge(velocity)) { return; }
 
         // ”»’è‚ðXV
-        Judgement currentJudgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+        Judgement currentJudgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
         if ((int)bestJudgement < (int)currentJudgement)
         {
             bestJudgement = currentJudgement;
@@ -93,7 +92,7 @@ public class NoteObject_DynamicGroundRightward : NoteObject<NoteData_DynamicGrou
     {
         if (noteData == null) { return false; }
         if (noteData.Timer == null) { return false; }
-        if (judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.Miss) { return false; }
+        if (noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.Miss) { return false; }
         if (isJudged) { return false; }
 
         return true;

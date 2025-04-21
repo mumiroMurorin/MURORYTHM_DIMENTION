@@ -8,7 +8,6 @@ using UniRx;
 /// </summary>
 public class NoteObject_Touch : NoteObject<NoteData_Touch>
 {
-    [SerializeField] JudgementWindow judgementWindow;
     [SerializeField] JudgementSoundEffects judgementSoundEffects;
 
     NoteData_Touch noteData;
@@ -42,7 +41,7 @@ public class NoteObject_Touch : NoteObject<NoteData_Touch>
                 // –¢”»’è‚Ì‚Æ‚«ŠŽ‚Â
                 .Where(_ => !isJudged)
                 // Good”»’èŽžŠÔ‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚é‚Æ‚«”»’è
-                .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
+                .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
                 .Subscribe(_ =>
                 {
                     Judge();
@@ -58,7 +57,7 @@ public class NoteObject_Touch : NoteObject<NoteData_Touch>
     private void Judge()
     {
         // ”»’è‚ð“¾‚é
-        Judgement judgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+        Judgement judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
 
         float radian = (11.25f * ((noteData.Range[noteData.Range.Length - 1] - noteData.Range[0]) / 2f + 0.5f) - 180f) * Mathf.Deg2Rad;
 
@@ -102,7 +101,7 @@ public class NoteObject_Touch : NoteObject<NoteData_Touch>
     {
         if (noteData == null) { return false; }
         if (noteData.Timer == null) { return false; }
-        if (judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.Miss) { return false; }
+        if (noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.Miss) { return false; }
         if (isJudged) { return false; }
 
         return true;

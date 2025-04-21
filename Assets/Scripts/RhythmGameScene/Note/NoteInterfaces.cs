@@ -39,6 +39,8 @@ public interface IClippedJudgableNote
     NoteType NoteType { get; }
 
     float Timing { get; }
+
+    int[] Range { get; }
 }
 
 /// <summary>

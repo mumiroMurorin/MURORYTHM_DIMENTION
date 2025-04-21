@@ -8,8 +8,6 @@ using UniRx;
 /// </summary>
 public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
 {
-    [SerializeField] JudgementWindow judgementWindow;
-
     NoteData_HoldStart noteData;
 
     bool isJudged;
@@ -41,7 +39,7 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
                 // –¢”»’è‚Ì‚Æ‚«ŠŽ‚Â
                 .Where(_ => !isJudged)
                 // Good”»’èŽžŠÔ‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚é‚Æ‚«”»’è
-                .Where(_ => judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
+                .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
                 .Subscribe(_ =>
                 {
                     Judge();
@@ -57,7 +55,7 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
     private void Judge()
     {
         // ”»’è‚ð“¾‚é
-        Judgement judgement = judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+        Judgement judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
 
         NoteJudgementData judgementData = new NoteJudgementData
         {
@@ -97,7 +95,7 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
     {
         if (noteData == null) { return false; }
         if (noteData.Timer == null) { return false; }
-        if (judgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.Miss) { return false; }
+        if (noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.Miss) { return false; }
         if (isJudged) { return false; }
 
         return true;

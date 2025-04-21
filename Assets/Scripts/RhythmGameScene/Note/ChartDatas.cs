@@ -8,34 +8,9 @@ using System.Linq;
 /// </summary>
 public class ChartData
 {
-    public int NoteNum 
-    { 
-        get
-        {
-            int count = 0;
-            foreach (var noteList in AllNoteDataLists)
-            {
-                count += noteList.Count;
-            }
+    public int NoteNum { get; private set; } = 0;
 
-            return count;
-        }
-    }
-
-    public int MaxCombo { 
-        get {
-            int count = 0;
-            foreach (var noteList in AllNoteDataLists) 
-            {
-                if (noteList.Count > 0 && noteList[0].JudgementType != JudgementType.None)
-                {
-                    count += noteList.Count;
-                }
-            }
-
-            return count;
-        }
-    }
+    public int MaxCombo { get; private set; } = 0;
 
     /// <summary>
     /// 全てのノーツ(リスト)を纏めたプロパティ
@@ -48,6 +23,11 @@ public class ChartData
     /// <param name="noteData"></param>
     public void AddNoteData(INoteData noteData)
     {
+        if (noteData is IJudgableNoteData) { MaxCombo++; }
+        else if (noteData is IClippedJudgableNote) { MaxCombo++; }
+
+        NoteNum++;
+
         // 引数のデータのノーツリストが存在するか確認
         foreach(var noteList in AllNoteDataLists)
         {

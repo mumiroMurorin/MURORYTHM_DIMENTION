@@ -29,47 +29,77 @@ public class NoteFactoryInitializingData
 /// <summary>
 /// Perfect`Good‚Ü‚Å‚Ì”»’è‹–—e”ÍˆÍ‚ğ‚Ü‚Æ‚ß‚½ƒNƒ‰ƒX
 /// </summary>
+[System.Serializable]
 public class JudgementWindow 
 {
-    [Header("‚»‚ê‚¼‚ê‚Ì”»’è(}n•b)")]
-    [SerializeField] float perfectWindow;
-    [SerializeField] float greatWindow;
-    [SerializeField] float goodWindow;
+    [Header("‚»‚ê‚¼‚ê‚Ì”»’è(•b)")]
+    [SerializeField] float perfectWindow_faster;
+    [SerializeField] float perfectWindow_latter;
+    [SerializeField] float greatWindow_faster;
+    [SerializeField] float greatWindow_latter;
+    [SerializeField] float goodWindow_faster;
+    [SerializeField] float goodWindow_latter;
 
-    public float PerfectWindow { get { return perfectWindow; } }
-    public float GreatWindow { get { return greatWindow; } }
-    public float GoodWindow { get { return goodWindow; } }
+    public float PerfectWindowFaster { get { return perfectWindow_faster; } }
+    public float PerfectWindowLatter { get { return perfectWindow_latter; } }
+    public float GreatWindowFaster { get { return greatWindow_faster; } }
+    public float GreatWindowLatter { get { return greatWindow_latter; } }
+    public float GoodWindowFaster { get { return goodWindow_faster; } }
+    public float GoodWindowLatter { get { return goodWindow_latter; } }
 
     public Judgement GetJudgement(float currentTime, float judgeTime)
     {
         return GetJudgementAndError(currentTime, judgeTime).Judgement;
     }
 
-    public JudgementAndErrorTime GetJudgementAndError(float currentTime, float judgeTime)
+    public JudgementAndErrorTime GetJudgementAndError(float currentTime, float correctTiming)
     {
-        float error = judgeTime - currentTime;
+        float error = correctTiming - currentTime;
 
         // Good”»’è‘O
-        if (judgeTime - goodWindow > currentTime) { return new JudgementAndErrorTime { Judgement = Judgement.None, Error = error }; }
+        if (correctTiming - goodWindow_faster > currentTime) { return new JudgementAndErrorTime { Judgement = Judgement.None, Error = error }; }
         // Good”»’èŒã
-        if (judgeTime + goodWindow < currentTime) { return new JudgementAndErrorTime { Judgement = Judgement.Miss, Error = error }; }
+        if (correctTiming + goodWindow_latter < currentTime) { return new JudgementAndErrorTime { Judgement = Judgement.Miss, Error = error }; }
 
-        float timingDiff = Mathf.Abs(judgeTime - currentTime);
-
-        if (timingDiff <= perfectWindow) { return new JudgementAndErrorTime { Judgement = Judgement.Perfect, Error = error }; }
-        else if (timingDiff <= greatWindow) { return new JudgementAndErrorTime { Judgement = Judgement.Great, Error = error }; }
-        else if (timingDiff <= goodWindow) { return new JudgementAndErrorTime { Judgement = Judgement.Good, Error = error }; }
+        if (-perfectWindow_faster < error && error <= perfectWindow_latter) { return new JudgementAndErrorTime { Judgement = Judgement.Perfect, Error = error }; }
+        else if (-greatWindow_faster < error && error <= greatWindow_latter) { return new JudgementAndErrorTime { Judgement = Judgement.Great, Error = error }; }
+        else if (-goodWindow_faster < error && error <= goodWindow_latter) { return new JudgementAndErrorTime { Judgement = Judgement.Good, Error = error }; }
 
         return new JudgementAndErrorTime { Judgement = Judgement.None };
+    }
+
+    public void ClipWindow(float clipDuration, bool isFaster)
+    {
+        if (isFaster)
+        {
+            float max = goodWindow_faster;
+            perfectWindow_faster = Mathf.Clamp(max - clipDuration, 0, perfectWindow_faster);
+            greatWindow_faster = Mathf.Clamp(max - clipDuration, perfectWindow_faster, greatWindow_faster);
+            goodWindow_faster = Mathf.Clamp(max - clipDuration, greatWindow_faster, goodWindow_faster);
+            Debug.Log($"Faster {goodWindow_faster}, {greatWindow_faster}, {perfectWindow_faster}");
+        }
+        else
+        {
+            float max = goodWindow_latter;
+            perfectWindow_latter = Mathf.Clamp(max - clipDuration, 0, perfectWindow_latter);
+            greatWindow_latter = Mathf.Clamp(max - clipDuration, perfectWindow_latter, greatWindow_latter);
+            goodWindow_latter = Mathf.Clamp(max - clipDuration, greatWindow_latter, goodWindow_latter);
+            Debug.Log($"Latter {goodWindow_latter}, {greatWindow_latter}, {perfectWindow_latter}");
+        }
     }
 
     public JudgementWindow Copy()
     {
         return new JudgementWindow
         {
-            perfectWindow = this.perfectWindow,
-            greatWindow = this.greatWindow,
-            goodWindow = this.goodWindow,
+            perfectWindow_faster = this.perfectWindow_faster,
+            perfectWindow_latter = this.perfectWindow_latter,
+
+            greatWindow_faster = this.greatWindow_faster,
+            greatWindow_latter = this.greatWindow_latter,
+
+            goodWindow_faster = this.goodWindow_faster,
+            goodWindow_latter = this.goodWindow_latter,
         };
     }
 }
@@ -78,13 +108,13 @@ public class JudgementWindow
 public class NoteTypeToJudgementWindow
 {
     [SerializeField] NoteType noteType;
-    [SerializeField] JudgementWindow judgementWindow;
+    [SerializeField] JudgementWindowObject judgementWindowObject;
 
     public JudgementWindow CheckAndGetJudgementWindow(NoteType noteType)
     {
         if(this.noteType == noteType)
         {
-            return judgementWindow;
+            return judgementWindowObject.JudgementWindow;
         }
 
         return null;
