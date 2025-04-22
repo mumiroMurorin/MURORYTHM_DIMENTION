@@ -443,7 +443,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b089f07c24e90b8408e898cd4cab8f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDebugMode: 1
   musicData_debug: {fileID: 11400000, guid: 30288d79747cd934cb1aaf6520d08a08, type: 2}
+  noteSpeed: 300
 --- !u!1001 &135123126
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2285,7 +2287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5344308489783075046, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7003494081260383716, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
       propertyPath: m_IsActive

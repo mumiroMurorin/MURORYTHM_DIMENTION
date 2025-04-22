@@ -184,12 +184,14 @@ namespace ChartConvert
             foreach(var sub in barDataOrigin.SubDivisionDatas)
             {
                 float bpm = sub.Bpm;
-                float timing = calcTiming.CalcNextTiming(beatUnit, divNum, bpm);
+                float timing = calcTiming.CurrentTiming;
 
                 if (!SetDataFromSubDivisionData(sub, chartData, timing)) 
                 {
                     isSucceed = false;
                 }
+
+                calcTiming.AddTiming(beatUnit, divNum, bpm);
             }
 
             return isSucceed;
@@ -225,12 +227,14 @@ namespace ChartConvert
         {
             float timePassedSec;
 
+            public float CurrentTiming { get { return timePassedSec; } }
+
             public CalcTimingClass(float musicOffsetMs, float optionOffsetMs)
             {
                 timePassedSec = -(musicOffsetMs + optionOffsetMs) / 1000f;
             }
 
-            public float CalcNextTiming(float beatUnit, float divNum, float bpm)
+            public float AddTiming(float beatUnit, float divNum, float bpm)
             {
                 // 1ï™êﬂÇÃéûä‘[sec]
                 // = 1ïbä‘Ç…ë≈ÇΩÇÍÇÈ4ï™âπïÑÇÃêî * (BeatUnit / 4f) / ï™äÑêî
@@ -242,6 +246,7 @@ namespace ChartConvert
                 timePassedSec += subDivisionSeconds;
                 return timePassedSec;
             }
+
         }
     }
 

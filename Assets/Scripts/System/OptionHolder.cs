@@ -43,7 +43,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     ReactiveProperty<float> noteSpeed = new ReactiveProperty<float>(100f);
     public IReadOnlyReactiveProperty<float> NoteSpeed => noteSpeed;
     public float NoteSpeedDisplay => noteSpeed.Value / 20f;
-    void SetNoteSpeed(float speed)
+    public void SetNoteSpeed(float speed)
     {
         noteSpeed.Value = Mathf.Clamp(speed, MIN_NOTESPEED, MAX_NOTESPEED);
     }
@@ -168,4 +168,6 @@ public interface IOptionGetter
 public interface IOptionSetter
 {
     void SetOption(OptionType optionType, int delta);
+
+    void SetNoteSpeed(float speed);
 }

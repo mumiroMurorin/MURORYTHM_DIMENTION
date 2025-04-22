@@ -76,7 +76,6 @@ public class JudgementWindow
             perfectWindow_faster = Mathf.Clamp(max - clipDuration, 0, perfectWindow_faster);
             greatWindow_faster = Mathf.Clamp(max - clipDuration, perfectWindow_faster, greatWindow_faster);
             goodWindow_faster = Mathf.Clamp(max - clipDuration, greatWindow_faster, goodWindow_faster);
-            Debug.Log($"Faster {goodWindow_faster}, {greatWindow_faster}, {perfectWindow_faster}");
         }
         else
         {
@@ -84,7 +83,6 @@ public class JudgementWindow
             perfectWindow_latter = Mathf.Clamp(max - clipDuration, 0, perfectWindow_latter);
             greatWindow_latter = Mathf.Clamp(max - clipDuration, perfectWindow_latter, greatWindow_latter);
             goodWindow_latter = Mathf.Clamp(max - clipDuration, greatWindow_latter, goodWindow_latter);
-            Debug.Log($"Latter {goodWindow_latter}, {greatWindow_latter}, {perfectWindow_latter}");
         }
     }
 
