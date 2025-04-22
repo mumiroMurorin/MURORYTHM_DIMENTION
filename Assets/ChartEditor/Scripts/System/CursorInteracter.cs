@@ -13,11 +13,18 @@ namespace ChartEditor
         IChartEditorDataSetter chartEditorDataSetter;
         IChartEditorDataGetter chartEditorDataGetter;
 
+        int raycastLayer;
+
         [Inject]
         public void Construct(IChartEditorDataSetter chartEditorDataSetter, IChartEditorDataGetter chartEditorDataGetter)
         {
             this.chartEditorDataSetter = chartEditorDataSetter;
             this.chartEditorDataGetter = chartEditorDataGetter;
+        }
+
+        private void Start()
+        {
+            raycastLayer = 1 << LayerMask.NameToLayer("CursorInteractable");
         }
 
         private void Update()
@@ -141,7 +148,7 @@ namespace ChartEditor
             RaycastHit hit;
 
             // オブジェクトがなかったらnullを返す
-            if (!Physics.Raycast(ray, out hit)) { return null; }
+            if (!Physics.Raycast(ray, out hit, 20f, raycastLayer)) { return null; }
             return hit.collider.gameObject;
         }
     }

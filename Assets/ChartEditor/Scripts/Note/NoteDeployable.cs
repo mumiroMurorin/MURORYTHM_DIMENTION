@@ -8,6 +8,8 @@ namespace ChartEditor
     [RequireComponent(typeof(NoteObject))]
     public class NoteDeployable : MonoBehaviour, IDeployableObject
     {
+        [Tooltip("配置時のアウトライン色")]
+        [SerializeField] private Color outlineColorOnDeploying;
         [SerializeField] private Renderer noteRenderer;
 
         NoteObject noteObject;
@@ -23,12 +25,19 @@ namespace ChartEditor
             this.gameObject.SetActive(false);
             noteObject.SetCollidersActive(false);
 
+            // アウトラインの設定
+            noteObject.SetOutlineColor(outlineColorOnDeploying, true);
+            noteObject.SetOutlineActive(true);
+
             noteObject.NoteData = noteData;
             noteObject.GetParentTransformFunc = getParentTransformFunc;
         }
 
         void IDeployableObject.OnDeploy()
         {
+            // アウトラインを消す
+            noteObject.SetOutlineActive(false);
+
             noteRenderer.material.color *= new Color(1, 1, 1, 2f);
             noteObject.SetCollidersActive(true);
         }

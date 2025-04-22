@@ -11,5 +11,6 @@ namespace ChartEditor
         public EditMode EditMode => EditMode.Move;
 
         public IMovableObject Note => note.Value;
+
     }
 }

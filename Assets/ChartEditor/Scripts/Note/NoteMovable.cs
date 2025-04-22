@@ -51,7 +51,7 @@ namespace ChartEditor
 
         void IMovableObject.OnMoveStart()
         {
-            noteObject.SetOutlineColor(outlineColorOnMove);
+            noteObject.SetOutlineColor(outlineColorOnMove, true);
             noteObject.SetOutlineActive(true);
             noteObject.SetCollidersActive(false);
 

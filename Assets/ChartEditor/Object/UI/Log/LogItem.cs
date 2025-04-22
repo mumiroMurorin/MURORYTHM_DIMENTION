@@ -26,7 +26,7 @@ namespace ChartEditor
         private void Start()
         {
             cts = new CancellationTokenSource();
-            //_ = DelayedExecutor.ExecuteAfterDelay(displayDuration, Destroy, cts.Token);
+            _ = DelayedExecutor.ExecuteAfterDelay(displayDuration, Destroy, cts.Token);
         }
 
         /// <summary>

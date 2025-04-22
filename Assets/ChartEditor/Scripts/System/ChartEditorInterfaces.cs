@@ -100,4 +100,11 @@ namespace ChartEditor
 
         void OnDestroy();
     }
+
+    public interface IJudgeStackingCollider
+    {
+        DeploymentNoteType NoteType { get; }
+
+        void NotifyDisable(IJudgeStackingCollider stack);
+    }
 }
