@@ -102,11 +102,12 @@ namespace ChartEditor
         private void OnTriggerEnter(Collider other)
         {
             // ”í‚è”»’è‚¿‚Å‚È‚¯‚ê‚Î•Ô‚·
-            if(!other.gameObject.TryGetComponent(out IJudgeStackingCollider stack)) { return; }
-            if(warninigNoteTypes == null) { return; }
-            
+            if(!other.transform.parent.TryGetComponent(out IJudgeStackingCollider stack)) { return; }
+            if (warninigNoteTypes == null) { return; }
+
+
             // ”í‚Á‚Ä‚¢‚éƒm[ƒg‚ÉŒx‚ğo‚·‚©”»’è
-            foreach(var type in warninigNoteTypes)
+            foreach (var type in warninigNoteTypes)
             {
                 if(stack.NoteType == type) 
                 {
@@ -119,7 +120,7 @@ namespace ChartEditor
         private void OnTriggerExit(Collider other)
         {
             // ”í‚è”»’è‚¿‚Å‚È‚¯‚ê‚Î•Ô‚·
-            if (!other.gameObject.TryGetComponent(out IJudgeStackingCollider stack)) { return; }
+            if (!other.transform.parent.TryGetComponent(out IJudgeStackingCollider stack)) { return; }
             if (warninigNoteTypes == null) { return; }
 
             // ”í‚Á‚Ä‚¢‚éƒm[ƒg‚ÉŒx‚ğo‚·‚©”»’è

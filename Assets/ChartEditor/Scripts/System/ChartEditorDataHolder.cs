@@ -33,7 +33,7 @@ namespace ChartEditor
             if(currentEditMode.Value == editMode) { return; }
 
             currentEditMode.Value = editMode;
-            Debug.Log($"Change Edit Mode: {currentEditMode.Value}");
+            if (!autoEditMode.Value) { Debug.Log($"Change Edit Mode: {currentEditMode.Value}"); }
         }
 
 
