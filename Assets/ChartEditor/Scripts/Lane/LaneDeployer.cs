@@ -11,7 +11,8 @@ namespace ChartEditor
         [SerializeField] SerializeInterface<ILaneDeployable<BarDataInChart>> barLineDeplayable;
         [SerializeField] Transform lineParent;
         [SerializeField] GameObject ground;
-
+        [SerializeField] GameObject[] laneDivisionLines;
+ 
         IChartEditorDataGetter chartEditorDataGetter;
 
         [Inject]
@@ -31,6 +32,11 @@ namespace ChartEditor
             chartEditorDataGetter?.ChartData
                 .Where(data => data != null)
                 .Subscribe(GenerateLane)
+                .AddTo(this.gameObject);
+
+            // レーン分割線の表示
+            chartEditorDataGetter?.LaneDivisionNum
+                .Subscribe(SetLaneDivisionLine)
                 .AddTo(this.gameObject);
         }
 
@@ -89,6 +95,23 @@ namespace ChartEditor
             {
                 Destroy(t.gameObject);
             }
+        }
+
+        /// <summary>
+        /// 分割線の表示非表示
+        /// </summary>
+        /// <param name="divNum"></param>
+        private void SetLaneDivisionLine(int divNum)
+        {
+            if(laneDivisionLines == null) { return; }
+            if(laneDivisionLines.Length != 17) { return; }
+
+            for (int i = 0; i < 16; i++) 
+            {
+                laneDivisionLines[i].SetActive(i % (16 / divNum) == 0);
+            }
+
+            laneDivisionLines[16].SetActive(true);
         }
     }
 

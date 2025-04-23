@@ -168,6 +168,21 @@ namespace ChartEditor
 
         #endregion
 
+        #region DivNum レーン分割数
+
+        ReactiveProperty<int> laneDivisionNum = new ReactiveProperty<int>(4);
+        IReadOnlyReactiveProperty<int> IChartEditorDataGetter.LaneDivisionNum => laneDivisionNum;
+
+        void IChartEditorDataSetter.SetLaneDivisionNum(int num)
+        {
+            // 乗数かどうかの判定をする、ビット演算子を使う、賢い
+            if (num < 0 || (num & (num - 1)) != 0) { return; }
+
+            laneDivisionNum.Value = Mathf.Clamp(num, 0, 16);
+        }
+
+        #endregion
+
         #region Scale 拡大率
 
         /// <summary>
@@ -236,6 +251,8 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<float> PlaybackProgress { get; }
 
+        IReadOnlyReactiveProperty<int> LaneDivisionNum { get; }
+
         /// <summary>
         /// エディタの拡大倍率、1秒間のUnity長 [z/sec]
         /// </summary>
@@ -272,6 +289,8 @@ namespace ChartEditor
         void SetPlayMode(PlayMode playMode);
 
         void SetPlaybackProgress(float value);
+
+        void SetLaneDivisionNum(int num);
 
         void SetChartViewScale(float scale);
 
