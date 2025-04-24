@@ -14,11 +14,13 @@ namespace ChartEditor
         [SerializeField] GameObject[] laneDivisionLines;
  
         IChartEditorDataGetter chartEditorDataGetter;
+        IChartEditorOptionGetter chartEditorOptionGetter;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorOptionGetter chartEditorOptionGetter)
         {
             this.chartEditorDataGetter = chartEditorDataGetter;
+            this.chartEditorOptionGetter = chartEditorOptionGetter;
         }
 
         void Start()
@@ -35,7 +37,7 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // レーン分割線の表示
-            chartEditorDataGetter?.LaneDivisionNum
+            chartEditorOptionGetter?.LaneDivisionNum
                 .Subscribe(SetLaneDivisionLine)
                 .AddTo(this.gameObject);
         }
@@ -56,7 +58,7 @@ namespace ChartEditor
                 GenerateBarUnit(chartData.BarDatas[i], lineParent, i);
             }
 
-            float chartLength = chartEditorDataGetter.ChartViewScale.Value * chartEditorDataGetter.Music.Value.length;
+            float chartLength = chartEditorOptionGetter.ChartViewScale.Value * chartEditorDataGetter.Music.Value.length;
 
             // グラウンドの生成
             ground.transform.localScale = new Vector3(

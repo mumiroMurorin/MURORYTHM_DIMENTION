@@ -168,44 +168,6 @@ namespace ChartEditor
 
         #endregion
 
-        #region DivNum レーン分割数
-
-        ReactiveProperty<int> laneDivisionNum = new ReactiveProperty<int>(4);
-        IReadOnlyReactiveProperty<int> IChartEditorDataGetter.LaneDivisionNum => laneDivisionNum;
-
-        void IChartEditorDataSetter.SetLaneDivisionNum(bool isNext)
-        {
-            int num = laneDivisionNum.Value;
-
-            // 最大値の時1に戻す
-            if (num >= 16 && isNext) { laneDivisionNum.Value = 1; }
-            // 最小値の時16にする
-            else if (num <= 1 && !isNext) { laneDivisionNum.Value = 16; }
-            // *2
-            else if (isNext && num > 0 && (num & (num - 1)) == 0) { laneDivisionNum.Value = num * 2; }
-            // ÷2
-            else if (!isNext && num > 0 && (num & (num - 1)) == 0) { laneDivisionNum.Value = num / 2; }
-            // それ以外の時1に戻す
-            else { laneDivisionNum.Value = 1; }
-        }
-
-        #endregion
-
-        #region Scale 拡大率
-
-        /// <summary>
-        /// 1秒間のグラウンド長さ
-        /// </summary>
-        ReactiveProperty<float> chartViewScale = new ReactiveProperty<float>(5f);
-        IReadOnlyReactiveProperty<float> IChartEditorDataGetter.ChartViewScale => chartViewScale;
-
-        void IChartEditorDataSetter.SetChartViewScale(float scale)
-        {
-            chartViewScale.Value = Mathf.Clamp(scale, 0.1f, float.MaxValue);
-        }
-
-        #endregion
-
         #region Music 再生音楽
 
         ReactiveProperty<AudioClip> music = new ReactiveProperty<AudioClip>();
@@ -259,13 +221,6 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<float> PlaybackProgress { get; }
 
-        IReadOnlyReactiveProperty<int> LaneDivisionNum { get; }
-
-        /// <summary>
-        /// エディタの拡大倍率、1秒間のUnity長 [z/sec]
-        /// </summary>
-        IReadOnlyReactiveProperty<float> ChartViewScale { get; }
-
         IReadOnlyReactiveProperty<float> Offset { get; }
 
         IReadOnlyReactiveProperty<AudioClip> Music { get; }
@@ -297,10 +252,6 @@ namespace ChartEditor
         void SetPlayMode(PlayMode playMode);
 
         void SetPlaybackProgress(float value);
-
-        void SetLaneDivisionNum(bool isNext);
-
-        void SetChartViewScale(float scale);
 
         void SetOffset(float offset);
 

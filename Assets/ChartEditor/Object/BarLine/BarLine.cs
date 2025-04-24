@@ -15,7 +15,7 @@ namespace ChartEditor
         [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> subdivisionLineFactory;
         [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> colliderFactory;
 
-        IChartEditorDataGetter chartEditorDataGetter;
+        IChartEditorOptionGetter optionGetter;
         IReadOnlyReactiveProperty<ILinePositioner> backData;
         int barNumber = 0;
 
@@ -46,12 +46,12 @@ namespace ChartEditor
         /// <param name="barData"></param>
         /// <param name="previousBar"></param>
         /// <param name="number"></param>
-        public void Initialize(BarDataInChart barData, IReadOnlyReactiveProperty<ILinePositioner> backData, IChartEditorDataGetter chartEditorDataGetter, int number)
+        public void Initialize(BarDataInChart barData, IReadOnlyReactiveProperty<ILinePositioner> backData, IChartEditorOptionGetter optionGetter, int number)
         {
             this.barData = barData;
             this.backData = backData;
             this.barNumber = number;
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.optionGetter = optionGetter;
             this.subDivisionData.Value = barData.SubDivisionDatas[0];
 
             InitializeFactories();
@@ -217,7 +217,7 @@ namespace ChartEditor
                 currentZ
                 );
 
-            float chartLengthParSecond = chartEditorDataGetter.ChartViewScale.Value;
+            float chartLengthParSecond = optionGetter.ChartViewScale.Value;
             float beatUnit = barData.BeatUnit.Value;
             float bpm = SubDivisionData.Bpm.Value;
             int divNum = barData.DivisionNum.Value;
@@ -233,7 +233,7 @@ namespace ChartEditor
         /// </summary>
         private void AdjustPositionOnChangeLineData()
         {
-            float chartLengthParSecond = chartEditorDataGetter.ChartViewScale.Value;
+            float chartLengthParSecond = optionGetter.ChartViewScale.Value;
             float beatUnit = barData.BeatUnit.Value;
             float bpm = SubDivisionData.Bpm.Value;
             int divNum = barData.DivisionNum.Value;
@@ -253,7 +253,7 @@ namespace ChartEditor
         /// <param name="barData"></param>
         private void DeployOtherLine(BarDataInChart barData)
         {
-            float chartLengthParSecond = chartEditorDataGetter.ChartViewScale.Value;
+            float chartLengthParSecond = optionGetter.ChartViewScale.Value;
             float beatUnit = barData.BeatUnit.Value;
             int divNum = barData.DivisionNum.Value;
             float localZ = 0;
@@ -324,7 +324,7 @@ namespace ChartEditor
 
             // èâä˙âª
             if (!obj.TryGetComponent(out SubdivisionLine subDivisionLine)) { return null; }
-            subDivisionLine.Initialize(subData, backData, chartEditorDataGetter);
+            subDivisionLine.Initialize(subData, backData, optionGetter);
 
             return obj;
         }

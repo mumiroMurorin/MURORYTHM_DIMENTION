@@ -11,6 +11,10 @@ namespace ChartEditor
             builder.Register<ChartEditorDataHolder>(Lifetime.Singleton)
                .As<IChartEditorDataGetter>()
                .As<IChartEditorDataSetter>();
+
+            builder.Register<ChartEditorOptionHolder>(Lifetime.Singleton)
+                .As<IChartEditorOptionGetter>()
+                .As<IChartEditorOptionSetter>();
         }
     }
 }

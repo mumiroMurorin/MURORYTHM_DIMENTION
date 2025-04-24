@@ -10,7 +10,7 @@ namespace ChartEditor
         [SerializeField] SubdivisionLineInfoView lineInfo_view;
 
         ILinePositioner backData;
-        IChartEditorDataGetter chartEditorDataGetter;
+        IChartEditorOptionGetter optionGetter;
 
         /// <summary>
         /// ŽŸ‚Ìü‚ÌŠJŽnˆÊ’u
@@ -24,12 +24,12 @@ namespace ChartEditor
         BarDataInChart barData;
         BarDataInChart ILinePositioner.BarData => barData;
 
-        public void Initialize(SubDivisionDataInBeat subDivisionData, ILinePositioner backData, IChartEditorDataGetter chartEditorDataGetter)
+        public void Initialize(SubDivisionDataInBeat subDivisionData, ILinePositioner backData, IChartEditorOptionGetter optionGetter)
         {
             this.subDivisionData = subDivisionData;
             this.backData = backData;
             this.barData = backData.BarData;
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.optionGetter = optionGetter;
 
             Bind();
         }
@@ -83,7 +83,7 @@ namespace ChartEditor
                 currentZ
                 );
 
-            float chartLengthParSecond = chartEditorDataGetter.ChartViewScale.Value;
+            float chartLengthParSecond = optionGetter.ChartViewScale.Value;
             float beatUnit = backData.BarData.BeatUnit.Value;
             float bpm = subDivisionData.Bpm.Value;
             int divNum = backData.BarData.DivisionNum.Value;
@@ -99,7 +99,7 @@ namespace ChartEditor
         /// </summary>
         private void AdjustPositionOnChangeLineData()
         {
-            float chartLengthParSecond = chartEditorDataGetter.ChartViewScale.Value;
+            float chartLengthParSecond = optionGetter.ChartViewScale.Value;
             float beatUnit = backData.BarData.BeatUnit.Value;
             float bpm = subDivisionData.Bpm.Value;
             int divNum = backData.BarData.DivisionNum.Value;

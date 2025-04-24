@@ -10,14 +10,14 @@ namespace ChartEditor
     {
         [SerializeField] GameObject barLineObj;
 
-        IChartEditorDataGetter chartEditorDataGetter;
+        IChartEditorOptionGetter optionGetter;
         List<BarLine> barLines = new List<BarLine>();
         int barCount = 0;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(IChartEditorOptionGetter optionGetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.optionGetter = optionGetter;
         }
 
         void ILaneDeployable<BarDataInChart>.Initialize()
@@ -42,7 +42,7 @@ namespace ChartEditor
             if(obj.TryGetComponent(out BarLine line))
             {
                 // è¨êﬂÇÃê›íË
-                line.Initialize(barData, barLines.LastOrDefault()?.SubDivisionLast, chartEditorDataGetter, ++barCount);
+                line.Initialize(barData, barLines.LastOrDefault()?.SubDivisionLast, optionGetter, ++barCount);
 
                 barLines?.Add(line);
             }

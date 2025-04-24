@@ -12,12 +12,14 @@ namespace ChartEditor
         [SerializeField] GameObject offsetAxis;
 
         IChartEditorDataGetter chartEditorDataGetter;
+        IChartEditorOptionGetter optionGetter;
         float chartLength;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorOptionGetter optionGetter)
         {
             this.chartEditorDataGetter = chartEditorDataGetter;
+            this.optionGetter = optionGetter;
         }
 
         private void Start()
@@ -28,7 +30,7 @@ namespace ChartEditor
         private void Bind()
         {
             // ”{—¦‚Ì•ÏX
-            chartEditorDataGetter?.ChartViewScale
+            optionGetter?.ChartViewScale
                 .Subscribe(scale => {
                     UpdateChartLength(chartEditorDataGetter.Music.Value,scale);
                     MoveCamera(chartEditorDataGetter.PlaybackProgress.Value);
@@ -49,7 +51,7 @@ namespace ChartEditor
             // Šy‹È‚ª•Ï‚í‚Á‚½Žž
             chartEditorDataGetter?.Music
                 .Subscribe(music => {
-                    UpdateChartLength(music, chartEditorDataGetter.ChartViewScale.Value);
+                    UpdateChartLength(music, optionGetter.ChartViewScale.Value);
                 })
                 .AddTo(this.gameObject);
         }

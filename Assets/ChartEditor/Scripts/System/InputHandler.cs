@@ -12,17 +12,22 @@ namespace ChartEditor
         [Header("マウス関係")]
         [Tooltip("拡大縮小の感度")]
         [SerializeField] float scalingSensitivity = 0.1f;
-        [Tooltip("再生位置移動の感度")]
-        [SerializeField] float moveSensitivity = 0.01f;
+        [Tooltip("再生位置移動の感度基準")]
+        [SerializeField] float moveSensitivityMax = 0.01f;
 
-        IChartEditorDataSetter chartEditorDataSetter;
-        IChartEditorDataGetter chartEditorDataGetter;
+        IChartEditorDataSetter dataSetter;
+        IChartEditorOptionSetter optionSetter;
+        IChartEditorDataGetter dataGetter;
+        IChartEditorOptionGetter optionGetter;
 
-        [Inject] 
-        public void Construct(IChartEditorDataSetter chartEditorDataSetter, IChartEditorDataGetter chartEditorDataGetter)
+        [Inject]
+        public void Construct(IChartEditorDataSetter dataSetter, IChartEditorDataGetter dataGetter, IChartEditorOptionSetter optionSetter, IChartEditorOptionGetter optionGetter)
         {
-            this.chartEditorDataSetter = chartEditorDataSetter;
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.dataSetter = dataSetter;
+            this.dataGetter = dataGetter;
+
+            this.optionSetter = optionSetter;
+            this.optionGetter = optionGetter;
         }
 
         private void Update()
@@ -42,7 +47,7 @@ namespace ChartEditor
             if (Mathf.Abs(scroll) < 0.01f) { return; }
             if (!Input.GetKey(KeyCode.LeftControl)) { return; }
 
-            chartEditorDataSetter?.SetChartViewScale(chartEditorDataGetter.ChartViewScale.Value + scroll * scalingSensitivity);
+            optionSetter?.SetChartViewScale(optionGetter.ChartViewScale.Value + scroll * scalingSensitivity);
         }
 
         /// <summary>
@@ -51,7 +56,7 @@ namespace ChartEditor
         private void OperatePlaybackProgress()
         {
             // 再生中は操作を受け付けない
-            if(chartEditorDataGetter.PlayMode.Value == PlayMode.Play) { return; }
+            if(dataGetter.PlayMode.Value == PlayMode.Play) { return; }
 
             var scroll = Input.mouseScrollDelta.y;
 
@@ -59,8 +64,8 @@ namespace ChartEditor
             if (Input.GetKey(KeyCode.LeftControl)) { return; }
 
             // スクロール感度と拡大率によって変える
-            float ratio = moveSensitivity * Mathf.Clamp(10f - chartEditorDataGetter.ChartViewScale.Value / 0.15f, 1f, 10f);
-            chartEditorDataSetter?.SetPlaybackProgress(chartEditorDataGetter.PlaybackProgress.Value + scroll * ratio);
+            float ratio = moveSensitivityMax * optionGetter.ScrollSensitivity.Value * Mathf.Clamp(10f - optionGetter.ChartViewScale.Value / 0.15f, 1f, 10f);
+            dataSetter?.SetPlaybackProgress(dataGetter.PlaybackProgress.Value + scroll * ratio);
         }
 
         /// <summary>
@@ -69,15 +74,15 @@ namespace ChartEditor
         private void OperateMusicPlay()
         {
             if (!Input.GetKeyDown(playKey)) { return; }
-            if (chartEditorDataGetter.Music.Value == null) { return; }
+            if (dataGetter.Music.Value == null) { return; }
 
-            switch (chartEditorDataGetter.PlayMode.Value)
+            switch (dataGetter.PlayMode.Value)
             {
                 case PlayMode.Play:
-                    chartEditorDataSetter?.SetPlayMode(PlayMode.Stop);
+                    dataSetter?.SetPlayMode(PlayMode.Stop);
                     break;
                 case PlayMode.Stop:
-                    chartEditorDataSetter?.SetPlayMode(PlayMode.Play);
+                    dataSetter?.SetPlayMode(PlayMode.Play);
                     break;
             }
 

@@ -11,12 +11,12 @@ namespace ChartEditor
         [SerializeField] SerializeInterface<ILaneDeployable<BarDataInChart>> barLineDeplayable;
         [SerializeField] GameObject ground;
 
-        IChartEditorDataGetter chartEditorDataGetter;
+        IChartEditorOptionGetter dataGetter;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(IChartEditorOptionGetter dataGetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.dataGetter = dataGetter;
         }
 
         void Start()
@@ -33,7 +33,7 @@ namespace ChartEditor
         private void Bind()
         {
             // Šg‘å—¦
-            chartEditorDataGetter?.ChartViewScale
+            dataGetter?.ChartViewScale
                 .Pairwise()
                 .Subscribe(OnChangeChartViewScale)
                 .AddTo(this.gameObject);

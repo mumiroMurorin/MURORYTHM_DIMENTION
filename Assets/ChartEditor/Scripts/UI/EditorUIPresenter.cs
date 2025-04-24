@@ -17,6 +17,7 @@ namespace ChartEditor
         [SerializeField] MusicBrowseButtonView musicBrowseButton_view;
         [SerializeField] OffsetInputFieldView offsetInputField_view;
         [SerializeField] ChangeLaneDivNumButtonView changeLaneDivNumButton_view;
+        [SerializeField] ScrollSensitivitySliderView scrollSensitivitySlider_view;
         [SerializeField] MusicNameView musicName_view;
         [SerializeField] AutoEditModeButtonView autoEditModeButton_view;
         [SerializeField] RhythmConfigBarView rhythmConfigBar_view;
@@ -25,17 +26,22 @@ namespace ChartEditor
 
         AudioFileSelector audioFileSelector = new AudioFileSelector();
 
-        IChartEditorDataSetter dataSetter_model;
-        IChartEditorDataGetter dataGetter_model;
+        IChartEditorDataSetter editorDataSetter_model;
+        IChartEditorDataGetter editorDataGetter_model;
+        IChartEditorOptionSetter optionDataSetter_model;
+        IChartEditorOptionGetter optionDataGetter_model;
+
         ChartConvert.ChartExporter chartExporter = new ChartConvert.ChartExporter();
 
         CancellationTokenSource soundLoadCts;
 
         [Inject]
-        public void Construct(IChartEditorDataSetter chartEditorDataSetter, IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(IChartEditorDataSetter chartEditorDataSetter, IChartEditorDataGetter chartEditorDataGetter, IChartEditorOptionSetter optionDataSetter, IChartEditorOptionGetter optionDataGetter)
         {
-            dataSetter_model = chartEditorDataSetter;
-            dataGetter_model = chartEditorDataGetter;
+            editorDataSetter_model = chartEditorDataSetter;
+            optionDataSetter_model = optionDataSetter;
+            editorDataGetter_model = chartEditorDataGetter;
+            optionDataGetter_model = optionDataGetter;
         }
 
         void Start()
@@ -50,13 +56,13 @@ namespace ChartEditor
         private void BindForOther()
         {
             // 楽曲選択の可視不可視
-            dataGetter_model?.PlayMode
+            editorDataGetter_model?.PlayMode
                 .Subscribe(musicBrowseButton_view.OnChangePlayMode)
                 .AddTo(this.gameObject);
 
             // オフセットフィールドのインタラクト可不可
             // エクスポートフィールドのインタラクト可不可
-            dataGetter_model?.PlayMode
+            editorDataGetter_model?.PlayMode
                 .Subscribe(value => { 
                     offsetInputField_view.OnChangePlayMode(value);
                     exportButton_view.OnChangePlayMode(value);
@@ -64,12 +70,17 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // レーン分割数の変更
-            dataGetter_model?.LaneDivisionNum
+            optionDataGetter_model?.LaneDivisionNum
                 .Subscribe(changeLaneDivNumButton_view.OnLaneDivNumChanged)
                 .AddTo(this.gameObject);
 
+            // スクロール感度
+            optionDataGetter_model?.ScrollSensitivity
+                .Subscribe(scrollSensitivitySlider_view.OnSensitivityChanged)
+                .AddTo(this.gameObject);
+
             // 楽曲名の変更
-            dataGetter_model?.Music
+            editorDataGetter_model?.Music
                 .Subscribe(musicName_view.OnChangeMusic)
                 .AddTo(this.gameObject);
         }
@@ -77,7 +88,7 @@ namespace ChartEditor
         private void BindForRhythmConfig()
         {
             // リズムコンフィグ(小節線)のクリック
-            dataGetter_model?.RhythmConfigurableBar
+            editorDataGetter_model?.RhythmConfigurableBar
                 .Where(value => value != null)
                 .Subscribe(value =>
                 {
@@ -88,7 +99,7 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // リズムコンフィグ(分線)のクリック
-            dataGetter_model?.RhythmConfigurableSubDivision
+            editorDataGetter_model?.RhythmConfigurableSubDivision
                 .Where(value => value != null)
                 .Subscribe(value =>
                 {
@@ -99,7 +110,7 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // リズムコンフィグ(小節線)を閉じる
-            dataGetter_model?.RhythmConfigurableBar
+            editorDataGetter_model?.RhythmConfigurableBar
                 .Pairwise()
                 .Where(value => value.Current == null)
                 .Subscribe(value =>
@@ -110,12 +121,12 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // リズムコンフィグ(分線)を閉じる
-            dataGetter_model?.RhythmConfigurableSubDivision
+            editorDataGetter_model?.RhythmConfigurableSubDivision
                 .Pairwise()
                 .Where(value => value.Current == null)
                 .Subscribe(value =>
                 {
-                    rhythmConfigSubDivision_view.SetData(value.Previous.SubDivisionDataGetter.SubDivisionData, dataGetter_model.ChartData.Value);
+                    rhythmConfigSubDivision_view.SetData(value.Previous.SubDivisionDataGetter.SubDivisionData, editorDataGetter_model.ChartData.Value);
                     rhythmConfigSubDivision_view.SetActive(false);
                 })
                 .AddTo(this.gameObject);
@@ -126,22 +137,22 @@ namespace ChartEditor
             // ツールボタン
             foreach (var button in toolButtons_view)
             {
-                button.Bind(dataGetter_model.CurrentEditMode, this.gameObject);
+                button.Bind(editorDataGetter_model.CurrentEditMode, this.gameObject);
             }
 
             // ノートボタン
             foreach (var button in noteButtons_view)
             {
-                button.Bind(dataGetter_model.DeploymentNoteType, this.gameObject);
+                button.Bind(editorDataGetter_model.DeploymentNoteType, this.gameObject);
             }
 
             // ノーツビューの可視不可視
-            dataGetter_model?.CurrentEditMode
+            editorDataGetter_model?.CurrentEditMode
                 .Subscribe(notesViewport_view.OnChangeEditMode)
                 .AddTo(this.gameObject);
 
             // オートエディットモードの変更
-            dataGetter_model?.AutoEditMode
+            editorDataGetter_model?.AutoEditMode
                 .Subscribe(autoEditModeButton_view.OnChangeAutoEditMode)
                 .AddTo(this.gameObject);
         }
@@ -151,13 +162,13 @@ namespace ChartEditor
             // ツールボタン
             foreach (var button in toolButtons_view)
             {
-                button.SetEvent(() => { dataSetter_model.SetEditMode(button.EditMode); });
+                button.SetEvent(() => { editorDataSetter_model.SetEditMode(button.EditMode); });
             }
 
             // ノーツボタン
             foreach(var button in noteButtons_view)
             {
-                button.SetEvent(() => { dataSetter_model.SetNoteType(button.NoteType); });
+                button.SetEvent(() => { editorDataSetter_model.SetNoteType(button.NoteType); });
             }
 
             // 曲選択ボタン
@@ -166,22 +177,25 @@ namespace ChartEditor
             // オートエディットモードボタン
             autoEditModeButton_view.OnClickedListner += () =>
             {
-                bool currentMode = dataGetter_model.AutoEditMode.Value;
-                dataSetter_model.SetAutoEditMode(!currentMode);
+                bool currentMode = editorDataGetter_model.AutoEditMode.Value;
+                editorDataSetter_model.SetAutoEditMode(!currentMode);
             };
 
             // オフセットフィールド
-            offsetInputField_view.OnValueChangedListner += dataSetter_model.SetOffset;
+            offsetInputField_view.OnValueChangedListner += editorDataSetter_model.SetOffset;
 
             // レーン分割数
-            changeLaneDivNumButton_view.OnButtonClickedListener += () => dataSetter_model.SetLaneDivisionNum(true);
+            changeLaneDivNumButton_view.OnButtonClickedListener += () => optionDataSetter_model.SetLaneDivisionNum(true);
+
+            // スクロール感度
+            scrollSensitivitySlider_view.OnSliderChangedListener += optionDataSetter_model.SetScrollSensitivity;
 
             // エクスポートボタン
-            exportButton_view.OnClickedListner += () => chartExporter.Export(dataGetter_model.ChartData.Value, dataGetter_model.Offset.Value);
+            exportButton_view.OnClickedListner += () => chartExporter.Export(editorDataGetter_model.ChartData.Value, editorDataGetter_model.Offset.Value);
 
             // リズムコンフィグ
-            rhythmConfigBar_view.OnClickedApplyButtonListner += () => dataSetter_model.SetRhythmConfigurableBar(null);
-            rhythmConfigSubDivision_view.OnClickedApplyButtonListner += () => dataSetter_model.SetRhythmConfigurableSubDivision(null);
+            rhythmConfigBar_view.OnClickedApplyButtonListner += () => editorDataSetter_model.SetRhythmConfigurableBar(null);
+            rhythmConfigSubDivision_view.OnClickedApplyButtonListner += () => editorDataSetter_model.SetRhythmConfigurableSubDivision(null);
         }
 
         /// <summary>
@@ -198,8 +212,8 @@ namespace ChartEditor
             soundLoadCts = new CancellationTokenSource();
 
             AudioClip clip = await audioFileSelector.SelectAudioFile(soundLoadCts.Token);
-            dataSetter_model.SetMusic(clip);
-            dataSetter_model.InitializeChartData();
+            editorDataSetter_model.SetMusic(clip);
+            editorDataSetter_model.InitializeChartData();
         }
 
         private void OnDestroy()
