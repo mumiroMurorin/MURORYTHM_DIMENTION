@@ -16,6 +16,7 @@ namespace ChartEditor
         [SerializeField] NotesViewportView notesViewport_view;
         [SerializeField] MusicBrowseButtonView musicBrowseButton_view;
         [SerializeField] OffsetInputFieldView offsetInputField_view;
+        [SerializeField] ChangeLaneDivNumButtonView changeLaneDivNumButton_view;
         [SerializeField] MusicNameView musicName_view;
         [SerializeField] AutoEditModeButtonView autoEditModeButton_view;
         [SerializeField] RhythmConfigBarView rhythmConfigBar_view;
@@ -39,29 +40,15 @@ namespace ChartEditor
 
         void Start()
         {
-            Bind(); 
+            BindForRhythmConfig();
+            BindForEditView();
+            BindForOther();
+
             SetEvent();
         }
 
-        private void Bind()
+        private void BindForOther()
         {
-            // ツールボタン
-            foreach(var button in toolButtons_view)
-            {
-                button.Bind(dataGetter_model.CurrentEditMode, this.gameObject);
-            }
-
-            // ノートボタン
-            foreach (var button in noteButtons_view)
-            {
-                button.Bind(dataGetter_model.DeploymentNoteType, this.gameObject);
-            }
-
-            // ノーツビューの可視不可視
-            dataGetter_model?.CurrentEditMode
-                .Subscribe(notesViewport_view.OnChangeEditMode)
-                .AddTo(this.gameObject);
-
             // 楽曲選択の可視不可視
             dataGetter_model?.PlayMode
                 .Subscribe(musicBrowseButton_view.OnChangePlayMode)
@@ -76,16 +63,19 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
 
+            // レーン分割数の変更
+            dataGetter_model?.LaneDivisionNum
+                .Subscribe(changeLaneDivNumButton_view.OnLaneDivNumChanged)
+                .AddTo(this.gameObject);
+
             // 楽曲名の変更
             dataGetter_model?.Music
                 .Subscribe(musicName_view.OnChangeMusic)
                 .AddTo(this.gameObject);
+        }
 
-            // オートエディットモードの変更
-            dataGetter_model?.AutoEditMode
-                .Subscribe(autoEditModeButton_view.OnChangeAutoEditMode)
-                .AddTo(this.gameObject);
-
+        private void BindForRhythmConfig()
+        {
             // リズムコンフィグ(小節線)のクリック
             dataGetter_model?.RhythmConfigurableBar
                 .Where(value => value != null)
@@ -131,6 +121,31 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
         }
 
+        private void BindForEditView()
+        {
+            // ツールボタン
+            foreach (var button in toolButtons_view)
+            {
+                button.Bind(dataGetter_model.CurrentEditMode, this.gameObject);
+            }
+
+            // ノートボタン
+            foreach (var button in noteButtons_view)
+            {
+                button.Bind(dataGetter_model.DeploymentNoteType, this.gameObject);
+            }
+
+            // ノーツビューの可視不可視
+            dataGetter_model?.CurrentEditMode
+                .Subscribe(notesViewport_view.OnChangeEditMode)
+                .AddTo(this.gameObject);
+
+            // オートエディットモードの変更
+            dataGetter_model?.AutoEditMode
+                .Subscribe(autoEditModeButton_view.OnChangeAutoEditMode)
+                .AddTo(this.gameObject);
+        }
+
         private void SetEvent()
         {
             // ツールボタン
@@ -157,6 +172,9 @@ namespace ChartEditor
 
             // オフセットフィールド
             offsetInputField_view.OnValueChangedListner += dataSetter_model.SetOffset;
+
+            // レーン分割数
+            changeLaneDivNumButton_view.OnButtonClickedListener += () => dataSetter_model.SetLaneDivisionNum(true);
 
             // エクスポートボタン
             exportButton_view.OnClickedListner += () => chartExporter.Export(dataGetter_model.ChartData.Value, dataGetter_model.Offset.Value);

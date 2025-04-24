@@ -173,12 +173,20 @@ namespace ChartEditor
         ReactiveProperty<int> laneDivisionNum = new ReactiveProperty<int>(4);
         IReadOnlyReactiveProperty<int> IChartEditorDataGetter.LaneDivisionNum => laneDivisionNum;
 
-        void IChartEditorDataSetter.SetLaneDivisionNum(int num)
+        void IChartEditorDataSetter.SetLaneDivisionNum(bool isNext)
         {
-            // 乗数かどうかの判定をする、ビット演算子を使う、賢い
-            if (num < 0 || (num & (num - 1)) != 0) { return; }
+            int num = laneDivisionNum.Value;
 
-            laneDivisionNum.Value = Mathf.Clamp(num, 0, 16);
+            // 最大値の時1に戻す
+            if (num >= 16 && isNext) { laneDivisionNum.Value = 1; }
+            // 最小値の時16にする
+            else if (num <= 1 && !isNext) { laneDivisionNum.Value = 16; }
+            // *2
+            else if (isNext && num > 0 && (num & (num - 1)) == 0) { laneDivisionNum.Value = num * 2; }
+            // ÷2
+            else if (!isNext && num > 0 && (num & (num - 1)) == 0) { laneDivisionNum.Value = num / 2; }
+            // それ以外の時1に戻す
+            else { laneDivisionNum.Value = 1; }
         }
 
         #endregion
@@ -290,7 +298,7 @@ namespace ChartEditor
 
         void SetPlaybackProgress(float value);
 
-        void SetLaneDivisionNum(int num);
+        void SetLaneDivisionNum(bool isNext);
 
         void SetChartViewScale(float scale);
 
