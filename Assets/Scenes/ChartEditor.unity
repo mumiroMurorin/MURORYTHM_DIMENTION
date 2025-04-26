@@ -8448,6 +8448,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorInteracter:
     obj: {fileID: 1038807069}
+  noteDataList:
+  - rid: 4659756163197042688
+  - rid: 4659756163197042689
+  - rid: 4659756163197042690
+  - rid: 4659756163197042691
   notes:
   - noteType: 0
     noteObject: {fileID: 5475620226950634511, guid: a3e1d74dfae71aa458e010bbb30b2e2a, type: 3}
@@ -8457,6 +8462,21 @@ MonoBehaviour:
     noteObject: {fileID: 5475620226950634511, guid: c2b8d046c25504b469dd1cbcc3247b65, type: 3}
   - noteType: 3
     noteObject: {fileID: 5475620226950634511, guid: 770935c34230ed34c9308bc8ab93a437, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 4659756163197042688
+      type: {class: NoteData_Touch, ns: ChartEditor, asm: Assembly-CSharp}
+      data: 
+    - rid: 4659756163197042689
+      type: {class: NoteData_DynamicUpward, ns: ChartEditor, asm: Assembly-CSharp}
+      data: 
+    - rid: 4659756163197042690
+      type: {class: NoteData_DynamicLeftward, ns: ChartEditor, asm: Assembly-CSharp}
+      data: 
+    - rid: 4659756163197042691
+      type: {class: NoteData_DynamicRightward, ns: ChartEditor, asm: Assembly-CSharp}
+      data: 
 --- !u!1 &1281706906
 GameObject:
   m_ObjectHideFlags: 0

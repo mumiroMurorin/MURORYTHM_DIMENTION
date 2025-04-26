@@ -367,7 +367,7 @@ namespace ChartConvert
     /// </summary>
     public interface INoteDataConvertable
     {
-        bool CheckAndAddDataForOrigin(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin);
+        bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin);
 
         bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing);
     }
@@ -379,7 +379,7 @@ namespace ChartConvert
     {
         readonly DeploymentNoteType type = DeploymentNoteType.TouchNote;
 
-        public bool CheckAndAddDataForOrigin(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
             if(noteDataInEditor.NoteType != type) { return false; }
 
@@ -425,7 +425,7 @@ namespace ChartConvert
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundUpward;
 
-        public bool CheckAndAddDataForOrigin(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
             if (noteDataInEditor.NoteType != type) { return false; }
 
@@ -471,7 +471,7 @@ namespace ChartConvert
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundRightward;
 
-        public bool CheckAndAddDataForOrigin(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
             if (noteDataInEditor.NoteType != type) { return false; }
 
@@ -518,7 +518,7 @@ namespace ChartConvert
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundLeftward;
 
-        public bool CheckAndAddDataForOrigin(NoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
             if (noteDataInEditor.NoteType != type) { return false; }
 

@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using UniRx;
+using ChartEditor;
 
 namespace ChartEditor
 {
     public class NoteDeployer : MonoBehaviour
     {
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
+
+        // SubclassSelectorを自作クラスの中にいれると上手く動作しないので苦肉の策
+        [Tooltip("ノートデータ(抽象クラス)")]
+        [SerializeReference, SubclassSelector] IGroundNoteData[] noteDataList;
         [SerializeField] NoteTypeToNoteObject[] notes;
 
         IDeployableObject deployingNote;
         IChartEditorDataGetter chartEditorDataGetter;
-        NoteData deployingNoteData;
+        IGroundNoteData deployingNoteData;
         bool isDeployedTentative;
 
         [Inject]
@@ -107,7 +112,7 @@ namespace ChartEditor
                 return;
             }
 
-            deployingNoteData = new NoteData() { NoteType = chartEditorDataGetter.DeploymentNoteType.Value };
+            deployingNoteData = GetNoteData(chartEditorDataGetter.DeploymentNoteType.Value);
             deployable.OnInstantiate(deployingNoteData, GetNoteParentTransform);
 
             deployingNote = deployable;
@@ -146,16 +151,31 @@ namespace ChartEditor
             return chartEditorDataGetter.ChartData.Value.GetPlacementLocation(address);
         }
 
-        [System.Serializable]
-        public class NoteTypeToNoteObject
+        private IGroundNoteData GetNoteData(DeploymentNoteType noteType)
         {
-            [SerializeField] DeploymentNoteType noteType;
-            [SerializeField] GameObject noteObject;
+            foreach(var data in noteDataList)
+            {
+                if(data.NoteType == noteType) 
+                {
+                    return data.Copy();
+                }
+            }
 
-            public DeploymentNoteType DeploymentNoteType { get { return noteType; } }
-
-            public GameObject NoteObject { get { return noteObject; } }
+            Debug.LogWarning($"【System】{noteType}に対応する抽象クラスがありません");
+            return null;
         }
+
+    }
+
+    [System.Serializable]
+    public class NoteTypeToNoteObject
+    {
+        [SerializeField] DeploymentNoteType noteType;
+        [SerializeField] GameObject noteObject;
+
+        public DeploymentNoteType DeploymentNoteType { get { return noteType; } }
+
+        public GameObject NoteObject { get { return noteObject; } }
     }
 }
 

@@ -7,87 +7,6 @@ using System.Linq;
 namespace ChartEditor
 {
     /// <summary>
-    /// 配置ノーツデータ
-    /// </summary>
-    public class NoteData
-    {
-        public DeploymentNoteType NoteType { get; set; }
-
-        public AddressInChart Address { get; private set; }
-
-        /// <summary>
-        /// 配置範囲 (基本0～15)
-        /// </summary>
-        ReactiveCollection<float> range = new ReactiveCollection<float>() { 0 };
-
-        /// <summary>
-        /// ノーツの移動、拡大縮小の監視
-        /// </summary>
-        public IReadOnlyReactiveCollection<float> Range { get { return range; } }
-
-        public void SetRange(List<float> range)
-        {
-            this.range.Clear(); 
-
-            foreach(float index in range)
-            {
-                this.range.Add(index);
-            }
-
-            Address.SetSliderIndex(this.range.First());
-        }
-
-        public void ChangeRange(float index, bool isRightAnchored)
-        {
-            List<float> shifted = new List<float>();
-            float min = range.First();
-            float max = range.Last();
-
-            // 右固定で左側とindexが一緒のとき返す
-            if (isRightAnchored && (int)min == index) { return; }
-            // 左固定で右側とindexが一緒のとき返す
-            if (!isRightAnchored && (int)max == index) { return; }
-
-            // 右固定で左側に伸ばす
-            if(isRightAnchored && index <= max)
-            {
-                for (float i = index; i <= max; i++) { shifted.Add(i); }
-            }
-            // 左固定で右側に伸ばす
-            else if (!isRightAnchored && index >= min) 
-            {
-                for (float i = min; i <= index; i++) { shifted.Add(i); }
-            }
-            else
-            {
-                return;
-            }
-
-            SetRange(shifted);
-            LogUI.Instance.Log($"【拡大】\n range:{string.Join(",", range)}");
-        }
-
-        public void SetAddress(AddressInChart address)
-        {
-            // 同じアドレスなら返す
-            if (Address != null && Address.IsSameAddress(address)) { return; }
-
-            if (Address == null) { Address = address.Copy(); }
-            else 
-            {
-                LogUI.Instance.Log($"【移動】:\n #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
-                Address.SetSameAddress(address);
-            }
-
-            int startIndex = (int)address.SliderIndex;
-            List<float> currentRange = range.ToList();
-            List<float> shifted = currentRange.Select(i => i - currentRange[0] + startIndex).ToList();
-
-            SetRange(shifted);
-        }
-    }
-
-    /// <summary>
     /// 分線のデータ
     /// </summary>
     public class SubDivisionDataInBeat
@@ -109,19 +28,19 @@ namespace ChartEditor
         /// <summary>
         /// その分線に配置されたノーツのデータ
         /// </summary>
-        ReactiveCollection<NoteData> noteDatas = new ReactiveCollection<NoteData>();
+        ReactiveCollection<IGroundNoteData> noteDatas = new ReactiveCollection<IGroundNoteData>();
 
         /// <summary>
         /// ノーツの追加、削除の監視用
         /// </summary>
-        public IReadOnlyReactiveCollection<NoteData> NoteDatas => noteDatas;
+        public IReadOnlyReactiveCollection<IGroundNoteData> NoteDatas => noteDatas;
 
-        public void AddNote(NoteData noteData)
+        public void AddNote(IGroundNoteData noteData)
         {
             noteDatas.Add(noteData);
         }
 
-        public bool RemoveNote(NoteData noteData)
+        public bool RemoveNote(IGroundNoteData noteData)
         {
             return noteDatas.Remove(noteData);
         }
@@ -341,7 +260,7 @@ namespace ChartEditor
         /// <summary>
         /// ノーツを追加する
         /// </summary>
-        public void AddNote(NoteData noteData, AddressInChart address)
+        public void AddNote(IGroundNoteData noteData, AddressInChart address)
         {
             // 新たな場所に追加
             SubDivisionDataInBeat newSubDivision = BarDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
@@ -354,7 +273,7 @@ namespace ChartEditor
         /// <summary>
         /// ノーツを削除する
         /// </summary>
-        public void RemoveNote(NoteData noteData)
+        public void RemoveNote(IGroundNoteData noteData)
         {
             AddressInChart address = noteData.Address;
             SubDivisionDataInBeat subDivision = barDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
@@ -375,7 +294,7 @@ namespace ChartEditor
         /// <param name="noteData"></param>
         /// <param name="newAddress"></param>
         /// <returns></returns>
-        public bool ChangeNoteAddress(NoteData noteData, AddressInChart newAddress)
+        public bool ChangeNoteAddress(IGroundNoteData noteData, AddressInChart newAddress)
         {
             AddressInChart oldAddress = noteData.Address;
 

@@ -13,7 +13,7 @@ namespace ChartEditor
 
         public Action<float> OnSliderChangedListener;
 
-        private void Start()
+        private void Awake()
         {
             slider = GetComponent<Slider>();
         }

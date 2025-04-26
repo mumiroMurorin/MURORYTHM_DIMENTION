@@ -20,7 +20,7 @@ namespace ChartEditor
         [SerializeField] private Collider[] colliders;
         [SerializeField] private OutlineBehaviour outline;
 
-        public NoteData NoteData { get; set; }
+        public IGroundNoteData NoteData { get; set; }
 
         public Func<AddressInChart, Transform> GetParentTransformFunc;
 
