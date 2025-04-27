@@ -126,6 +126,13 @@ namespace ChartEditor
             data.SetRange(this.range.ToList());
             return data;
         }
+
+        public IConnectableObject NoteObject { get; private set; }
+
+        public void SetNoteObject(IConnectableObject noteObject)
+        {
+            NoteObject = noteObject;
+        }
     }
 
 }

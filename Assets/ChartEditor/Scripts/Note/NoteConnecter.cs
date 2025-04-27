@@ -88,8 +88,6 @@ namespace ChartEditor
                 // “¯‚¶ƒm[ƒg‚Í’Ç‰Á‚Å‚«‚È‚¢
                 if (comparisonNote == addNote) { return; }
 
-                Debug.Log($"{addNote}, {comparisonNote}");
-
                 addNote.SetNextNote(comparisonNote);
                 comparisonNote.SetBackNote(addNote);
                 return;

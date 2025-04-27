@@ -107,6 +107,7 @@ namespace ChartEditor
         /// </summary>
         ReactiveProperty<IGroundChainNoteData> backNote = new ReactiveProperty<IGroundChainNoteData>();
         public IReadOnlyReactiveProperty<IGroundChainNoteData> BackNote => backNote;
+
         public void SetBackNote(IGroundChainNoteData backNote)
         {
             this.backNote.Value = backNote;
@@ -122,6 +123,13 @@ namespace ChartEditor
 
             data.SetRange(this.range.ToList());
             return data;
+        }
+
+        public IConnectableObject NoteObject { get; private set; }
+
+        public void SetNoteObject(IConnectableObject noteObject)
+        {
+            NoteObject = noteObject;
         }
     }
 

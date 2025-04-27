@@ -113,6 +113,13 @@ namespace ChartEditor
             }
 
             deployingNoteData = GetNoteData(chartEditorDataGetter.DeploymentNoteType.Value);
+
+            // チェインノーツのときデータセット
+            if(deployingNoteData is IGroundChainNoteData)
+            {
+                ((IGroundChainNoteData)deployingNoteData).SetNoteObject(obj.GetComponent<IConnectableObject>());
+            }
+
             deployable.OnInstantiate(deployingNoteData, GetNoteParentTransform);
 
             deployingNote = deployable;

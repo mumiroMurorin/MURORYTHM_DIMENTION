@@ -108,6 +108,10 @@ namespace ChartEditor
 
     public interface IConnectableObject
     {
+        Transform MeshRightEdge { get; }
+
+        Transform MeshLeftEdge { get; }
+
         NoteObject Note { get; }
 
     }

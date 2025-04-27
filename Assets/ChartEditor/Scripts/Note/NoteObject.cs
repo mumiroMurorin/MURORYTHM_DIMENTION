@@ -22,7 +22,7 @@ namespace ChartEditor
 
         public IGroundNoteData NoteData { get; set; }
 
-        public Func<AddressInChart, Transform> GetParentTransformFunc;
+        public Func<AddressInChart, Transform> GetParentTransformFunc { get; set; }
 
         CancellationTokenSource cts;
         

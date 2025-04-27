@@ -27,6 +27,8 @@ namespace ChartEditor
 
     public interface IGroundChainNoteData: IGroundNoteData
     {
+        IConnectableObject NoteObject { get; }
+
         IReadOnlyReactiveProperty<IGroundChainNoteData> NextNote { get; }
 
         IReadOnlyReactiveProperty<IGroundChainNoteData> BackNote { get; }
@@ -34,5 +36,7 @@ namespace ChartEditor
         void SetNextNote(IGroundChainNoteData nextNote);
 
         void SetBackNote(IGroundChainNoteData backNote);
+
+        void SetNoteObject(IConnectableObject noteObject);
     }
 }
