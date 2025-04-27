@@ -35,6 +35,7 @@ namespace ChartEditor
 
         /// <summary>
         /// エディットモードの更新
+        /// そのコライダーの一番上にあるInteractableColliderのEditModeが反映される
         /// </summary>
         private void SetEditorMode()
         {
@@ -44,6 +45,8 @@ namespace ChartEditor
             if (raycastEditMode == EditMode.None) { return; }
             // 削除モード中は無効
             if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.Destroy) { return; }
+            // ノーツ接続中は無効
+            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.Connecting) { return; }
             // オートモード中じゃなければ無効
             if (!chartEditorDataGetter.AutoEditMode.Value) { return; }
 
@@ -85,8 +88,21 @@ namespace ChartEditor
                 return;
             }
 
+            UpdateDeployableObject(obj);
+            UpdateMovableObject(obj);
+            UpdateScalableObject(obj);
+            UpdateConnectableObject(obj);
+            UpdateDestroyableObject(obj);
+            UpdateRhythmConfigurableCollider(obj);
+        }
+
+
+        #region UpdateObjectFunc
+
+        private void UpdateDeployableObject(GameObject obj)
+        {
             // ノーツ配置場所の更新
-            if(obj.TryGetComponent(out IDeployableCollider deployable))
+            if (obj.TryGetComponent(out IDeployableCollider deployable))
             {
                 chartEditorDataSetter.SetDeployableCollider(deployable);
             }
@@ -94,7 +110,10 @@ namespace ChartEditor
             {
                 chartEditorDataSetter.SetDeployableCollider(null);
             }
+        }
 
+        private void UpdateMovableObject(GameObject obj)
+        {
             // インタラクトされているノーツの更新 (移動)
             if (obj.TryGetComponent(out IMovableCollider movable))
             {
@@ -104,7 +123,10 @@ namespace ChartEditor
             {
                 chartEditorDataSetter.SetMovableObject(null);
             }
+        }
 
+        private void UpdateScalableObject(GameObject obj)
+        {
             // インタラクトされているノーツの更新 (拡大縮小)
             if (obj.TryGetComponent(out IScalableCollider scalable))
             {
@@ -114,7 +136,23 @@ namespace ChartEditor
             {
                 chartEditorDataSetter.SetScalableObject(null, chartEditorDataGetter.IsRightAnchored);
             }
+        }
 
+        private void UpdateConnectableObject(GameObject obj)
+        {
+            // インタラクトされているノーツの更新 (拡大縮小)
+            if (obj.TryGetComponent(out IConnectableCollider connectable))
+            {
+                chartEditorDataSetter.SetConnectableObject(connectable.Note);
+            }
+            else
+            {
+                chartEditorDataSetter.SetConnectableObject(null);
+            }
+        }
+
+        private void UpdateDestroyableObject(GameObject obj)
+        {
             // インタラクトされているノーツの更新 (削除)
             if (obj.TryGetComponent(out IDestroyableCollider destroyable))
             {
@@ -124,7 +162,10 @@ namespace ChartEditor
             {
                 chartEditorDataSetter.SetDestroyableObject(null);
             }
+        }
 
+        private void UpdateRhythmConfigurableCollider(GameObject obj)
+        {
             // インタラクトされているRhythmConfigurableColliderの更新
             // あんまりよくないけどクリック処理もここでやっちゃう
             if (obj.TryGetComponent(out IRhythmConfigurableBarCollider configurableBar))
@@ -137,6 +178,9 @@ namespace ChartEditor
                 if (Input.GetMouseButtonDown(0)) { chartEditorDataSetter.SetRhythmConfigurableSubDivision(configurableSub); }
             }
         }
+
+        #endregion
+
 
         /// <summary>
         /// カーソルに乗っかっているオブジェクトを返す

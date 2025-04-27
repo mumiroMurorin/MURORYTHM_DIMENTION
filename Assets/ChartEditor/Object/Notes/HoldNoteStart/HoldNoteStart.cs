@@ -6,15 +6,15 @@ using UniRx;
 
 namespace ChartEditor
 {
-    public class DynamicNoteUpward : NoteObject
+    public class HoldNoteStart : NoteObject
     {
         
     }
 
     [System.Serializable]
-    public class NoteData_DynamicUpward : IGroundNoteData
+    public class NoteData_HoldStart : IGroundChainNoteData
     {
-        public DeploymentNoteType NoteType => DeploymentNoteType.DynamicGroundUpward;
+        public DeploymentNoteType NoteType => DeploymentNoteType.HoldStart;
 
         public AddressInChart Address { get; private set; } = new AddressInChart();
 
@@ -89,15 +89,43 @@ namespace ChartEditor
             SetRange(shifted);
         }
 
+        /// <summary>
+        /// 次のノーツ
+        /// </summary>
+        ReactiveProperty<IGroundChainNoteData> nextNote = new ReactiveProperty<IGroundChainNoteData>();
+        public IReadOnlyReactiveProperty<IGroundChainNoteData> NextNote => nextNote;
+        public void SetNextNote(IGroundChainNoteData nextNote)
+        {
+            this.nextNote.Value = nextNote;
+        }
+
+        /// <summary>
+        /// 前のノーツ
+        /// </summary>
+        ReactiveProperty<IGroundChainNoteData> backNote = null;
+        public IReadOnlyReactiveProperty<IGroundChainNoteData> BackNote => backNote;
+        public void SetBackNote(IGroundChainNoteData backNote)
+        {
+            // 始点に前ノーツは存在しないので返す
+            return;
+
+            //this.backNote.Value = backNote;
+        }
+
+        /// <summary>
+        /// コピー
+        /// </summary>
+        /// <returns></returns>
         public IGroundNoteData Copy()
         {
-            var data = new NoteData_DynamicUpward
+            var data = new NoteData_HoldStart
             {
-                Address = this.Address.Copy()
+                Address = this.Address.Copy()   
             };
 
             data.SetRange(this.range.ToList());
             return data;
         }
     }
+
 }

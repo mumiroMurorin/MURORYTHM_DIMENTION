@@ -16,7 +16,7 @@ namespace ChartEditor
     {
         public DeploymentNoteType NoteType => DeploymentNoteType.DynamicGroundLeftward;
 
-        public AddressInChart Address { get; private set; }
+        public AddressInChart Address { get; private set; } = new AddressInChart();
 
         /// <summary>
         /// ”z’u”ÍˆÍ (Šî–{0`15)
@@ -89,6 +89,16 @@ namespace ChartEditor
             SetRange(shifted);
         }
 
+        public IGroundNoteData Copy()
+        {
+            var data = new NoteData_DynamicLeftward
+            {
+                Address = this.Address.Copy()
+            };
+
+            data.SetRange(this.range.ToList());
+            return data;
+        }
     }
 
 }

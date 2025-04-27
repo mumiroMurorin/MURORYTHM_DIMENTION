@@ -101,6 +101,17 @@ namespace ChartEditor
         void OnDestroy();
     }
 
+    public interface IConnectableCollider
+    {
+        IConnectableObject Note { get; }
+    }
+
+    public interface IConnectableObject
+    {
+        NoteObject Note { get; }
+
+    }
+
     public interface IJudgeStackingCollider
     {
         DeploymentNoteType NoteType { get; }

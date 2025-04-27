@@ -16,7 +16,7 @@ namespace ChartEditor
     {
         public DeploymentNoteType NoteType => DeploymentNoteType.TouchNote;
 
-        public AddressInChart Address { get; private set; }
+        public AddressInChart Address { get; private set; } = new AddressInChart();
 
         /// <summary>
         /// ”z’u”ÍˆÍ (Šî–{0`15)
