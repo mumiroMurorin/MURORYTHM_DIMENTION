@@ -45,7 +45,7 @@ namespace ChartEditor
             // ŽŸƒm[ƒc‚ª•Ï‚í‚Á‚½Žž
             data.NextNote?
                 .Where(next => next != null)
-                .Subscribe(next => GenerateMesh(next.NoteObject.MeshLeftEdge.position, next.NoteObject.MeshRightEdge.position))
+                .Subscribe(next => GenerateMesh(next.NoteObject.MeshRightEdge.position, next.NoteObject.MeshLeftEdge.position))
                 .AddTo(this.gameObject);
         }
 
@@ -58,13 +58,17 @@ namespace ChartEditor
             meshObject = new GameObject("Mesh");
             MeshFilter meshFilter = meshObject.AddComponent<MeshFilter>();
             MeshRenderer meshRenderer = meshObject.AddComponent<MeshRenderer>();
-            Debug.Log(string.Join(",", new List<Vector3>() { meshRightEdge.position, meshLeftEdge.position, nextLeft, nextRight }));
-            Mesh mesh = MeshGenerator.GenerateMesh(new List<Vector3>() { meshRightEdge.position, meshLeftEdge.position, nextLeft, nextRight });
+            Mesh mesh = MeshGenerator.GenerateMesh(
+                meshLeftEdge.position,
+                nextLeft,
+                nextRight,
+                meshRightEdge.position
+                );
             meshFilter.mesh = mesh;
 
             meshRenderer.material = meshMaterial;
             meshObject.transform.SetParent(origin.transform);
-            meshObject.transform.localScale = Vector3.one;
+            //meshObject.transform.localScale = Vector3.one;
         }
 
         private void OnDestroy()

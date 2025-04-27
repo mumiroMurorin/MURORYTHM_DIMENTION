@@ -63,6 +63,35 @@ namespace MeshGenerate
         }
 
         /// <summary>
+        /// 4点からメッシュを生成する
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public static Mesh GenerateMesh(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
+        {
+            var mesh = new Mesh();
+
+            mesh.vertices = new[] { a, b, c, d };
+            mesh.triangles = new[] { 0, 1, 2, 2, 3, 0 };
+
+            mesh.uv = new[]
+            {
+                new Vector2(0f, 0f), // a
+                new Vector2(1f, 0f), // b
+                new Vector2(1f, 1f), // c
+                new Vector2(0f, 1f)  // d
+            };
+
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+
+            return mesh;
+        }
+
+        /// <summary>
         /// グラウンド沿いのメッシュを生成する
         /// </summary>
         /// <returns></returns>
