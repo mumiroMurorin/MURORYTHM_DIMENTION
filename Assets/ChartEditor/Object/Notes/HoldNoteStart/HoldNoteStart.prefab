@@ -582,7 +582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshMaterial: {fileID: 2100000, guid: 645475578082a8f42bb7a16def63a846, type: 2}
-  origin: {fileID: 2150781262789464597}
+  meshHeight: 0.01
   meshRightEdge: {fileID: 7471558287435797446}
   meshLeftEdge: {fileID: 3465726226268142789}
 --- !u!1 &6988801563116920244

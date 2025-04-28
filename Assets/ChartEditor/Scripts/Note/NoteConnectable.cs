@@ -12,7 +12,7 @@ namespace ChartEditor
     public class NoteConnectable : MonoBehaviour, IConnectableObject
     {
         [SerializeField] Material meshMaterial;
-        [SerializeField] GameObject origin;
+        [SerializeField] float meshHeight = 0.01f;
         [SerializeField] Transform meshRightEdge;
         [SerializeField] Transform meshLeftEdge;
 
@@ -22,6 +22,7 @@ namespace ChartEditor
         NoteObject noteObject;
         NoteObject IConnectableObject.Note => noteObject;
 
+        bool isSubscribedThisNote;
         GameObject meshObject;
         CancellationTokenSource cts = new CancellationTokenSource();
 
@@ -39,35 +40,84 @@ namespace ChartEditor
             // ノートデータが存在するまで待つ
             await UniTask.WaitUntil(() => noteObject.NoteData.Address != null, cancellationToken: token);
 
-            if(noteObject.NoteData is not IGroundChainNoteData) { return; }
+            // IGroundChainNoteDataに変換
+            if (noteObject.NoteData is not IGroundChainNoteData) { return; }
             var data = (IGroundChainNoteData)(noteObject.NoteData);
 
-            // 次ノーツが変わった時
+            // 次ノーツが変わった時購読しなおす
             data.NextNote?
                 .Where(next => next != null)
-                .Subscribe(next => GenerateMesh(next.NoteObject.MeshRightEdge.position, next.NoteObject.MeshLeftEdge.position))
+                .Subscribe(next => {
+                    BindForThisNote(data);
+                    BindForNextNote(next);
+                })
                 .AddTo(this.gameObject);
+        }
+
+        /// <summary>
+        /// このノーツに対するバインド
+        /// </summary>
+        /// <param name="thisNote"></param>
+        private void BindForThisNote(IGroundChainNoteData thisNote)
+        {
+            if (isSubscribedThisNote) { return; }
+            if (thisNote.NextNote == null) { return; }
+            if (thisNote.NextNote.Value == null) { return; }
+            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
+            
+            // 2フレームごとに位置が変わってないかチェック
+            Observable.IntervalFrame(2)
+                .Select(_ => meshLeftEdge.position)
+                .DistinctUntilChanged()
+                .Subscribe(_ => GenerateMesh(nextNote.NoteObject.MeshRightEdge.position, nextNote.NoteObject.MeshLeftEdge.position))
+                .AddTo(this);
+
+            Observable.IntervalFrame(2)
+                .Select(_ => meshRightEdge.position)
+                .DistinctUntilChanged()
+                .Subscribe(_ => GenerateMesh(nextNote.NoteObject.MeshRightEdge.position, nextNote.NoteObject.MeshLeftEdge.position))
+                .AddTo(this);
+
+            isSubscribedThisNote = true;
+        }
+
+        /// <summary>
+        /// 次ノーツに対するバインド
+        /// </summary>
+        /// <param name="nextNote"></param>
+        private void BindForNextNote(IGroundChainNoteData nextNote)
+        {
+            // 2フレームごとに位置が変わってないかチェック
+            Observable.IntervalFrame(2)
+                .Select(_ => nextNote.NoteObject.MeshLeftEdge.position)
+                .DistinctUntilChanged()
+                .Subscribe(_ => GenerateMesh(nextNote.NoteObject.MeshRightEdge.position, nextNote.NoteObject.MeshLeftEdge.position))
+                .AddTo(this);
+
+            Observable.IntervalFrame(2)
+                .Select(_ => nextNote.NoteObject.MeshRightEdge.position)
+                .DistinctUntilChanged()
+                .Subscribe(_ => GenerateMesh(nextNote.NoteObject.MeshRightEdge.position, nextNote.NoteObject.MeshLeftEdge.position))
+                .AddTo(this);
         }
 
         private void GenerateMesh(Vector3 nextRight, Vector3 nextLeft)
         {
             if(meshObject != null) { Destroy(meshObject); }
 
-            Debug.Log("きちゃ～");
-
             meshObject = new GameObject("Mesh");
             MeshFilter meshFilter = meshObject.AddComponent<MeshFilter>();
             MeshRenderer meshRenderer = meshObject.AddComponent<MeshRenderer>();
             Mesh mesh = MeshGenerator.GenerateMesh(
-                meshLeftEdge.position,
-                nextLeft,
-                nextRight,
-                meshRightEdge.position
+                new Vector3(meshLeftEdge.position.x, meshHeight, meshLeftEdge.position.z),
+                new Vector3(nextLeft.x, meshHeight, nextLeft.z),
+                new Vector3(nextRight.x, meshHeight, nextRight.z),
+                new Vector3(meshRightEdge.position.x, meshHeight, meshRightEdge.position.z)
                 );
             meshFilter.mesh = mesh;
 
             meshRenderer.material = meshMaterial;
-            meshObject.transform.SetParent(origin.transform);
+            meshObject.transform.SetParent(noteObject.transform);
             //meshObject.transform.localScale = Vector3.one;
         }
 
