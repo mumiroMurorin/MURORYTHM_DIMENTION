@@ -111,9 +111,14 @@ namespace ChartEditor
             if (comparisonNote.BackNote == null && !comparisonNote.Address.IsEarlierThan(addNote.Address)) { return; }
 
             // データをセット
-            Debug.Log($"{addNote}, {comparisonNote}");
+            Debug.Log(addNote + "," + comparisonNote);
+            // 次ノーツの前ノーツ → 追加ノーツ
+            comparisonNote.NextNote?.Value?.SetBackNote(addNote);
+            // 追加ノーツの次ノーツ → 次ノーツ
             addNote.SetNextNote(comparisonNote.NextNote.Value);
+            // 追加ノーツの前ノーツ → 前ノーツ
             addNote.SetBackNote(comparisonNote); 
+            // 前ノーツの次ノーツ → 追加ノーツ
             comparisonNote.SetNextNote(addNote); 
         }
 

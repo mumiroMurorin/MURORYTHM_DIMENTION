@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using MeshGenerate;
@@ -22,8 +23,8 @@ namespace ChartEditor
         NoteObject noteObject;
         NoteObject IConnectableObject.Note => noteObject;
 
-        bool isSubscribedThisNote;
         GameObject meshObject;
+        List<IDisposable> nextNoteDisposables = new List<IDisposable>();
         CancellationTokenSource cts = new CancellationTokenSource();
 
         private void Start()
@@ -48,6 +49,7 @@ namespace ChartEditor
             data.NextNote?
                 .Where(next => next != null)
                 .Subscribe(next => {
+                    DisposeHoldMesh();
                     BindForThisNote(data);
                     BindForNextNote(next);
                 })
@@ -60,25 +62,25 @@ namespace ChartEditor
         /// <param name="thisNote"></param>
         private void BindForThisNote(IGroundChainNoteData thisNote)
         {
-            if (isSubscribedThisNote) { return; }
             if (thisNote.NextNote == null) { return; }
             if (thisNote.NextNote.Value == null) { return; }
             IGroundChainNoteData nextNote = thisNote.NextNote.Value;
-            
+
             // 2フレームごとに位置が変わってないかチェック
-            Observable.IntervalFrame(2)
+            var disposable1 = Observable.IntervalFrame(2)
                 .Select(_ => meshLeftEdge.position)
                 .DistinctUntilChanged()
                 .Subscribe(_ => GenerateMesh(nextNote.NoteObject.MeshRightEdge.position, nextNote.NoteObject.MeshLeftEdge.position))
                 .AddTo(this);
 
-            Observable.IntervalFrame(2)
+            var disposable2 = Observable.IntervalFrame(2)
                 .Select(_ => meshRightEdge.position)
                 .DistinctUntilChanged()
                 .Subscribe(_ => GenerateMesh(nextNote.NoteObject.MeshRightEdge.position, nextNote.NoteObject.MeshLeftEdge.position))
                 .AddTo(this);
 
-            isSubscribedThisNote = true;
+            nextNoteDisposables.Add(disposable1);
+            nextNoteDisposables.Add(disposable2);
         }
 
         /// <summary>
@@ -88,17 +90,35 @@ namespace ChartEditor
         private void BindForNextNote(IGroundChainNoteData nextNote)
         {
             // 2フレームごとに位置が変わってないかチェック
-            Observable.IntervalFrame(2)
+            var disposable1 = Observable.IntervalFrame(2)
                 .Select(_ => nextNote.NoteObject.MeshLeftEdge.position)
                 .DistinctUntilChanged()
                 .Subscribe(_ => GenerateMesh(nextNote.NoteObject.MeshRightEdge.position, nextNote.NoteObject.MeshLeftEdge.position))
                 .AddTo(this);
 
-            Observable.IntervalFrame(2)
+            var disposable2 = Observable.IntervalFrame(2)
                 .Select(_ => nextNote.NoteObject.MeshRightEdge.position)
                 .DistinctUntilChanged()
                 .Subscribe(_ => GenerateMesh(nextNote.NoteObject.MeshRightEdge.position, nextNote.NoteObject.MeshLeftEdge.position))
                 .AddTo(this);
+
+            nextNoteDisposables.Add(disposable1);
+            nextNoteDisposables.Add(disposable2);
+        }
+
+        /// <summary>
+        /// 次ノーツに対するバインドを消す
+        /// </summary>
+        private void DisposeHoldMesh()
+        {
+            if (meshObject != null) { Destroy(meshObject); }
+
+            foreach (var dis in nextNoteDisposables)
+            {
+                dis.Dispose();
+            }
+
+            nextNoteDisposables = new List<IDisposable>();
         }
 
         private void GenerateMesh(Vector3 nextRight, Vector3 nextLeft)
