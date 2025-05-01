@@ -54,7 +54,10 @@ namespace ChartConvert
         public List<NoteDataOrigin_DynamicUpward> DynamicUpwardData { get; set; }
         public List<NoteDataOrigin_DynamicRightward> DynamicRightwardData { get; set; }
         public List<NoteDataOrigin_DynamicLeftward> DynamicLeftwardData { get; set; }
-        public List<NoteDataOrigin_Hold> HoldData { get; set; }
+        public List<NoteDataOrigin_HoldStart> HoldStartData { get; set; }
+        public List<NoteDataOrigin_HoldEnd> HoldEndData { get; set; }
+        public List<NoteDataOrigin_HoldRelay> HoldRelayData { get; set; }
+        public List<NoteDataOrigin_HoldMesh> HoldMeshData { get; set; }
 
     }
 
@@ -80,9 +83,26 @@ namespace ChartConvert
         public int[] Range { get; set; }
     }
 
-    public class NoteDataOrigin_Hold
+    public class NoteDataOrigin_HoldStart
+    {
+        public int[] Range { get; set; }
+    }
+
+    public class NoteDataOrigin_HoldEnd
+    {
+        public int[] Range { get; set; }
+    }
+
+    public class NoteDataOrigin_HoldRelay
+    {
+        public int[] Range { get; set; }
+    }
+
+    public class NoteDataOrigin_HoldMesh
     {
         public int HoldNumber { get; set; }
+
+        public bool IsEnd { get; set; }
 
         public int[] Range { get; set; }
     }

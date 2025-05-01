@@ -146,7 +146,6 @@ namespace ChartEditor
         /// <param name="holdNoteType"></param>
         private void ChangeNoteMaterial(IGroundChainNoteData back, IGroundChainNoteData next)
         {
-            Debug.Log(back + "," + next);
             if (back != null && next != null) { noteMeshRenderer.material = relayMaterial; }
             else if (back != null && next == null) { noteMeshRenderer.material = endMaterial; }
             else if (back == null && next != null) { noteMeshRenderer.material = startMaterial; }

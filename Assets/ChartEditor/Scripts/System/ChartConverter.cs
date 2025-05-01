@@ -17,7 +17,10 @@ namespace ChartConvert
             new DynamicUpwardConverter(),
             new DynamicRightwardConverter(),
             new DynamicLeftwardConverter(),
-            new HoldConverter(),
+            new HoldStartConverter(),
+            new HoldRelayConverter(),
+            new HoldEndConverter(),
+            new HoldMeshConverter(),
         };
 
         public void Export(ChartEditor.ChartData chartData, float offset)
@@ -115,7 +118,7 @@ namespace ChartConvert
                     if (converter.CheckAndAddDataForOrigin(noteData, dataOrigin)) 
                     {
                         isSucceed_ = true;
-                        break;
+                        // break;
                     }
                 }
 
@@ -141,6 +144,10 @@ namespace ChartConvert
             new DynamicUpwardConverter(),
             new DynamicRightwardConverter(),
             new DynamicLeftwardConverter(),
+            new HoldStartConverter(),
+            new HoldRelayConverter(),
+            new HoldEndConverter(),
+            new HoldMeshConverter(),
         };
 
         public ChartData Import(ChartDataOrigin dataOrigin, INoteSpawnDataOptionHolder optionHolder)
@@ -559,50 +566,278 @@ namespace ChartConvert
     }
 
     /// <summary>
-    /// ホールドノーツ
+    /// ホールドスタートノーツ
     /// </summary>
-    public class HoldConverter : INoteDataConvertable
+    public class HoldStartConverter : INoteDataConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.Hold;
 
         public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
             if (noteDataInEditor.NoteType != type) { return false; }
+            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
+
+            IGroundChainNoteData backNote = ((IGroundChainNoteData)noteDataInEditor).BackNote.Value;
+            IGroundChainNoteData nextNote = ((IGroundChainNoteData)noteDataInEditor).NextNote.Value;
+            if (backNote != null) { return false; }
+            if (backNote == null && nextNote == null) { return false; }
+            if (backNote != null && nextNote != null) { return false; }
 
             // 新たにインスタンス化
-            if (dataOrigin.HoldData == null)
+            if (dataOrigin.HoldStartData == null)
             {
-                dataOrigin.HoldData = new List<NoteDataOrigin_Hold>();
+                dataOrigin.HoldStartData = new List<NoteDataOrigin_HoldStart>();
             }
 
             // 追加するデータのインスタンス化
-            NoteDataOrigin_Hold data = new NoteDataOrigin_Hold()
+            NoteDataOrigin_HoldStart data = new NoteDataOrigin_HoldStart()
             {
-                // ここにNumber処理を記述;
-                //HoldNumber = ,
                 Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
             };
 
-            dataOrigin.HoldData.Add(data);
+            dataOrigin.HoldStartData.Add(data);
             return true;
         }
 
         public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
-            if (dataOrigin.HoldData == null) { return true; }
+            if (dataOrigin.HoldStartData == null) { return true; }
 
-            //foreach (var noteOrigin in dataOrigin.HoldData)
-            //{
-            //    NoteData_Hold noteData = new NoteData_DynamicGroundLeftward
-            //    {
-            //        Range = (int[])noteOrigin.Range.Clone(),
-            //        Timing = timing
-            //    };
+            foreach (var noteOrigin in dataOrigin.HoldStartData)
+            {
+                NoteData_HoldStart noteData = new NoteData_HoldStart
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    Timing = timing
+                };
 
-            //    chartData.AddNoteData(noteData);
-            //}
+                chartData.AddNoteData(noteData);
+            }
 
             return true;
+        }
+    }
+
+    /// <summary>
+    /// ホールド中継ノーツ
+    /// </summary>
+    public class HoldRelayConverter : INoteDataConvertable
+    {
+        readonly DeploymentNoteType type = DeploymentNoteType.Hold;
+
+        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        {
+            if (noteDataInEditor.NoteType != type) { return false; }
+            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
+
+            IGroundChainNoteData backNote = ((IGroundChainNoteData)noteDataInEditor).BackNote.Value;
+            IGroundChainNoteData nextNote = ((IGroundChainNoteData)noteDataInEditor).NextNote.Value;
+            if (backNote == null && nextNote != null) { return false; }
+            if (backNote != null && nextNote == null) { return false; }
+
+            // 新たにインスタンス化
+            if (dataOrigin.HoldRelayData == null)
+            {
+                dataOrigin.HoldRelayData = new List<NoteDataOrigin_HoldRelay>();
+            }
+
+            // 追加するデータのインスタンス化
+            NoteDataOrigin_HoldRelay data = new NoteDataOrigin_HoldRelay()
+            {
+                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+            };
+
+            dataOrigin.HoldRelayData.Add(data);
+            return true;
+        }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (dataOrigin.HoldRelayData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.HoldRelayData)
+            {
+                NoteData_HoldRelay noteData = new NoteData_HoldRelay
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    Timing = timing
+                };
+
+                chartData.AddNoteData(noteData);
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// ホールドエンドノーツ
+    /// </summary>
+    public class HoldEndConverter : INoteDataConvertable
+    {
+        readonly DeploymentNoteType type = DeploymentNoteType.Hold;
+
+        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        {
+            if (noteDataInEditor.NoteType != type) { return false; }
+            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
+
+            IGroundChainNoteData backNote = ((IGroundChainNoteData)noteDataInEditor).BackNote.Value;
+            IGroundChainNoteData nextNote = ((IGroundChainNoteData)noteDataInEditor).NextNote.Value;
+            if (nextNote != null) { return false; }
+            if (backNote == null && nextNote == null) { return false; }
+            if (backNote != null && nextNote != null) { return false; }
+
+            // 新たにインスタンス化
+            if (dataOrigin.HoldEndData == null)
+            {
+                dataOrigin.HoldEndData = new List<NoteDataOrigin_HoldEnd>();
+            }
+
+            // 追加するデータのインスタンス化
+            NoteDataOrigin_HoldEnd data = new NoteDataOrigin_HoldEnd()
+            {
+                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+            };
+
+            dataOrigin.HoldEndData.Add(data);
+            return true;
+        }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (dataOrigin.HoldEndData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.HoldEndData)
+            {
+                NoteData_HoldEnd noteData = new NoteData_HoldEnd
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    Timing = timing
+                };
+
+                chartData.AddNoteData(noteData);
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// ホールドメッシュ
+    /// </summary>
+    public class HoldMeshConverter : INoteDataConvertable
+    {
+        readonly DeploymentNoteType type = DeploymentNoteType.Hold;
+
+        Dictionary<IGroundChainNoteData, int> nextNoteToNumber = new Dictionary<IGroundChainNoteData, int>();
+        int currentHoldNumber = 0;
+
+        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        {
+            if (noteDataInEditor.NoteType != type) { return false; }
+            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
+
+            IGroundChainNoteData backNote = ((IGroundChainNoteData)noteDataInEditor).BackNote.Value;
+            IGroundChainNoteData nextNote = ((IGroundChainNoteData)noteDataInEditor).NextNote.Value;
+
+            // 新たにインスタンス化
+            if (dataOrigin.HoldMeshData == null)
+            {
+                dataOrigin.HoldMeshData = new List<NoteDataOrigin_HoldMesh>();
+            }
+
+            // 前ノーツが無かった場合、新たに識別番号を作って登録する
+            if (!nextNoteToNumber.TryGetValue((IGroundChainNoteData)noteDataInEditor, out int number)) 
+            {
+                if(nextNote != null)
+                {
+                    nextNoteToNumber.Add(nextNote, currentHoldNumber);
+                    number = currentHoldNumber++;
+                }
+                else
+                {
+                    Debug.LogWarning("【Convert】次ノーツがないホールド始点が存在します");
+                    return false;
+                }
+            }
+            // 前ノーツ、次ノーツもある場合場合、NextNoteを更新する
+            else if(nextNote != null)
+            {
+                nextNoteToNumber.Remove((IGroundChainNoteData)noteDataInEditor);
+                nextNoteToNumber.Add(nextNote, number);
+            }
+
+            // 追加するデータのインスタンス化
+            NoteDataOrigin_HoldMesh data = new NoteDataOrigin_HoldMesh()
+            {
+                HoldNumber = number,
+                IsEnd = nextNote == null,
+                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+            };
+
+            dataOrigin.HoldMeshData.Add(data);
+            return true;
+        }
+
+        Dictionary<int, List<HoldMeshOriginAndTiming>> numberToHoldMeshDataOrigin = new Dictionary<int, List<HoldMeshOriginAndTiming>>();
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (dataOrigin.HoldMeshData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.HoldMeshData)
+            {
+                // 一度ディクショナリーに格納
+                List<HoldMeshOriginAndTiming> meshList; 
+                // ディクショナリーに登録されていなければ新規作成
+                if(!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber,out meshList))
+                {
+                    meshList = new List<HoldMeshOriginAndTiming>();
+                    numberToHoldMeshDataOrigin.Add(noteOrigin.HoldNumber, meshList);
+                }
+                meshList.Add(new HoldMeshOriginAndTiming { Data = noteOrigin, Timing = timing });
+
+                // 終点でなければ返す
+                if (!noteOrigin.IsEnd) { continue; }
+
+                // 変換して譜面データに代入
+                chartData.AddNoteData(GenerateNoteData_HoldMesh(numberToHoldMeshDataOrigin[noteOrigin.HoldNumber]));
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// List＜HoldMeshOriginAndTiming＞ → NoteData_HoldMesh
+        /// </summary>
+        /// <param name="meshDataList"></param>
+        /// <returns></returns>
+        private NoteData_HoldMesh GenerateNoteData_HoldMesh(List<HoldMeshOriginAndTiming> meshDataList)
+        {
+            var noteData = new NoteData_HoldMesh();
+            var timeToRanges = new List<TimeToRange>();
+
+            noteData.Timing = meshDataList[0].Timing;
+            noteData.TimeToRanges = timeToRanges;
+
+            // TimeToRangeに変換
+            foreach (var origin in meshDataList)
+            {
+                timeToRanges.Add(new TimeToRange { Range = origin.Data.Range.Select(x => (float)x).ToArray(), Timing = origin.Timing });
+            }
+
+            return noteData;
+        }
+
+        /// <summary>
+        /// NoteDataOrigin_HoldMesh と Timing のセット
+        /// </summary>
+        private class HoldMeshOriginAndTiming
+        {
+            public NoteDataOrigin_HoldMesh Data { get; set; }
+
+            public float Timing { get; set; }
         }
     }
 
