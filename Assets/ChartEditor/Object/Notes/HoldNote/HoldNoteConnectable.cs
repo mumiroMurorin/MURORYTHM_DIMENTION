@@ -10,10 +10,16 @@ using MeshGenerate;
 namespace ChartEditor
 {
     [RequireComponent(typeof(NoteObject))]
-    public class NoteConnectable : MonoBehaviour, IConnectableObject
+    public class HoldNoteConnectable : MonoBehaviour, IConnectableObject
     {
+        [Header("ノーツマテリアル")]
+        [SerializeField] Material startMaterial;
+        [SerializeField] Material relayMaterial;
+        [SerializeField] Material endMaterial;
         [SerializeField] Material meshMaterial;
+        [Space(40)]
         [SerializeField] float meshHeight = 0.01f;
+        [SerializeField] MeshRenderer noteMeshRenderer;
         [SerializeField] Transform meshRightEdge;
         [SerializeField] Transform meshLeftEdge;
 
@@ -52,6 +58,19 @@ namespace ChartEditor
                     DisposeHoldMesh();
                     BindForThisNote(data);
                     BindForNextNote(next);
+                })
+                .AddTo(this.gameObject);
+
+            // マテリアルの変更
+            data.NextNote?
+                .Subscribe(next => {
+                    ChangeNoteMaterial(data.BackNote.Value, next);
+                })
+                .AddTo(this.gameObject);
+
+            data.BackNote?
+                .Subscribe(back => {
+                    ChangeNoteMaterial(back, data.NextNote.Value);
                 })
                 .AddTo(this.gameObject);
         }
@@ -121,6 +140,19 @@ namespace ChartEditor
             nextNoteDisposables = new List<IDisposable>();
         }
 
+        /// <summary>
+        /// マテリアルの変更
+        /// </summary>
+        /// <param name="holdNoteType"></param>
+        private void ChangeNoteMaterial(IGroundChainNoteData back, IGroundChainNoteData next)
+        {
+            Debug.Log(back + "," + next);
+            if (back != null && next != null) { noteMeshRenderer.material = relayMaterial; }
+            else if (back != null && next == null) { noteMeshRenderer.material = endMaterial; }
+            else if (back == null && next != null) { noteMeshRenderer.material = startMaterial; }
+            else { noteMeshRenderer.material = relayMaterial; }
+        }
+
         private void GenerateMesh(Vector3 nextRight, Vector3 nextLeft)
         {
             if(meshObject != null) { Destroy(meshObject); }
@@ -138,7 +170,6 @@ namespace ChartEditor
 
             meshRenderer.material = meshMaterial;
             meshObject.transform.SetParent(noteObject.transform);
-            //meshObject.transform.localScale = Vector3.one;
         }
 
         private void OnDestroy()

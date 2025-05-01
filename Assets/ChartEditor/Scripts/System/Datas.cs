@@ -448,7 +448,6 @@ namespace ChartEditor
         DynamicGroundUpward,
         DynamicGroundRightward,
         DynamicGroundLeftward,
-        HoldStart,
-        HoldEnd,
+        Hold,
     }
 }

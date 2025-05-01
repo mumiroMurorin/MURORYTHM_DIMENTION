@@ -6,15 +6,15 @@ using UniRx;
 
 namespace ChartEditor
 {
-    public class HoldNoteEnd : NoteObject
+    public class HoldNote : NoteObject
     {
         
     }
 
     [System.Serializable]
-    public class NoteData_HoldEnd : IGroundChainNoteData
+    public class NoteData_Hold : IGroundChainNoteData
     {
-        public DeploymentNoteType NoteType => DeploymentNoteType.HoldEnd;
+        public DeploymentNoteType NoteType => DeploymentNoteType.Hold;
 
         public AddressInChart Address { get; private set; } = new AddressInChart();
 
@@ -89,17 +89,14 @@ namespace ChartEditor
             SetRange(shifted);
         }
 
-
         /// <summary>
         /// 次のノーツ
         /// </summary>
-        ReactiveProperty<IGroundChainNoteData> nextNote = null;
+        ReactiveProperty<IGroundChainNoteData> nextNote = new ReactiveProperty<IGroundChainNoteData>();
         public IReadOnlyReactiveProperty<IGroundChainNoteData> NextNote => nextNote;
         public void SetNextNote(IGroundChainNoteData nextNote)
         {
-            // 終点に次のノーツはない
-            return;
-            //this.nextNote.Value = nextNote;
+            this.nextNote.Value = nextNote;
         }
 
         /// <summary>
@@ -107,16 +104,18 @@ namespace ChartEditor
         /// </summary>
         ReactiveProperty<IGroundChainNoteData> backNote = new ReactiveProperty<IGroundChainNoteData>();
         public IReadOnlyReactiveProperty<IGroundChainNoteData> BackNote => backNote;
-
         public void SetBackNote(IGroundChainNoteData backNote)
         {
             this.backNote.Value = backNote;
         }
 
-
+        /// <summary>
+        /// コピー
+        /// </summary>
+        /// <returns></returns>
         public IGroundNoteData Copy()
         {
-            var data = new NoteData_HoldEnd
+            var data = new NoteData_Hold
             {
                 Address = this.Address.Copy()   
             };
