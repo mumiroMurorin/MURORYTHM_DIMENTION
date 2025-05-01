@@ -17,6 +17,7 @@ namespace ChartConvert
             new DynamicUpwardConverter(),
             new DynamicRightwardConverter(),
             new DynamicLeftwardConverter(),
+            new HoldConverter(),
         };
 
         public void Export(ChartEditor.ChartData chartData, float offset)
@@ -552,6 +553,54 @@ namespace ChartConvert
 
                 chartData.AddNoteData(noteData);
             }
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// ホールドノーツ
+    /// </summary>
+    public class HoldConverter : INoteDataConvertable
+    {
+        readonly DeploymentNoteType type = DeploymentNoteType.Hold;
+
+        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        {
+            if (noteDataInEditor.NoteType != type) { return false; }
+
+            // 新たにインスタンス化
+            if (dataOrigin.HoldData == null)
+            {
+                dataOrigin.HoldData = new List<NoteDataOrigin_Hold>();
+            }
+
+            // 追加するデータのインスタンス化
+            NoteDataOrigin_Hold data = new NoteDataOrigin_Hold()
+            {
+                // ここにNumber処理を記述;
+                //HoldNumber = ,
+                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+            };
+
+            dataOrigin.HoldData.Add(data);
+            return true;
+        }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (dataOrigin.HoldData == null) { return true; }
+
+            //foreach (var noteOrigin in dataOrigin.HoldData)
+            //{
+            //    NoteData_Hold noteData = new NoteData_DynamicGroundLeftward
+            //    {
+            //        Range = (int[])noteOrigin.Range.Clone(),
+            //        Timing = timing
+            //    };
+
+            //    chartData.AddNoteData(noteData);
+            //}
 
             return true;
         }

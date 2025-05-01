@@ -37,6 +37,8 @@ namespace ChartEditor
 
         void SetBackNote(IGroundChainNoteData backNote);
 
+        void AddChainNote(IGroundChainNoteData addNote);
+
         void SetNoteObject(IConnectableObject noteObject);
     }
 }

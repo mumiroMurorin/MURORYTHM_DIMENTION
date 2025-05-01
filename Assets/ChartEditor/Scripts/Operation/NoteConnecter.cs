@@ -40,8 +40,7 @@ namespace ChartEditor
             if (connectableObject.Note.NoteData is not IGroundChainNoteData) { return; }
 
             chartEditorDataSetter.SetEditMode(EditMode.Connecting);
-
-            UpdateStartNote((IGroundChainNoteData)connectableObject.Note.NoteData);
+            startNote = (IGroundChainNoteData)connectableObject.Note.NoteData;
         }
 
         /// <summary>
@@ -56,8 +55,7 @@ namespace ChartEditor
             if (connectableObject == null) { return; }
             if (connectableObject.Note.NoteData is not IGroundChainNoteData) { return; }
 
-            RegisterChainNote((IGroundChainNoteData)connectableObject.Note.NoteData);
-            UpdateStartNote(startNote);
+            startNote.AddChainNote((IGroundChainNoteData)connectableObject.Note.NoteData);
         }
 
         /// <summary>
@@ -72,53 +70,6 @@ namespace ChartEditor
             }
 
             startNote = note;
-        }
-
-        /// <summary>
-        /// ノーツデータを登録
-        /// </summary>
-        /// <param name="addNote"></param>
-        private void RegisterChainNote(IGroundChainNoteData addNote)
-        {
-            IGroundChainNoteData comparisonNote = startNote;
-
-            // 最初のノーツ以前のとき
-            if (!comparisonNote.Address.IsEarlierThan(addNote.Address))
-            {
-                // 同じノートは追加できない
-                if (comparisonNote == addNote) { return; }
-
-                addNote.SetNextNote(comparisonNote);
-                comparisonNote.SetBackNote(addNote);
-                return;
-            }
-
-            // 比較ノートが追加ノートの後続位置に来るまで繰り返す
-            while (comparisonNote.Address.IsEarlierThan(addNote.Address))
-            {
-                // 終点以降のノートは追加できない
-                if(comparisonNote.NextNote == null) { return; }
-                // 最後のノートまで行ったら後続に追加
-                if(comparisonNote.NextNote.Value == null) { break; }
-
-                comparisonNote = comparisonNote.NextNote.Value;
-            }
-
-            // 同じノートは追加できない
-            if (comparisonNote == addNote) { return; }
-
-            // 始点以前のノートは追加できない
-            if (comparisonNote.BackNote == null && !comparisonNote.Address.IsEarlierThan(addNote.Address)) { return; }
-
-            // データをセット
-            // 次ノーツの前ノーツ → 追加ノーツ
-            comparisonNote.NextNote?.Value?.SetBackNote(addNote);
-            // 追加ノーツの次ノーツ → 次ノーツ
-            addNote.SetNextNote(comparisonNote.NextNote.Value);
-            // 追加ノーツの前ノーツ → 前ノーツ
-            addNote.SetBackNote(comparisonNote); 
-            // 前ノーツの次ノーツ → 追加ノーツ
-            comparisonNote.SetNextNote(addNote); 
         }
 
         /// <summary>

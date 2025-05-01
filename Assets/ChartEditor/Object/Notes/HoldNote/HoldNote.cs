@@ -89,6 +89,79 @@ namespace ChartEditor
             SetRange(shifted);
         }
 
+        public void AddChainNote(IGroundChainNoteData addNote)
+        {
+            // 同じノートは追加できない
+            if(addNote == this) { return; }
+            if(addNote == this.NextNote.Value) { return; }
+            if(addNote == this.BackNote.Value) { return; }
+
+            // このノーツよりも前で且つ前ノーツが無い時新たに登録
+            if(!this.Address.IsEarlierThan(addNote.Address) && backNote.Value == null)
+            {
+                // 前ノーツに次ノーツが登録されているとき
+                if (addNote.NextNote.Value != null)
+                {
+                    // 次ノーツを追加ノートの次ノートにする
+                    this.SetNextNote(addNote.NextNote.Value);
+                    // 追加ノートの次ノートの前ノートをこのノートにする(ややこしすぎる)
+                    addNote.NextNote.Value.SetBackNote(addNote);
+                }
+
+                SetBackNote(addNote);
+                addNote.SetNextNote(this);
+                return;
+            }
+
+            // このノーツよりも先で且つ次ノーツが無い時新たに登録
+            if (this.Address.IsEarlierThan(addNote.Address) && nextNote.Value == null)
+            {
+                // 次ノーツに前ノーツが登録されているとき
+                if (addNote.BackNote.Value != null)
+                {
+                    // 前ノーツを追加ノートの前ノートにする
+                    this.SetBackNote(addNote.BackNote.Value);
+                    // 追加ノートの前ノートの次ノートをこのノートにする(ややこしすぎる)
+                    addNote.BackNote.Value.SetNextNote(this);
+                }
+
+                SetNextNote(addNote);
+                addNote.SetBackNote(this);
+                return;
+            }
+
+            // このノーツと次ノーツの間だった時登録
+            if(this.Address.IsEarlierThan(addNote.Address) && !NextNote.Value.Address.IsEarlierThan(addNote.Address))
+            {
+                // 追加ノーツの次ノーツに以前の次ノーツをセット
+                addNote.SetNextNote(this.NextNote.Value);
+                // 追加ノーツの前ノーツにこのノーツをセット
+                addNote.SetBackNote(this);
+                // 次ノーツの前ノーツに追加ノーツをセット
+                this.NextNote.Value.SetBackNote(addNote);
+                // 最後に、このノーツの次ノーツに追加ノーツをセット
+                SetNextNote(addNote);
+
+                return;
+            }
+
+            // 前ノーツ以前だった時前ノーツへ託す
+            if (!this.Address.IsEarlierThan(addNote.Address))
+            {
+                backNote.Value?.AddChainNote(addNote);
+                return;
+            }
+
+            // 次のノーツ以降だった時次ノーツに託す
+            if (this.Address.IsEarlierThan(addNote.Address))
+            {
+                nextNote.Value?.AddChainNote(addNote);
+                return;
+            }
+
+            Debug.Log($"【System】何故ここに来た？ {addNote} {this}");
+        }
+
         /// <summary>
         /// 次のノーツ
         /// </summary>

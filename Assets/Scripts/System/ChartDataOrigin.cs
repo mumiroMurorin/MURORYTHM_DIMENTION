@@ -54,6 +54,8 @@ namespace ChartConvert
         public List<NoteDataOrigin_DynamicUpward> DynamicUpwardData { get; set; }
         public List<NoteDataOrigin_DynamicRightward> DynamicRightwardData { get; set; }
         public List<NoteDataOrigin_DynamicLeftward> DynamicLeftwardData { get; set; }
+        public List<NoteDataOrigin_Hold> HoldData { get; set; }
+
     }
 
     #region NoteDataOriginClass ノーツデータクラス
@@ -73,12 +75,17 @@ namespace ChartConvert
         public int[] Range { get; set; }
     }
 
-
     public class NoteDataOrigin_DynamicLeftward
     {
         public int[] Range { get; set; }
     }
 
+    public class NoteDataOrigin_Hold
+    {
+        public int HoldNumber { get; set; }
+
+        public int[] Range { get; set; }
+    }
 
     #endregion
 
