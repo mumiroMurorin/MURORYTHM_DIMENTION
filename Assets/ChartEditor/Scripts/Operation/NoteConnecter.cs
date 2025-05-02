@@ -59,20 +59,6 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 始点ノーツデータを更新
-        /// </summary>
-        /// <returns></returns>
-        private void UpdateStartNote(IGroundChainNoteData note)
-        {
-            while (note.BackNote != null && note.BackNote.Value != null)
-            {
-                note = note.BackNote.Value;
-            }
-
-            startNote = note;
-        }
-
-        /// <summary>
         /// 接続モードの終了
         /// </summary>
         private void EndConnect()

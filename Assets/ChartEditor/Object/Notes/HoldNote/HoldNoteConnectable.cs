@@ -30,6 +30,7 @@ namespace ChartEditor
         NoteObject IConnectableObject.Note => noteObject;
 
         GameObject meshObject;
+        IGroundChainNoteData chainNoteData;
         List<IDisposable> nextNoteDisposables = new List<IDisposable>();
         CancellationTokenSource cts = new CancellationTokenSource();
 
@@ -49,28 +50,24 @@ namespace ChartEditor
 
             // IGroundChainNoteDataに変換
             if (noteObject.NoteData is not IGroundChainNoteData) { return; }
-            var data = (IGroundChainNoteData)(noteObject.NoteData);
+            chainNoteData = (IGroundChainNoteData)(noteObject.NoteData);
 
             // 次ノーツが変わった時購読しなおす
-            data.NextNote?
-                .Where(next => next != null)
+            chainNoteData.NextNote
                 .Subscribe(next => {
                     DisposeHoldMesh();
-                    BindForThisNote(data);
-                    BindForNextNote(next);
+                    ChangeNoteMaterial(chainNoteData.BackNote.Value, next);
+                    if(next != null)
+                    {
+                        BindForThisNote(chainNoteData);
+                        BindForNextNote(next);
+                    }
                 })
                 .AddTo(this.gameObject);
 
-            // マテリアルの変更
-            data.NextNote?
-                .Subscribe(next => {
-                    ChangeNoteMaterial(data.BackNote.Value, next);
-                })
-                .AddTo(this.gameObject);
-
-            data.BackNote?
+            chainNoteData.BackNote
                 .Subscribe(back => {
-                    ChangeNoteMaterial(back, data.NextNote.Value);
+                    ChangeNoteMaterial(back, chainNoteData.NextNote.Value);
                 })
                 .AddTo(this.gameObject);
         }
@@ -173,6 +170,8 @@ namespace ChartEditor
 
         private void OnDestroy()
         {
+            chainNoteData?.RemoveNote();
+
             if (cts != null)
             {
                 cts.Cancel();

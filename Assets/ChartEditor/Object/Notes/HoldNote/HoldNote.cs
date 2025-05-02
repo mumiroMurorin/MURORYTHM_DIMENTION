@@ -8,7 +8,7 @@ namespace ChartEditor
 {
     public class HoldNote : NoteObject
     {
-        
+
     }
 
     [System.Serializable]
@@ -160,6 +160,13 @@ namespace ChartEditor
             }
 
             Debug.Log($"【System】何故ここに来た？ {addNote} {this}");
+        }
+
+        public void RemoveNote()
+        {
+            // 前ノーツ、次ノーツに前後のノーツをセット
+            NextNote.Value?.SetBackNote(BackNote.Value);
+            BackNote.Value?.SetNextNote(NextNote.Value);
         }
 
         /// <summary>

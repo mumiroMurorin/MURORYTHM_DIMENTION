@@ -32,6 +32,7 @@ namespace ChartEditor
             chartEditorDataGetter.ChartData.Value.RemoveNote(destroyableObject.Note.NoteData);
 
             destroyableObject.OnDestroy();
+            destroyableObject.Note.NoteData = null;
         }
     }
 
