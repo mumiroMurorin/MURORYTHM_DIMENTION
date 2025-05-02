@@ -422,12 +422,14 @@ namespace ChartEditor
     public enum EditMode
     {
         None,
+        EditingConfig,
         Deploy,
         Destroy,
         Move,
         Scale,
         Connect,
         Connecting,
+        ChangeType,
     }
 
     /// <summary>

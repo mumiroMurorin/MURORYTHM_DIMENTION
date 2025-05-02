@@ -194,8 +194,16 @@ namespace ChartEditor
             exportButton_view.OnClickedListner += () => chartExporter.Export(editorDataGetter_model.ChartData.Value, editorDataGetter_model.Offset.Value);
 
             // リズムコンフィグ
-            rhythmConfigBar_view.OnClickedApplyButtonListner += () => editorDataSetter_model.SetRhythmConfigurableBar(null);
-            rhythmConfigSubDivision_view.OnClickedApplyButtonListner += () => editorDataSetter_model.SetRhythmConfigurableSubDivision(null);
+            rhythmConfigBar_view.OnClickedApplyButtonListner += () => CloseConfig();
+            rhythmConfigSubDivision_view.OnClickedApplyButtonListner += () => CloseConfig();
+        }
+
+        private void CloseConfig()
+        {
+            editorDataSetter_model.SetRhythmConfigurableBar(null);
+            editorDataSetter_model.SetRhythmConfigurableSubDivision(null);
+
+            editorDataSetter_model.SetEditMode(EditMode.None);
         }
 
         /// <summary>

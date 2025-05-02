@@ -43,6 +43,8 @@ namespace ChartEditor
 
             // カーソル下に何もないときは無効
             if (raycastEditMode == EditMode.None) { return; }
+            // コンフィグエディット中は無効
+            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.EditingConfig) { return; }
             // 削除モード中は無効
             if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.Destroy) { return; }
             // ノーツ接続中は無効
@@ -78,12 +80,14 @@ namespace ChartEditor
         private void UpdateObjectUnderCursor()
         {
             GameObject obj = GetObjectUnderCursor();
+            
             if(obj == null) 
             {
                 chartEditorDataSetter.SetDeployableCollider(null);
                 chartEditorDataSetter.SetMovableObject(null);
                 chartEditorDataSetter.SetScalableObject(null, chartEditorDataGetter.IsRightAnchored);
                 chartEditorDataSetter.SetDestroyableObject(null);
+                chartEditorDataSetter.SetConnectableObject(null);
 
                 return;
             }
@@ -166,16 +170,28 @@ namespace ChartEditor
 
         private void UpdateRhythmConfigurableCollider(GameObject obj)
         {
+            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.EditingConfig) { return; }
+
             // インタラクトされているRhythmConfigurableColliderの更新
             // あんまりよくないけどクリック処理もここでやっちゃう
+            // 小節線
             if (obj.TryGetComponent(out IRhythmConfigurableBarCollider configurableBar))
             {
-                if (Input.GetMouseButtonDown(0)) { chartEditorDataSetter.SetRhythmConfigurableBar(configurableBar); }
+                if (Input.GetMouseButtonDown(0)) 
+                {
+                    chartEditorDataSetter.SetEditMode(EditMode.EditingConfig);
+                    chartEditorDataSetter.SetRhythmConfigurableBar(configurableBar);
+                }
             }
 
+            // 分線
             if (obj.TryGetComponent(out IRhythmConfigurableSubDivisionCollider configurableSub))
             {
-                if (Input.GetMouseButtonDown(0)) { chartEditorDataSetter.SetRhythmConfigurableSubDivision(configurableSub); }
+                if (Input.GetMouseButtonDown(0)) 
+                {
+                    chartEditorDataSetter.SetEditMode(EditMode.EditingConfig);
+                    chartEditorDataSetter.SetRhythmConfigurableSubDivision(configurableSub);
+                }
             }
         }
 
