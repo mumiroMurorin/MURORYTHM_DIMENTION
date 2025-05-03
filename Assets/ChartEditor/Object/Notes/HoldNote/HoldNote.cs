@@ -12,9 +12,14 @@ namespace ChartEditor
     }
 
     [System.Serializable]
-    public class NoteData_Hold : IGroundChainNoteData
+    public class NoteData_Hold : IGroundChainNoteData, ITypeChangableNoteData
     {
-        public DeploymentNoteType NoteType => DeploymentNoteType.Hold;
+        ReactiveProperty<DeploymentNoteType> noteType = new ReactiveProperty<DeploymentNoteType>(DeploymentNoteType.Hold);
+        public DeploymentNoteType NoteType {
+            get { return noteType.Value; }
+            private set { noteType.Value = value; }
+        }
+        public IReadOnlyReactiveProperty<DeploymentNoteType> NoteTypeRP => noteType;
 
         public AddressInChart Address { get; private set; } = new AddressInChart();
 
@@ -27,6 +32,21 @@ namespace ChartEditor
         /// ノーツの移動、拡大縮小の監視
         /// </summary>
         public IReadOnlyReactiveCollection<float> Range { get { return range; } }
+
+        public void ChangeNoteType()
+        {
+            // 可視 → 不可視
+            if(NoteType == DeploymentNoteType.Hold)
+            {
+                if (NextNote.Value == null || BackNote.Value == null) { return; }
+                NoteType = DeploymentNoteType.HoldHidden;
+            }
+            // 不可視 → 可視
+            else if (NoteType == DeploymentNoteType.HoldHidden)
+            {
+                NoteType = DeploymentNoteType.Hold;
+            }
+        }
 
         public void SetRange(List<float> range)
         {

@@ -2071,6 +2071,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!1 &333189526
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 333189527}
+  - component: {fileID: 333189528}
+  m_Layer: 0
+  m_Name: NoteTypeChanger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &333189527
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 333189526}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 619309498}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &333189528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 333189526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b27439c61623b54da41b3ba4408a5b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &342369883
 GameObject:
   m_ObjectHideFlags: 0
@@ -3718,6 +3762,7 @@ Transform:
   - {fileID: 305315783}
   - {fileID: 1797220170}
   - {fileID: 754356523}
+  - {fileID: 333189527}
   m_Father: {fileID: 961400762}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &630248959
@@ -7351,7 +7396,7 @@ MonoBehaviour:
   - editMode: 7
     texture: {fileID: 2800000, guid: 1e42591ba834b854b8d4bd52c8e855ee, type: 3}
   - editMode: 8
-    texture: {fileID: 2800000, guid: 1e42591ba834b854b8d4bd52c8e855ee, type: 3}
+    texture: {fileID: 2800000, guid: b107f5fca73c9534ba3de0b6daa4a536, type: 3}
 --- !u!1 &1047519566
 GameObject:
   m_ObjectHideFlags: 0
@@ -13938,7 +13983,7 @@ PrefabInstance:
     - target: {fileID: 6619929450107830251, guid: a7ff45f7a7cf5d24a876d000b95f34b5, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 20ce6d0a03921d140b4d5f2547ebfbcc, type: 3}
+      objectReference: {fileID: 21300000, guid: 3039a7f470e816743b982b69a3f61d7a, type: 3}
     - target: {fileID: 8593971788613959082, guid: a7ff45f7a7cf5d24a876d000b95f34b5, type: 3}
       propertyPath: m_text
       value: "\u30BF\u30A4\u30D7\n\u5909\u66F4"

@@ -141,6 +141,15 @@ namespace ChartEditor
             connectableObject.Value = cObject;
         }
 
+        // ノーツタイプの変更
+        ReactiveProperty<IChangableObject> changableObject = new ReactiveProperty<IChangableObject>();
+        IReadOnlyReactiveProperty<IChangableObject> IChartEditorDataGetter.ChangableObject => changableObject;
+        void IChartEditorDataSetter.SetChangableObject(IChangableObject cObject)
+        {
+            if (changableObject.Value == cObject) { return; }
+
+            changableObject.Value = cObject;
+        }
 
         // ノーツの削除
         ReactiveProperty<IDestroyableObject> destroyableObject = new ReactiveProperty<IDestroyableObject>();
@@ -228,6 +237,8 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<IConnectableObject> ConnectableObject { get; }
 
+        IReadOnlyReactiveProperty<IChangableObject> ChangableObject { get; }
+
         IReadOnlyReactiveProperty<IDestroyableObject> DestroyableObject { get; }
 
         IReadOnlyReactiveProperty<PlayMode> PlayMode { get; }
@@ -261,6 +272,8 @@ namespace ChartEditor
         void SetScalableObject(IScalableObject sObject, bool isRightAnchored);
 
         void SetConnectableObject(IConnectableObject cObject);
+
+        void SetChangableObject(IChangableObject cObject);
 
         void SetDestroyableObject(IDestroyableObject dObject);
 

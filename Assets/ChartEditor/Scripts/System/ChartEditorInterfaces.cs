@@ -116,6 +116,18 @@ namespace ChartEditor
 
     }
 
+    public interface IChangableCollider
+    {
+        IChangableObject Note { get; }
+    }
+
+    public interface IChangableObject
+    {
+        ITypeChangableNoteData NoteData { get; }
+
+        public void OnChangeNoteType();
+    }
+
     public interface IJudgeStackingCollider
     {
         DeploymentNoteType NoteType { get; }

@@ -43,4 +43,11 @@ namespace ChartEditor
 
         void SetNoteObject(IConnectableObject noteObject);
     }
+
+    public interface ITypeChangableNoteData
+    {
+        IReadOnlyReactiveProperty<DeploymentNoteType> NoteTypeRP { get; }
+
+        void ChangeNoteType();
+    }
 }

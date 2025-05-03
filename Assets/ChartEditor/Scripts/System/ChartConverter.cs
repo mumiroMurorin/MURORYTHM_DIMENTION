@@ -629,6 +629,7 @@ namespace ChartConvert
         {
             if (noteDataInEditor.NoteType != type) { return false; }
             if (noteDataInEditor is not IGroundChainNoteData) { return false; }
+            if (noteDataInEditor is not ITypeChangableNoteData) { return false; }
 
             IGroundChainNoteData backNote = ((IGroundChainNoteData)noteDataInEditor).BackNote.Value;
             IGroundChainNoteData nextNote = ((IGroundChainNoteData)noteDataInEditor).NextNote.Value;
@@ -728,14 +729,15 @@ namespace ChartConvert
     /// </summary>
     public class HoldMeshConverter : INoteDataConvertable
     {
-        readonly DeploymentNoteType type = DeploymentNoteType.Hold;
+        readonly DeploymentNoteType type1 = DeploymentNoteType.Hold;
+        readonly DeploymentNoteType type2 = DeploymentNoteType.HoldHidden;
 
         Dictionary<IGroundChainNoteData, int> nextNoteToNumber = new Dictionary<IGroundChainNoteData, int>();
         int currentHoldNumber = 0;
 
         public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
-            if (noteDataInEditor.NoteType != type) { return false; }
+            if (noteDataInEditor.NoteType != type1 && noteDataInEditor.NoteType != type2) { return false; }
             if (noteDataInEditor is not IGroundChainNoteData) { return false; }
 
             IGroundChainNoteData backNote = ((IGroundChainNoteData)noteDataInEditor).BackNote.Value;
