@@ -6,9 +6,21 @@ namespace ChartEditor
 {
     public class LogFactoryView : MonoBehaviour
     {
+        [SerializeField] LogGetter logGetter;
+
         [SerializeField] GameObject logPrefab;
         [SerializeField] Transform logParent;
-        
+
+        private void Start()
+        {
+            logGetter.OnReceiveLogListener += OnRecieveLog;
+        }
+
+        private void OnRecieveLog(LogData logData)
+        {
+            Spawn(logData);
+        }
+
         /// <summary>
         /// ÉçÉOÇÃê∂ê¨
         /// </summary>

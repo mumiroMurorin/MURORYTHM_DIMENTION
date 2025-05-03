@@ -67,7 +67,7 @@ namespace ChartEditor
             }
 
             SetRange(shifted);
-            LogUI.Instance.Log($"yŠg‘åz\n range:{string.Join(",", range)}");
+            Debug.Log($"yŠg‘åz\n {range.First()} ` {range.Last()}");
         }
 
         public void SetAddress(AddressInChart address)
@@ -78,7 +78,7 @@ namespace ChartEditor
             if (Address == null) { Address = address.Copy(); }
             else
             {
-                LogUI.Instance.Log($"yˆÚ“®z:\n #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
+                Debug.Log($"yˆÚ“®z:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
                 Address.SetSameAddress(address);
             }
 

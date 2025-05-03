@@ -23,7 +23,7 @@ namespace ChartEditor
 
         CancellationTokenSource cts;
 
-        private void Start()
+        private void Awake()
         {
             cts = new CancellationTokenSource();
             _ = DelayedExecutor.ExecuteAfterDelay(displayDuration, Destroy, cts.Token);
@@ -40,14 +40,22 @@ namespace ChartEditor
             // îwåiêFÇÃê›íË
             switch (logData.LogType)
             {
-                case LogType.General:
+                case LogType.Log:
                     backGround.color = generalColor;
                     break;
                 case LogType.Warning:
                     backGround.color = warningColor;
                     break;
                 case LogType.Error:
+                case LogType.Exception:
+                case LogType.Assert:
                     backGround.color = errorColor;
+                    if (cts != null)
+                    {
+                        cts.Cancel();
+                        cts.Dispose();
+                        cts = null;
+                    }
                     break;
             }
         }
@@ -66,22 +74,5 @@ namespace ChartEditor
                 cts = null;
             }
         }
-    }
-
-    /// <summary>
-    /// Debug.LogÇ∆àÍèèÇ…égÇ®Ç§
-    /// </summary>
-    public class LogData
-    {
-        public LogType LogType { get; set; }
-
-        public string Logtext { get; set; }
-    }
-
-    public enum LogType
-    {
-        General,
-        Warning,
-        Error
     }
 }

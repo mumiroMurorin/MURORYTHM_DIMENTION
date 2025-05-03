@@ -267,7 +267,7 @@ namespace ChartEditor
             newSubDivision.AddNote(noteData);
 
             noteData.SetAddress(address);
-            LogUI.Instance.Log($"y”z’uz:\n #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
+            Debug.Log($"y”z’uz:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
         }
 
         /// <summary>
@@ -280,11 +280,11 @@ namespace ChartEditor
 
             if (!subDivision.RemoveNote(noteData))
             {
-                LogUI.Instance.LogError($"yíœzíœ‚É¸”s‚µ‚Ü‚µ‚½:\n #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
+                Debug.LogError($"yíœzíœ‚É¸”s‚µ‚Ü‚µ‚½:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
             }
             else
             {
-                LogUI.Instance.Log($"yíœz:\n #{address.BarIndex} {address.SubDivisionIndex} {address.SliderIndex}");
+                Debug.Log($"yíœz:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
             }
         }
 
@@ -302,7 +302,7 @@ namespace ChartEditor
             SubDivisionDataInBeat oldSubDivision = BarDatas[oldAddress.BarIndex].SubDivisionDatas[oldAddress.SubDivisionIndex];
             if (!oldSubDivision.RemoveNote(noteData)) 
             {
-                LogUI.Instance.LogError($"yˆÚ“®zíœ‚É¸”s‚µ‚Ü‚µ‚½\n ŠY“–‚·‚éƒm[ƒc‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
+                Debug.LogError($"yˆÚ“®zíœ‚É¸”s‚µ‚Ü‚µ‚½\n ŠY“–‚·‚éƒm[ƒc‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
                 return false; 
             }
 
