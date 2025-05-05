@@ -37,15 +37,20 @@ namespace ChartEditor
 
             // アドレスの変更通知に対して場所の更新
             noteObject.NoteData.Address.BarIndexRP
-                .Subscribe(_ => OnChangeAddress(noteObject.NoteData.Address))
+                .Subscribe(_ => {
+                    OnChangeAddress(noteObject.NoteData.Address); })
                 .AddTo(this.gameObject);
 
             noteObject.NoteData.Address.SubDivisionIndexRP
-                .Subscribe(_ => OnChangeAddress(noteObject.NoteData.Address))
+                .Subscribe(_ => {
+                    OnChangeAddress(noteObject.NoteData.Address); 
+                })
                 .AddTo(this.gameObject);
 
             noteObject.NoteData.Address.SliderIndexRP
-                .Subscribe(_ => OnChangeAddress(noteObject.NoteData.Address))
+                .Subscribe(_ => {
+                    OnChangeAddress(noteObject.NoteData.Address);
+                })
                 .AddTo(this.gameObject);
         }
 
@@ -77,6 +82,8 @@ namespace ChartEditor
         private void OnChangeAddress(AddressInChart address)
         {
             Transform parent = noteObject.GetParentTransformFunc(address);
+
+            if(parent == null) { return; }
 
             Vector3 pos = new Vector3(parent.position.x, this.transform.position.y, parent.position.z);
             this.transform.position = pos;

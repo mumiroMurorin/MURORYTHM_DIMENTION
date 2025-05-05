@@ -148,7 +148,7 @@ namespace ChartEditor
         {
             if (address.SubDivisionIndex > subDivisionDatas.Count)
             {
-                Debug.LogError($"ySystemz’l‚ª•ªü‚Ì”‚ğ’´‚¦‚Ä‚¢‚Ü‚·: {address.SubDivisionIndex}");
+                // Debug.LogError($"ySystemz’l‚ª•ªü‚Ì”‚ğ’´‚¦‚Ä‚¢‚Ü‚·: {address.SubDivisionIndex}/{subDivisionDatas.Count}");
                 return null;
             }
 
@@ -318,7 +318,7 @@ namespace ChartEditor
         {
             if (address.BarIndex > barDatas.Count)
             {
-                Debug.LogError($"ySystemz’l‚ª¬ßü‚Ì”‚ğ’´‚¦‚Ä‚¢‚Ü‚·: {address.BarIndex}");
+                // Debug.LogError($"ySystemz’l‚ª¬ßü‚Ì”‚ğ’´‚¦‚Ä‚¢‚Ü‚·: {address.BarIndex}");
                 return null;
             }
 
@@ -381,11 +381,11 @@ namespace ChartEditor
 
         public void SetSameAddress(AddressInChart address)
         {
-            this.barIndex.Value = address.BarIndex;
-            this.subDivisionIndex.Value = address.SubDivisionIndex;
             this.sliderIndex.Value = address.SliderIndex;
+            this.subDivisionIndex.Value = address.SubDivisionIndex;
+            this.barIndex.Value = address.BarIndex;
         }
-        
+
         /// <summary>
         /// ‚Ç‚¿‚ç‚ªæ‚ÌƒAƒhƒŒƒX‚©•Ô‚·
         /// ˆø”‚Ì‚Ù‚¤‚ª’x‚¯‚ê‚ÎTrue
