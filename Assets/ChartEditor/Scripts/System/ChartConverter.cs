@@ -10,26 +10,33 @@ namespace ChartConvert
 {
     public class ChartExporter
     {
-        // ここに変換関数を記述していく
-        private List<INoteDataConvertable> converters = new List<INoteDataConvertable>()
-        {
-            new TouchNoteConverter(),
-            new DynamicUpwardConverter(),
-            new DynamicRightwardConverter(),
-            new DynamicLeftwardConverter(),
-            new HoldStartConverter(),
-            new HoldRelayConverter(),
-            new HoldEndConverter(),
-            new HoldMeshConverter(),
-        };
+        private List<INoteDataConvertable> converters = new List<INoteDataConvertable>();
 
         public void Export(ChartEditor.ChartData chartData, float offset)
         {
+            Initialize();
+
             // 最初に変換
             ChartDataOrigin chartDataOrigin = ConvertChartDataOrigin(chartData, offset);
 
             // エクスポート
             JsonConverter.TrySaveToJsonFileDialog(chartDataOrigin);
+        }
+
+        private void Initialize()
+        {
+            // ここに変換関数を記述していく
+            converters = new List<INoteDataConvertable>()
+            {
+                new TouchNoteConverter(),
+                new DynamicUpwardConverter(),
+                new DynamicRightwardConverter(),
+                new DynamicLeftwardConverter(),
+                new HoldStartConverter(),
+                new HoldRelayConverter(),
+                new HoldEndConverter(),
+                new HoldMeshConverter(),
+            };
         }
 
         /// <summary>
@@ -138,20 +145,12 @@ namespace ChartConvert
     public class ChartImporter
     {
         // ここに変換関数を記述していく
-        private List<INoteDataConvertable> converters = new List<INoteDataConvertable>()
-        {
-            new TouchNoteConverter(),
-            new DynamicUpwardConverter(),
-            new DynamicRightwardConverter(),
-            new DynamicLeftwardConverter(),
-            new HoldStartConverter(),
-            new HoldRelayConverter(),
-            new HoldEndConverter(),
-            new HoldMeshConverter(),
-        };
+        private List<INoteDataConvertable> converters = new List<INoteDataConvertable>();
 
         public ChartData Import(ChartDataOrigin dataOrigin, INoteSpawnDataOptionHolder optionHolder)
         {
+            Initialize();
+
             bool isSucceed = true;
 
             ChartData chartData = new ChartData();
@@ -171,6 +170,22 @@ namespace ChartConvert
             else { Debug.LogWarning("【Converter】譜面データの変換失敗。ログを確かめてください"); }
 
             return chartData;
+        }
+
+        private void Initialize()
+        {
+            // ここに変換関数を記述していく
+            converters = new List<INoteDataConvertable>()
+            {
+                new TouchNoteConverter(),
+                new DynamicUpwardConverter(),
+                new DynamicRightwardConverter(),
+                new DynamicLeftwardConverter(),
+                new HoldStartConverter(),
+                new HoldRelayConverter(),
+                new HoldEndConverter(),
+                new HoldMeshConverter(),
+            };
         }
 
         /// <summary>
@@ -763,7 +778,7 @@ namespace ChartConvert
                     return false;
                 }
             }
-            // 前ノーツ、次ノーツもある場合場合、NextNoteを更新する
+            // 前ノーツ、次ノーツもある場合、NextNoteを更新する
             else if(nextNote != null)
             {
                 nextNoteToNumber.Remove((IGroundChainNoteData)noteDataInEditor);
