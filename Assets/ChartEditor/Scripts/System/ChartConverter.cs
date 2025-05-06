@@ -142,7 +142,87 @@ namespace ChartConvert
 
     }
 
-    public class ChartImporter
+    public class ChartImporterForChartEditor
+    {
+        private List<INoteDataConvertable> converters = new List<INoteDataConvertable>();
+
+        public ChartEditor.ChartData Import(ChartDataOrigin dataOrigin)
+        {
+            Initialize();
+
+            bool isSucceed = true;
+
+            ChartEditor.ChartData chartData = new ChartEditor.ChartData(1, 1);
+
+            // 分線を一つずつ取り出す
+            foreach (var bar in dataOrigin.BarDatas)
+            {
+                if (!SetDataFromBarData(bar, chartData))
+                {
+                    isSucceed = false;
+                }
+            }
+
+            if (isSucceed) { Debug.Log("【Converter】譜面データの変換成功"); }
+            else { Debug.LogWarning("【Converter】譜面データの変換失敗。ログを確かめてください"); }
+
+            return chartData;
+        }
+
+        private bool SetDataFromBarData(BarDataOrigin barDataOrigin, ChartEditor.ChartData chartData)
+        {
+            bool isSucceed = true;
+
+            // 拍子、分割数の取得
+            int beatCount = barDataOrigin.BeatCount;
+            float beatUnit = barDataOrigin.BeatUnit;
+            int divNum = barDataOrigin.DivisionNum;
+
+            // 小節データを一つ一つ取り出してデータを代入
+            foreach (var sub in barDataOrigin.SubDivisionDatas)
+            {
+                float bpm = sub.Bpm;
+
+                if (!SetDataFromSubDivisionData(sub, chartData))
+                {
+                    isSucceed = false;
+                }
+            }
+
+            return isSucceed;
+        }
+
+        private bool SetDataFromSubDivisionData(SubDivisionDataOrigin dataOrigin, ChartEditor.ChartData chartData)
+        {
+            bool isSucceed = true;
+
+            // 一つずつ取り出して変換
+            foreach (var converter in converters)
+            {
+                if (!converter.CheckAndAddDataFromOrigin(dataOrigin, chartData)) { isSucceed = false; }
+            }
+
+            return isSucceed;
+        }
+
+        private void Initialize()
+        {
+            // ここに変換関数を記述していく
+            converters = new List<INoteDataConvertable>()
+            {
+                new TouchNoteConverter(),
+                new DynamicUpwardConverter(),
+                new DynamicRightwardConverter(),
+                new DynamicLeftwardConverter(),
+                new HoldStartConverter(),
+                new HoldRelayConverter(),
+                new HoldEndConverter(),
+                new HoldMeshConverter(),
+            };
+        }
+    }
+
+    public class ChartImporterForRhythmGame
     {
         // ここに変換関数を記述していく
         private List<INoteDataConvertable> converters = new List<INoteDataConvertable>();
@@ -393,6 +473,8 @@ namespace ChartConvert
         bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin);
 
         bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing);
+
+        bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.ChartData chartData);
     }
 
     /// <summary>
@@ -438,6 +520,12 @@ namespace ChartConvert
             }
 
             return true;
+        }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.ChartData chartData)
+        {
+            if (dataOrigin.TouchNoteData == null) { return true; }
+
         }
     }
 
