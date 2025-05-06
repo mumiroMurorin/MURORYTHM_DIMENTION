@@ -80,6 +80,50 @@ namespace JsonUtil
 
     public static class JsonLoader
     {
+        public static bool TryLoadFromJsonFileDialog<T>(out T result)
+        {
+            result = default;
+
+            try
+            {
+                using (VistaOpenFileDialog dialog = new VistaOpenFileDialog())
+                {
+                    dialog.Title = "読み込むJSONファイルを選択";
+                    dialog.Filter = "JSONファイル (*.json)|*.json";
+                    dialog.Multiselect = false;
+
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        string json = File.ReadAllText(dialog.FileName);
+                        result = JsonConvert.DeserializeObject<T>(json);
+
+                        UnityEngine.Debug.Log($"【JsonImporter】読み込み完了: {dialog.FileName}");
+                        return true;
+                    }
+                    else
+                    {
+                        UnityEngine.Debug.Log("【JsonImporter】読み込みがキャンセルされました。");
+                        return false;
+                    }
+                }
+            }
+            catch (IOException ioEx)
+            {
+                UnityEngine.Debug.LogError($"【JsonImporter】ファイル入出力エラー: {ioEx.Message}");
+            }
+            catch (JsonException jsonEx)
+            {
+                UnityEngine.Debug.LogError($"【JsonImporter】JSON解析エラー: {jsonEx.Message}");
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"【JsonImporter】予期しないエラー: {ex.Message}\n{ex.StackTrace}");
+            }
+
+            return false;
+        }
+
+
         /// <summary>
         /// 指定されたパスのJSONファイルを読み込み、T型にデシリアライズします。
         /// </summary>

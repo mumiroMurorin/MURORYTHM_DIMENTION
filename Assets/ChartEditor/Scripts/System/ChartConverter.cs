@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using ChartEditor;
-using JsonUtil;
 using System;
 
 namespace ChartConvert
 {
+    /// <summary>
+    /// ChartEditor → ChartDataOrigin (外部ファイルにエクスポート)
+    /// </summary>
     public class ChartExporter
     {
         private List<INoteDataConvertable> converters = new List<INoteDataConvertable>();
 
-        public void Export(ChartEditor.ChartData chartData, float offset)
+        public ChartDataOrigin Export(ChartEditor.ChartData chartData, float offset)
         {
             Initialize();
 
             // 最初に変換
-            ChartDataOrigin chartDataOrigin = ConvertChartDataOrigin(chartData, offset);
+            return ConvertChartDataOrigin(chartData, offset);
 
             // エクスポート
-            JsonConverter.TrySaveToJsonFileDialog(chartDataOrigin);
         }
 
         private void Initialize()
@@ -142,25 +143,26 @@ namespace ChartConvert
 
     }
 
+    /// <summary>
+    /// ChartDataOrigin → ChartEditor (外部ファイルから譜面エディタにインポート)
+    /// </summary>
     public class ChartImporterForChartEditor
     {
         private List<INoteDataConvertable> converters = new List<INoteDataConvertable>();
 
         public ChartEditor.ChartData Import(ChartDataOrigin dataOrigin)
         {
-            Initialize();
-
             bool isSucceed = true;
 
-            ChartEditor.ChartData chartData = new ChartEditor.ChartData(1, 1);
+            // 初期化
+            Initialize();
+            ChartEditor.ChartData chartData = new ChartEditor.ChartData(dataOrigin.BarDatas.Count);
 
             // 分線を一つずつ取り出す
-            foreach (var bar in dataOrigin.BarDatas)
+            for (int i = 0; i < dataOrigin.BarDatas.Count; i++) 
             {
-                if (!SetDataFromBarData(bar, chartData))
-                {
-                    isSucceed = false;
-                }
+                var bar = dataOrigin.BarDatas[i];
+                if (!SetDataFromBarData(bar, chartData.BarDatas[i])) { isSucceed = false; }
             }
 
             if (isSucceed) { Debug.Log("【Converter】譜面データの変換成功"); }
@@ -169,7 +171,7 @@ namespace ChartConvert
             return chartData;
         }
 
-        private bool SetDataFromBarData(BarDataOrigin barDataOrigin, ChartEditor.ChartData chartData)
+        private bool SetDataFromBarData(BarDataOrigin barDataOrigin, ChartEditor.BarDataInChart dataInChartEditor)
         {
             bool isSucceed = true;
 
@@ -178,28 +180,31 @@ namespace ChartConvert
             float beatUnit = barDataOrigin.BeatUnit;
             int divNum = barDataOrigin.DivisionNum;
 
-            // 小節データを一つ一つ取り出してデータを代入
-            foreach (var sub in barDataOrigin.SubDivisionDatas)
-            {
-                float bpm = sub.Bpm;
+            dataInChartEditor.SetBeatCount(beatCount);
+            dataInChartEditor.SetBeatUnit(beatUnit);
+            dataInChartEditor.SetDivisionNum(divNum);
 
-                if (!SetDataFromSubDivisionData(sub, chartData))
-                {
-                    isSucceed = false;
-                }
+            // 小節データを一つ一つ取り出してデータを代入
+            for (int i = 0;i < barDataOrigin.SubDivisionDatas.Count; i++)
+            {
+                var sub = barDataOrigin.SubDivisionDatas[i];
+                if (!SetDataFromSubDivisionData(sub, dataInChartEditor.SubDivisionDatas[i])) { isSucceed = false; }
             }
 
             return isSucceed;
         }
 
-        private bool SetDataFromSubDivisionData(SubDivisionDataOrigin dataOrigin, ChartEditor.ChartData chartData)
+        private bool SetDataFromSubDivisionData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
         {
             bool isSucceed = true;
+
+            // bpmのセット
+            dataInChartEditor.SetBpm(dataOrigin.Bpm);
 
             // 一つずつ取り出して変換
             foreach (var converter in converters)
             {
-                if (!converter.CheckAndAddDataFromOrigin(dataOrigin, chartData)) { isSucceed = false; }
+                if (!converter.CheckAndAddDataFromOrigin(dataOrigin, dataInChartEditor)) { isSucceed = false; }
             }
 
             return isSucceed;
@@ -222,6 +227,9 @@ namespace ChartConvert
         }
     }
 
+    /// <summary>
+    /// ChartDataOrigin → 音ゲー 
+    /// </summary>
     public class ChartImporterForRhythmGame
     {
         // ここに変換関数を記述していく
@@ -353,6 +361,9 @@ namespace ChartConvert
         }
     }
 
+    /// <summary>
+    /// 判定調整
+    /// </summary>
     public class JudgementWindowAdjuster
     {
         /// <summary>
@@ -474,7 +485,7 @@ namespace ChartConvert
 
         bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing);
 
-        bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.ChartData chartData);
+        bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor);
     }
 
     /// <summary>
@@ -522,10 +533,24 @@ namespace ChartConvert
             return true;
         }
 
-        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.ChartData chartData)
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
         {
             if (dataOrigin.TouchNoteData == null) { return true; }
 
+            foreach(var noteDataOrigin in dataOrigin.TouchNoteData)
+            {
+                IGroundNoteData noteData = new ChartEditor.NoteData_Touch();
+
+                // データのセット
+                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+
+                noteData.SetAddress(address);
+                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
+
+                dataInChartEditor.AddNote(noteData);
+            }
+
+            return true;
         }
     }
 
@@ -571,6 +596,11 @@ namespace ChartConvert
                 chartData.AddNoteData(noteData);
             }
 
+            return true;
+        }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        {
             return true;
         }
     }
@@ -620,6 +650,11 @@ namespace ChartConvert
 
             return true;
         }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        {
+            return true;
+        }
     }
 
     /// <summary>
@@ -664,6 +699,11 @@ namespace ChartConvert
                 chartData.AddNoteData(noteData);
             }
 
+            return true;
+        }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        {
             return true;
         }
     }
@@ -719,6 +759,11 @@ namespace ChartConvert
 
             return true;
         }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        {
+            return true;
+        }
     }
 
     /// <summary>
@@ -772,6 +817,11 @@ namespace ChartConvert
 
             return true;
         }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        {
+            return true;
+        }
     }
 
     /// <summary>
@@ -823,6 +873,11 @@ namespace ChartConvert
                 chartData.AddNoteData(noteData);
             }
 
+            return true;
+        }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        {
             return true;
         }
     }
@@ -910,6 +965,11 @@ namespace ChartConvert
                 chartData.AddNoteData(GenerateNoteData_HoldMesh(numberToHoldMeshDataOrigin[noteOrigin.HoldNumber]));
             }
 
+            return true;
+        }
+
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        {
             return true;
         }
 

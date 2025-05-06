@@ -11,6 +11,7 @@ namespace ChartEditor
 {
     public class EditorUIPresenter : MonoBehaviour
     {
+        [Header("Views")]
         [SerializeField] List<ToolButtonToEditMode> toolButtons_view;
         [SerializeField] List<NoteButtonToEditMode> noteButtons_view;
         [SerializeField] NotesViewportView notesViewport_view;
@@ -22,7 +23,12 @@ namespace ChartEditor
         [SerializeField] AutoEditModeButtonView autoEditModeButton_view;
         [SerializeField] RhythmConfigBarView rhythmConfigBar_view;
         [SerializeField] RhythmConfigSubView rhythmConfigSubDivision_view;
+        [SerializeField] ImportButtonView importButton_view;
         [SerializeField] ExportButtonView exportButton_view;
+        [Header("Models")]
+        [SerializeField] ChartDataExporter chartDataExporter_model;
+        [SerializeField] ChartDataImporter chartDataImporter_model;
+
 
         AudioFileSelector audioFileSelector = new AudioFileSelector();
 
@@ -30,8 +36,6 @@ namespace ChartEditor
         IChartEditorDataGetter editorDataGetter_model;
         IChartEditorOptionSetter optionDataSetter_model;
         IChartEditorOptionGetter optionDataGetter_model;
-
-        ChartConvert.ChartExporter chartExporter = new ChartConvert.ChartExporter();
 
         CancellationTokenSource soundLoadCts;
 
@@ -64,8 +68,9 @@ namespace ChartEditor
             // エクスポートフィールドのインタラクト可不可
             editorDataGetter_model?.PlayMode
                 .Subscribe(value => { 
-                    offsetInputField_view.OnChangePlayMode(value);
-                    exportButton_view.OnChangePlayMode(value);
+                    offsetInputField_view?.OnChangePlayMode(value);
+                    exportButton_view?.OnChangePlayMode(value);
+                    importButton_view?.OnChangePlayMode(value);
                 })
                 .AddTo(this.gameObject);
 
@@ -191,7 +196,10 @@ namespace ChartEditor
             scrollSensitivitySlider_view.OnSliderChangedListener += optionDataSetter_model.SetScrollSensitivity;
 
             // エクスポートボタン
-            exportButton_view.OnClickedListner += () => chartExporter.Export(editorDataGetter_model.ChartData.Value, editorDataGetter_model.Offset.Value);
+            exportButton_view.OnClickedListner += chartDataExporter_model.Export;
+
+            // インポートボタン
+            importButton_view.OnClickedListner += chartDataImporter_model.Import;
 
             // リズムコンフィグ
             rhythmConfigBar_view.OnClickedApplyButtonListner += () => CloseConfig();

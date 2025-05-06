@@ -217,11 +217,20 @@ namespace ChartEditor
         {
             // 全体の小節数 = 曲の長さ[min] / 小節数[回/min]
             //              = (曲の長さ[sec] / 60f) * (bpm[回/min] / 小節内のビート数)
-            float beatNum = (musicLength / 60f) * (bpm / beatCount);
+            float barNum = (musicLength / 60f) * (bpm / beatCount);
 
-            for(int i = 0; i < beatNum; i++)
+            for(int i = 0; i < barNum; i++)
             {
                 BarDataInChart barData = new BarDataInChart(beatCount, beatUnit, divNum, bpm, i);
+                barDatas.Add(barData);
+            }
+        }
+
+        public ChartData(int barNum)
+        {
+            for (int i = 0; i < barNum; i++)
+            {
+                BarDataInChart barData = new BarDataInChart(4, 4, 2, 256, i);
                 barDatas.Add(barData);
             }
         }
