@@ -15,6 +15,8 @@ namespace ChartEditor
         [SerializeField] List<ToolButtonToEditMode> toolButtons_view;
         [SerializeField] List<NoteButtonToEditMode> noteButtons_view;
         [SerializeField] NotesViewportView notesViewport_view;
+        [SerializeField] ChartExtendButtonView chartExtendButton_view;
+        [SerializeField] ChartShortenButtonView chartShortenButton_view;
         [SerializeField] MusicBrowseButtonView musicBrowseButton_view;
         [SerializeField] OffsetInputFieldView offsetInputField_view;
         [SerializeField] ChangeLaneDivNumButtonView changeLaneDivNumButton_view;
@@ -71,6 +73,8 @@ namespace ChartEditor
                     offsetInputField_view?.OnChangePlayMode(value);
                     exportButton_view?.OnChangePlayMode(value);
                     importButton_view?.OnChangePlayMode(value);
+                    chartExtendButton_view?.OnChangePlayMode(value);
+                    chartShortenButton_view?.OnChangePlayMode(value);
                 })
                 .AddTo(this.gameObject);
 
