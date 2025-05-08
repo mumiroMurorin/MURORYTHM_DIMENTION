@@ -13,11 +13,25 @@ namespace ChartEditor
 
         public IReadOnlyReactiveProperty<ChartData> ChartData => chartData;
 
-        public void InitializeChartData()
+        public void ChangeChartLength(int delta)
         {
-            if(music.Value == null) { return; }
+            if(ChartData.Value == null)
+            {
+                chartData.Value = new ChartData(0);
+            }
 
-            chartData.Value = new ChartData(music.Value.length, 256);
+            if (delta > 0) { chartData.Value.AddBar(delta); }
+            else if(delta < 0) { chartData.Value.RemoveBar(Mathf.Abs(delta)); }
+        }
+
+        // •ˆ–Ê’·‚³
+        ReactiveProperty<float> chartSeconds = new ReactiveProperty<float>(0);
+        public IReadOnlyReactiveProperty<float> ChartSeconds => chartSeconds;
+
+        public void SetChartSeconds(float seconds)
+        {
+            if(seconds < 0) { return; }
+            chartSeconds.Value = seconds;
         }
 
         #endregion
@@ -217,6 +231,8 @@ namespace ChartEditor
     {
         IReadOnlyReactiveProperty<ChartData> ChartData { get; }
 
+        IReadOnlyReactiveProperty<float> ChartSeconds { get; }
+
         IReadOnlyReactiveProperty<EditMode> CurrentEditMode { get; }
 
         IReadOnlyReactiveProperty<bool> AutoEditMode { get; }
@@ -253,7 +269,9 @@ namespace ChartEditor
 
     public interface IChartEditorDataSetter
     {
-        public void InitializeChartData();
+        public void ChangeChartLength(int delta);
+
+        public void SetChartSeconds(float seconds);
 
         void SetEditMode(EditMode editMode);
 

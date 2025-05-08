@@ -74,7 +74,6 @@ namespace ChartEditor
         private void OperateMusicPlay()
         {
             if (!Input.GetKeyDown(playKey)) { return; }
-            if (dataGetter.Music.Value == null) { return; }
 
             switch (dataGetter.PlayMode.Value)
             {

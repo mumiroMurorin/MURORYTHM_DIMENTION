@@ -179,13 +179,16 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
         AudioSource sourceFadeIn = bgmSources[0].clip != null ? bgmSources[1] : bgmSources[0];
         AudioSource sourceFadeOut = bgmSources[0].clip != null ? bgmSources[0] : bgmSources[1];
 
-        //V‚µ‚­Ä¶‚·‚é•û‚Ì‰Šú‰»
-        sourceFadeIn.volume = 0;
-        sourceFadeIn.clip = clip;
-        sourceFadeIn.loop = loopFlg;
-        sourceFadeIn.time = sourceFadeIn.clip.length * Mathf.Clamp01(progress);
-        sourceFadeIn.Play();
-        sourceFadeIn.DOFade(1.0f, BGMCrossFadeDuration).SetEase(Ease.Linear);
+        // V‚µ‚­Ä¶‚·‚é•û‚Ì‰Šú‰»
+        if(progress < 1f)
+        {
+            sourceFadeIn.volume = 0;
+            sourceFadeIn.clip = clip;
+            sourceFadeIn.loop = loopFlg;
+            sourceFadeIn.time = sourceFadeIn.clip.length * Mathf.Clamp01(progress);
+            sourceFadeIn.Play();
+            sourceFadeIn.DOFade(1.0f, BGMCrossFadeDuration).SetEase(Ease.Linear);
+        }
         sourceFadeOut.DOFade(0, BGMCrossFadeDuration).SetEase(Ease.Linear);
 
         await UniTask.Delay((int)(BGMCrossFadeDuration * 1000), false, PlayerLoopTiming.Update, token);
@@ -195,6 +198,8 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
 
     private async UniTaskVoid FadeIn(AudioClip clip, bool loopFlg, CancellationToken token, float progress = 0f)
     {
+        if(progress >= 1f) { return; }
+
         bgmSources[0].volume = 0;
         bgmSources[0].loop = loopFlg;
         bgmSources[0].clip = clip;

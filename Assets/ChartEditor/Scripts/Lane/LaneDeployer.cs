@@ -15,6 +15,7 @@ namespace ChartEditor
  
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorOptionGetter chartEditorOptionGetter;
+        int barCount = 0;
 
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorOptionGetter chartEditorOptionGetter)
@@ -33,12 +34,39 @@ namespace ChartEditor
             // 譜面生成
             chartEditorDataGetter?.ChartData
                 .Where(data => data != null)
-                .Subscribe(GenerateLane)
+                .Subscribe(data => {
+                    BindForChartData(data);
+                    Initialze(data); 
+                })
                 .AddTo(this.gameObject);
 
             // レーン分割線の表示
             chartEditorOptionGetter?.LaneDivisionNum
                 .Subscribe(SetLaneDivisionLine)
+                .AddTo(this.gameObject);
+
+            // グラウンド長さ更新
+            chartEditorDataGetter?.ChartSeconds
+                .Subscribe(seconds => UpdateGroundLength(seconds, chartEditorOptionGetter.ChartViewScale.Value))
+                .AddTo(this.gameObject);
+
+            chartEditorOptionGetter?.ChartViewScale
+                .Subscribe(scale => UpdateGroundLength(chartEditorDataGetter.ChartSeconds.Value, scale))
+                .AddTo(this.gameObject);
+        }
+
+        private void BindForChartData(ChartData chartData)
+        {
+            chartData?.BarDatas.ObserveAdd()
+                .Subscribe(barData => {
+                    AddLane(barData.Value);
+                })
+                .AddTo(this.gameObject);
+
+            chartData?.BarDatas.ObserveRemove()
+                .Subscribe(barData => {
+                    RemoveLane(barData.Value);
+                })
                 .AddTo(this.gameObject);
         }
 
@@ -47,7 +75,7 @@ namespace ChartEditor
         /// </summary>
         /// <param name="musicLength"></param>
         /// <param name="mainBpm"></param>
-        private void GenerateLane(ChartData chartData)
+        private void Initialze(ChartData chartData)
         {
             // まず初期化
             ClearLane();
@@ -55,22 +83,19 @@ namespace ChartEditor
             // 小節線の数だけ繰り返す
             for (int i = 0; i < chartData.BarDatas.Count; i++)
             {
-                GenerateBarUnit(chartData.BarDatas[i], lineParent, i);
+                AddLane(chartData.BarDatas[i]);
             }
+        }
 
-            float chartLength = chartEditorOptionGetter.ChartViewScale.Value * chartEditorDataGetter.Music.Value.length;
+        private void AddLane(BarDataInChart barData)
+        {
+            // 小節線追加
+            GenerateBarUnit(barData, lineParent, barCount++);
+        }
 
-            // グラウンドの生成
-            ground.transform.localScale = new Vector3(
-                ground.transform.localScale.x,
-                chartLength,
-                ground.transform.localScale.z);
+        private void RemoveLane(BarDataInChart barData)
+        {
 
-            ground.transform.position = new Vector3(
-                ground.transform.position.x,
-                ground.transform.position.y,
-                ground.transform.localScale.y / 2f
-                );
         }
 
         /// <summary>
@@ -83,6 +108,23 @@ namespace ChartEditor
             // 小節線のインスタンス化
             GameObject barObj = barLineDeplayable.Value.Deploy(barData, Vector3.zero, parent);
             barObj.name = $"Bar_{count + 1}";
+        }
+
+        private void UpdateGroundLength(float chartSeconds, float viewScale)
+        {
+            float chartLength = viewScale * chartSeconds;
+
+            // グラウンドの生成
+            ground.transform.localScale = new Vector3(
+                ground.transform.localScale.x,
+                chartLength,
+                ground.transform.localScale.z);
+
+            ground.transform.position = new Vector3(
+                ground.transform.position.x,
+                ground.transform.position.y,
+                ground.transform.localScale.y / 2f
+                );
         }
 
         /// <summary>

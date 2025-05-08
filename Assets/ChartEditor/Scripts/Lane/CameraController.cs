@@ -32,7 +32,7 @@ namespace ChartEditor
             // ”{—¦‚Ì•ÏX
             optionGetter?.ChartViewScale
                 .Subscribe(scale => {
-                    UpdateChartLength(chartEditorDataGetter.Music.Value,scale);
+                    UpdateChartLength(chartEditorDataGetter.ChartSeconds.Value, scale);
                     MoveCamera(chartEditorDataGetter.PlaybackProgress.Value);
                     ChangeCameraOffset(chartEditorDataGetter.Offset.Value);
                 })
@@ -48,10 +48,10 @@ namespace ChartEditor
                 .Subscribe(ChangeCameraOffset)
                 .AddTo(this.gameObject);
 
-            // Šy‹È‚ª•Ï‚í‚Á‚½Žž
-            chartEditorDataGetter?.Music
-                .Subscribe(music => {
-                    UpdateChartLength(music, optionGetter.ChartViewScale.Value);
+            // •ˆ–Ê’·‚³‚ª•Ï‚í‚Á‚½Žž
+            chartEditorDataGetter?.ChartSeconds
+                .Subscribe(seconds => {
+                    UpdateChartLength(seconds, optionGetter.ChartViewScale.Value);
                 })
                 .AddTo(this.gameObject);
         }
@@ -61,11 +61,9 @@ namespace ChartEditor
         /// </summary>
         /// <param name="music"></param>
         /// <param name="scale"></param>
-        private void UpdateChartLength(AudioClip music, float scale)
+        private void UpdateChartLength(float chartSeconds, float scale)
         {
-            if (music == null) { return; }
-
-            chartLength = music.length * scale;
+            chartLength = chartSeconds * scale;
         }
 
         /// <summary>
@@ -85,11 +83,7 @@ namespace ChartEditor
         /// </summary>
         private void ChangeCameraOffset(float offset)
         {
-            if (chartEditorDataGetter.Music.Value == null) { return; }
-
-            float musicLength = chartEditorDataGetter.Music.Value.length;
-
-            float z = offset / 1000 * (chartLength / musicLength);
+            float z = offset / 1000 * optionGetter.ChartViewScale.Value;
             offsetAxis.transform.localPosition = new Vector3(
                 offsetAxis.transform.localPosition.x,
                 z,

@@ -10,7 +10,6 @@ namespace ChartEditor
 {
     public class MusicPlayer : MonoBehaviour
     {
-        [SerializeField] GameObject obj;
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorDataSetter chartEditorDataSetter;
 
@@ -48,29 +47,34 @@ namespace ChartEditor
         /// </summary>
         private void PlayMusic()
         {
+            // äyã»ÇÃçƒê∂
             AudioClip clip = chartEditorDataGetter.Music.Value;
-            float progress = chartEditorDataGetter.PlaybackProgress.Value;
-            SoundManager.Instance.PlayBGM(clip, loopFlg: false, isFadeout: false, progress: progress);
+            if(clip != null)
+            {
+                float chartLength = chartEditorDataGetter.ChartSeconds.Value;
+                float progress = Mathf.Clamp01((chartLength * chartEditorDataGetter.PlaybackProgress.Value) / clip.length);
+                SoundManager.Instance.PlayBGM(clip, loopFlg: false, isFadeout: false, progress: progress);
+            }
 
+            // ïàñ çƒê∂
             if (cts != null)
             {
-                cts.Cancel();  
-                cts.Dispose(); 
+                cts.Cancel();
+                cts.Dispose();
             }
 
             cts = new CancellationTokenSource();
-
             UpdatePlaybackProgressAsync(cts.Token).Forget();
         }
 
         private async UniTask UpdatePlaybackProgressAsync(CancellationToken token)
         {
-            float musicLength = chartEditorDataGetter.Music.Value.length;
+            float chartLength = chartEditorDataGetter.ChartSeconds.Value;
 
             while (!token.IsCancellationRequested)
             {
                 float currentProgress = chartEditorDataGetter.PlaybackProgress.Value;
-                float addProgress = Time.deltaTime / musicLength;
+                float addProgress = Time.deltaTime / chartLength;
 
                 if(currentProgress == 1f) { break; }
                 chartEditorDataSetter.SetPlaybackProgress(currentProgress + addProgress);

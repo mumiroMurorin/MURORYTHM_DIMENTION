@@ -213,7 +213,12 @@ namespace ChartEditor
     /// </summary>
     public class ChartData
     {
-        public ChartData(float musicLength, float bpm, int beatCount = 4, float beatUnit = 4, int divNum = 2)
+        const int DEFAULT_BEAT_COUNT = 4;
+        const float DEFAULT_BEAT_UNIT = 4;
+        const int DEFAULT_DIVISION_NUM = 2;
+        const float DEFAULT_BPM = 256;
+
+        public ChartData(float musicLength, float bpm, int beatCount = DEFAULT_BEAT_COUNT, float beatUnit = DEFAULT_BEAT_UNIT, int divNum = DEFAULT_DIVISION_NUM)
         {
             // 全体の小節数 = 曲の長さ[min] / 小節数[回/min]
             //              = (曲の長さ[sec] / 60f) * (bpm[回/min] / 小節内のビート数)
@@ -230,7 +235,7 @@ namespace ChartEditor
         {
             for (int i = 0; i < barNum; i++)
             {
-                BarDataInChart barData = new BarDataInChart(4, 4, 2, 256, i);
+                BarDataInChart barData = new BarDataInChart(DEFAULT_BEAT_COUNT, DEFAULT_BEAT_UNIT, DEFAULT_DIVISION_NUM, DEFAULT_BPM, i);
                 barDatas.Add(barData);
             }
         }
@@ -263,6 +268,34 @@ namespace ChartEditor
                     // フラグオンならBPM変更
                     if (isFound) { sub.SetBpm(bpm); }
                 }
+            }
+        }
+
+        /// <summary>
+        /// 小節線の追加
+        /// </summary>
+        /// <param name="length"></param>
+        public void AddBar(int length)
+        {
+            float bpm = DEFAULT_BPM;
+            if(BarDatas.Count > 0) { bpm = BarDatas.Last().SubDivisionDatas.Last().Bpm.Value; }
+
+            for (int i = 0; i < length; i++)
+            {
+                BarDataInChart barData = new BarDataInChart(DEFAULT_BEAT_COUNT, DEFAULT_BEAT_UNIT, DEFAULT_DIVISION_NUM, bpm, i);
+                barDatas.Add(barData);
+            }
+        }
+
+        /// <summary>
+        /// 小節線の削除
+        /// </summary>
+        /// <param name="length"></param>
+        public void RemoveBar(int length)
+        {
+            for (int i = 0; i < Mathf.Min(length, BarDatas.Count); i++)
+            {
+                barDatas.RemoveAt(barDatas.Count - 1);
             }
         }
 

@@ -2917,7 +2917,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1362533e1ad69042946877a95c5c13e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obj: {fileID: 2119177814}
 --- !u!1 &393575328
 GameObject:
   m_ObjectHideFlags: 0
@@ -10658,6 +10657,7 @@ GameObject:
   - component: {fileID: 1517439683}
   - component: {fileID: 1517439684}
   - component: {fileID: 1517439685}
+  - component: {fileID: 1517439686}
   m_Layer: 0
   m_Name: LaneFactories
   m_TagString: Untagged
@@ -10733,6 +10733,18 @@ MonoBehaviour:
   barLineDeplayable:
     obj: {fileID: 1091189661}
   ground: {fileID: 403046138}
+--- !u!114 &1517439686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517439682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8def83f16ee7524d8e409eb0b1c5045, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1530241948
 GameObject:
   m_ObjectHideFlags: 0

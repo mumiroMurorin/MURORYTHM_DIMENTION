@@ -205,6 +205,12 @@ namespace ChartEditor
             // インポートボタン
             importButton_view.OnClickedListner += chartDataImporter_model.Import;
 
+            // 譜面延長ボタン
+            chartExtendButton_view.OnClickedListner += () => editorDataSetter_model.ChangeChartLength(1);
+
+            // 譜面縮小ボタン
+            chartShortenButton_view.OnClickedListner += () => editorDataSetter_model.ChangeChartLength(-1);
+
             // リズムコンフィグ
             rhythmConfigBar_view.OnClickedApplyButtonListner += () => CloseConfig();
             rhythmConfigSubDivision_view.OnClickedApplyButtonListner += () => CloseConfig();
@@ -233,7 +239,6 @@ namespace ChartEditor
 
             AudioClip clip = await audioFileSelector.SelectAudioFile(soundLoadCts.Token);
             editorDataSetter_model.SetMusic(clip);
-            editorDataSetter_model.InitializeChartData();
         }
 
         private void OnDestroy()
