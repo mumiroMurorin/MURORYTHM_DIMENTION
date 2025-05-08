@@ -28,6 +28,14 @@ namespace ChartEditor
         void Initialize();
     }
 
+    /// <summary>
+    /// ƒŒ[ƒ“‚©‚çíœ‚Å‚«‚é
+    /// </summary>
+    public interface ILaneDestroyable<T>
+    {
+        public void Destroy(T lineData);
+    }
+
     public interface IInteractableCollider
     {
         /// <summary>

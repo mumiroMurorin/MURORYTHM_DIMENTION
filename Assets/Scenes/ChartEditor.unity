@@ -10698,6 +10698,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   barLineDeplayable:
     obj: {fileID: 1091189661}
+  barLineDestroyable:
+    obj: {fileID: 1091189661}
   lineParent: {fileID: 2019691097}
   ground: {fileID: 403046138}
   laneDivisionLines:

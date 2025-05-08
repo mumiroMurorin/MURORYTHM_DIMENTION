@@ -6,7 +6,7 @@ using VContainer;
 
 namespace ChartEditor
 {
-    public class BarLineFactory : MonoBehaviour, ILaneDeployable<BarDataInChart>
+    public class BarLineFactory : MonoBehaviour, ILaneDeployable<BarDataInChart>, ILaneDestroyable<BarDataInChart>
     {
         [SerializeField] GameObject barLineObj;
 
@@ -48,6 +48,36 @@ namespace ChartEditor
             }
 
             return obj;
+        }
+
+        /// <summary>
+        /// 最後尾のデータの消去のみ考慮している
+        /// 真ん中のデータを消す際は違う処理が必要
+        /// </summary>
+        /// <param name="lineData"></param>
+        void ILaneDestroyable<BarDataInChart>.Destroy(BarDataInChart lineData)
+        {
+            // lineDataを持つBarLineを探す
+            BarLine barLine = null;
+            foreach (var bar in barLines)
+            {
+                if(bar.BarData == lineData) { barLine = bar; break; }
+            }
+
+            // 無かったら返す
+            if(barLine == null)
+            {
+                Debug.LogWarning("【System】該当するBarDataが見つかりませんでした");
+                return;
+            }
+
+            // 最後尾のデータの消去のみ考慮している
+            // 真ん中のデータを消す際は違う処理が必要
+            barLines.Remove(barLine);
+            Destroy(barLine.gameObject);
+            barLine = null;
+
+            barCount--;
         }
 
         void ILaneDeployable<BarDataInChart>.Scaling(float current, float previous)

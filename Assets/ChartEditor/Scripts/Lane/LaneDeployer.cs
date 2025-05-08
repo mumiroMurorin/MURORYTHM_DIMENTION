@@ -9,10 +9,11 @@ namespace ChartEditor
     public class LaneDeployer : MonoBehaviour
     {
         [SerializeField] SerializeInterface<ILaneDeployable<BarDataInChart>> barLineDeplayable;
+        [SerializeField] SerializeInterface<ILaneDestroyable<BarDataInChart>> barLineDestroyable;
         [SerializeField] Transform lineParent;
         [SerializeField] GameObject ground;
         [SerializeField] GameObject[] laneDivisionLines;
- 
+
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorOptionGetter chartEditorOptionGetter;
         int barCount = 0;
@@ -95,7 +96,8 @@ namespace ChartEditor
 
         private void RemoveLane(BarDataInChart barData)
         {
-
+            barLineDestroyable?.Value.Destroy(barData);
+            barCount--;
         }
 
         /// <summary>

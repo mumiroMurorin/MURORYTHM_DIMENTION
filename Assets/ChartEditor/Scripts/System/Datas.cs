@@ -97,7 +97,7 @@ namespace ChartEditor
             UpdateSubDivisionData(beatCount, beatUnit, divNum, bpm);
         }
 
-        int barIndex;
+        public int barIndex;
 
         /// <summary>
         /// ¬ß“à‚Ì•ªüƒf[ƒ^
@@ -282,7 +282,7 @@ namespace ChartEditor
 
             for (int i = 0; i < length; i++)
             {
-                BarDataInChart barData = new BarDataInChart(DEFAULT_BEAT_COUNT, DEFAULT_BEAT_UNIT, DEFAULT_DIVISION_NUM, bpm, i);
+                BarDataInChart barData = new BarDataInChart(DEFAULT_BEAT_COUNT, DEFAULT_BEAT_UNIT, DEFAULT_DIVISION_NUM, bpm, BarDatas.Count + i);
                 barDatas.Add(barData);
             }
         }
