@@ -34,12 +34,6 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // ノーツの出現
-            chartEditorDataGetter.CurrentEditMode
-                .Where(editMode => editMode == EditMode.Deploy)
-                .Subscribe(editMode => InstantiateNote())
-                .AddTo(this.gameObject);
-
             // ノーツの削除
             chartEditorDataGetter.CurrentEditMode
                 .Where(editMode => editMode != EditMode.Deploy)
@@ -57,7 +51,6 @@ namespace ChartEditor
                 {
                     if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
                     DestroyNote();
-                    InstantiateNote();
                 })
                 .AddTo(this.gameObject);
         }
@@ -75,6 +68,9 @@ namespace ChartEditor
             // 配置モードでない際は返す
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
             if (deployable == null) { return; }
+
+            // 配置ノーツが無かったら新規インスタンス化
+            if (deployingNote == null) { InstantiateNote(); }
 
             deployingNote.OnMove(deployable.deployParent);
             isDeployedTentative = true;
@@ -121,6 +117,7 @@ namespace ChartEditor
             }
 
             deployable.OnInstantiate(deployingNoteData, GetNoteParentTransform);
+            deployable.OnDestroyListner += () => OnDestroyDeployingNote();
 
             deployingNote = deployable;
             isDeployedTentative = false;
@@ -133,6 +130,10 @@ namespace ChartEditor
         {
             if (deployingNote == null) { return; }
             deployingNote.OnDisable();
+        }
+
+        private void OnDestroyDeployingNote()
+        {
             deployingNote = null;
             deployingNoteData = null;
         }

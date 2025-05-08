@@ -13,6 +13,7 @@ namespace ChartEditor
         [SerializeField] private Renderer noteRenderer;
 
         NoteObject noteObject;
+        public Action OnDestroyListner { get; set; }
 
         private void Awake()
         {
@@ -31,6 +32,7 @@ namespace ChartEditor
 
             noteObject.NoteData = noteData;
             noteObject.GetParentTransformFunc = getParentTransformFunc;
+
         }
 
         void IDeployableObject.OnDeploy()
@@ -55,6 +57,11 @@ namespace ChartEditor
         void IDeployableObject.OnDisable()
         {
             noteObject.Destroy();
+        }
+
+        private void OnDestroy()
+        {
+            OnDestroyListner?.Invoke();
         }
     }
 

@@ -54,6 +54,8 @@ namespace ChartEditor
 
     public interface IDeployableObject
     {
+        public Action OnDestroyListner { get; set; }
+
         void OnInstantiate(IGroundNoteData noteData, Func<AddressInChart, Transform> getParentTransformFunc);
 
         void OnMove(Transform parent);
