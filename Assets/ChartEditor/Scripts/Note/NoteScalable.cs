@@ -30,6 +30,9 @@ namespace ChartEditor
             // ノートデータが存在するまで待つ
             await UniTask.WaitUntil(() => noteObject.NoteData != null, cancellationToken: token);
 
+            // ObserveCountChanged()は初期化してくれないので、最初に大きさを変える
+            OnChangeScale(noteObject.NoteData.Range.Count);
+
             // 大きさの変更通知に対してスケール更新
             noteObject.NoteData.Range.ObserveCountChanged()
                 .Subscribe(OnChangeScale)

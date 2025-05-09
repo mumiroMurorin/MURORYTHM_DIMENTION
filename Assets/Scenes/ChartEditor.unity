@@ -14887,7 +14887,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playKey: 32
   scalingSensitivity: 0.1
-  moveSensitivityMax: 0.005
+  moveSensitivityMax: 0.025
 --- !u!1 &2040267433
 GameObject:
   m_ObjectHideFlags: 0

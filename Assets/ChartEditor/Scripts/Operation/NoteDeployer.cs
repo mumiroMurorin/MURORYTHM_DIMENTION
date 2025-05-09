@@ -124,6 +124,35 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 外部データから配置
+        /// </summary>
+        /// <param name="groundNoteData"></param>
+        public void DeployForNoteData(IGroundNoteData noteData)
+        {
+            GameObject obj = Instantiate(GetNote(noteData.NoteType));
+
+            if (!obj.TryGetComponent(out IDeployableObject deployable))
+            {
+                Debug.LogWarning("ノーツにIDeployableObjectがくっついてねぇぞ！");
+                return;
+            }
+
+            // チェインノーツのときデータセット
+            if (noteData is IGroundChainNoteData)
+            {
+                ((IGroundChainNoteData)noteData).SetNoteObject(obj.GetComponent<IConnectableObject>());
+            }
+
+            deployable.OnInstantiate(noteData, GetNoteParentTransform);
+            deployable.OnDestroyListner += () => OnDestroyDeployingNote();
+
+            // 配置
+            Transform parent = chartEditorDataGetter.ChartData.Value.GetPlacementLocation(noteData.Address);
+            deployable.OnMove(parent);
+            deployable.OnDeploy();
+        }
+
+        /// <summary>
         /// ノートの削除
         /// </summary>
         private void DestroyNote()

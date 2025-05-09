@@ -150,25 +150,28 @@ namespace ChartConvert
     {
         private List<INoteDataConvertable> converters = new List<INoteDataConvertable>();
 
-        public ChartEditor.ChartData Import(ChartDataOrigin dataOrigin)
+        public bool Import(ChartDataOrigin dataOrigin, ref ChartEditor.ChartData chartData)
         {
             bool isSucceed = true;
 
             // 初期化
             Initialize();
-            ChartEditor.ChartData chartData = new ChartEditor.ChartData(dataOrigin.BarDatas.Count);
+
+            chartData.AddBar(dataOrigin.BarDatas.Count);
 
             // 分線を一つずつ取り出す
             for (int i = 0; i < dataOrigin.BarDatas.Count; i++) 
             {
+
                 var bar = dataOrigin.BarDatas[i];
+
                 if (!SetDataFromBarData(bar, chartData.BarDatas[i])) { isSucceed = false; }
             }
 
             if (isSucceed) { Debug.Log("【Converter】譜面データの変換成功"); }
             else { Debug.LogWarning("【Converter】譜面データの変換失敗。ログを確かめてください"); }
 
-            return chartData;
+            return isSucceed;
         }
 
         private bool SetDataFromBarData(BarDataOrigin barDataOrigin, ChartEditor.BarDataInChart dataInChartEditor)
@@ -188,6 +191,7 @@ namespace ChartConvert
             for (int i = 0;i < barDataOrigin.SubDivisionDatas.Count; i++)
             {
                 var sub = barDataOrigin.SubDivisionDatas[i];
+
                 if (!SetDataFromSubDivisionData(sub, dataInChartEditor.SubDivisionDatas[i])) { isSucceed = false; }
             }
 
@@ -196,6 +200,8 @@ namespace ChartConvert
 
         private bool SetDataFromSubDivisionData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
         {
+            Debug.Log(dataInChartEditor.BarIndex);
+
             bool isSucceed = true;
 
             // bpmのセット
@@ -544,6 +550,7 @@ namespace ChartConvert
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
 
+                Debug.Log(address.BarIndex);
                 noteData.SetAddress(address);
                 noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
 

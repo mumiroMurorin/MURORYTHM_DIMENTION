@@ -12,6 +12,10 @@ namespace ChartEditor
         ReactiveProperty<ChartData> chartData = new ReactiveProperty<ChartData>();
 
         public IReadOnlyReactiveProperty<ChartData> ChartData => chartData;
+        public void SetChartData(ChartData chartData)
+        {
+            this.chartData.Value = chartData;
+        }
 
         public void ChangeChartLength(int delta)
         {
@@ -270,6 +274,8 @@ namespace ChartEditor
     public interface IChartEditorDataSetter
     {
         public void ChangeChartLength(int delta);
+
+        public void SetChartData(ChartData chartData);
 
         public void SetChartSeconds(float seconds);
 

@@ -218,18 +218,18 @@ namespace ChartEditor
         const int DEFAULT_DIVISION_NUM = 2;
         const float DEFAULT_BPM = 256;
 
-        public ChartData(float musicLength, float bpm, int beatCount = DEFAULT_BEAT_COUNT, float beatUnit = DEFAULT_BEAT_UNIT, int divNum = DEFAULT_DIVISION_NUM)
-        {
-            // 全体の小節数 = 曲の長さ[min] / 小節数[回/min]
-            //              = (曲の長さ[sec] / 60f) * (bpm[回/min] / 小節内のビート数)
-            float barNum = (musicLength / 60f) * (bpm / beatCount);
+        //public ChartData(float musicLength, float bpm, int beatCount = DEFAULT_BEAT_COUNT, float beatUnit = DEFAULT_BEAT_UNIT, int divNum = DEFAULT_DIVISION_NUM)
+        //{
+        //    // 全体の小節数 = 曲の長さ[min] / 小節数[回/min]
+        //    //              = (曲の長さ[sec] / 60f) * (bpm[回/min] / 小節内のビート数)
+        //    float barNum = (musicLength / 60f) * (bpm / beatCount);
 
-            for(int i = 0; i < barNum; i++)
-            {
-                BarDataInChart barData = new BarDataInChart(beatCount, beatUnit, divNum, bpm, i);
-                barDatas.Add(barData);
-            }
-        }
+        //    for(int i = 0; i < barNum; i++)
+        //    {
+        //        BarDataInChart barData = new BarDataInChart(beatCount, beatUnit, divNum, bpm, i);
+        //        barDatas.Add(barData);
+        //    }
+        //}
 
         public ChartData(int barNum)
         {
@@ -278,11 +278,13 @@ namespace ChartEditor
         public void AddBar(int length)
         {
             float bpm = DEFAULT_BPM;
-            if(BarDatas.Count > 0) { bpm = BarDatas.Last().SubDivisionDatas.Last().Bpm.Value; }
+            int barDataCount = BarDatas.Count;
+
+            if (BarDatas.Count > 0) { bpm = BarDatas.Last().SubDivisionDatas.Last().Bpm.Value; }
 
             for (int i = 0; i < length; i++)
             {
-                BarDataInChart barData = new BarDataInChart(DEFAULT_BEAT_COUNT, DEFAULT_BEAT_UNIT, DEFAULT_DIVISION_NUM, bpm, BarDatas.Count + i);
+                BarDataInChart barData = new BarDataInChart(DEFAULT_BEAT_COUNT, DEFAULT_BEAT_UNIT, DEFAULT_DIVISION_NUM, bpm, barDataCount + i);
                 barDatas.Add(barData);
             }
         }
