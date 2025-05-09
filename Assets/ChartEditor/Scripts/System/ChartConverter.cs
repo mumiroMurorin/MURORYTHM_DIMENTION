@@ -200,8 +200,6 @@ namespace ChartConvert
 
         private bool SetDataFromSubDivisionData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
         {
-            Debug.Log(dataInChartEditor.BarIndex);
-
             bool isSucceed = true;
 
             // bpmのセット
@@ -608,6 +606,22 @@ namespace ChartConvert
 
         public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
         {
+            if (dataOrigin.DynamicUpwardData == null) { return true; }
+
+            foreach (var noteDataOrigin in dataOrigin.DynamicUpwardData)
+            {
+                IGroundNoteData noteData = new ChartEditor.NoteData_DynamicUpward();
+
+                // データのセット
+                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+
+                Debug.Log(address.BarIndex);
+                noteData.SetAddress(address);
+                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
+
+                dataInChartEditor.AddNote(noteData);
+            }
+
             return true;
         }
     }
@@ -660,6 +674,22 @@ namespace ChartConvert
 
         public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
         {
+            if (dataOrigin.DynamicRightwardData == null) { return true; }
+
+            foreach (var noteDataOrigin in dataOrigin.DynamicRightwardData)
+            {
+                IGroundNoteData noteData = new ChartEditor.NoteData_DynamicRightward();
+
+                // データのセット
+                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+
+                Debug.Log(address.BarIndex);
+                noteData.SetAddress(address);
+                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
+
+                dataInChartEditor.AddNote(noteData);
+            }
+
             return true;
         }
     }
@@ -711,6 +741,22 @@ namespace ChartConvert
 
         public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
         {
+            if (dataOrigin.DynamicLeftwardData == null) { return true; }
+
+            foreach (var noteDataOrigin in dataOrigin.DynamicLeftwardData)
+            {
+                IGroundNoteData noteData = new ChartEditor.NoteData_DynamicLeftward();
+
+                // データのセット
+                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+
+                Debug.Log(address.BarIndex);
+                noteData.SetAddress(address);
+                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
+
+                dataInChartEditor.AddNote(noteData);
+            }
+
             return true;
         }
     }

@@ -146,7 +146,7 @@ namespace ChartEditor
 
         public Transform GetPlacementLocation(AddressInChart address)
         {
-            if (address.SubDivisionIndex > subDivisionDatas.Count)
+            if (address.SubDivisionIndex >= subDivisionDatas.Count)
             {
                 // Debug.LogError($"ySystemz’l‚ª•ªü‚Ì”‚ğ’´‚¦‚Ä‚¢‚Ü‚·: {address.SubDivisionIndex}/{subDivisionDatas.Count}");
                 return null;
@@ -360,7 +360,7 @@ namespace ChartEditor
 
         public Transform GetPlacementLocation(AddressInChart address)
         {
-            if (address.BarIndex > barDatas.Count)
+            if (address.BarIndex >= barDatas.Count)
             {
                 // Debug.LogError($"ySystemz’l‚ª¬ßü‚Ì”‚ğ’´‚¦‚Ä‚¢‚Ü‚·: {address.BarIndex}");
                 return null;
@@ -425,9 +425,10 @@ namespace ChartEditor
 
         public void SetSameAddress(AddressInChart address)
         {
-            this.sliderIndex.Value = address.SliderIndex;
-            this.subDivisionIndex.Value = address.SubDivisionIndex;
+            Debug.Log($"SetSameAddress: #{address.barIndex}-{address.SubDivisionIndex}-{address.SliderIndex}");
             this.barIndex.Value = address.BarIndex;
+            this.subDivisionIndex.Value = address.SubDivisionIndex;
+            this.sliderIndex.Value = address.SliderIndex;
         }
 
         /// <summary>
