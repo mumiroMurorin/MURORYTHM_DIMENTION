@@ -208,7 +208,7 @@ namespace ChartConvert
             // 一つずつ取り出して変換
             foreach (var converter in converters)
             {
-                if (!converter.CheckAndAddDataFromOrigin(dataOrigin, dataInChartEditor)) { isSucceed = false; }
+                if (!converter.CheckAndAddDataFromOrigin(dataOrigin, dataInChartEditor,)) { isSucceed = false; }
             }
 
             return isSucceed;
@@ -483,19 +483,30 @@ namespace ChartConvert
     /// <summary>
     /// ChartEditor.NoteDataを変換してSubDivisionDataOriginにぶち込む
     /// </summary>
-    public interface INoteDataConvertable
+    public interface IOriginDataToRhythmGameConvertable
+    {
+        bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing);
+    }
+
+    public interface IGroundNoteToChartEditorConvertable
     {
         bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin);
 
-        bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing);
-
         bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor);
+    }
+
+    public interface IChainNoteConvertable
+    {
+        bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin,);
+
+        bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor,
+            ref Dictionary<int, List<IGroundChainNoteData>> numberToNote);
     }
 
     /// <summary>
     /// タッチノーツ
     /// </summary>
-    public class TouchNoteConverter : INoteDataConvertable
+    public class TouchNoteConverter : INoteDataConvertable, IGroundNoteToChartEditorConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.TouchNote;
 
@@ -548,7 +559,6 @@ namespace ChartConvert
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
 
-                Debug.Log(address.BarIndex);
                 noteData.SetAddress(address);
                 noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
 
@@ -562,7 +572,7 @@ namespace ChartConvert
     /// <summary>
     /// ↑ダイナミック↑ノーツ
     /// </summary>
-    public class DynamicUpwardConverter : INoteDataConvertable
+    public class DynamicUpwardConverter : INoteDataConvertable, IGroundNoteToChartEditorConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundUpward;
 
@@ -629,7 +639,7 @@ namespace ChartConvert
     /// <summary>
     /// →ダイナミック→ノーツ
     /// </summary>
-    public class DynamicRightwardConverter : INoteDataConvertable
+    public class DynamicRightwardConverter : INoteDataConvertable, IGroundNoteToChartEditorConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundRightward;
 
@@ -697,7 +707,7 @@ namespace ChartConvert
     /// <summary>
     /// ←ダイナミック←ノーツ
     /// </summary>
-    public class DynamicLeftwardConverter : INoteDataConvertable
+    public class DynamicLeftwardConverter : INoteDataConvertable, IGroundNoteToChartEditorConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundLeftward;
 
@@ -764,7 +774,7 @@ namespace ChartConvert
     /// <summary>
     /// ホールドスタートノーツ
     /// </summary>
-    public class HoldStartConverter : INoteDataConvertable
+    public class HoldStartConverter : INoteDataConvertable, IGroundChainNoteToChartEditorConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.Hold;
 
@@ -813,8 +823,25 @@ namespace ChartConvert
             return true;
         }
 
-        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, List<IGroundChainNoteData>> numberToNote)
         {
+            if (dataOrigin.HoldStartData == null) { return true; }
+
+            foreach (var noteDataOrigin in dataOrigin.HoldStartData)
+            {
+                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
+
+                if (noteData is not IGroundChainNoteData) { return false; }
+
+                // データのセット
+                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+
+                noteData.SetAddress(address);
+                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
+
+                dataInChartEditor.AddNote(noteData);
+            }
+
             return true;
         }
     }
@@ -822,7 +849,7 @@ namespace ChartConvert
     /// <summary>
     /// ホールド中継ノーツ
     /// </summary>
-    public class HoldRelayConverter : INoteDataConvertable
+    public class HoldRelayConverter : INoteDataConvertable, IGroundChainNoteToChartEditorConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.Hold;
 
@@ -871,8 +898,23 @@ namespace ChartConvert
             return true;
         }
 
-        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, List<IGroundChainNoteData>> numberToNote)
         {
+            if (dataOrigin.HoldRelayData == null) { return true; }
+
+            foreach (var noteDataOrigin in dataOrigin.HoldRelayData)
+            {
+                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
+
+                // データのセット
+                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+
+                noteData.SetAddress(address);
+                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
+
+                dataInChartEditor.AddNote(noteData);
+            }
+
             return true;
         }
     }
@@ -880,7 +922,7 @@ namespace ChartConvert
     /// <summary>
     /// ホールドエンドノーツ
     /// </summary>
-    public class HoldEndConverter : INoteDataConvertable
+    public class HoldEndConverter : INoteDataConvertable, IGroundChainNoteToChartEditorConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.Hold;
 
@@ -929,8 +971,23 @@ namespace ChartConvert
             return true;
         }
 
-        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, List<IGroundChainNoteData>> numberToNote)
         {
+            if (dataOrigin.HoldEndData == null) { return true; }
+
+            foreach (var noteDataOrigin in dataOrigin.HoldEndData)
+            {
+                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
+
+                // データのセット
+                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+
+                noteData.SetAddress(address);
+                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
+
+                dataInChartEditor.AddNote(noteData);
+            }
+
             return true;
         }
     }
@@ -938,7 +995,7 @@ namespace ChartConvert
     /// <summary>
     /// ホールドメッシュ
     /// </summary>
-    public class HoldMeshConverter : INoteDataConvertable
+    public class HoldMeshConverter : INoteDataConvertable, IGroundChainNoteToChartEditorConvertable
     {
         readonly DeploymentNoteType type1 = DeploymentNoteType.Hold;
         readonly DeploymentNoteType type2 = DeploymentNoteType.HoldHidden;
@@ -1021,8 +1078,23 @@ namespace ChartConvert
             return true;
         }
 
-        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, List<IGroundChainNoteData>> numberToNote)
         {
+            if (dataOrigin.HoldEndData == null) { return true; }
+
+            foreach (var noteDataOrigin in dataOrigin.HoldEndData)
+            {
+                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
+
+                // データのセット
+                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+
+                noteData.SetAddress(address);
+                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
+
+                dataInChartEditor.AddNote(noteData);
+            }
+
             return true;
         }
 

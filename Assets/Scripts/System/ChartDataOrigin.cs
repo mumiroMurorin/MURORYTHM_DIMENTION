@@ -85,16 +85,22 @@ namespace ChartConvert
 
     public class NoteDataOrigin_HoldStart
     {
+        public int HoldNumber { get; set; }
+
         public int[] Range { get; set; }
     }
 
     public class NoteDataOrigin_HoldEnd
     {
+        public int HoldNumber { get; set; }
+
         public int[] Range { get; set; }
     }
 
     public class NoteDataOrigin_HoldRelay
     {
+        public int HoldNumber { get; set; }
+
         public int[] Range { get; set; }
     }
 
