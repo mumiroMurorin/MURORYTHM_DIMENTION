@@ -11,7 +11,17 @@
           "DynamicUpwardData": null,
           "DynamicRightwardData": null,
           "DynamicLeftwardData": null,
-          "HoldStartData": null,
+          "HoldStartData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ],
           "HoldEndData": null,
           "HoldRelayData": null
         },
@@ -27,17 +37,80 @@
         },
         {
           "Bpm": 256.0,
-          "TouchNoteData": [
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": [
             {
+              "HoldNumber": 0,
+              "IsHidden": true,
               "Range": [
-                0,
-                1,
-                2,
-                3,
                 4,
                 5,
                 6,
-                7,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 256.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 0,
+              "IsHidden": true,
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 256.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 0,
+              "IsHidden": false,
+              "Range": [
                 8,
                 9,
                 10,
@@ -48,71 +121,7 @@
                 15
               ]
             }
-          ],
-          "DynamicUpwardData": null,
-          "DynamicRightwardData": null,
-          "DynamicLeftwardData": null,
-          "HoldStartData": null,
-          "HoldEndData": null,
-          "HoldRelayData": null
-        },
-        {
-          "Bpm": 256.0,
-          "TouchNoteData": null,
-          "DynamicUpwardData": null,
-          "DynamicRightwardData": null,
-          "DynamicLeftwardData": null,
-          "HoldStartData": null,
-          "HoldEndData": null,
-          "HoldRelayData": null
-        },
-        {
-          "Bpm": 256.0,
-          "TouchNoteData": null,
-          "DynamicUpwardData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ],
-          "DynamicRightwardData": null,
-          "DynamicLeftwardData": null,
-          "HoldStartData": null,
-          "HoldEndData": null,
-          "HoldRelayData": null
-        },
-        {
-          "Bpm": 256.0,
-          "TouchNoteData": null,
-          "DynamicUpwardData": null,
-          "DynamicRightwardData": null,
-          "DynamicLeftwardData": null,
-          "HoldStartData": null,
-          "HoldEndData": null,
-          "HoldRelayData": null
-        },
-        {
-          "Bpm": 256.0,
-          "TouchNoteData": null,
-          "DynamicUpwardData": null,
-          "DynamicRightwardData": [
-            {
-              "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ],
-          "DynamicLeftwardData": null,
-          "HoldStartData": null,
-          "HoldEndData": null,
-          "HoldRelayData": null
+          ]
         },
         {
           "Bpm": 256.0,
@@ -136,8 +145,74 @@
           "TouchNoteData": null,
           "DynamicUpwardData": null,
           "DynamicRightwardData": null,
-          "DynamicLeftwardData": [
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": [
             {
+              "HoldNumber": 0,
+              "IsHidden": true,
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 256.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 0,
+              "IsHidden": true,
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 256.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": [
+            {
+              "HoldNumber": 0,
               "Range": [
                 0,
                 1,
@@ -146,54 +221,6 @@
               ]
             }
           ],
-          "HoldStartData": null,
-          "HoldEndData": null,
-          "HoldRelayData": null
-        },
-        {
-          "Bpm": 256.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8
-              ]
-            }
-          ],
-          "DynamicUpwardData": null,
-          "DynamicRightwardData": null,
-          "DynamicLeftwardData": null,
-          "HoldStartData": null,
-          "HoldEndData": null,
-          "HoldRelayData": null
-        },
-        {
-          "Bpm": 256.0,
-          "TouchNoteData": null,
-          "DynamicUpwardData": null,
-          "DynamicRightwardData": null,
-          "DynamicLeftwardData": null,
-          "HoldStartData": null,
-          "HoldEndData": null,
-          "HoldRelayData": null
-        },
-        {
-          "Bpm": 256.0,
-          "TouchNoteData": null,
-          "DynamicUpwardData": null,
-          "DynamicRightwardData": null,
-          "DynamicLeftwardData": null,
-          "HoldStartData": null,
-          "HoldEndData": null,
-          "HoldRelayData": null
-        },
-        {
-          "Bpm": 256.0,
-          "TouchNoteData": null,
-          "DynamicUpwardData": null,
-          "DynamicRightwardData": null,
-          "DynamicLeftwardData": null,
-          "HoldStartData": null,
-          "HoldEndData": null,
           "HoldRelayData": null
         },
         {

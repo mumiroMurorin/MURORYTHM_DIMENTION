@@ -956,7 +956,7 @@ namespace ChartConvert
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
                 IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
-                if (noteDataOrigin.IsHidden) { ((ITypeChangableNoteData)noteData).ChangeNoteType(); }
+                if (noteDataOrigin.IsHidden) { ((ITypeChangableNoteData)noteData).ChangeNoteType(true); }
 
                 noteData.SetAddress(address);
                 noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());

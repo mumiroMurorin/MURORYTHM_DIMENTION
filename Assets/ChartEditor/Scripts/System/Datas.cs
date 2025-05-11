@@ -412,7 +412,6 @@ namespace ChartEditor
 
         public void SetSameAddress(AddressInChart address)
         {
-            Debug.Log($"SetSameAddress: #{address.barIndex}-{address.SubDivisionIndex}-{address.SliderIndex}");
             this.barIndex.Value = address.BarIndex;
             this.subDivisionIndex.Value = address.SubDivisionIndex;
             this.sliderIndex.Value = address.SliderIndex;

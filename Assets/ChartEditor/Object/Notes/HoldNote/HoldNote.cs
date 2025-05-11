@@ -33,12 +33,12 @@ namespace ChartEditor
         /// </summary>
         public IReadOnlyReactiveCollection<float> Range { get { return range; } }
 
-        public void ChangeNoteType()
+        public void ChangeNoteType(bool isCompulsion)
         {
             // ‰Â‹ ¨ •s‰Â‹
             if(NoteType == DeploymentNoteType.Hold)
             {
-                if (NextNote.Value == null || BackNote.Value == null) { return; }
+                if (!isCompulsion && (NextNote.Value == null || BackNote.Value == null)) { return; }
                 NoteType = DeploymentNoteType.HoldHidden;
             }
             // •s‰Â‹ ¨ ‰Â‹
