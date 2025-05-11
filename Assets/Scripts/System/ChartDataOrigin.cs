@@ -57,8 +57,6 @@ namespace ChartConvert
         public List<NoteDataOrigin_HoldStart> HoldStartData { get; set; }
         public List<NoteDataOrigin_HoldEnd> HoldEndData { get; set; }
         public List<NoteDataOrigin_HoldRelay> HoldRelayData { get; set; }
-        public List<NoteDataOrigin_HoldMesh> HoldMeshData { get; set; }
-
     }
 
     #region NoteDataOriginClass ノーツデータクラス
@@ -101,14 +99,7 @@ namespace ChartConvert
     {
         public int HoldNumber { get; set; }
 
-        public int[] Range { get; set; }
-    }
-
-    public class NoteDataOrigin_HoldMesh
-    {
-        public int HoldNumber { get; set; }
-
-        public bool IsEnd { get; set; }
+        public bool IsHidden { get; set; }
 
         public int[] Range { get; set; }
     }
