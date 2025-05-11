@@ -497,16 +497,17 @@ namespace ChartConvert
 
     public interface IChainNoteConvertable
     {
-        bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin,);
+        bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, 
+            ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber);
 
         bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor,
-            ref Dictionary<int, List<IGroundChainNoteData>> numberToNote);
+            ref Dictionary<int, IGroundChainNoteData> numberToStartNote);
     }
 
     /// <summary>
     /// タッチノーツ
     /// </summary>
-    public class TouchNoteConverter : INoteDataConvertable, IGroundNoteToChartEditorConvertable
+    public class TouchNoteConverter : IOriginDataToRhythmGameConvertable, IGroundNoteToChartEditorConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.TouchNote;
 
@@ -572,7 +573,7 @@ namespace ChartConvert
     /// <summary>
     /// ↑ダイナミック↑ノーツ
     /// </summary>
-    public class DynamicUpwardConverter : INoteDataConvertable, IGroundNoteToChartEditorConvertable
+    public class DynamicUpwardConverter : IOriginDataToRhythmGameConvertable, IGroundNoteToChartEditorConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundUpward;
 
@@ -639,7 +640,7 @@ namespace ChartConvert
     /// <summary>
     /// →ダイナミック→ノーツ
     /// </summary>
-    public class DynamicRightwardConverter : INoteDataConvertable, IGroundNoteToChartEditorConvertable
+    public class DynamicRightwardConverter : IOriginDataToRhythmGameConvertable, IGroundNoteToChartEditorConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundRightward;
 
@@ -707,7 +708,7 @@ namespace ChartConvert
     /// <summary>
     /// ←ダイナミック←ノーツ
     /// </summary>
-    public class DynamicLeftwardConverter : INoteDataConvertable, IGroundNoteToChartEditorConvertable
+    public class DynamicLeftwardConverter : IOriginDataToRhythmGameConvertable, IGroundNoteToChartEditorConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundLeftward;
 
@@ -774,11 +775,13 @@ namespace ChartConvert
     /// <summary>
     /// ホールドスタートノーツ
     /// </summary>
-    public class HoldStartConverter : INoteDataConvertable, IGroundChainNoteToChartEditorConvertable
+    public class HoldStartConverter : IOriginDataToRhythmGameConvertable, IChainNoteConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.Hold;
 
-        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        int currentHoldNumber = 0;
+
+        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != type) { return false; }
             if (noteDataInEditor is not IGroundChainNoteData) { return false; }
@@ -798,10 +801,12 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_HoldStart data = new NoteDataOrigin_HoldStart()
             {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
+                HoldNumber = currentHoldNumber
             };
 
             dataOrigin.HoldStartData.Add(data);
+            nextNoteToNumber.Add(nextNote, currentHoldNumber++);
             return true;
         }
 
@@ -823,23 +828,33 @@ namespace ChartConvert
             return true;
         }
 
-        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, List<IGroundChainNoteData>> numberToNote)
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldStartData == null) { return true; }
 
             foreach (var noteDataOrigin in dataOrigin.HoldStartData)
             {
                 IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
-
                 if (noteData is not IGroundChainNoteData) { return false; }
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
 
                 noteData.SetAddress(address);
                 noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
-
                 dataInChartEditor.AddNote(noteData);
+
+                // ディクショナリーへの保存
+                if (numberToStartNote.TryGetValue(noteDataOrigin.HoldNumber,out var startNote))
+                {
+                    Debug.LogWarning($"【Converter】HoldStartの変換の際、既にHoldNumberが存在しました: {noteDataOrigin.HoldNumber}");
+                    return false;
+                }
+                else
+                {
+                    numberToStartNote.Add(noteDataOrigin.HoldNumber, chainData);
+                }
             }
 
             return true;
@@ -849,31 +864,42 @@ namespace ChartConvert
     /// <summary>
     /// ホールド中継ノーツ
     /// </summary>
-    public class HoldRelayConverter : INoteDataConvertable, IGroundChainNoteToChartEditorConvertable
+    public class HoldRelayConverter : IOriginDataToRhythmGameConvertable, IChainNoteConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.Hold;
 
-        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != type) { return false; }
             if (noteDataInEditor is not IGroundChainNoteData) { return false; }
             if (noteDataInEditor is not ITypeChangableNoteData) { return false; }
 
-            IGroundChainNoteData backNote = ((IGroundChainNoteData)noteDataInEditor).BackNote.Value;
-            IGroundChainNoteData nextNote = ((IGroundChainNoteData)noteDataInEditor).NextNote.Value;
+            IGroundChainNoteData thisNote = (IGroundChainNoteData)noteDataInEditor;
+            IGroundChainNoteData backNote = thisNote.BackNote.Value;
+            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
             if (backNote == null && nextNote != null) { return false; }
             if (backNote != null && nextNote == null) { return false; }
 
-            // 新たにインスタンス化
-            if (dataOrigin.HoldRelayData == null)
+            // ディクショナリーからHoldNumberを探す
+            if (!nextNoteToNumber.TryGetValue(thisNote, out int number))
             {
-                dataOrigin.HoldRelayData = new List<NoteDataOrigin_HoldRelay>();
+                Debug.LogWarning($"【Converter】HoldRelayの変換の際、このノーツが見つかりませんでした: {number}");
+                return false;
             }
+            else
+            {
+                nextNoteToNumber.Remove(thisNote);
+                nextNoteToNumber.Add(nextNote, number);
+            }
+
+            // 新たにインスタンス化
+            if (dataOrigin.HoldRelayData == null) { dataOrigin.HoldRelayData = new List<NoteDataOrigin_HoldRelay>(); }
 
             // 追加するデータのインスタンス化
             NoteDataOrigin_HoldRelay data = new NoteDataOrigin_HoldRelay()
             {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
+                HoldNumber = number
             };
 
             dataOrigin.HoldRelayData.Add(data);
@@ -898,21 +924,34 @@ namespace ChartConvert
             return true;
         }
 
-        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, List<IGroundChainNoteData>> numberToNote)
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldRelayData == null) { return true; }
 
             foreach (var noteDataOrigin in dataOrigin.HoldRelayData)
             {
                 IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
+                if (noteData is not IGroundChainNoteData) { return false; }
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
 
                 noteData.SetAddress(address);
                 noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
-
                 dataInChartEditor.AddNote(noteData);
+
+                // リストへの保存
+                if (numberToStartNote.TryGetValue(noteDataOrigin.HoldNumber, out var startNote))
+                {
+                    // 繋げる
+                    startNote.AddChainNote(chainData);
+                }
+                else
+                {
+                    Debug.LogWarning($"【Converter】HoldRelayの変換の際、HoldNumberが存在しませんでした: {noteDataOrigin.HoldNumber}");
+                    return false;
+                }
             }
 
             return true;
@@ -922,20 +961,33 @@ namespace ChartConvert
     /// <summary>
     /// ホールドエンドノーツ
     /// </summary>
-    public class HoldEndConverter : INoteDataConvertable, IGroundChainNoteToChartEditorConvertable
+    public class HoldEndConverter : IOriginDataToRhythmGameConvertable, IChainNoteConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.Hold;
 
-        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != type) { return false; }
             if (noteDataInEditor is not IGroundChainNoteData) { return false; }
 
-            IGroundChainNoteData backNote = ((IGroundChainNoteData)noteDataInEditor).BackNote.Value;
-            IGroundChainNoteData nextNote = ((IGroundChainNoteData)noteDataInEditor).NextNote.Value;
+            IGroundChainNoteData thisNote = (IGroundChainNoteData)noteDataInEditor;
+            IGroundChainNoteData backNote = thisNote.BackNote.Value;
+            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
             if (nextNote != null) { return false; }
             if (backNote == null && nextNote == null) { return false; }
             if (backNote != null && nextNote != null) { return false; }
+
+            // ディクショナリーからHoldNumberを探す
+            if (!nextNoteToNumber.TryGetValue(thisNote, out int number))
+            {
+                Debug.LogWarning($"【Converter】HoldEndの変換の際、このノーツが見つかりませんでした: {number}");
+                return false;
+            }
+            else
+            {
+                // 終点なのでAddしない
+                nextNoteToNumber.Remove(thisNote);
+            }
 
             // 新たにインスタンス化
             if (dataOrigin.HoldEndData == null)
@@ -946,7 +998,8 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_HoldEnd data = new NoteDataOrigin_HoldEnd()
             {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
+                HoldNumber = number
             };
 
             dataOrigin.HoldEndData.Add(data);
@@ -971,21 +1024,34 @@ namespace ChartConvert
             return true;
         }
 
-        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, List<IGroundChainNoteData>> numberToNote)
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldEndData == null) { return true; }
 
             foreach (var noteDataOrigin in dataOrigin.HoldEndData)
             {
                 IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
+                if (noteData is not IGroundChainNoteData) { return false; }
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
 
                 noteData.SetAddress(address);
                 noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
-
                 dataInChartEditor.AddNote(noteData);
+
+                // リストへの保存
+                if (numberToStartNote.TryGetValue(noteDataOrigin.HoldNumber, out var startNote))
+                {
+                    // 繋げる
+                    startNote.AddChainNote(chainData);
+                }
+                else
+                {
+                    Debug.LogWarning($"【Converter】HoldEndの変換の際、HoldNumberが存在しませんでした: {noteDataOrigin.HoldNumber}");
+                    return false;
+                }
             }
 
             return true;
@@ -995,47 +1061,37 @@ namespace ChartConvert
     /// <summary>
     /// ホールドメッシュ
     /// </summary>
-    public class HoldMeshConverter : INoteDataConvertable, IGroundChainNoteToChartEditorConvertable
+    public class HoldMeshConverter : IOriginDataToRhythmGameConvertable, IChainNoteConvertable
     {
         readonly DeploymentNoteType type1 = DeploymentNoteType.Hold;
         readonly DeploymentNoteType type2 = DeploymentNoteType.HoldHidden;
 
-        Dictionary<IGroundChainNoteData, int> nextNoteToNumber = new Dictionary<IGroundChainNoteData, int>();
-        int currentHoldNumber = 0;
-
-        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        public bool CheckAndAddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != type1 && noteDataInEditor.NoteType != type2) { return false; }
             if (noteDataInEditor is not IGroundChainNoteData) { return false; }
 
-            IGroundChainNoteData backNote = ((IGroundChainNoteData)noteDataInEditor).BackNote.Value;
-            IGroundChainNoteData nextNote = ((IGroundChainNoteData)noteDataInEditor).NextNote.Value;
+            IGroundChainNoteData thisNote = (IGroundChainNoteData)noteDataInEditor;
+            IGroundChainNoteData backNote = thisNote.BackNote.Value;
+            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
+
+            // ディクショナリーからHoldNumberを探す
+            if (!nextNoteToNumber.TryGetValue(thisNote, out int number))
+            {
+                Debug.LogWarning($"【Converter】HoldMeshの変換の際、このノーツが見つかりませんでした: {number}");
+                return false;
+            }
+            // ただのHoldの場合はほかの変換関数で追加されているはず
+            else if(noteDataInEditor.NoteType == type2)
+            {
+                nextNoteToNumber.Remove(thisNote);
+                nextNoteToNumber.Add(nextNote, number);
+            }
 
             // 新たにインスタンス化
             if (dataOrigin.HoldMeshData == null)
             {
                 dataOrigin.HoldMeshData = new List<NoteDataOrigin_HoldMesh>();
-            }
-
-            // 前ノーツが無かった場合、新たに識別番号を作って登録する
-            if (!nextNoteToNumber.TryGetValue((IGroundChainNoteData)noteDataInEditor, out int number)) 
-            {
-                if(nextNote != null)
-                {
-                    nextNoteToNumber.Add(nextNote, currentHoldNumber);
-                    number = currentHoldNumber++;
-                }
-                else
-                {
-                    Debug.LogWarning("【Convert】次ノーツがないホールド始点が存在します");
-                    return false;
-                }
-            }
-            // 前ノーツ、次ノーツもある場合、NextNoteを更新する
-            else if(nextNote != null)
-            {
-                nextNoteToNumber.Remove((IGroundChainNoteData)noteDataInEditor);
-                nextNoteToNumber.Add(nextNote, number);
             }
 
             // 追加するデータのインスタンス化
@@ -1078,21 +1134,34 @@ namespace ChartConvert
             return true;
         }
 
-        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, List<IGroundChainNoteData>> numberToNote)
+        public bool CheckAndAddDataFromOrigin(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
         {
-            if (dataOrigin.HoldEndData == null) { return true; }
+            if (dataOrigin.HoldMeshData == null) { return true; }
 
-            foreach (var noteDataOrigin in dataOrigin.HoldEndData)
+            foreach (var noteDataOrigin in dataOrigin.HoldMeshData)
             {
                 IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
+                if (noteData is not IGroundChainNoteData) { return false; }
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
 
                 noteData.SetAddress(address);
                 noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
-
                 dataInChartEditor.AddNote(noteData);
+
+                // リストへの保存
+                if (numberToStartNote.TryGetValue(noteDataOrigin.HoldNumber, out var startNote))
+                {
+                    // 繋げる
+                    startNote.AddChainNote(chainData);
+                }
+                else
+                {
+                    Debug.LogWarning($"【Converter】HoldEndの変換の際、HoldNumberが存在しませんでした: {noteDataOrigin.HoldNumber}");
+                    return false;
+                }
             }
 
             return true;
