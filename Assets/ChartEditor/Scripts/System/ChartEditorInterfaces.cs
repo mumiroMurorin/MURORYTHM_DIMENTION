@@ -17,12 +17,6 @@ namespace ChartEditor
         GameObject Deploy(T lineData, Vector3 pos, Transform parent = null);
 
         /// <summary>
-        /// Šg‘åk¬
-        /// </summary>
-        /// <param name="scale"></param>
-        void Scaling(float current, float previous);
-
-        /// <summary>
         /// ‰Šú‰»
         /// </summary>
         void Initialize();

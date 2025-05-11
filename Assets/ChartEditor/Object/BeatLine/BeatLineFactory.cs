@@ -34,14 +34,5 @@ namespace ChartEditor
 
             return obj;
         }
-
-        void ILaneDeployable<SubDivisionDataInBeat>.Scaling(float current, float previous)
-        {
-            foreach (SubdivisionLine beatLine in beatLines)
-            {
-                Vector3 pos = beatLine.gameObject.transform.localPosition;
-                beatLine.gameObject.transform.localPosition = new Vector3(pos.x, pos.y, pos.z * (current / previous));
-            }
-        }
     }
 }

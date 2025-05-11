@@ -186,6 +186,13 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
             
+            // Å‰‚Ì•ªü‚Ì‚İŠg‘å—¦‚ğŠÄ‹
+            if(barNumber == 1)
+            {
+                optionGetter?.ChartViewScale
+                    .Subscribe(_ => AdjustPositionOnChangeLineData())
+                    .AddTo(this.gameObject);
+            }
         }
 
         #endregion
@@ -225,7 +232,7 @@ namespace ChartEditor
             // z‚Ì’Ç‰Á
             // += 1•b‚ ‚½‚è‚Ìz‹——£ * •b”
             //  = 1•b‚ ‚½‚è‚Ìz‹——£ * (60f / bpm) * (4f / beatUnit) / •ªŠ„”
-            nextZ.Value = currentZ += chartLengthParSecond * (60f / bpm) * (4f / beatUnit) / divNum;
+            nextZ.Value = currentZ + chartLengthParSecond * (60f / bpm) * (4f / beatUnit) / divNum;
         }
 
         /// <summary>
@@ -335,9 +342,7 @@ namespace ChartEditor
         public void Scaling(float current, float previous)
         {
             // •ªü‚àƒXƒP[ƒŠƒ“ƒO
-            beatLineFactory?.Value.Scaling(current, previous);
-            subdivisionLineFactory?.Value.Scaling(current, previous);
-            colliderFactory?.Value.Scaling(current, previous);
+            AdjustPositionOnChangeLineData();
         }
     }
 

@@ -45,15 +45,6 @@ namespace ChartEditor
             chartEditorOptionGetter?.LaneDivisionNum
                 .Subscribe(SetLaneDivisionLine)
                 .AddTo(this.gameObject);
-
-            // グラウンド長さ更新
-            chartEditorDataGetter?.ChartSeconds
-                .Subscribe(seconds => UpdateGroundLength(seconds, chartEditorOptionGetter.ChartViewScale.Value))
-                .AddTo(this.gameObject);
-
-            chartEditorOptionGetter?.ChartViewScale
-                .Subscribe(scale => UpdateGroundLength(chartEditorDataGetter.ChartSeconds.Value, scale))
-                .AddTo(this.gameObject);
         }
 
         private void BindForChartData(ChartData chartData)
@@ -110,23 +101,6 @@ namespace ChartEditor
             // 小節線のインスタンス化
             GameObject barObj = barLineDeplayable.Value.Deploy(barData, Vector3.zero, parent);
             barObj.name = $"Bar_{count + 1}";
-        }
-
-        private void UpdateGroundLength(float chartSeconds, float viewScale)
-        {
-            float chartLength = viewScale * chartSeconds;
-
-            // グラウンドの生成
-            ground.transform.localScale = new Vector3(
-                ground.transform.localScale.x,
-                chartLength,
-                ground.transform.localScale.z);
-
-            ground.transform.position = new Vector3(
-                ground.transform.position.x,
-                ground.transform.position.y,
-                ground.transform.localScale.y / 2f
-                );
         }
 
         /// <summary>

@@ -79,16 +79,5 @@ namespace ChartEditor
 
             barCount--;
         }
-
-        void ILaneDeployable<BarDataInChart>.Scaling(float current, float previous)
-        {
-            foreach (BarLine barLine in barLines)
-            {
-                barLine.Scaling(current, previous);
-
-                Vector3 pos = barLine.gameObject.transform.localPosition;
-                barLine.gameObject.transform.localPosition = new Vector3(pos.x, pos.y, pos.z * (current / previous));
-            }
-        }
     }
 }

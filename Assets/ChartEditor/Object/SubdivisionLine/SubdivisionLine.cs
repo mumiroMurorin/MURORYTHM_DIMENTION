@@ -91,7 +91,7 @@ namespace ChartEditor
             // z‚Ì’Ç‰Á
             // += 1•b‚ ‚½‚è‚Ìz‹——£ * •b”
             //  = 1•b‚ ‚½‚è‚Ìz‹——£ * (60f / bpm) * (4f / beatUnit) / •ªŠ„”
-            nextZ.Value = currentZ += chartLengthParSecond * (60f / bpm) * (4f / beatUnit) / divNum;
+            nextZ.Value = currentZ + chartLengthParSecond * (60f / bpm) * (4f / beatUnit) / divNum;
         }
 
         /// <summary>

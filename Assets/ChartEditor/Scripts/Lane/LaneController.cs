@@ -11,12 +11,14 @@ namespace ChartEditor
         [SerializeField] SerializeInterface<ILaneDeployable<BarDataInChart>> barLineDeplayable;
         [SerializeField] GameObject ground;
 
-        IChartEditorOptionGetter dataGetter;
+        IChartEditorOptionGetter optionGetter;
+        IChartEditorDataGetter dataGetter;
 
         [Inject]
-        public void Construct(IChartEditorOptionGetter dataGetter)
+        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorOptionGetter optionGetter)
         {
             this.dataGetter = dataGetter;
+            this.optionGetter = optionGetter;
         }
 
         void Start()
@@ -33,25 +35,25 @@ namespace ChartEditor
         private void Bind()
         {
             // 拡大率
-            dataGetter?.ChartViewScale
-                .Pairwise()
-                .Subscribe(OnChangeChartViewScale)
+            // グラウンド長さ更新
+            dataGetter?.ChartSeconds
+                .Subscribe(seconds => UpdateGroundLength(seconds, optionGetter.ChartViewScale.Value))
+                .AddTo(this.gameObject);
+
+            optionGetter?.ChartViewScale
+                .Subscribe(scale => UpdateGroundLength(dataGetter.ChartSeconds.Value, scale))
                 .AddTo(this.gameObject);
         }
 
-        /// <summary>
-        /// 拡大率より拡大縮小を行う
-        /// </summary>
-        /// <param name="scale"></param>
-        private void OnChangeChartViewScale(Pair<float> pairScale)
-        {
-            // 各線でスケーリング
-            barLineDeplayable?.Value.Scaling(pairScale.Current, pairScale.Previous);
 
-            // グラウンド
+        private void UpdateGroundLength(float chartSeconds, float viewScale)
+        {
+            float chartLength = viewScale * chartSeconds;
+
+            // グラウンドの生成
             ground.transform.localScale = new Vector3(
                 ground.transform.localScale.x,
-                ground.transform.localScale.y * (pairScale.Current / pairScale.Previous),
+                chartLength,
                 ground.transform.localScale.z);
 
             ground.transform.position = new Vector3(
