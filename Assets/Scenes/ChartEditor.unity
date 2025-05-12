@@ -1940,9 +1940,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: {fileID: 217638425}
+  backGround: {fileID: 217638426}
   editTmp: {fileID: 1743631919}
   textOnEnable: "\u30AA\u30FC\u30C8\u30E2\u30FC\u30C9\u4E2D"
   textOnDisable: "\u30AA\u30FC\u30C8\u30E2\u30FC\u30C9\n\u89E3\u9664\u4E2D"
+  colorAutoModing: {r: 0.60062885, g: 0.8845191, b: 1, a: 1}
 --- !u!1001 &236603879
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -57,23 +57,30 @@ namespace ChartEditor
             if(barData == null) { return; }
 
             // 小節データ内の変更に対する購読
-            barData.SubDivisionDatas.ObserveCountChanged()
-                .Skip(1)
-                .Subscribe(_ => OnChangeValueInBarData(barData))
+            barData.SubDivisionDatas.ObserveAdd()
+                .Subscribe(sub => {
+                    BindForSubDivisionData(sub.Value, barData);
+                    OnChangeValueInBarData(barData);
+                })
                 .AddTo(this.gameObject);
 
             barData.BeatUnit
-                .Skip(1)
                 .Subscribe(_ => OnChangeValueInBarData(barData))
                 .AddTo(this.gameObject);
 
             foreach (var sub in barData.SubDivisionDatas)
             {
-                sub.Bpm
-                    .Skip(1)
-                    .Subscribe(_ => OnChangeValueInBarData(barData))
-                    .AddTo(this.gameObject);
+                BindForSubDivisionData(sub, barData);
             }
+        }
+
+        private void BindForSubDivisionData(SubDivisionDataInBeat subData, BarDataInChart barData)
+        {
+            if(subData == null) { return; }
+            if(barData == null) { return; }
+
+            subData.Bpm.Subscribe(_ => { OnChangeValueInBarData(barData); })
+                   .AddTo(this.gameObject);
         }
 
         public void OnAddBarInChart(BarDataInChart barData)
@@ -147,7 +154,7 @@ namespace ChartEditor
         /// <returns></returns>
         private float CalcTimeInSubDivision(SubDivisionDataInBeat sub, float beatUnit, int divNum)
         {
-            return (60f / sub.Bpm.Value) / (beatUnit / 4f) / divNum;
+            return (60f / sub.Bpm.Value) * (4f / beatUnit) / divNum;
         }
     }
 
