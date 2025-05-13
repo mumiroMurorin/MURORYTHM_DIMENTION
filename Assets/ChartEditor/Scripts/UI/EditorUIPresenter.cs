@@ -146,7 +146,8 @@ namespace ChartEditor
             // ツールボタン
             foreach (var button in toolButtons_view)
             {
-                button.Bind(editorDataGetter_model.CurrentEditMode, this.gameObject);
+                button.BindForDeploymentNoteType(editorDataGetter_model.CurrentEditMode, this.gameObject);
+                button.BindForAutomode(editorDataGetter_model.AutoEditMode, this.gameObject);
             }
 
             // ノートボタン
@@ -261,15 +262,23 @@ namespace ChartEditor
         {
             [SerializeField] ChangeEditModeButtonView toolButton_view;
             [SerializeField] EditMode editMode;
+            [SerializeField] bool IsHiddenInAutoMode;
 
             public ChangeEditModeButtonView ToolButton_view { get { return toolButton_view; } }
 
             public EditMode EditMode { get { return editMode; } }
 
-            public void Bind(IReadOnlyReactiveProperty<EditMode> reactiveProperty, GameObject gameObject)
+            public void BindForDeploymentNoteType(IReadOnlyReactiveProperty<EditMode> reactiveProperty, GameObject gameObject)
             {
                 reactiveProperty
                     .Subscribe(editMode => ToolButton_view.OnChangeEditMode(editMode == this.editMode))
+                    .AddTo(gameObject);
+            }
+
+            public void BindForAutomode(IReadOnlyReactiveProperty<bool> isAutoModeRP, GameObject gameObject)
+            {
+                isAutoModeRP
+                    .Subscribe(isAutomode => ToolButton_view.OnChangeAutoMode(isAutomode && IsHiddenInAutoMode))
                     .AddTo(gameObject);
             }
 

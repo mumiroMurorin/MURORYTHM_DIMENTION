@@ -85,6 +85,8 @@ namespace ChartEditor
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
             if (chartEditorDataGetter.DeployableCollider.Value == null) { return; }
             if (!isDeployedTentative) { return; }
+            // 謎のヌルリファによりこの条件も追加
+            if(deployingNoteData == null) { return; }
 
             // データ上の追加
             AddressInChart address = chartEditorDataGetter.DeployableCollider.Value.Address;

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace ChartEditor
 {
@@ -19,6 +20,7 @@ namespace ChartEditor
         public void OnClicked()
         {
             OnClickedListner.Invoke();
+            EventSystem.current.SetSelectedGameObject(null);
         }
     }
 

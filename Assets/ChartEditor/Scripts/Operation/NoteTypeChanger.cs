@@ -24,7 +24,7 @@ namespace ChartEditor
             // 左クリック
             if (Input.GetMouseButtonDown(0) && editMode == EditMode.ChangeType) { ChangeNoteType(); }
             // 右クリック
-            else if (Input.GetMouseButtonDown(1)) { ChangeNoteType(); }
+            // else if (Input.GetMouseButtonDown(1)) { ChangeNoteType(); }
         }
 
         /// <summary>

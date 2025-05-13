@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using TMPro;
+using UnityEngine.EventSystems;
 
 namespace ChartEditor
 {
@@ -20,6 +21,7 @@ namespace ChartEditor
         public void OnButtonClicked()
         {
             OnButtonClickedListener?.Invoke();
+            EventSystem.current.SetSelectedGameObject(null);
         }
     }
 
