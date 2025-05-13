@@ -15,6 +15,9 @@ namespace ChartEditor
         [Tooltip("再生位置移動の感度基準")]
         [SerializeField] float moveSensitivityMax = 0.01f;
 
+        [Tooltip("譜面エクスポート")]
+        [SerializeField] ChartDataExporter chartDataExporter;
+
         IChartEditorDataSetter dataSetter;
         IChartEditorOptionSetter optionSetter;
         IChartEditorDataGetter dataGetter;
@@ -35,6 +38,7 @@ namespace ChartEditor
             OperateMusicPlay();
             OperateChartViewScale();
             OperatePlaybackProgress();
+
         }
 
         /// <summary>
@@ -85,6 +89,11 @@ namespace ChartEditor
                     break;
             }
 
+        }
+
+        private void SaveChart()
+        {
+            //if(!Input.GetKeyDown())
         }
     }
 }
