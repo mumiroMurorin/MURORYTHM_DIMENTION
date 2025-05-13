@@ -892,7 +892,7 @@ PrefabInstance:
     - target: {fileID: 3555472810679899760, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 08d24f6fc35258d4f8891044d2c49dfe, type: 3}
+      objectReference: {fileID: 21300000, guid: ec54692cc598638499320ba6ed7c8617, type: 3}
     - target: {fileID: 3621809594783352364, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
       propertyPath: m_Name
       value: DynamicNoteLeftward
@@ -1693,7 +1693,7 @@ PrefabInstance:
     - target: {fileID: 3555472810679899760, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 08d24f6fc35258d4f8891044d2c49dfe, type: 3}
+      objectReference: {fileID: 21300000, guid: 01a8dad1babd6234aa42aa41c2150d86, type: 3}
     - target: {fileID: 3621809594783352364, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
       propertyPath: m_Name
       value: DynamicNoteDownward
@@ -12433,7 +12433,7 @@ PrefabInstance:
     - target: {fileID: 3555472810679899760, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 08d24f6fc35258d4f8891044d2c49dfe, type: 3}
+      objectReference: {fileID: 21300000, guid: 400239ce8e4c26a4d963442a83053dea, type: 3}
     - target: {fileID: 3621809594783352364, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
       propertyPath: m_Name
       value: DynamicNoteUpward
@@ -14303,7 +14303,7 @@ PrefabInstance:
     - target: {fileID: 3555472810679899760, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: abc2b3e6bedaad8478f49d9f1c3d8793, type: 3}
+      objectReference: {fileID: 21300000, guid: 8e2c4a87661b6944c8f63ab2f12f959a, type: 3}
     - target: {fileID: 3621809594783352364, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
       propertyPath: m_Name
       value: Hold
@@ -14603,7 +14603,7 @@ PrefabInstance:
     - target: {fileID: 3555472810679899760, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 08d24f6fc35258d4f8891044d2c49dfe, type: 3}
+      objectReference: {fileID: 21300000, guid: 9482b8db469618743a0a32a3db0d9234, type: 3}
     - target: {fileID: 3621809594783352364, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
       propertyPath: m_Name
       value: DynamicNoteRightward
@@ -16366,6 +16366,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 832480301}
     m_Modifications:
+    - target: {fileID: 3555472810679899760, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: eeddbcfc4409fc740a5e1cf532e21b66, type: 3}
     - target: {fileID: 3621809594783352364, guid: da47664ee32448e4386d4dd6a0838e2c, type: 3}
       propertyPath: m_Name
       value: TouchNote
