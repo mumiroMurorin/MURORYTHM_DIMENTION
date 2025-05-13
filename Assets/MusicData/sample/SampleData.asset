@@ -20,7 +20,7 @@ MonoBehaviour:
   sample_clip: {fileID: 8300000, guid: a0832b65e104cf646b5ea8dad5744df2, type: 3}
   difficulities: 01000000020000000300000004000000
   charts:
-  - {fileID: 4900000, guid: 41dcfa810be97494a834aee0d05966e1, type: 3}
+  - {fileID: 4900000, guid: 1a87e6f0f33207549b1a718a1a5b1de7, type: 3}
   - {fileID: 4900000, guid: 2f877fecc6732c64ca54f7c1b0bb1b53, type: 3}
   - {fileID: 4900000, guid: 2f877fecc6732c64ca54f7c1b0bb1b53, type: 3}
   - {fileID: 4900000, guid: 2f877fecc6732c64ca54f7c1b0bb1b53, type: 3}

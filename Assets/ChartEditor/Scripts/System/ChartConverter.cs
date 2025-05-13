@@ -33,9 +33,9 @@ namespace ChartConvert
             {
                 new TouchNoteConverter(),
                 new DynamicUpwardConverter(),
+                new DynamicDownwardConverter(),
                 new DynamicRightwardConverter(),
                 new DynamicLeftwardConverter(),
-
             };
 
             chainConverters = new List<IChainNoteConvertable>
@@ -59,8 +59,10 @@ namespace ChartConvert
 
             // オフセット
             chartDataOrigin.OffsetMs = offset;
-
             chartDataOrigin.BarDatas = new List<BarDataOrigin>();
+
+            if (chartData == null) { return chartDataOrigin; }
+            if (chartData.BarDatas == null) { return chartDataOrigin; }
 
             // 譜面から小節を一つずつ取り出す
             foreach (var bar in chartData.BarDatas)
@@ -189,6 +191,7 @@ namespace ChartConvert
             {
                 new TouchNoteConverter(),
                 new DynamicUpwardConverter(),
+                new DynamicDownwardConverter(),
                 new DynamicRightwardConverter(),
                 new DynamicLeftwardConverter(),
             };
@@ -287,6 +290,7 @@ namespace ChartConvert
             {
                 new TouchNoteConverter(),
                 new DynamicUpwardConverter(),
+                new DynamicDownwardConverter(),
                 new DynamicRightwardConverter(),
                 new DynamicLeftwardConverter(),
                 new HoldStartConverter(),
@@ -638,6 +642,73 @@ namespace ChartConvert
             foreach (var noteDataOrigin in dataOrigin.DynamicUpwardData)
             {
                 IGroundNoteData noteData = new ChartEditor.NoteData_DynamicUpward();
+
+                // データのセット
+                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+
+                Debug.Log(address.BarIndex);
+                noteData.SetAddress(address);
+                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
+
+                dataInChartEditor.AddNote(noteData);
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// ↓ダイナミック↓ノーツ
+    /// </summary>
+    public class DynamicDownwardConverter : IOriginDataToRhythmGameConvertable, IUnchainedNoteConvertable
+    {
+        readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundDownward;
+
+        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        {
+            if (noteDataInEditor.NoteType != type) { return false; }
+
+            // 新たにインスタンス化
+            if (dataOrigin.DynamicDownwardData == null)
+            {
+                dataOrigin.DynamicDownwardData = new List<NoteDataOrigin_DynamicDownward>();
+            }
+
+            // 追加するデータのインスタンス化
+            NoteDataOrigin_DynamicDownward data = new NoteDataOrigin_DynamicDownward()
+            {
+                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+            };
+
+            dataOrigin.DynamicDownwardData.Add(data);
+            return true;
+        }
+
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (dataOrigin.DynamicDownwardData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.DynamicDownwardData)
+            {
+                NoteData_DynamicGroundDownward noteData = new NoteData_DynamicGroundDownward
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    Timing = timing
+                };
+
+                chartData.AddNoteData(noteData);
+            }
+
+            return true;
+        }
+
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        {
+            if (dataOrigin.DynamicDownwardData == null) { return true; }
+
+            foreach (var noteDataOrigin in dataOrigin.DynamicDownwardData)
+            {
+                IGroundNoteData noteData = new ChartEditor.NoteData_DynamicDownward();
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);

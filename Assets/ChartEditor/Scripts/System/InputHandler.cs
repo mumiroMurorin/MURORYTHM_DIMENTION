@@ -35,10 +35,14 @@ namespace ChartEditor
 
         private void Update()
         {
+            // 楽曲再生
             OperateMusicPlay();
+            // スケール変更
             OperateChartViewScale();
+            // 譜面スクロール
             OperatePlaybackProgress();
-
+            // 保存
+            SaveChart();
         }
 
         /// <summary>
@@ -93,7 +97,11 @@ namespace ChartEditor
 
         private void SaveChart()
         {
-            //if(!Input.GetKeyDown())
+            // Ctrl + S で保存
+            if (!Input.GetKey(KeyCode.LeftControl)) { return; }
+            if (!Input.GetKeyDown(KeyCode.S)) { return; }
+
+            chartDataExporter.Export();
         }
     }
 }

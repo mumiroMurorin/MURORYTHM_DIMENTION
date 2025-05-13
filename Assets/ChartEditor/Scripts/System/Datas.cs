@@ -479,6 +479,7 @@ namespace ChartEditor
     {
         TouchNote,
         DynamicGroundUpward,
+        DynamicGroundDownward,
         DynamicGroundRightward,
         DynamicGroundLeftward,
         Hold,

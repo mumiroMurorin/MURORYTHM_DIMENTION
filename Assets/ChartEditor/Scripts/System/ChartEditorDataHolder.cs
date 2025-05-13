@@ -56,7 +56,7 @@ namespace ChartEditor
 
 
         // 自動エディット設定モード
-        ReactiveProperty<bool> autoEditMode = new ReactiveProperty<bool>();
+        ReactiveProperty<bool> autoEditMode = new ReactiveProperty<bool>(true);
         IReadOnlyReactiveProperty<bool> IChartEditorDataGetter.AutoEditMode => autoEditMode;
 
         void IChartEditorDataSetter.SetAutoEditMode(bool isEnable)

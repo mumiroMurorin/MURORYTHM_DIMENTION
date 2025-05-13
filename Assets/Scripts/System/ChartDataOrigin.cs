@@ -52,6 +52,7 @@ namespace ChartConvert
 
         public List<NoteDataOrigin_Touch> TouchNoteData { get; set; }
         public List<NoteDataOrigin_DynamicUpward> DynamicUpwardData { get; set; }
+        public List<NoteDataOrigin_DynamicDownward> DynamicDownwardData { get; set; }
         public List<NoteDataOrigin_DynamicRightward> DynamicRightwardData { get; set; }
         public List<NoteDataOrigin_DynamicLeftward> DynamicLeftwardData { get; set; }
         public List<NoteDataOrigin_HoldStart> HoldStartData { get; set; }
@@ -67,6 +68,11 @@ namespace ChartConvert
     }
 
     public class NoteDataOrigin_DynamicUpward
+    {
+        public int[] Range { get; set; }
+    }
+
+    public class NoteDataOrigin_DynamicDownward
     {
         public int[] Range { get; set; }
     }
