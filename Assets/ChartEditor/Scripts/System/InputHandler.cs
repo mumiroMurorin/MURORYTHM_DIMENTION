@@ -15,6 +15,8 @@ namespace ChartEditor
         [SerializeField] float scalingSensitivity = 0.1f;
         [Tooltip("再生位置移動の感度基準")]
         [SerializeField] float moveSensitivityMax = 0.01f;
+        [Header("ショートカットキー")]
+        [SerializeField] EditModeToKeycode[] editModeShortCutKeys;
 
         [Tooltip("譜面エクスポート")]
         [SerializeField] ChartDataExporter chartDataExporter;
@@ -44,6 +46,8 @@ namespace ChartEditor
             OperatePlaybackProgress();
             // 保存
             SaveChart();
+            // ショートカットキー
+            ShortCutKey();
         }
 
         /// <summary>
@@ -105,18 +109,28 @@ namespace ChartEditor
             chartDataExporter.Export();
         }
 
+        private void ShortCutKey()
+        {
+            if(editModeShortCutKeys == null) { return; }
+
+            foreach(var key in editModeShortCutKeys)
+            {
+                key.CheckAndChangeEditMode(KeyCode.LeftAlt, dataSetter.SetEditMode);
+            }
+        }
+
         [System.Serializable]
         class EditModeToKeycode
         {
             [SerializeField] EditMode editMode;
             [SerializeField] KeyCode keyCode;
 
-            public bool CheckAndChangeEditMode(KeyCode modifierKey, Action changeEditMode)
+            public bool CheckAndChangeEditMode(KeyCode modifierKey, Action<EditMode> changeEditMode)
             {
                 if (!Input.GetKey(modifierKey)) { return false; } 
                 if (!Input.GetKeyDown(keyCode)) { return false; }
 
-                changeEditMode.Invoke();
+                changeEditMode.Invoke(editMode);
                 return true;
             }
         }
