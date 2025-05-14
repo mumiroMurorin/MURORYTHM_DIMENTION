@@ -27,6 +27,7 @@ namespace ChartEditor
         [SerializeField] RhythmConfigSubView rhythmConfigSubDivision_view;
         [SerializeField] ImportButtonView importButton_view;
         [SerializeField] ExportButtonView exportButton_view;
+        [SerializeField] OperationDescriptionView descriptionView;
         [Header("Models")]
         [SerializeField] ChartDataExporter chartDataExporter_model;
         [SerializeField] ChartDataImporter chartDataImporter_model;
@@ -91,6 +92,11 @@ namespace ChartEditor
             // äyã»ñºÇÃïœçX
             editorDataGetter_model?.Music
                 .Subscribe(musicName_view.OnChangeMusic)
+                .AddTo(this.gameObject);
+
+            // ê‡ñæï∂ÇÃï\é¶
+            editorDataGetter_model?.CurrentEditMode
+                .Subscribe(descriptionView.OnChangeEditMode)
                 .AddTo(this.gameObject);
         }
 

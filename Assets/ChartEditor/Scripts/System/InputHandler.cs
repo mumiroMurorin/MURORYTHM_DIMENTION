@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using VContainer;
 
 namespace ChartEditor
@@ -102,6 +103,22 @@ namespace ChartEditor
             if (!Input.GetKeyDown(KeyCode.S)) { return; }
 
             chartDataExporter.Export();
+        }
+
+        [System.Serializable]
+        class EditModeToKeycode
+        {
+            [SerializeField] EditMode editMode;
+            [SerializeField] KeyCode keyCode;
+
+            public bool CheckAndChangeEditMode(KeyCode modifierKey, Action changeEditMode)
+            {
+                if (!Input.GetKey(modifierKey)) { return false; } 
+                if (!Input.GetKeyDown(keyCode)) { return false; }
+
+                changeEditMode.Invoke();
+                return true;
+            }
         }
     }
 }

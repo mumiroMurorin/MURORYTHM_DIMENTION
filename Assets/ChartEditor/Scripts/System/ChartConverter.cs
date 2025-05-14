@@ -125,6 +125,8 @@ namespace ChartConvert
             // ノーツデータを一つずつ取り出して
             foreach (var noteData in dataInEditor.NoteDatas)
             {
+                if (noteData == null) { continue; }
+
                 bool isSucceed_ = false;
 
                 // 変換器で変換出来るか総当たり

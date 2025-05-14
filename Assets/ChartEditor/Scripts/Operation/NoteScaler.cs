@@ -55,8 +55,8 @@ namespace ChartEditor
             if (scaledAddress == null) { scaledAddress = address.Copy(); } 
 
             // カーソル下のコライダーがその列のコライダーでなければ返す
-            if (scaledAddress.BarIndex != address.BarIndex) { return; }
-            if (scaledAddress.SubDivisionIndex != address.SubDivisionIndex) { return; }
+            //if (scaledAddress.BarIndex != address.BarIndex) { return; }
+            //if (scaledAddress.SubDivisionIndex != address.SubDivisionIndex) { return; }
 
             // データの更新
             scaledNote.Note.NoteData.ChangeRange(address.SliderIndex, chartEditorDataGetter.IsRightAnchored);

@@ -6,6 +6,7 @@ public class MaterialAnimation : MonoBehaviour
     [SerializeField] int rows = 3; 
     [SerializeField] int columns = 3; 
     [SerializeField] float frameRate = 30f;
+    [SerializeField] bool isReverse;
 
     int currentFrame;
     float frameTime;
@@ -33,7 +34,8 @@ public class MaterialAnimation : MonoBehaviour
             frameTime = 1f / frameRate;
 
             // フレームを進める
-            currentFrame = (currentFrame + 1) % (rows * columns);
+            if (!isReverse) { currentFrame = (currentFrame + 1) % (rows * columns); }
+            else { currentFrame = (currentFrame + (rows * columns - 2)) % (rows * columns); }
 
             // UVオフセットを計算して適用
             int row = currentFrame / columns;
