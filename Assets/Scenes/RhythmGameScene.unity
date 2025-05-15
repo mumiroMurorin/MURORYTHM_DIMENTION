@@ -264,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   update: 1
-  angle: -5
+  angle: 0
   factor: 1
   mode: 1
   top: 100
@@ -6441,6 +6441,10 @@ PrefabInstance:
     - target: {fileID: 5601094991250338147, guid: a74f5192244238243a3b051e9e5b70e2, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6182579293432456172, guid: a74f5192244238243a3b051e9e5b70e2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 150
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -22,8 +22,6 @@ namespace ChartConvert
 
             // 最初に変換
             return ConvertChartDataOrigin(chartData, offset);
-
-            // エクスポート
         }
 
         private void Initialize()
@@ -1161,27 +1159,44 @@ namespace ChartConvert
 
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
-            if (dataOrigin.HoldStartData == null || dataOrigin.HoldRelayData == null || dataOrigin.HoldEndData == null) { return true; }
+            AddHoldStartData(dataOrigin, timing);
+            AddHoldRelayData(dataOrigin, timing);
+            AddHoldEndData(dataOrigin, chartData, timing);
+
+            return true;
+        }
+
+        private bool AddHoldStartData(SubDivisionDataOrigin dataOrigin, float timing)
+        {
+            if (dataOrigin.HoldStartData == null) { return true; }
 
             // 始点、メッシュデータ格納リストの作成
             foreach (var noteOrigin in dataOrigin.HoldStartData)
             {
                 // 一度ディクショナリーに格納
-                List<TimeToRange> meshList; 
+                List<TimeToRange> meshList;
                 // ディクショナリーに登録されていなければ新規作成
-                if(numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber,out meshList))
+                if (numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out meshList))
                 {
                     Debug.LogWarning($"【Converter】始点データが既に登録されています: {noteOrigin.HoldNumber}");
                     return false;
                 }
-                
+
                 meshList = new List<TimeToRange>();
                 meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
                 numberToHoldMeshDataOrigin.Add(noteOrigin.HoldNumber, meshList);
+
+                Debug.Log("Start");
             }
 
-            // 中継点、メッシュデータ格納リストにデータを追加
-            foreach (var noteOrigin in dataOrigin.HoldStartData)
+            return true;
+        }
+
+        private bool AddHoldRelayData(SubDivisionDataOrigin dataOrigin, float timing)
+        {
+            if (dataOrigin.HoldRelayData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.HoldRelayData)
             {
                 // ディクショナリーに登録されていなければ新規作成
                 if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
@@ -1189,23 +1204,31 @@ namespace ChartConvert
                     Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
                     return false;
                 }
-                
+
                 meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
             }
+
+            return true;
+        }
+
+        private bool AddHoldEndData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (dataOrigin.HoldEndData == null) { return true; }
 
             // 終点、メッシュデータ格納リストにデータを追加後、譜面データに代入
-            foreach (var noteOrigin in dataOrigin.HoldStartData)
+            foreach (var noteOrigin in dataOrigin.HoldEndData)
             {
-                // ディクショナリーに登録されていなければ新規作成
+                // ディクショナリーに登録されていなければ返す
                 if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
                 {
                     Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
                     return false;
                 }
-                meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
 
-                // 変換して譜面データに代入
-                chartData.AddNoteData(GenerateNoteData_HoldMesh(numberToHoldMeshDataOrigin[noteOrigin.HoldNumber]));
+                meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
+                chartData.AddNoteData(GenerateNoteData_HoldMesh(meshList));
+
+                Debug.Log("End");
             }
 
             return true;
