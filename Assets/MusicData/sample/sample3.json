@@ -466,16 +466,15 @@
           "DynamicRightwardData": null,
           "DynamicLeftwardData": null,
           "HoldStartData": null,
-          "HoldEndData": null,
-          "HoldRelayData": [
+          "HoldEndData": [
             {
               "HoldNumber": 0,
-              "IsHidden": false,
               "Range": [
                 1
               ]
             }
-          ]
+          ],
+          "HoldRelayData": null
         },
         {
           "Bpm": 140.0,

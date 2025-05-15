@@ -111,6 +111,31 @@ namespace ChartEditor
 
         public void AddChainNote(IGroundChainNoteData addNote)
         {
+            List<IGroundChainNoteData> chains = new List<IGroundChainNoteData>();
+
+            // このノーツ
+            chains.Add(this);
+
+            // このノーツを遡って全部リストに追加
+            IGroundChainNoteData backNote = this.BackNote.Value;
+            while (backNote != null)
+            {
+                chains.Add(backNote);
+                backNote = backNote.BackNote.Value;
+            }
+
+            // このノーツを進んで全部リストに追加
+            IGroundChainNoteData nextNote = this.NextNote.Value;
+            while (nextNote != null
+                )
+            {
+                chains.Add(backNote);
+                backNote = backNote.BackNote.Value;
+            }
+        }
+
+        public void AddChainNote(IGroundChainNoteData addNote)
+        {
             // 同じノートは追加できない
             if(addNote == this) { return; }
             if(addNote == this.NextNote.Value) { return; }
