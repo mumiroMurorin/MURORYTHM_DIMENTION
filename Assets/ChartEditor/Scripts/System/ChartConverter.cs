@@ -160,19 +160,19 @@ namespace ChartConvert
         private List<IChainNoteConvertable> chainConverters = new List<IChainNoteConvertable>();
         private Dictionary<int, IGroundChainNoteData> holdNumberToChainNote = new Dictionary<int, IGroundChainNoteData>();
 
-        public bool Import(ChartDataOrigin dataOrigin, ref ChartEditor.ChartData chartData)
+        public bool Import(ChartDataOrigin dataOrigin, ref ChartEditor.ChartData chartData, IChartEditorDataSetter dataSetter)
         {
             bool isSucceed = true;
 
             // 初期化
             Initialize();
 
+            dataSetter.SetOffset(dataOrigin.OffsetMs);
             chartData.AddBar(dataOrigin.BarDatas.Count);
 
             // 分線を一つずつ取り出す
             for (int i = 0; i < dataOrigin.BarDatas.Count; i++) 
             {
-
                 var bar = dataOrigin.BarDatas[i];
 
                 if (!SetDataFromBarData(bar, chartData.BarDatas[i])) { isSucceed = false; }
@@ -969,7 +969,7 @@ namespace ChartConvert
             // ディクショナリーからHoldNumberを探す
             if (!nextNoteToNumber.TryGetValue(thisNote, out int number))
             {
-                Debug.LogWarning($"【Converter】HoldRelayの変換の際、このノーツが見つかりませんでした: {number}");
+                Debug.LogWarning($"【Converter】HoldRelayの変換の際、ノーツが見つかりませんでした");
                 return false;
             }
             else
@@ -1072,7 +1072,7 @@ namespace ChartConvert
             // ディクショナリーからHoldNumberを探す
             if (!nextNoteToNumber.TryGetValue(thisNote, out int number))
             {
-                Debug.LogWarning($"【Converter】HoldEndの変換の際、このノーツが見つかりませんでした: {number}");
+                Debug.LogWarning($"【Converter】HoldEndの変換の際、ノーツが見つかりませんでした");
                 return false;
             }
             else

@@ -715,16 +715,7 @@
           "DynamicLeftwardData": null,
           "HoldStartData": null,
           "HoldEndData": null,
-          "HoldRelayData": [
-            {
-              "HoldNumber": 4,
-              "IsHidden": true,
-              "Range": [
-                5,
-                6
-              ]
-            }
-          ]
+          "HoldRelayData": null
         },
         {
           "Bpm": 177.0,
@@ -760,7 +751,15 @@
               ]
             }
           ],
-          "HoldEndData": null,
+          "HoldEndData": [
+            {
+              "HoldNumber": 4,
+              "Range": [
+                5,
+                6
+              ]
+            }
+          ],
           "HoldRelayData": null
         },
         {
@@ -1048,15 +1047,25 @@
       "SubDivisionDatas": [
         {
           "Bpm": 177.0,
-          "TouchNoteData": null,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7
+              ]
+            }
+          ],
           "DynamicUpwardData": null,
           "DynamicDownwardData": null,
           "DynamicRightwardData": null,
           "DynamicLeftwardData": null,
           "HoldStartData": null,
-          "HoldEndData": [
+          "HoldEndData": null,
+          "HoldRelayData": [
             {
               "HoldNumber": 9,
+              "IsHidden": true,
               "Range": [
                 0,
                 1,
@@ -1074,6 +1083,486 @@
                 13,
                 14,
                 15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ],
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ],
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ],
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 9,
+              "IsHidden": true,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ],
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ],
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ],
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        },
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": null,
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": null,
+          "HoldRelayData": null
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 177.0,
+          "TouchNoteData": null,
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                7,
+                8
+              ]
+            }
+          ],
+          "DynamicDownwardData": null,
+          "DynamicRightwardData": null,
+          "DynamicLeftwardData": null,
+          "HoldStartData": null,
+          "HoldEndData": [
+            {
+              "HoldNumber": 9,
+              "Range": [
+                7,
+                8
               ]
             }
           ],
@@ -1159,5 +1648,5 @@
       ]
     }
   ],
-  "OffsetMs": 0.0
+  "OffsetMs": 650.0
 }

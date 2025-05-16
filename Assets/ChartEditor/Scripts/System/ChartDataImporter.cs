@@ -30,7 +30,7 @@ namespace ChartEditor
 
             ChartData chartData = new ChartData(0);
             editorDataSetter.SetChartData(chartData);
-            chartImporter.Import(chartDataOrigin, ref chartData);
+            chartImporter.Import(chartDataOrigin, ref chartData, editorDataSetter);
 
             // ノーツの配置
             DeployNote(chartData);

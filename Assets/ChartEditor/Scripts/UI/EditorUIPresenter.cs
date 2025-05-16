@@ -79,6 +79,11 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
 
+            // オフセットの変更
+            editorDataGetter_model?.Offset
+                .Subscribe(offsetInputField_view.OnChangeMainBPM)
+                .AddTo(this.gameObject);
+
             // レーン分割数の変更
             optionDataGetter_model?.LaneDivisionNum
                 .Subscribe(changeLaneDivNumButton_view.OnLaneDivNumChanged)

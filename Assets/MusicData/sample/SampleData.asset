@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: SampleData
   m_EditorClassIdentifier: 
   music_name: "\u30B5\u30F3\u30D7\u30EB\u30C7\u30FC\u30BF"
-  composer_name: Leeaf
-  music_spr: {fileID: 21300000, guid: c20a5d106028bbc45ba16da3bc4a4a67, type: 3}
+  composer_name: Leaf
+  music_spr: {fileID: 21300000, guid: ccee17ce6690c684eb16c3281c41ab07, type: 3}
   theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
-  clip: {fileID: 8300000, guid: a0832b65e104cf646b5ea8dad5744df2, type: 3}
-  sample_clip: {fileID: 8300000, guid: a0832b65e104cf646b5ea8dad5744df2, type: 3}
+  clip: {fileID: 8300000, guid: 657beddfdbff8f94a828fe2d8951b02a, type: 3}
+  sample_clip: {fileID: 8300000, guid: 657beddfdbff8f94a828fe2d8951b02a, type: 3}
   difficulities: 01000000020000000300000004000000
   charts:
   - {fileID: 4900000, guid: e8c24b10869086a4f9adc51082e6d8fd, type: 3}

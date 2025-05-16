@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 using VContainer;
 
 public class SpaceInputHandlerForMediaPipe : MonoBehaviour
@@ -14,23 +15,49 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour
     [SerializeField] Vector3 controllerCenter;
     [SerializeField] Vector3 controllerSize;
 
+    [Space(30)]
+    [SerializeField] TMPro.TextMeshProUGUI velocityTextRight;
+    [SerializeField] TMPro.TextMeshProUGUI velocityTextLeft;
+
     Vector3 right_hand_pos = Vector3.zero;
     Vector3 left_hand_pos = Vector3.zero;
 
     bool isTracking;
 
     ISpaceInputSetter spaceInputSetter;
+    ISpaceInputGetter spaceInputGetter;
 
     [Inject]
-    public void Construct(ISpaceInputSetter inputSetter)
+    public void Construct(ISpaceInputSetter inputSetter,ISpaceInputGetter inputGetter)
     {
         spaceInputSetter = inputSetter;
+        spaceInputGetter = inputGetter;
+    }
+
+    private void Start()
+    {
+        Bind();
     }
 
     void Update()
     {
         SetData();
         SendData();
+    }
+
+    private void Bind()
+    {
+        spaceInputGetter?.GetSpaceInputVelocity(SpaceTrackingTag.RightHand)
+            .Subscribe(value => {
+                velocityTextRight.text = value.ToString();
+            })
+            .AddTo(this.gameObject);
+
+        spaceInputGetter?.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand)
+            .Subscribe(value => {
+                velocityTextLeft.text = value.ToString();
+            })
+            .AddTo(this.gameObject);
     }
 
     private void SetData()
