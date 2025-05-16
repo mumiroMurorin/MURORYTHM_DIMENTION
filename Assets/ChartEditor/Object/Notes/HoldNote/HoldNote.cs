@@ -110,11 +110,13 @@ namespace ChartEditor
                 Address.SetSameAddress(address);
             }
 
+            // 移動に伴う範囲のセット
             int startIndex = (int)address.SliderIndex;
             List<float> currentRange = range.ToList();
             List<float> shifted = currentRange.Select(i => i - currentRange[0] + startIndex).ToList();
 
             SetRange(shifted);
+            UpdateChainNote();
         }
 
         public void AddChainNote(IGroundChainNoteData addNote)
@@ -167,6 +169,51 @@ namespace ChartEditor
 
             // それぞれのノーツをつなげる
             for (int i = 0; i < chains.Count; i++) 
+            {
+                // 中継点
+                if (i > 0) { chains[i].SetBackNote(chains[i - 1]); }
+                // 始点
+                else { chains[i].SetBackNote(null); }
+
+                // 中継点
+                if (i < chains.Count - 1) { chains[i].SetNextNote(chains[i + 1]); }
+                // 終点
+                else { chains[i].SetNextNote(null); }
+            }
+        }
+
+        public void UpdateChainNote()
+        {
+            List<IGroundChainNoteData> chains = new List<IGroundChainNoteData>();
+
+            chains.Add(this);
+
+            // このノーツを遡って全部リストに追加
+            IGroundChainNoteData backNote = this.BackNote.Value;
+            while (backNote != null)
+            {
+                chains.Add(backNote);
+                backNote = backNote.BackNote.Value;
+            }
+
+            // このノーツを進んで全部リストに追加
+            IGroundChainNoteData nextNote = this.NextNote.Value;
+            while (nextNote != null)
+            {
+                chains.Add(nextNote);
+                nextNote = nextNote.NextNote.Value;
+            }
+
+            // 重複項目を削除
+            chains = chains.Distinct().ToList();
+            // ソート
+            chains.Sort((a, b) => {
+                if (a.Address.IsEarlierThan(b.Address)) { return -1; }
+                else { return 1; }
+            });
+
+            // それぞれのノーツをつなげる
+            for (int i = 0; i < chains.Count; i++)
             {
                 // 中継点
                 if (i > 0) { chains[i].SetBackNote(chains[i - 1]); }
