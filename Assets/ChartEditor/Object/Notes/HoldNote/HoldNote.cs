@@ -14,6 +14,14 @@ namespace ChartEditor
     [System.Serializable]
     public class NoteData_Hold : IGroundChainNoteData, ITypeChangableNoteData
     {
+        public NoteData_Hold() { }
+
+        public NoteData_Hold(NoteData_Hold data)
+        {
+            this.Address = new AddressInChart(data.Address);
+            this.SetRange(data.Range.ToList());
+        }
+
         ReactiveProperty<DeploymentNoteType> noteType = new ReactiveProperty<DeploymentNoteType>(DeploymentNoteType.Hold);
         public DeploymentNoteType NoteType {
             get { return noteType.Value; }
@@ -95,7 +103,7 @@ namespace ChartEditor
             // 同じアドレスなら返す
             if (Address != null && Address.IsSameAddress(address)) { return; }
 
-            if (Address == null) { Address = address.Copy(); }
+            if (Address == null) { Address = new AddressInChart(address); }
             else
             {
                 Debug.Log($"【移動】:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
@@ -113,8 +121,9 @@ namespace ChartEditor
         {
             List<IGroundChainNoteData> chains = new List<IGroundChainNoteData>();
 
-            // このノーツ
+            // ノーツを追加
             chains.Add(this);
+            chains.Add(addNote);
 
             // このノーツを遡って全部リストに追加
             IGroundChainNoteData backNote = this.BackNote.Value;
@@ -126,85 +135,49 @@ namespace ChartEditor
 
             // このノーツを進んで全部リストに追加
             IGroundChainNoteData nextNote = this.NextNote.Value;
-            while (nextNote != null
-                )
+            while (nextNote != null)
+            {
+                chains.Add(nextNote);
+                nextNote = nextNote.NextNote.Value;
+            }
+
+            // 追加ノーツを遡って全部リストに追加
+            backNote = addNote.BackNote.Value;
+            while (backNote != null)
             {
                 chains.Add(backNote);
                 backNote = backNote.BackNote.Value;
             }
-        }
 
-        public void AddChainNote(IGroundChainNoteData addNote)
-        {
-            // 同じノートは追加できない
-            if(addNote == this) { return; }
-            if(addNote == this.NextNote.Value) { return; }
-            if(addNote == this.BackNote.Value) { return; }
-
-            // このノーツよりも前で且つ前ノーツが無い時新たに登録
-            if(!this.Address.IsEarlierThan(addNote.Address) && backNote.Value == null)
+            // 追加ノーツを進んで全部リストに追加
+            nextNote = addNote.NextNote.Value;
+            while (nextNote != null)
             {
-                // 前ノーツに次ノーツが登録されているとき
-                if (addNote.NextNote.Value != null)
-                {
-                    // 次ノーツを追加ノートの次ノートにする
-                    this.SetNextNote(addNote.NextNote.Value);
-                    // 追加ノートの次ノートの前ノートをこのノートにする(ややこしすぎる)
-                    addNote.NextNote.Value.SetBackNote(addNote);
-                }
-
-                SetBackNote(addNote);
-                addNote.SetNextNote(this);
-                return;
+                chains.Add(nextNote);
+                nextNote = nextNote.NextNote.Value;
             }
 
-            // このノーツよりも先で且つ次ノーツが無い時新たに登録
-            if (this.Address.IsEarlierThan(addNote.Address) && nextNote.Value == null)
+            // 重複項目を削除
+            chains = chains.Distinct().ToList();
+            // ソート
+            chains.Sort((a,b) => { 
+                if (a.Address.IsEarlierThan(b.Address)) { return -1; }
+                else { return 1; }
+            });
+
+            // それぞれのノーツをつなげる
+            for (int i = 0; i < chains.Count; i++) 
             {
-                // 次ノーツに前ノーツが登録されているとき
-                if (addNote.BackNote.Value != null)
-                {
-                    // 前ノーツを追加ノートの前ノートにする
-                    this.SetBackNote(addNote.BackNote.Value);
-                    // 追加ノートの前ノートの次ノートをこのノートにする(ややこしすぎる)
-                    addNote.BackNote.Value.SetNextNote(this);
-                }
+                // 中継点
+                if (i > 0) { chains[i].SetBackNote(chains[i - 1]); }
+                // 始点
+                else { chains[i].SetBackNote(null); }
 
-                SetNextNote(addNote);
-                addNote.SetBackNote(this);
-                return;
+                // 中継点
+                if (i < chains.Count - 1) { chains[i].SetNextNote(chains[i + 1]); }
+                // 終点
+                else { chains[i].SetNextNote(null); }
             }
-
-            // このノーツと次ノーツの間だった時登録
-            if(this.Address.IsEarlierThan(addNote.Address) && !NextNote.Value.Address.IsEarlierThan(addNote.Address))
-            {
-                // 追加ノーツの次ノーツに以前の次ノーツをセット
-                addNote.SetNextNote(this.NextNote.Value);
-                // 追加ノーツの前ノーツにこのノーツをセット
-                addNote.SetBackNote(this);
-                // 次ノーツの前ノーツに追加ノーツをセット
-                this.NextNote.Value.SetBackNote(addNote);
-                // 最後に、このノーツの次ノーツに追加ノーツをセット
-                SetNextNote(addNote);
-
-                return;
-            }
-
-            // 前ノーツ以前だった時前ノーツへ託す
-            if (!this.Address.IsEarlierThan(addNote.Address))
-            {
-                backNote.Value?.AddChainNote(addNote);
-                return;
-            }
-
-            // 次のノーツ以降だった時次ノーツに託す
-            if (this.Address.IsEarlierThan(addNote.Address))
-            {
-                nextNote.Value?.AddChainNote(addNote);
-                return;
-            }
-
-            Debug.Log($"【System】何故ここに来た？ {addNote} {this}");
         }
 
         public void RemoveNote()
@@ -234,26 +207,16 @@ namespace ChartEditor
             this.backNote.Value = backNote;
         }
 
-        /// <summary>
-        /// コピー
-        /// </summary>
-        /// <returns></returns>
-        public IGroundNoteData Copy()
-        {
-            var data = new NoteData_Hold
-            {
-                Address = this.Address.Copy()   
-            };
-
-            data.SetRange(this.range.ToList());
-            return data;
-        }
-
         public IConnectableObject NoteObject { get; private set; }
 
         public void SetNoteObject(IConnectableObject noteObject)
         {
             NoteObject = noteObject;
+        }
+
+        public IGroundNoteData Copy()
+        {
+            return new NoteData_Hold(this);
         }
     }
 

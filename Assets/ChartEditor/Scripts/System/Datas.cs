@@ -369,6 +369,12 @@ namespace ChartEditor
             this.sliderIndex = new ReactiveProperty<float>(sliderIndex);
         }
 
+        public AddressInChart(AddressInChart address)
+        {
+            this.barIndex = new ReactiveProperty<int>(address.BarIndex);
+            this.subDivisionIndex = new ReactiveProperty<int>(address.SubDivisionIndex);
+            this.sliderIndex = new ReactiveProperty<float>(address.SliderIndex);
+        }
 
         /// <summary>
         /// è¨êﬂê¸î‘çÜ
@@ -405,11 +411,6 @@ namespace ChartEditor
             sliderIndex.Value = index;
         }
 
-        public AddressInChart Copy()
-        {
-            return new AddressInChart(this.barIndex.Value, this.subDivisionIndex.Value, this.sliderIndex.Value);
-        }
-
         public void SetSameAddress(AddressInChart address)
         {
             this.barIndex.Value = address.BarIndex;
@@ -444,6 +445,11 @@ namespace ChartEditor
         public bool IsSameAddress(AddressInChart address)
         {
             return address.BarIndex == this.BarIndex && address.SubDivisionIndex == this.SubDivisionIndex && address.SliderIndex == this.SliderIndex;
+        }
+
+        public string GetAddressText()
+        {
+            return $"#{BarIndex} - {SubDivisionIndex} - {SliderIndex}";
         }
     }
 

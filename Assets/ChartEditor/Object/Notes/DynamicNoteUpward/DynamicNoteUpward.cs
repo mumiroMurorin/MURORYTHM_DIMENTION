@@ -14,6 +14,14 @@ namespace ChartEditor
     [System.Serializable]
     public class NoteData_DynamicUpward : IGroundNoteData
     {
+        public NoteData_DynamicUpward() { }
+
+        public NoteData_DynamicUpward(NoteData_DynamicUpward data)
+        {
+            this.Address = new AddressInChart(data.Address);
+            this.SetRange(data.Range.ToList());
+        }
+
         public DeploymentNoteType NoteType => DeploymentNoteType.DynamicGroundUpward;
 
         public AddressInChart Address { get; private set; } = new AddressInChart();
@@ -75,7 +83,7 @@ namespace ChartEditor
             // “¯‚¶ƒAƒhƒŒƒX‚È‚ç•Ô‚·
             if (Address != null && Address.IsSameAddress(address)) { return; }
 
-            if (Address == null) { Address = address.Copy(); }
+            if (Address == null) { Address = new AddressInChart(address); }
             else
             {
                 Debug.Log($"yˆÚ“®z:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
@@ -91,13 +99,7 @@ namespace ChartEditor
 
         public IGroundNoteData Copy()
         {
-            var data = new NoteData_DynamicUpward
-            {
-                Address = this.Address.Copy()
-            };
-
-            data.SetRange(this.range.ToList());
-            return data;
+            return new NoteData_DynamicUpward(this);
         }
     }
 }

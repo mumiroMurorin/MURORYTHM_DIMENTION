@@ -52,7 +52,7 @@ namespace ChartEditor
             // アドレスの取得
             AddressInChart address = deployable.Address;
 
-            if (scaledAddress == null) { scaledAddress = address.Copy(); } 
+            if (scaledAddress == null) { scaledAddress = new AddressInChart(address); } 
 
             // カーソル下のコライダーがその列のコライダーでなければ返す
             //if (scaledAddress.BarIndex != address.BarIndex) { return; }

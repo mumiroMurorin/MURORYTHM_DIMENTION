@@ -14,6 +14,14 @@ namespace ChartEditor
     [System.Serializable]
     public class NoteData_DynamicRightward : IGroundNoteData
     {
+        public NoteData_DynamicRightward() { }
+
+        public NoteData_DynamicRightward(NoteData_DynamicRightward data)
+        {
+            this.Address = new AddressInChart(data.Address);
+            this.SetRange(data.Range.ToList());
+        }
+
         public DeploymentNoteType NoteType => DeploymentNoteType.DynamicGroundRightward;
 
         public AddressInChart Address { get; private set; } = new AddressInChart();
@@ -75,7 +83,7 @@ namespace ChartEditor
             // “¯‚¶ƒAƒhƒŒƒX‚È‚ç•Ô‚·
             if (Address != null && Address.IsSameAddress(address)) { return; }
 
-            if (Address == null) { Address = address.Copy(); }
+            if (Address == null) { Address = new AddressInChart(address); }
             else
             {
                 Debug.Log($"yˆÚ“®z:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
@@ -91,14 +99,7 @@ namespace ChartEditor
 
         public IGroundNoteData Copy()
         {
-            var data = new NoteData_DynamicRightward
-            {
-                Address = this.Address.Copy()
-            };
-
-            data.SetRange(this.range.ToList());
-            return data;
+            return new NoteData_DynamicRightward(this);
         }
-
     }
 }
