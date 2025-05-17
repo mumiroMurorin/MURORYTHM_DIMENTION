@@ -99,14 +99,27 @@ namespace NoteJudgement
         /// <param name="timeToPosition1"></param>
         /// <param name="timeToPosition2"></param>
         /// <returns></returns>
-        public static Vector3 CalculateVelocity((float, Vector3)timeToPosition1, (float, Vector3) timeToPosition2)
+        public static Vector3 CalculateVelocity(TimeToPos timeToPosition1, TimeToPos timeToPosition2)
         {
-            float t1 = timeToPosition1.Item1 < timeToPosition2.Item1 ? timeToPosition1.Item1 : timeToPosition2.Item1;
-            float t2 = timeToPosition1.Item1 < timeToPosition2.Item1 ? timeToPosition2.Item1 : timeToPosition1.Item1;
-            Vector3 p1 = timeToPosition1.Item1 < timeToPosition2.Item1 ? timeToPosition1.Item2 : timeToPosition2.Item2;
-            Vector3 p2 = timeToPosition1.Item1 < timeToPosition2.Item1 ? timeToPosition2.Item2 : timeToPosition1.Item2;
+            float t1 = timeToPosition1.Time < timeToPosition2.Time ? timeToPosition1.Time : timeToPosition2.Time;
+            float t2 = timeToPosition1.Time < timeToPosition2.Time ? timeToPosition2.Time : timeToPosition1.Time;
+            Vector3 p1 = timeToPosition1.Time < timeToPosition2.Time ? timeToPosition1.Pos : timeToPosition2.Pos;
+            Vector3 p2 = timeToPosition1.Time < timeToPosition2.Time ? timeToPosition2.Pos : timeToPosition1.Pos;
 
             return (p2 - p1) / Mathf.Abs(t2 - t1);
         }
     }
+}
+
+public class TimeToPos
+{
+    public TimeToPos(float time,Vector3 pos)
+    {
+        Time = time;
+        Pos = pos;
+    }
+
+    public float Time { get; set; }
+
+    public Vector3 Pos { get; set; }
 }

@@ -28,13 +28,15 @@ public class SpaceInputIncarnate : MonoBehaviour
     private void Bind()
     {
         // ‰EŽè
-        spaceInputGetter?.GetSpaceInputReactiveDictionary(SpaceTrackingTag.RightHand)
-            .ObserveAdd().Subscribe(value => MoveCaptureObject(rightHandCaptureObject.gameObject, value.Value))
+        spaceInputGetter?.GetSpaceInput(SpaceTrackingTag.RightHand)
+            .ObserveAdd()
+            .Subscribe(value => MoveCaptureObject(rightHandCaptureObject.gameObject, value.Value.Pos))
             .AddTo(this.gameObject);
 
         // ¶Žè
-        spaceInputGetter?.GetSpaceInputReactiveDictionary(SpaceTrackingTag.LeftHand)
-            .ObserveAdd().Subscribe(value => MoveCaptureObject(leftHandCaptureObject.gameObject, value.Value))
+        spaceInputGetter?.GetSpaceInput(SpaceTrackingTag.LeftHand)
+            .ObserveAdd()
+            .Subscribe(value => MoveCaptureObject(leftHandCaptureObject.gameObject, value.Value.Pos))
             .AddTo(this.gameObject);
     }
 

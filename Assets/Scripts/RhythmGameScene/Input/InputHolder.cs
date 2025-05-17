@@ -14,12 +14,12 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
     ReactiveProperty<bool>[] sliderInput;
 
     // 空間入力(右手)
-    LimitedReactiveDictionary<float, Vector3> rightHandInput = new LimitedReactiveDictionary<float, Vector3>(MAX_RECORD_SPACE_INDEX);
+    ReactiveCollection<TimeToPos> rightHandInput = new ReactiveCollection<TimeToPos>();
     // 右手の動きのベクトル
     ReactiveProperty<Vector3> rightHandVelocity = new ReactiveProperty<Vector3>();
 
     // 空間入力(左手)
-    LimitedReactiveDictionary<float, Vector3> leftHandInput = new LimitedReactiveDictionary<float, Vector3>(MAX_RECORD_SPACE_INDEX);
+    ReactiveCollection<TimeToPos> leftHandInput = new ReactiveCollection<TimeToPos>();
     // 左手の動きのベクトル
     ReactiveProperty<Vector3> leftHandVelocity = new ReactiveProperty<Vector3>();
 
@@ -38,12 +38,20 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
         }
 
         // 両手の動きをVector化する
-        rightHandInput.Dictionary.ObserveAdd()
-            .Subscribe(_ => SetHandVector(rightHandInput.Dictionary, rightHandVelocity))
+        rightHandInput.ObserveAdd()
+            .Pairwise()
+            .Subscribe(pair => { 
+                SetHandVector(pair.Previous.Value, pair.Current.Value, rightHandVelocity);
+                if(rightHandInput.Count > MAX_RECORD_SPACE_INDEX) { rightHandInput.RemoveAt(0); }
+            })
             .AddTo(disposables);
 
-        leftHandInput.Dictionary.ObserveAdd()
-            .Subscribe(_ => SetHandVector(leftHandInput.Dictionary, leftHandVelocity))
+        leftHandInput.ObserveAdd()
+            .Pairwise()
+            .Subscribe(pair => { 
+                SetHandVector(pair.Previous.Value, pair.Current.Value, leftHandVelocity);
+                if (leftHandInput.Count > MAX_RECORD_SPACE_INDEX) { leftHandInput.RemoveAt(0); }
+            })
             .AddTo(disposables);
     }
 
@@ -69,14 +77,10 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
         switch (tag)
         {
             case SpaceTrackingTag.RightHand:
-                if (rightHandInput.Dictionary.Count > 0 &&
-                    (rightHandInput.Dictionary.Last().Value == pos || rightHandInput.Dictionary.Last().Key == time)) { break; }
-                rightHandInput.Add(time, pos);
+                rightHandInput.Add(new TimeToPos(time, pos));
                 break;
             case SpaceTrackingTag.LeftHand:
-                if (leftHandInput.Dictionary.Count > 0 &&
-                    (leftHandInput.Dictionary.Last().Value == pos || leftHandInput.Dictionary.Last().Key == time)) { break; }
-                leftHandInput.Add(time, pos);
+                leftHandInput.Add(new TimeToPos(time, pos));
                 break;
             default:
                 Debug.LogWarning($"【Input】設定されていないタグです: {tag}");
@@ -106,19 +110,14 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
         return sliderInput[index];
     }
 
-    /// <summary>
-    /// 空間入力(ReactiveProperty)を返す
-    /// </summary>
-    /// <param name="spaceTrackingTag"></param>
-    /// <returns></returns>
-    public IReadOnlyReactiveDictionary<float, Vector3> GetSpaceInputReactiveDictionary(SpaceTrackingTag spaceTrackingTag)
+    public IReadOnlyReactiveCollection<TimeToPos> GetSpaceInput(SpaceTrackingTag spaceTrackingTag)
     {
         switch (spaceTrackingTag)
         {
             case SpaceTrackingTag.RightHand:
-                return rightHandInput.Dictionary;
+                return rightHandInput;
             case SpaceTrackingTag.LeftHand:
-                return leftHandInput.Dictionary;
+                return leftHandInput;
             default:
                 Debug.LogWarning($"【Input】設定されていないタグです: {spaceTrackingTag}");
                 return null;
@@ -148,13 +147,15 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
     /// 手の座標から動きをベクトル化する
     /// </summary>
     /// <param name="handInput"></param>
-    private void SetHandVector(IReadOnlyReactiveDictionary<float, Vector3> handInput, ReactiveProperty<Vector3> recorder)
+    private void SetHandVector(TimeToPos previous, TimeToPos current, ReactiveProperty<Vector3> recorder)
     {
-        if (handInput == null || handInput.Count < 2) { return; }
+        if (previous.Time == current.Time) 
+        { 
+            recorder.Value = Vector3.zero; 
+            return;
+        }
 
-        var previous = handInput.ElementAt(handInput.Count - 2);
-        var current = handInput.Last();
-        recorder.Value = NoteJudgement.DynamicNote.CalculateVelocity((previous.Key, previous.Value), (current.Key, current.Value));
+        recorder.Value = NoteJudgement.DynamicNote.CalculateVelocity(previous, current);
     }
 
     public void Dispose()

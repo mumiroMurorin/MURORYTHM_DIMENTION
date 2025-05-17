@@ -22,7 +22,7 @@ public enum SpaceTrackingTag
 /// </summary>
 public interface ISpaceInputGetter
 {
-    IReadOnlyReactiveDictionary<float, Vector3> GetSpaceInputReactiveDictionary(SpaceTrackingTag spaceTrackingTag);
+    IReadOnlyReactiveCollection<TimeToPos> GetSpaceInput(SpaceTrackingTag spaceTrackingTag);
 
     IReadOnlyReactiveProperty<Vector3> GetSpaceInputVelocity(SpaceTrackingTag spaceTrackingTag);
 
