@@ -17,15 +17,26 @@ namespace ChartEditor
         [Tooltip("明滅時間")]
         [SerializeField] private float blinkDuration = 1f;
         [SerializeField] private Renderer noteRenderer;
-        [SerializeField] private Collider[] colliders;
+        [SerializeField] private GameObject[] colliderObjects;
         [SerializeField] private OutlineBehaviour outline;
+
+        List<Collider> colliders;
 
         public IGroundNoteData NoteData { get; set; }
 
         public Func<AddressInChart, Transform> GetParentTransformFunc { get; set; }
 
         CancellationTokenSource cts;
-        
+
+        private void Awake()
+        {
+            colliders = new List<Collider>();
+            foreach (var obj in colliderObjects)
+            {
+                colliders.AddRange(obj.GetComponents<Collider>());
+            }
+        }
+
         /// <summary>
         /// 全てのコライダーの有効／無効を切り替える
         /// </summary>

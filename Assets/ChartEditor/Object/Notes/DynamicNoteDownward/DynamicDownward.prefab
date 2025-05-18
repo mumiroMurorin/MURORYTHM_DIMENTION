@@ -362,11 +362,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blinkDuration: 0.75
   noteRenderer: {fileID: 5893660377328454484}
-  colliders:
-  - {fileID: 8764774069622436691}
-  - {fileID: 7947380020270672316}
-  - {fileID: 3312604737733778148}
-  - {fileID: 8906610331341616456}
+  colliderObjects:
+  - {fileID: 1346356341139103831}
+  - {fileID: 7846833803484370955}
+  - {fileID: 3511318229296851223}
+  - {fileID: 7983332021642989188}
   outline: {fileID: 290910759025656015}
 --- !u!114 &7126901341016802860
 MonoBehaviour:
@@ -530,6 +530,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8187530652102092990}
   - component: {fileID: 8764774069622436691}
+  - component: {fileID: 2964328565487233477}
   - component: {fileID: 1275047894595005607}
   - component: {fileID: 2228441479770991026}
   m_Layer: 9
@@ -573,8 +574,29 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.99, y: 0.1, z: 0.75}
-  m_Center: {x: 0, y: 0.25, z: -0.1}
+  m_Size: {x: 0.99, y: 0.1, z: 0.35}
+  m_Center: {x: 0, y: 0.25, z: -0.3}
+--- !u!65 &2964328565487233477
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7983332021642989188}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.99, y: 0.1, z: 0.1}
+  m_Center: {x: 0, y: 0.25, z: 0.23}
 --- !u!114 &1275047894595005607
 MonoBehaviour:
   m_ObjectHideFlags: 0

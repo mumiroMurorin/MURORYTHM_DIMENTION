@@ -362,11 +362,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blinkDuration: 0.75
   noteRenderer: {fileID: 5893660377328454484}
-  colliders:
-  - {fileID: 8764774069622436691}
-  - {fileID: 7947380020270672316}
-  - {fileID: 3312604737733778148}
-  - {fileID: 8906610331341616456}
+  colliderObjects:
+  - {fileID: 7983332021642989188}
+  - {fileID: 3511318229296851223}
+  - {fileID: 7846833803484370955}
+  - {fileID: 1346356341139103831}
   outline: {fileID: 3066808719956895909}
 --- !u!114 &7126901341016802860
 MonoBehaviour:
