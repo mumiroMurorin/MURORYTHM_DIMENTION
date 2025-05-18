@@ -44,8 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9734b749d8991454aa7faba17806ebe0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  judgeMagnitude: 0.3
-  judgementWindow:
-    perfectWindow: 0.0666666
-    greatWindow: 0.1
-    goodWindow: 0.1333333
+  judgeMagnitude: 2

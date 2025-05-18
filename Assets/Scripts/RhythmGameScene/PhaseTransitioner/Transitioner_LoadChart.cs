@@ -9,6 +9,7 @@ namespace TransitionerInRhythmGameScene
     {
         [SerializeField] SerializeInterface<IChartGenerator> chartGenerator;
         [SerializeField] SerializeInterface<IChartEnder> chartEnder;
+        [SerializeField] SerializeInterface<IScoreCalculaterSetter> scoreCalculaterSetter;
         [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.LoadChart;
@@ -23,7 +24,11 @@ namespace TransitionerInRhythmGameScene
             Debug.Log("yTransitionzTransition to \"LoadChart\"");
 
             chartEnder.Value.BindOnEndChart();
-            chartGenerator.Value.Generate(TransitionNextPhase);
+            chartGenerator.Value.Generate(() => 
+            { 
+                scoreCalculaterSetter.Value.SetScoreCalculater();
+                TransitionNextPhase(); 
+            });
         }
 
         /// <summary>

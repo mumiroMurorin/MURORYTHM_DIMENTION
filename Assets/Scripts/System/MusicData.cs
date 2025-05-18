@@ -39,6 +39,6 @@ public class MusicData : ScriptableObject
     public TextAsset GetChart(Difficulty name) { return charts[(int)name]; }
 
     MusicRecord[] records = new MusicRecord[4];
-    public MusicRecord GetMusicRecord(Difficulty name) { return records[(int)name]; }
+    public MusicRecord GetMusicRecord(Difficulty name) { return records[(int)name] != null ? records[(int)name] : new MusicRecord(); }
     public void SetMusicRecord(Difficulty name, MusicRecord new_record) { records[(int)name] = new_record; }
 }

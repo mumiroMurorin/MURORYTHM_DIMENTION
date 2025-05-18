@@ -47,17 +47,19 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour
 
     private void Bind()
     {
-        //spaceInputGetter?.GetSpaceInputVelocity(SpaceTrackingTag.RightHand)
-        //    .Subscribe(value => {
-        //        velocityTextRight.text = value.y.ToString("F2");
-        //    })
-        //    .AddTo(this.gameObject);
+        spaceInputGetter?.GetSpaceInputVelocity(SpaceTrackingTag.RightHand)
+            .Subscribe(value =>
+            {
+                velocityTextRight.text = value.y.ToString("F2");
+            })
+            .AddTo(this.gameObject);
 
-        //spaceInputGetter?.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand)
-        //    .Subscribe(value => {
-        //        velocityTextLeft.text = value.y.ToString("F2");
-        //    })
-        //    .AddTo(this.gameObject);
+        spaceInputGetter?.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand)
+            .Subscribe(value =>
+            {
+                velocityTextLeft.text = value.y.ToString("F2");
+            })
+            .AddTo(this.gameObject);
     }
 
     private void SetData()

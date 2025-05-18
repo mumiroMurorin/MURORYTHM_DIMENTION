@@ -1185,8 +1185,6 @@ namespace ChartConvert
                 meshList = new List<TimeToRange>();
                 meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
                 numberToHoldMeshDataOrigin.Add(noteOrigin.HoldNumber, meshList);
-
-                Debug.Log("Start");
             }
 
             return true;
@@ -1227,8 +1225,6 @@ namespace ChartConvert
 
                 meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
                 chartData.AddNoteData(GenerateNoteData_HoldMesh(meshList));
-
-                Debug.Log("End");
             }
 
             return true;

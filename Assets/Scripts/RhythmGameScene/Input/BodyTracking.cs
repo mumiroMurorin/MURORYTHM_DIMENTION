@@ -147,7 +147,7 @@ namespace Mediapipe.Unity.Tutorial
                 }
                 else
                 {
-                    Debug.LogWarning("【MediaPipe】No pose landmarks received.");
+                    // Debug.LogWarning("【MediaPipe】No pose landmarks received.");
                 }
             }
         }

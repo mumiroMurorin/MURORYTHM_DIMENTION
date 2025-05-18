@@ -43,6 +43,8 @@ public interface IScoreSetter
     /// スコアのリセット
     /// </summary>
     void ResetScore();
+
+    void SetScoreCalculater(ScoreCalculater scoreCalculater);
 }
 
 /// <summary>

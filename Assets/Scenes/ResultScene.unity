@@ -505,6 +505,7 @@ MonoBehaviour:
   - {fileID: 883577286}
   - {fileID: 394946493}
   - {fileID: 76786509}
+  - {fileID: 876771428}
 --- !u!1 &205437913
 GameObject:
   m_ObjectHideFlags: 0
@@ -2035,6 +2036,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 865493788}
   m_CullTransparentMesh: 1
+--- !u!1 &876771428
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 876771429}
+  - component: {fileID: 876771430}
+  m_Layer: 0
+  m_Name: ScoreRecoder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &876771429
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876771428}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2051875843}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &876771430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876771428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8b7d77042f38ec4da590a7ca59cd096, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &879537740
 GameObject:
   m_ObjectHideFlags: 0
@@ -4324,6 +4369,7 @@ Transform:
   - {fileID: 115802742}
   - {fileID: 709638091}
   - {fileID: 883577287}
+  - {fileID: 876771429}
   - {fileID: 394946494}
   - {fileID: 758050359}
   - {fileID: 76786510}

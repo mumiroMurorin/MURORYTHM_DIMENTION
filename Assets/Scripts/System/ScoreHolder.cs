@@ -30,8 +30,12 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     public IReadOnlyReactiveProperty<int> Combo { get { return combo; } }
 
     // Score
-    ReactiveProperty<float> score = new ReactiveProperty<float>(0);
-    public IReadOnlyReactiveProperty<float> Score { get { return score; } }
+    ScoreCalculater scoreCalculater;
+    public IReadOnlyReactiveProperty<float> Score { get { return scoreCalculater?.Score; } }
+    public void SetScoreCalculater(ScoreCalculater scoreCalculater)
+    {
+        this.scoreCalculater = scoreCalculater;
+    }
 
     // ComboRank
     ReactiveProperty<ComboRank> comboRank = new ReactiveProperty<ComboRank>(ComboRank.AllPerfect);
@@ -52,7 +56,7 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
         missNum.Value = 0;
         noteJudgementDatas = new ReactiveCollection<NoteJudgementData>();
         combo.Value = 0;
-        score.Value = 0;
+        scoreCalculater = null;
         comboRank.Value = ComboRank.AllPerfect;
         scoreRank.Value = ScoreRank.E;
     }
@@ -68,28 +72,25 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
 
         SetComboRank(judgementData.Judgement);
         noteJudgementDatas.Add(judgementData);
+        scoreCalculater?.AddJudgement(judgementData.Judgement);
 
         switch (judgementData.Judgement)
         {
             case Judgement.Perfect:
                 perfectNum.Value++;
                 combo.Value++;
-                //judgedNum.Value++;
                 break;
             case Judgement.Great:
                 greatNum.Value++;
                 combo.Value++;
-                //judgedNum.Value++;
                 break;
             case Judgement.Good:
                 goodNum.Value++;
-                //judgedNum.Value++;
                 combo.Value++;
                 break;
             case Judgement.Miss:
                 missNum.Value++;
                 combo.Value = 0;
-                //judgedNum.Value++;
                 break;
         }
     }
@@ -116,3 +117,40 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     }
 }
 
+public class ScoreCalculater
+{
+    const int MAX_SCORE = 1000000;
+    const float GREAT_RATIO = 0.9f;
+    const float GOOD_RATIO = 0.5f;
+    const float MISS_RATIO = 0f;
+
+    float addScoreOnPerfect;
+
+    public ScoreCalculater(int maxCombo)
+    {
+        addScoreOnPerfect = MAX_SCORE / maxCombo;
+    }
+
+    public ReactiveProperty<float> Score { get; } = new ReactiveProperty<float>(0);
+
+    public void AddJudgement(Judgement judgement)
+    {
+        Debug.Log("‚«‚¿‚á");
+        switch (judgement)
+        {
+            case Judgement.Perfect:
+                Score.Value += addScoreOnPerfect;
+                break;
+            case Judgement.Great:
+                Score.Value += addScoreOnPerfect * GREAT_RATIO;
+                break;
+            case Judgement.Good:
+                Score.Value += addScoreOnPerfect * GOOD_RATIO;
+                break;
+            case Judgement.Miss:
+                Score.Value += addScoreOnPerfect * MISS_RATIO;
+                break;
+        }
+    }
+
+}
