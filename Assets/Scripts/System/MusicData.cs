@@ -3,40 +3,59 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[CreateAssetMenu(menuName = "ScriptableObject/MusicData", fileName = "Music")]
-public class MusicData : ScriptableObject
+[System.Serializable]
+public class MusicData
 {
     [Header("曲名")]
     [SerializeField] private string music_name;
-    public string MusicName { get { return music_name; } }
+    public string MusicName { get { return music_name; } set { music_name = value; } }
 
     [Header("コンポーザー")]
     [SerializeField] private string composer_name;
-    public string ComposerName { get { return composer_name; } }
+    public string ComposerName { get { return composer_name; } set { composer_name = value; } }
 
     [Header("サムネイル")]
     [SerializeField] private Sprite music_spr;
-    public Sprite MusicSprite { get { return music_spr; } }
+    public Sprite MusicSprite { get { return music_spr; } set { music_spr = value; } }
 
     [Header("テーマ画像")]
     [SerializeField] private Sprite theme_spr;
-    public Sprite ThemeSprite { get { return theme_spr; } }
+    public Sprite ThemeSprite { get { return theme_spr; } set { theme_spr = value; } }
 
     [Header("音楽ファイル")]
     [SerializeField] private AudioClip clip;
-    public AudioClip MusicClip { get { return clip; } }
+    public AudioClip MusicClip { get { return clip; } set { clip = value; } }
 
     [Header("視聴ファイル")]
     [SerializeField] private AudioClip sample_clip;
-    public AudioClip SampleClip { get { return sample_clip; } }
+    public AudioClip SampleClip { get { return sample_clip; } set { sample_clip = value; } }
 
     [Header("難易度")]
     [SerializeField] private int[] difficulities = new int[4];
     public int GetDifficulity(Difficulty name) { return difficulities[(int)name]; }
+    public void SetDifficulty(int[] difficulties) 
+    { 
+        if(difficulities.Length != 4) 
+        { 
+            Debug.LogError($"【System】難易度の数が4ではありません: {difficulities.Length}");
+            return; 
+        }
+
+        this.difficulities = difficulties;
+    }
 
     [Header("譜面")]
     [SerializeField] private TextAsset[] charts = new TextAsset[4];
     public TextAsset GetChart(Difficulty name) { return charts[(int)name]; }
+    public void SetChart(Difficulty diff, TextAsset chartFile)
+    {
+        if((int)diff >= charts.Length || (int)diff < 0)
+        {
+            Debug.LogError($"【System】長さが有効ではありません: {diff},{(int)diff}");
+            return;
+        }
+        charts[(int)diff] = chartFile;
+    }
 
     MusicRecord[] records = new MusicRecord[4];
     public MusicRecord GetMusicRecord(Difficulty name) { return records[(int)name] != null ? records[(int)name] : new MusicRecord(); }
