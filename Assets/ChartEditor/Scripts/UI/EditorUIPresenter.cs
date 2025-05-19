@@ -32,9 +32,6 @@ namespace ChartEditor
         [SerializeField] ChartDataExporter chartDataExporter_model;
         [SerializeField] ChartDataImporter chartDataImporter_model;
 
-
-        AudioFileSelector audioFileSelector = new AudioFileSelector();
-
         IChartEditorDataSetter editorDataSetter_model;
         IChartEditorDataGetter editorDataGetter_model;
         IChartEditorOptionSetter optionDataSetter_model;
@@ -249,7 +246,7 @@ namespace ChartEditor
 
             soundLoadCts = new CancellationTokenSource();
 
-            AudioClip clip = await audioFileSelector.SelectAudioFile(soundLoadCts.Token);
+            AudioClip clip = await AudioFileSelector.SelectAudioFile(soundLoadCts.Token);
             editorDataSetter_model.SetMusic(clip);
         }
 

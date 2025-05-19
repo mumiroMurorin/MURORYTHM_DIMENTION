@@ -5,9 +5,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class AudioFileSelector
+public static class AudioFileSelector
 {
-    public async Task<AudioClip> SelectAudioFile(CancellationToken cancellationToken)
+    public static async Task<AudioClip> SelectAudioFile(CancellationToken cancellationToken)
     {
         var extensions = new[] { new ExtensionFilter("Audio Files", "wav", "mp3") };
         string[] paths = StandaloneFileBrowser.OpenFilePanel("Select Audio File", "", extensions, false);
@@ -20,7 +20,7 @@ public class AudioFileSelector
         return null;
     }
 
-    private async Task<AudioClip> LoadAudioClip(string path, CancellationToken cancellationToken)
+    public static async Task<AudioClip> LoadAudioClip(string path, CancellationToken cancellationToken)
     {
         using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip("file://" + path, AudioType.UNKNOWN))
         {

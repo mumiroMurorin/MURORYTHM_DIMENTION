@@ -186,7 +186,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &160316406
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5017,6 +5017,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dataFolderName: MusicData
+  musicInformationFileName: information.json
+  musicJacketFileName: jacket.png
+  musicThemeImageFileName: theme.png
+  musicClipFileNames:
+  - clip.wav
+  - clip.mp3
+  - clip.ogg
+  sampleClipFileNames:
+  - sample.wav
+  - sample.mp3
+  - sample.ogg
+  chartFileNames:
+  - chart_initiate.json
+  - chart_fanatic.json
+  - chart_skyclad.json
+  - chart_dream.json
   kariTmp: {fileID: 160316407}
 --- !u!1 &1959534641
 GameObject:
@@ -5533,7 +5549,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1654844631}
   - {fileID: 1021714054}
-  - {fileID: 217213026}
   - {fileID: 591359730}
   - {fileID: 1839293358}
   - {fileID: 1528082574}
+  - {fileID: 217213026}
