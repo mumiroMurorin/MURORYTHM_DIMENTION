@@ -6,7 +6,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 
-public class MusicDataListLoader : MonoBehaviour, IMusicDataListLoader
+public class MusicDataListLoaderDebug : MonoBehaviour, IMusicDataListLoader
 {
     [SerializeField] MusicDataList musicDataList;
 
@@ -19,14 +19,11 @@ public class MusicDataListLoader : MonoBehaviour, IMusicDataListLoader
         this.selectSceneDataSetter = selectSceneDataSetter;
     }
 
-    void IMusicDataListLoader.LoadMusicDataList()
+    void IMusicDataListLoader.LoadMusicDataList(Action onFinishAction)
     {
         selectSceneDataSetter.SetMusicList(musicDataList.MusicDatas);
-    }
 
-    void IMusicDataListLoader.LoadAudioDatas(Action onEndAction)
-    {
-        if(cts != null)
+        if (cts != null)
         {
             cts.Cancel();
             cts.Dispose();
@@ -34,7 +31,7 @@ public class MusicDataListLoader : MonoBehaviour, IMusicDataListLoader
 
         cts = new CancellationTokenSource();
 
-        LoadAudioDatasAsync(onEndAction, cts.Token).Forget();
+        LoadAudioDatasAsync(onFinishAction, cts.Token).Forget();
     }
 
     /// <summary>
@@ -69,7 +66,5 @@ public class MusicDataListLoader : MonoBehaviour, IMusicDataListLoader
 
 public interface IMusicDataListLoader
 {
-    void LoadMusicDataList();
-
-    void LoadAudioDatas(Action onEndAction);
+    void LoadMusicDataList(Action onFinishAction);
 }

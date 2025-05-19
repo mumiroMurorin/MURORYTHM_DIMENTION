@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using VContainer;
 
 namespace TransitionerInSelectScene
@@ -21,11 +22,19 @@ namespace TransitionerInSelectScene
         {
             Debug.Log("【Transition】Transition to \"LoadData\"");
 
-            // 楽曲データリストの読み込みとセット
-            musicDataListLoader.Value.LoadMusicDataList();
+            bool[] isCompletedTask = new bool[1];
 
-            // 楽曲サンプル音源の読み込み
-            musicDataListLoader.Value.LoadAudioDatas(TransitionNextPhase);
+            // 楽曲データリストの読み込みとセット
+            musicDataListLoader.Value.LoadMusicDataList(() => { 
+                isCompletedTask[0] = true; 
+                CheckAndTransition(isCompletedTask);
+            });
+        }
+
+        private void CheckAndTransition(bool[] isCompletedTask)
+        {
+            if(!isCompletedTask.All(x => x)) { return; }
+            TransitionNextPhase();
         }
 
         /// <summary>

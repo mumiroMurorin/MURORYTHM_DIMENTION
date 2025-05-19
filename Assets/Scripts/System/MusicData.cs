@@ -45,17 +45,18 @@ public class MusicData
     }
 
     [Header("•ˆ–Ê")]
-    [SerializeField] private TextAsset[] charts = new TextAsset[4];
-    public TextAsset GetChart(Difficulty name) { return charts[(int)name]; }
-    public void SetChart(Difficulty diff, TextAsset chartFile)
+    [SerializeField] private string[] chartPaths = new string[4];
+    public string GetChartPath(Difficulty name) { return chartPaths[(int)name]; }
+    public void SetChartPath(Difficulty diff, string chartPath)
     {
-        if((int)diff >= charts.Length || (int)diff < 0)
+        if((int)diff >= chartPaths.Length || (int)diff < 0)
         {
             Debug.LogError($"ySystemz’·‚³‚ª—LŒø‚Å‚Í‚ ‚è‚Ü‚¹‚ñ: {diff},{(int)diff}");
             return;
         }
-        charts[(int)diff] = chartFile;
+        chartPaths[(int)diff] = chartPath;
     }
+
 
     MusicRecord[] records = new MusicRecord[4];
     public MusicRecord GetMusicRecord(Difficulty name) { return records[(int)name] != null ? records[(int)name] : new MusicRecord(); }

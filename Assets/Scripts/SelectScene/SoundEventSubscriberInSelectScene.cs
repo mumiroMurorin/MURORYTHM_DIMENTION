@@ -39,6 +39,7 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
 
         // ‘I‘ðŠy‹È‚Ì•ÏX
         selectSceneDataGetter?.CurrentMusicData
+            .Where(value => value != null)
             .Subscribe(value => {
                 soundManager.PlayBGM(value.SampleClip);
             })

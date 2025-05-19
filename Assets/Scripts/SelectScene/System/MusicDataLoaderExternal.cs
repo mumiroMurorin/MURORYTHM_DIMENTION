@@ -7,6 +7,7 @@ using System.Threading;
 using UnityEngine;
 using VContainer;
 using System.IO;
+using System.Linq;
 using JsonUtil;
 
 public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
@@ -25,26 +26,38 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     [Tooltip("楽曲サンプルオーディオファイル名")]
     [SerializeField] string[] sampleClipFileNames = new string[] { "sample.wav", "sample.mp3", "sample.ogg" };
     [Tooltip("譜面データ名")]
-    [SerializeField] string[] chartFileNames = new string[] { "chart_initiate.json", "chart_fanatic.json", "chart_skyclad.json", "chart_dream.json" };
+    [SerializeField] string chartFileNameInitiate = "chart_initiate.json";
+    [SerializeField] string chartFileNameFanatic = "chart_fanatic.json";
+    [SerializeField] string chartFileNameSkyclad = "chart_skyclad.json";
+    [SerializeField] string chartFileNameDream = "chart_dream.json";
 
     [SerializeField] TMPro.TextMeshProUGUI kariTmp;
 
     private string dataPath;
     CancellationTokenSource cts;
-    ISelectSceneDataSetter selectSceneDataSetter;
+    ISelectSceneDataSetter dataSetter;
+    ISelectSceneDataGetter dataGetter;
 
     [Inject]
-    public void Construct(ISelectSceneDataSetter selectSceneDataSetter)
+    public void Construct(ISelectSceneDataSetter dataSetter, ISelectSceneDataGetter dataGetter)
     {
-        this.selectSceneDataSetter = selectSceneDataSetter;
+        this.dataSetter = dataSetter;
+        this.dataGetter = dataGetter;
     }
 
-    void Start()
+    public void LoadMusicDataList(Action onFinishedAction)
     {
-        LoadMusicDataList();
+        if (cts != null)
+        {
+            cts.Cancel();
+            cts.Dispose();
+        }
+        cts = new CancellationTokenSource();
+
+        LoadMusicDataListAsync(cts.Token, onFinishedAction).Forget();
     }
 
-    public void LoadMusicDataList()
+    private async UniTask LoadMusicDataListAsync(CancellationToken token, Action onFinishAction)
     {
         dataPath = Application.dataPath + "/" + dataFolderName;
 
@@ -57,24 +70,29 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
 
         // サブフォルダのパス一覧を取得して一つずつ取り出す
         string[] subDirectories = Directory.GetDirectories(dataPath);
+        List<UniTask<MusicData>> tasks = new List<UniTask<MusicData>>();
         MusicDataList musicDataList = new MusicDataList();
-
-        if(cts != null)
-        {
-            cts.Cancel();
-            cts.Dispose();
-        }
-        cts = new CancellationTokenSource();
 
         // 各サブフォルダをループ
         foreach (string dir in subDirectories)
         {
             // 最後尾の「/」が「\」になっちゃうので置換
             string normalizedPath = dir.Replace("\\", "/");
-
-            //MusicData musicData = await LoadMusicData(normalizedPath, cts.Token);
-            //if (musicData != null) { musicDataList.MusicDatas.Add(musicData); }
+            tasks.Add(LoadMusicData(normalizedPath, cts.Token));
         }
+
+        // 全ての処理が終わるまで待ち
+        MusicData[] results = await UniTask.WhenAll(tasks);
+
+        foreach (var result in results)
+        {
+            if (result != null) { musicDataList.MusicDatas.Add(result); }
+        }
+
+        await LoadAudioDatasAsync(musicDataList, cts.Token);
+        dataSetter.SetMusicList(musicDataList.MusicDatas);
+
+        onFinishAction.Invoke();
     }
 
     /// <summary>
@@ -97,12 +115,17 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
             SetSampleClipFileAsync(musicData, path, token),
             SetJacketFileAsync(musicData, path, token),
             SetThemeImageFileAsync(musicData, path, token),
+            SetChartFileAsync(musicData, path, token)
         };
 
         // 全ての処理が終わるまで待ち
         bool[] results = await UniTask.WhenAll(tasks);
 
-        return null;
+        // 一つでも処理が失敗したら返す
+        if(!results.All(x => x)) { return null; }
+
+        Debug.Log($"【System】{musicData.MusicName} ロード完了: {path}");
+        return musicData;
     }
 
     /// <summary>
@@ -150,12 +173,13 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         bool isFindPath = false;
         foreach(var fileName in musicClipFileNames)
         {
-            path = path + "/" + fileName;
+            string clipPath = path + "/" + fileName;
 
             // フォルダパスの存在確認
-            if (File.Exists(path))
+            if (File.Exists(clipPath))
             {
                 isFindPath = true;
+                path = clipPath;
                 break;
             }
         }
@@ -186,12 +210,13 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         bool isFindPath = false;
         foreach (var fileName in sampleClipFileNames)
         {
-            path = path + "/" + fileName;
+            string samplePath = path + "/" + fileName;
 
             // フォルダパスの存在確認
-            if (File.Exists(path))
+            if (File.Exists(samplePath))
             {
                 isFindPath = true;
+                path = samplePath;
                 break;
             }
         }
@@ -253,33 +278,70 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         return true;
     }
 
-    //private async UniTask<bool> SetChartFileAsync(MusicData musicData, string path, CancellationToken token)
-    //{
-    //    // リストにあるファイルが存在するか確認
-    //    bool isFindPath = false;
-    //    foreach (var fileName in chartFileNames)
-    //    {
-    //        path = path + "/" + fileName;
-
-    //        // フォルダパスの存在確認
-    //        if (File.Exists(path))
-    //        {
-    //            isFindPath = true;
-    //            break;
-    //        }
-    //    }
-
-    //    // 見つからなかった場合
-    //    if (!isFindPath)
-    //    {
-    //        Debug.LogWarning("【System】指定されたフォルダが存在しません: " + path);
-    //        return false;
-    //    }
-    //}
-
-    void IMusicDataListLoader.LoadAudioDatas(Action onEndAction)
+    /// <summary>
+    /// 譜面データ(パス)の取得
+    /// </summary>
+    /// <param name="musicData"></param>
+    /// <param name="path"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    private async UniTask<bool> SetChartFileAsync(MusicData musicData, string path, CancellationToken token)
     {
+        // リストにあるファイルが存在するか確認
+        string pathInitiate = path + "/" + chartFileNameInitiate;
+        if (File.Exists(pathInitiate))
+        {
+            musicData.SetChartPath(Difficulty.Initiate, pathInitiate);
+        }
 
+        string pathFanatic = path + "/" + chartFileNameFanatic;
+        if (File.Exists(pathFanatic))
+        {
+            musicData.SetChartPath(Difficulty.Fanatic, pathFanatic);
+        }
+
+        string pathSkyclad = path + "/" + chartFileNameSkyclad;
+        if (File.Exists(pathSkyclad))
+        {
+            musicData.SetChartPath(Difficulty.Skyclad, pathSkyclad);
+        }
+
+        string pathDream = path + "/" + chartFileNameDream;
+        if (File.Exists(pathDream))
+        {
+            musicData.SetChartPath(Difficulty.Dream, pathDream);
+        }
+
+        // 無理やり
+        await UniTask.Delay(1, cancellationToken: token);
+        return true;
+    }
+
+    /// <summary>
+    /// 楽曲のロードを非同期で行う
+    /// </summary>
+    /// <param name="onEndAction"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    private async UniTask LoadAudioDatasAsync(MusicDataList musicDataList, CancellationToken token)
+    {
+        foreach (var data in musicDataList.MusicDatas)
+        {
+            if (data.SampleClip.loadState == AudioDataLoadState.Loaded) { continue; }
+
+            data.SampleClip.LoadAudioData();
+            await UniTask.WaitUntil(() => data.SampleClip.loadState == AudioDataLoadState.Loaded, cancellationToken: token);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (cts != null)
+        {
+            cts.Cancel();
+            cts.Dispose();
+            cts = null;
+        }
     }
 
     /// <summary>

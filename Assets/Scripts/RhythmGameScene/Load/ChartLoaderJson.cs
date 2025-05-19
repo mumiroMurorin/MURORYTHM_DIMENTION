@@ -36,7 +36,7 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
     void IChartLoader.LoadChart(Action callback)
     {
         Difficulty difficulty = musicDataGetter.Difficulty.Value;
-        ChartData chartData = LoadChartData(musicDataGetter.Music.Value.GetChart(difficulty));
+        ChartData chartData = LoadChartData(musicDataGetter.Music.Value.GetChartPath(difficulty));
 
         chartDataSetter.SetChartData(chartData);
         callback.Invoke();
@@ -48,7 +48,7 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
     /// <param name="textAsset"></param>
     /// <param name="callback"></param>
     /// <returns></returns>
-    public ChartData LoadChartData(TextAsset textAsset)
+    private ChartData LoadChartData(TextAsset textAsset)
     {
         if (jsonData == null && textAsset == null)
         {
@@ -58,6 +58,33 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
 
         // Jsonデータの変換
         if(!JsonLoader.TryLoadFromTextAsset(textAsset != null ? textAsset : jsonData, out ChartDataOrigin chartDataOrigin))
+        {
+            // 失敗
+            return null;
+        }
+
+        // 譜面データの変換
+        ChartImporterForRhythmGame chartImporter = new ChartImporterForRhythmGame();
+        ChartData chart = chartImporter.Import(chartDataOrigin, optionGetter);
+
+        // 判定枠の調整
+        JudgementWindowAdjuster judgementWindowAdjuster = new JudgementWindowAdjuster();
+        judgementWindowAdjuster.AdjustJudgementWindow(chart, judgementWindows);
+
+
+        return chart;
+    }
+
+    private ChartData LoadChartData(string path)
+    {
+        if (path == null || path == "")
+        {
+            Debug.LogError("【System】Jsonファイルパスが参照されていません");
+            return null;
+        }
+
+        // Jsonデータの変換
+        if (!JsonLoader.TryLoadFromJsonFile(path, out ChartDataOrigin chartDataOrigin)) 
         {
             // 失敗
             return null;

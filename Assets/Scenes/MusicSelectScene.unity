@@ -949,12 +949,12 @@ GameObject:
   - component: {fileID: 277925327}
   - component: {fileID: 277925328}
   m_Layer: 0
-  m_Name: MusicDataListLoader
+  m_Name: Debug
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &277925327
 Transform:
   m_ObjectHideFlags: 0
@@ -963,13 +963,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 277925326}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1926686071}
-  m_Father: {fileID: 1528082574}
+  m_Children: []
+  m_Father: {fileID: 1926686071}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &277925328
 MonoBehaviour:
@@ -992,11 +991,11 @@ MonoBehaviour:
       clip: {fileID: 8300000, guid: a0832b65e104cf646b5ea8dad5744df2, type: 3}
       sample_clip: {fileID: 8300000, guid: a0832b65e104cf646b5ea8dad5744df2, type: 3}
       difficulities: 00000000000000000000000000000000
-      charts:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
+      chartPaths:
+      - 
+      - 
+      - 
+      - 
 --- !u!1 &288092411
 GameObject:
   m_ObjectHideFlags: 0
@@ -2991,7 +2990,7 @@ MonoBehaviour:
         phaseTransitionable:
           obj: {fileID: 1012713960}
         musicDataListLoader:
-          obj: {fileID: 277925326}
+          obj: {fileID: 1926686070}
     - rid: 4334588895060557840
       type: {class: Transitioner_FadeIn, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
       data:
@@ -3983,7 +3982,7 @@ Transform:
   - {fileID: 1012713961}
   - {fileID: 69001550}
   - {fileID: 332814019}
-  - {fileID: 277925327}
+  - {fileID: 1926686071}
   - {fileID: 2136412674}
   - {fileID: 1468933149}
   - {fileID: 347714553}
@@ -4983,7 +4982,7 @@ GameObject:
   - component: {fileID: 1926686071}
   - component: {fileID: 1926686072}
   m_Layer: 0
-  m_Name: kariLoder
+  m_Name: MusicDataListLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4997,12 +4996,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1926686070}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 277925327}
+  m_Children:
+  - {fileID: 277925327}
+  m_Father: {fileID: 1528082574}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1926686072
 MonoBehaviour:
@@ -5028,11 +5028,10 @@ MonoBehaviour:
   - sample.wav
   - sample.mp3
   - sample.ogg
-  chartFileNames:
-  - chart_initiate.json
-  - chart_fanatic.json
-  - chart_skyclad.json
-  - chart_dream.json
+  chartFileNameInitiate: chart_initiate.json
+  chartFileNameFanatic: chart_fanatic.json
+  chartFileNameSkyclad: chart_skyclad.json
+  chartFileNameDream: chart_dream.json
   kariTmp: {fileID: 160316407}
 --- !u!1 &1959534641
 GameObject:
@@ -5085,7 +5084,7 @@ MonoBehaviour:
   - {fileID: 69001549}
   - {fileID: 2136412673}
   - {fileID: 332814018}
-  - {fileID: 277925326}
+  - {fileID: 1926686070}
   - {fileID: 1468933148}
   - {fileID: 300857401}
 --- !u!224 &1974952398 stripped
