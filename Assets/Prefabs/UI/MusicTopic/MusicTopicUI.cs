@@ -61,7 +61,8 @@ public class MusicTopicUI : MonoBehaviour
         //ALL PERFECT
         ap_obj.SetActive(data.GetMusicRecord(currentSetDifficulty).ComboRank == ComboRank.AllPerfect);
 
-
+        // 難易度
+        UpdateNumberOfDifficulty(data, currentSetDifficulty);
     }
 
     /// <summary>
@@ -75,10 +76,6 @@ public class MusicTopicUI : MonoBehaviour
         // 難易度名
         diff_tmp.text = difficulty.ToString().ToUpper(); //大文字に
 
-        // 難易度(レベル)
-        //if (currentSetData.GetDifficulity(difficulty) != 0) { level_tmp.text = currentSetData.GetDifficulity(difficulty).ToString(); }
-        //else { level_tmp.text = "-"; }
-
         // 難易度背景
         foreach (var difficultyToSprite in difficultyToSprites)
         {
@@ -88,11 +85,33 @@ public class MusicTopicUI : MonoBehaviour
                 break;
             }
         }
+
+        UpdateNumberOfDifficulty(currentSetData, difficulty);
     }
 
-    //表示非表示
-    public void SetObjActive(bool b)
+    /// <summary>
+    /// 引数から難易度の数字を更新
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="difficulty"></param>
+    private void UpdateNumberOfDifficulty(MusicData data, Difficulty difficulty)
     {
-        this.gameObject.SetActive(b);
+        if (data == null) { return; }
+
+        // 難易度(レベル)
+        if (currentSetData.GetDifficulity(difficulty) != -1)
+        {
+            level_tmp.text = data.GetDifficulity(difficulty).ToString();
+        }
+        else { level_tmp.text = "-"; }
+    }
+
+    /// <summary>
+    /// 表示非表示切り替え
+    /// </summary>
+    /// <param name="b"></param>
+    public void SetObjActive(bool isActive)
+    {
+        this.gameObject.SetActive(isActive);
     }
 }

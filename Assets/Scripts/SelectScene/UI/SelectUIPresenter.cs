@@ -17,12 +17,12 @@ namespace UIInSelectScene
         [SerializeField] SerializeInterface<IOperationGetter> operationGetter_model;
         [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter_model;
 
-        ISelectSceneDataGetter selectSceneDataGetter_model;
+        IMusicDataListGetter musicDataListGetter_model;
 
         [Inject]
-        public void Construct(ISelectSceneDataGetter selectSceneDataGetter)
+        public void Construct(IMusicDataListGetter musicListGetter)
         {
-            selectSceneDataGetter_model = selectSceneDataGetter;
+            musicDataListGetter_model = musicListGetter;
         }
 
         private void Start()
@@ -36,21 +36,28 @@ namespace UIInSelectScene
 
         private void BindMusicTopic()
         {
+            // 楽曲リストが既にあった時、楽曲リストを更新する
+            if(musicDataListGetter_model?.MusicDatasSorted.Count > 0)
+            {
+                int index = musicDataListGetter_model.CurrentMusicIndex.Value;
+                musicTopicController_view.SetMusicDatas(index, musicDataListGetter_model);
+            }
+
             // 楽曲リストの更新
-            selectSceneDataGetter_model?.MusicDatasSorted.ObserveCountChanged()
+            musicDataListGetter_model?.MusicDatasSorted.ObserveCountChanged()
                 .Subscribe(_ => {
-                    int index = selectSceneDataGetter_model.CurrentMusicIndex.Value;
                     // トピックの更新
-                    musicTopicController_view.SetMusicDatas(index, selectSceneDataGetter_model);
+                    int index = musicDataListGetter_model.CurrentMusicIndex.Value;
+                    musicTopicController_view.SetMusicDatas(index, musicDataListGetter_model);
                 })
                 .AddTo(this.gameObject);
 
             // トピックの移動
-            selectSceneDataGetter_model?.CurrentMusicIndex
+            musicDataListGetter_model?.CurrentMusicIndex
                 .Pairwise()
                 .Subscribe(pair => { 
                     // トピックの更新
-                    _ = musicTopicController_view.OnChangeSelectedMusic(pair.Current, pair.Previous, selectSceneDataGetter_model);
+                    _ = musicTopicController_view.OnChangeSelectedMusic(pair.Current, pair.Previous, musicDataListGetter_model);
                 })
                 .AddTo(this.gameObject);
 
@@ -68,7 +75,7 @@ namespace UIInSelectScene
                 .AddTo(this.gameObject);
 
             // 難易度の変更
-            selectSceneDataGetter_model?.Difficulty
+            musicDataListGetter_model?.Difficulty
                 .Subscribe(musicTopicController_view.OnChangeDifficulty)
                 .AddTo(this.gameObject);
 
@@ -118,10 +125,10 @@ namespace UIInSelectScene
         private void BindOther()
         {
             // 選択楽曲の変更
-            selectSceneDataGetter_model?.CurrentMusicData
+            musicDataListGetter_model?.CurrentMusicData
                 .Subscribe(value => {
                     // 背景の更新
-                    backGroundController_view.OnChangeMusicTopic(selectSceneDataGetter_model.CurrentMusicData.Value);
+                    backGroundController_view.OnChangeMusicTopic(musicDataListGetter_model.CurrentMusicData.Value);
                 })
                 .AddTo(this.gameObject);
         }

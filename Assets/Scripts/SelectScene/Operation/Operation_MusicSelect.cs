@@ -37,14 +37,14 @@ public class Operation_MusicSelect : MonoBehaviour
     private int[] DIFF_DOWN_INDICES = new int[] { 2, 3, 4 };
     private int[] MUSIC_SELECT_INDICES = new int[] { 5, 6, 7, 8, 9, 10 };
 
-    ISelectSceneDataSetter selectSceneDataSetter;
-    ISelectSceneDataGetter selectSceneDataGetter;
+    IMusicDataListSetter musicDataListSetter;
+    IMusicDataListGetter musicDataListGetter;
 
     [Inject]
-    public void Construct(ISelectSceneDataSetter selectSceneDataSetter, ISelectSceneDataGetter selectSceneDataGetter)
+    public void Construct(IMusicDataListSetter musicDataListSetter, IMusicDataListGetter musicDataListGetter)
     {
-        this.selectSceneDataSetter = selectSceneDataSetter;
-        this.selectSceneDataGetter = selectSceneDataGetter;
+        this.musicDataListSetter = musicDataListSetter;
+        this.musicDataListGetter = musicDataListGetter;
     }
 
     private void Start()
@@ -90,7 +90,7 @@ public class Operation_MusicSelect : MonoBehaviour
     /// <param name="index"></param>
     private void MoveMusicTopic(int delta)
     {
-        selectSceneDataSetter.SetMusicIndex(selectSceneDataGetter.CurrentMusicIndex.Value + delta);
+        musicDataListSetter.SetMusicIndex(musicDataListGetter.CurrentMusicIndex.Value + delta);
     }
 
     /// <summary>
@@ -99,7 +99,7 @@ public class Operation_MusicSelect : MonoBehaviour
     /// <param name="diff"></param>
     private void ChangeDifficulty(int delta)
     {
-        selectSceneDataSetter.SetDifficulty(selectSceneDataGetter.Difficulty.Value + delta);
+        musicDataListSetter.SetDifficulty(musicDataListGetter.Difficulty.Value + delta);
     }
 
     /// <summary>

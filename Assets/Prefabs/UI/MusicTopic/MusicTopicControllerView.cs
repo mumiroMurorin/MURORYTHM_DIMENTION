@@ -18,7 +18,7 @@ namespace UIInSelectScene
         /// </summary>
         /// <param name="deltaValue"></param>
         /// <returns></returns>
-        public async UniTask OnChangeSelectedMusic(int currentIndex, int previousIndex, ISelectSceneDataGetter selectSceneDataGetter)
+        public async UniTask OnChangeSelectedMusic(int currentIndex, int previousIndex, IMusicDataListGetter dataGetter)
         {
             int deltaValue = currentIndex - previousIndex;
 
@@ -33,7 +33,7 @@ namespace UIInSelectScene
                 isMoving = true;
                 await UniTask.WaitUntil(() => !isMoving);
 
-                SetMusicDatas(deltaValue > 0 ? previousIndex + i + 1 : previousIndex - i - 1, selectSceneDataGetter);
+                SetMusicDatas(deltaValue > 0 ? previousIndex + i + 1 : previousIndex - i - 1, dataGetter);
             }
         }
 
@@ -42,12 +42,12 @@ namespace UIInSelectScene
         /// </summary>
         /// <param name="index"></param>
         /// <param name="musicDatas"></param>
-        public void SetMusicDatas(int index, ISelectSceneDataGetter selectSceneDataGetter)
+        public void SetMusicDatas(int index, IMusicDataListGetter dataGetter)
         {
             for (int i = 0; i < musicTopicUIs.Length; i++) 
             {
                 int indexLocal = index - musicTopicUIs.Length / 2 + i;
-                MusicData data = selectSceneDataGetter.GetMusicData(indexLocal);
+                MusicData data = dataGetter.GetMusicData(indexLocal);
 
                 if (data == null)
                 {

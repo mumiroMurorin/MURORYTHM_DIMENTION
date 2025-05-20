@@ -35,16 +35,16 @@ public class Operation_DetailSelect : MonoBehaviour
     private int[] DIFF_UP_INDICES = new int[] { 11, 12, 13 };
     private int[] DIFF_DOWN_INDICES = new int[] { 2, 3, 4 };
 
-    ISelectSceneDataGetter selectSceneDataGetter;
-    ISelectSceneDataSetter selectSceneDataSetter;
+    IMusicDataListGetter musicDataListGetter;
+    IMusicDataListSetter musicDataListSetter;
     IMusicDataSetter musicDataSetter;
 
     [Inject]
-    public void Construct(IMusicDataSetter musicDataSetter, ISelectSceneDataGetter selectSceneDataGetter, ISelectSceneDataSetter selectSceneDataSetter)
+    public void Construct(IMusicDataSetter musicDataSetter, IMusicDataListGetter musicDataListGetter, IMusicDataListSetter musicDataListSetter)
     {
         this.musicDataSetter = musicDataSetter;
-        this.selectSceneDataGetter = selectSceneDataGetter;
-        this.selectSceneDataSetter = selectSceneDataSetter;
+        this.musicDataListGetter = musicDataListGetter;
+        this.musicDataListSetter = musicDataListSetter;
     }
 
     private void Start()
@@ -91,7 +91,7 @@ public class Operation_DetailSelect : MonoBehaviour
     /// <param name="diff"></param>
     private void ChangeDifficulty(int delta)
     {
-        selectSceneDataSetter.SetDifficulty(selectSceneDataGetter.Difficulty.Value + delta);
+        musicDataListSetter.SetDifficulty(musicDataListGetter.Difficulty.Value + delta);
     }
 
     /// <summary>
@@ -116,8 +116,8 @@ public class Operation_DetailSelect : MonoBehaviour
     private void TransitionRhythmGamePhase()
     {
         // “ïˆÕ“x‚ÆŠy‹È‚ÌŠm’è
-        musicDataSetter.SetDifficulty(selectSceneDataGetter.Difficulty.Value);
-        musicDataSetter.SetMusicData(selectSceneDataGetter.CurrentMusicData.Value);
+        musicDataSetter.SetDifficulty(musicDataListGetter.Difficulty.Value);
+        musicDataSetter.SetMusicData(musicDataListGetter.CurrentMusicData.Value);
 
         phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.FadeOut);
     }

@@ -10,18 +10,18 @@ public class MusicDataListLoaderDebug : MonoBehaviour, IMusicDataListLoader
 {
     [SerializeField] MusicDataList musicDataList;
 
-    ISelectSceneDataSetter selectSceneDataSetter;
+    IMusicDataListSetter musicDataListSetter;
     CancellationTokenSource cts;
 
     [Inject]
-    public void Construct(ISelectSceneDataSetter selectSceneDataSetter)
+    public void Construct(IMusicDataListSetter musicDataListSetter)
     {
-        this.selectSceneDataSetter = selectSceneDataSetter;
+        this.musicDataListSetter = musicDataListSetter;
     }
 
     void IMusicDataListLoader.LoadMusicDataList(Action onFinishAction)
     {
-        selectSceneDataSetter.SetMusicList(musicDataList.MusicDatas);
+        musicDataListSetter.SetMusicList(musicDataList.MusicDatas);
 
         if (cts != null)
         {

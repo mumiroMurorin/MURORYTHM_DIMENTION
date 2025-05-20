@@ -9,12 +9,14 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
 {
     [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter;
 
+    IMusicDataListGetter musicDataListGetter;
     ISelectSceneDataGetter selectSceneDataGetter;
     SoundManager soundManager;
 
     [Inject]
-    public void Construct(ISelectSceneDataGetter selectSceneDataGetter)
+    public void Construct(IMusicDataListGetter musicDataListGetter, ISelectSceneDataGetter selectSceneDataGetter)
     {
+        this.musicDataListGetter = musicDataListGetter;
         this.selectSceneDataGetter = selectSceneDataGetter;
     }
 
@@ -30,7 +32,7 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
     private void BindInSelectMusicPhase()
     {
         // トピックの移動
-        selectSceneDataGetter?.CurrentMusicIndex
+        musicDataListGetter?.CurrentMusicIndex
             .Skip(1)
             .Subscribe(_ => {
                 soundManager.PlaySE(SE_Type.MoveTopic);
@@ -38,7 +40,7 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
             .AddTo(this.gameObject);
 
         // 選択楽曲の変更
-        selectSceneDataGetter?.CurrentMusicData
+        musicDataListGetter?.CurrentMusicData
             .Where(value => value != null)
             .Subscribe(value => {
                 soundManager.PlayBGM(value.SampleClip);
@@ -46,14 +48,14 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
             .AddTo(this.gameObject);
 
         // 難易度UP
-        selectSceneDataGetter?.Difficulty
+        musicDataListGetter?.Difficulty
             .Pairwise()
             .Where(pair => pair.Previous < pair.Current)
             .Subscribe(_ => soundManager.PlaySE(SE_Type.UpDifficulty))
             .AddTo(this.gameObject);
 
         // 難易度DOWN
-        selectSceneDataGetter?.Difficulty
+        musicDataListGetter?.Difficulty
             .Pairwise()
             .Where(pair => pair.Previous > pair.Current)
             .Subscribe(_ => soundManager.PlaySE(SE_Type.DownDifficulty))

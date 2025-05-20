@@ -135,7 +135,6 @@ public class ScoreCalculater
 
     public void AddJudgement(Judgement judgement)
     {
-        Debug.Log("‚«‚¿‚á");
         switch (judgement)
         {
             case Judgement.Perfect:

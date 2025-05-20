@@ -11,13 +11,15 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
     [SerializeField] float noteSpeed;
 
     IMusicDataSetter musicDataSetter;
+    IMusicDataGetter musicDataGetter;
     IOptionSetter optionSetter;
     IScoreSetter scoreSetter;
 
     [Inject]
-    public void Construct(IScoreSetter scoreSetter, IMusicDataSetter musicDataSetter, IOptionSetter optionSetter)
+    public void Construct(IScoreSetter scoreSetter, IMusicDataGetter musicDataGetter, IMusicDataSetter musicDataSetter, IOptionSetter optionSetter)
     {
         this.musicDataSetter = musicDataSetter;
+        this.musicDataGetter = musicDataGetter;
         this.scoreSetter = scoreSetter;
         this.optionSetter = optionSetter;
     }
@@ -27,7 +29,7 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
         if (!isDebugMode) { return; }
 
         if (musicDataSetter == null) { return; }
-        musicDataSetter.SetMusicData(musicData_debug);
+        if (musicDataGetter.Music.Value == null) { musicDataSetter.SetMusicData(musicData_debug); }
 
         if(optionSetter == null) { return; }
         optionSetter.SetNoteSpeed(noteSpeed);
