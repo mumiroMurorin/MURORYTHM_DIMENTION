@@ -17,7 +17,6 @@ public class OperationHandlerFromSlider : MonoBehaviour, IOperationSetter, IOper
 
     void IOperationSetter.SetOperate(SliderTouchData sliderTouchData)
     {
-        Debug.Log($"‚«‚¿‚á {sliderTouchData.Text.Value}");
         sliderTouchDatas.Add(sliderTouchData);
         inputHandler?.Value.OnTouchSlider(sliderTouchData.SliderIndices, sliderTouchData.ExecuteAction);
     }
@@ -101,7 +100,7 @@ public class SliderTouchData
     {
         if (coolDownHandler != null && coolDownHandler.IsWaiting) { return; }
 
-        Callback.Value.Invoke();
+        Callback?.Value?.Invoke();
         coolDownHandler?.ResetCoolTime();
     }
 }

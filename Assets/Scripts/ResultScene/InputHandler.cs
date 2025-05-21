@@ -39,13 +39,10 @@ public class InputHandler : MonoBehaviour, IInputHandler
 
     private void BindForIndices(IReadOnlyReactiveCollection<int> indices, Action callback)
     {
-        // disposables?.Dispose();
         if (disposables == null || disposables.IsDisposed)
         {
             disposables = new CompositeDisposable();
         }
-
-        Debug.Log(string.Join(",", indices.ToArray()));
 
         foreach (int index in indices)
         {
