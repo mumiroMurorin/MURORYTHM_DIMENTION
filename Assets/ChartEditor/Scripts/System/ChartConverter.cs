@@ -120,35 +120,133 @@ namespace ChartConvert
 
             // 変換に成功したかの判定
             bool isSucceed = true;
+
+            // 同じ分節にchainノーツがあった時順番を変える
+            ReorderChainedNotesInSubdivision(dataInEditor);
+
             // ノーツデータを一つずつ取り出して
             foreach (var noteData in dataInEditor.NoteDatas)
             {
                 if (noteData == null) { continue; }
+                bool isSucceedLocal = false;
 
-                bool isSucceed_ = false;
-
-                // 変換器で変換出来るか総当たり
+                // 変換関数で変換出来るか総当たり(普通のノーツ)
                 foreach (var converter in unchainConverters)
                 {
-                    isSucceed_ |= converter.AddDataForOrigin(noteData, dataOrigin);
+                    isSucceedLocal |= converter.AddDataForOrigin(noteData, dataOrigin);
                 }
 
-                foreach(var converter in chainConverters)
+                // 変換関数で変換出来るか総当たり(チェインノーツ)
+                foreach (var converter in chainConverters)
                 {
-                    isSucceed_ |= converter.AddDataForOrigin(noteData, dataOrigin, ref nextHoldNoteToNumber);
+                    isSucceedLocal |= converter.AddDataForOrigin(noteData, dataOrigin, ref nextHoldNoteToNumber);
                 }
 
-                if (!isSucceed_) 
+                // 変換成功判定
+                if (!isSucceedLocal) 
                 { 
                     Debug.LogWarning($"【Converter】ノーツデータの変換に失敗しました: {noteData.NoteType}");
                     isSucceed = false;
                 }
-
             }
 
             return isSucceed;
         }
 
+        /// <summary>
+        /// 分節データ内のノーツデータを並び替え
+        /// </summary>
+        /// <param name="dataInEditor"></param>
+        private void ReorderChainedNotesInSubdivision(SubDivisionDataInBeat dataInEditor)
+        {
+            // 同じ分節に配置されているChainノーツ(始点)をあぶりだす
+            var chainNoteStarts = FindChainNotesInSubdivision(dataInEditor);
+
+            // 同分節のチェインノーツがなければ返す
+            if (chainNoteStarts.Count == 0) { return; }
+
+            foreach(var note in chainNoteStarts)
+            {
+                // 順番に(削除してから)代入する
+                var chainNote = note;
+                while (chainNote != null)
+                {
+                    dataInEditor.RemoveNote(chainNote);
+                    dataInEditor.AddNote(chainNote);
+
+                    if (!IsInSameSubdivision(chainNote, chainNote.NextNote.Value)) { break; }
+                    chainNote = chainNote.NextNote.Value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 同じ分節に配置されているChainノーツをあぶりだす
+        /// </summary>
+        /// <param name="dataInEditor"></param>
+        /// <returns></returns>
+        private List<IGroundChainNoteData> FindChainNotesInSubdivision(SubDivisionDataInBeat dataInEditor)
+        {
+            List<IGroundChainNoteData> chainNotes = new List<IGroundChainNoteData>();
+            foreach (var note in dataInEditor.NoteDatas)
+            {
+                // Chainノーツである場合のみ
+                if (note is not IGroundChainNoteData) { continue; }
+                var thisNote = (IGroundChainNoteData)note;
+                var nextNote = thisNote.NextNote.Value;
+                var backNote = thisNote.BackNote.Value;
+
+                // 次ノーツが同じ分節に配置されていた場合
+                if (nextNote != null && IsInSameSubdivision(thisNote, nextNote))
+                {
+                    // 一番最初のチェインノーツをあぶりだす
+                    IGroundChainNoteData chainNote = GetFirstChainNoteInSameSubdivision(thisNote);
+                    chainNotes.Add(chainNote);
+                }
+                // 前ノーツが同じ分節に配置されていた場合
+                else if (backNote != null && IsInSameSubdivision(thisNote, backNote))
+                {
+                    // 一番最初のチェインノーツをあぶりだす
+                    IGroundChainNoteData chainNote = GetFirstChainNoteInSameSubdivision(thisNote);
+                    chainNotes.Add(chainNote);
+                }
+            }
+
+            chainNotes = chainNotes.Distinct().ToList();
+
+            return chainNotes;
+        }
+
+        /// <summary>
+        /// 同分節内の一番最初のチェインノーツをあぶりだす
+        /// </summary>
+        /// <param name="chainNote"></param>
+        /// <returns></returns>
+        private IGroundChainNoteData GetFirstChainNoteInSameSubdivision(IGroundChainNoteData chainNote)
+        {
+            while (chainNote != null && IsInSameSubdivision(chainNote, chainNote.BackNote.Value))
+            {
+                chainNote = chainNote.BackNote.Value;
+            }
+
+            return chainNote;
+        }
+
+        /// <summary>
+        /// ノーツが同じ分節内にあるか返す
+        /// </summary>
+        /// <param name="note1"></param>
+        /// <param name="note2"></param>
+        /// <returns></returns>
+        private bool IsInSameSubdivision(IGroundNoteData note1, IGroundNoteData note2)
+        {
+            if (note1 == null) { return false; }
+            if (note2 == null) { return false; }
+            if (note1.Address.BarIndex != note2.Address.BarIndex) { return false; }
+            if (note1.Address.SubDivisionIndex != note2.Address.SubDivisionIndex) { return false; }
+
+            return true;
+        }
     }
 
     /// <summary>
