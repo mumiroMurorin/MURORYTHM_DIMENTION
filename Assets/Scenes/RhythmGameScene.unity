@@ -444,7 +444,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDebugMode: 1
-  musicData_debug: {fileID: 11400000, guid: 30288d79747cd934cb1aaf6520d08a08, type: 2}
+  musicData_debug:
+    music_name: 
+    composer_name: 
+    music_spr: {fileID: 0}
+    theme_spr: {fileID: 0}
+    clip: {fileID: 0}
+    sample_clip: {fileID: 0}
+    difficulities: 00000000000000000000000000000000
+    chartPaths:
+    - 
+    - 
+    - 
+    - 
   noteSpeed: 200
 --- !u!1001 &135123126
 PrefabInstance:
@@ -1349,8 +1361,9 @@ GameObject:
   - component: {fileID: 484755817}
   - component: {fileID: 484755819}
   - component: {fileID: 484755820}
+  - component: {fileID: 484755821}
   m_Layer: 0
-  m_Name: ChartLoader
+  m_Name: DataLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1414,6 +1427,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eed301843588b4149ba0603782f8aaea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &484755821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484755816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b63c449334433134cb6071d9db8e9d2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &505195064
@@ -6126,6 +6151,8 @@ MonoBehaviour:
           obj: {fileID: 484755816}
         musicPlayer:
           obj: {fileID: 1737290705}
+        scoreResetter:
+          obj: {fileID: 484755816}
         phaseTransitionable:
           obj: {fileID: 1853263903}
     - rid: 4334588895060557825

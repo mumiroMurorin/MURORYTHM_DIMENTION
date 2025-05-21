@@ -23,7 +23,7 @@ namespace Mediapipe.Unity.Tutorial
         [SerializeField] private TextAsset _configAsset;
 
         CalculatorGraph _graph;
-        ResourceManager _resourceManager;
+        static ResourceManager _resourceManager;
 
         // カメラ入力用
         WebCamTexture _webCamTexture;
@@ -68,7 +68,10 @@ namespace Mediapipe.Unity.Tutorial
             _pixelData = new Color32[_webCamTexture.width * _webCamTexture.height];
 
             // リソースマネージャーの初期化
-            _resourceManager = new StreamingAssetsResourceManager();
+            if(_resourceManager == null)
+            {
+                _resourceManager = new StreamingAssetsResourceManager();
+            }
 
             // モデルの読み込み（ポーズトラッキング用に変更）
             if (_modelComplexity == ModelComplexity.Lite)
