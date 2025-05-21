@@ -10,6 +10,8 @@ public class Operation_DetailSelect : MonoBehaviour
     [Header("各項目に対応するスライダーUIの表示色と表示テキスト")]
     [SerializeField] Color musicStartColor;
     [SerializeField] string musicStartText = "楽曲スタート！";
+    [SerializeField] Color musicUnstartableColor;
+    [SerializeField] string musicUnstartableText = "";
     [SerializeField] Color backSelectColor;
     [SerializeField] string backSelectText = "楽曲選択に戻る";
     [SerializeField] Color difficultyUpColor;
@@ -71,7 +73,15 @@ public class Operation_DetailSelect : MonoBehaviour
     private void SetOperation()
     {
         // 楽曲スタート
-        operationSetter.Value.SetOperate(new SliderTouchData(MUSIC_START_INDICES, TransitionRhythmGamePhase, musicStartColor, musicStartText));
+        var startMusicTouchData = new SliderTouchData(MUSIC_START_INDICES, TransitionRhythmGamePhase, musicStartColor, musicStartText);
+        operationSetter.Value.SetOperate(startMusicTouchData);
+        // 難易度変更で更新
+        musicDataListGetter.Difficulty
+            .Subscribe(diff => {
+                UpdateMusicStartTopic(startMusicTouchData);
+            })
+            .AddTo(this.gameObject);
+
         // 楽曲選択に戻る
         operationSetter.Value.SetOperate(new SliderTouchData(BACK_SELECT_INDICES, TransitionMusicSelectPhase, backSelectColor, backSelectText));
 
@@ -84,6 +94,27 @@ public class Operation_DetailSelect : MonoBehaviour
         operationSetter.Value.SetOperate(new SliderTouchData(OPTION_INDICES, TransitionOptionPhase, optionColor, optionText));
     }
 
+    private void UpdateMusicStartTopic(SliderTouchData sliderTouchData)
+    {
+        Difficulty difficulty = musicDataListGetter.Difficulty.Value;
+        int numOfDifficulty = musicDataListGetter.CurrentMusicData.Value.GetDifficulity(difficulty);
+
+        // 譜面がない場合
+        if(numOfDifficulty == -1)
+        {
+            sliderTouchData.SetImageColor(musicUnstartableColor);
+            sliderTouchData.SetText(musicUnstartableText);
+            sliderTouchData.DisposeAction();
+        }
+        // 譜面がある場合
+        else
+        {
+            sliderTouchData.SetImageColor(musicStartColor);
+            sliderTouchData.SetText(musicStartText);
+            sliderTouchData.DisposeAction();
+            sliderTouchData.AddCallback(TransitionRhythmGamePhase);
+        }
+    }
 
     /// <summary>
     /// 難易度の変更

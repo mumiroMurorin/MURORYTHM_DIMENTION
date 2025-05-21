@@ -68,7 +68,7 @@ namespace UIInResultScene
 
         private void SetInteractionSliderEvent(SliderTouchData sliderTouchData)
         {
-            sliderTouchData.Callback += () => sliderUnitsController_view.OnTouchSlider(sliderTouchData);
+            sliderTouchData.AddCallback(() => sliderUnitsController_view.OnTouchSlider(sliderTouchData));
         }
     }
 }

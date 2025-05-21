@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 using VContainer;
 using UniRx;
 
@@ -26,14 +27,27 @@ public class InputHandler : MonoBehaviour, IInputHandler
         if (invalidSeconds > invalidCount) { invalidCount += Time.deltaTime; }
     }
 
-    void IInputHandler.OnTouchSlider(int[] indexes, Action callback)
+    void IInputHandler.OnTouchSlider(IReadOnlyReactiveCollection<int> indices, Action callback)
     {
+        // 最初だけ明示的に実行
+        BindForIndices(indices, callback);
+
+        indices?.ObserveCountChanged()
+            .Subscribe(_ => BindForIndices(indices, callback))
+            .AddTo(this.gameObject);
+    }
+
+    private void BindForIndices(IReadOnlyReactiveCollection<int> indices, Action callback)
+    {
+        // disposables?.Dispose();
         if (disposables == null || disposables.IsDisposed)
         {
             disposables = new CompositeDisposable();
         }
 
-        foreach (int index in indexes)
+        Debug.Log(string.Join(",", indices.ToArray()));
+
+        foreach (int index in indices)
         {
             sliderInputGetter.GetSliderInputReactiveProperty(index)
                 // タッチされた時
@@ -59,7 +73,7 @@ public class InputHandler : MonoBehaviour, IInputHandler
 
 public interface IInputHandler
 {
-    void OnTouchSlider(int[] indexes, Action callback);
+    void OnTouchSlider(IReadOnlyReactiveCollection<int> indices, Action callback);
 
     void Dispose();
 }

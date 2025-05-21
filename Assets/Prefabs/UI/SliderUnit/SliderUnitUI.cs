@@ -15,7 +15,7 @@ public class SliderUnitUI : MonoBehaviour
     public void SetSliderData(SliderTouchData sliderTouchData)
     {
         // êFÇÃïœçX
-        if (image) { image.color = sliderTouchData.ImageColor; }
+        if (image) { image.color = sliderTouchData.ImageColor.Value; }
         if (isTouching)
         {
             cts.Cancel();
@@ -35,10 +35,10 @@ public class SliderUnitUI : MonoBehaviour
 
         isTouching = true;
         image.color = new Color(
-            Mathf.Clamp(sliderTouchData.ImageColor.r - pressedDecrmentionColorValue, 0, 1),
-            Mathf.Clamp(sliderTouchData.ImageColor.g - pressedDecrmentionColorValue, 0, 1),
-            Mathf.Clamp(sliderTouchData.ImageColor.b - pressedDecrmentionColorValue, 0, 1),
-            sliderTouchData.ImageColor.a);
+            Mathf.Clamp(sliderTouchData.ImageColor.Value.r - pressedDecrmentionColorValue, 0, 1),
+            Mathf.Clamp(sliderTouchData.ImageColor.Value.g - pressedDecrmentionColorValue, 0, 1),
+            Mathf.Clamp(sliderTouchData.ImageColor.Value.b - pressedDecrmentionColorValue, 0, 1),
+            sliderTouchData.ImageColor.Value.a);
 
         // íxÇÁÇπÇƒå≥Ç…ñﬂÇ∑
         if (cts != null)
@@ -62,7 +62,7 @@ public class SliderUnitUI : MonoBehaviour
         if (!image) { return; }
 
         isTouching = false;
-        image.color = sliderTouchData.ImageColor;
+        image.color = sliderTouchData.ImageColor.Value;
     }
 
     private void OnDestroy()
