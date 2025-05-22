@@ -28,6 +28,18 @@ namespace ChartEditor
             private set { noteType.Value = value; }
         }
         public IReadOnlyReactiveProperty<DeploymentNoteType> NoteTypeRP => noteType;
+        public void SetNoteType(DeploymentNoteType noteType)
+        {
+            if (noteType != DeploymentNoteType.Hold &&
+                noteType != DeploymentNoteType.HoldHidden &&
+                noteType != DeploymentNoteType.HoldHiddenJudged) 
+            {
+                Debug.LogWarning($"【Note】HoldNoteは {noteType} に対応していません");
+                return;
+            }
+
+            NoteType = noteType;
+        }
 
         public AddressInChart Address { get; private set; } = new AddressInChart();
 
@@ -41,16 +53,30 @@ namespace ChartEditor
         /// </summary>
         public IReadOnlyReactiveCollection<float> Range { get { return range; } }
 
-        public void ChangeNoteType(bool isCompulsion)
+        public void ChangeNoteType()
         {
-            // 可視 → 不可視
+            // 可視 → 判定なし不可視
             if(NoteType == DeploymentNoteType.Hold)
             {
-                if (!isCompulsion && (NextNote.Value == null || BackNote.Value == null)) { return; }
                 NoteType = DeploymentNoteType.HoldHidden;
             }
-            // 不可視 → 可視
+            // 判定なし不可視 → 判定あり不可視
             else if (NoteType == DeploymentNoteType.HoldHidden)
+            {
+                NoteType = DeploymentNoteType.HoldHiddenJudged;
+            }
+            // 判定あり不可視 → 可視
+            else if (NoteType == DeploymentNoteType.HoldHiddenJudged)
+            {
+                NoteType = DeploymentNoteType.Hold;
+            }
+
+            UpdateNoteType();
+        }
+
+        private void UpdateNoteType()
+        {
+            if (NextNote.Value == null || BackNote.Value == null) 
             {
                 NoteType = DeploymentNoteType.Hold;
             }
@@ -242,6 +268,7 @@ namespace ChartEditor
         public void SetNextNote(IGroundChainNoteData nextNote)
         {
             this.nextNote.Value = nextNote;
+            UpdateNoteType();
         }
 
         /// <summary>
@@ -252,6 +279,7 @@ namespace ChartEditor
         public void SetBackNote(IGroundChainNoteData backNote)
         {
             this.backNote.Value = backNote;
+            UpdateNoteType();
         }
 
         public IConnectableObject NoteObject { get; private set; }

@@ -464,8 +464,7 @@ namespace ChartConvert
     {
         public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
         {
-            if (noteDataInEditor.NoteType != DeploymentNoteType.Hold &&
-                noteDataInEditor.NoteType != DeploymentNoteType.HoldHidden) { return false; }
+            if (noteDataInEditor.NoteType != DeploymentNoteType.Hold) { return false; }
             if (noteDataInEditor is not IGroundChainNoteData) { return false; }
             if (noteDataInEditor is not ITypeChangableNoteData) { return false; }
 
@@ -491,10 +490,10 @@ namespace ChartConvert
             if (dataOrigin.HoldRelayData == null) { dataOrigin.HoldRelayData = new List<NoteDataOrigin_HoldRelay>(); }
 
             // 追加するデータのインスタンス化
+            DeploymentNoteType noteType = noteDataInEditor.NoteType;
             NoteDataOrigin_HoldRelay data = new NoteDataOrigin_HoldRelay()
             {
                 Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
-                IsHidden = noteDataInEditor.NoteType == DeploymentNoteType.HoldHidden,
                 HoldNumber = number
             };
 
@@ -508,9 +507,6 @@ namespace ChartConvert
 
             foreach (var noteOrigin in dataOrigin.HoldRelayData)
             {
-                // 隠された中継ノートは除外
-                if (noteOrigin.IsHidden) { continue; }
-
                 NoteData_HoldRelay noteData = new NoteData_HoldRelay
                 {
                     Range = (int[])noteOrigin.Range.Clone(),
@@ -536,7 +532,7 @@ namespace ChartConvert
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
                 IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
-                if (noteDataOrigin.IsHidden) { ((ITypeChangableNoteData)noteData).ChangeNoteType(true); }
+                ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.Hold);
 
                 noteData.SetAddress(address);
                 noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
@@ -670,6 +666,8 @@ namespace ChartConvert
         {
             AddHoldStartData(dataOrigin, timing);
             AddHoldRelayData(dataOrigin, timing);
+            AddHoldMeshRelayData(dataOrigin, timing);
+            AddHoldHiddenJudgedRelay(dataOrigin, timing);
             AddHoldEndData(dataOrigin, chartData, timing);
 
             return true;
@@ -704,6 +702,44 @@ namespace ChartConvert
             if (dataOrigin.HoldRelayData == null) { return true; }
 
             foreach (var noteOrigin in dataOrigin.HoldRelayData)
+            {
+                // ディクショナリーに登録されていなければ新規作成
+                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                {
+                    Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
+            }
+
+            return true;
+        }
+
+        private bool AddHoldMeshRelayData(SubDivisionDataOrigin dataOrigin, float timing)
+        {
+            if (dataOrigin.HoldMeshRelayData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.HoldMeshRelayData)
+            {
+                // ディクショナリーに登録されていなければ新規作成
+                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                {
+                    Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
+            }
+
+            return true;
+        }
+
+        private bool AddHoldHiddenJudgedRelay(SubDivisionDataOrigin dataOrigin, float timing)
+        {
+            if (dataOrigin.HoldHiddenJudgedRelayData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.HoldHiddenJudgedRelayData)
             {
                 // ディクショナリーに登録されていなければ新規作成
                 if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))

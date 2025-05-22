@@ -48,6 +48,8 @@ namespace ChartEditor
     {
         IReadOnlyReactiveProperty<DeploymentNoteType> NoteTypeRP { get; }
 
-        void ChangeNoteType(bool isCompulsion);
+        void ChangeNoteType();
+
+        void SetNoteType(DeploymentNoteType noteType);
     }
 }

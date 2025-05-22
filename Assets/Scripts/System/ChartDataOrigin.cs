@@ -58,35 +58,55 @@ namespace ChartConvert
         public List<NoteDataOrigin_HoldStart> HoldStartData { get; set; }
         public List<NoteDataOrigin_HoldEnd> HoldEndData { get; set; }
         public List<NoteDataOrigin_HoldRelay> HoldRelayData { get; set; }
+        public List<NoteDataOrigin_HoldMeshRelay> HoldMeshRelayData { get; set; }
+        public List<NoteDataOrigin_HoldHiddenJudgedRelay> HoldHiddenJudgedRelayData { get; set; }
     }
 
     #region NoteDataOriginClass ノーツデータクラス
 
+    /// <summary>
+    /// タッチノーツデータ
+    /// </summary>
     public class NoteDataOrigin_Touch
     {
         public int[] Range { get; set; }
     }
 
+    /// <summary>
+    /// 上ダイナミックノーツデータ
+    /// </summary>
     public class NoteDataOrigin_DynamicUpward
     {
         public int[] Range { get; set; }
     }
 
+    /// <summary>
+    /// 下ダイナミックノーツデータ
+    /// </summary>
     public class NoteDataOrigin_DynamicDownward
     {
         public int[] Range { get; set; }
     }
 
+    /// <summary>
+    /// 右ダイナミックノーツデータ
+    /// </summary>
     public class NoteDataOrigin_DynamicRightward
     {
         public int[] Range { get; set; }
     }
 
+    /// <summary>
+    /// 左ダイナミックノーツデータ
+    /// </summary>
     public class NoteDataOrigin_DynamicLeftward
     {
         public int[] Range { get; set; }
     }
 
+    /// <summary>
+    /// ホールド始点データ
+    /// </summary>
     public class NoteDataOrigin_HoldStart
     {
         public int HoldNumber { get; set; }
@@ -94,6 +114,9 @@ namespace ChartConvert
         public int[] Range { get; set; }
     }
 
+    /// <summary>
+    /// ホールド終点データ
+    /// </summary>
     public class NoteDataOrigin_HoldEnd
     {
         public int HoldNumber { get; set; }
@@ -101,11 +124,32 @@ namespace ChartConvert
         public int[] Range { get; set; }
     }
 
+    /// <summary>
+    /// ホールド中継点データ
+    /// </summary>
     public class NoteDataOrigin_HoldRelay
     {
         public int HoldNumber { get; set; }
 
-        public bool IsHidden { get; set; }
+        public int[] Range { get; set; }
+    }
+
+    /// <summary>
+    /// ホールドメッシュ中継点データ
+    /// </summary>
+    public class NoteDataOrigin_HoldMeshRelay
+    {
+        public int HoldNumber { get; set; }
+
+        public int[] Range { get; set; }
+    }
+
+    /// <summary>
+    /// ホールド判定点データ
+    /// </summary>
+    public class NoteDataOrigin_HoldHiddenJudgedRelay
+    {
+        public int HoldNumber { get; set; }
 
         public int[] Range { get; set; }
     }

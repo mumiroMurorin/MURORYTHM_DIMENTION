@@ -14,6 +14,7 @@ namespace ChartEditor
         [SerializeField] MeshRenderer noteMeshRenderer;
         [SerializeField] Color normalColor = Color.white;
         [SerializeField] Color hiddenColor = new Color(1, 1, 1, 0.25f); 
+        [SerializeField] Color hiddenJudgedColor = new Color(1, 0.5f, 0.5f, 0.25f); 
 
         NoteObject noteObject;
         ITypeChangableNoteData noteData;
@@ -37,13 +38,14 @@ namespace ChartEditor
 
             // IGroundChainNoteDataに変換
             if(noteObject.NoteData is not ITypeChangableNoteData) { return; }
-            noteData = (ITypeChangableNoteData)(noteObject.NoteData);
+            noteData = (ITypeChangableNoteData)noteObject.NoteData;
 
             // ノーツタイプが変更された時
             noteData.NoteTypeRP
                 .Subscribe(type => {
                     if (type == DeploymentNoteType.Hold) { noteMeshRenderer.material.color = normalColor; }
                     else if(type == DeploymentNoteType.HoldHidden) { noteMeshRenderer.material.color = hiddenColor; }
+                    else if(type == DeploymentNoteType.HoldHiddenJudged) { noteMeshRenderer.material.color = hiddenJudgedColor; }
                 })
                 .AddTo(this.gameObject);
         }

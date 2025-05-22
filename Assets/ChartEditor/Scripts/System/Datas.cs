@@ -490,5 +490,6 @@ namespace ChartEditor
         DynamicGroundLeftward,
         Hold,
         HoldHidden,
+        HoldHiddenJudged,
     }
 }
