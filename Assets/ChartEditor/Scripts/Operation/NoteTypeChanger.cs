@@ -36,7 +36,7 @@ namespace ChartEditor
             if (changableObject == null) { return; }
             if (changableObject.NoteData == null) { return; }
 
-            changableObject.NoteData.ChangeNoteType(false);
+            changableObject.NoteData.ChangeNoteType();
             changableObject.OnChangeNoteType();
         }
     }
