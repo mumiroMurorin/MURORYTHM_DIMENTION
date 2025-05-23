@@ -85,7 +85,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         {
             // 最後尾の「/」が「\」になっちゃうので置換
             string normalizedPath = dir.Replace("\\", "/");
-            tasks.Add(LoadMusicData(normalizedPath, cts.Token));
+            tasks.Add(LoadMusicData(normalizedPath, token));
         }
 
         // 全ての処理が終わるまで待ち

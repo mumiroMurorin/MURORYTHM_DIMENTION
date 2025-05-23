@@ -449,7 +449,7 @@ MonoBehaviour:
     composer_name: 
     music_spr: {fileID: 0}
     theme_spr: {fileID: 0}
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: b6c36bc84b8ee8640b622cafea3e20dd, type: 3}
     sample_clip: {fileID: 0}
     difficulities: 00000000000000000000000000000000
     chartPaths:
@@ -457,6 +457,7 @@ MonoBehaviour:
     - 
     - 
     - 
+  chartFilePath: MusicData/sample/sample6.json
   noteSpeed: 200
 --- !u!1001 &135123126
 PrefabInstance:
