@@ -10,16 +10,20 @@ namespace ChartEditor
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
 
         IChartEditorDataGetter chartEditorDataGetter;
+        IChartEditorDataSetter chartEditorDataSetter;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorDataSetter chartEditorDataSetter)
         {
             this.chartEditorDataGetter = chartEditorDataGetter;
+            this.chartEditorDataSetter = chartEditorDataSetter;
         }
 
         private void Update()
         {
             if (Input.GetMouseButtonDown(0)) { DestroyNote(); }
+            // 右クリック時、オートモードならタイプ変更モード解除
+            else if (Input.GetMouseButtonDown(1)) { BackAutoMode(); }
         }
 
         private void DestroyNote()
@@ -33,6 +37,15 @@ namespace ChartEditor
 
             destroyableObject.OnDestroy();
             destroyableObject.Note.NoteData = null;
+        }
+
+        /// <summary>
+        /// オートモードに戻す
+        /// </summary>
+        private void BackAutoMode()
+        {
+            if (!chartEditorDataGetter.AutoEditMode.Value) { return; }
+            chartEditorDataSetter.SetEditMode(EditMode.None);
         }
     }
 

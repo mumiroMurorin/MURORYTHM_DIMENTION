@@ -373,13 +373,11 @@ namespace ChartConvert
     /// </summary>
     public class HoldStartConverter : IOriginDataToRhythmGameConvertable, IChainNoteConvertable
     {
-        readonly DeploymentNoteType type = DeploymentNoteType.Hold;
-
         int currentHoldNumber = 0;
 
         public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
         {
-            if (noteDataInEditor.NoteType != type) { return false; }
+            if (noteDataInEditor.NoteType != DeploymentNoteType.Hold) { return false; }
             if (noteDataInEditor is not IGroundChainNoteData) { return false; }
 
             IGroundChainNoteData backNote = ((IGroundChainNoteData)noteDataInEditor).BackNote.Value;
@@ -542,7 +540,7 @@ namespace ChartConvert
                 if (numberToStartNote.TryGetValue(noteDataOrigin.HoldNumber, out var startNote))
                 {
                     // 繋げる
-                    startNote.AddChainNote(chainData);
+                    startNote.AddChainNote(chainData, false);
                 }
                 else
                 {
@@ -553,6 +551,171 @@ namespace ChartConvert
 
             return true;
         }
+    }
+
+    /// <summary>
+    /// ホールドメッシュ中継ノーツ
+    /// </summary>
+    public class HoldMeshRelayConverter : IChainNoteConvertable
+    {
+        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
+        {
+            if (noteDataInEditor.NoteType != DeploymentNoteType.HoldHidden) { return false; }
+            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
+
+            IGroundChainNoteData thisNote = (IGroundChainNoteData)noteDataInEditor;
+            IGroundChainNoteData backNote = thisNote.BackNote.Value;
+            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
+            if (backNote == null && nextNote != null) { return false; }
+            if (backNote != null && nextNote == null) { return false; }
+
+            // ディクショナリーからHoldNumberを探す
+            if (!nextNoteToNumber.TryGetValue(thisNote, out int number))
+            {
+                Debug.LogWarning($"【Converter】HoldMeshRelayの変換の際、ノーツが見つかりませんでした");
+                return false;
+            }
+            else
+            {
+                nextNoteToNumber.Remove(thisNote);
+                nextNoteToNumber.Add(nextNote, number);
+            }
+
+            // 新たにインスタンス化
+            if (dataOrigin.HoldMeshRelayData == null)
+            {
+                dataOrigin.HoldMeshRelayData = new List<NoteDataOrigin_HoldMeshRelay>();
+            }
+
+            // 追加するデータのインスタンス化
+            NoteDataOrigin_HoldMeshRelay data = new NoteDataOrigin_HoldMeshRelay()
+            {
+                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
+                HoldNumber = number
+            };
+
+            dataOrigin.HoldMeshRelayData.Add(data);
+            return true;
+        }
+
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
+        {
+            if (dataOrigin.HoldMeshRelayData == null) { return true; }
+
+            foreach (var noteDataOrigin in dataOrigin.HoldMeshRelayData)
+            {
+                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
+                if (noteData is not IGroundChainNoteData) { return false; }
+                if (noteData is not ITypeChangableNoteData) { return false; }
+
+                // データのセット
+                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
+                ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.HoldHidden);
+
+                noteData.SetAddress(address);
+                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
+                dataInChartEditor.AddNote(noteData);
+
+                // リストへの保存
+                if (numberToStartNote.TryGetValue(noteDataOrigin.HoldNumber, out var startNote))
+                {
+                    // 繋げる
+                    startNote.AddChainNote(chainData, false);
+                }
+                else
+                {
+                    Debug.LogWarning($"【Converter】HoldMeshRelayの変換の際、HoldNumberが存在しませんでした: {noteDataOrigin.HoldNumber}");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// ホールド判定点
+    /// </summary>
+    public class HoldHiddenJudgedRelay : IChainNoteConvertable
+    {
+        const DeploymentNoteType NoteType = DeploymentNoteType.HoldHiddenJudged;
+
+        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
+        {
+            if (noteDataInEditor.NoteType != NoteType) { return false; }
+            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
+
+            IGroundChainNoteData thisNote = (IGroundChainNoteData)noteDataInEditor;
+            IGroundChainNoteData backNote = thisNote.BackNote.Value;
+            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
+            if (backNote == null && nextNote != null) { return false; }
+            if (backNote != null && nextNote == null) { return false; }
+
+            // ディクショナリーからHoldNumberを探す
+            if (!nextNoteToNumber.TryGetValue(thisNote, out int number))
+            {
+                Debug.LogWarning($"【Converter】HoldHiddenJudgedの変換の際、ノーツが見つかりませんでした");
+                return false;
+            }
+            else
+            {
+                nextNoteToNumber.Remove(thisNote);
+                nextNoteToNumber.Add(nextNote, number);
+            }
+
+            // 新たにインスタンス化
+            if (dataOrigin.HoldHiddenJudgedRelayData == null)
+            {
+                dataOrigin.HoldHiddenJudgedRelayData = new List<NoteDataOrigin_HoldHiddenJudgedRelay>();
+            }
+
+            // 追加するデータのインスタンス化
+            NoteDataOrigin_HoldHiddenJudgedRelay data = new NoteDataOrigin_HoldHiddenJudgedRelay()
+            {
+                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
+                HoldNumber = number
+            };
+
+            dataOrigin.HoldHiddenJudgedRelayData.Add(data);
+            return true;
+        }
+
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
+        {
+            if (dataOrigin.HoldHiddenJudgedRelayData == null) { return true; }
+
+            foreach (var noteDataOrigin in dataOrigin.HoldHiddenJudgedRelayData)
+            {
+                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
+                if (noteData is not IGroundChainNoteData) { return false; }
+                if (noteData is not ITypeChangableNoteData) { return false; }
+
+                // データのセット
+                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
+                ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.HoldHiddenJudged);
+
+                noteData.SetAddress(address);
+                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
+                dataInChartEditor.AddNote(noteData);
+
+                // リストへの保存
+                if (numberToStartNote.TryGetValue(noteDataOrigin.HoldNumber, out var startNote))
+                {
+                    // 繋げる
+                    startNote.AddChainNote(chainData, false);
+                }
+                else
+                {
+                    Debug.LogWarning($"【Converter】HoldHiddenJudgedの変換の際、HoldNumberが存在しませんでした: {noteDataOrigin.HoldNumber}");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
     }
 
     /// <summary>
@@ -642,7 +805,7 @@ namespace ChartConvert
                 if (numberToStartNote.TryGetValue(noteDataOrigin.HoldNumber, out var startNote))
                 {
                     // 繋げる
-                    startNote.AddChainNote(chainData);
+                    startNote.AddChainNote(chainData, false);
                 }
                 else
                 {
@@ -653,173 +816,6 @@ namespace ChartConvert
 
             return true;
         }
-    }
-
-    /// <summary>
-    /// ホールドメッシュ中継ノーツ
-    /// </summary>
-    public class HoldMeshRelayConverter : IChainNoteConvertable
-    {
-        const DeploymentNoteType NoteType = DeploymentNoteType.HoldHidden;
-
-        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
-        {
-            if (noteDataInEditor.NoteType != NoteType) { return false; }
-            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
-
-            IGroundChainNoteData thisNote = (IGroundChainNoteData)noteDataInEditor;
-            IGroundChainNoteData backNote = thisNote.BackNote.Value;
-            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
-            if (backNote == null && nextNote != null) { return false; }
-            if (backNote != null && nextNote == null) { return false; }
-
-            // ディクショナリーからHoldNumberを探す
-            if (!nextNoteToNumber.TryGetValue(thisNote, out int number))
-            {
-                Debug.LogWarning($"【Converter】HoldMeshRelayの変換の際、ノーツが見つかりませんでした");
-                return false;
-            }
-            else
-            {
-                // 終点なのでAddしない
-                nextNoteToNumber.Remove(thisNote);
-            }
-
-            // 新たにインスタンス化
-            if (dataOrigin.HoldMeshRelayData == null)
-            {
-                dataOrigin.HoldMeshRelayData = new List<NoteDataOrigin_HoldMeshRelay>();
-            }
-
-            // 追加するデータのインスタンス化
-            NoteDataOrigin_HoldMeshRelay data = new NoteDataOrigin_HoldMeshRelay()
-            {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
-                HoldNumber = number
-            };
-
-            dataOrigin.HoldMeshRelayData.Add(data);
-            return true;
-        }
-
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
-        {
-            if (dataOrigin.HoldMeshRelayData == null) { return true; }
-
-            foreach (var noteDataOrigin in dataOrigin.HoldMeshRelayData)
-            {
-                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
-                if (noteData is not IGroundChainNoteData) { return false; }
-                if (noteData is not ITypeChangableNoteData) { return false; }
-
-                // データのセット
-                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
-                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
-                ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.HoldHidden);
-
-                noteData.SetAddress(address);
-                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
-                dataInChartEditor.AddNote(noteData);
-
-                // リストへの保存
-                if (numberToStartNote.TryGetValue(noteDataOrigin.HoldNumber, out var startNote))
-                {
-                    // 繋げる
-                    startNote.AddChainNote(chainData);
-                }
-                else
-                {
-                    Debug.LogWarning($"【Converter】HoldMeshRelayの変換の際、HoldNumberが存在しませんでした: {noteDataOrigin.HoldNumber}");
-                    return false;
-                }
-            }
-
-            return true;
-        }
-    }
-
-    /// <summary>
-    /// ホールド判定点
-    /// </summary>
-    public class HoldHiddenJudgedRelay : IChainNoteConvertable
-    {
-        const DeploymentNoteType NoteType = DeploymentNoteType.HoldHiddenJudged;
-
-        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
-        {
-            if (noteDataInEditor.NoteType != NoteType) { return false; }
-            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
-
-            IGroundChainNoteData thisNote = (IGroundChainNoteData)noteDataInEditor;
-            IGroundChainNoteData backNote = thisNote.BackNote.Value;
-            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
-            if (backNote == null && nextNote != null) { return false; }
-            if (backNote != null && nextNote == null) { return false; }
-
-            // ディクショナリーからHoldNumberを探す
-            if (!nextNoteToNumber.TryGetValue(thisNote, out int number))
-            {
-                Debug.LogWarning($"【Converter】HoldHiddenJudgedの変換の際、ノーツが見つかりませんでした");
-                return false;
-            }
-            else
-            {
-                // 終点なのでAddしない
-                nextNoteToNumber.Remove(thisNote);
-            }
-
-            // 新たにインスタンス化
-            if (dataOrigin.HoldHiddenJudgedRelayData == null)
-            {
-                dataOrigin.HoldHiddenJudgedRelayData = new List<NoteDataOrigin_HoldHiddenJudgedRelay>();
-            }
-
-            // 追加するデータのインスタンス化
-            NoteDataOrigin_HoldHiddenJudgedRelay data = new NoteDataOrigin_HoldHiddenJudgedRelay()
-            {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
-                HoldNumber = number
-            };
-
-            dataOrigin.HoldHiddenJudgedRelayData.Add(data);
-            return true;
-        }
-
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
-        {
-            if (dataOrigin.HoldHiddenJudgedRelayData == null) { return true; }
-
-            foreach (var noteDataOrigin in dataOrigin.HoldHiddenJudgedRelayData)
-            {
-                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
-                if (noteData is not IGroundChainNoteData) { return false; }
-                if (noteData is not ITypeChangableNoteData) { return false; }
-
-                // データのセット
-                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
-                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
-                ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.HoldHiddenJudged);
-
-                noteData.SetAddress(address);
-                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
-                dataInChartEditor.AddNote(noteData);
-
-                // リストへの保存
-                if (numberToStartNote.TryGetValue(noteDataOrigin.HoldNumber, out var startNote))
-                {
-                    // 繋げる
-                    startNote.AddChainNote(chainData);
-                }
-                else
-                {
-                    Debug.LogWarning($"【Converter】HoldHiddenJudgedの変換の際、HoldNumberが存在しませんでした: {noteDataOrigin.HoldNumber}");
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
     }
 
     /// <summary>

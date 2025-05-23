@@ -33,11 +33,11 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<IGroundChainNoteData> BackNote { get; }
 
-        void SetNextNote(IGroundChainNoteData nextNote);
+        void SetNextNote(IGroundChainNoteData nextNote, bool isUpdateNoteType = true);
 
-        void SetBackNote(IGroundChainNoteData backNote);
+        void SetBackNote(IGroundChainNoteData backNote, bool isUpdateNoteType = true);
 
-        void AddChainNote(IGroundChainNoteData addNote);
+        void AddChainNote(IGroundChainNoteData addNote, bool isUpdateNoteType = true);
 
         void RemoveNote();
 

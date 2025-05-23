@@ -41,7 +41,8 @@ namespace ChartEditor
             NoteType = noteType;
         }
 
-        public AddressInChart Address { get; private set; } = new AddressInChart();
+        public AddressInChart Address { get; private set; }
+        //public AddressInChart Address { get; private set; } = new AddressInChart();
 
         /// <summary>
         /// 配置範囲 (基本0～15)
@@ -129,6 +130,11 @@ namespace ChartEditor
             // 同じアドレスなら返す
             if (Address != null && Address.IsSameAddress(address)) { return; }
 
+            // 文節が更新されていなければチェインの更新はしない
+            bool isUpdateSubLocate = true;
+            if(Address == null) { isUpdateSubLocate = false; }
+            else if(Address.BarIndex == address.BarIndex && Address.SubDivisionIndex == address.SubDivisionIndex) { isUpdateSubLocate = false; }
+
             if (Address == null) { Address = new AddressInChart(address); }
             else
             {
@@ -142,10 +148,14 @@ namespace ChartEditor
             List<float> shifted = currentRange.Select(i => i - currentRange[0] + startIndex).ToList();
 
             SetRange(shifted);
-            UpdateChainNote();
+            if (isUpdateSubLocate) { UpdateChainNote(); }
         }
 
-        public void AddChainNote(IGroundChainNoteData addNote)
+        /// <summary>
+        /// チェインノーツを追加
+        /// </summary>
+        /// <param name="addNote"></param>
+        public void AddChainNote(IGroundChainNoteData addNote, bool isUpdateNoteType = true)
         {
             List<IGroundChainNoteData> chains = new List<IGroundChainNoteData>();
 
@@ -185,29 +195,12 @@ namespace ChartEditor
                 nextNote = nextNote.NextNote.Value;
             }
 
-            // 重複項目を削除
-            chains = chains.Distinct().ToList();
-            // ソート
-            chains.Sort((a,b) => { 
-                if (a.Address.IsEarlierThan(b.Address)) { return -1; }
-                else { return 1; }
-            });
-
-            // それぞれのノーツをつなげる
-            for (int i = 0; i < chains.Count; i++) 
-            {
-                // 中継点
-                if (i > 0) { chains[i].SetBackNote(chains[i - 1]); }
-                // 始点
-                else { chains[i].SetBackNote(null); }
-
-                // 中継点
-                if (i < chains.Count - 1) { chains[i].SetNextNote(chains[i + 1]); }
-                // 終点
-                else { chains[i].SetNextNote(null); }
-            }
+            ConnectChainNotes(chains, isUpdateNoteType);
         }
 
+        /// <summary>
+        /// チェインノーツの順を更新
+        /// </summary>
         public void UpdateChainNote()
         {
             List<IGroundChainNoteData> chains = new List<IGroundChainNoteData>();
@@ -230,6 +223,15 @@ namespace ChartEditor
                 nextNote = nextNote.NextNote.Value;
             }
 
+            ConnectChainNotes(chains);
+        }
+
+        /// <summary>
+        /// 引数ノーツを順に全てつなげる
+        /// </summary>
+        /// <param name="chains"></param>
+        private void ConnectChainNotes(List<IGroundChainNoteData> chains, bool isUpdateNoteType = true)
+        {
             // 重複項目を削除
             chains = chains.Distinct().ToList();
             // ソート
@@ -242,17 +244,20 @@ namespace ChartEditor
             for (int i = 0; i < chains.Count; i++)
             {
                 // 中継点
-                if (i > 0) { chains[i].SetBackNote(chains[i - 1]); }
+                if (i > 0) { chains[i].SetBackNote(chains[i - 1], isUpdateNoteType); }
                 // 始点
-                else { chains[i].SetBackNote(null); }
+                else { chains[i].SetBackNote(null, isUpdateNoteType); }
 
                 // 中継点
-                if (i < chains.Count - 1) { chains[i].SetNextNote(chains[i + 1]); }
+                if (i < chains.Count - 1) { chains[i].SetNextNote(chains[i + 1], isUpdateNoteType); }
                 // 終点
-                else { chains[i].SetNextNote(null); }
+                else { chains[i].SetNextNote(null, isUpdateNoteType); }
             }
         }
 
+        /// <summary>
+        /// ノーツを削除(コネクトを解除)
+        /// </summary>
         public void RemoveNote()
         {
             // 前ノーツ、次ノーツに前後のノーツをセット
@@ -265,10 +270,10 @@ namespace ChartEditor
         /// </summary>
         ReactiveProperty<IGroundChainNoteData> nextNote = new ReactiveProperty<IGroundChainNoteData>();
         public IReadOnlyReactiveProperty<IGroundChainNoteData> NextNote => nextNote;
-        public void SetNextNote(IGroundChainNoteData nextNote)
+        public void SetNextNote(IGroundChainNoteData nextNote, bool isUpdateNoteType = true)
         {
             this.nextNote.Value = nextNote;
-            UpdateNoteType();
+            if (isUpdateNoteType) { UpdateNoteType(); }
         }
 
         /// <summary>
@@ -276,10 +281,10 @@ namespace ChartEditor
         /// </summary>
         ReactiveProperty<IGroundChainNoteData> backNote = new ReactiveProperty<IGroundChainNoteData>();
         public IReadOnlyReactiveProperty<IGroundChainNoteData> BackNote => backNote;
-        public void SetBackNote(IGroundChainNoteData backNote)
+        public void SetBackNote(IGroundChainNoteData backNote, bool isUpdateNoteType = true)
         {
             this.backNote.Value = backNote;
-            UpdateNoteType();
+            if (isUpdateNoteType) { UpdateNoteType(); }
         }
 
         public IConnectableObject NoteObject { get; private set; }

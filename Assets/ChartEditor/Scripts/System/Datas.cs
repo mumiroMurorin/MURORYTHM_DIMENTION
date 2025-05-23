@@ -362,7 +362,11 @@ namespace ChartEditor
     /// </summary>
     public class AddressInChart
     {
-        public AddressInChart(int barIndex = 0, int subDivisionIndex = 0, float sliderIndex = 0)
+        const int BAR_INDEX_DEFAULT = 0; 
+        const int SUBDIVISION_INDEX_DEFAULT = 0; 
+        const int SLIDER_INDEX_DEFAULT = 0; 
+
+        public AddressInChart(int barIndex = BAR_INDEX_DEFAULT, int subDivisionIndex = SUBDIVISION_INDEX_DEFAULT, float sliderIndex = SLIDER_INDEX_DEFAULT)
         {
             this.barIndex = new ReactiveProperty<int>(barIndex);
             this.subDivisionIndex = new ReactiveProperty<int>(subDivisionIndex);
@@ -371,9 +375,18 @@ namespace ChartEditor
 
         public AddressInChart(AddressInChart address)
         {
-            this.barIndex = new ReactiveProperty<int>(address.BarIndex);
-            this.subDivisionIndex = new ReactiveProperty<int>(address.SubDivisionIndex);
-            this.sliderIndex = new ReactiveProperty<float>(address.SliderIndex);
+            if(address == null) 
+            {
+                this.barIndex = new ReactiveProperty<int>(BAR_INDEX_DEFAULT);
+                this.subDivisionIndex = new ReactiveProperty<int>(SUBDIVISION_INDEX_DEFAULT);
+                this.sliderIndex = new ReactiveProperty<float>(SLIDER_INDEX_DEFAULT);
+            }
+            else
+            {
+                this.barIndex = new ReactiveProperty<int>(address.BarIndex);
+                this.subDivisionIndex = new ReactiveProperty<int>(address.SubDivisionIndex);
+                this.sliderIndex = new ReactiveProperty<float>(address.SliderIndex);
+            }
         }
 
         /// <summary>

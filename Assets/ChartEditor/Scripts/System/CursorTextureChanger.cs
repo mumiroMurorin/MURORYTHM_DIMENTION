@@ -36,10 +36,12 @@ namespace ChartEditor
                 .Subscribe(value =>
                 {
                     currentEditMode = value;
-                    
+
                     // オートモードの時はそのままやっちゃう
                     if (dataGetter_model.AutoEditMode.Value)
                     {
+                        if (currentEditMode == EditMode.Destroy) { return; }
+                        if (currentEditMode == EditMode.ChangeType) { return; }
                         SetCursorTexture(value);
                     }
                 })
@@ -49,24 +51,32 @@ namespace ChartEditor
 
             // 移動モード
             dataGetter_model?.MovableObject
+                .Where(_ => currentEditMode == EditMode.Move)
                 .Subscribe(obj => {
-                    if (currentEditMode != EditMode.Move) { return; }
                     SetCursorTexture(currentEditMode, obj == null);
                 })
                 .AddTo(this.gameObject);
 
             // スケーリング
             dataGetter_model?.ScalableObject
+                .Where(_ => currentEditMode == EditMode.Scale)
                 .Subscribe(obj => {
-                    if (currentEditMode != EditMode.Scale) { return; }
                     SetCursorTexture(currentEditMode, obj == null);
                 })
                 .AddTo(this.gameObject);
 
             // 削除
             dataGetter_model?.DestroyableObject
+                .Where(_ => currentEditMode == EditMode.Destroy)
                 .Subscribe(obj => {
-                    if (currentEditMode != EditMode.Destroy) { return; }
+                    SetCursorTexture(currentEditMode, obj == null);
+                })
+                .AddTo(this.gameObject);
+
+            // タイプ変更
+            dataGetter_model?.ChangableObject
+                .Where(_ => currentEditMode == EditMode.ChangeType)
+                .Subscribe(obj => {
                     SetCursorTexture(currentEditMode, obj == null);
                 })
                 .AddTo(this.gameObject);
