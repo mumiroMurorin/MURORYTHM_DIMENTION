@@ -52,6 +52,7 @@ namespace ChartConvert
                 new DynamicLeftwardConverter(),
                 new HoldStartConverter(),
                 new HoldRelayConverter(),
+                new HoldHiddenJudgedRelay(),
                 new HoldEndConverter(),
                 new HoldMeshConverter(),
             };

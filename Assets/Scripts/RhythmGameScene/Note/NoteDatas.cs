@@ -254,6 +254,7 @@ public enum NoteType
     Touch,
     HoldStart,
     HoldRelay,
+    HoldRelayHidden,
     HoldEnd,
     HoldMesh,
     SpaceHoldMesh,

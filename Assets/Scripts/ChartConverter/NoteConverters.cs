@@ -637,7 +637,7 @@ namespace ChartConvert
     /// <summary>
     /// ホールド判定点
     /// </summary>
-    public class HoldHiddenJudgedRelay : IChainNoteConvertable
+    public class HoldHiddenJudgedRelay : IChainNoteConvertable, IOriginDataToRhythmGameConvertable
     {
         const DeploymentNoteType NoteType = DeploymentNoteType.HoldHiddenJudged;
 
@@ -716,6 +716,23 @@ namespace ChartConvert
             return true;
         }
 
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (dataOrigin.HoldHiddenJudgedRelayData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.HoldHiddenJudgedRelayData)
+            {
+                NoteData_HoldRelayHidden noteData = new NoteData_HoldRelayHidden
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    Timing = timing
+                };
+
+                chartData.AddNoteData(noteData);
+            }
+
+            return true;
+        }
     }
 
     /// <summary>

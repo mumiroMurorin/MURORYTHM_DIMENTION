@@ -627,7 +627,7 @@ MonoBehaviour:
   noteMeshRenderer: {fileID: 5893660377328454484}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hiddenColor: {r: 1, g: 1, b: 1, a: 0.39215687}
-  hiddenJudgedColor: {r: 0, g: 1, b: 0.15047383, a: 0.39215687}
+  hiddenJudgedColor: {r: 0, g: 1, b: 0.14901961, a: 0.64705884}
 --- !u!1 &6988801563116920244
 GameObject:
   m_ObjectHideFlags: 0
