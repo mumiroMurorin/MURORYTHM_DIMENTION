@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UniRx;
 using VContainer;
 
 public class SliderInputHandler : MonoBehaviour
 {
-
     [Header("‘Î‰ž‚·‚é“ü—Í(•K‚¸’·‚³16‚É)")]
     [SerializeField] KeyCodeConfig[] configs;
 
@@ -19,6 +19,11 @@ public class SliderInputHandler : MonoBehaviour
     public void Inject(ISliderInputSetter inputSetter)
     {
         sliderInputSetter = inputSetter;
+    }
+
+    private void Awake()
+    {
+        sliderInputSetter?.Initialize(this.gameObject);
     }
 
     private void Start()
@@ -63,11 +68,6 @@ public class SliderInputHandler : MonoBehaviour
                 dictionary.Add(config.KeyCodes[i], i);
             }
         }
-    }
-
-    private void OnDestroy()
-    {
-        sliderInputSetter?.Dispose();
     }
 
     [System.Serializable]

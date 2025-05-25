@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System.Linq;
+using NoteJudgement;
 
 /// <summary>
 /// タッチノーツにアタッチされるクラス
@@ -11,7 +12,7 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
 {
     NoteData_SpaceHoldRelay noteData;
 
-    List<int> judgeRange = new List<int>();
+    Judgement bestJudgement = Judgement.Miss;
     bool isJudged;
 
     /// <summary>
@@ -21,106 +22,95 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     public override void Initialize(NoteData_SpaceHoldRelay data)
     {
         noteData = data;
-
-        Bind();
-    }
-
-    private void Bind()
-    {
-        if (noteData == null) { return; }
-
-
     }
 
     private void Update()
     {
-        //if (noteData == null) { return; }
-        //if (noteData.Timer.Time < noteData.Timing) { return; }
-
-        //UpdateJudgeRange();
-        //UpdateTouchStatus();
-    }
-
-    /// <summary>
-    /// ノーツの判定範囲を更新する
-    /// </summary>
-    private void UpdateJudgeRange()
-    {
-        //if (noteData.Timer == null) { return; }
-
-        //// 時間外判定
-        //if (noteData.TimeToRanges[0].Timing > noteData.Timer.Time) { return; }
-        //if (noteData.TimeToRanges[^1].Timing < noteData.Timer.Time) { return; }
-
-        //// 今ホールドノーツのどの時間を判定しているのか調べる
-        //TimeToRange former = new TimeToRange();
-        //TimeToRange latter = new TimeToRange();
-        //for(int i = 0; i < noteData.TimeToRanges.Count; i++)
-        //{
-        //    if (noteData.TimeToRanges[i].Timing > noteData.Timer.Time) { continue; }
-        //    if (noteData.TimeToRanges[i + 1].Timing < noteData.Timer.Time) { continue; }
-
-        //    former = noteData.TimeToRanges[i];
-        //    latter = noteData.TimeToRanges[i + 1];
-        //}
-
-        //// 判定範囲の計算
-        //float t0 = former.Timing;
-        //float t1 = latter.Timing;
-        //float x0 = former.Range[0];
-        //float x1 = latter.Range[0];
-        //float t = noteData.Timer.Time;
-
-        //float startRange = x1 - x0 != 0 ?
-        //    (t - t1) * (x1 - x0) / (t1 - t0) + x1 :
-        //    former.Range[0];
-
-        //x0 = former.Range[^1];
-        //x1 = latter.Range[^1];
-
-        //float endRange = x1 - x0 != 0 ?
-        //    (t - t1) * (x1 - x0) / (t1 - t0) + x1 :
-        //    former.Range[^1];
-
-        //judgeRange = Enumerable.Range((int)startRange, (int)Mathf.Ceil(endRange) - (int)startRange + 1).ToList();
-
-        //Debug.Log($"Range: {startRange} , {endRange}");
-        //Debug.Log("judgeRange: " + string.Join(",", judgeRange.Select(n => n.ToString())));
-    }
-
-    /// <summary>
-    /// タッチ判定を更新する
-    /// </summary>
-    private void UpdateTouchStatus()
-    {
-        if (noteData.Timer == null) { return; }
-
-        // 判定範囲内のスライダー入力を調べる
-        foreach (int index in judgeRange)
+        // 判定時間内かつスライダーが押されているとき
+        if (IsInJudgementTimeRange() && IsInSpaceRange())
         {
-            if (!noteData.SliderInput.GetSliderInputReactiveProperty(index).Value) { continue; }
+            // 記録した判定よりいい判定だったとき判定の更新
+            Judgement currentJudgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+            if ((int)bestJudgement < (int)currentJudgement)
+            {
+                bestJudgement = currentJudgement;
+            }
 
-            // もしどこかが押されていたら成功
-            SetTouchStatus(true);
-            return;
+            // 最高判定のとき確定
+            if (bestJudgement == Judgement.Perfect)
+            {
+                SendJudgementData();
+            }
         }
-
-        // どこも押されていなかったら失敗
-        SetTouchStatus(false);
-
-        return;
+        // 判定時間を過ぎたとき
+        else if (IsPassJudgementRange())
+        {
+            SendJudgementData();
+            SetDisable();
+        }
     }
 
     /// <summary>
-    /// タッチされているかどうかでマテリアルを変更する
+    /// 判定データを送信
     /// </summary>
-    /// <param name="isTouching"></param>
-    public void SetTouchStatus(bool isTouching)
+    private void SendJudgementData()
     {
-        //foreach(MeshRenderer meshRenderer in meshRenderers)
-        //{
-        //    meshRenderer.material = isTouching ? meshMaterialTouching : meshMaterialUntouching;
-        //}
+        NoteJudgementData judgementData = new NoteJudgementData
+        {
+            Judgement = bestJudgement,
+            NoteData = this.noteData,
+            PositionJudged = noteData.Vertices.First(),
+            TimingError = noteData.Timing - noteData.Timer.Time
+        };
+
+        Debug.Log(noteData.Vertices.First());
+        noteData.JudgementRecorder?.RecordJudgement(judgementData);
+        isJudged = true;
+    }
+
+    /// <summary>
+    /// 判定範囲内か調べる
+    /// </summary>
+    /// <returns></returns>
+    private bool IsInJudgementTimeRange()
+    {
+        if (noteData == null) { return false; }
+        if (noteData.Timer == null) { return false; }
+        if (isJudged) { return false; }
+
+        Judgement judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+        if (judgement == Judgement.Miss || judgement == Judgement.None) { return false; }
+
+        return true;
+    }
+
+    /// <summary>
+    /// ノーツ範囲内に手があるか判定
+    /// </summary>
+    /// <returns></returns>
+    private bool IsInSpaceRange()
+    {
+        if (noteData.SpaceInput == null) { return false; }
+        if (noteData.Timer == null) { return false; }
+
+        bool isRightIn = SpaceHoldNote.IsPointInPolygon(noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand).Last().Pos, noteData.Vertices);
+        bool isLeftIn = SpaceHoldNote.IsPointInPolygon(noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.LeftHand).Last().Pos, noteData.Vertices);
+
+        return isRightIn || isLeftIn;
+    }
+
+    /// <summary>
+    /// ノーツ判定範囲外？
+    /// </summary>
+    /// <returns></returns>
+    private bool IsPassJudgementRange()
+    {
+        if (noteData == null) { return false; }
+        if (noteData.Timer == null) { return false; }
+        if (noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.Miss) { return false; }
+        if (isJudged) { return false; }
+
+        return true;
     }
 
     /// <summary>
@@ -145,8 +135,12 @@ public class NoteData_SpaceHoldRelay : INoteData, IJudgableNoteData
 
     public Vector2[] Vertices { get; set; }
 
-    public ISliderInputGetter SliderInput { get; set; }
+    public Mesh Mesh { get; set; }
+
+    public ISpaceInputGetter SpaceInput { get; set; }
 
     public ITimeGetter Timer { get; set; }
+
+    public IJudgementRecorder JudgementRecorder { get; set; }
 }
 

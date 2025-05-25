@@ -13,6 +13,7 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
     Vector3 JudgeVector => Vector3.down;
 
     [SerializeField] float judgeMagnitude;
+    [SerializeField] JudgementSoundEffects judgementSoundEffects;
 
     NoteData_DynamicGroundDownward noteData;
     DynamicJudgement dynamicJudgement;
@@ -113,6 +114,7 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
         };
 
         noteData.JudgementRecorder?.RecordJudgement(judgementData);
+        judgementSoundEffects.PlaySE(bestJudgement);
         isJudged = true;
     }
 

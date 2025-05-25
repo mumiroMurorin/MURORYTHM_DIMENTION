@@ -67,9 +67,12 @@ namespace ChartConvert
         public List<NoteDataOrigin_HoldHiddenJudgedRelay> HoldHiddenJudgedRelayData { get; set; }
 
         // スペースホールドノーツ
+        public List<NoteDataOrigin_SpaceHoldStart> SpaceHoldStartData { get; set; }
         public List<NoteDataOrigin_SpaceHoldRelay> SpaceHoldRelayData { get; set; }
         public List<NoteDataOrigin_SpaceHoldMeshRelay> SpaceHoldMeshRelayData { get; set; }
         public List<NoteDataOrigin_SpaceHoldHiddenJudgedRelay> SpaceHoldHiddenJudgedRelayData { get; set; }
+        public List<NoteDataOrigin_SpaceHoldEnd> SpaceHoldEndData { get; set; }
+
     }
 
     #region NoteDataOriginClass ノーツデータクラス
@@ -165,6 +168,16 @@ namespace ChartConvert
     }
 
     /// <summary>
+    /// スペースホールド始点データ
+    /// </summary>
+    public class NoteDataOrigin_SpaceHoldStart
+    {
+        public int HoldNumber { get; set; }
+
+        public Vector2[] Vertices { get; set; }
+    }
+
+    /// <summary>
     /// スペースホールド中継点データ
     /// </summary>
     public class NoteDataOrigin_SpaceHoldRelay
@@ -188,6 +201,16 @@ namespace ChartConvert
     /// スペースホールド判定点データ
     /// </summary>
     public class NoteDataOrigin_SpaceHoldHiddenJudgedRelay
+    {
+        public int HoldNumber { get; set; }
+
+        public Vector2[] Vertices { get; set; }
+    }
+
+    /// <summary>
+    /// スペースホールド終点データ
+    /// </summary>
+    public class NoteDataOrigin_SpaceHoldEnd
     {
         public int HoldNumber { get; set; }
 

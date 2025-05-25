@@ -54,7 +54,7 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
         greatNum.Value = 0;
         goodNum.Value = 0;
         missNum.Value = 0;
-        noteJudgementDatas = new ReactiveCollection<NoteJudgementData>();
+        noteJudgementDatas.Clear();
         combo.Value = 0;
         scoreCalculater = null;
         comboRank.Value = ComboRank.AllPerfect;

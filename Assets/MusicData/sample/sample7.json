@@ -1,0 +1,153 @@
+{
+  "BarDatas": [
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0,
+          "SpaceHoldRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                { "x": -0.25, "y": -0.5 },
+                { "x": -0.25, "y": 0 },
+                { "x": 0.25, "y": 0 },
+                { "x": 0.25, "y": -0.5 }
+              ]
+            }
+          ],
+          "SpaceHoldStartData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                { "x": -0.25, "y": -0.5 },
+                { "x": -0.25, "y": 0 },
+                { "x": 0.25, "y": 0 },
+                { "x": 0.25, "y": -0.5 }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 140.0,
+          "SpaceHoldRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                { "x": -0.25, "y": -0.5 },
+                { "x": -0.25, "y": 0 },
+                { "x": 0.25, "y": 0 },
+                { "x": 0.25, "y": -0.5 }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 140.0,
+                    "SpaceHoldRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                { "x": -0.25, "y": -0.5 },
+                { "x": -0.25, "y": 0 },
+                { "x": 0.25, "y": 0 },
+                { "x": 0.25, "y": -0.5 }
+              ]
+            }
+          ],
+          "SpaceHoldEndData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                { "x": -0.25, "y": -0.5 },
+                { "x": -0.25, "y": 0 },
+                { "x": 0.25, "y": 0 },
+                { "x": 0.25, "y": -0.5 }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        },
+        {
+          "Bpm": 140.0
+        }
+      ]
+    }
+  ],
+  "OffsetMs": 0.0
+}

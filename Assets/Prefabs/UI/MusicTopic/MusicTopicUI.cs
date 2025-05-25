@@ -52,7 +52,7 @@ public class MusicTopicUI : MonoBehaviour
         music_image.sprite = data.MusicSprite;
 
         // ÉåÉRÅ[Éh
-        score_tmp.text = data.GetMusicRecord(currentSetDifficulty).Score.ToString();
+        score_tmp.text = data.GetMusicRecord(currentSetDifficulty).Score.ToString("N0");
 
         //TRACK COMPLETE
         comp_obj.SetActive(data.GetMusicRecord(currentSetDifficulty).ComboRank == ComboRank.TrackComplete);

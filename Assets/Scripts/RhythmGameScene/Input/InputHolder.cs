@@ -27,9 +27,7 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
     ReactiveProperty<bool> canGetSpaceInput = new ReactiveProperty<bool>();
     public IReadOnlyReactiveProperty<bool> CanGetSpaceInputReactiveProperty { get { return canGetSpaceInput; } }
 
-    private CompositeDisposable disposables = new CompositeDisposable();
-
-    public InputHolder()
+    public void Initialize(GameObject disposable)
     {
         sliderInput = new ReactiveProperty<bool>[SLIDER_MAX_COUNT];
         for (int i = 0; i < sliderInput.Length; i++)
@@ -40,19 +38,19 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
         // —¼Žè‚Ì“®‚«‚ðVector‰»‚·‚é
         rightHandInput.ObserveAdd()
             .Pairwise()
-            .Subscribe(pair => { 
+            .Subscribe(pair => {
                 SetHandVector(pair.Previous.Value, pair.Current.Value, rightHandVelocity);
                 if(rightHandInput.Count > MAX_RECORD_SPACE_INDEX) { rightHandInput.RemoveAt(0); }
             })
-            .AddTo(disposables);
+            .AddTo(disposable);
 
         leftHandInput.ObserveAdd()
             .Pairwise()
-            .Subscribe(pair => { 
+            .Subscribe(pair => {
                 SetHandVector(pair.Previous.Value, pair.Current.Value, leftHandVelocity);
                 if (leftHandInput.Count > MAX_RECORD_SPACE_INDEX) { leftHandInput.RemoveAt(0); }
             })
-            .AddTo(disposables);
+            .AddTo(disposable);
     }
 
     /// <summary>
@@ -95,6 +93,7 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
     public void SetCanGetSpaceInput(bool isGet)
     {
         if (canGetSpaceInput.Value == isGet) { return; }
+
         canGetSpaceInput.Value = isGet;
     }
 
@@ -156,10 +155,5 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
         }
 
         recorder.Value = NoteJudgement.DynamicNote.CalculateVelocity(previous, current);
-    }
-
-    public void Dispose()
-    {
-        disposables.Dispose();
     }
 }

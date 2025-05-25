@@ -19,7 +19,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     [SerializeField] Material edgeMaterial;
 
     INoteSpawnDataOptionHolder optionHolder;
-    ISliderInputGetter sliderInputGetter;
+    ISpaceInputGetter spaceInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
     GameObject groundObject;
@@ -30,7 +30,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
         this.optionHolder = initializingData.OptionHolder;
         this.groundObject = initializingData.GroundObject;
         this.groundDeformer = initializingData.GroundDeformer;
-        this.sliderInputGetter = initializingData.SliderInputGetter;
+        this.spaceInputGetter = initializingData.SpaceInputGetter;
         this.judgementRecorder = initializingData.JudgementRecorder;
         this.timer = initializingData.Timer;
     }
@@ -56,8 +56,9 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     private NoteData_SpaceHoldRelay ConvertNoteData(NoteData_SpaceHoldRelay data)
     {
         // ノーツデータにいろいろ追加
-        data.SliderInput = this.sliderInputGetter;
+        data.SpaceInput = this.spaceInputGetter;
         data.Timer = this.timer;
+        data.JudgementRecorder = this.judgementRecorder;
 
         return data;
     }
@@ -96,6 +97,8 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
         var points = noteData.Vertices.Select(v => MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToList();
         Mesh mesh = MeshGenerator.GenerateMesh(points);
         meshFilter.mesh = mesh;
+        // 成功演出のためにMeshを保存
+        noteData.Mesh = mesh;
 
         if (mesh == null) { return obj; }
 

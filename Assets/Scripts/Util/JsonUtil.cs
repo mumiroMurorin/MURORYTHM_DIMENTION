@@ -21,7 +21,13 @@ namespace JsonUtil
         {
             try
             {
-                string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+                string json = JsonConvert.SerializeObject(
+                    data,
+                    Formatting.Indented,
+                    new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore
+                    });
                 string path = Path.Combine(UnityEngine.Application.persistentDataPath, fileName);
                 File.WriteAllText(path, json);
                 Debug.Log($"【JsonConoverter】保存成功: {path}");
@@ -42,7 +48,13 @@ namespace JsonUtil
             try
             {
                 // JSONに変換
-                string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+                string json = JsonConvert.SerializeObject(
+                    data,
+                    Formatting.Indented,
+                    new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore
+                    });
 
                 // ダイアログ表示
                 using (VistaSaveFileDialog dialog = new VistaSaveFileDialog())

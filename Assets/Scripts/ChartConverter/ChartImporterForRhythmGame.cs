@@ -46,15 +46,20 @@ namespace ChartConvert
             converters = new List<IOriginDataToRhythmGameConvertable>()
             {
                 new TouchNoteConverter(),
+
                 new DynamicUpwardConverter(),
                 new DynamicDownwardConverter(),
                 new DynamicRightwardConverter(),
                 new DynamicLeftwardConverter(),
+
                 new HoldStartConverter(),
                 new HoldRelayConverter(),
                 new HoldHiddenJudgedRelay(),
                 new HoldEndConverter(),
                 new HoldMeshConverter(),
+
+                new SpaceHoldRelayConverter(),
+                new SpaceHoldMeshConverter(),
             };
         }
 

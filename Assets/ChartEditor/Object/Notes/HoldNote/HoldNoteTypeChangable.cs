@@ -36,18 +36,37 @@ namespace ChartEditor
             // ノートデータが存在するまで待つ
             await UniTask.WaitUntil(() => noteObject.NoteData.Address != null, cancellationToken: token);
 
-            // IGroundChainNoteDataに変換
-            if(noteObject.NoteData is not ITypeChangableNoteData) { return; }
+            // ITypeChangableNoteDataに変換
+            if (noteObject.NoteData is not ITypeChangableNoteData) { return; }
             noteData = (ITypeChangableNoteData)noteObject.NoteData;
 
             // ノーツタイプが変更された時
             noteData.NoteTypeRP
-                .Subscribe(type => {
-                    if (type == DeploymentNoteType.Hold) { noteMeshRenderer.material.color = normalColor; }
-                    else if(type == DeploymentNoteType.HoldHidden) { noteMeshRenderer.material.color = hiddenColor; }
-                    else if(type == DeploymentNoteType.HoldHiddenJudged) { noteMeshRenderer.material.color = hiddenJudgedColor; }
+                .Subscribe(ChangeNoteColor)
+                .AddTo(this.gameObject);
+
+            // IGroundChainNoteDataに変換
+            if (noteObject.NoteData is not IGroundChainNoteData) { return; }
+            var chainData = (IGroundChainNoteData)noteObject.NoteData;
+
+            chainData.NextNote
+                .Subscribe(next => {
+                    ChangeNoteColor(noteData.NoteTypeRP.Value);
                 })
                 .AddTo(this.gameObject);
+
+            chainData.BackNote
+                .Subscribe(back => {
+                    ChangeNoteColor(noteData.NoteTypeRP.Value);
+                })
+                .AddTo(this.gameObject);
+        }
+
+        private void ChangeNoteColor(DeploymentNoteType noteType)
+        {
+            if (noteType == DeploymentNoteType.Hold) { noteMeshRenderer.material.color = normalColor; }
+            else if (noteType == DeploymentNoteType.HoldHidden) { noteMeshRenderer.material.color = hiddenColor; }
+            else if (noteType == DeploymentNoteType.HoldHiddenJudged) { noteMeshRenderer.material.color = hiddenJudgedColor; }
         }
 
         public void OnChangeNoteType()
