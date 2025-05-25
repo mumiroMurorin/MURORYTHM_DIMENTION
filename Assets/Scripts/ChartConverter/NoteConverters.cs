@@ -971,4 +971,45 @@ namespace ChartConvert
         }
     }
 
+    public class SpaceHoldRelayConverter: IOriginDataToRhythmGameConvertable
+    {
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (dataOrigin.SpaceHoldRelayData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.SpaceHoldRelayData)
+            {
+                NoteData_SpaceHoldRelay noteData = new NoteData_SpaceHoldRelay
+                {
+                    Vertices = (Vector2[])noteOrigin.Vertices.Clone(),
+                    Timing = timing
+                };
+
+                chartData.AddNoteData(noteData);
+            }
+
+            return true;
+        }
+    }
+
+    public class SpaceHoldMeshConverter : IOriginDataToRhythmGameConvertable
+    {
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (dataOrigin.SpaceHoldMeshRelayData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.SpaceHoldMeshRelayData)
+            {
+                NOteData_SpaceHold noteData = new NoteData_SpaceHoldRelay
+                {
+                    Vertices = (Vector2[])noteOrigin.Vertices.Clone(),
+                    Timing = timing
+                };
+
+                chartData.AddNoteData(noteData);
+            }
+
+            return true;
+        }
+    }
 }

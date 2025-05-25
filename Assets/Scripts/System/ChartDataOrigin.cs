@@ -50,16 +50,26 @@ namespace ChartConvert
 
         // -------------- この分節に配置されているノーツリスト ------------------
 
+        // タッチノーツ
         public List<NoteDataOrigin_Touch> TouchNoteData { get; set; }
+        
+        // ダイナミックノーツ 
         public List<NoteDataOrigin_DynamicUpward> DynamicUpwardData { get; set; }
         public List<NoteDataOrigin_DynamicDownward> DynamicDownwardData { get; set; }
         public List<NoteDataOrigin_DynamicRightward> DynamicRightwardData { get; set; }
         public List<NoteDataOrigin_DynamicLeftward> DynamicLeftwardData { get; set; }
+
+        // ホールドノーツ
         public List<NoteDataOrigin_HoldStart> HoldStartData { get; set; }
         public List<NoteDataOrigin_HoldEnd> HoldEndData { get; set; }
         public List<NoteDataOrigin_HoldRelay> HoldRelayData { get; set; }
         public List<NoteDataOrigin_HoldMeshRelay> HoldMeshRelayData { get; set; }
         public List<NoteDataOrigin_HoldHiddenJudgedRelay> HoldHiddenJudgedRelayData { get; set; }
+
+        // スペースホールドノーツ
+        public List<NoteDataOrigin_SpaceHoldRelay> SpaceHoldRelayData { get; set; }
+        public List<NoteDataOrigin_SpaceHoldMeshRelay> SpaceHoldMeshRelayData { get; set; }
+        public List<NoteDataOrigin_SpaceHoldHiddenJudgedRelay> SpaceHoldHiddenJudgedRelayData { get; set; }
     }
 
     #region NoteDataOriginClass ノーツデータクラス
@@ -152,6 +162,36 @@ namespace ChartConvert
         public int HoldNumber { get; set; }
 
         public int[] Range { get; set; }
+    }
+
+    /// <summary>
+    /// スペースホールド中継点データ
+    /// </summary>
+    public class NoteDataOrigin_SpaceHoldRelay
+    {
+        public int HoldNumber { get; set; }
+
+        public Vector2[] Vertices { get; set; }
+    }
+
+    /// <summary>
+    /// スペースホールドメッシュ中継点データ
+    /// </summary>
+    public class NoteDataOrigin_SpaceHoldMeshRelay
+    {
+        public int HoldNumber { get; set; }
+
+        public Vector2[] Vertices { get; set; }
+    }
+
+    /// <summary>
+    /// スペースホールド判定点データ
+    /// </summary>
+    public class NoteDataOrigin_SpaceHoldHiddenJudgedRelay
+    {
+        public int HoldNumber { get; set; }
+
+        public Vector2[] Vertices { get; set; }
     }
 
     #endregion
