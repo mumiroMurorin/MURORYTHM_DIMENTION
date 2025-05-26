@@ -58,7 +58,10 @@ namespace ChartConvert
                 new HoldEndConverter(),
                 new HoldMeshConverter(),
 
+                new SpaceHoldStartConverter(),
                 new SpaceHoldRelayConverter(),
+                new SpaceHoldHiddenJudgedRelay(),
+                new SpaceHoldEndConverter(),
                 new SpaceHoldMeshConverter(),
             };
         }

@@ -251,17 +251,18 @@ public enum Judgement
 /// </summary>
 public enum NoteType
 {
-    Touch,
-    HoldStart,
-    HoldRelay,
-    HoldRelayHidden,
-    HoldEnd,
-    HoldMesh,
-    SpaceHoldMesh,
-    SpaceHoldRelay,
-    DynamicGroundUpward,
-    DynamicGroundDownward,
-    DynamicGroundRightward,
-    DynamicGroundLeftward,
-    DynamicSpace
+    Touch = 1,
+    HoldStart = 10,
+    HoldRelay = 11,
+    HoldRelayHidden = 12,
+    HoldEnd = 13,
+    HoldMesh = 14,
+    SpaceHoldMesh = 20,
+    SpaceHoldRelay = 21,
+    SpaceHoldRelayHidden = 22,
+    DynamicGroundUpward = 30,
+    DynamicGroundDownward = 31,
+    DynamicGroundRightward = 32,
+    DynamicGroundLeftward = 33,
+    DynamicSpace = 34,
 }

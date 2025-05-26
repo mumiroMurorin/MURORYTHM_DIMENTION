@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using System.Linq;
 
 /// <summary>
@@ -62,6 +63,22 @@ public class ChartData
 
         // 存在しない場合は空のリストを返す
         return new List<INoteData>();
+    }
+
+    public List<T> GetNoteDataList<T>(T noteData) where T : INoteData
+    {
+        // 引数のデータのノーツリストが存在するか確認
+        foreach (var noteList in AllNoteDataLists)
+        {
+            // 存在する場合は追加して終了
+            if (noteList.Count > 0 && noteList[0].GetType() == noteData.GetType())
+            {
+                return noteList.Select(x => (T)x).ToList();
+            }
+        }
+
+        // 存在しない場合は空のリストを返す
+        return null;
     }
 
 }

@@ -22,6 +22,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
     [SerializeField] NoteFactory<NoteData_HoldMesh> holdMeshNoteFactory;
     [SerializeField] NoteFactory<NoteData_SpaceHoldMesh> spaceHoldMeshNoteFactory;
     [SerializeField] NoteFactory<NoteData_SpaceHoldRelay> spaceHoldRelayNoteFactory;
+    [SerializeField] NoteFactory<NoteData_SpaceHoldRelayHidden> spaceHoldRelayHiddenNoteFactory;
 
     [Header("Factoryの初期化に必要なデータ")]
     [SerializeField] GameObject groundObject;
@@ -80,6 +81,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         holdMeshNoteFactory.Initialize(data);
         spaceHoldMeshNoteFactory.Initialize(data);
         spaceHoldRelayNoteFactory.Initialize(data);
+        spaceHoldRelayHiddenNoteFactory.Initialize(data);
     }
 
     /// <summary>
@@ -100,6 +102,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         GenerateHoldMeshNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldMesh).OfType<NoteData_HoldMesh>().ToList());
         GenerateSpaceHoldMeshNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceHoldMesh).OfType<NoteData_SpaceHoldMesh>().ToList());
         GenerateSpaceHoldRelayNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceHoldRelay).OfType<NoteData_SpaceHoldRelay>().ToList());
+        GenerateSpaceHoldRelayHiddenNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceHoldRelayHidden).OfType<NoteData_SpaceHoldRelayHidden>().ToList());
 
         callback?.Invoke();
     }
@@ -270,6 +273,20 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         foreach (NoteData_SpaceHoldRelay data in noteDatas)
         {
             spaceHoldRelayNoteFactory.Spawn(data);
+        }
+    }
+
+    /// <summary>
+    /// スペースホールド中点の生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateSpaceHoldRelayHiddenNote(List<NoteData_SpaceHoldRelayHidden> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (NoteData_SpaceHoldRelayHidden data in noteDatas)
+        {
+            spaceHoldRelayHiddenNoteFactory.Spawn(data);
         }
     }
 }

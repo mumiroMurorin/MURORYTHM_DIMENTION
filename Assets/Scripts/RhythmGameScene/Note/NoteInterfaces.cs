@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using Deform;
 
 /// <summary>
@@ -63,6 +64,8 @@ public abstract class NoteFactory<T> : MonoBehaviour, INoteFactory<T> where T : 
     public abstract void Initialize(NoteFactoryInitializingData initializingData);
 
     public abstract NoteObject<T> Spawn(T data);
+
+    public Type DataType => typeof(T);
 }
 
 /// <summary>

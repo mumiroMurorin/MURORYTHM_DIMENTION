@@ -9,6 +9,30 @@ namespace ChartConvert
 {
 
     /// <summary>
+    /// スペースホールド始点(中継点データに変換)
+    /// </summary>
+    public class SpaceHoldStartConverter : IOriginDataToRhythmGameConvertable
+    {
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (dataOrigin.SpaceHoldStartData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.SpaceHoldStartData)
+            {
+                NoteData_SpaceHoldRelay noteData = new NoteData_SpaceHoldRelay
+                {
+                    Vertices = (Vector2[])noteOrigin.Vertices.Clone(),
+                    Timing = timing
+                };
+
+                chartData.AddNoteData(noteData);
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// スペースホールド中継点
     /// </summary>
     public class SpaceHoldRelayConverter : IOriginDataToRhythmGameConvertable
@@ -18,6 +42,54 @@ namespace ChartConvert
             if (dataOrigin.SpaceHoldRelayData == null) { return true; }
 
             foreach (var noteOrigin in dataOrigin.SpaceHoldRelayData)
+            {
+                NoteData_SpaceHoldRelay noteData = new NoteData_SpaceHoldRelay
+                {
+                    Vertices = (Vector2[])noteOrigin.Vertices.Clone(),
+                    Timing = timing
+                };
+
+                chartData.AddNoteData(noteData);
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// スペースホールド中継点
+    /// </summary>
+    public class SpaceHoldHiddenJudgedRelay : IOriginDataToRhythmGameConvertable
+    {
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (dataOrigin.SpaceHoldHiddenJudgedRelayData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.SpaceHoldHiddenJudgedRelayData)
+            {
+                NoteData_SpaceHoldRelayHidden noteData = new NoteData_SpaceHoldRelayHidden
+                {
+                    Vertices = (Vector2[])noteOrigin.Vertices.Clone(),
+                    Timing = timing
+                };
+
+                chartData.AddNoteData(noteData);
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// スペースホールド終点(中継点データに変換)
+    /// </summary>
+    public class SpaceHoldEndConverter : IOriginDataToRhythmGameConvertable
+    {
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (dataOrigin.SpaceHoldEndData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.SpaceHoldEndData)
             {
                 NoteData_SpaceHoldRelay noteData = new NoteData_SpaceHoldRelay
                 {

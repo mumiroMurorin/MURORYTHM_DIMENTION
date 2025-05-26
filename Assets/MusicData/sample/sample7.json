@@ -13,17 +13,6 @@
         },
         {
           "Bpm": 140.0,
-          "SpaceHoldRelayData": [
-            {
-              "HoldNumber": 0,
-              "Vertices": [
-                { "x": -0.25, "y": -0.5 },
-                { "x": -0.25, "y": 0 },
-                { "x": 0.25, "y": 0 },
-                { "x": 0.25, "y": -0.5 }
-              ]
-            }
-          ],
           "SpaceHoldStartData": [
             {
               "HoldNumber": 0,
@@ -73,25 +62,102 @@
           ]
         },
         {
-          "Bpm": 140.0
+          "Bpm": 140.0,
+          "SpaceHoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                { "x": -0.25, "y": -0.5 },
+                { "x": -0.25, "y": 0 },
+                { "x": 0.25, "y": 0 },
+                { "x": 0.25, "y": -0.5 }
+              ]
+            }
+          ]
         },
         {
-          "Bpm": 140.0
+          "Bpm": 140.0,
+          "SpaceHoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                { "x": -0.25, "y": -0.5 },
+                { "x": -0.25, "y": 0 },
+                { "x": 0.25, "y": 0 },
+                { "x": 0.25, "y": -0.5 }
+              ]
+            }
+          ]
         },
         {
-          "Bpm": 140.0
+          "Bpm": 140.0,
+          "SpaceHoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                { "x": -0.25, "y": -0.5 },
+                { "x": -0.25, "y": 0 },
+                { "x": 0.25, "y": 0 },
+                { "x": 0.25, "y": -0.5 }
+              ]
+            }
+          ]
         },
         {
-          "Bpm": 140.0
+          "Bpm": 140.0,
+          "SpaceHoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                { "x": -0.25, "y": -0.5 },
+                { "x": -0.25, "y": 0 },
+                { "x": 0.25, "y": 0 },
+                { "x": 0.25, "y": -0.5 }
+              ]
+            }
+          ]
         },
         {
-          "Bpm": 140.0
+          "Bpm": 140.0,
+          "SpaceHoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                { "x": -0.25, "y": -0.5 },
+                { "x": -0.25, "y": 0 },
+                { "x": 0.25, "y": 0 },
+                { "x": 0.25, "y": -0.5 }
+              ]
+            }
+          ]
         },
         {
-          "Bpm": 140.0
+          "Bpm": 140.0,
+          "SpaceHoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                { "x": -0.25, "y": -0.5 },
+                { "x": -0.25, "y": 0 },
+                { "x": 0.25, "y": 0 },
+                { "x": 0.25, "y": -0.5 }
+              ]
+            }
+          ]
         },
         {
-          "Bpm": 140.0
+          "Bpm": 140.0,
+          "SpaceHoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                { "x": -0.25, "y": -0.5 },
+                { "x": -0.25, "y": 0 },
+                { "x": 0.25, "y": 0 },
+                { "x": 0.25, "y": -0.5 }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -102,17 +168,6 @@
       "SubDivisionDatas": [
         {
           "Bpm": 140.0,
-                    "SpaceHoldRelayData": [
-            {
-              "HoldNumber": 0,
-              "Vertices": [
-                { "x": -0.25, "y": -0.5 },
-                { "x": -0.25, "y": 0 },
-                { "x": 0.25, "y": 0 },
-                { "x": 0.25, "y": -0.5 }
-              ]
-            }
-          ],
           "SpaceHoldEndData": [
             {
               "HoldNumber": 0,
