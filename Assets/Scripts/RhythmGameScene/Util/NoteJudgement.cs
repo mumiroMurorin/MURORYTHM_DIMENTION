@@ -145,6 +145,21 @@ namespace NoteJudgement
             return (crossings % 2) == 1;
         }
     }
+
+    static public class GroundNoteJudgement
+    {
+        public static bool IsTouchingSlider(ISliderInputGetter sliderInput, int[] range)
+        {
+            if (sliderInput == null) { return false; }
+
+            foreach (int index in range)
+            {
+                if (sliderInput.GetSliderInputReactiveProperty(index).Value) { return true; }
+            }
+
+            return false;
+        }
+    }
 }
 
 public class TimeToPos

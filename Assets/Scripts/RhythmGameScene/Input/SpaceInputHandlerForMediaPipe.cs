@@ -50,6 +50,7 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour
         spaceInputGetter?.GetSpaceInputVelocity(SpaceTrackingTag.RightHand)
             .Subscribe(value =>
             {
+                if(velocityTextRight == null) { return; }
                 velocityTextRight.text = value.y.ToString("F2");
             })
             .AddTo(this.gameObject);
@@ -57,6 +58,7 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour
         spaceInputGetter?.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand)
             .Subscribe(value =>
             {
+                if (velocityTextLeft == null) { return; }
                 velocityTextLeft.text = value.y.ToString("F2");
             })
             .AddTo(this.gameObject);
@@ -96,9 +98,12 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour
         );
 
         // -1Å`1ÇÃîÕàÕÇ…é˚ÇﬂÇƒï‘Ç∑
+        Vector2 xy = new Vector2(normalized.x, normalized.y);
+        xy = Vector2.ClampMagnitude(xy, 1f);
+
         return new Vector3(
-            Mathf.Clamp(normalized.x, -1f, 1f),
-            Mathf.Clamp(normalized.y, -1f, 1f),
+            xy.x,
+            xy.y,
             Mathf.Clamp(normalized.z, -1f, 1f)
         );
     }

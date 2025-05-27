@@ -41,6 +41,7 @@ namespace ChartConvert
                 new HoldStartConverter(),
                 new HoldRelayConverter(),
                 new HoldEndConverter(),
+                new HoldEndUnjudgeConverter(),
                 new HoldMeshRelayConverter(),
                 new HoldHiddenJudgedRelay(),
             };

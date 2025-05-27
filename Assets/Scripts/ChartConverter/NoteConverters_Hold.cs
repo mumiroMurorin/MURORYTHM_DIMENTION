@@ -476,6 +476,105 @@ namespace ChartConvert
     }
 
     /// <summary>
+    /// ホールドエンド(判定なし)ノーツ
+    /// </summary>
+    public class HoldEndUnjudgeConverter : IOriginDataToRhythmGameConvertable, IChainNoteConvertable
+    {
+        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
+        {
+            if (noteDataInEditor.NoteType != DeploymentNoteType.HoldEndUnjudge) { return false; }
+            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
+
+            IGroundChainNoteData thisNote = (IGroundChainNoteData)noteDataInEditor;
+            IGroundChainNoteData backNote = thisNote.BackNote.Value;
+            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
+            if (nextNote != null) { return false; }
+            if (backNote == null && nextNote == null) { return false; }
+            if (backNote != null && nextNote != null) { return false; }
+
+            // ディクショナリーからHoldNumberを探す
+            if (!nextNoteToNumber.TryGetValue(thisNote, out int number))
+            {
+                Debug.LogWarning($"【Converter】HoldEndUnjudgeの変換の際、ノーツが見つかりませんでした");
+                return false;
+            }
+            else
+            {
+                // 終点なのでAddしない
+                nextNoteToNumber.Remove(thisNote);
+            }
+
+            // 新たにインスタンス化
+            if (dataOrigin.HoldEndUnjudgeData == null)
+            {
+                dataOrigin.HoldEndUnjudgeData = new List<NoteDataOrigin_HoldEndUnjudge>();
+            }
+
+            // 追加するデータのインスタンス化
+            NoteDataOrigin_HoldEndUnjudge data = new NoteDataOrigin_HoldEndUnjudge()
+            {
+                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
+                HoldNumber = number
+            };
+
+            dataOrigin.HoldEndUnjudgeData.Add(data);
+            return true;
+        }
+
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (dataOrigin.HoldEndUnjudgeData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.HoldEndUnjudgeData)
+            {
+                NoteData_HoldEndUnjudge noteData = new NoteData_HoldEndUnjudge
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    Timing = timing
+                };
+
+                chartData.AddNoteData(noteData);
+            }
+
+            return true;
+        }
+
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
+        {
+            if (dataOrigin.HoldEndUnjudgeData == null) { return true; }
+
+            foreach (var noteDataOrigin in dataOrigin.HoldEndUnjudgeData)
+            {
+                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
+                if (noteData is not IGroundChainNoteData) { return false; }
+                ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.HoldEndUnjudge);
+
+                // データのセット
+                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
+
+                noteData.SetAddress(address);
+                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
+                dataInChartEditor.AddNote(noteData);
+
+                // リストへの保存
+                if (numberToStartNote.TryGetValue(noteDataOrigin.HoldNumber, out var startNote))
+                {
+                    // 繋げる
+                    startNote.AddChainNote(chainData, false);
+                }
+                else
+                {
+                    Debug.LogWarning($"【Converter】HoldEndUnjudgeの変換の際、HoldNumberが存在しませんでした: {noteDataOrigin.HoldNumber}");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// ホールドメッシュ
     /// </summary>
     public class HoldMeshConverter : IOriginDataToRhythmGameConvertable
@@ -489,6 +588,7 @@ namespace ChartConvert
             AddHoldMeshRelayData(dataOrigin, timing);
             AddHoldHiddenJudgedRelay(dataOrigin, timing);
             AddHoldEndData(dataOrigin, chartData, timing);
+            AddHoldEndUnjudgeData(dataOrigin, chartData, timing);
 
             return true;
         }
@@ -580,6 +680,27 @@ namespace ChartConvert
 
             // 終点、メッシュデータ格納リストにデータを追加後、譜面データに代入
             foreach (var noteOrigin in dataOrigin.HoldEndData)
+            {
+                // ディクショナリーに登録されていなければ返す
+                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                {
+                    Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
+                chartData.AddNoteData(GenerateNoteData_HoldMesh(meshList));
+            }
+
+            return true;
+        }
+
+        private bool AddHoldEndUnjudgeData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        {
+            if (dataOrigin.HoldEndUnjudgeData == null) { return true; }
+
+            // 終点、メッシュデータ格納リストにデータを追加後、譜面データに代入
+            foreach (var noteOrigin in dataOrigin.HoldEndUnjudgeData)
             {
                 // ディクショナリーに登録されていなければ返す
                 if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))

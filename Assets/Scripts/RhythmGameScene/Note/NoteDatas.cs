@@ -256,6 +256,7 @@ public enum NoteType
     HoldRelay = 11,
     HoldRelayHidden = 12,
     HoldEnd = 13,
+    HoldEndUnjudge = 15,
     HoldMesh = 14,
     SpaceHoldMesh = 20,
     SpaceHoldRelay = 21,

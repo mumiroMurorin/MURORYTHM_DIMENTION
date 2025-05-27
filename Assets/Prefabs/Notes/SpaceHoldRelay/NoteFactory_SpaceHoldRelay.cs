@@ -97,8 +97,6 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
         var points = noteData.Vertices.Select(v => MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToList();
         Mesh mesh = MeshGenerator.GenerateMesh(points);
         meshFilter.mesh = mesh;
-        // ¬Œ÷‰‰o‚Ì‚½‚ß‚ÉMesh‚ğ•Û‘¶
-        noteData.Mesh = mesh;
 
         if (mesh == null) { return obj; }
 
@@ -119,6 +117,8 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
         var points = noteData.Vertices.Select(v => MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToList();
         Mesh mesh = MeshGenerator.GenerateLineMesh(points, enphasisLineWidth, isLoop: true);
         meshFilter.mesh = mesh;
+        // ¬Œ÷‰‰o‚Ì‚½‚ß‚ÉMesh‚ğ•Û‘¶
+        noteData.Mesh = mesh;
 
         if (mesh == null) { return obj; }
 

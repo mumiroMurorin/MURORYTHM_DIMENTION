@@ -1,0 +1,104 @@
+{
+  "BarDatas": [
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "HoldEndUnjudgeData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        }
+      ]
+    }
+  ],
+  "OffsetMs": 0.0
+}

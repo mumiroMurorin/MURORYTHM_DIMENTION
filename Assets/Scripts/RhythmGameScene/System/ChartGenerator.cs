@@ -19,6 +19,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
     [SerializeField] NoteFactory<NoteData_HoldRelay> holdRelayNoteFactory;
     [SerializeField] NoteFactory<NoteData_HoldRelayHidden> holdRelayHiddenNoteFactory;
     [SerializeField] NoteFactory<NoteData_HoldEnd> holdEndNoteFactory;
+    [SerializeField] NoteFactory<NoteData_HoldEndUnjudge> holdEndUnjudgeNoteFactory;
     [SerializeField] NoteFactory<NoteData_HoldMesh> holdMeshNoteFactory;
     [SerializeField] NoteFactory<NoteData_SpaceHoldMesh> spaceHoldMeshNoteFactory;
     [SerializeField] NoteFactory<NoteData_SpaceHoldRelay> spaceHoldRelayNoteFactory;
@@ -78,6 +79,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         holdRelayNoteFactory.Initialize(data);
         holdRelayHiddenNoteFactory.Initialize(data);
         holdEndNoteFactory.Initialize(data);
+        holdEndUnjudgeNoteFactory.Initialize(data);
         holdMeshNoteFactory.Initialize(data);
         spaceHoldMeshNoteFactory.Initialize(data);
         spaceHoldRelayNoteFactory.Initialize(data);
@@ -99,6 +101,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         GenerateHoldRelayNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldRelay).OfType<NoteData_HoldRelay>().ToList());
         GenerateHoldRelayHiddenNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldRelayHidden).OfType<NoteData_HoldRelayHidden>().ToList());
         GenerateHoldEndNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldEnd).OfType<NoteData_HoldEnd>().ToList());
+        GenerateHoldEndUnjudgeNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldEndUnjudge).OfType<NoteData_HoldEndUnjudge>().ToList());
         GenerateHoldMeshNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldMesh).OfType<NoteData_HoldMesh>().ToList());
         GenerateSpaceHoldMeshNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceHoldMesh).OfType<NoteData_SpaceHoldMesh>().ToList());
         GenerateSpaceHoldRelayNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceHoldRelay).OfType<NoteData_SpaceHoldRelay>().ToList());
@@ -230,6 +233,20 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         foreach (NoteData_HoldEnd data in noteDatas)
         {
             holdEndNoteFactory.Spawn(data);
+        }
+    }
+
+    /// <summary>
+    /// ホールドノーツ終点(判定なし)の生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateHoldEndUnjudgeNote(List<NoteData_HoldEndUnjudge> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (NoteData_HoldEndUnjudge data in noteDatas)
+        {
+            holdEndUnjudgeNoteFactory.Spawn(data);
         }
     }
 

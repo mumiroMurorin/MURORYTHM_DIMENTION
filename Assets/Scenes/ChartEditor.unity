@@ -10697,6 +10697,8 @@ MonoBehaviour:
     noteObject: {fileID: 5475620226950634511, guid: df1462ddc3f8d704c90bada7e7496fb6, type: 3}
   - noteType: 7
     noteObject: {fileID: 5475620226950634511, guid: df1462ddc3f8d704c90bada7e7496fb6, type: 3}
+  - noteType: 8
+    noteObject: {fileID: 5475620226950634511, guid: df1462ddc3f8d704c90bada7e7496fb6, type: 3}
   references:
     version: 2
     RefIds:
@@ -18082,6 +18084,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 948257134454334149, guid: e2c4facf94a4149439083bf755bc97a2, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2226451740050325991, guid: e2c4facf94a4149439083bf755bc97a2, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2226451740050325991, guid: e2c4facf94a4149439083bf755bc97a2, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2226451740050325991, guid: e2c4facf94a4149439083bf755bc97a2, type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2353856511422833447, guid: e2c4facf94a4149439083bf755bc97a2, type: 3}

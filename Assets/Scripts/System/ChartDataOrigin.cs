@@ -62,6 +62,7 @@ namespace ChartConvert
         // ホールドノーツ
         public List<NoteDataOrigin_HoldStart> HoldStartData { get; set; }
         public List<NoteDataOrigin_HoldEnd> HoldEndData { get; set; }
+        public List<NoteDataOrigin_HoldEndUnjudge> HoldEndUnjudgeData { get; set; }
         public List<NoteDataOrigin_HoldRelay> HoldRelayData { get; set; }
         public List<NoteDataOrigin_HoldMeshRelay> HoldMeshRelayData { get; set; }
         public List<NoteDataOrigin_HoldHiddenJudgedRelay> HoldHiddenJudgedRelayData { get; set; }
@@ -131,6 +132,16 @@ namespace ChartConvert
     /// ホールド終点データ
     /// </summary>
     public class NoteDataOrigin_HoldEnd
+    {
+        public int HoldNumber { get; set; }
+
+        public int[] Range { get; set; }
+    }
+
+    /// <summary>
+    /// ホールド終点(判定なし)データ
+    /// </summary>
+    public class NoteDataOrigin_HoldEndUnjudge
     {
         public int HoldNumber { get; set; }
 

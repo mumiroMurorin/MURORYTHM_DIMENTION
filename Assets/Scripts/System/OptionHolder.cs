@@ -130,6 +130,27 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     }
 
     #endregion
+
+
+    #region 筐体ポジション
+
+    // 筐体真ん中(7番と8番の間)
+    ReactiveProperty<Vector3> controllerCenter = new ReactiveProperty<Vector3>(Vector3.zero);
+    public IReadOnlyReactiveProperty<Vector3> ControllerCenter => controllerCenter;
+    public void SetControllerCenter(Vector3 pos)
+    {
+        controllerCenter.Value = pos;
+    }
+
+    // 筐体サイズ(直径)
+    ReactiveProperty<Vector3> controllerSize = new ReactiveProperty<Vector3>(Vector3.one);
+    public IReadOnlyReactiveProperty<Vector3> ControllerSize => controllerSize;
+    public void SetControllerSize(Vector3 size)
+    {
+        controllerSize.Value = size;
+    }
+
+    #endregion
 }
 
 public interface INoteSpawnDataOptionHolder
@@ -163,6 +184,10 @@ public interface IOptionGetter
     IReadOnlyReactiveProperty<float> BGMVolume { get; }
 
     int BGMVolumeDisplay { get; }
+
+    IReadOnlyReactiveProperty<Vector3> ControllerCenter { get; }
+
+    IReadOnlyReactiveProperty<Vector3> ControllerSize { get; }
 }
 
 public interface IOptionSetter
@@ -170,4 +195,8 @@ public interface IOptionSetter
     void SetOption(OptionType optionType, int delta);
 
     void SetNoteSpeed(float speed);
+
+    void SetControllerCenter(Vector3 pos);
+
+    void SetControllerSize(Vector3 size);
 }
