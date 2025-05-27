@@ -2,16 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System;
 
 namespace ChartEditor
 {
     public class VertexObject : MonoBehaviour
     {
         SpaceHoldVertex vertexData;
+        Action onChangePositionListener;
+        Func<Vector2, Vector2> calcPositionOnChartGround;
 
-        public void SetVertexData(SpaceHoldVertex vertexData)
+        public void Initialize(SpaceHoldVertex vertexData, Action onChangePositionListener, Func<Vector2, Vector2> calcPositionOnChartGround)
         {
             this.vertexData = vertexData;
+            this.onChangePositionListener = onChangePositionListener;
+            this.calcPositionOnChartGround = calcPositionOnChartGround;
             Bind(vertexData);
         }
 
@@ -24,8 +29,17 @@ namespace ChartEditor
 
         private void OnChangePosition(Vector2 pos)
         {
+            Vector2 converted = calcPositionOnChartGround(pos);
+
             this.gameObject.transform.position
-                = new Vector3(pos.x, pos.y, this.gameObject.transform.position.z);
+                = new Vector3(converted.x, converted.y, this.gameObject.transform.position.z);
+
+            onChangePositionListener?.Invoke();
+        }
+
+        public void Destroy()
+        {
+            Destroy(this.gameObject);
         }
     }
 }

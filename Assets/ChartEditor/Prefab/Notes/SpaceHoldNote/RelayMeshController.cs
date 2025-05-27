@@ -5,21 +5,33 @@ using UniRx;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using System.Linq;
+using MeshGenerate;
 
 namespace ChartEditor
 {
     [RequireComponent(typeof(NoteObject))]
     public class RelayMeshController : MonoBehaviour
     {
+        [SerializeField] GameObject colliderObject;
+        [SerializeField] Transform vertexObjParent;
         [SerializeField] GameObject vertexObject;
+        [SerializeField] Material centerMeshMaterial;
+
+        [SerializeField] float leftLimit;
+        [SerializeField] float rightLimit;
+        [SerializeField] float upperLimit;
+        [SerializeField] float lowerLimit;
 
         NoteObject noteObject;
         IVerticesControlableNoteData verticesData;
+        MeshFilter centerMeshFilter;
+        Dictionary<SpaceHoldVertex, VertexObject> dataToObj = new Dictionary<SpaceHoldVertex, VertexObject>();
         CancellationTokenSource cts = new CancellationTokenSource();
 
         private void Start()
         {
             noteObject = GetComponent<NoteObject>();
+            Initialize();
             Bind(cts.Token).Forget();
         }
 
@@ -28,7 +40,7 @@ namespace ChartEditor
             // ノートデータが存在するまで待つ
             await UniTask.WaitUntil(() => noteObject.NoteData != null, cancellationToken: token);
 
-            // IGroundChainNoteDataに変換
+            // IVerticesControlableNoteDataに変換
             if (noteObject.NoteData is not IVerticesControlableNoteData) { return; }
             verticesData = (IVerticesControlableNoteData)noteObject.NoteData;
 
@@ -50,6 +62,11 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
         }
 
+        private void Initialize()
+        {
+            GenerateCenterMeshParent();
+        }
+
         private void OnAddVertex(SpaceHoldVertex vertex)
         {
             var obj = Instantiate(vertexObject);
@@ -59,12 +76,99 @@ namespace ChartEditor
                 return;
             }
 
-            vertexObj.SetVertexData(vertex);
+            vertexObj.gameObject.transform.SetParent(vertexObjParent);
+            vertexObj.Initialize(
+                vertex, 
+                () => {
+                    UpdateMesh();
+                    UpdateColliderObjectScale();
+                },
+                ConvertPositionOnChartGround
+                );
+            dataToObj.Add(vertex, vertexObj);
+
+            //UpdateMesh();
+            //UpdateColliderObjectScale();
         }
 
         private void OnRemoveVertex(SpaceHoldVertex vertex)
         {
+            if(!dataToObj.TryGetValue(vertex,out VertexObject obj))
+            {
+                Debug.LogWarning($"【Vertex】データに対応するオブジェクトが見つかりませんでした: {vertex.Position}");
+                return;
+            }
 
+            dataToObj.Remove(vertex);
+            obj.Destroy();
+
+            UpdateMesh();
+            UpdateColliderObjectScale();
+        }
+
+        /// <summary>
+        /// センターメッシュの生成
+        /// </summary>
+        private void GenerateCenterMeshParent()
+        {
+            GameObject obj = new GameObject("CenterMesh");
+            MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
+            centerMeshFilter = obj.AddComponent<MeshFilter>();
+
+            meshRenderer.material = centerMeshMaterial;
+
+            obj.transform.SetParent(vertexObjParent);
+            obj.transform.localPosition = Vector3.zero;
+        }
+
+        /// <summary>
+        /// 形が変わった時などメッシュを更新する
+        /// </summary>
+        private void UpdateMesh()
+        {
+            // センターメッシュ
+            List<Vector3> positions = new List<Vector3>();
+            foreach(var pair in dataToObj)
+            {
+                Vector3 vertexPos = pair.Value.gameObject.transform.localPosition;
+                positions.Add(new Vector3(vertexPos.x, vertexPos.y, vertexPos.z));
+            }
+
+            if(positions.Count < 3) { return; }
+
+            Mesh centerMesh = MeshGenerator.GenerateMesh(positions);
+            centerMeshFilter.mesh = centerMesh;
+        }
+
+        private void UpdateColliderObjectScale()
+        {
+            if(dataToObj.Count == 0) { return; }
+
+            Vector3 rightPos = Vector3.negativeInfinity;
+            Vector3 leftPos = Vector3.positiveInfinity;
+            foreach (var pair in dataToObj)
+            {
+                Vector3 vertexPos = pair.Value.gameObject.transform.localPosition;
+                if(rightPos.x < vertexPos.x) { rightPos = vertexPos; }
+                if(leftPos.x > vertexPos.x) { leftPos = vertexPos; }
+            }
+
+            colliderObject.transform.localScale = 
+                new Vector3(
+                    rightPos.x - leftPos.x, 
+                    colliderObject.transform.localScale.y, 
+                    colliderObject.transform.localScale.z
+                );
+
+            colliderObject.transform.localPosition = (rightPos + leftPos) / 2f;
+        }
+
+        private Vector2 ConvertPositionOnChartGround(Vector2 normalizedPos)
+        {
+            float x = Mathf.Lerp(leftLimit, rightLimit, (normalizedPos.x + 1f) / 2f);
+            float y = Mathf.Lerp(lowerLimit, upperLimit, (normalizedPos.y + 1f) / 2f);
+
+            return new Vector2(x, y);
         }
     }
 }

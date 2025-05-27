@@ -336,6 +336,51 @@ namespace MeshGenerate
             return mesh;
         }
 
+        public static Mesh GenerateSpaceEdgeMesh(List<Vector2> vertices1, List<Vector2> vertices2, float length, int meshDivisionNum, bool isMeshReverse)
+        {
+            Mesh mesh = new Mesh();
+            // ドデカイメッシュに対応
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+
+            List<int> triangles = new List<int>();
+            List<Vector3> vertices = new List<Vector3>();
+            List<Vector2> uvs = new List<Vector2>();
+            float currentStartZ = 0;
+            int currentMeshIndex = 0;
+
+            // 最大頂点数を調べて分割数を更新する
+            meshDivisionNum = Mathf.Max(meshDivisionNum, vertices1.Count, vertices2.Count);
+
+            // 各頂点距離の辺全体の長さに対する割合
+            int verticesCount;
+            List<float> ratios;
+
+            // 頂点リストを生成
+            verticesCount = vertices1.Count();
+            ratios = Enumerable.Range(0, meshDivisionNum - verticesCount).Select(i => i / ((float)meshDivisionNum - verticesCount - 1)).ToList();
+            List<Vector3> verticesStart = GenerateVertices(vertices1.ToList(), ratios, currentStartZ);
+
+            verticesCount = vertices2.Count();
+            ratios = Enumerable.Range(0, meshDivisionNum - verticesCount).Select(i => i / ((float)meshDivisionNum - verticesCount - 1)).ToList();
+            List<Vector3> verticesEnd = GenerateVertices(vertices2.ToList(), ratios, currentStartZ + length);
+
+            // 頂点リストの代入
+            vertices.AddRange(verticesStart);
+            vertices.AddRange(verticesEnd);
+
+            // トライアングルインデックスを生成、代入
+            triangles.AddRange(GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count, isMeshReverse));
+
+            currentMeshIndex += verticesStart.Count + verticesEnd.Count;
+
+            // 代入
+            mesh.vertices = vertices.ToArray();
+            mesh.triangles = triangles.ToArray();
+            mesh.RecalculateNormals();
+
+            return mesh;
+        }
+
         /// <summary>
         /// 頂点リスト(Mesh生成に最低限必要な頂点)と打点割合リストに従い頂点リストを返す
         /// </summary>

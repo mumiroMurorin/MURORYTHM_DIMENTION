@@ -18,6 +18,7 @@ namespace ChartEditor
         [SerializeField] Material endMaterial;
         [SerializeField] Material meshMaterial;
         [Space(40)]
+        [SerializeField] int meshDivisionNum = 30;
         [SerializeField] float meshHeight = 0.01f;
         [SerializeField] MeshRenderer noteMeshRenderer;
         [SerializeField] Transform meshRightEdge;
@@ -30,6 +31,7 @@ namespace ChartEditor
         NoteObject IConnectableObject.Note => noteObject;
 
         GameObject meshObject;
+        MeshFilter meshFilter;
         IGroundChainNoteData chainNoteData;
         List<IDisposable> nextNoteDisposables = new List<IDisposable>();
         CancellationTokenSource cts = new CancellationTokenSource();
@@ -38,6 +40,7 @@ namespace ChartEditor
         {
             noteObject = GetComponent<NoteObject>();
             Bind(cts.Token).Forget();
+            //GenerateMeshParent();
         }
 
         private async UniTask Bind(CancellationToken token)
@@ -151,7 +154,7 @@ namespace ChartEditor
 
         private void GenerateMesh(Vector3 nextRight, Vector3 nextLeft)
         {
-            if(meshObject != null) { Destroy(meshObject); }
+            if (meshObject != null) { Destroy(meshObject); }
 
             meshObject = new GameObject("Mesh");
             MeshFilter meshFilter = meshObject.AddComponent<MeshFilter>();
@@ -167,6 +170,25 @@ namespace ChartEditor
             meshRenderer.material = meshMaterial;
             meshObject.transform.SetParent(noteObject.transform);
         }
+
+        // ÉÅÉbÉVÉÖÇê∂ê¨Ç∑ÇÈä÷êîÇΩÇøÅAàÍíUï€óØ
+        //private void GenerateMeshParent()
+        //{
+        //    if(meshObject != null) { Destroy(meshObject); }
+
+        //    meshObject = new GameObject("Mesh");
+        //    meshFilter = meshObject.AddComponent<MeshFilter>();
+        //    MeshRenderer meshRenderer = meshObject.AddComponent<MeshRenderer>();
+
+        //    meshRenderer.material = meshMaterial;
+        //    meshObject.transform.SetParent(noteObject.transform);
+        //}
+
+        //private void UpdateMesh(List<Vector2> thisVertices, List<Vector2> nextVertices, float length)
+        //{
+        //    Mesh mesh = MeshGenerator.GenerateSpaceEdgeMesh(thisVertices, nextVertices, length, meshDivisionNum, false);
+        //    meshFilter.mesh = mesh;
+        //}
 
         private void OnDestroy()
         {
