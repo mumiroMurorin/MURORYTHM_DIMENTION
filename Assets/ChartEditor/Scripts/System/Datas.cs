@@ -504,6 +504,10 @@ namespace ChartEditor
         Hold,
         HoldHidden,
         HoldHiddenJudged,
-        HoldEndUnjudge
+        HoldEndUnjudge,
+        SpaceHold,
+        SpaceHoldHidden,
+        SpaceHoldHiddenJudged,
+        SpaceHoldEndUnjudge
     }
 }

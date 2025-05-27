@@ -52,4 +52,9 @@ namespace ChartEditor
 
         void SetNoteType(DeploymentNoteType noteType);
     }
+
+    public interface IVerticesControlableNoteData
+    {
+        SpaceHoldVertices SpaceHoldVertices { get; }
+    }
 }
