@@ -27,7 +27,6 @@ public enum SE_Type
     DesicionMusic = 130,
     BackTopic1 = 140,
     SelectOption = 150,
-
 }
 
 /// <summary>
@@ -62,6 +61,7 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
     // === AudioClip ===
     [SerializeField] List<BGMTypeToAudioClip> bgmClips;
     [SerializeField] List<SETypeToAudioClip> seClips;
+    [SerializeField] List<JudgementSoundEffects> judgementSEs;
 
     // === AudioMixer ===
     [SerializeField] AudioMixerGroup audioMixerGroupSE;
@@ -98,6 +98,11 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
             seSources[i].outputAudioMixerGroup = audioMixerGroupSE;
         }
 
+        // SEの読み込み
+      　foreach(var se in judgementSEs)
+        {
+            se.LoadSE();
+        }
     }
 
     void Update()
@@ -265,6 +270,26 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
     }
 
     /// <summary>
+    /// 判定SEの再生
+    /// </summary>
+    /// <param name="noteType"></param>
+    /// <param name="judgement"></param>
+    public void PlaySE(NoteType noteType, Judgement judgement)
+    {
+        foreach (var se in judgementSEs)
+        {
+            var clip = se.GetAudioClip(noteType, judgement);
+            if(clip == null) { continue; }
+            
+            // 条件に当てはまったら再生する
+            PlaySE(clip);
+        }
+
+        // 条件に当てはまるものが無かったら再生しない
+        return;
+    }
+
+    /// <summary>
     /// SE停止
     /// </summary>
     public void StopSE()
@@ -315,7 +340,7 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
 
     public void SetBGM(AudioClip clip, BGM_Type bgm_Type)
     {
-        // すでにタグにAudioがセットされている場合、セットしなおすs
+        // すでにタグにAudioがセットされている場合、セットしなおす
         foreach(var set in bgmClips)
         {
             if(set.type == bgm_Type)

@@ -6,11 +6,11 @@ namespace ChartEditor
 {
     public class NoteSoundCollider : MonoBehaviour
     {
-        [SerializeField] AudioClip se;
+        [SerializeField] NoteType noteType;
 
         public void PlaySE()
         {
-            SoundManager.Instance.PlaySE(se);
+            SoundManager.Instance.PlaySE(noteType, Judgement.Perfect);
         }
     }
 }

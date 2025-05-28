@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using UnityEngine.UI;
 using UniRx;
 
 namespace UIInRhythmGameScene
 {
     public class RhythmGameUIPresenter : MonoBehaviour
     {
+        [SerializeField] BackGround_View backGround_view;
         [SerializeField] Combo_View combo_view;
         [SerializeField] ReadyToPlayUIControllerView readyToPlayUIControllerView;
 
@@ -28,15 +30,26 @@ namespace UIInRhythmGameScene
 
         private void Bind()
         {
-            // 楽曲データ → Ready?UI
-            musicDataGetter_model?.Music
-                .Subscribe(value => readyToPlayUIControllerView.SetMusicData(value))
-                .AddTo(this.gameObject);
-            
             // コンボ数
             scoreGetter_model?.Combo
                 .Subscribe(combo_view.OnChangeCombo)
                 .AddTo(this.gameObject);
+
+            // 楽曲データに関連するUI
+            musicDataGetter_model?.Music
+                .Where(data => data != null)
+                .Subscribe(OnSetMusicData)
+                .AddTo(this.gameObject);
+        }
+
+        /// <summary>
+        /// 楽曲データに関するUI情報をセット
+        /// </summary>
+        /// <param name="musicData"></param>
+        private void OnSetMusicData(MusicData musicData)
+        {
+            readyToPlayUIControllerView.SetMusicData(musicData);
+            backGround_view.OnSetMusicData(musicData);
         }
     }
 

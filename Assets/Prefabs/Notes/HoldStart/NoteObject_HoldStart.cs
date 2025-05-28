@@ -8,8 +8,6 @@ using UniRx;
 /// </summary>
 public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
 {
-    [SerializeField] JudgementSoundEffects judgementSoundEffects;
-
     NoteData_HoldStart noteData;
 
     bool isJudged;
@@ -67,7 +65,7 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
         };
 
         noteData.JudgementRecorder?.RecordJudgement(judgementData);
-        judgementSoundEffects.PlaySE(judgement);
+        SoundManager.Instance.PlaySE(noteData.NoteType, judgement);
         isJudged = true;
     }
 
