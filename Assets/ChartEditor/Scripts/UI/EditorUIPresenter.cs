@@ -27,7 +27,9 @@ namespace ChartEditor
         [SerializeField] RhythmConfigSubView rhythmConfigSubDivision_view;
         [SerializeField] ImportButtonView importButton_view;
         [SerializeField] ExportButtonView exportButton_view;
-        [SerializeField] OperationDescriptionView descriptionView;
+        [SerializeField] OperationDescriptionView description_view;
+        [SerializeField] ExplanationButtonView explanationButton_view;
+        [SerializeField] ExplanationView explanation_view;
         [Header("Models")]
         [SerializeField] ChartDataExporter chartDataExporter_model;
         [SerializeField] ChartDataImporter chartDataImporter_model;
@@ -66,6 +68,7 @@ namespace ChartEditor
 
             // オフセットフィールドのインタラクト可不可
             // エクスポートフィールドのインタラクト可不可
+            // 説明書ボタンのインタラクト可不可
             editorDataGetter_model?.PlayMode
                 .Subscribe(value => { 
                     offsetInputField_view?.OnChangePlayMode(value);
@@ -73,6 +76,7 @@ namespace ChartEditor
                     importButton_view?.OnChangePlayMode(value);
                     chartExtendButton_view?.OnChangePlayMode(value);
                     chartShortenButton_view?.OnChangePlayMode(value);
+                    explanationButton_view?.OnChangePlayMode(value);
                 })
                 .AddTo(this.gameObject);
 
@@ -98,7 +102,12 @@ namespace ChartEditor
 
             // 説明文の表示
             editorDataGetter_model?.CurrentEditMode
-                .Subscribe(descriptionView.OnChangeEditMode)
+                .Subscribe(description_view.OnChangeEditMode)
+                .AddTo(this.gameObject);
+
+            // 説明書の表示、非表示
+            editorDataGetter_model?.CurrentEditMode
+                .Subscribe(explanation_view.OnChangeEditMode)
                 .AddTo(this.gameObject);
         }
 
@@ -223,6 +232,11 @@ namespace ChartEditor
             // リズムコンフィグ
             rhythmConfigBar_view.OnClickedApplyButtonListner += () => CloseConfig();
             rhythmConfigSubDivision_view.OnClickedApplyButtonListner += () => CloseConfig();
+
+            explanationButton_view.OnClickedListner += () => { editorDataSetter_model.SetEditMode(EditMode.Explanation); };
+
+            // 説明書を閉じる
+            explanation_view.OnClickCloseButtonListner += () => { editorDataSetter_model.SetEditMode(EditMode.None); };
         }
 
         private void CloseConfig()

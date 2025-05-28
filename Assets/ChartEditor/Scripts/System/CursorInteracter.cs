@@ -49,6 +49,8 @@ namespace ChartEditor
             if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.Destroy) { return; }
             // ノーツ接続中は無効
             if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.Connecting) { return; }
+            // 説明書閲覧中は無効
+            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.Explanation) { return; }
             // ノーツタイプ変更中は無効
             if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.ChangeType) { return; }
             // オートモード中じゃなければ無効
@@ -187,7 +189,10 @@ namespace ChartEditor
 
         private void UpdateRhythmConfigurableCollider(GameObject obj)
         {
+            // 他のコンフィグをいじってるときは返す
             if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.EditingConfig) { return; }
+            // 説明書読んでるときも返す
+            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.Explanation) { return; }
 
             // インタラクトされているRhythmConfigurableColliderの更新
             // あんまりよくないけどクリック処理もここでやっちゃう

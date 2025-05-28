@@ -55,6 +55,11 @@ namespace ChartEditor
         /// </summary>
         private void OperateChartViewScale()
         {
+            // 説明書を読んでるときは受け付けない
+            if (dataGetter.CurrentEditMode.Value == EditMode.Explanation) { return; }
+            // コンフィグをいじっているときは受け付けない
+            if (dataGetter.CurrentEditMode.Value == EditMode.EditingConfig) { return; }
+
             var scroll = Input.mouseScrollDelta.y;
 
             if (Mathf.Abs(scroll) < 0.01f) { return; }
@@ -69,7 +74,11 @@ namespace ChartEditor
         private void OperatePlaybackProgress()
         {
             // 再生中は操作を受け付けない
-            if(dataGetter.PlayMode.Value == PlayMode.Play) { return; }
+            if (dataGetter.PlayMode.Value == PlayMode.Play) { return; }
+            // 説明書を読んでるときは受け付けない
+            if (dataGetter.CurrentEditMode.Value == EditMode.Explanation) { return; }
+            // コンフィグをいじっているときは受け付けない
+            if (dataGetter.CurrentEditMode.Value == EditMode.EditingConfig) { return; }
 
             var scroll = Input.mouseScrollDelta.y;
 

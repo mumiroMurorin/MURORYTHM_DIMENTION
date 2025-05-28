@@ -480,6 +480,7 @@ namespace ChartEditor
         Connect,
         Connecting,
         ChangeType,
+        Explanation,
     }
 
     /// <summary>
