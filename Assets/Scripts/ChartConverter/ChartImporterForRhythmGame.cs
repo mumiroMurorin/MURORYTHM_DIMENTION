@@ -13,7 +13,11 @@ namespace ChartConvert
     public class ChartImporterForRhythmGame
     {
         // ここに変換関数を記述していく
-        private List<IOriginDataToRhythmGameConvertable> converters = new List<IOriginDataToRhythmGameConvertable>();
+        private List<IUnchainDataToRhythmGameConvertable> unChainConverters = new List<IUnchainDataToRhythmGameConvertable>();
+        private List<IHoldDataToRhythmGameConvertable> holdConverters = new List<IHoldDataToRhythmGameConvertable>();
+        private List<ISpaceHoldDataToRhythmGameConvertable> spaceHoldConverters = new List<ISpaceHoldDataToRhythmGameConvertable>();
+        private Dictionary<int, List<TimeToRange>> holdNumberToRanges = new Dictionary<int, List<TimeToRange>>();
+
 
         public ChartData Import(ChartDataOrigin dataOrigin, INoteSpawnDataOptionHolder optionHolder)
         {
@@ -43,7 +47,7 @@ namespace ChartConvert
         private void Initialize()
         {
             // ここに変換関数を記述していく
-            converters = new List<IOriginDataToRhythmGameConvertable>()
+            unChainConverters = new List<IUnchainDataToRhythmGameConvertable>()
             {
                 new TouchNoteConverter(),
 
@@ -52,18 +56,27 @@ namespace ChartConvert
                 new DynamicRightwardConverter(),
                 new DynamicLeftwardConverter(),
 
+                new HoldMeshConverter(),
+
+                new SpaceHoldMeshConverter(),
+            };
+
+            holdConverters = new List<IHoldDataToRhythmGameConvertable>()
+            {
                 new HoldStartConverter(),
                 new HoldRelayConverter(),
                 new HoldHiddenJudgedRelay(),
                 new HoldEndConverter(),
                 new HoldEndUnjudgeConverter(),
-                new HoldMeshConverter(),
+                new HoldMeshRelayConverter(),
+            };
 
+            spaceHoldConverters = new List<ISpaceHoldDataToRhythmGameConvertable>()
+            {
                 new SpaceHoldStartConverter(),
                 new SpaceHoldRelayConverter(),
                 new SpaceHoldHiddenJudgedRelay(),
                 new SpaceHoldEndConverter(),
-                new SpaceHoldMeshConverter(),
             };
         }
 
@@ -111,7 +124,26 @@ namespace ChartConvert
             bool isSucceed = true;
 
             // 一つずつ取り出して変換
-            foreach (var converter in converters)
+            // タッチ系
+            foreach (var converter in unChainConverters)
+            {
+                if (!converter.AddDataForGameData(dataOrigin, chartData, secondsPassed))
+                {
+                    isSucceed = false;
+                }
+            }
+
+            // ホールド系
+            foreach (var converter in holdConverters)
+            {
+                if (!converter.AddDataForGameData(dataOrigin, chartData, secondsPassed, holdNumberToRanges)) 
+                {
+                    isSucceed = false;
+                }
+            }
+
+            // スペースホールド系
+            foreach (var converter in spaceHoldConverters)
             {
                 if (!converter.AddDataForGameData(dataOrigin, chartData, secondsPassed))
                 {

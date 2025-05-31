@@ -51,7 +51,7 @@ public enum OptionType
     NoteSpeed,
     Offset,
     MasterVolume,
-    NoteSEVolume,
+    JudgementSEVolume,
     MusicVolume,
 }
 

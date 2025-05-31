@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using JudgementUtil;
+using JudgementUtil.Hold;
+using System.Linq;
 
 /// <summary>
 /// タッチノーツにアタッチされるクラス
@@ -11,6 +14,7 @@ public class NoteObject_HoldRelay : NoteObject<NoteData_HoldRelay>
     NoteData_HoldRelay noteData;
 
     bool isJudged;
+    List<int> judgeRange = new List<int>();
     Judgement bestJudgement = Judgement.Miss;
 
     /// <summary>
@@ -24,8 +28,24 @@ public class NoteObject_HoldRelay : NoteObject<NoteData_HoldRelay>
 
     private void Update()
     {
+        if (noteData == null) { return; }
+
+        // 判定時間過ぎてるとき
+        if (IsPassJudgementRange())
+        {
+            SendJudgementData();
+            SetDisable();
+            return;
+        }
+
+        // 判定時間内でないとき
+        if (!IsInJudgementRange()) { return; }
+
+        // 判定範囲の更新
+        judgeRange = HoldJudgement.GetJudgeRange(noteData.TimeToRanges, noteData.Timer.Time);
+
         // 判定時間内かつスライダーが押されているとき
-        if (IsInJudgementRange() && IsTouchingSlider())
+        if (GroundJudgement.IsTouchingSlider(noteData.SliderInput, judgeRange.ToArray()))
         {
             // 記録した判定よりいい判定だったとき判定の更新
             Judgement currentJudgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
@@ -39,12 +59,6 @@ public class NoteObject_HoldRelay : NoteObject<NoteData_HoldRelay>
             {
                 SendJudgementData();
             }
-        }
-        // 判定時間を過ぎたとき
-        else if (IsPassJudgementRange())
-        {
-            SendJudgementData();
-            SetDisable();
         }
     }
 
@@ -90,23 +104,6 @@ public class NoteObject_HoldRelay : NoteObject<NoteData_HoldRelay>
     }
 
     /// <summary>
-    /// ノーツ範囲内のスライダーがタッチされているか判定
-    /// </summary>
-    /// <returns></returns>
-    private bool IsTouchingSlider()
-    {
-        if (noteData.SliderInput == null) { return false; }
-        if (noteData.Timer == null) { return false; }
-
-        foreach (int index in noteData.Range)
-        {
-            if (noteData.SliderInput.GetSliderInputReactiveProperty(index).Value) { return true; }
-        }
-
-        return false;
-    }
-
-    /// <summary>
     /// ノーツ判定範囲外？
     /// </summary>
     /// <returns></returns>
@@ -133,6 +130,8 @@ public class NoteData_HoldRelay : INoteData, IJudgableNoteData
     public JudgementWindow JudgementWindow { get; set; }
 
     public int[] Range { get; set; }
+
+    public List<TimeToRange> TimeToRanges { get; set; }
 
     public ISliderInputGetter SliderInput { get; set; }
 

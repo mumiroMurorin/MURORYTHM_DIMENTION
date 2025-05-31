@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System.Linq;
-using NoteJudgement;
+using JudgementUtil.SpacaHold;
 
 /// <summary>
 /// タッチノーツにアタッチされるクラス
@@ -92,8 +92,8 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
         if (noteData.SpaceInput == null) { return false; }
         if (noteData.Timer == null) { return false; }
 
-        bool isRightIn = SpaceHoldNote.IsPointInPolygon(noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand).Last().Pos, noteData.Vertices);
-        bool isLeftIn = SpaceHoldNote.IsPointInPolygon(noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.LeftHand).Last().Pos, noteData.Vertices);
+        bool isRightIn = SpaceHoldJudgement.IsPointInPolygon(noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand).Last().Pos, noteData.Vertices);
+        bool isLeftIn = SpaceHoldJudgement.IsPointInPolygon(noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.LeftHand).Last().Pos, noteData.Vertices);
 
         return isRightIn || isLeftIn;
     }

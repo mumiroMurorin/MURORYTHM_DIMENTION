@@ -5,7 +5,7 @@ using VContainer;
 
 public class DataSetterDebugInRhythmGameScene : MonoBehaviour
 {
-    [Header("デバッグモード(リリース時は必ずオフに)")]
+    [Header("デバッグモード")]
     [SerializeField] bool isDebugMode;
     [SerializeField] MusicData musicData_debug;
     [SerializeField] string chartFilePath;
@@ -27,10 +27,11 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
 
     void Awake()
     {
+#if UNITY_EDITOR
         if (!isDebugMode) { return; }
         if (musicDataSetter == null) { return; }
 
-        if (musicDataGetter.Music.Value == null) 
+        if (musicDataGetter.Music.Value == null)
         {
             musicData_debug.SetChartPath(Difficulty.Initiate, Application.dataPath + "/" + chartFilePath);
             musicData_debug.SetChartPath(Difficulty.Fanatic, Application.dataPath + "/" + chartFilePath);
@@ -39,7 +40,8 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
             musicDataSetter.SetMusicData(musicData_debug);
         }
 
-        if(optionSetter == null) { return; }
+        if (optionSetter == null) { return; }
         optionSetter.SetNoteSpeed(noteSpeed);
+#endif
     }
 }

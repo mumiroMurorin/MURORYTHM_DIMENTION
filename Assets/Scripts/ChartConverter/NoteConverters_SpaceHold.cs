@@ -11,7 +11,7 @@ namespace ChartConvert
     /// <summary>
     /// スペースホールド始点(中継点データに変換)
     /// </summary>
-    public class SpaceHoldStartConverter : IOriginDataToRhythmGameConvertable
+    public class SpaceHoldStartConverter : ISpaceHoldDataToRhythmGameConvertable
     {
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
@@ -35,7 +35,7 @@ namespace ChartConvert
     /// <summary>
     /// スペースホールド中継点
     /// </summary>
-    public class SpaceHoldRelayConverter : IOriginDataToRhythmGameConvertable
+    public class SpaceHoldRelayConverter : ISpaceHoldDataToRhythmGameConvertable
     {
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
@@ -59,7 +59,7 @@ namespace ChartConvert
     /// <summary>
     /// スペースホールド中継点
     /// </summary>
-    public class SpaceHoldHiddenJudgedRelay : IOriginDataToRhythmGameConvertable
+    public class SpaceHoldHiddenJudgedRelay : ISpaceHoldDataToRhythmGameConvertable
     {
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
@@ -83,7 +83,7 @@ namespace ChartConvert
     /// <summary>
     /// スペースホールド終点(中継点データに変換)
     /// </summary>
-    public class SpaceHoldEndConverter : IOriginDataToRhythmGameConvertable
+    public class SpaceHoldEndConverter : ISpaceHoldDataToRhythmGameConvertable
     {
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
@@ -107,7 +107,7 @@ namespace ChartConvert
     /// <summary>
     /// スペースホールドメッシュ
     /// </summary>
-    public class SpaceHoldMeshConverter : IOriginDataToRhythmGameConvertable
+    public class SpaceHoldMeshConverter : IUnchainDataToRhythmGameConvertable
     {
         Dictionary<int, List<TimeToVertices>> numberToHoldMeshDataOrigin = new Dictionary<int, List<TimeToVertices>>();
 

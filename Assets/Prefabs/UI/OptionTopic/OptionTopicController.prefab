@@ -925,10 +925,8 @@ MonoBehaviour:
     prefab: {fileID: 511264936851410521, guid: 5d9bcefabf2816d43aa021ea365d03c6, type: 3}
   - optionType: 2
     prefab: {fileID: 511264936851410521, guid: 937fd4f192952cb4db8292c3bc874d53, type: 3}
-  - optionType: 3
-    prefab: {fileID: 511264936851410521, guid: 5d9bcefabf2816d43aa021ea365d03c6, type: 3}
   - optionType: 4
-    prefab: {fileID: 511264936851410521, guid: 5d9bcefabf2816d43aa021ea365d03c6, type: 3}
+    prefab: {fileID: 511264936851410521, guid: eae6de35e118671478bf053ebacd4199, type: 3}
   optionTopicParents:
   - {fileID: 2524149636159914954}
   - {fileID: 9049028904321639789}

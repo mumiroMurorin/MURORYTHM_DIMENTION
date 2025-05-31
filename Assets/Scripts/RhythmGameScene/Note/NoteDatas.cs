@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NoteJudgement;
+using JudgementUtil.Dynamic;
 using System.Linq;
 using Deform;
 
@@ -54,7 +54,8 @@ public class JudgementWindow
 
     public JudgementAndErrorTime GetJudgementAndError(float currentTime, float correctTiming)
     {
-        float error = correctTiming - currentTime;
+        // 判定誤差 早ければ- 遅ければ+
+        float error = currentTime - correctTiming;
 
         // Good判定前
         if (correctTiming - goodWindow_faster > currentTime) { return new JudgementAndErrorTime { Judgement = Judgement.None, Error = error }; }
@@ -119,18 +120,18 @@ public class NoteTypeToJudgementWindow
     }
 }
 
-public class DynamicJudgement
+public class DynamicJudgementHandler
 {
     List<Vector3> judgeVectors;
 
-    public DynamicJudgement(int[] range, Vector3 rotationVector, float magnitude)
+    public DynamicJudgementHandler(int[] range, Vector3 rotationVector, float magnitude)
     {
         judgeVectors = new List<Vector3>();
 
         // それぞれの判定ベクトルを調べる
         for (int i = 0; i < range.Length; i++)
         {
-            Vector3 vector = NoteJudgement.DynamicNote.CalcJudgementThresHold(10, range[i], rotationVector);
+            Vector3 vector = DynamicJudgement.CalcJudgementThresHold(10, range[i], rotationVector);
 
             // 各要素が0でないか調べてmagnitudeを代入
             if (vector.x > 0) { vector.x = magnitude; }
@@ -153,7 +154,7 @@ public class DynamicJudgement
     {
         foreach (Vector3 threshold in judgeVectors)
         {
-            if (NoteJudgement.DynamicNote.JudgeThreshold(threshold, diff)) { return true; }
+            if (DynamicJudgement.JudgeThreshold(threshold, diff)) { return true; }
         }
 
         return false;
@@ -181,11 +182,30 @@ public class NoteJudgementData
     public Vector3 PositionJudged { get; set; }
 }
 
+public class TimeToPos
+{
+    public TimeToPos(float time, Vector3 pos)
+    {
+        Time = time;
+        Pos = pos;
+    }
+
+    public float Time { get; set; }
+
+    public Vector3 Pos { get; set; }
+}
+
 /// <summary>
 /// ホールドノーツ用の纏めクラス
 /// </summary>
 public class TimeToRange
 {
+    public TimeToRange(float timing,float[] range)
+    {
+        Timing = timing;
+        Range = range;
+    }
+
     public float Timing { get; set; }
     public float[] Range { get; set; }
 }

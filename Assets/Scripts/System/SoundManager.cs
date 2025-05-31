@@ -65,6 +65,7 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
 
     // === AudioMixer ===
     [SerializeField] AudioMixerGroup audioMixerGroupSE;
+    [SerializeField] AudioMixerGroup audioMixerGroupJudgementSE;
     [SerializeField] AudioMixerGroup audioMixerGroupBGM;
 
     // === AudioSource ===
@@ -80,7 +81,6 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
     public void Constructor(IVolumeGetter volumeGetter)
     {
         this.volumeGetter = volumeGetter;
-        Bind();
     }
 
     private new void Awake()
@@ -103,6 +103,11 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
         {
             se.LoadSE();
         }
+    }
+
+    private void Start()
+    {
+        Bind();
     }
 
     void Update()
@@ -130,6 +135,11 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
         // seVolume → 
         volumeGetter?.SEVolume
             .Subscribe(OnSEVolumeChanged)
+            .AddTo(this.gameObject);
+
+        // JudgementSEVolume →
+        volumeGetter?.JudgementSEVolume
+            .Subscribe(OnJudgementSEVolumeChanged)
             .AddTo(this.gameObject);
     }
 
@@ -254,21 +264,6 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
         PlaySE(GetSEClip(seType));
     }
 
-    public void PlaySE(AudioClip setClip)
-    {
-        // 再生中ではないAudioSourceをつかってSEを鳴らす
-        foreach (AudioSource source in seSources)
-        {
-            // 再生中の AudioSource の場合には次のループ処理へ移る
-            if (source.isPlaying) { continue; }
-
-            // 再生中でない AudioSource に Clip をセットして SE を鳴らす
-            source.clip = setClip;
-            source.Play();
-            break;
-        }
-    }
-
     /// <summary>
     /// 判定SEの再生
     /// </summary>
@@ -280,13 +275,29 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
         {
             var clip = se.GetAudioClip(noteType, judgement);
             if(clip == null) { continue; }
-            
+
             // 条件に当てはまったら再生する
-            PlaySE(clip);
+            PlaySE(clip, audioMixerGroupJudgementSE);
         }
 
         // 条件に当てはまるものが無かったら再生しない
         return;
+    }
+
+    public void PlaySE(AudioClip setClip, AudioMixerGroup mixer = default)
+    {
+        // 再生中ではないAudioSourceをつかってSEを鳴らす
+        foreach (AudioSource source in seSources)
+        {
+            // 再生中の AudioSource の場合には次のループ処理へ移る
+            if (source.isPlaying) { continue; }
+
+            // 再生中でない AudioSource に Clip をセットして SE を鳴らす
+            if (mixer != default) { source.outputAudioMixerGroup = mixer; }
+            source.clip = setClip;
+            source.Play();
+            break;
+        }
     }
 
     /// <summary>
@@ -361,13 +372,19 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
     private void OnSEVolumeChanged(float vol)
     {
         var volume = Mathf.Clamp(Mathf.Log10(vol) * 20f, -80f, 0f);
-        audioMixerGroupSE.audioMixer.SetFloat("Volume_SE", volume);
+        audioMixerGroupSE?.audioMixer.SetFloat("Volume_SE", volume);
+    }
+
+    private void OnJudgementSEVolumeChanged(float vol)
+    {
+        var volume = Mathf.Clamp(Mathf.Log10(vol) * 20f, -80f, 0f);
+        audioMixerGroupJudgementSE?.audioMixer.SetFloat("Volume_JudgementSE", volume);
     }
 
     private void OnBGMVolumeChanged(float vol)
     {
         var volume = Mathf.Clamp(Mathf.Log10(vol) * 20f, -80f, 0f);
-        audioMixerGroupBGM.audioMixer.SetFloat("Volume_BGM", volume);
+        audioMixerGroupBGM?.audioMixer.SetFloat("Volume_BGM", volume);
     }
 
     private void OnDestroy()

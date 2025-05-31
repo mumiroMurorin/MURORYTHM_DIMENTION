@@ -457,7 +457,7 @@ MonoBehaviour:
     - 
     - 
     - 
-  chartFilePath: MusicData/sample/echo_Shinpei.json
+  chartFilePath: MusicData/sample/sample10.json
   noteSpeed: 200
 --- !u!1001 &135123126
 PrefabInstance:

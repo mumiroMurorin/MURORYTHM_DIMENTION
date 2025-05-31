@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
-namespace NoteJudgement
+namespace JudgementUtil.Dynamic
 {
-    static public class DynamicNote
+    static public class DynamicJudgement
     {
         /// <summary>
         /// 入力されたVectorが判定閾値を超えているか返す
@@ -110,67 +109,4 @@ namespace NoteJudgement
         }
     }
 
-    static public class SpaceHoldNote
-    {
-        /// <summary>
-        /// 2次元頂点リストから構成されるMeshの中に点があるか判定
-        /// </summary>
-        /// <param name="point"></param>
-        /// <param name="polygon"></param>
-        /// <returns></returns>
-        public static bool IsPointInPolygon(Vector2 point, Vector2[] polygon)
-        {
-            int crossings = 0;
-            int count = polygon.Length;
-
-            for (int i = 0; i < count; i++)
-            {
-                Vector2 a = polygon[i];
-                Vector2 b = polygon[(i + 1) % count];
-
-                // 射線がエッジを横切るかチェック
-                if (((a.y <= point.y) && (b.y > point.y)) || ((a.y > point.y) && (b.y <= point.y)))
-                {
-                    float t = (point.y - a.y) / (b.y - a.y);
-                    float x = a.x + t * (b.x - a.x);
-
-                    if (x > point.x)
-                    {
-                        crossings++;
-                    }
-                }
-            }
-
-            // 奇数回交差すれば中にある
-            return (crossings % 2) == 1;
-        }
-    }
-
-    static public class GroundNoteJudgement
-    {
-        public static bool IsTouchingSlider(ISliderInputGetter sliderInput, int[] range)
-        {
-            if (sliderInput == null) { return false; }
-
-            foreach (int index in range)
-            {
-                if (sliderInput.GetSliderInputReactiveProperty(index).Value) { return true; }
-            }
-
-            return false;
-        }
-    }
-}
-
-public class TimeToPos
-{
-    public TimeToPos(float time,Vector3 pos)
-    {
-        Time = time;
-        Pos = pos;
-    }
-
-    public float Time { get; set; }
-
-    public Vector3 Pos { get; set; }
 }

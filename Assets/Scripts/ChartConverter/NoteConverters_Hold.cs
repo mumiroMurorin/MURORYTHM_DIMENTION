@@ -11,7 +11,7 @@ namespace ChartConvert
     /// <summary>
     /// ホールドスタートノーツ
     /// </summary>
-    public class HoldStartConverter : IOriginDataToRhythmGameConvertable, IChainNoteConvertable
+    public class HoldStartConverter : IHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
         int currentHoldNumber = 0;
 
@@ -41,24 +41,6 @@ namespace ChartConvert
 
             dataOrigin.HoldStartData.Add(data);
             nextNoteToNumber.Add(nextNote, currentHoldNumber++);
-            return true;
-        }
-
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
-        {
-            if (dataOrigin.HoldStartData == null) { return true; }
-
-            foreach (var noteOrigin in dataOrigin.HoldStartData)
-            {
-                NoteData_HoldStart noteData = new NoteData_HoldStart
-                {
-                    Range = (int[])noteOrigin.Range.Clone(),
-                    Timing = timing
-                };
-
-                chartData.AddNoteData(noteData);
-            }
-
             return true;
         }
 
@@ -93,12 +75,39 @@ namespace ChartConvert
 
             return true;
         }
+
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing, Dictionary<int, List<TimeToRange>> timeToRanges)
+        {
+            if (dataOrigin.HoldStartData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.HoldStartData)
+            {
+                if (timeToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange)) 
+                {
+                    Debug.LogWarning($"【Converter】HoldStartの変換の際、既にHoldNumberが存在しました: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                timeToRanges.Add(noteOrigin.HoldNumber, new List<TimeToRange>() { new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()) });
+
+                NoteData_HoldStart noteData = new NoteData_HoldStart
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    Timing = timing
+                };
+
+                chartData.AddNoteData(noteData);
+            }
+
+            return true;
+        }
+
     }
 
     /// <summary>
     /// ホールド中継ノーツ
     /// </summary>
-    public class HoldRelayConverter : IOriginDataToRhythmGameConvertable, IChainNoteConvertable
+    public class HoldRelayConverter : IHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
         public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
         {
@@ -139,24 +148,6 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
-        {
-            if (dataOrigin.HoldRelayData == null) { return true; }
-
-            foreach (var noteOrigin in dataOrigin.HoldRelayData)
-            {
-                NoteData_HoldRelay noteData = new NoteData_HoldRelay
-                {
-                    Range = (int[])noteOrigin.Range.Clone(),
-                    Timing = timing
-                };
-
-                chartData.AddNoteData(noteData);
-            }
-
-            return true;
-        }
-
         public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldRelayData == null) { return true; }
@@ -191,12 +182,39 @@ namespace ChartConvert
 
             return true;
         }
+
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing, Dictionary<int, List<TimeToRange>> timeToRanges)
+        {
+            if (dataOrigin.HoldRelayData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.HoldRelayData)
+            {
+                if (!timeToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
+                {
+                    Debug.LogWarning($"【Converter】HoldRelayの変換の際、ノーツが見つかりませんでした: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                timeToRange.Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
+
+                NoteData_HoldRelay noteData = new NoteData_HoldRelay
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    TimeToRanges = timeToRange,
+                    Timing = timing
+                };
+
+                chartData.AddNoteData(noteData);
+            }
+
+            return true;
+        }
     }
 
     /// <summary>
     /// ホールドメッシュ中継ノーツ
     /// </summary>
-    public class HoldMeshRelayConverter : IChainNoteConvertable
+    public class HoldMeshRelayConverter : IHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
         public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
         {
@@ -272,12 +290,30 @@ namespace ChartConvert
 
             return true;
         }
+
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing, Dictionary<int, List<TimeToRange>> timeToRanges)
+        {
+            if (dataOrigin.HoldMeshRelayData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.HoldMeshRelayData)
+            {
+                if (!timeToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
+                {
+                    Debug.LogWarning($"【Converter】HoldMeshRelayの変換の際、ノーツが見つかりませんでした: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                timeToRange.Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
+            }
+
+            return true;
+        }
     }
 
     /// <summary>
     /// ホールド判定点
     /// </summary>
-    public class HoldHiddenJudgedRelay : IChainNoteConvertable, IOriginDataToRhythmGameConvertable
+    public class HoldHiddenJudgedRelay : IChainNoteConvertable, IHoldDataToRhythmGameConvertable
     {
         const DeploymentNoteType NoteType = DeploymentNoteType.HoldHiddenJudged;
 
@@ -356,15 +392,24 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing, Dictionary<int, List<TimeToRange>> timeToRanges)
         {
             if (dataOrigin.HoldHiddenJudgedRelayData == null) { return true; }
 
             foreach (var noteOrigin in dataOrigin.HoldHiddenJudgedRelayData)
             {
+                if (!timeToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
+                {
+                    Debug.LogWarning($"【Converter】HoldHiddenJudgedRelayの変換の際、ノーツが見つかりませんでした: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                timeToRange.Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
+
                 NoteData_HoldRelayHidden noteData = new NoteData_HoldRelayHidden
                 {
                     Range = (int[])noteOrigin.Range.Clone(),
+                    TimeToRanges = timeToRange,
                     Timing = timing
                 };
 
@@ -378,7 +423,7 @@ namespace ChartConvert
     /// <summary>
     /// ホールドエンドノーツ
     /// </summary>
-    public class HoldEndConverter : IOriginDataToRhythmGameConvertable, IChainNoteConvertable
+    public class HoldEndConverter : IHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
         const DeploymentNoteType NoteType = DeploymentNoteType.Hold;
 
@@ -423,24 +468,6 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
-        {
-            if (dataOrigin.HoldEndData == null) { return true; }
-
-            foreach (var noteOrigin in dataOrigin.HoldEndData)
-            {
-                NoteData_HoldEnd noteData = new NoteData_HoldEnd
-                {
-                    Range = (int[])noteOrigin.Range.Clone(),
-                    Timing = timing
-                };
-
-                chartData.AddNoteData(noteData);
-            }
-
-            return true;
-        }
-
         public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldEndData == null) { return true; }
@@ -473,12 +500,40 @@ namespace ChartConvert
 
             return true;
         }
+
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing, Dictionary<int, List<TimeToRange>> timeToRanges)
+        {
+            if (dataOrigin.HoldEndData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.HoldEndData)
+            {
+                if (!timeToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
+                {
+                    Debug.LogWarning($"【Converter】HoldEndの変換の際、ノーツが見つかりませんでした: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                timeToRange.Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
+
+                NoteData_HoldEnd noteData = new NoteData_HoldEnd
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    TimeToRanges = timeToRange,
+                    Timing = timing
+                };
+
+                chartData.AddNoteData(noteData);
+            }
+
+            return true;
+        }
+
     }
 
     /// <summary>
     /// ホールドエンド(判定なし)ノーツ
     /// </summary>
-    public class HoldEndUnjudgeConverter : IOriginDataToRhythmGameConvertable, IChainNoteConvertable
+    public class HoldEndUnjudgeConverter : IHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
         public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
         {
@@ -521,24 +576,6 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
-        {
-            if (dataOrigin.HoldEndUnjudgeData == null) { return true; }
-
-            foreach (var noteOrigin in dataOrigin.HoldEndUnjudgeData)
-            {
-                NoteData_HoldEndUnjudge noteData = new NoteData_HoldEndUnjudge
-                {
-                    Range = (int[])noteOrigin.Range.Clone(),
-                    Timing = timing
-                };
-
-                chartData.AddNoteData(noteData);
-            }
-
-            return true;
-        }
-
         public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldEndUnjudgeData == null) { return true; }
@@ -572,12 +609,39 @@ namespace ChartConvert
 
             return true;
         }
+
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing, Dictionary<int, List<TimeToRange>> timeToRanges)
+        {
+            if (dataOrigin.HoldEndUnjudgeData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.HoldEndUnjudgeData)
+            {
+                if (!timeToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
+                {
+                    Debug.LogWarning($"【Converter】HoldEndUnjudgeの変換の際、ノーツが見つかりませんでした: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                timeToRange.Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
+
+                NoteData_HoldEndUnjudge noteData = new NoteData_HoldEndUnjudge
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    Timing = timing
+                };
+
+                chartData.AddNoteData(noteData);
+            }
+
+            return true;
+        }
+
     }
 
     /// <summary>
     /// ホールドメッシュ
     /// </summary>
-    public class HoldMeshConverter : IOriginDataToRhythmGameConvertable
+    public class HoldMeshConverter : IUnchainDataToRhythmGameConvertable
     {
         Dictionary<int, List<TimeToRange>> numberToHoldMeshDataOrigin = new Dictionary<int, List<TimeToRange>>();
 
@@ -610,7 +674,7 @@ namespace ChartConvert
                 }
 
                 meshList = new List<TimeToRange>();
-                meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
+                meshList.Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
                 numberToHoldMeshDataOrigin.Add(noteOrigin.HoldNumber, meshList);
             }
 
@@ -630,7 +694,7 @@ namespace ChartConvert
                     return false;
                 }
 
-                meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
+                meshList.Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
             }
 
             return true;
@@ -649,7 +713,7 @@ namespace ChartConvert
                     return false;
                 }
 
-                meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
+                meshList.Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
             }
 
             return true;
@@ -668,7 +732,7 @@ namespace ChartConvert
                     return false;
                 }
 
-                meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
+                meshList.Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
             }
 
             return true;
@@ -688,7 +752,7 @@ namespace ChartConvert
                     return false;
                 }
 
-                meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
+                meshList.Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
                 chartData.AddNoteData(GenerateNoteData_HoldMesh(meshList));
             }
 
@@ -709,7 +773,7 @@ namespace ChartConvert
                     return false;
                 }
 
-                meshList.Add(new TimeToRange { Range = noteOrigin.Range.Select(x => (float)x).ToArray(), Timing = timing });
+                meshList.Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
                 chartData.AddNoteData(GenerateNoteData_HoldMesh(meshList));
             }
 

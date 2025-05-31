@@ -127,7 +127,7 @@ namespace UIInSelectScene
                 
                 obj = Instantiate(prefab, parent);
 
-                if (!obj.TryGetComponent(out IOptionTopicPresenter topic)) { return; }
+                if (!obj.TryGetComponent(out IOptionTopicPresenter topic)) { Debug.Log("Ç”ÇüÅIÅH"); return; }
                 topic.Bind(optionGetter);
             }
 

@@ -24,9 +24,8 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
             case OptionType.MusicVolume:
                 AddBGMVolume(delta);
                 break;
-                // ‰¼
-            case OptionType.NoteSEVolume:
-                AddSEVolume(delta);
+            case OptionType.JudgementSEVolume:
+                AddJudgementSeVolume(delta);
                 break;
         }
     }
@@ -78,6 +77,24 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     void AddSEVolume(int delta)
     {
         seVolume.Value = Mathf.Clamp01(seVolume.Value + delta * 0.1f);
+    }
+
+    // ”»’è‰¹ŠÖŒW
+    ReactiveProperty<float> judgementSeVolume = new ReactiveProperty<float>(0.8f);
+    public IReadOnlyReactiveProperty<float> JudgementSEVolume => judgementSeVolume;
+    public int JudgementSEVolumeDisplay => (int)(judgementSeVolume.Value * 10f);
+    void SetJudgementSeVolume(float value)
+    {
+        judgementSeVolume.Value = Mathf.Clamp01(value);
+    }
+
+    /// <summary>
+    /// += delta * 0.1f
+    /// </summary>
+    /// <param name="delta"></param>
+    void AddJudgementSeVolume(int delta)
+    {
+        judgementSeVolume.Value = Mathf.Clamp01(judgementSeVolume.Value + delta * 0.1f);
     }
 
     #endregion
@@ -164,6 +181,8 @@ public interface IVolumeGetter
 {
     IReadOnlyReactiveProperty<float> SEVolume { get; }
 
+    IReadOnlyReactiveProperty<float> JudgementSEVolume { get; }
+
     IReadOnlyReactiveProperty<float> BGMVolume { get; }
 }
 
@@ -184,6 +203,10 @@ public interface IOptionGetter
     IReadOnlyReactiveProperty<float> BGMVolume { get; }
 
     int BGMVolumeDisplay { get; }
+
+    IReadOnlyReactiveProperty<float> JudgementSEVolume { get; }
+
+    int JudgementSEVolumeDisplay { get; }
 
     IReadOnlyReactiveProperty<Vector3> ControllerCenter { get; }
 

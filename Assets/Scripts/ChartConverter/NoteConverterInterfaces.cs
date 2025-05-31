@@ -12,7 +12,17 @@ namespace ChartConvert
     /// <summary>
     /// ChartEditor.NoteDataÇïœä∑ÇµÇƒSubDivisionDataOriginÇ…Ç‘ÇøçûÇﬁ
     /// </summary>
-    public interface IOriginDataToRhythmGameConvertable
+    public interface IUnchainDataToRhythmGameConvertable
+    {
+        bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing);
+    }
+
+    public interface IHoldDataToRhythmGameConvertable
+    {
+        bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing, Dictionary<int, List<TimeToRange>> numberToRanges);
+    }
+
+    public interface ISpaceHoldDataToRhythmGameConvertable
     {
         bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing);
     }

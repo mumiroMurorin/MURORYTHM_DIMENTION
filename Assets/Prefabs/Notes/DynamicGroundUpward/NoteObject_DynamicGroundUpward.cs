@@ -13,7 +13,7 @@ public class NoteObject_DynamicGroundUpward : NoteObject<NoteData_DynamicGroundU
     [SerializeField] float judgeMagnitude;
 
     NoteData_DynamicGroundUpward noteData;
-    DynamicJudgement dynamicJudgement;
+    DynamicJudgementHandler dynamicJudgement;
     Judgement bestJudgement = Judgement.Miss;
     bool isJudged;
 
@@ -25,7 +25,7 @@ public class NoteObject_DynamicGroundUpward : NoteObject<NoteData_DynamicGroundU
     {
         noteData = data;
 
-        dynamicJudgement = new DynamicJudgement(noteData.Range, JudgeVector, judgeMagnitude);
+        dynamicJudgement = new DynamicJudgementHandler(noteData.Range, JudgeVector, judgeMagnitude);
 
         Bind();
     }
@@ -64,7 +64,7 @@ public class NoteObject_DynamicGroundUpward : NoteObject<NoteData_DynamicGroundU
     /// </summary>
     private void Judge(Vector3 velocity)
     {
-        //Debug.Log($"yJudgezDownward velocity:{velocity}, {dynamicJudgement.Judge(velocity)}, {this.gameObject.name}");
+        //Debug.Log($"yJudgezUpward velocity:{velocity}, {dynamicJudgement.Judge(velocity)}");
 
         // è‡’l‚©‚ço‚Ä‚é‚©”»’è
         if (!dynamicJudgement.Judge(velocity)) { return; }

@@ -11,7 +11,7 @@ namespace ChartConvert
     /// <summary>
     /// ↑ダイナミック↑ノーツ
     /// </summary>
-    public class DynamicUpwardConverter : IOriginDataToRhythmGameConvertable, IUnchainedNoteConvertable
+    public class DynamicUpwardConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundUpward;
 
@@ -78,7 +78,7 @@ namespace ChartConvert
     /// <summary>
     /// ↓ダイナミック↓ノーツ
     /// </summary>
-    public class DynamicDownwardConverter : IOriginDataToRhythmGameConvertable, IUnchainedNoteConvertable
+    public class DynamicDownwardConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundDownward;
 
@@ -145,7 +145,7 @@ namespace ChartConvert
     /// <summary>
     /// →ダイナミック→ノーツ
     /// </summary>
-    public class DynamicRightwardConverter : IOriginDataToRhythmGameConvertable, IUnchainedNoteConvertable
+    public class DynamicRightwardConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundRightward;
 
@@ -213,7 +213,7 @@ namespace ChartConvert
     /// <summary>
     /// ←ダイナミック←ノーツ
     /// </summary>
-    public class DynamicLeftwardConverter : IOriginDataToRhythmGameConvertable, IUnchainedNoteConvertable
+    public class DynamicLeftwardConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundLeftward;
 

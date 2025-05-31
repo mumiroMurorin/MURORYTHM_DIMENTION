@@ -376,7 +376,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03dc55c2d6b55bf4a8dabbbf0af0c73e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicData_debug: {fileID: 11400000, guid: 37a1863b6a5b727458278e6ef429a0a4, type: 2}
+  musicData_debug:
+    music_name: 
+    composer_name: 
+    music_spr: {fileID: 0}
+    theme_spr: {fileID: 0}
+    clip: {fileID: 0}
+    sample_clip: {fileID: 0}
+    difficulities: 00000000000000000000000000000000
+    chartPaths:
+    - 
+    - 
+    - 
+    - 
 --- !u!1 &104637677
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,7 +1067,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &468367596
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1825,7 +1837,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &824237549
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2642,6 +2654,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneLoading
       objectReference: {fileID: 0}
+    - target: {fileID: 2384375492315390311, guid: 427d40c13c5d3614fb5c22340e3f329e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9127009098835754723, guid: 427d40c13c5d3614fb5c22340e3f329e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3436,7 +3452,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1780702899
 RectTransform:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ public class NoteObject_DynamicGroundLeftward : NoteObject<NoteData_DynamicGroun
     [SerializeField] float judgeMagnitude;
 
     NoteData_DynamicGroundLeftward noteData;
-    DynamicJudgement dynamicJudgement;
+    DynamicJudgementHandler dynamicJudgement;
     Judgement bestJudgement = Judgement.Miss;
     bool isJudged;
 
@@ -25,7 +25,7 @@ public class NoteObject_DynamicGroundLeftward : NoteObject<NoteData_DynamicGroun
     {
         noteData = data;
 
-        dynamicJudgement = new DynamicJudgement(noteData.Range, JudgeVector, judgeMagnitude);
+        dynamicJudgement = new DynamicJudgementHandler(noteData.Range, JudgeVector, judgeMagnitude);
 
         Bind();
     }

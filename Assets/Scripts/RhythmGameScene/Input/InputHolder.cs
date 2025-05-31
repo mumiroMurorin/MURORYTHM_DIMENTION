@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using NoteJudgement;
+using JudgementUtil.Dynamic;
 using System.Linq;
 
 public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGetter, ISpaceInputGetter
@@ -154,6 +154,6 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
             return;
         }
 
-        recorder.Value = NoteJudgement.DynamicNote.CalculateVelocity(previous, current);
+        recorder.Value = DynamicJudgement.CalculateVelocity(previous, current);
     }
 }

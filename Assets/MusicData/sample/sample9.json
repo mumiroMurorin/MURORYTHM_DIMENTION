@@ -1,0 +1,298 @@
+{
+  "BarDatas": [
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 60.0,
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        },
+        {
+          "Bpm": 60.0
+        }
+      ]
+    }
+  ],
+  "OffsetMs": 0.0
+}

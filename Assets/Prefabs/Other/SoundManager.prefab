@@ -50,5 +50,7 @@ MonoBehaviour:
   Mute: 0
   bgmClips: []
   seClips: []
-  audioMixerGroupSE: {fileID: -7809398562029020463, guid: 18dc00cef6493e84aa0ccee3f1e17fdf, type: 2}
+  judgementSEs: []
+  audioMixerGroupSE: {fileID: -353128144009607815, guid: 18dc00cef6493e84aa0ccee3f1e17fdf, type: 2}
+  audioMixerGroupJudgementSE: {fileID: -2767609628589665510, guid: 18dc00cef6493e84aa0ccee3f1e17fdf, type: 2}
   audioMixerGroupBGM: {fileID: 7211132152348954227, guid: 18dc00cef6493e84aa0ccee3f1e17fdf, type: 2}

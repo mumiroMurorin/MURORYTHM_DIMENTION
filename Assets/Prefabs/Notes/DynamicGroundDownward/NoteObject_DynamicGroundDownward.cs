@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using NoteJudgement;
+using JudgementUtil.Dynamic;
 using System.Linq;
 
 /// <summary>
@@ -15,7 +15,7 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
     [SerializeField] float judgeMagnitude;
 
     NoteData_DynamicGroundDownward noteData;
-    DynamicJudgement dynamicJudgement;
+    DynamicJudgementHandler dynamicJudgement;
     Judgement bestJudgement = Judgement.Miss;
     bool isJudged;
 
@@ -27,7 +27,7 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
     {
         noteData = data;
 
-        dynamicJudgement = new DynamicJudgement(noteData.Range, JudgeVector, judgeMagnitude);
+        dynamicJudgement = new DynamicJudgementHandler(noteData.Range, JudgeVector, judgeMagnitude);
 
         Bind();
     }
