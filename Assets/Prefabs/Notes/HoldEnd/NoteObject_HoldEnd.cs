@@ -84,6 +84,7 @@ public class NoteObject_HoldEnd : NoteObject<NoteData_HoldEnd>
         };
 
         noteData.JudgementRecorder?.RecordJudgement(judgementData);
+        SoundManager.Instance.PlaySE(noteData.NoteType, bestJudgement);
         isJudged = true;
     }
 

@@ -42,7 +42,16 @@ public class NoteObject_HoldRelay : NoteObject<NoteData_HoldRelay>
         if (!IsInJudgementRange()) { return; }
 
         // 判定範囲の更新
-        judgeRange = HoldJudgement.GetJudgeRange(noteData.TimeToRanges, noteData.Timer.Time);
+        // 前判定
+        if (noteData.Timing >= noteData.Timer.Time)
+        {
+            judgeRange = HoldJudgement.GetJudgeRange(noteData.TimeToRanges, noteData.Timer.Time);
+        }
+        // 後ろ判定、判定時間時のレンジをキープ
+        else
+        {
+            judgeRange = noteData.Range.ToList();
+        }
 
         // 判定時間内かつスライダーが押されているとき
         if (GroundJudgement.IsTouchingSlider(noteData.SliderInput, judgeRange.ToArray()))
@@ -75,6 +84,7 @@ public class NoteObject_HoldRelay : NoteObject<NoteData_HoldRelay>
         };
 
         noteData.JudgementRecorder?.RecordJudgement(judgementData);
+        SoundManager.Instance.PlaySE(noteData.NoteType, bestJudgement);
         isJudged = true;
     }
 

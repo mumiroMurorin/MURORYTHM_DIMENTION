@@ -10,8 +10,8 @@ namespace JudgementUtil.Hold
         static public List<int> GetJudgeRange(List<TimeToRange> timeToRanges ,float currentTime)
         {
             // 時間外判定
-            if (timeToRanges[0].Timing > currentTime) { return null; }
-            if (timeToRanges[^1].Timing < currentTime) { return null; }
+            if (timeToRanges[0].Timing > currentTime) { return new List<int>(); }
+            if (timeToRanges[^1].Timing < currentTime) { return timeToRanges[^1].Range.Select(x => (int)x).ToList(); }
 
             // 今ホールドノーツのどの時間を判定しているのか調べる
             TimeToRange former = new TimeToRange(0, new float[0]);

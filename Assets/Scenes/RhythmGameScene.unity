@@ -449,7 +449,7 @@ MonoBehaviour:
     composer_name: cruster-P
     music_spr: {fileID: 21300000, guid: 9d4d84fadeb3bef4ba122b422132a3a0, type: 3}
     theme_spr: {fileID: 21300000, guid: 74ae4ef0036bbb9428f47ab31c214c32, type: 3}
-    clip: {fileID: 8300000, guid: ba5f918d808ae124599185a716160608, type: 3}
+    clip: {fileID: 8300000, guid: 074a303835a350540874252c6455fb47, type: 3}
     sample_clip: {fileID: 0}
     difficulities: 00000000000000000000000000000000
     chartPaths:
@@ -457,7 +457,7 @@ MonoBehaviour:
     - 
     - 
     - 
-  chartFilePath: MusicData/sample/sample10.json
+  chartFilePath: "MusicData/\u30A4\u30AC\u30AF/chart_initiate.json"
   noteSpeed: 200
 --- !u!1001 &135123126
 PrefabInstance:
@@ -7680,7 +7680,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
       propertyPath: judgementSEs.Array.size
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
       propertyPath: judgementSEs.Array.data[0]
@@ -7706,6 +7706,14 @@ PrefabInstance:
       propertyPath: judgementSEs.Array.data[5]
       value: 
       objectReference: {fileID: 11400000, guid: d96818610e991bb4683306590533e520, type: 2}
+    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
+      propertyPath: judgementSEs.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: 5a67ffdb1c09db44594e84dd4ceebd23, type: 2}
+    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
+      propertyPath: judgementSEs.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: 1dd8bc3ef99d2ab49848e1c834a31353, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
