@@ -11,7 +11,6 @@ namespace ChartEditor
         [SerializeField] SerializeInterface<ILaneDeployable<BarDataInChart>> barLineDeplayable;
         [SerializeField] SerializeInterface<ILaneDestroyable<BarDataInChart>> barLineDestroyable;
         [SerializeField] Transform lineParent;
-        [SerializeField] GameObject ground;
         [SerializeField] GameObject[] laneDivisionLines;
 
         IChartEditorDataGetter chartEditorDataGetter;

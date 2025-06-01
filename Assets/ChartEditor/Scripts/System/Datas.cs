@@ -484,6 +484,16 @@ namespace ChartEditor
     }
 
     /// <summary>
+    /// エディットノーツタイプ
+    /// </summary>
+    public enum EditNoteType
+    {
+        Ground = 1,
+        Space = 2,
+        Vertices = 3,
+    }
+
+    /// <summary>
     /// 音楽再生モード
     /// </summary>
     public enum PlayMode
