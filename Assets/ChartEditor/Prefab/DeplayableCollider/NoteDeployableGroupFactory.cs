@@ -6,8 +6,8 @@ namespace ChartEditor
 {
     public class NoteDeployableGroupFactory : MonoBehaviour, ILaneDeployable<SubDivisionDataInBeat>
     {
-        [SerializeField] GameObject noteDeployableColliderObj;
-
+        [SerializeField] GameObject groundDeployableColliderObj;
+ 
         List<NoteDeployableGroup> noteDeployableColliders = new List<NoteDeployableGroup>();
 
         void ILaneDeployable<SubDivisionDataInBeat>.Initialize()
@@ -22,7 +22,7 @@ namespace ChartEditor
 
         GameObject ILaneDeployable<SubDivisionDataInBeat>.Deploy(SubDivisionDataInBeat subDivisionData, Vector3 pos, Transform parent)
         {
-            GameObject obj = Instantiate(noteDeployableColliderObj);
+            GameObject obj = Instantiate(groundDeployableColliderObj);
             if (parent) { obj.transform.SetParent(parent); }
             obj.transform.localPosition = pos + new Vector3(0, 0.01f, 0);
 

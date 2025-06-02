@@ -11,7 +11,6 @@ namespace ChartEditor
         [SerializeField] SerializeInterface<ILaneDeployable<BarDataInChart>> barLineDeplayable;
         [SerializeField] SerializeInterface<ILaneDestroyable<BarDataInChart>> barLineDestroyable;
         [SerializeField] Transform lineParent;
-        [SerializeField] GameObject[] laneDivisionLines;
 
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorOptionGetter chartEditorOptionGetter;
@@ -39,11 +38,6 @@ namespace ChartEditor
                     Initialze(data); 
                 })
                 .AddTo(this.gameObject);
-
-            // レーン分割線の表示
-            chartEditorOptionGetter?.LaneDivisionNum
-                .Subscribe(SetLaneDivisionLine)
-                .AddTo(this.gameObject);
         }
 
         private void BindForChartData(ChartData chartData)
@@ -70,6 +64,7 @@ namespace ChartEditor
         {
             // まず初期化
             ClearLane();
+            barCount = 0;
 
             // 小節線の数だけ繰り返す
             for (int i = 0; i < chartData.BarDatas.Count; i++)
@@ -114,23 +109,6 @@ namespace ChartEditor
             {
                 Destroy(t.gameObject);
             }
-        }
-
-        /// <summary>
-        /// 分割線の表示非表示
-        /// </summary>
-        /// <param name="divNum"></param>
-        private void SetLaneDivisionLine(int divNum)
-        {
-            if(laneDivisionLines == null) { return; }
-            if(laneDivisionLines.Length != 17) { return; }
-
-            for (int i = 0; i < 16; i++) 
-            {
-                laneDivisionLines[i].SetActive(i % (16 / divNum) == 0);
-            }
-
-            laneDivisionLines[16].SetActive(true);
         }
     }
 

@@ -157,10 +157,10 @@ namespace ChartEditor
             MeshFilter meshFilter = meshObject.AddComponent<MeshFilter>();
             MeshRenderer meshRenderer = meshObject.AddComponent<MeshRenderer>();
             Mesh mesh = MeshGenerator.GenerateMesh(
-                new Vector3(meshLeftEdge.position.x, meshHeight, meshLeftEdge.position.z),
-                new Vector3(nextLeft.x, meshHeight, nextLeft.z),
-                new Vector3(nextRight.x, meshHeight, nextRight.z),
-                new Vector3(meshRightEdge.position.x, meshHeight, meshRightEdge.position.z)
+                new Vector3(meshLeftEdge.position.x, meshLeftEdge.position.y + meshHeight, meshLeftEdge.position.z),
+                new Vector3(nextLeft.x, nextLeft.y + meshHeight, nextLeft.z),
+                new Vector3(nextRight.x, nextLeft.y + meshHeight, nextRight.z),
+                new Vector3(meshRightEdge.position.x, meshRightEdge.position.y + meshHeight, meshRightEdge.position.z)
                 );
             meshFilter.mesh = mesh;
 

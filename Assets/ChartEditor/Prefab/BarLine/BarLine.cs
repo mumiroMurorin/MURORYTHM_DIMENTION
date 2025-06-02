@@ -13,7 +13,8 @@ namespace ChartEditor
         [Header("LineFactories")]
         [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> beatLineFactory;
         [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> subdivisionLineFactory;
-        [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> colliderFactory;
+        [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> groundColliderFactory;
+        [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> spaceColliderFactory;
 
         IChartEditorOptionGetter optionGetter;
         IReadOnlyReactiveProperty<ILinePositioner> backData;
@@ -66,7 +67,8 @@ namespace ChartEditor
         {
             beatLineFactory?.Value.Initialize();
             subdivisionLineFactory?.Value.Initialize();
-            colliderFactory?.Value.Initialize();
+            groundColliderFactory?.Value.Initialize();
+            spaceColliderFactory?.Value.Initialize();
         }
 
         /// <summary>
@@ -306,13 +308,15 @@ namespace ChartEditor
         private GameObject GenerateSubDivisionUnit(SubDivisionDataInBeat subData, ILinePositioner backData, float currentZ, Transform parent, bool isBeatTiming, bool isBarTiming)
         {
             // コライダーの設置
-            GameObject deployableCollider = colliderFactory?.Value.Deploy(subData, Vector3.forward * currentZ, parent);
+            GameObject groundCollider = groundColliderFactory?.Value.Deploy(subData, Vector3.forward * currentZ, parent);
+            GameObject spaceCollider = spaceColliderFactory?.Value.Deploy(subData, Vector3.forward * currentZ, parent);
 
             // 小節線があるため置かない
             // この小節線をリターンする
             if (isBarTiming) 
             {
-                deployableCollider.transform.SetParent(this.gameObject.transform);
+                groundCollider.transform.SetParent(this.gameObject.transform);
+                spaceCollider.transform.SetParent(this.gameObject.transform);
                 return this.gameObject; 
             }
 
@@ -327,7 +331,8 @@ namespace ChartEditor
                 obj = subdivisionLineFactory?.Value.Deploy(subData, Vector3.forward * currentZ, parent);
             }
 
-            deployableCollider.transform.SetParent(obj.transform);
+            groundCollider.transform.SetParent(obj.transform);
+            spaceCollider.transform.SetParent(obj.transform);
 
             // 初期化
             if (!obj.TryGetComponent(out SubdivisionLine subDivisionLine)) { return null; }

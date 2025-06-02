@@ -52,8 +52,10 @@ MonoBehaviour:
     obj: {fileID: 5685416354428862072}
   subdivisionLineFactory:
     obj: {fileID: 6602336112322251316}
-  colliderFactory:
+  groundColliderFactory:
     obj: {fileID: 1227359165818130066}
+  spaceColliderFactory:
+    obj: {fileID: 1399377664932968535}
 --- !u!1 &5116212708957978496
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,6 +205,7 @@ Transform:
   - {fileID: 3913107015277169794}
   - {fileID: 2524473898132666574}
   - {fileID: 7611359058337610856}
+  - {fileID: 7765077147407026861}
   m_Father: {fileID: 2226689091317066491}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1618989855760585416
@@ -416,6 +419,73 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8260913062084880473, guid: 29abdea63ec343041ac53c897da97236, type: 3}
   m_PrefabInstance: {fileID: 4342033696524178977}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7047920365401919502
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4621490107942926316}
+    m_Modifications:
+    - target: {fileID: 723996234795637411, guid: 5dc55eeb4156b3148a80874295fe8e39, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723996234795637411, guid: 5dc55eeb4156b3148a80874295fe8e39, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723996234795637411, guid: 5dc55eeb4156b3148a80874295fe8e39, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723996234795637411, guid: 5dc55eeb4156b3148a80874295fe8e39, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 723996234795637411, guid: 5dc55eeb4156b3148a80874295fe8e39, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723996234795637411, guid: 5dc55eeb4156b3148a80874295fe8e39, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723996234795637411, guid: 5dc55eeb4156b3148a80874295fe8e39, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723996234795637411, guid: 5dc55eeb4156b3148a80874295fe8e39, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723996234795637411, guid: 5dc55eeb4156b3148a80874295fe8e39, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 723996234795637411, guid: 5dc55eeb4156b3148a80874295fe8e39, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260913062084880473, guid: 5dc55eeb4156b3148a80874295fe8e39, type: 3}
+      propertyPath: m_Name
+      value: SpaceDeployableGroupFactory
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5dc55eeb4156b3148a80874295fe8e39, type: 3}
+--- !u!1 &1399377664932968535 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8260913062084880473, guid: 5dc55eeb4156b3148a80874295fe8e39, type: 3}
+  m_PrefabInstance: {fileID: 7047920365401919502}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7765077147407026861 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 723996234795637411, guid: 5dc55eeb4156b3148a80874295fe8e39, type: 3}
+  m_PrefabInstance: {fileID: 7047920365401919502}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7182357406823540427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -466,7 +536,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8260913062084880473, guid: 281b123b527a7b84b84c434c6d2b7ab3, type: 3}
       propertyPath: m_Name
-      value: NoteDeployableCollidersFactory
+      value: GroundDeployableCollidersFactory
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

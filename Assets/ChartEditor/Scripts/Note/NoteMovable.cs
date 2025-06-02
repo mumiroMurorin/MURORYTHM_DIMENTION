@@ -18,7 +18,8 @@ namespace ChartEditor
 
         NoteObject noteObject;
         NoteObject IMovableObject.Note => noteObject;
-        
+
+        Vector3 addPos;
         CancellationTokenSource cts = new CancellationTokenSource();
 
         private void Start()
@@ -60,7 +61,9 @@ namespace ChartEditor
             noteObject.SetOutlineActive(true);
             noteObject.SetCollidersActive(false);
 
-            this.transform.position += Vector3.up * addHeightOnMove;
+            // 追加するベクトルを保存
+            addPos = Vector3.up * addHeightOnMove;
+            this.transform.position += addPos;
         }
 
         void IMovableObject.OnMove()
@@ -72,7 +75,10 @@ namespace ChartEditor
         {
             noteObject.SetOutlineActive(false);
             noteObject.SetCollidersActive(true);
-            this.transform.position -= Vector3.up * addHeightOnMove;
+
+            // 追加したベクトル分元に戻す
+            this.transform.position -= addPos;
+            addPos = Vector3.zero;
         }
 
         /// <summary>
@@ -85,7 +91,7 @@ namespace ChartEditor
 
             if(parent == null) { return; }
 
-            Vector3 pos = new Vector3(parent.position.x, this.transform.position.y, parent.position.z);
+            Vector3 pos = parent.position + addPos;
             this.transform.position = pos;
             this.transform.SetParent(parent);
         }

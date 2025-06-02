@@ -46,9 +46,9 @@ namespace ChartEditor
 
         void IDeployableObject.OnMove(Transform parent)
         {
-            // 親オブジェクトに合わせた位置調整（Y 座標は維持）
+            // 親オブジェクトに合わせた位置調整
             // まだ設置していないので引数のTransformを参照
-            Vector3 pos = new Vector3(parent.position.x, this.transform.position.y, parent.position.z);
+            Vector3 pos = parent.position;
             this.transform.position = pos;
             this.transform.SetParent(parent);
             this.gameObject.SetActive(true);
