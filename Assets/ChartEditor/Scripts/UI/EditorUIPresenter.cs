@@ -12,9 +12,6 @@ namespace ChartEditor
     public class EditorUIPresenter : MonoBehaviour
     {
         [Header("Views")]
-        [SerializeField] List<ToolButtonToEditMode> toolButtons_view;
-        [SerializeField] List<NoteButtonToEditMode> noteButtons_view;
-        [SerializeField] NotesViewportView notesViewport_view;
         [SerializeField] ChartExtendButtonView chartExtendButton_view;
         [SerializeField] ChartShortenButtonView chartShortenButton_view;
         [SerializeField] MusicBrowseButtonView musicBrowseButton_view;
@@ -54,7 +51,6 @@ namespace ChartEditor
         void Start()
         {
             BindForRhythmConfig();
-            BindForEditView();
             BindForOther();
 
             SetEvent();
@@ -120,6 +116,11 @@ namespace ChartEditor
             editorDataGetter_model?.EditNoteType
                 .Subscribe(switchLayerButton_view.OnChangeEditNoteType)
                 .AddTo(this.gameObject);
+
+            // オートエディットモードの変更
+            editorDataGetter_model?.AutoEditMode
+                .Subscribe(autoEditModeButton_view.OnChangeAutoEditMode)
+                .AddTo(this.gameObject);
         }
 
         private void BindForRhythmConfig()
@@ -169,46 +170,8 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
         }
 
-        private void BindForEditView()
-        {
-            // ツールボタン
-            foreach (var button in toolButtons_view)
-            {
-                button.BindForDeploymentNoteType(editorDataGetter_model.CurrentEditMode, this.gameObject);
-                button.BindForAutomode(editorDataGetter_model.AutoEditMode, this.gameObject);
-            }
-
-            // ノートボタン
-            foreach (var button in noteButtons_view)
-            {
-                button.Bind(editorDataGetter_model.DeploymentNoteType, this.gameObject);
-            }
-
-            // ノーツビューの可視不可視
-            editorDataGetter_model?.CurrentEditMode
-                .Subscribe(notesViewport_view.OnChangeEditMode)
-                .AddTo(this.gameObject);
-
-            // オートエディットモードの変更
-            editorDataGetter_model?.AutoEditMode
-                .Subscribe(autoEditModeButton_view.OnChangeAutoEditMode)
-                .AddTo(this.gameObject);
-        }
-
         private void SetEvent()
         {
-            // ツールボタン
-            foreach (var button in toolButtons_view)
-            {
-                button.SetEvent(() => { editorDataSetter_model.SetEditMode(button.EditMode); });
-            }
-
-            // ノーツボタン
-            foreach(var button in noteButtons_view)
-            {
-                button.SetEvent(() => { editorDataSetter_model.SetNoteType(button.NoteType); });
-            }
-
             // 曲選択ボタン
             musicBrowseButton_view.OnClickedListner += BrowseAudioFile;
 
@@ -290,69 +253,5 @@ namespace ChartEditor
                 soundLoadCts = null;
             }
         }
-
-        #region その他まとめクラス
-
-        /// <summary>
-        /// ツールボタンに対するアクション他
-        /// </summary>
-        [Serializable]
-        public class ToolButtonToEditMode
-        {
-            [SerializeField] ChangeEditModeButtonView toolButton_view;
-            [SerializeField] EditMode editMode;
-            [SerializeField] bool IsHiddenInAutoMode;
-
-            public ChangeEditModeButtonView ToolButton_view { get { return toolButton_view; } }
-
-            public EditMode EditMode { get { return editMode; } }
-
-            public void BindForDeploymentNoteType(IReadOnlyReactiveProperty<EditMode> reactiveProperty, GameObject gameObject)
-            {
-                reactiveProperty
-                    .Subscribe(editMode => ToolButton_view.OnChangeEditMode(editMode == this.editMode))
-                    .AddTo(gameObject);
-            }
-
-            public void BindForAutomode(IReadOnlyReactiveProperty<bool> isAutoModeRP, GameObject gameObject)
-            {
-                isAutoModeRP
-                    .Subscribe(isAutomode => ToolButton_view.OnChangeAutoMode(isAutomode && IsHiddenInAutoMode))
-                    .AddTo(gameObject);
-            }
-
-            public void SetEvent(Action action)
-            {
-                toolButton_view.OnClickedListner += action;
-            }
-        }
-
-        /// <summary>
-        /// ノートボタンに対するアクション他
-        /// </summary>
-        [Serializable]
-        public class NoteButtonToEditMode
-        {
-            [SerializeField] ChangeDeploymentNoteButtonView noteButton_view;
-            [SerializeField] DeploymentNoteType noteType;
-
-            public ChangeDeploymentNoteButtonView NoteButton_view { get { return noteButton_view; } }
-
-            public DeploymentNoteType NoteType { get { return noteType; } }
-
-            public void Bind(IReadOnlyReactiveProperty<DeploymentNoteType> reactiveProperty, GameObject gameObject)
-            {
-                reactiveProperty
-                    .Subscribe(noteType => NoteButton_view.OnChangeDeploymentNote(noteType == this.noteType))
-                    .AddTo(gameObject);
-            }
-
-            public void SetEvent(Action action)
-            {
-                noteButton_view.OnClickedListner += action;
-            }
-        }
-
-        #endregion
     }
 }

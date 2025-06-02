@@ -17,6 +17,11 @@ namespace ChartEditor
             button.interactable = !isInteracted;
         }
 
+        public void OnChangeEditNoteType(bool isActive)
+        {
+            button.gameObject.SetActive(isActive);
+        }
+
         public void OnClicked()
         {
             OnClickedListner?.Invoke();
