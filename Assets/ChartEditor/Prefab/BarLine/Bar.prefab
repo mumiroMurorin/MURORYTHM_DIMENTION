@@ -56,6 +56,10 @@ MonoBehaviour:
     obj: {fileID: 1227359165818130066}
   spaceColliderFactory:
     obj: {fileID: 1399377664932968535}
+  groundLayerAffectables:
+    obj: {fileID: 1227359165818130066}
+  spaceLayerAffectables:
+    obj: {fileID: 1399377664932968535}
 --- !u!1 &5116212708957978496
 GameObject:
   m_ObjectHideFlags: 0

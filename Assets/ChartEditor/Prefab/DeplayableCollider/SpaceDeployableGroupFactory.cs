@@ -4,10 +4,12 @@ using UnityEngine;
 
 namespace ChartEditor
 {
-    public class SpaceDeployableGroupFactory : MonoBehaviour, ILaneDeployable<SubDivisionDataInBeat>
+    public class SpaceDeployableGroupFactory : MonoBehaviour, ILaneDeployable<SubDivisionDataInBeat>, ILayerAffectable
     {
         [SerializeField] GameObject spaceDeployableColliderObj;
- 
+        [SerializeField] float heightOnGroundEditMode;
+        [SerializeField] float heightOnSpaceEditMode;
+
         List<SpaceDeployableUnit> spaceDeployableColliders = new List<SpaceDeployableUnit>();
 
         void ILaneDeployable<SubDivisionDataInBeat>.Initialize()
@@ -24,7 +26,7 @@ namespace ChartEditor
         {
             GameObject obj = Instantiate(spaceDeployableColliderObj);
             if (parent) { obj.transform.SetParent(parent); }
-            obj.transform.localPosition = pos + new Vector3(0, -5f, 0);
+            obj.transform.localPosition = pos;
 
             // ê∂ê¨ÇµÇΩÉâÉCÉìÇÉäÉXÉgÇ…äiî[
             if (obj.TryGetComponent(out SpaceDeployableUnit line))
@@ -35,6 +37,23 @@ namespace ChartEditor
             }
 
             return obj;
+        }
+
+        void ILayerAffectable.OnChangeLayer(EditNoteType editNoteType)
+        {
+            foreach(var deployable in spaceDeployableColliders)
+            {
+                Vector3 pos = deployable.gameObject.transform.position;
+                switch (editNoteType)
+                {
+                    case EditNoteType.Ground:
+                        deployable.gameObject.transform.position = new Vector3(pos.x, heightOnGroundEditMode, pos.z);
+                        break;
+                    case EditNoteType.Space:
+                        deployable.gameObject.transform.position = new Vector3(pos.x, heightOnSpaceEditMode, pos.z);
+                        break;
+                }
+            }
         }
     }
 }

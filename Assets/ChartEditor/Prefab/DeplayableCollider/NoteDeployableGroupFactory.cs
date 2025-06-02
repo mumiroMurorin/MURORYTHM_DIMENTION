@@ -4,10 +4,12 @@ using UnityEngine;
 
 namespace ChartEditor
 {
-    public class NoteDeployableGroupFactory : MonoBehaviour, ILaneDeployable<SubDivisionDataInBeat>
+    public class NoteDeployableGroupFactory : MonoBehaviour, ILaneDeployable<SubDivisionDataInBeat>, ILayerAffectable
     {
         [SerializeField] GameObject groundDeployableColliderObj;
- 
+        [SerializeField] float heightOnGroundEditMode;
+        [SerializeField] float heightOnSpaceEditMode;
+
         List<NoteDeployableGroup> noteDeployableColliders = new List<NoteDeployableGroup>();
 
         void ILaneDeployable<SubDivisionDataInBeat>.Initialize()
@@ -35,6 +37,23 @@ namespace ChartEditor
             }
 
             return obj;
+        }
+
+        void ILayerAffectable.OnChangeLayer(EditNoteType editNoteType)
+        {
+            foreach (var deployable in noteDeployableColliders)
+            {
+                Vector3 pos = deployable.gameObject.transform.position;
+                switch (editNoteType)
+                {
+                    case EditNoteType.Ground:
+                        deployable.gameObject.transform.position = new Vector3(pos.x, heightOnGroundEditMode, pos.z);
+                        break;
+                    case EditNoteType.Space:
+                        deployable.gameObject.transform.position = new Vector3(pos.x, heightOnSpaceEditMode, pos.z);
+                        break;
+                }
+            }
         }
     }
 }

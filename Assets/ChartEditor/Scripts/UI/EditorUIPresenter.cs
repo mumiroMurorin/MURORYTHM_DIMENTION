@@ -30,6 +30,7 @@ namespace ChartEditor
         [SerializeField] OperationDescriptionView description_view;
         [SerializeField] ExplanationButtonView explanationButton_view;
         [SerializeField] ExplanationView explanation_view;
+        [SerializeField] SwitchLayerButtonView switchLayerButton_view;
         [Header("Models")]
         [SerializeField] ChartDataExporter chartDataExporter_model;
         [SerializeField] ChartDataImporter chartDataImporter_model;
@@ -108,6 +109,16 @@ namespace ChartEditor
             // 説明書の表示、非表示
             editorDataGetter_model?.CurrentEditMode
                 .Subscribe(explanation_view.OnChangeEditMode)
+                .AddTo(this.gameObject);
+
+            // レイヤー変更ボタンのインタラクト可不可
+            editorDataGetter_model?.CurrentEditMode
+                .Subscribe(switchLayerButton_view.OnChangeEditMode)
+                .AddTo(this.gameObject);
+
+            // レイヤー変更ボタンの更新
+            editorDataGetter_model?.EditNoteType
+                .Subscribe(switchLayerButton_view.OnChangeEditNoteType)
                 .AddTo(this.gameObject);
         }
 
@@ -233,10 +244,16 @@ namespace ChartEditor
             rhythmConfigBar_view.OnClickedApplyButtonListner += () => CloseConfig();
             rhythmConfigSubDivision_view.OnClickedApplyButtonListner += () => CloseConfig();
 
-            explanationButton_view.OnClickedListner += () => { editorDataSetter_model.SetEditMode(EditMode.Explanation); };
+            // レイヤー変更ボタン
+            switchLayerButton_view.OnClickCloseButtonListner += () => {
+                EditNoteType current = editorDataGetter_model.EditNoteType.Value;
+                editorDataSetter_model.SetEditNoteType(current == EditNoteType.Ground ? EditNoteType.Space : EditNoteType.Ground); 
+            };
+
+            explanationButton_view.OnClickedListner += () => editorDataSetter_model.SetEditMode(EditMode.Explanation);
 
             // 説明書を閉じる
-            explanation_view.OnClickCloseButtonListner += () => { editorDataSetter_model.SetEditMode(EditMode.None); };
+            explanation_view.OnClickCloseButtonListner += () => editorDataSetter_model.SetEditMode(EditMode.None);
         }
 
         private void CloseConfig()

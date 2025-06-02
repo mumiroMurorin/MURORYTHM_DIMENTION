@@ -16,7 +16,12 @@ namespace ChartEditor
         [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> groundColliderFactory;
         [SerializeField] SerializeInterface<ILaneDeployable<SubDivisionDataInBeat>> spaceColliderFactory;
 
+        [Header("ILayerAffectables")]
+        [SerializeField] SerializeInterface<ILayerAffectable> groundLayerAffectables;
+        [SerializeField] SerializeInterface<ILayerAffectable> spaceLayerAffectables;
+
         IChartEditorOptionGetter optionGetter;
+        IChartEditorDataGetter dataGetter;
         IReadOnlyReactiveProperty<ILinePositioner> backData;
         int barNumber = 0;
 
@@ -47,12 +52,13 @@ namespace ChartEditor
         /// <param name="barData"></param>
         /// <param name="previousBar"></param>
         /// <param name="number"></param>
-        public void Initialize(BarDataInChart barData, IReadOnlyReactiveProperty<ILinePositioner> backData, IChartEditorOptionGetter optionGetter, int number)
+        public void Initialize(BarDataInChart barData, IReadOnlyReactiveProperty<ILinePositioner> backData, IChartEditorOptionGetter optionGetter, IChartEditorDataGetter dataGetter, int number)
         {
             this.barData = barData;
             this.backData = backData;
             this.barNumber = number;
             this.optionGetter = optionGetter;
+            this.dataGetter = dataGetter;
             this.subDivisionData.Value = barData.SubDivisionDatas[0];
 
             InitializeFactories();
@@ -195,6 +201,14 @@ namespace ChartEditor
                     .Subscribe(_ => AdjustPositionOnChangeLineData())
                     .AddTo(this.gameObject);
             }
+
+            // ƒŒƒCƒ„[•ÏX‚ðŠÄŽ‹
+            dataGetter?.EditNoteType
+                .Subscribe(editMode => {
+                    groundLayerAffectables.Value.OnChangeLayer(editMode);
+                    spaceLayerAffectables.Value.OnChangeLayer(editMode);
+                })
+                .AddTo(this.gameObject);
         }
 
         #endregion

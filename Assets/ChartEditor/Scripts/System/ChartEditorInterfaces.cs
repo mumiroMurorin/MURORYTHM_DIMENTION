@@ -30,6 +30,11 @@ namespace ChartEditor
         public void Destroy(T lineData);
     }
 
+    public interface ILayerAffectable
+    {
+        void OnChangeLayer(EditNoteType editNoteType);
+    }
+
     public interface IInteractableCollider
     {
         /// <summary>

@@ -68,6 +68,18 @@ namespace ChartEditor
         }
 
 
+        // 編集ノーツタイプ
+        ReactiveProperty<EditNoteType> editNoteType = new ReactiveProperty<EditNoteType>(EditNoteType.Ground);
+        IReadOnlyReactiveProperty<EditNoteType> IChartEditorDataGetter.EditNoteType => editNoteType;
+
+        void IChartEditorDataSetter.SetEditNoteType(EditNoteType editNoteType)
+        {
+            if (this.editNoteType.Value == editNoteType) { return; }
+
+            this.editNoteType.Value = editNoteType;
+            Debug.Log($"Change Edit Note Type: {this.editNoteType.Value}");
+        }
+
         #endregion
 
         #region DeploymentNoteType 配置ノーツ関係
@@ -241,6 +253,8 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<bool> AutoEditMode { get; }
 
+        IReadOnlyReactiveProperty<EditNoteType> EditNoteType { get; }
+
         IReadOnlyReactiveProperty<IRhythmConfigurableBarCollider> RhythmConfigurableBar { get; }
 
         IReadOnlyReactiveProperty<IRhythmConfigurableSubDivisionCollider> RhythmConfigurableSubDivision { get; }
@@ -282,6 +296,8 @@ namespace ChartEditor
         void SetEditMode(EditMode editMode);
 
         void SetAutoEditMode(bool isEnable);
+
+        void SetEditNoteType(EditNoteType editNoteType);
 
         void SetNoteType(DeploymentNoteType noteType);
 
