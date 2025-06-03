@@ -5,7 +5,7 @@ using UniRx;
 
 namespace ChartEditor
 {
-    public interface IGroundNoteData
+    public interface IDeployableNoteData
     {
         DeploymentNoteType NoteType { get; }
 
@@ -22,22 +22,22 @@ namespace ChartEditor
 
         void SetAddress(AddressInChart address);
 
-        IGroundNoteData Copy();
+        IDeployableNoteData Copy();
     }
 
-    public interface IGroundChainNoteData: IGroundNoteData
+    public interface IChainNoteData: IDeployableNoteData
     {
         IConnectableObject NoteObject { get; }
 
-        IReadOnlyReactiveProperty<IGroundChainNoteData> NextNote { get; }
+        IReadOnlyReactiveProperty<IChainNoteData> NextNote { get; }
 
-        IReadOnlyReactiveProperty<IGroundChainNoteData> BackNote { get; }
+        IReadOnlyReactiveProperty<IChainNoteData> BackNote { get; }
 
-        void SetNextNote(IGroundChainNoteData nextNote, bool isUpdateNoteType = true);
+        void SetNextNote(IChainNoteData nextNote, bool isUpdateNoteType = true);
 
-        void SetBackNote(IGroundChainNoteData backNote, bool isUpdateNoteType = true);
+        void SetBackNote(IChainNoteData backNote, bool isUpdateNoteType = true);
 
-        void AddChainNote(IGroundChainNoteData addNote, bool isUpdateNoteType = true);
+        void AddChainNote(IChainNoteData addNote, bool isUpdateNoteType = true);
 
         void RemoveNote();
 

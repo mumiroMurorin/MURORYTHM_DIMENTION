@@ -28,19 +28,19 @@ namespace ChartEditor
         /// <summary>
         /// その分線に配置されたノーツのデータ
         /// </summary>
-        ReactiveCollection<IGroundNoteData> noteDatas = new ReactiveCollection<IGroundNoteData>();
+        ReactiveCollection<IDeployableNoteData> noteDatas = new ReactiveCollection<IDeployableNoteData>();
 
         /// <summary>
         /// ノーツの追加、削除の監視用
         /// </summary>
-        public IReadOnlyReactiveCollection<IGroundNoteData> NoteDatas => noteDatas;
+        public IReadOnlyReactiveCollection<IDeployableNoteData> NoteDatas => noteDatas;
 
-        public void AddNote(IGroundNoteData noteData)
+        public void AddNote(IDeployableNoteData noteData)
         {
             noteDatas.Add(noteData);
         }
 
-        public bool RemoveNote(IGroundNoteData noteData)
+        public bool RemoveNote(IDeployableNoteData noteData)
         {
             return noteDatas.Remove(noteData);
         }
@@ -291,7 +291,7 @@ namespace ChartEditor
         /// <summary>
         /// ノーツを追加する
         /// </summary>
-        public void AddNote(IGroundNoteData noteData, AddressInChart address)
+        public void AddNote(IDeployableNoteData noteData, AddressInChart address)
         {
             // 新たな場所に追加
             SubDivisionDataInBeat newSubDivision = BarDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
@@ -304,7 +304,7 @@ namespace ChartEditor
         /// <summary>
         /// ノーツを削除する
         /// </summary>
-        public void RemoveNote(IGroundNoteData noteData)
+        public void RemoveNote(IDeployableNoteData noteData)
         {
             AddressInChart address = noteData.Address;
             SubDivisionDataInBeat subDivision = barDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
@@ -325,7 +325,7 @@ namespace ChartEditor
         /// <param name="noteData"></param>
         /// <param name="newAddress"></param>
         /// <returns></returns>
-        public bool ChangeNoteAddress(IGroundNoteData noteData, AddressInChart newAddress)
+        public bool ChangeNoteAddress(IDeployableNoteData noteData, AddressInChart newAddress)
         {
             AddressInChart oldAddress = noteData.Address;
 
@@ -481,6 +481,13 @@ namespace ChartEditor
         Connecting,
         ChangeType,
         Explanation,
+
+        SpaceDeploy,
+        SpaceMove,
+        SpaceConnect,
+        SpaceConnecting,
+        SpaceChangeType,
+        SpaceDestroy,
     }
 
     /// <summary>

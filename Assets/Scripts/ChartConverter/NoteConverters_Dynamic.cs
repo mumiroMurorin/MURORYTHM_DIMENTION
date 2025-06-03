@@ -15,7 +15,7 @@ namespace ChartConvert
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundUpward;
 
-        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
             if (noteDataInEditor.NoteType != type) { return false; }
 
@@ -59,7 +59,7 @@ namespace ChartConvert
 
             foreach (var noteDataOrigin in dataOrigin.DynamicUpwardData)
             {
-                IGroundNoteData noteData = new ChartEditor.NoteData_DynamicUpward();
+                IDeployableNoteData noteData = new ChartEditor.NoteData_DynamicUpward();
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
@@ -82,7 +82,7 @@ namespace ChartConvert
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundDownward;
 
-        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
             if (noteDataInEditor.NoteType != type) { return false; }
 
@@ -126,7 +126,7 @@ namespace ChartConvert
 
             foreach (var noteDataOrigin in dataOrigin.DynamicDownwardData)
             {
-                IGroundNoteData noteData = new ChartEditor.NoteData_DynamicDownward();
+                IDeployableNoteData noteData = new ChartEditor.NoteData_DynamicDownward();
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
@@ -149,7 +149,7 @@ namespace ChartConvert
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundRightward;
 
-        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
             if (noteDataInEditor.NoteType != type) { return false; }
 
@@ -194,7 +194,7 @@ namespace ChartConvert
 
             foreach (var noteDataOrigin in dataOrigin.DynamicRightwardData)
             {
-                IGroundNoteData noteData = new ChartEditor.NoteData_DynamicRightward();
+                IDeployableNoteData noteData = new ChartEditor.NoteData_DynamicRightward();
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
@@ -217,7 +217,7 @@ namespace ChartConvert
     {
         readonly DeploymentNoteType type = DeploymentNoteType.DynamicGroundLeftward;
 
-        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
             if (noteDataInEditor.NoteType != type) { return false; }
 
@@ -261,7 +261,7 @@ namespace ChartConvert
 
             foreach (var noteDataOrigin in dataOrigin.DynamicLeftwardData)
             {
-                IGroundNoteData noteData = new ChartEditor.NoteData_DynamicLeftward();
+                IDeployableNoteData noteData = new ChartEditor.NoteData_DynamicLeftward();
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);

@@ -46,9 +46,9 @@ namespace ChartEditor
                 .Subscribe(ChangeNoteColor)
                 .AddTo(this.gameObject);
 
-            // IGroundChainNoteData‚É•ÏŠ·
-            if (noteObject.NoteData is not IGroundChainNoteData) { return; }
-            var chainData = (IGroundChainNoteData)noteObject.NoteData;
+            // IChainNoteData‚É•ÏŠ·
+            if (noteObject.NoteData is not IChainNoteData) { return; }
+            var chainData = (IChainNoteData)noteObject.NoteData;
 
             chainData.NextNote
                 .Subscribe(next => {

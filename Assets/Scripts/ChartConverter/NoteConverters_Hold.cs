@@ -15,13 +15,13 @@ namespace ChartConvert
     {
         int currentHoldNumber = 0;
 
-        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != DeploymentNoteType.Hold) { return false; }
-            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
+            if (noteDataInEditor is not IChainNoteData) { return false; }
 
-            IGroundChainNoteData backNote = ((IGroundChainNoteData)noteDataInEditor).BackNote.Value;
-            IGroundChainNoteData nextNote = ((IGroundChainNoteData)noteDataInEditor).NextNote.Value;
+            IChainNoteData backNote = ((IChainNoteData)noteDataInEditor).BackNote.Value;
+            IChainNoteData nextNote = ((IChainNoteData)noteDataInEditor).NextNote.Value;
             if (backNote != null) { return false; }
             if (backNote == null && nextNote == null) { return false; }
             if (backNote != null && nextNote != null) { return false; }
@@ -44,18 +44,18 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldStartData == null) { return true; }
 
             foreach (var noteDataOrigin in dataOrigin.HoldStartData)
             {
-                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
-                if (noteData is not IGroundChainNoteData) { return false; }
+                IDeployableNoteData noteData = new ChartEditor.NoteData_Hold();
+                if (noteData is not IChainNoteData) { return false; }
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
-                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
+                IChainNoteData chainData = (IChainNoteData)noteData;
 
                 noteData.SetAddress(address);
                 noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
@@ -109,15 +109,15 @@ namespace ChartConvert
     /// </summary>
     public class HoldRelayConverter : IHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
-        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != DeploymentNoteType.Hold) { return false; }
-            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
+            if (noteDataInEditor is not IChainNoteData) { return false; }
             if (noteDataInEditor is not ITypeChangableNoteData) { return false; }
 
-            IGroundChainNoteData thisNote = (IGroundChainNoteData)noteDataInEditor;
-            IGroundChainNoteData backNote = thisNote.BackNote.Value;
-            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
+            IChainNoteData thisNote = (IChainNoteData)noteDataInEditor;
+            IChainNoteData backNote = thisNote.BackNote.Value;
+            IChainNoteData nextNote = thisNote.NextNote.Value;
             if (backNote == null && nextNote != null) { return false; }
             if (backNote != null && nextNote == null) { return false; }
 
@@ -148,19 +148,19 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldRelayData == null) { return true; }
 
             foreach (var noteDataOrigin in dataOrigin.HoldRelayData)
             {
-                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
-                if (noteData is not IGroundChainNoteData) { return false; }
+                IDeployableNoteData noteData = new ChartEditor.NoteData_Hold();
+                if (noteData is not IChainNoteData) { return false; }
                 if (noteData is not ITypeChangableNoteData) { return false; }
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
-                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
+                IChainNoteData chainData = (IChainNoteData)noteData;
                 ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.Hold);
 
                 noteData.SetAddress(address);
@@ -216,14 +216,14 @@ namespace ChartConvert
     /// </summary>
     public class HoldMeshRelayConverter : IHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
-        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != DeploymentNoteType.HoldHidden) { return false; }
-            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
+            if (noteDataInEditor is not IChainNoteData) { return false; }
 
-            IGroundChainNoteData thisNote = (IGroundChainNoteData)noteDataInEditor;
-            IGroundChainNoteData backNote = thisNote.BackNote.Value;
-            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
+            IChainNoteData thisNote = (IChainNoteData)noteDataInEditor;
+            IChainNoteData backNote = thisNote.BackNote.Value;
+            IChainNoteData nextNote = thisNote.NextNote.Value;
             if (backNote == null && nextNote != null) { return false; }
             if (backNote != null && nextNote == null) { return false; }
 
@@ -256,19 +256,19 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldMeshRelayData == null) { return true; }
 
             foreach (var noteDataOrigin in dataOrigin.HoldMeshRelayData)
             {
-                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
-                if (noteData is not IGroundChainNoteData) { return false; }
+                IDeployableNoteData noteData = new ChartEditor.NoteData_Hold();
+                if (noteData is not IChainNoteData) { return false; }
                 if (noteData is not ITypeChangableNoteData) { return false; }
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
-                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
+                IChainNoteData chainData = (IChainNoteData)noteData;
                 ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.HoldHidden);
 
                 noteData.SetAddress(address);
@@ -317,14 +317,14 @@ namespace ChartConvert
     {
         const DeploymentNoteType NoteType = DeploymentNoteType.HoldHiddenJudged;
 
-        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != NoteType) { return false; }
-            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
+            if (noteDataInEditor is not IChainNoteData) { return false; }
 
-            IGroundChainNoteData thisNote = (IGroundChainNoteData)noteDataInEditor;
-            IGroundChainNoteData backNote = thisNote.BackNote.Value;
-            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
+            IChainNoteData thisNote = (IChainNoteData)noteDataInEditor;
+            IChainNoteData backNote = thisNote.BackNote.Value;
+            IChainNoteData nextNote = thisNote.NextNote.Value;
             if (backNote == null && nextNote != null) { return false; }
             if (backNote != null && nextNote == null) { return false; }
 
@@ -357,19 +357,19 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldHiddenJudgedRelayData == null) { return true; }
 
             foreach (var noteDataOrigin in dataOrigin.HoldHiddenJudgedRelayData)
             {
-                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
-                if (noteData is not IGroundChainNoteData) { return false; }
+                IDeployableNoteData noteData = new ChartEditor.NoteData_Hold();
+                if (noteData is not IChainNoteData) { return false; }
                 if (noteData is not ITypeChangableNoteData) { return false; }
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
-                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
+                IChainNoteData chainData = (IChainNoteData)noteData;
                 ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.HoldHiddenJudged);
 
                 noteData.SetAddress(address);
@@ -427,14 +427,14 @@ namespace ChartConvert
     {
         const DeploymentNoteType NoteType = DeploymentNoteType.Hold;
 
-        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != NoteType) { return false; }
-            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
+            if (noteDataInEditor is not IChainNoteData) { return false; }
 
-            IGroundChainNoteData thisNote = (IGroundChainNoteData)noteDataInEditor;
-            IGroundChainNoteData backNote = thisNote.BackNote.Value;
-            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
+            IChainNoteData thisNote = (IChainNoteData)noteDataInEditor;
+            IChainNoteData backNote = thisNote.BackNote.Value;
+            IChainNoteData nextNote = thisNote.NextNote.Value;
             if (nextNote != null) { return false; }
             if (backNote == null && nextNote == null) { return false; }
             if (backNote != null && nextNote != null) { return false; }
@@ -468,18 +468,18 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldEndData == null) { return true; }
 
             foreach (var noteDataOrigin in dataOrigin.HoldEndData)
             {
-                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
-                if (noteData is not IGroundChainNoteData) { return false; }
+                IDeployableNoteData noteData = new ChartEditor.NoteData_Hold();
+                if (noteData is not IChainNoteData) { return false; }
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
-                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
+                IChainNoteData chainData = (IChainNoteData)noteData;
 
                 noteData.SetAddress(address);
                 noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
@@ -535,14 +535,14 @@ namespace ChartConvert
     /// </summary>
     public class HoldEndUnjudgeConverter : IHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
-        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != DeploymentNoteType.HoldEndUnjudge) { return false; }
-            if (noteDataInEditor is not IGroundChainNoteData) { return false; }
+            if (noteDataInEditor is not IChainNoteData) { return false; }
 
-            IGroundChainNoteData thisNote = (IGroundChainNoteData)noteDataInEditor;
-            IGroundChainNoteData backNote = thisNote.BackNote.Value;
-            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
+            IChainNoteData thisNote = (IChainNoteData)noteDataInEditor;
+            IChainNoteData backNote = thisNote.BackNote.Value;
+            IChainNoteData nextNote = thisNote.NextNote.Value;
             if (nextNote != null) { return false; }
             if (backNote == null && nextNote == null) { return false; }
             if (backNote != null && nextNote != null) { return false; }
@@ -576,19 +576,19 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IGroundChainNoteData> numberToStartNote)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldEndUnjudgeData == null) { return true; }
 
             foreach (var noteDataOrigin in dataOrigin.HoldEndUnjudgeData)
             {
-                IGroundNoteData noteData = new ChartEditor.NoteData_Hold();
-                if (noteData is not IGroundChainNoteData) { return false; }
+                IDeployableNoteData noteData = new ChartEditor.NoteData_Hold();
+                if (noteData is not IChainNoteData) { return false; }
                 ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.HoldEndUnjudge);
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
-                IGroundChainNoteData chainData = (IGroundChainNoteData)noteData;
+                IChainNoteData chainData = (IChainNoteData)noteData;
 
                 noteData.SetAddress(address);
                 noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());

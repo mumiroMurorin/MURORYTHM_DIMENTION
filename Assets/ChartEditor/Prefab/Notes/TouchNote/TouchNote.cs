@@ -12,7 +12,7 @@ namespace ChartEditor
     }
 
     [System.Serializable]
-    public class NoteData_Touch : IGroundNoteData
+    public class NoteData_Touch : IDeployableNoteData
     {
         public NoteData_Touch() { }
 
@@ -97,7 +97,7 @@ namespace ChartEditor
             SetRange(shifted);
         }
 
-        public IGroundNoteData Copy()
+        public IDeployableNoteData Copy()
         {
             return new NoteData_Touch(this);
         }

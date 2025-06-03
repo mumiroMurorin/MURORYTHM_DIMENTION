@@ -7,7 +7,7 @@ using ChartEditor;
 
 namespace ChartEditor
 {
-    public class NoteDeployer : MonoBehaviour
+    public class SpaceDeployer : MonoBehaviour
     {
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
 
@@ -204,17 +204,6 @@ namespace ChartEditor
             return null;
         }
 
-    }
-
-    [System.Serializable]
-    public class NoteTypeToNoteObject
-    {
-        [SerializeField] DeploymentNoteType noteType;
-        [SerializeField] GameObject noteObject;
-
-        public DeploymentNoteType DeploymentNoteType { get { return noteType; } }
-
-        public GameObject NoteObject { get { return noteObject; } }
     }
 }
 

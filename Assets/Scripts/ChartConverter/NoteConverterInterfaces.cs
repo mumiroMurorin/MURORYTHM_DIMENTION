@@ -29,17 +29,17 @@ namespace ChartConvert
 
     public interface IUnchainedNoteConvertable
     {
-        bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin);
+        bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin);
 
         bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor);
     }
 
     public interface IChainNoteConvertable
     {
-        bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, 
-            ref Dictionary<IGroundChainNoteData, int> nextNoteToNumber);
+        bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, 
+            ref Dictionary<IChainNoteData, int> nextNoteToNumber);
 
         bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor,
-            ref Dictionary<int, IGroundChainNoteData> numberToStartNote);
+            ref Dictionary<int, IChainNoteData> numberToStartNote);
     }
 }

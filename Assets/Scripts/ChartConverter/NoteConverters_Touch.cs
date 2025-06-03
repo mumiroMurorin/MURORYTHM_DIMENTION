@@ -14,7 +14,7 @@ namespace ChartConvert
     {
         readonly DeploymentNoteType type = DeploymentNoteType.TouchNote;
 
-        public bool AddDataForOrigin(IGroundNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
             if (noteDataInEditor.NoteType != type) { return false; }
 
@@ -58,7 +58,7 @@ namespace ChartConvert
 
             foreach (var noteDataOrigin in dataOrigin.TouchNoteData)
             {
-                IGroundNoteData noteData = new ChartEditor.NoteData_Touch();
+                IDeployableNoteData noteData = new ChartEditor.NoteData_Touch();
 
                 // データのセット
                 AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);

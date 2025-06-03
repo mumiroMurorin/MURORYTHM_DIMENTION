@@ -22,7 +22,7 @@ namespace ChartEditor
 
         List<Collider> colliders;
 
-        public IGroundNoteData NoteData { get; set; }
+        public IDeployableNoteData NoteData { get; set; }
 
         public Func<AddressInChart, Transform> GetParentTransformFunc { get; set; }
 

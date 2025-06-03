@@ -14,7 +14,7 @@ namespace ChartConvert
     {
         private List<IUnchainedNoteConvertable> unchainConverters = new List<IUnchainedNoteConvertable>();
         private List<IChainNoteConvertable> chainConverters = new List<IChainNoteConvertable>();
-        private Dictionary<int, IGroundChainNoteData> holdNumberToChainNote = new Dictionary<int, IGroundChainNoteData>();
+        private Dictionary<int, IChainNoteData> holdNumberToChainNote = new Dictionary<int, IChainNoteData>();
 
         public bool Import(ChartDataOrigin dataOrigin, ref ChartEditor.ChartData chartData, IChartEditorDataSetter dataSetter)
         {

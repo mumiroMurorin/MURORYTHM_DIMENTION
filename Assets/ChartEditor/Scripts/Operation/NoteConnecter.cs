@@ -9,7 +9,7 @@ namespace ChartEditor
     {
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorDataSetter chartEditorDataSetter;
-        IGroundChainNoteData startNote;
+        IChainNoteData startNote;
 
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorDataSetter chartEditorDataSetter)
@@ -37,10 +37,10 @@ namespace ChartEditor
             IConnectableObject connectableObject = chartEditorDataGetter.ConnectableObject.Value;
             if (connectableObject == null) { return; }
 
-            if (connectableObject.Note.NoteData is not IGroundChainNoteData) { return; }
+            if (connectableObject.Note.NoteData is not IChainNoteData) { return; }
 
             chartEditorDataSetter.SetEditMode(EditMode.Connecting);
-            startNote = (IGroundChainNoteData)connectableObject.Note.NoteData;
+            startNote = (IChainNoteData)connectableObject.Note.NoteData;
         }
 
         /// <summary>
@@ -53,9 +53,9 @@ namespace ChartEditor
 
             IConnectableObject connectableObject = chartEditorDataGetter.ConnectableObject.Value;
             if (connectableObject == null) { return; }
-            if (connectableObject.Note.NoteData is not IGroundChainNoteData) { return; }
+            if (connectableObject.Note.NoteData is not IChainNoteData) { return; }
 
-            startNote.AddChainNote((IGroundChainNoteData)connectableObject.Note.NoteData);
+            startNote.AddChainNote((IChainNoteData)connectableObject.Note.NoteData);
         }
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace ChartEditor
     }
 
     [System.Serializable]
-    public class NoteData_DynamicLeftward : IGroundNoteData
+    public class NoteData_DynamicLeftward : IDeployableNoteData
     {
         public NoteData_DynamicLeftward() { }
 
@@ -97,7 +97,7 @@ namespace ChartEditor
             SetRange(shifted);
         }
 
-        public IGroundNoteData Copy()
+        public IDeployableNoteData Copy()
         {
             return new NoteData_DynamicLeftward(this);
         }

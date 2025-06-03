@@ -14,7 +14,7 @@ namespace ChartConvert
     {
         private List<IUnchainedNoteConvertable> unchainConverters = new List<IUnchainedNoteConvertable>();
         private List<IChainNoteConvertable> chainConverters = new List<IChainNoteConvertable>();
-        private Dictionary<IGroundChainNoteData, int> nextHoldNoteToNumber = new Dictionary<IGroundChainNoteData, int>();
+        private Dictionary<IChainNoteData, int> nextHoldNoteToNumber = new Dictionary<IChainNoteData, int>();
 
         public ChartDataOrigin Export(ChartEditor.ChartData chartData, float offset)
         {
@@ -188,14 +188,14 @@ namespace ChartConvert
         /// </summary>
         /// <param name="dataInEditor"></param>
         /// <returns></returns>
-        private List<IGroundChainNoteData> FindChainNotesInSubdivision(SubDivisionDataInBeat dataInEditor)
+        private List<IChainNoteData> FindChainNotesInSubdivision(SubDivisionDataInBeat dataInEditor)
         {
-            List<IGroundChainNoteData> chainNotes = new List<IGroundChainNoteData>();
+            List<IChainNoteData> chainNotes = new List<IChainNoteData>();
             foreach (var note in dataInEditor.NoteDatas)
             {
                 // Chainノーツである場合のみ
-                if (note is not IGroundChainNoteData) { continue; }
-                var thisNote = (IGroundChainNoteData)note;
+                if (note is not IChainNoteData) { continue; }
+                var thisNote = (IChainNoteData)note;
                 var nextNote = thisNote.NextNote.Value;
                 var backNote = thisNote.BackNote.Value;
 
@@ -203,14 +203,14 @@ namespace ChartConvert
                 if (nextNote != null && IsInSameSubdivision(thisNote, nextNote))
                 {
                     // 一番最初のチェインノーツをあぶりだす
-                    IGroundChainNoteData chainNote = GetFirstChainNoteInSameSubdivision(thisNote);
+                    IChainNoteData chainNote = GetFirstChainNoteInSameSubdivision(thisNote);
                     chainNotes.Add(chainNote);
                 }
                 // 前ノーツが同じ分節に配置されていた場合
                 else if (backNote != null && IsInSameSubdivision(thisNote, backNote))
                 {
                     // 一番最初のチェインノーツをあぶりだす
-                    IGroundChainNoteData chainNote = GetFirstChainNoteInSameSubdivision(thisNote);
+                    IChainNoteData chainNote = GetFirstChainNoteInSameSubdivision(thisNote);
                     chainNotes.Add(chainNote);
                 }
             }
@@ -225,7 +225,7 @@ namespace ChartConvert
         /// </summary>
         /// <param name="chainNote"></param>
         /// <returns></returns>
-        private IGroundChainNoteData GetFirstChainNoteInSameSubdivision(IGroundChainNoteData chainNote)
+        private IChainNoteData GetFirstChainNoteInSameSubdivision(IChainNoteData chainNote)
         {
             while (chainNote != null && IsInSameSubdivision(chainNote, chainNote.BackNote.Value))
             {
@@ -241,7 +241,7 @@ namespace ChartConvert
         /// <param name="note1"></param>
         /// <param name="note2"></param>
         /// <returns></returns>
-        private bool IsInSameSubdivision(IGroundNoteData note1, IGroundNoteData note2)
+        private bool IsInSameSubdivision(IDeployableNoteData note1, IDeployableNoteData note2)
         {
             if (note1 == null) { return false; }
             if (note2 == null) { return false; }

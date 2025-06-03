@@ -12,7 +12,7 @@ namespace ChartEditor
     }
 
     [System.Serializable]
-    public class NoteData_Hold : IGroundChainNoteData, ITypeChangableNoteData
+    public class NoteData_Hold : IChainNoteData, ITypeChangableNoteData
     {
         public NoteData_Hold() { }
 
@@ -181,19 +181,19 @@ namespace ChartEditor
         /// チェインノーツを追加
         /// </summary>
         /// <param name="addNote"></param>
-        public void AddChainNote(IGroundChainNoteData addNote, bool isUpdateNoteType = true)
+        public void AddChainNote(IChainNoteData addNote, bool isUpdateNoteType = true)
         {
             // 違うノーツ軍なら返す
             if (!CheckSameNoteTypeGroup(addNote.NoteType)) { return; }
 
-            List<IGroundChainNoteData> chains = new List<IGroundChainNoteData>();
+            List<IChainNoteData> chains = new List<IChainNoteData>();
 
             // ノーツを追加
             chains.Add(this);
             chains.Add(addNote);
 
             // このノーツを遡って全部リストに追加
-            IGroundChainNoteData backNote = this.BackNote.Value;
+            IChainNoteData backNote = this.BackNote.Value;
             while (backNote != null)
             {
                 chains.Add(backNote);
@@ -201,7 +201,7 @@ namespace ChartEditor
             }
 
             // このノーツを進んで全部リストに追加
-            IGroundChainNoteData nextNote = this.NextNote.Value;
+            IChainNoteData nextNote = this.NextNote.Value;
             while (nextNote != null)
             {
                 chains.Add(nextNote);
@@ -246,12 +246,12 @@ namespace ChartEditor
         /// </summary>
         public void UpdateChainNote()
         {
-            List<IGroundChainNoteData> chains = new List<IGroundChainNoteData>();
+            List<IChainNoteData> chains = new List<IChainNoteData>();
 
             chains.Add(this);
 
             // このノーツを遡って全部リストに追加
-            IGroundChainNoteData backNote = this.BackNote.Value;
+            IChainNoteData backNote = this.BackNote.Value;
             while (backNote != null)
             {
                 chains.Add(backNote);
@@ -259,7 +259,7 @@ namespace ChartEditor
             }
 
             // このノーツを進んで全部リストに追加
-            IGroundChainNoteData nextNote = this.NextNote.Value;
+            IChainNoteData nextNote = this.NextNote.Value;
             while (nextNote != null)
             {
                 chains.Add(nextNote);
@@ -273,7 +273,7 @@ namespace ChartEditor
         /// 引数ノーツを順に全てつなげる
         /// </summary>
         /// <param name="chains"></param>
-        private void ConnectChainNotes(List<IGroundChainNoteData> chains, bool isUpdateNoteType = true)
+        private void ConnectChainNotes(List<IChainNoteData> chains, bool isUpdateNoteType = true)
         {
             // 重複項目を削除
             chains = chains.Distinct().ToList();
@@ -311,9 +311,9 @@ namespace ChartEditor
         /// <summary>
         /// 次のノーツ
         /// </summary>
-        ReactiveProperty<IGroundChainNoteData> nextNote = new ReactiveProperty<IGroundChainNoteData>();
-        public IReadOnlyReactiveProperty<IGroundChainNoteData> NextNote => nextNote;
-        public void SetNextNote(IGroundChainNoteData nextNote, bool isUpdateNoteType = true)
+        ReactiveProperty<IChainNoteData> nextNote = new ReactiveProperty<IChainNoteData>();
+        public IReadOnlyReactiveProperty<IChainNoteData> NextNote => nextNote;
+        public void SetNextNote(IChainNoteData nextNote, bool isUpdateNoteType = true)
         {
             this.nextNote.Value = nextNote;
             if (isUpdateNoteType) { UpdateNoteType(); }
@@ -322,9 +322,9 @@ namespace ChartEditor
         /// <summary>
         /// 前のノーツ
         /// </summary>
-        ReactiveProperty<IGroundChainNoteData> backNote = new ReactiveProperty<IGroundChainNoteData>();
-        public IReadOnlyReactiveProperty<IGroundChainNoteData> BackNote => backNote;
-        public void SetBackNote(IGroundChainNoteData backNote, bool isUpdateNoteType = true)
+        ReactiveProperty<IChainNoteData> backNote = new ReactiveProperty<IChainNoteData>();
+        public IReadOnlyReactiveProperty<IChainNoteData> BackNote => backNote;
+        public void SetBackNote(IChainNoteData backNote, bool isUpdateNoteType = true)
         {
             this.backNote.Value = backNote;
             if (isUpdateNoteType) { UpdateNoteType(); }
@@ -337,7 +337,7 @@ namespace ChartEditor
             NoteObject = noteObject;
         }
 
-        public IGroundNoteData Copy()
+        public IDeployableNoteData Copy()
         {
             return new NoteData_Hold(this);
         }

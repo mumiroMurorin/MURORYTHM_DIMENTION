@@ -20,7 +20,7 @@ namespace ChartEditor
             noteObject = GetComponent<NoteObject>();
         }
 
-        void IDeployableObject.OnInstantiate(IGroundNoteData noteData, Func<AddressInChart, Transform> getParentTransformFunc)
+        void IDeployableObject.OnInstantiate(IDeployableNoteData noteData, Func<AddressInChart, Transform> getParentTransformFunc)
         {
             noteRenderer.material.color *= new Color(1, 1, 1, 0.5f);
             this.gameObject.SetActive(false);

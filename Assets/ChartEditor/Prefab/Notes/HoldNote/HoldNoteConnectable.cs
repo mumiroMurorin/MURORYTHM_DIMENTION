@@ -30,7 +30,7 @@ namespace ChartEditor
         NoteObject IConnectableObject.Note => noteObject;
 
         GameObject meshObject;
-        IGroundChainNoteData chainNoteData;
+        IChainNoteData chainNoteData;
         List<IDisposable> nextNoteDisposables = new List<IDisposable>();
         CancellationTokenSource cts = new CancellationTokenSource();
 
@@ -48,9 +48,9 @@ namespace ChartEditor
             // ノートデータが存在するまで待つ
             await UniTask.WaitUntil(() => noteObject.NoteData.Address != null, cancellationToken: token);
 
-            // IGroundChainNoteDataに変換
-            if (noteObject.NoteData is not IGroundChainNoteData) { return; }
-            chainNoteData = (IGroundChainNoteData)(noteObject.NoteData);
+            // IChainNoteDataに変換
+            if (noteObject.NoteData is not IChainNoteData) { return; }
+            chainNoteData = (IChainNoteData)(noteObject.NoteData);
 
             // 次ノーツが変わった時購読しなおす
             chainNoteData.NextNote
@@ -76,11 +76,11 @@ namespace ChartEditor
         /// このノーツに対するバインド
         /// </summary>
         /// <param name="thisNote"></param>
-        private void BindForThisNote(IGroundChainNoteData thisNote)
+        private void BindForThisNote(IChainNoteData thisNote)
         {
             if (thisNote.NextNote == null) { return; }
             if (thisNote.NextNote.Value == null) { return; }
-            IGroundChainNoteData nextNote = thisNote.NextNote.Value;
+            IChainNoteData nextNote = thisNote.NextNote.Value;
 
             // 2フレームごとに位置が変わってないかチェック
             var disposable1 = Observable.IntervalFrame(2)
@@ -103,7 +103,7 @@ namespace ChartEditor
         /// 次ノーツに対するバインド
         /// </summary>
         /// <param name="nextNote"></param>
-        private void BindForNextNote(IGroundChainNoteData nextNote)
+        private void BindForNextNote(IChainNoteData nextNote)
         {
             // 2フレームごとに位置が変わってないかチェック
             var disposable1 = Observable.IntervalFrame(2)
@@ -141,7 +141,7 @@ namespace ChartEditor
         /// マテリアルの変更
         /// </summary>
         /// <param name="holdNoteType"></param>
-        private void ChangeNoteMaterial(IGroundChainNoteData back, IGroundChainNoteData next)
+        private void ChangeNoteMaterial(IChainNoteData back, IChainNoteData next)
         {
             if (back != null && next != null) { noteMeshRenderer.material = relayMaterial; }
             else if (back != null && next == null) { noteMeshRenderer.material = endMaterial; }
