@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4754915078397325738}
   - component: {fileID: 6574088663987222846}
   - component: {fileID: 7627113204988303830}
+  - component: {fileID: 7026746705395250061}
   m_Layer: 9
   m_Name: SpaceDeployableCollider
   m_TagString: Untagged
@@ -66,3 +67,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b28c160b4c0cfa43a4ae70f0170fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7026746705395250061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8071861117035782348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea674607acc1fa64e8929dc1c31877df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spaceDeployableUnit: {fileID: 7627113204988303830}

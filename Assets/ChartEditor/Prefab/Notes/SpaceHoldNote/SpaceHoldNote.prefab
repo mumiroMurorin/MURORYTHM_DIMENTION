@@ -405,7 +405,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8919827025346925897}
   - component: {fileID: 148318156737617283}
-  - component: {fileID: 7126901341016802860}
+  - component: {fileID: 1218810012175725564}
   - component: {fileID: 5680730002281049432}
   - component: {fileID: 2042939825380956139}
   - component: {fileID: 3876255539538478899}
@@ -453,7 +453,7 @@ MonoBehaviour:
   - {fileID: 2025427974455954411}
   - {fileID: 1346356341139103831}
   outline: {fileID: 3066808719956895909}
---- !u!114 &7126901341016802860
+--- !u!114 &1218810012175725564
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -462,10 +462,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5475620226950634511}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69510d7ddfd43574fa6add420035ad59, type: 3}
+  m_Script: {fileID: 11500000, guid: 1fb3d2091b338914e8eb57e00364ad74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineColorOnDeploying: {r: 1, g: 0, b: 0.9208169, a: 1}
+  outlineColorOnDeploying: {r: 1, g: 0, b: 0.92156863, a: 1}
   noteRenderer: {fileID: 5893660377328454484}
 --- !u!114 &5680730002281049432
 MonoBehaviour:

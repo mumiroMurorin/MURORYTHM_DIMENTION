@@ -71,6 +71,8 @@ namespace ChartEditor
 
             // 配置ノーツが無かったら新規インスタンス化
             if (deployingNote == null) { InstantiateNote(); }
+            // それでもなかったら返す
+            if (deployingNote == null) { return; }
 
             deployingNote.OnMove(deployable.deployParent);
             isDeployedTentative = true;
@@ -102,7 +104,10 @@ namespace ChartEditor
         /// </summary>
         private void InstantiateNote()
         {
-            GameObject obj = Instantiate(GetNote(chartEditorDataGetter.DeploymentNoteType.Value));
+            GameObject origin = GetNote(chartEditorDataGetter.DeploymentNoteType.Value);
+            if (origin == null) { return; }
+
+            GameObject obj = Instantiate(origin);
 
             if (!obj.TryGetComponent(out IDeployableObject deployable))
             {
@@ -131,7 +136,10 @@ namespace ChartEditor
         /// <param name="groundNoteData"></param>
         public void DeployForNoteData(IDeployableNoteData noteData)
         {
-            GameObject obj = Instantiate(GetNote(noteData.NoteType));
+            GameObject origin = GetNote(chartEditorDataGetter.DeploymentNoteType.Value);
+            if (origin == null) { return; }
+
+            GameObject obj = Instantiate(origin);
 
             if (!obj.TryGetComponent(out IDeployableObject deployable))
             {
@@ -181,7 +189,7 @@ namespace ChartEditor
                 if(noteType == note.DeploymentNoteType) { return note.NoteObject; }
             }
 
-            Debug.LogWarning($"対応するノーツが存在しませんでした: {noteType}");
+            //Debug.LogWarning($"対応するノーツが存在しませんでした: {noteType}");
             return null;
         }
 

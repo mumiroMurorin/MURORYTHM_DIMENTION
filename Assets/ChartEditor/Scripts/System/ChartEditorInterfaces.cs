@@ -51,6 +51,13 @@ namespace ChartEditor
         AddressInChart Address { get; }
     }
 
+    public interface IFreedomDeployableCollider
+    {
+        Transform deployParent { get; }
+
+        AddressInChart Address { get; }
+    }
+
     public interface IDeployableObject
     {
         public Action OnDestroyListner { get; set; }
@@ -58,6 +65,19 @@ namespace ChartEditor
         void OnInstantiate(IDeployableNoteData noteData, Func<AddressInChart, Transform> getParentTransformFunc);
 
         void OnMove(Transform parent);
+
+        void OnDeploy();
+
+        void OnDisable();
+    }
+
+    public interface IFreedomDeployableObject
+    {
+        public Action OnDestroyListner { get; set; }
+
+        void OnInstantiate(IDeployableNoteData noteData, Func<AddressInChart, Transform> getParentTransformFunc);
+
+        void OnMove(Transform parent, Vector3 worldPos);
 
         void OnDeploy();
 

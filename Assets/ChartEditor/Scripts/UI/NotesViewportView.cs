@@ -10,7 +10,8 @@ namespace ChartEditor
 
         public void OnChangeEditMode(EditMode mode)
         {
-            obj.SetActive(mode == EditMode.Deploy);
+            if(mode == EditMode.Connecting) { obj.SetActive(false); }
+            else { obj.SetActive(true); }
         }
     }
 

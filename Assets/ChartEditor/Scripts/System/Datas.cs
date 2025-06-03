@@ -484,10 +484,6 @@ namespace ChartEditor
 
         SpaceDeploy,
         SpaceMove,
-        SpaceConnect,
-        SpaceConnecting,
-        SpaceChangeType,
-        SpaceDestroy,
     }
 
     /// <summary>
@@ -523,6 +519,7 @@ namespace ChartEditor
         HoldHidden,
         HoldHiddenJudged,
         HoldEndUnjudge,
+
         SpaceHold,
         SpaceHoldHidden,
         SpaceHoldHiddenJudged,

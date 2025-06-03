@@ -88,6 +88,7 @@ namespace ChartEditor
             if(obj == null) 
             {
                 chartEditorDataSetter.SetDeployableCollider(null);
+                chartEditorDataSetter.SetFreedomDeployableCollider(null);
                 chartEditorDataSetter.SetMovableObject(null);
                 chartEditorDataSetter.SetScalableObject(null, chartEditorDataGetter.IsRightAnchored);
                 chartEditorDataSetter.SetDestroyableObject(null);
@@ -98,6 +99,7 @@ namespace ChartEditor
             }
 
             UpdateDeployableObject(obj);
+            UpdateFreedomDeployableObject(obj);
             UpdateMovableObject(obj);
             UpdateScalableObject(obj);
             UpdateConnectableObject(obj);
@@ -119,6 +121,19 @@ namespace ChartEditor
             else
             {
                 chartEditorDataSetter.SetDeployableCollider(null);
+            }
+        }
+
+        private void UpdateFreedomDeployableObject(GameObject obj)
+        {
+            // ノーツ配置場所の更新
+            if (obj.TryGetComponent(out IFreedomDeployableCollider deployable))
+            {
+                chartEditorDataSetter.SetFreedomDeployableCollider(deployable);
+            }
+            else
+            {
+                chartEditorDataSetter.SetFreedomDeployableCollider(null);
             }
         }
 
@@ -230,14 +245,30 @@ namespace ChartEditor
             RaycastHit hit;
 
             // オブジェクトがなかったらnullを返す
-            if (!Physics.Raycast(ray, out hit, 20f, raycastLayer)) { return null; }
+            if (!Physics.Raycast(ray, out hit, 30f, raycastLayer)) { return null; }
             return hit.collider.gameObject;
+        }
+
+        /// <summary>
+        /// Rayがヒットした位置(ワールド座標)を返す
+        /// </summary>
+        /// <returns></returns>
+        public Vector3 GetWorldPositionUnderCursor()
+        {
+            Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            // オブジェクトがなかったらnullを返す
+            if (!Physics.Raycast(ray, out hit, 30f, raycastLayer)) { return Vector3.zero; }
+            return hit.point;
         }
     }
 
     public interface ICursorInteracter
     {
         GameObject GetObjectUnderCursor();
+
+        Vector3 GetWorldPositionUnderCursor();
     }
 
 }

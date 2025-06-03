@@ -105,6 +105,15 @@ namespace ChartEditor
             deployableCollider.Value = collider;
         }
 
+        ReactiveProperty<IFreedomDeployableCollider> freedomDeployableCollider = new ReactiveProperty<IFreedomDeployableCollider>();
+        IReadOnlyReactiveProperty<IFreedomDeployableCollider> IChartEditorDataGetter.FreedomDeployableCollider => freedomDeployableCollider;
+
+        void IChartEditorDataSetter.SetFreedomDeployableCollider(IFreedomDeployableCollider collider)
+        {
+            if (freedomDeployableCollider.Value == collider) { return; }
+            freedomDeployableCollider.Value = collider;
+        }
+
         #endregion
 
         #region BarConfig è¨êﬂê¸Ç…ëŒÇ∑ÇÈê›íË
@@ -263,6 +272,8 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<IDeployableCollider> DeployableCollider { get; }
 
+        IReadOnlyReactiveProperty<IFreedomDeployableCollider> FreedomDeployableCollider { get; }
+
         IReadOnlyReactiveProperty<IMovableObject> MovableObject { get; }
 
         bool IsRightAnchored { get; }
@@ -306,6 +317,8 @@ namespace ChartEditor
         void SetRhythmConfigurableSubDivision(IRhythmConfigurableSubDivisionCollider rCollider);
 
         void SetDeployableCollider(IDeployableCollider collider);
+
+        void SetFreedomDeployableCollider(IFreedomDeployableCollider collider);
 
         void SetMovableObject(IMovableObject mObject);
 

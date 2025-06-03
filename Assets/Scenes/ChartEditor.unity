@@ -1062,6 +1062,69 @@ RectTransform:
   m_AnchoredPosition: {x: 150, y: -217.5}
   m_SizeDelta: {x: 300, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &71458738
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 71458739}
+  - component: {fileID: 71458740}
+  m_Layer: 0
+  m_Name: SpaceDeployer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &71458739
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71458738}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 619309498}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &71458740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71458738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea41906dfea552a479518793462481a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cursorInteracter:
+    obj: {fileID: 1038807069}
+  noteDataList:
+  - rid: 3422109081925582848
+  notes:
+  - noteType: 9
+    noteObject: {fileID: 5475620226950634511, guid: 41e3941ad64096049b60bc5b270486d2, type: 3}
+  - noteType: 10
+    noteObject: {fileID: 5475620226950634511, guid: 41e3941ad64096049b60bc5b270486d2, type: 3}
+  - noteType: 11
+    noteObject: {fileID: 5475620226950634511, guid: 41e3941ad64096049b60bc5b270486d2, type: 3}
+  - noteType: 12
+    noteObject: {fileID: 5475620226950634511, guid: 41e3941ad64096049b60bc5b270486d2, type: 3}
+  references:
+    version: 2
+    RefIds:
+    - rid: 3422109081925582848
+      type: {class: NoteData_SpaceHold, ns: ChartEditor, asm: Assembly-CSharp}
+      data: 
 --- !u!1001 &94919053
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5739,6 +5802,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1250030798}
+  - {fileID: 71458739}
   - {fileID: 630248960}
   - {fileID: 305315783}
   - {fileID: 1797220170}
@@ -13079,7 +13143,6 @@ MonoBehaviour:
   - rid: 4659756163197042690
   - rid: 4659756163197042691
   - rid: 5896496808941584384
-  - rid: 5467758694911705088
   notes:
   - noteType: 0
     noteObject: {fileID: 5475620226950634511, guid: a3e1d74dfae71aa458e010bbb30b2e2a, type: 3}
@@ -13099,14 +13162,6 @@ MonoBehaviour:
     noteObject: {fileID: 5475620226950634511, guid: df1462ddc3f8d704c90bada7e7496fb6, type: 3}
   - noteType: 8
     noteObject: {fileID: 5475620226950634511, guid: df1462ddc3f8d704c90bada7e7496fb6, type: 3}
-  - noteType: 9
-    noteObject: {fileID: 5475620226950634511, guid: 41e3941ad64096049b60bc5b270486d2, type: 3}
-  - noteType: 10
-    noteObject: {fileID: 5475620226950634511, guid: 41e3941ad64096049b60bc5b270486d2, type: 3}
-  - noteType: 11
-    noteObject: {fileID: 5475620226950634511, guid: 41e3941ad64096049b60bc5b270486d2, type: 3}
-  - noteType: 12
-    noteObject: {fileID: 5475620226950634511, guid: 41e3941ad64096049b60bc5b270486d2, type: 3}
   references:
     version: 2
     RefIds:
@@ -13124,9 +13179,6 @@ MonoBehaviour:
       data: 
     - rid: 5467758377858236416
       type: {class: NoteData_DynamicDownward, ns: ChartEditor, asm: Assembly-CSharp}
-      data: 
-    - rid: 5467758694911705088
-      type: {class: NoteData_SpaceHold, ns: ChartEditor, asm: Assembly-CSharp}
       data: 
     - rid: 5896496808941584384
       type: {class: NoteData_Hold, ns: ChartEditor, asm: Assembly-CSharp}

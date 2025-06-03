@@ -1,0 +1,67 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+
+namespace ChartEditor
+{
+    [RequireComponent(typeof(NoteObject))]
+    public class SpaceDeployable : MonoBehaviour, IFreedomDeployableObject
+    {
+        [Tooltip("配置時のアウトライン色")]
+        [SerializeField] private Color outlineColorOnDeploying;
+        [SerializeField] private Renderer noteRenderer;
+
+        NoteObject noteObject;
+        public Action OnDestroyListner { get; set; }
+
+        private void Awake()
+        {
+            noteObject = GetComponent<NoteObject>();
+        }
+
+        void IFreedomDeployableObject.OnInstantiate(IDeployableNoteData noteData, Func<AddressInChart, Transform> getParentTransformFunc)
+        {
+            noteRenderer.material.color *= new Color(1, 1, 1, 0.5f);
+            this.gameObject.SetActive(false);
+            noteObject.SetCollidersActive(false);
+
+            // アウトラインの設定
+            noteObject.SetOutlineColor(outlineColorOnDeploying, true);
+            noteObject.SetOutlineActive(true);
+
+            noteObject.NoteData = noteData;
+            noteObject.GetParentTransformFunc = getParentTransformFunc;
+
+        }
+
+        void IFreedomDeployableObject.OnDeploy()
+        {
+            // アウトラインを消す
+            noteObject.SetOutlineActive(false);
+
+            noteRenderer.material.color *= new Color(1, 1, 1, 2f);
+            noteObject.SetCollidersActive(true);
+        }
+
+        void IFreedomDeployableObject.OnMove(Transform parent, Vector3 worldPos)
+        {
+            // 親オブジェクトに合わせた位置調整
+            // まだ設置していないので引数のTransformを参照
+            this.transform.position = worldPos;
+            this.transform.SetParent(parent);
+            this.gameObject.SetActive(true);
+        }
+
+        void IFreedomDeployableObject.OnDisable()
+        {
+            noteObject.Destroy();
+        }
+
+        private void OnDestroy()
+        {
+            OnDestroyListner?.Invoke();
+        }
+    }
+
+}
