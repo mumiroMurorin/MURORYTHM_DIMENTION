@@ -136,7 +136,7 @@ namespace ChartEditor
         /// <param name="groundNoteData"></param>
         public void DeployForNoteData(IDeployableNoteData noteData)
         {
-            GameObject origin = GetNote(chartEditorDataGetter.DeploymentNoteType.Value);
+            GameObject origin = GetNote(noteData.NoteType);
             if (origin == null) { return; }
 
             GameObject obj = Instantiate(origin);

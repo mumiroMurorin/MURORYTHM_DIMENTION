@@ -48,7 +48,8 @@ namespace ChartEditor
         {
             // 親オブジェクトに合わせた位置調整
             // まだ設置していないので引数のTransformを参照
-            this.transform.position = worldPos;
+            this.transform.position = parent.position;
+
             this.transform.SetParent(parent);
             this.gameObject.SetActive(true);
         }

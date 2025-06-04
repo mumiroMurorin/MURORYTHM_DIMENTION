@@ -75,6 +75,7 @@ namespace ChartConvert
             {
                 new SpaceHoldStartConverter(),
                 new SpaceHoldRelayConverter(),
+                new SpaceHoldMeshRelayConverter(),
                 new SpaceHoldHiddenJudgedRelay(),
                 new SpaceHoldEndConverter(),
             };

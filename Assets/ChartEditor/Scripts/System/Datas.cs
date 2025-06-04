@@ -11,6 +11,8 @@ namespace ChartEditor
     /// </summary>
     public class SubDivisionDataInBeat
     {
+        const int SPACE_LOCATION_INDEX = 100;
+
         public SubDivisionDataInBeat(float bpm, int barIndex, int subIndex)
         {
             SetBpm(bpm);
@@ -21,7 +23,19 @@ namespace ChartEditor
         public int BarIndex { get; }
         public int SubDivisionIndex { get; }
 
+        // Ground配置場所
         public Transform[] PlacementLocation { private get; set; }
+        public void SetPlacementLocation(Transform[] locates)
+        {
+            PlacementLocation = locates;
+        }
+
+        // 宙配置場所
+        public Transform SpaceLocation { private get; set; }
+        public void SetSpaceLocation(Transform locate)
+        {
+            SpaceLocation = locate;
+        }
 
         #region ノーツデータ
 
@@ -47,17 +61,19 @@ namespace ChartEditor
 
         public Transform GetPlacementLocation(AddressInChart address)
         {
+            // 宙配置場所
+            if(address.SliderIndex == SPACE_LOCATION_INDEX)
+            {
+                return SpaceLocation;
+            }
+
+            // グラウンド配置場所
             if(address.SliderIndex > 15) {
                 Debug.LogError($"【System】値が15を超えています: {address.SliderIndex}");
                 return null; 
             }
 
             return PlacementLocation[(int)address.SliderIndex];
-        }
-
-        public void SetPlacementLocation(Transform[] locates)
-        {
-            PlacementLocation = locates;
         }
 
         #endregion
@@ -523,6 +539,6 @@ namespace ChartEditor
         SpaceHold,
         SpaceHoldHidden,
         SpaceHoldHiddenJudged,
-        SpaceHoldEndUnjudge
+        //SpaceHoldEndUnjudge
     }
 }

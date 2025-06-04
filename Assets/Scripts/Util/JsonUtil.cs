@@ -26,7 +26,8 @@ namespace JsonUtil
                     Formatting.Indented,
                     new JsonSerializerSettings
                     {
-                        NullValueHandling = NullValueHandling.Ignore
+                        NullValueHandling = NullValueHandling.Ignore,
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                     });
                 string path = Path.Combine(UnityEngine.Application.persistentDataPath, fileName);
                 File.WriteAllText(path, json);
@@ -53,7 +54,8 @@ namespace JsonUtil
                     Formatting.Indented,
                     new JsonSerializerSettings
                     {
-                        NullValueHandling = NullValueHandling.Ignore
+                        NullValueHandling = NullValueHandling.Ignore,
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                     });
 
                 // ダイアログ表示

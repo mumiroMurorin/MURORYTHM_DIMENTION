@@ -9,6 +9,7 @@ namespace ChartEditor
     public class CursorInteracter : MonoBehaviour, ICursorInteracter
     {
         [SerializeField] Camera viewCamera;
+        [SerializeField] float rayDistance = 35f;
 
         IChartEditorDataSetter chartEditorDataSetter;
         IChartEditorDataGetter chartEditorDataGetter;
@@ -245,7 +246,7 @@ namespace ChartEditor
             RaycastHit hit;
 
             // オブジェクトがなかったらnullを返す
-            if (!Physics.Raycast(ray, out hit, 30f, raycastLayer)) { return null; }
+            if (!Physics.Raycast(ray, out hit, rayDistance, raycastLayer)) { return null; }
             return hit.collider.gameObject;
         }
 
@@ -259,7 +260,7 @@ namespace ChartEditor
             RaycastHit hit;
 
             // オブジェクトがなかったらnullを返す
-            if (!Physics.Raycast(ray, out hit, 30f, raycastLayer)) { return Vector3.zero; }
+            if (!Physics.Raycast(ray, out hit, rayDistance, raycastLayer)) { return Vector3.zero; }
             return hit.point;
         }
     }

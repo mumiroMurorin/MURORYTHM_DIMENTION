@@ -30,3 +30,23 @@ public static class Vector2Extensions
         return sum;
     }
 }
+
+/// <summary>
+/// JsonファイルにシリアライズしやすいVector2
+/// </summary>
+[System.Serializable]
+public class SimpleVector2
+{
+    public float x;
+    public float y;
+
+    public SimpleVector2() { }
+
+    public SimpleVector2(Vector2 v)
+    {
+        x = v.x;
+        y = v.y;
+    }
+
+    public Vector2 ToVector2() => new Vector2(x, y);
+}

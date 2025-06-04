@@ -33,8 +33,8 @@ namespace ChartEditor
         {
             if (noteType != DeploymentNoteType.SpaceHold &&
                 noteType != DeploymentNoteType.SpaceHoldHidden &&
-                noteType != DeploymentNoteType.SpaceHoldHiddenJudged &&
-                noteType != DeploymentNoteType.SpaceHoldEndUnjudge) 
+                noteType != DeploymentNoteType.SpaceHoldHiddenJudged )
+                // && noteType != DeploymentNoteType.SpaceHoldEndUnjudge) 
             {
                 Debug.LogWarning($"【Note】SpaceHoldNoteは {noteType} に対応していません");
                 return;
@@ -65,17 +65,17 @@ namespace ChartEditor
             // 終点
             if(NextNote.Value == null)
             {
-                switch (NoteType)
-                {
-                    // 判定あり終点 → 判定なし終点
-                    case DeploymentNoteType.SpaceHold:
-                        NoteType = DeploymentNoteType.SpaceHoldEndUnjudge;
-                        break;
-                    // 判定なし終点 → 判定あり終点
-                    case DeploymentNoteType.SpaceHoldEndUnjudge:
-                        NoteType = DeploymentNoteType.SpaceHold;
-                        break;
-                }
+                //switch (NoteType)
+                //{
+                //    // 判定あり終点 → 判定なし終点
+                //    case DeploymentNoteType.SpaceHold:
+                //        NoteType = DeploymentNoteType.SpaceHoldEndUnjudge;
+                //        break;
+                //    // 判定なし終点 → 判定あり終点
+                //    case DeploymentNoteType.SpaceHoldEndUnjudge:
+                //        NoteType = DeploymentNoteType.SpaceHold;
+                //        break;
+                //}
             }
             // 中継点
             else
@@ -103,10 +103,10 @@ namespace ChartEditor
         private void UpdateNoteType()
         {
             // 終点ノーツが変なことになってたら元に戻す
-            if(NextNote.Value == null && NoteType != DeploymentNoteType.SpaceHoldEndUnjudge)
-            {
-                NoteType = DeploymentNoteType.SpaceHold;
-            }
+            //if(NextNote.Value == null && NoteType != DeploymentNoteType.SpaceHoldEndUnjudge)
+            //{
+            //    NoteType = DeploymentNoteType.SpaceHold;
+            //}
 
             // 始点ノーツが変なことになってたら元に戻す
             if (BackNote.Value == null) 
@@ -241,7 +241,7 @@ namespace ChartEditor
         private bool CheckSameNoteTypeGroup(DeploymentNoteType noteType)
         {
             return noteType == DeploymentNoteType.SpaceHold ||
-                noteType == DeploymentNoteType.SpaceHoldEndUnjudge ||
+                //noteType == DeploymentNoteType.SpaceHoldEndUnjudge ||
                 noteType == DeploymentNoteType.SpaceHoldHidden ||
                 noteType == DeploymentNoteType.SpaceHoldHiddenJudged;
         }
@@ -361,17 +361,14 @@ namespace ChartEditor
             new Vector2(0.25f, -0.5f)
         };
 
-        public SpaceHoldVertices()
-        {
-            foreach(var pos in defaultVertices)
-            {
-                vertices.Add(new SpaceHoldVertex(pos));
-            }
-        }
-
         // 頂点リスト
         ReactiveCollection<SpaceHoldVertex> vertices = new ReactiveCollection<SpaceHoldVertex>();
         public IReadOnlyReactiveCollection<SpaceHoldVertex> Vertices => vertices;
+
+        public SpaceHoldVertices()
+        {
+            SetVertices(defaultVertices.ToArray());
+        }
 
         public void AddVertex(SpaceHoldVertex vertex)
         {
@@ -381,6 +378,21 @@ namespace ChartEditor
         public bool RemoveVertex(SpaceHoldVertex vertex)
         {
             return vertices.Remove(vertex);
+        }
+
+        public void SetVertices(Vector2[] positions)
+        {
+            vertices.Clear();
+
+            foreach (var pos in positions)
+            {
+                vertices.Add(new SpaceHoldVertex(pos));
+            }
+        }
+
+        public SimpleVector2[] GetVertexArray()
+        {
+            return Vertices.Select(x => new SimpleVector2(x.Position.Value)).ToArray();
         }
     }
 

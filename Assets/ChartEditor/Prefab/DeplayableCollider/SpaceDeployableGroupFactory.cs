@@ -32,7 +32,7 @@ namespace ChartEditor
             if (obj.TryGetComponent(out SpaceDeployableUnit line))
             {
                 line.SetAddress(subDivisionData.BarIndex, subDivisionData.SubDivisionIndex);
-                //subDivisionData.SetPlacementLocation(line.GetNoteDeployableUnitTransforms());
+                subDivisionData.SetSpaceLocation(line.GetNoteDeployableUnitTransforms());
                 spaceDeployableColliders?.Add(line);
             }
 

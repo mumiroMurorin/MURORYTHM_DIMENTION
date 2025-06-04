@@ -46,4 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spaceDeployableColliderObj: {fileID: 8071861117035782348, guid: 982bcb24d4f081648b07553a432b8de9, type: 3}
   heightOnGroundEditMode: 0.1
-  heightOnSpaceEditMode: 10.1
+  heightOnSpaceEditMode: 17.1

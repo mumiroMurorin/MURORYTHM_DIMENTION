@@ -60,6 +60,11 @@ namespace ChartEditor
             verticesData.SpaceHoldVertices.Vertices.ObserveRemove()
                 .Subscribe(vertex => OnRemoveVertex(vertex.Value))
                 .AddTo(this.gameObject);
+
+            // ƒNƒŠƒA‚³‚ê‚½‚Æ‚«
+            verticesData.SpaceHoldVertices.Vertices.ObserveReset()
+                .Subscribe(_ => OnClearVertex())
+                .AddTo(this.gameObject);
         }
 
         private void Initialize()
@@ -76,7 +81,10 @@ namespace ChartEditor
                 return;
             }
 
+            dataToObj.Add(vertex, vertexObj);
+
             vertexObj.gameObject.transform.SetParent(vertexObjParent);
+            vertexObj.gameObject.transform.localPosition = Vector3.zero;
             vertexObj.Initialize(
                 vertex, 
                 () => {
@@ -85,10 +93,6 @@ namespace ChartEditor
                 },
                 ConvertPositionOnChartGround
                 );
-            dataToObj.Add(vertex, vertexObj);
-
-            //UpdateMesh();
-            //UpdateColliderObjectScale();
         }
 
         private void OnRemoveVertex(SpaceHoldVertex vertex)
@@ -101,6 +105,19 @@ namespace ChartEditor
 
             dataToObj.Remove(vertex);
             obj.Destroy();
+
+            UpdateMesh();
+            UpdateColliderObjectScale();
+        }
+
+        private void OnClearVertex()
+        {
+            foreach (var pair in dataToObj)
+            {
+                pair.Value.Destroy();
+            }
+
+            dataToObj.Clear();
 
             UpdateMesh();
             UpdateColliderObjectScale();
@@ -159,8 +176,6 @@ namespace ChartEditor
                     colliderObject.transform.localScale.y, 
                     colliderObject.transform.localScale.z
                 );
-
-            colliderObject.transform.localPosition = (rightPos + leftPos) / 2f;
         }
 
         private Vector2 ConvertPositionOnChartGround(Vector2 normalizedPos)

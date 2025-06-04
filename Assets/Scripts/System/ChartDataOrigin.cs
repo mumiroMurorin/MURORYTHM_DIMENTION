@@ -185,7 +185,7 @@ namespace ChartConvert
     {
         public int HoldNumber { get; set; }
 
-        public Vector2[] Vertices { get; set; }
+        public SimpleVector2[] Vertices { get; set; }
     }
 
     /// <summary>
@@ -195,7 +195,7 @@ namespace ChartConvert
     {
         public int HoldNumber { get; set; }
 
-        public Vector2[] Vertices { get; set; }
+        public SimpleVector2[] Vertices { get; set; }
     }
 
     /// <summary>
@@ -205,7 +205,7 @@ namespace ChartConvert
     {
         public int HoldNumber { get; set; }
 
-        public Vector2[] Vertices { get; set; }
+        public SimpleVector2[] Vertices { get; set; }
     }
 
     /// <summary>
@@ -215,7 +215,7 @@ namespace ChartConvert
     {
         public int HoldNumber { get; set; }
 
-        public Vector2[] Vertices { get; set; }
+        public SimpleVector2[] Vertices { get; set; }
     }
 
     /// <summary>
@@ -225,7 +225,7 @@ namespace ChartConvert
     {
         public int HoldNumber { get; set; }
 
-        public Vector2[] Vertices { get; set; }
+        public SimpleVector2[] Vertices { get; set; }
     }
 
     #endregion

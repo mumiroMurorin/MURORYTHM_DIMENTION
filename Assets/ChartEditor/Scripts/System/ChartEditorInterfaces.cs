@@ -89,7 +89,23 @@ namespace ChartEditor
         IMovableObject Note { get; }
     }
 
+    public interface IFreedomMovableCollider
+    {
+        IFreedomMovableObject Note { get; }
+    }
+
     public interface IMovableObject
+    {
+        NoteObject Note { get; }
+
+        void OnMoveStart();
+
+        void OnMove();
+
+        void OnMoveEnd();
+    }
+
+    public interface IFreedomMovableObject
     {
         NoteObject Note { get; }
 

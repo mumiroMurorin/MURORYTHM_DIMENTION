@@ -31,8 +31,8 @@ namespace ChartEditor
         {
             Vector2 converted = calcPositionOnChartGround(pos);
 
-            this.gameObject.transform.position
-                = new Vector3(converted.x, converted.y, this.gameObject.transform.position.z);
+            this.gameObject.transform.localPosition
+                = new Vector3(converted.x, converted.y, this.gameObject.transform.localPosition.z);
 
             onChangePositionListener?.Invoke();
         }

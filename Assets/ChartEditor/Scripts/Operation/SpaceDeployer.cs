@@ -139,14 +139,14 @@ namespace ChartEditor
         /// <param name="groundNoteData"></param>
         public void DeployForNoteData(IDeployableNoteData noteData)
         {
-            GameObject origin = GetNote(chartEditorDataGetter.DeploymentNoteType.Value);
+            GameObject origin = GetNote(noteData.NoteType);
             if (origin == null) { return; }
 
             GameObject obj = Instantiate(origin);
 
-            if (!obj.TryGetComponent(out IDeployableObject deployable))
+            if (!obj.TryGetComponent(out IFreedomDeployableObject deployable))
             {
-                Debug.LogWarning("ノーツにIDeployableObjectがくっついてねぇぞ！");
+                Debug.LogWarning("ノーツにIFreedomDeployableObjectがくっついてねぇぞ！");
                 return;
             }
 
@@ -161,7 +161,7 @@ namespace ChartEditor
 
             // 配置
             Transform parent = chartEditorDataGetter.ChartData.Value.GetPlacementLocation(noteData.Address);
-            deployable.OnMove(parent);
+            deployable.OnMove(parent, Vector3.zero); //※修正
             deployable.OnDeploy();
         }
 

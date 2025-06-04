@@ -13,8 +13,10 @@ namespace ChartConvert
     public class ChartImporterForChartEditor
     {
         private List<IUnchainedNoteConvertable> unchainConverters = new List<IUnchainedNoteConvertable>();
-        private List<IChainNoteConvertable> chainConverters = new List<IChainNoteConvertable>();
+        private List<IChainNoteConvertable> holdConverters = new List<IChainNoteConvertable>();
+        private List<IChainNoteConvertable> spaceHoldConverters = new List<IChainNoteConvertable>();
         private Dictionary<int, IChainNoteData> holdNumberToChainNote = new Dictionary<int, IChainNoteData>();
+        private Dictionary<int, IChainNoteData> spaceHoldNumberToChainNote = new Dictionary<int, IChainNoteData>();
 
         public bool Import(ChartDataOrigin dataOrigin, ref ChartEditor.ChartData chartData, IChartEditorDataSetter dataSetter)
         {
@@ -52,7 +54,7 @@ namespace ChartConvert
                 new DynamicLeftwardConverter(),
             };
 
-            chainConverters = new List<IChainNoteConvertable>()
+            holdConverters = new List<IChainNoteConvertable>()
             {
                 new HoldStartConverter(),
                 new HoldRelayConverter(),
@@ -60,6 +62,15 @@ namespace ChartConvert
                 new HoldEndUnjudgeConverter(),
                 new HoldMeshRelayConverter(),
                 new HoldHiddenJudgedRelay(),
+            };
+
+            spaceHoldConverters = new List<IChainNoteConvertable>()
+            {
+                new SpaceHoldStartConverter(),
+                new SpaceHoldRelayConverter(),
+                new SpaceHoldEndConverter(),
+                new SpaceHoldMeshRelayConverter(),
+                new SpaceHoldHiddenJudgedRelay(),
             };
         }
 
@@ -100,9 +111,14 @@ namespace ChartConvert
                 isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor);
             }
 
-            foreach (var converter in chainConverters)
+            foreach (var converter in holdConverters)
             {
-                isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor, ref holdNumberToChainNote);
+                isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor, holdNumberToChainNote);
+            }
+
+            foreach (var converter in spaceHoldConverters)
+            {
+                isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor, spaceHoldNumberToChainNote);
             }
 
             return isSucceed;

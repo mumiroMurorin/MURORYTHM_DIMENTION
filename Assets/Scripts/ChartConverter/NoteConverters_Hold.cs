@@ -15,7 +15,7 @@ namespace ChartConvert
     {
         int currentHoldNumber = 0;
 
-        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IChainNoteData, int> nextNoteToNumber)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, Dictionary<IChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != DeploymentNoteType.Hold) { return false; }
             if (noteDataInEditor is not IChainNoteData) { return false; }
@@ -44,7 +44,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IChainNoteData> numberToStartNote)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor,  Dictionary<int, IChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldStartData == null) { return true; }
 
@@ -109,7 +109,7 @@ namespace ChartConvert
     /// </summary>
     public class HoldRelayConverter : IHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
-        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IChainNoteData, int> nextNoteToNumber)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin,  Dictionary<IChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != DeploymentNoteType.Hold) { return false; }
             if (noteDataInEditor is not IChainNoteData) { return false; }
@@ -148,7 +148,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IChainNoteData> numberToStartNote)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor,  Dictionary<int, IChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldRelayData == null) { return true; }
 
@@ -216,7 +216,7 @@ namespace ChartConvert
     /// </summary>
     public class HoldMeshRelayConverter : IHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
-        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IChainNoteData, int> nextNoteToNumber)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin,  Dictionary<IChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != DeploymentNoteType.HoldHidden) { return false; }
             if (noteDataInEditor is not IChainNoteData) { return false; }
@@ -256,7 +256,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IChainNoteData> numberToStartNote)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor,  Dictionary<int, IChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldMeshRelayData == null) { return true; }
 
@@ -317,7 +317,7 @@ namespace ChartConvert
     {
         const DeploymentNoteType NoteType = DeploymentNoteType.HoldHiddenJudged;
 
-        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IChainNoteData, int> nextNoteToNumber)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin,  Dictionary<IChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != NoteType) { return false; }
             if (noteDataInEditor is not IChainNoteData) { return false; }
@@ -357,7 +357,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IChainNoteData> numberToStartNote)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor,  Dictionary<int, IChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldHiddenJudgedRelayData == null) { return true; }
 
@@ -427,7 +427,7 @@ namespace ChartConvert
     {
         const DeploymentNoteType NoteType = DeploymentNoteType.Hold;
 
-        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IChainNoteData, int> nextNoteToNumber)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, Dictionary<IChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != NoteType) { return false; }
             if (noteDataInEditor is not IChainNoteData) { return false; }
@@ -468,7 +468,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IChainNoteData> numberToStartNote)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, Dictionary<int, IChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldEndData == null) { return true; }
 
@@ -535,7 +535,7 @@ namespace ChartConvert
     /// </summary>
     public class HoldEndUnjudgeConverter : IHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
-        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, ref Dictionary<IChainNoteData, int> nextNoteToNumber)
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin,  Dictionary<IChainNoteData, int> nextNoteToNumber)
         {
             if (noteDataInEditor.NoteType != DeploymentNoteType.HoldEndUnjudge) { return false; }
             if (noteDataInEditor is not IChainNoteData) { return false; }
@@ -576,7 +576,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, ref Dictionary<int, IChainNoteData> numberToStartNote)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor,  Dictionary<int, IChainNoteData> numberToStartNote)
         {
             if (dataOrigin.HoldEndUnjudgeData == null) { return true; }
 

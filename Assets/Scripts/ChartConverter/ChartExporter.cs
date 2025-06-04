@@ -13,8 +13,10 @@ namespace ChartConvert
     public class ChartExporter
     {
         private List<IUnchainedNoteConvertable> unchainConverters = new List<IUnchainedNoteConvertable>();
-        private List<IChainNoteConvertable> chainConverters = new List<IChainNoteConvertable>();
+        private List<IChainNoteConvertable> holdConverters = new List<IChainNoteConvertable>();
+        private List<IChainNoteConvertable> spaceHoldConverters = new List<IChainNoteConvertable>();
         private Dictionary<IChainNoteData, int> nextHoldNoteToNumber = new Dictionary<IChainNoteData, int>();
+        private Dictionary<IChainNoteData, int> nextSpaceHoldNoteToNumber = new Dictionary<IChainNoteData, int>();
 
         public ChartDataOrigin Export(ChartEditor.ChartData chartData, float offset)
         {
@@ -36,7 +38,7 @@ namespace ChartConvert
                 new DynamicLeftwardConverter(),
             };
 
-            chainConverters = new List<IChainNoteConvertable>
+            holdConverters = new List<IChainNoteConvertable>
             {
                 new HoldStartConverter(),
                 new HoldRelayConverter(),
@@ -44,6 +46,15 @@ namespace ChartConvert
                 new HoldEndUnjudgeConverter(),
                 new HoldMeshRelayConverter(),
                 new HoldHiddenJudgedRelay(),
+            };
+
+            spaceHoldConverters = new List<IChainNoteConvertable>
+            {
+                new SpaceHoldStartConverter(),
+                new SpaceHoldRelayConverter(),
+                new SpaceHoldEndConverter(),
+                new SpaceHoldMeshRelayConverter(),
+                new SpaceHoldHiddenJudgedRelay(),
             };
         }
 
@@ -139,10 +150,16 @@ namespace ChartConvert
                     isSucceedLocal |= converter.AddDataForOrigin(noteData, dataOrigin);
                 }
 
-                // 変換関数で変換出来るか総当たり(チェインノーツ)
-                foreach (var converter in chainConverters)
+                // 変換関数で変換出来るか総当たり(ホールドノーツ)
+                foreach (var converter in holdConverters)
                 {
-                    isSucceedLocal |= converter.AddDataForOrigin(noteData, dataOrigin, ref nextHoldNoteToNumber);
+                    isSucceedLocal |= converter.AddDataForOrigin(noteData, dataOrigin, nextHoldNoteToNumber);
+                }
+
+                // 変換関数で変換出来るか総当たり(スぺースホールドノーツ)
+                foreach (var converter in spaceHoldConverters)
+                {
+                    isSucceedLocal |= converter.AddDataForOrigin(noteData, dataOrigin, nextSpaceHoldNoteToNumber);
                 }
 
                 // 変換成功判定

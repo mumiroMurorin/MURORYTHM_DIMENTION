@@ -68,7 +68,7 @@ namespace ChartEditor
             if (noteType == DeploymentNoteType.SpaceHold) { noteMeshRenderer.material.color = normalColor; }
             else if (noteType == DeploymentNoteType.SpaceHoldHidden) { noteMeshRenderer.material.color = hiddenColor; }
             else if (noteType == DeploymentNoteType.SpaceHoldHiddenJudged) { noteMeshRenderer.material.color = hiddenJudgedColor; }
-            else if(noteType == DeploymentNoteType.SpaceHoldEndUnjudge) { noteMeshRenderer.material.color = holdEndUnjudgeColor; }
+            // else if(noteType == DeploymentNoteType.SpaceHoldEndUnjudge) { noteMeshRenderer.material.color = holdEndUnjudgeColor; }
         }
 
         public void OnChangeNoteType()
