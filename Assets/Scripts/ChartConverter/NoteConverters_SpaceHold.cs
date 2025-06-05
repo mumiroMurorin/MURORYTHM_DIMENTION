@@ -212,22 +212,9 @@ namespace ChartConvert
     {
         const int SLIDER_INDEX_NUM = 100;
 
-        // ¦ˆê”»’è•t‚«‚É•ÏŠ·
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
-            if (dataOrigin.SpaceHoldMeshRelayData == null) { return true; }
-
-            foreach (var noteOrigin in dataOrigin.SpaceHoldMeshRelayData)
-            {
-                NoteData_SpaceHoldRelayHidden noteData = new NoteData_SpaceHoldRelayHidden
-                {
-                    Vertices = noteOrigin.Vertices.Select(x=> x.ToVector2()).ToArray(),
-                    Timing = timing
-                };
-
-                chartData.AddNoteData(noteData);
-            }
-
+            // “Á‚Éˆ—‚È‚µ
             return true;
         }
 
