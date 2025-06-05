@@ -155,6 +155,16 @@ namespace ChartEditor
             movableObject.Value = mObject;
         }
 
+        ReactiveProperty<IFreedomMovableObject> freedomMovableObject = new ReactiveProperty<IFreedomMovableObject>();
+        IReadOnlyReactiveProperty<IFreedomMovableObject> IChartEditorDataGetter.FreedomMovableObject => freedomMovableObject;
+
+        void IChartEditorDataSetter.SetFreedomMovableObject(IFreedomMovableObject mObject)
+        {
+            if (freedomMovableObject.Value == mObject) { return; }
+
+            freedomMovableObject.Value = mObject;
+        }
+
         // ƒm[ƒc‚ÌŠg‘åk¬
         bool isRightAnchored;
         bool IChartEditorDataGetter.IsRightAnchored => isRightAnchored;
@@ -276,6 +286,8 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<IMovableObject> MovableObject { get; }
 
+        IReadOnlyReactiveProperty<IFreedomMovableObject> FreedomMovableObject { get; }
+
         bool IsRightAnchored { get; }
 
         IReadOnlyReactiveProperty<IScalableObject> ScalableObject { get; }
@@ -321,6 +333,8 @@ namespace ChartEditor
         void SetFreedomDeployableCollider(IFreedomDeployableCollider collider);
 
         void SetMovableObject(IMovableObject mObject);
+
+        void SetFreedomMovableObject(IFreedomMovableObject mObject);
 
         void SetScalableObject(IScalableObject sObject, bool isRightAnchored);
 

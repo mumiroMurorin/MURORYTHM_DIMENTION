@@ -91,6 +91,7 @@ namespace ChartEditor
                 chartEditorDataSetter.SetDeployableCollider(null);
                 chartEditorDataSetter.SetFreedomDeployableCollider(null);
                 chartEditorDataSetter.SetMovableObject(null);
+                chartEditorDataSetter.SetFreedomMovableObject(null);
                 chartEditorDataSetter.SetScalableObject(null, chartEditorDataGetter.IsRightAnchored);
                 chartEditorDataSetter.SetDestroyableObject(null);
                 chartEditorDataSetter.SetConnectableObject(null);
@@ -102,6 +103,7 @@ namespace ChartEditor
             UpdateDeployableObject(obj);
             UpdateFreedomDeployableObject(obj);
             UpdateMovableObject(obj);
+            UpdateFreedomMovableObject(obj);
             UpdateScalableObject(obj);
             UpdateConnectableObject(obj);
             UpdateChangableObject(obj);
@@ -148,6 +150,19 @@ namespace ChartEditor
             else
             {
                 chartEditorDataSetter.SetMovableObject(null);
+            }
+        }
+
+        private void UpdateFreedomMovableObject(GameObject obj)
+        {
+            // インタラクトされているノーツの更新 (移動)
+            if (obj.TryGetComponent(out IFreedomMovableCollider movable))
+            {
+                chartEditorDataSetter.SetFreedomMovableObject(movable.Note);
+            }
+            else
+            {
+                chartEditorDataSetter.SetFreedomMovableObject(null);
             }
         }
 

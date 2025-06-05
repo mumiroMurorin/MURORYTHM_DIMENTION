@@ -35,19 +35,88 @@
           "Bpm": 256.0
         },
         {
-          "Bpm": 256.0
+          "Bpm": 256.0,
+          "SpaceHoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                {
+                  "x": -0.25,
+                  "y": -0.5
+                },
+                {
+                  "x": -0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": -0.5
+                }
+              ]
+            }
+          ]
         },
         {
           "Bpm": 256.0
         },
         {
-          "Bpm": 256.0
+          "Bpm": 256.0,
+          "SpaceHoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                {
+                  "x": -0.25,
+                  "y": -0.5
+                },
+                {
+                  "x": -0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": -0.5
+                }
+              ]
+            }
+          ]
         },
         {
           "Bpm": 256.0
         },
         {
-          "Bpm": 256.0
+          "Bpm": 256.0,
+          "SpaceHoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                {
+                  "x": -0.25,
+                  "y": -0.5
+                },
+                {
+                  "x": -0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": -0.5
+                }
+              ]
+            }
+          ]
         },
         {
           "Bpm": 256.0
@@ -89,33 +158,8 @@
           "Bpm": 256.0
         },
         {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 2,
-      "SubDivisionDatas": [
-        {
           "Bpm": 256.0,
-          "SpaceHoldHiddenJudgedRelayData": [
+          "SpaceHoldMeshRelayData": [
             {
               "HoldNumber": 0,
               "Vertices": [
@@ -143,19 +187,59 @@
           "Bpm": 256.0
         },
         {
-          "Bpm": 256.0
+          "Bpm": 256.0,
+          "SpaceHoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                {
+                  "x": -0.25,
+                  "y": -0.5
+                },
+                {
+                  "x": -0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": -0.5
+                }
+              ]
+            }
+          ]
         },
         {
           "Bpm": 256.0
         },
         {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0
+          "Bpm": 256.0,
+          "SpaceHoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                {
+                  "x": -0.25,
+                  "y": -0.5
+                },
+                {
+                  "x": -0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": -0.5
+                }
+              ]
+            }
+          ]
         },
         {
           "Bpm": 256.0
@@ -167,6 +251,187 @@
       "BeatUnit": 4.0,
       "DivisionNum": 2,
       "SubDivisionDatas": [
+        {
+          "Bpm": 256.0,
+          "SpaceHoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                {
+                  "x": -0.25,
+                  "y": -0.5
+                },
+                {
+                  "x": -0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": -0.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpaceHoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                {
+                  "x": -0.25,
+                  "y": -0.5
+                },
+                {
+                  "x": -0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": -0.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpaceHoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                {
+                  "x": -0.25,
+                  "y": -0.5
+                },
+                {
+                  "x": -0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": -0.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpaceHoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                {
+                  "x": -0.25,
+                  "y": -0.5
+                },
+                {
+                  "x": -0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": -0.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0,
+          "SpaceHoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                {
+                  "x": -0.25,
+                  "y": -0.5
+                },
+                {
+                  "x": -0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": -0.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpaceHoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                {
+                  "x": -0.25,
+                  "y": -0.5
+                },
+                {
+                  "x": -0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": -0.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
         {
           "Bpm": 256.0,
           "SpaceHoldEndData": [
@@ -192,18 +457,6 @@
               ]
             }
           ]
-        },
-        {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0
         },
         {
           "Bpm": 256.0
