@@ -161,7 +161,7 @@ namespace ChartEditor
 
             // îzíu
             Transform parent = chartEditorDataGetter.ChartData.Value.GetPlacementLocation(noteData.Address);
-            deployable.OnMove(parent, Vector3.zero); //Å¶èCê≥
+            deployable.OnMove(parent, Vector3.zero); //Å¶èCê≥ïK
             deployable.OnDeploy();
         }
 

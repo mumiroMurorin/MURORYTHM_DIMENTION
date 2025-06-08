@@ -1,0 +1,147 @@
+fileFormatVersion: 2
+guid: 0ed658d0572fb7fd19cb432c76f78fa8
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    400000: //RootNode
+    2100000: mg_9
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: mg_9_pillar_0
+    7400000: mg_9_pillar_0|controller_jellyfish_0Action.002
+    7400002: mg_9_pillar_0|Cube.080|Cube.041|controller_jellyfish_0Action.002
+    7400004: mg_9_pillar_0|Cube.080|Cube.041|Cube.082Action
+    7400006: mg_9_pillar_0|Cube.080|Cube.041|Cube.082Action.001
+    7400008: mg_9_pillar_0|Cube.080|Cube.041|Cube.082Action.002
+    7400010: mg_9_pillar_0|Cube.080|Cube.041|Cube.082Action.003
+    7400012: mg_9_pillar_0|Cube.080|Cube.041|Cube.082Action.004
+    7400014: mg_9_pillar_0|Cube.080|Cube.041|Cube.082Action.006
+    7400016: mg_9_pillar_0|Cube.080|Cube.041|Cube.082Action.007
+    7400018: mg_9_pillar_0|Cube.081|Cube.056|controller_jellyfish_0Action.002
+    7400020: mg_9_pillar_0|Cube.081|Cube.056|Cube.082Action
+    7400022: mg_9_pillar_0|Cube.081|Cube.056|Cube.082Action.001
+    7400024: mg_9_pillar_0|Cube.081|Cube.056|Cube.082Action.002
+    7400026: mg_9_pillar_0|Cube.081|Cube.056|Cube.082Action.003
+    7400028: mg_9_pillar_0|Cube.081|Cube.056|Cube.082Action.004
+    7400030: mg_9_pillar_0|Cube.081|Cube.056|Cube.082Action.006
+    7400032: mg_9_pillar_0|Cube.081|Cube.056|Cube.082Action.007
+    7400034: mg_9_pillar_0|Cube.087|Cube.060|controller_jellyfish_0Action.002
+    7400036: mg_9_pillar_0|Cube.087|Cube.060|Cube.082Action
+    7400038: mg_9_pillar_0|Cube.087|Cube.060|Cube.082Action.001
+    7400040: mg_9_pillar_0|Cube.087|Cube.060|Cube.082Action.002
+    7400042: mg_9_pillar_0|Cube.087|Cube.060|Cube.082Action.003
+    7400044: mg_9_pillar_0|Cube.087|Cube.060|Cube.082Action.004
+    7400046: mg_9_pillar_0|Cube.087|Cube.060|Cube.082Action.006
+    7400048: mg_9_pillar_0|Cube.087|Cube.060|Cube.082Action.007
+    7400050: mg_9_pillar_0|Cube.088|Cube.069|controller_jellyfish_0Action.002
+    7400052: mg_9_pillar_0|Cube.088|Cube.069|Cube.082Action
+    7400054: mg_9_pillar_0|Cube.088|Cube.069|Cube.082Action.001
+    7400056: mg_9_pillar_0|Cube.088|Cube.069|Cube.082Action.002
+    7400058: mg_9_pillar_0|Cube.088|Cube.069|Cube.082Action.003
+    7400060: mg_9_pillar_0|Cube.088|Cube.069|Cube.082Action.004
+    7400062: mg_9_pillar_0|Cube.088|Cube.069|Cube.082Action.006
+    7400064: mg_9_pillar_0|Cube.088|Cube.069|Cube.082Action.007
+    7400066: mg_9_pillar_0|Cube.089|Cube.078|controller_jellyfish_0Action.002
+    7400068: mg_9_pillar_0|Cube.089|Cube.078|Cube.082Action
+    7400070: mg_9_pillar_0|Cube.089|Cube.078|Cube.082Action.001
+    7400072: mg_9_pillar_0|Cube.089|Cube.078|Cube.082Action.002
+    7400074: mg_9_pillar_0|Cube.089|Cube.078|Cube.082Action.003
+    7400076: mg_9_pillar_0|Cube.089|Cube.078|Cube.082Action.004
+    7400078: mg_9_pillar_0|Cube.089|Cube.078|Cube.082Action.006
+    7400080: mg_9_pillar_0|Cube.089|Cube.078|Cube.082Action.007
+    7400082: mg_9_pillar_0|Cube.100|Cube.079|controller_jellyfish_0Action.002
+    7400084: mg_9_pillar_0|Cube.100|Cube.079|Cube.082Action
+    7400086: mg_9_pillar_0|Cube.100|Cube.079|Cube.082Action.001
+    7400088: mg_9_pillar_0|Cube.100|Cube.079|Cube.082Action.002
+    7400090: mg_9_pillar_0|Cube.100|Cube.079|Cube.082Action.003
+    7400092: mg_9_pillar_0|Cube.100|Cube.079|Cube.082Action.004
+    7400094: mg_9_pillar_0|Cube.100|Cube.079|Cube.082Action.006
+    7400096: mg_9_pillar_0|Cube.100|Cube.079|Cube.082Action.007
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
