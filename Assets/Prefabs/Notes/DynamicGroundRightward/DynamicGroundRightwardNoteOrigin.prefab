@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4212254938933315147}
   - component: {fileID: 8075949290047082630}
+  - component: {fileID: 6952250616172493443}
   m_Layer: 0
   m_Name: DynamicGroundRightwardNoteOrigin
   m_TagString: Untagged
@@ -45,11 +46,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   judgeMagnitude: 2
-  judgementSoundEffects:
-    sounds:
-    - Judgement: 1000
-      audioClip: {fileID: 8300000, guid: 8bd5926b93d04594aa0e437f7e212207, type: 3}
-    - Judgement: 100
-      audioClip: {fileID: 8300000, guid: 8bd5926b93d04594aa0e437f7e212207, type: 3}
-    - Judgement: 10
-      audioClip: {fileID: 8300000, guid: 8bd5926b93d04594aa0e437f7e212207, type: 3}
+--- !u!65 &6952250616172493443
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8224908405846241423}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.1, y: 0.1, z: 0.1}
+  m_Center: {x: 0, y: 0, z: 0}

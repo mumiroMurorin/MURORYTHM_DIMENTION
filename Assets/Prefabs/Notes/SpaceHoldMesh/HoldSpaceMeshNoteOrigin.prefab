@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4212254938933315147}
   - component: {fileID: 3121784222154283204}
+  - component: {fileID: 1938924315459338536}
   m_Layer: 0
   m_Name: HoldSpaceMeshNoteOrigin
   m_TagString: Untagged
@@ -44,6 +45,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 381f0af99864ef24282b31c9f0f70b1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshMaterialDefault: {fileID: 2100000, guid: ec35f585c67be384e85d488ab21805a9, type: 2}
+  meshMaterialDefault: {fileID: 2100000, guid: d635d3c6cd00be74fa243653eea69482, type: 2}
   meshMaterialTouching: {fileID: 2100000, guid: ec35f585c67be384e85d488ab21805a9, type: 2}
   meshMaterialUntouching: {fileID: 2100000, guid: ec35f585c67be384e85d488ab21805a9, type: 2}
+--- !u!65 &1938924315459338536
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8224908405846241423}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.1, y: 0.1, z: 0.1}
+  m_Center: {x: 0, y: 0, z: 0}
