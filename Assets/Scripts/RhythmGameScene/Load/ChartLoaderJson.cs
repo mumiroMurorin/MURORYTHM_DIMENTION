@@ -71,7 +71,6 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
         JudgementWindowAdjuster judgementWindowAdjuster = new JudgementWindowAdjuster();
         judgementWindowAdjuster.AdjustJudgementWindow(chart, judgementWindows);
 
-
         return chart;
     }
 
