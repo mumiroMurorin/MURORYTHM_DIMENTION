@@ -200,6 +200,16 @@ namespace ChartEditor
             changableObject.Value = cObject;
         }
 
+        // ノーツの編集
+        ReactiveProperty<ISpaceEditableObject> editableObject = new ReactiveProperty<ISpaceEditableObject>();
+        IReadOnlyReactiveProperty<ISpaceEditableObject> IChartEditorDataGetter.EditableObject => editableObject;
+        void IChartEditorDataSetter.SetEditableObject(ISpaceEditableObject eObject)
+        {
+            if (editableObject.Value == eObject) { return; }
+
+            editableObject.Value = eObject;
+        }
+
         // ノーツの削除
         ReactiveProperty<IDestroyableObject> destroyableObject = new ReactiveProperty<IDestroyableObject>();
         IReadOnlyReactiveProperty<IDestroyableObject> IChartEditorDataGetter.DestroyableObject => destroyableObject;
@@ -296,6 +306,8 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<IChangableObject> ChangableObject { get; }
 
+        IReadOnlyReactiveProperty<ISpaceEditableObject> EditableObject { get; }
+
         IReadOnlyReactiveProperty<IDestroyableObject> DestroyableObject { get; }
 
         IReadOnlyReactiveProperty<PlayMode> PlayMode { get; }
@@ -341,6 +353,8 @@ namespace ChartEditor
         void SetConnectableObject(IConnectableObject cObject);
 
         void SetChangableObject(IChangableObject cObject);
+
+        void SetEditableObject(ISpaceEditableObject eObject);
 
         void SetDestroyableObject(IDestroyableObject dObject);
 

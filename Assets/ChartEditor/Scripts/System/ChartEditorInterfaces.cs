@@ -30,11 +30,17 @@ namespace ChartEditor
         public void Destroy(T lineData);
     }
 
+    /// <summary>
+    /// レイヤーによって影響を受ける
+    /// </summary>
     public interface ILayerAffectable
     {
         void OnChangeLayer(EditNoteType editNoteType);
     }
 
+    /// <summary>
+    /// インタラクト可能なオブジェクト(コライダー)
+    /// </summary>
     public interface IInteractableCollider
     {
         /// <summary>
@@ -44,6 +50,9 @@ namespace ChartEditor
         EditMode EditMode { get; }
     }
 
+    /// <summary>
+    /// 配置可能オブジェクト(コライダー)
+    /// </summary>
     public interface IDeployableCollider
     {
         Transform deployParent { get; }
@@ -51,6 +60,9 @@ namespace ChartEditor
         AddressInChart Address { get; }
     }
 
+    /// <summary>
+    /// 自由配置可能オブジェクト(コライダー)
+    /// </summary>
     public interface IFreedomDeployableCollider
     {
         Transform deployParent { get; }
@@ -58,6 +70,9 @@ namespace ChartEditor
         AddressInChart Address { get; }
     }
 
+    /// <summary>
+    /// 配置可能オブジェクト
+    /// </summary>
     public interface IDeployableObject
     {
         public Action OnDestroyListner { get; set; }
@@ -71,6 +86,9 @@ namespace ChartEditor
         void OnDisable();
     }
 
+    /// <summary>
+    /// 自由配置可能オブジェクト
+    /// </summary>
     public interface IFreedomDeployableObject
     {
         public Action OnDestroyListner { get; set; }
@@ -84,16 +102,25 @@ namespace ChartEditor
         void OnDisable();
     }
 
+    /// <summary>
+    /// 移動可能オブジェクト(コライダー)
+    /// </summary>
     public interface IMovableCollider
     {
         IMovableObject Note { get; }
     }
 
+    /// <summary>
+    /// 自由移動可能オブジェクト(コライダー)
+    /// </summary>
     public interface IFreedomMovableCollider
     {
         IFreedomMovableObject Note { get; }
     }
 
+    /// <summary>
+    /// 移動可能オブジェクト
+    /// </summary>
     public interface IMovableObject
     {
         NoteObject Note { get; }
@@ -105,6 +132,9 @@ namespace ChartEditor
         void OnMoveEnd();
     }
 
+    /// <summary>
+    /// 自由移動可能オブジェクト
+    /// </summary>
     public interface IFreedomMovableObject
     {
         NoteObject Note { get; }
@@ -116,6 +146,9 @@ namespace ChartEditor
         void OnMoveEnd();
     }
 
+    /// <summary>
+    /// スケーリング可能オブジェクト(コライダー)
+    /// </summary>
     public interface IScalableCollider
     {
         IScalableObject Note { get; }
@@ -123,6 +156,9 @@ namespace ChartEditor
         bool IsRightEdge { get; }
     }
 
+    /// <summary>
+    /// スケーリング可能オブジェクト
+    /// </summary>
     public interface IScalableObject
     {
         NoteObject Note { get; }
@@ -134,11 +170,17 @@ namespace ChartEditor
         void OnFinishScale();
     }
 
+    /// <summary>
+    /// 削除可能オブジェクト(コライダー)
+    /// </summary>
     public interface IDestroyableCollider
     {
         IDestroyableObject Note { get; }
     }
 
+    /// <summary>
+    /// 削除可能オブジェクト
+    /// </summary>
     public interface IDestroyableObject
     {
         NoteObject Note { get; }
@@ -146,11 +188,17 @@ namespace ChartEditor
         void OnDestroy();
     }
 
+    /// <summary>
+    /// 接続可能オブジェクト(コライダー)
+    /// </summary>
     public interface IConnectableCollider
     {
         IConnectableObject Note { get; }
     }
 
+    /// <summary>
+    /// 接続可能オブジェクト
+    /// </summary>
     public interface IConnectableObject
     {
         Transform MeshRightEdge { get; }
@@ -161,11 +209,17 @@ namespace ChartEditor
 
     }
 
+    /// <summary>
+    /// タイプ変更可能オブジェクト(コライダー)
+    /// </summary>
     public interface IChangableCollider
     {
         IChangableObject Note { get; }
     }
 
+    /// <summary>
+    /// タイプ変更可能オブジェクト
+    /// </summary>
     public interface IChangableObject
     {
         ITypeChangableNoteData NoteData { get; }
@@ -173,6 +227,25 @@ namespace ChartEditor
         public void OnChangeNoteType();
     }
 
+    /// <summary>
+    /// 編集可能オブジェクト(コライダー)
+    /// </summary>
+    public interface ISpaceEditableCollider
+    {
+        ISpaceEditableObject Note { get; }
+    }
+
+    /// <summary>
+    /// 編集可能オブジェクト
+    /// </summary>
+    public interface ISpaceEditableObject
+    {
+
+    }
+
+    /// <summary>
+    /// 被り判定コライダー
+    /// </summary>
     public interface IJudgeStackingCollider
     {
         DeploymentNoteType NoteType { get; }

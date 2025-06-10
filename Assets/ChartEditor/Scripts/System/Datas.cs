@@ -500,6 +500,7 @@ namespace ChartEditor
 
         SpaceDeploy,
         SpaceMove,
+        SpaceEdit,
     }
 
     /// <summary>

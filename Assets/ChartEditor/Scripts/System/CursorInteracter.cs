@@ -54,6 +54,8 @@ namespace ChartEditor
             if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.Explanation) { return; }
             // ノーツタイプ変更中は無効
             if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.ChangeType) { return; }
+            // エディットは無効
+            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.SpaceEdit) { return; }
             // オートモード中じゃなければ無効
             if (!chartEditorDataGetter.AutoEditMode.Value) { return; }
 
@@ -96,6 +98,7 @@ namespace ChartEditor
                 chartEditorDataSetter.SetDestroyableObject(null);
                 chartEditorDataSetter.SetConnectableObject(null);
                 chartEditorDataSetter.SetChangableObject(null);
+                chartEditorDataSetter.SetEditableObject(null);
 
                 return;
             }
@@ -107,6 +110,7 @@ namespace ChartEditor
             UpdateScalableObject(obj);
             UpdateConnectableObject(obj);
             UpdateChangableObject(obj);
+            UpdateSpaceEditableObject(obj);
             UpdateDestroyableObject(obj);
             UpdateRhythmConfigurableCollider(obj);
         }
@@ -202,6 +206,19 @@ namespace ChartEditor
             else
             {
                 chartEditorDataSetter.SetChangableObject(null);
+            }
+        }
+
+        private void UpdateSpaceEditableObject(GameObject obj)
+        {
+            // インタラクトされているノーツの更新 (拡大縮小)
+            if (obj.TryGetComponent(out ISpaceEditableCollider editable))
+            {
+                chartEditorDataSetter.SetEditableObject(editable.Note);
+            }
+            else
+            {
+                chartEditorDataSetter.SetEditableObject(null);
             }
         }
 
