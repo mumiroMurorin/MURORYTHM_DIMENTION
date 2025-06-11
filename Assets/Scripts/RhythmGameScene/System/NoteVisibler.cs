@@ -12,7 +12,6 @@ public class NoteVisibler : MonoBehaviour
     {
         if(!other.gameObject.TryGetComponent(out INoteVisibleSettable settable)) { return; }
 
-        Debug.Log("Visible!");
         settable.SetVisible(true);
     }
 
@@ -24,7 +23,6 @@ public class NoteVisibler : MonoBehaviour
     {
         if (!other.gameObject.TryGetComponent(out INoteVisibleSettable settable)) { return; }
 
-        Debug.Log("Invisible!");
         settable.SetVisible(false);
     }
 }
