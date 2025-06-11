@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshMaterialDefault: {fileID: 2100000, guid: 1efbb91671345b94390094cae6ac565e, type: 2}
-  meshMaterialTouching: {fileID: 2100000, guid: 1efbb91671345b94390094cae6ac565e, type: 2}
-  meshMaterialUntouching: {fileID: 2100000, guid: 1efbb91671345b94390094cae6ac565e, type: 2}
+  meshMaterialTouching: {fileID: 2100000, guid: 9a2d98baddf489a4883710104c5d9f7d, type: 2}
+  meshMaterialUntouching: {fileID: 2100000, guid: c8d0e1dd7776f114098eda7ad7ae3c2d, type: 2}
 --- !u!65 &1721200693252035536
 BoxCollider:
   m_ObjectHideFlags: 0
