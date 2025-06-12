@@ -8,6 +8,8 @@ namespace ChartEditor
     {
         [SerializeField] SerializeInterface<IDestroyableObject> note;
 
+        public EditMode EditMode => EditMode.Destroy;
+
         public IDestroyableObject Note => note.Value;
     }
 }

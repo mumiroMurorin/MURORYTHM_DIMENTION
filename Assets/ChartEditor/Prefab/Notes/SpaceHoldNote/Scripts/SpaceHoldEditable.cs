@@ -6,7 +6,7 @@ namespace ChartEditor
 {
     public class SpaceHoldEditableObject : MonoBehaviour, ISpaceEditableObject
     {
-        
+
     }
 
 }

@@ -34,9 +34,11 @@ namespace ChartEditor
         {
             if(chartEditorDataGetter.CurrentEditMode.Value != EditMode.Connect) { return; }
 
-            IConnectableObject connectableObject = chartEditorDataGetter.ConnectableObject.Value;
-            if (connectableObject == null) { return; }
+            var collider = chartEditorDataGetter.GetInteractableCollider<IConnectableCollider>();
+            if(collider == null) { return; }
 
+            IConnectableObject connectableObject = collider.Note;
+            if (connectableObject == null) { return; }
             if (connectableObject.Note.NoteData is not IChainNoteData) { return; }
 
             chartEditorDataSetter.SetEditMode(EditMode.Connecting);
@@ -51,7 +53,10 @@ namespace ChartEditor
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Connecting) { return; }
             if (startNote == null) { return; }
 
-            IConnectableObject connectableObject = chartEditorDataGetter.ConnectableObject.Value;
+            var collider = chartEditorDataGetter.GetInteractableCollider<IConnectableCollider>();
+            if (collider == null) { return; }
+
+            IConnectableObject connectableObject = collider.Note;
             if (connectableObject == null) { return; }
             if (connectableObject.Note.NoteData is not IChainNoteData) { return; }
 

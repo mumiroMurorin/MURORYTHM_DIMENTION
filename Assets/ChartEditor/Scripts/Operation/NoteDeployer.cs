@@ -41,9 +41,11 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // ノーツの仮配置
-            chartEditorDataGetter.DeployableCollider
-                .Subscribe(UpdateNotePosition)
-                .AddTo(this.gameObject);
+            chartEditorDataGetter.InteractableColliders.ObserveAdd()
+                .Subscribe(collider =>
+                {
+                    if (collider.Value is IDeployableCollider matched) { UpdateNotePosition(matched); }
+                }).AddTo(this.gameObject);
 
             // 配置ノーツの種類の変更
             chartEditorDataGetter.DeploymentNoteType
@@ -85,13 +87,16 @@ namespace ChartEditor
         {
             // 配置モードでない際は返す
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
-            if (chartEditorDataGetter.DeployableCollider.Value == null) { return; }
+
+            var collider = chartEditorDataGetter.GetInteractableCollider<IFreedomDeployableCollider>();
+            if (collider == null) { return; }
+            
             if (!isDeployedTentative) { return; }
             // 謎のヌルリファによりこの条件も追加
             if(deployingNoteData == null) { return; }
 
             // データ上の追加
-            AddressInChart address = chartEditorDataGetter.DeployableCollider.Value.Address;
+            AddressInChart address = collider.Address;
             chartEditorDataGetter.ChartData.Value.AddNote(deployingNoteData, address);
             
             // オブジェクトの設置

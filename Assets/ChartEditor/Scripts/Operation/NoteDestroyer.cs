@@ -30,7 +30,10 @@ namespace ChartEditor
         {
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Destroy) { return; }
 
-            IDestroyableObject destroyableObject = chartEditorDataGetter.DestroyableObject.Value;
+            var collider = chartEditorDataGetter.GetInteractableCollider<IDestroyableCollider>();
+            if (collider == null) { return; }
+
+            IDestroyableObject destroyableObject = collider.Note;
             if (destroyableObject == null) { return; }
 
             chartEditorDataGetter.ChartData.Value.RemoveNote(destroyableObject.Note.NoteData);

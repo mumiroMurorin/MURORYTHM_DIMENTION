@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChartEditor
 {
-    public class NoteDeployableCollider : MonoBehaviour, IInteractableCollider, IDeployableCollider
+    public class NoteDeployableCollider : MonoBehaviour, IDeployableCollider
     {
         [SerializeField] NoteDeployableUnit noteDeployableUnit;
 

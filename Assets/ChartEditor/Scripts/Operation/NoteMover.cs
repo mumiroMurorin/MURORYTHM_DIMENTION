@@ -29,7 +29,10 @@ namespace ChartEditor
         {
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Move) { return; }
 
-            IMovableObject movableObject = chartEditorDataGetter.MovableObject.Value;
+            var collider = chartEditorDataGetter.GetInteractableCollider<IMovableCollider>();
+            if (collider == null) { return; }
+
+            IMovableObject movableObject = collider.Note;
             if (movableObject == null) { return; }
 
             movableObject.OnMoveStart();
@@ -38,19 +41,19 @@ namespace ChartEditor
         
         private void MoveNote()
         {
-            // ”z’uƒ‚[ƒh‚Å‚È‚¢Û‚Í•Ô‚·
+            // é…ç½®ãƒ¢ãƒ¼ãƒ‰ã§ãªã„éš›ã¯è¿”ã™
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Move) { return; }
             if (movedNote == null) { return; }
 
-            // ƒJ[ƒ\ƒ‹‰º‚Ìeæ“¾
-            IDeployableCollider deployable = chartEditorDataGetter.DeployableCollider.Value;
+            // ã‚«ãƒ¼ã‚½ãƒ«ä¸‹ã®è¦ªå–å¾—
+            var deployable = chartEditorDataGetter.GetInteractableCollider<IDeployableCollider>();
             if (deployable == null) { return; }
-            if (movedNote.Note.transform.position == deployable.deployParent.position)  { return; }
+            if (movedNote.Note.transform.position == deployable.deployParent.position) { return; }
 
-            // ƒAƒhƒŒƒX‚ÌˆÚ“®
+            // ã‚¢ãƒ‰ãƒ¬ã‚¹ã®ç§»å‹•
             chartEditorDataGetter.ChartData.Value.ChangeNoteAddress(movedNote.Note.NoteData, deployable.Address);
 
-            // ƒIƒuƒWƒFƒNƒg‘¤‚Ìs“®
+            // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå´ã®è¡Œå‹•
             movedNote.OnMove();
         }
 

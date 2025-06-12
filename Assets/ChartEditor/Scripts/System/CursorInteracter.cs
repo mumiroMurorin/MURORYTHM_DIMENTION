@@ -15,6 +15,18 @@ namespace ChartEditor
         IChartEditorDataGetter chartEditorDataGetter;
 
         int raycastLayer;
+        bool isCursorIgnoremode;
+        GameObject currentHitObject;
+
+        List<EditMode> cursorIgnoreModes = new List<EditMode> 
+        {
+            EditMode.EditingConfig,
+            EditMode.Destroy,
+            EditMode.Connecting,
+            EditMode.Explanation,
+            EditMode.ChangeType,
+            EditMode.SpaceEdit,
+        };
 
         [Inject]
         public void Construct(IChartEditorDataSetter chartEditorDataSetter, IChartEditorDataGetter chartEditorDataGetter)
@@ -26,6 +38,25 @@ namespace ChartEditor
         private void Start()
         {
             raycastLayer = 1 << LayerMask.NameToLayer("CursorInteractable");
+            Bind();
+        }
+
+        private void Bind()
+        {
+            // カーソル無視モードの更新
+            chartEditorDataGetter?.CurrentEditMode
+                .Subscribe(mode => {
+                    foreach (var ignoreMode in cursorIgnoreModes)
+                    {
+                        isCursorIgnoremode = false;
+                        if (mode == ignoreMode) 
+                        {
+                            isCursorIgnoremode = true;
+                            return;
+                        }
+                    }
+                })
+                .AddTo(this.gameObject);
         }
 
         private void Update()
@@ -42,20 +73,10 @@ namespace ChartEditor
         {
             EditMode raycastEditMode = GetEditModeUnderCursor();
 
+            // 無視リストに入ってるモード中であれば無効
+            if (isCursorIgnoremode) { return; }
             // カーソル下に何もないときは無効
             if (raycastEditMode == EditMode.None) { return; }
-            // コンフィグエディット中は無効
-            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.EditingConfig) { return; }
-            // 削除モード中は無効
-            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.Destroy) { return; }
-            // ノーツ接続中は無効
-            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.Connecting) { return; }
-            // 説明書閲覧中は無効
-            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.Explanation) { return; }
-            // ノーツタイプ変更中は無効
-            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.ChangeType) { return; }
-            // エディットは無効
-            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.SpaceEdit) { return; }
             // オートモード中じゃなければ無効
             if (!chartEditorDataGetter.AutoEditMode.Value) { return; }
 
@@ -87,185 +108,43 @@ namespace ChartEditor
         private void UpdateObjectUnderCursor()
         {
             GameObject obj = GetObjectUnderCursor();
-            
-            if(obj == null) 
-            {
-                chartEditorDataSetter.SetDeployableCollider(null);
-                chartEditorDataSetter.SetFreedomDeployableCollider(null);
-                chartEditorDataSetter.SetMovableObject(null);
-                chartEditorDataSetter.SetFreedomMovableObject(null);
-                chartEditorDataSetter.SetScalableObject(null, chartEditorDataGetter.IsRightAnchored);
-                chartEditorDataSetter.SetDestroyableObject(null);
-                chartEditorDataSetter.SetConnectableObject(null);
-                chartEditorDataSetter.SetChangableObject(null);
-                chartEditorDataSetter.SetEditableObject(null);
 
+            if(currentHitObject != null && obj == currentHitObject) { あああ }
+
+            // カーソル下に何もなかったら返す
+            if(obj == null)
+            {
+                chartEditorDataSetter.SetInteractableColliders(null);
                 return;
             }
 
-            UpdateDeployableObject(obj);
-            UpdateFreedomDeployableObject(obj);
-            UpdateMovableObject(obj);
-            UpdateFreedomMovableObject(obj);
-            UpdateScalableObject(obj);
-            UpdateConnectableObject(obj);
-            UpdateChangableObject(obj);
-            UpdateSpaceEditableObject(obj);
-            UpdateDestroyableObject(obj);
-            UpdateRhythmConfigurableCollider(obj);
+            // すべてのコンポーネントを取得
+            IInteractableCollider[] allComponents = obj.GetComponents<IInteractableCollider>();
+            chartEditorDataSetter.SetInteractableColliders(allComponents);
         }
+       
+        //    // インタラクトされているRhythmConfigurableColliderの更新
+        //    // あんまりよくないけどクリック処理もここでやっちゃう
+        //    // 小節線
+        //    if (obj.TryGetComponent(out IRhythmConfigurableBarCollider configurableBar))
+        //    {
+        //        if (Input.GetMouseButtonDown(0)) 
+        //        {
+        //            chartEditorDataSetter.SetEditMode(EditMode.EditingConfig);
+        //            chartEditorDataSetter.SetRhythmConfigurableBar(configurableBar);
+        //        }
+        //    }
 
-
-        #region UpdateObjectFunc
-
-        private void UpdateDeployableObject(GameObject obj)
-        {
-            // ノーツ配置場所の更新
-            if (obj.TryGetComponent(out IDeployableCollider deployable))
-            {
-                chartEditorDataSetter.SetDeployableCollider(deployable);
-            }
-            else
-            {
-                chartEditorDataSetter.SetDeployableCollider(null);
-            }
-        }
-
-        private void UpdateFreedomDeployableObject(GameObject obj)
-        {
-            // ノーツ配置場所の更新
-            if (obj.TryGetComponent(out IFreedomDeployableCollider deployable))
-            {
-                chartEditorDataSetter.SetFreedomDeployableCollider(deployable);
-            }
-            else
-            {
-                chartEditorDataSetter.SetFreedomDeployableCollider(null);
-            }
-        }
-
-        private void UpdateMovableObject(GameObject obj)
-        {
-            // インタラクトされているノーツの更新 (移動)
-            if (obj.TryGetComponent(out IMovableCollider movable))
-            {
-                chartEditorDataSetter.SetMovableObject(movable.Note);
-            }
-            else
-            {
-                chartEditorDataSetter.SetMovableObject(null);
-            }
-        }
-
-        private void UpdateFreedomMovableObject(GameObject obj)
-        {
-            // インタラクトされているノーツの更新 (移動)
-            if (obj.TryGetComponent(out IFreedomMovableCollider movable))
-            {
-                chartEditorDataSetter.SetFreedomMovableObject(movable.Note);
-            }
-            else
-            {
-                chartEditorDataSetter.SetFreedomMovableObject(null);
-            }
-        }
-
-        private void UpdateScalableObject(GameObject obj)
-        {
-            // インタラクトされているノーツの更新 (拡大縮小)
-            if (obj.TryGetComponent(out IScalableCollider scalable))
-            {
-                chartEditorDataSetter.SetScalableObject(scalable.Note, !scalable.IsRightEdge);
-            }
-            else
-            {
-                chartEditorDataSetter.SetScalableObject(null, chartEditorDataGetter.IsRightAnchored);
-            }
-        }
-
-        private void UpdateConnectableObject(GameObject obj)
-        {
-            // インタラクトされているノーツの更新 (拡大縮小)
-            if (obj.TryGetComponent(out IConnectableCollider connectable))
-            {
-                chartEditorDataSetter.SetConnectableObject(connectable.Note);
-            }
-            else
-            {
-                chartEditorDataSetter.SetConnectableObject(null);
-            }
-        }
-
-        private void UpdateChangableObject(GameObject obj)
-        {
-            // インタラクトされているノーツの更新 (拡大縮小)
-            if (obj.TryGetComponent(out IChangableCollider changable))
-            {
-                chartEditorDataSetter.SetChangableObject(changable.Note);
-            }
-            else
-            {
-                chartEditorDataSetter.SetChangableObject(null);
-            }
-        }
-
-        private void UpdateSpaceEditableObject(GameObject obj)
-        {
-            // インタラクトされているノーツの更新 (拡大縮小)
-            if (obj.TryGetComponent(out ISpaceEditableCollider editable))
-            {
-                chartEditorDataSetter.SetEditableObject(editable.Note);
-            }
-            else
-            {
-                chartEditorDataSetter.SetEditableObject(null);
-            }
-        }
-
-        private void UpdateDestroyableObject(GameObject obj)
-        {
-            // インタラクトされているノーツの更新 (削除)
-            if (obj.TryGetComponent(out IDestroyableCollider destroyable))
-            {
-                chartEditorDataSetter.SetDestroyableObject(destroyable.Note);
-            }
-            else
-            {
-                chartEditorDataSetter.SetDestroyableObject(null);
-            }
-        }
-
-        private void UpdateRhythmConfigurableCollider(GameObject obj)
-        {
-            // 他のコンフィグをいじってるときは返す
-            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.EditingConfig) { return; }
-            // 説明書読んでるときも返す
-            if (chartEditorDataGetter.CurrentEditMode.Value == EditMode.Explanation) { return; }
-
-            // インタラクトされているRhythmConfigurableColliderの更新
-            // あんまりよくないけどクリック処理もここでやっちゃう
-            // 小節線
-            if (obj.TryGetComponent(out IRhythmConfigurableBarCollider configurableBar))
-            {
-                if (Input.GetMouseButtonDown(0)) 
-                {
-                    chartEditorDataSetter.SetEditMode(EditMode.EditingConfig);
-                    chartEditorDataSetter.SetRhythmConfigurableBar(configurableBar);
-                }
-            }
-
-            // 分線
-            if (obj.TryGetComponent(out IRhythmConfigurableSubDivisionCollider configurableSub))
-            {
-                if (Input.GetMouseButtonDown(0)) 
-                {
-                    chartEditorDataSetter.SetEditMode(EditMode.EditingConfig);
-                    chartEditorDataSetter.SetRhythmConfigurableSubDivision(configurableSub);
-                }
-            }
-        }
-
-        #endregion
+        //    // 分線
+        //    if (obj.TryGetComponent(out IRhythmConfigurableSubDivisionCollider configurableSub))
+        //    {
+        //        if (Input.GetMouseButtonDown(0)) 
+        //        {
+        //            chartEditorDataSetter.SetEditMode(EditMode.EditingConfig);
+        //            chartEditorDataSetter.SetRhythmConfigurableSubDivision(configurableSub);
+        //        }
+        //    }
+        //}
 
 
         /// <summary>

@@ -32,8 +32,10 @@ namespace ChartEditor
         {
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.ChangeType) { return; }
 
-            IChangableObject changableObject = chartEditorDataGetter.ChangableObject.Value;
-            if (changableObject == null) { return; }
+            var collider = chartEditorDataGetter.GetInteractableCollider<IChangableCollider>();
+            if (collider == null) { return; }
+
+            var changableObject = collider.Note;
             if (changableObject.NoteData == null) { return; }
 
             changableObject.NoteData.ChangeNoteType();

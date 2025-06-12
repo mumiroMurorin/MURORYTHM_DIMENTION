@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChartEditor
 {
-    public class NoteScalableCollider : MonoBehaviour, IInteractableCollider, IScalableCollider
+    public class NoteScalableCollider : MonoBehaviour, IScalableCollider
     {
         [SerializeField] SerializeInterface<IScalableObject> note;
         [SerializeField] bool isRightEdge;

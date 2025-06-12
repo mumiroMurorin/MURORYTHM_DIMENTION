@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System;
 
 namespace ChartEditor
 {
@@ -94,133 +95,156 @@ namespace ChartEditor
 
         #endregion
 
-        #region Deploy 配置場所
 
-        ReactiveProperty<IDeployableCollider> deployableCollider = new ReactiveProperty<IDeployableCollider>();
-        IReadOnlyReactiveProperty<IDeployableCollider> IChartEditorDataGetter.DeployableCollider => deployableCollider;
-
-        void IChartEditorDataSetter.SetDeployableCollider(IDeployableCollider collider)
+        ReactiveCollection<IInteractableCollider> interactableColliders = new ReactiveCollection<IInteractableCollider>();
+        public IReadOnlyReactiveCollection<IInteractableCollider> InteractableColliders => interactableColliders;
+        public T GetInteractableCollider<T>() where T : IInteractableCollider
         {
-            if(deployableCollider.Value == collider) { return; }
-            deployableCollider.Value = collider;
+            foreach (var col in interactableColliders)
+            {
+                if (col is T matched) { return matched; }
+            }
+
+            return default;
+        }
+        public void SetInteractableColliders(IInteractableCollider[] colliders)
+        {
+            interactableColliders.Clear();
+
+            if(colliders == null) { return; }
+            foreach (var col in colliders)
+            {
+                interactableColliders.Add(col);
+            }
         }
 
-        ReactiveProperty<IFreedomDeployableCollider> freedomDeployableCollider = new ReactiveProperty<IFreedomDeployableCollider>();
-        IReadOnlyReactiveProperty<IFreedomDeployableCollider> IChartEditorDataGetter.FreedomDeployableCollider => freedomDeployableCollider;
+        //#region Deploy 配置場所
 
-        void IChartEditorDataSetter.SetFreedomDeployableCollider(IFreedomDeployableCollider collider)
-        {
-            if (freedomDeployableCollider.Value == collider) { return; }
-            freedomDeployableCollider.Value = collider;
-        }
+        //ReactiveProperty<IDeployableCollider> deployableCollider = new ReactiveProperty<IDeployableCollider>();
+        //IReadOnlyReactiveProperty<IDeployableCollider> IChartEditorDataGetter.DeployableCollider => deployableCollider;
 
-        #endregion
+        //void IChartEditorDataSetter.SetDeployableCollider(IDeployableCollider collider)
+        //{
+        //    if(deployableCollider.Value == collider) { return; }
+        //    deployableCollider.Value = collider;
+        //}
 
-        #region BarConfig 小節線に対する設定
+        //ReactiveProperty<IFreedomDeployableCollider> freedomDeployableCollider = new ReactiveProperty<IFreedomDeployableCollider>();
+        //IReadOnlyReactiveProperty<IFreedomDeployableCollider> IChartEditorDataGetter.FreedomDeployableCollider => freedomDeployableCollider;
 
-        ReactiveProperty<IRhythmConfigurableBarCollider> rhythmConfigurableBar = new ReactiveProperty<IRhythmConfigurableBarCollider>();
-        IReadOnlyReactiveProperty<IRhythmConfigurableBarCollider> IChartEditorDataGetter.RhythmConfigurableBar => rhythmConfigurableBar;
+        //void IChartEditorDataSetter.SetFreedomDeployableCollider(IFreedomDeployableCollider collider)
+        //{
+        //    if (freedomDeployableCollider.Value == collider) { return; }
+        //    freedomDeployableCollider.Value = collider;
+        //}
 
-        void IChartEditorDataSetter.SetRhythmConfigurableBar(IRhythmConfigurableBarCollider rCollider)
-        {
-            if (rhythmConfigurableBar.Value == rCollider) { return; }
-            rhythmConfigurableBar.Value = rCollider;
-        }
+        //#endregion
 
-        #endregion
+        //#region BarConfig 小節線に対する設定
 
-        #region SubDivisionConfig 分線(拍線)に対する設定
+        //ReactiveProperty<IRhythmConfigurableBarCollider> rhythmConfigurableBar = new ReactiveProperty<IRhythmConfigurableBarCollider>();
+        //IReadOnlyReactiveProperty<IRhythmConfigurableBarCollider> IChartEditorDataGetter.RhythmConfigurableBar => rhythmConfigurableBar;
 
-        ReactiveProperty<IRhythmConfigurableSubDivisionCollider> rhythmConfigurableSubDivision = new ReactiveProperty<IRhythmConfigurableSubDivisionCollider>();
-        IReadOnlyReactiveProperty<IRhythmConfigurableSubDivisionCollider> IChartEditorDataGetter.RhythmConfigurableSubDivision => rhythmConfigurableSubDivision;
+        //void IChartEditorDataSetter.SetRhythmConfigurableBar(IRhythmConfigurableBarCollider rCollider)
+        //{
+        //    if (rhythmConfigurableBar.Value == rCollider) { return; }
+        //    rhythmConfigurableBar.Value = rCollider;
+        //}
 
-        void IChartEditorDataSetter.SetRhythmConfigurableSubDivision(IRhythmConfigurableSubDivisionCollider sCollider)
-        {
-            if (rhythmConfigurableSubDivision.Value == sCollider) { return; }
-            rhythmConfigurableSubDivision.Value = sCollider;
-        }
+        //#endregion
 
-        #endregion
+        //#region SubDivisionConfig 分線(拍線)に対する設定
 
-        #region ChartEdit 譜面の編集系
+        //ReactiveProperty<IRhythmConfigurableSubDivisionCollider> rhythmConfigurableSubDivision = new ReactiveProperty<IRhythmConfigurableSubDivisionCollider>();
+        //IReadOnlyReactiveProperty<IRhythmConfigurableSubDivisionCollider> IChartEditorDataGetter.RhythmConfigurableSubDivision => rhythmConfigurableSubDivision;
 
-        // ノーツの再配置
-        ReactiveProperty<IMovableObject> movableObject= new ReactiveProperty<IMovableObject>();
-        IReadOnlyReactiveProperty<IMovableObject> IChartEditorDataGetter.MovableObject => movableObject;
+        //void IChartEditorDataSetter.SetRhythmConfigurableSubDivision(IRhythmConfigurableSubDivisionCollider sCollider)
+        //{
+        //    if (rhythmConfigurableSubDivision.Value == sCollider) { return; }
+        //    rhythmConfigurableSubDivision.Value = sCollider;
+        //}
 
-        void IChartEditorDataSetter.SetMovableObject(IMovableObject mObject)
-        {
-            if (movableObject.Value == mObject) { return; }
+        //#endregion
 
-            movableObject.Value = mObject;
-        }
+        //#region ChartEdit 譜面の編集系
 
-        ReactiveProperty<IFreedomMovableObject> freedomMovableObject = new ReactiveProperty<IFreedomMovableObject>();
-        IReadOnlyReactiveProperty<IFreedomMovableObject> IChartEditorDataGetter.FreedomMovableObject => freedomMovableObject;
+        //// ノーツの再配置
+        //ReactiveProperty<IMovableObject> movableObject= new ReactiveProperty<IMovableObject>();
+        //IReadOnlyReactiveProperty<IMovableObject> IChartEditorDataGetter.MovableObject => movableObject;
 
-        void IChartEditorDataSetter.SetFreedomMovableObject(IFreedomMovableObject mObject)
-        {
-            if (freedomMovableObject.Value == mObject) { return; }
+        //void IChartEditorDataSetter.SetMovableObject(IMovableObject mObject)
+        //{
+        //    if (movableObject.Value == mObject) { return; }
 
-            freedomMovableObject.Value = mObject;
-        }
+        //    movableObject.Value = mObject;
+        //}
 
-        // ノーツの拡大縮小
-        bool isRightAnchored;
-        bool IChartEditorDataGetter.IsRightAnchored => isRightAnchored;
+        //ReactiveProperty<IFreedomMovableObject> freedomMovableObject = new ReactiveProperty<IFreedomMovableObject>();
+        //IReadOnlyReactiveProperty<IFreedomMovableObject> IChartEditorDataGetter.FreedomMovableObject => freedomMovableObject;
 
-        ReactiveProperty<IScalableObject> scalableObject = new ReactiveProperty<IScalableObject>();
-        IReadOnlyReactiveProperty<IScalableObject> IChartEditorDataGetter.ScalableObject => scalableObject;
+        //void IChartEditorDataSetter.SetFreedomMovableObject(IFreedomMovableObject mObject)
+        //{
+        //    if (freedomMovableObject.Value == mObject) { return; }
 
-        void IChartEditorDataSetter.SetScalableObject(IScalableObject sObject, bool isRightAnchored)
-        {
-            if(scalableObject.Value == sObject) { return; }
+        //    freedomMovableObject.Value = mObject;
+        //}
 
-            scalableObject.Value = sObject;
-            this.isRightAnchored = isRightAnchored;
-        }
+        //// ノーツの拡大縮小
+        //bool isRightAnchored;
+        //bool IChartEditorDataGetter.IsRightAnchored => isRightAnchored;
 
-        // ノーツの接続
-        ReactiveProperty<IConnectableObject> connectableObject = new ReactiveProperty<IConnectableObject>();
-        IReadOnlyReactiveProperty<IConnectableObject> IChartEditorDataGetter.ConnectableObject => connectableObject;
-        void IChartEditorDataSetter.SetConnectableObject(IConnectableObject cObject)
-        {
-            if (connectableObject.Value == cObject) { return; }
+        //ReactiveProperty<IScalableObject> scalableObject = new ReactiveProperty<IScalableObject>();
+        //IReadOnlyReactiveProperty<IScalableObject> IChartEditorDataGetter.ScalableObject => scalableObject;
 
-            connectableObject.Value = cObject;
-        }
+        //void IChartEditorDataSetter.SetScalableObject(IScalableObject sObject, bool isRightAnchored)
+        //{
+        //    if(scalableObject.Value == sObject) { return; }
 
-        // ノーツタイプの変更
-        ReactiveProperty<IChangableObject> changableObject = new ReactiveProperty<IChangableObject>();
-        IReadOnlyReactiveProperty<IChangableObject> IChartEditorDataGetter.ChangableObject => changableObject;
-        void IChartEditorDataSetter.SetChangableObject(IChangableObject cObject)
-        {
-            if (changableObject.Value == cObject) { return; }
+        //    scalableObject.Value = sObject;
+        //    this.isRightAnchored = isRightAnchored;
+        //}
 
-            changableObject.Value = cObject;
-        }
+        //// ノーツの接続
+        //ReactiveProperty<IConnectableObject> connectableObject = new ReactiveProperty<IConnectableObject>();
+        //IReadOnlyReactiveProperty<IConnectableObject> IChartEditorDataGetter.ConnectableObject => connectableObject;
+        //void IChartEditorDataSetter.SetConnectableObject(IConnectableObject cObject)
+        //{
+        //    if (connectableObject.Value == cObject) { return; }
 
-        // ノーツの編集
-        ReactiveProperty<ISpaceEditableObject> editableObject = new ReactiveProperty<ISpaceEditableObject>();
-        IReadOnlyReactiveProperty<ISpaceEditableObject> IChartEditorDataGetter.EditableObject => editableObject;
-        void IChartEditorDataSetter.SetEditableObject(ISpaceEditableObject eObject)
-        {
-            if (editableObject.Value == eObject) { return; }
+        //    connectableObject.Value = cObject;
+        //}
 
-            editableObject.Value = eObject;
-        }
+        //// ノーツタイプの変更
+        //ReactiveProperty<IChangableObject> changableObject = new ReactiveProperty<IChangableObject>();
+        //IReadOnlyReactiveProperty<IChangableObject> IChartEditorDataGetter.ChangableObject => changableObject;
+        //void IChartEditorDataSetter.SetChangableObject(IChangableObject cObject)
+        //{
+        //    if (changableObject.Value == cObject) { return; }
 
-        // ノーツの削除
-        ReactiveProperty<IDestroyableObject> destroyableObject = new ReactiveProperty<IDestroyableObject>();
-        IReadOnlyReactiveProperty<IDestroyableObject> IChartEditorDataGetter.DestroyableObject => destroyableObject;
-        void IChartEditorDataSetter.SetDestroyableObject(IDestroyableObject dObject)
-        {
-            if (destroyableObject.Value == dObject) { return; }
+        //    changableObject.Value = cObject;
+        //}
 
-            destroyableObject.Value = dObject;
-        }
+        //// ノーツの編集
+        //ReactiveProperty<ISpaceEditableObject> editableObject = new ReactiveProperty<ISpaceEditableObject>();
+        //IReadOnlyReactiveProperty<ISpaceEditableObject> IChartEditorDataGetter.EditableObject => editableObject;
+        //void IChartEditorDataSetter.SetEditableObject(ISpaceEditableObject eObject)
+        //{
+        //    if (editableObject.Value == eObject) { return; }
 
-        #endregion
+        //    editableObject.Value = eObject;
+        //}
+
+        //// ノーツの削除
+        //ReactiveProperty<IDestroyableObject> destroyableObject = new ReactiveProperty<IDestroyableObject>();
+        //IReadOnlyReactiveProperty<IDestroyableObject> IChartEditorDataGetter.DestroyableObject => destroyableObject;
+        //void IChartEditorDataSetter.SetDestroyableObject(IDestroyableObject dObject)
+        //{
+        //    if (destroyableObject.Value == dObject) { return; }
+
+        //    destroyableObject.Value = dObject;
+        //}
+
+        //#endregion
 
         #region PlayMode プレイモード関係
 
@@ -284,31 +308,35 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<EditNoteType> EditNoteType { get; }
 
-        IReadOnlyReactiveProperty<IRhythmConfigurableBarCollider> RhythmConfigurableBar { get; }
+        IReadOnlyReactiveCollection<IInteractableCollider> InteractableColliders { get; }
 
-        IReadOnlyReactiveProperty<IRhythmConfigurableSubDivisionCollider> RhythmConfigurableSubDivision { get; }
+        T GetInteractableCollider<T>() where T : IInteractableCollider;
+
+        //IReadOnlyReactiveProperty<IRhythmConfigurableBarCollider> RhythmConfigurableBar { get; }
+
+        //IReadOnlyReactiveProperty<IRhythmConfigurableSubDivisionCollider> RhythmConfigurableSubDivision { get; }
 
         IReadOnlyReactiveProperty<DeploymentNoteType> DeploymentNoteType { get; }
 
-        IReadOnlyReactiveProperty<IDeployableCollider> DeployableCollider { get; }
+        //IReadOnlyReactiveProperty<IDeployableCollider> DeployableCollider { get; }
 
-        IReadOnlyReactiveProperty<IFreedomDeployableCollider> FreedomDeployableCollider { get; }
+        //IReadOnlyReactiveProperty<IFreedomDeployableCollider> FreedomDeployableCollider { get; }
 
-        IReadOnlyReactiveProperty<IMovableObject> MovableObject { get; }
+        //IReadOnlyReactiveProperty<IMovableObject> MovableObject { get; }
 
-        IReadOnlyReactiveProperty<IFreedomMovableObject> FreedomMovableObject { get; }
+        //IReadOnlyReactiveProperty<IFreedomMovableObject> FreedomMovableObject { get; }
 
-        bool IsRightAnchored { get; }
+        //bool IsRightAnchored { get; }
 
-        IReadOnlyReactiveProperty<IScalableObject> ScalableObject { get; }
+        //IReadOnlyReactiveProperty<IScalableObject> ScalableObject { get; }
 
-        IReadOnlyReactiveProperty<IConnectableObject> ConnectableObject { get; }
+        //IReadOnlyReactiveProperty<IConnectableObject> ConnectableObject { get; }
 
-        IReadOnlyReactiveProperty<IChangableObject> ChangableObject { get; }
+        //IReadOnlyReactiveProperty<IChangableObject> ChangableObject { get; }
 
-        IReadOnlyReactiveProperty<ISpaceEditableObject> EditableObject { get; }
+        //IReadOnlyReactiveProperty<ISpaceEditableObject> EditableObject { get; }
 
-        IReadOnlyReactiveProperty<IDestroyableObject> DestroyableObject { get; }
+        //IReadOnlyReactiveProperty<IDestroyableObject> DestroyableObject { get; }
 
         IReadOnlyReactiveProperty<PlayMode> PlayMode { get; }
 
@@ -336,27 +364,30 @@ namespace ChartEditor
 
         void SetNoteType(DeploymentNoteType noteType);
 
-        void SetRhythmConfigurableBar(IRhythmConfigurableBarCollider rCollider);
+        void SetInteractableColliders(IInteractableCollider[] colliders);
 
-        void SetRhythmConfigurableSubDivision(IRhythmConfigurableSubDivisionCollider rCollider);
 
-        void SetDeployableCollider(IDeployableCollider collider);
+        //void SetRhythmConfigurableBar(IRhythmConfigurableBarCollider rCollider);
 
-        void SetFreedomDeployableCollider(IFreedomDeployableCollider collider);
+        //void SetRhythmConfigurableSubDivision(IRhythmConfigurableSubDivisionCollider rCollider);
 
-        void SetMovableObject(IMovableObject mObject);
+        //void SetDeployableCollider(IDeployableCollider collider);
 
-        void SetFreedomMovableObject(IFreedomMovableObject mObject);
+        //void SetFreedomDeployableCollider(IFreedomDeployableCollider collider);
 
-        void SetScalableObject(IScalableObject sObject, bool isRightAnchored);
+        //void SetMovableObject(IMovableObject mObject);
 
-        void SetConnectableObject(IConnectableObject cObject);
+        //void SetFreedomMovableObject(IFreedomMovableObject mObject);
 
-        void SetChangableObject(IChangableObject cObject);
+        //void SetScalableObject(IScalableObject sObject, bool isRightAnchored);
 
-        void SetEditableObject(ISpaceEditableObject eObject);
+        //void SetConnectableObject(IConnectableObject cObject);
 
-        void SetDestroyableObject(IDestroyableObject dObject);
+        //void SetChangableObject(IChangableObject cObject);
+
+        //void SetEditableObject(ISpaceEditableObject eObject);
+
+        //void SetDestroyableObject(IDestroyableObject dObject);
 
         void SetPlayMode(PlayMode playMode);
 

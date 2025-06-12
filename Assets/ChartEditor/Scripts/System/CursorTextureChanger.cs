@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using VContainer;
 using UniRx;
 
@@ -16,6 +17,15 @@ namespace ChartEditor
         IChartEditorDataGetter dataGetter_model;
 
         EditMode currentEditMode;
+        List<Type> dependenceObjectType = new List<Type>
+        {
+            typeof(IMovableCollider),
+            typeof(IScalableCollider),
+            typeof(IDestroyableCollider),
+            typeof(IChangableCollider),
+            typeof(IConnectableCollider),
+            typeof(ISpaceEditableCollider),
+        };
 
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter)
@@ -47,40 +57,23 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
 
-            // 配置モードはテクスチャ変更なし
+            // コライダーが追加されたときカーソルを変更する
+            dataGetter_model?.InteractableColliders.ObserveAdd()
+                .Subscribe(col => { 
+                    foreach(var type in dependenceObjectType)
+                    {
+                        if(type.IsAssignableFrom(col.GetType())) 
+                        { 
+                            SetCursorTexture(currentEditMode, true); 
+                        }
+                    }
+                }).AddTo(this.gameObject);
 
-            // 移動モード
-            dataGetter_model?.MovableObject
-                .Where(_ => currentEditMode == EditMode.Move)
-                .Subscribe(obj => {
-                    SetCursorTexture(currentEditMode, obj == null);
-                })
-                .AddTo(this.gameObject);
-
-            // スケーリング
-            dataGetter_model?.ScalableObject
-                .Where(_ => currentEditMode == EditMode.Scale)
-                .Subscribe(obj => {
-                    SetCursorTexture(currentEditMode, obj == null);
-                })
-                .AddTo(this.gameObject);
-
-            // 削除
-            dataGetter_model?.DestroyableObject
-                .Where(_ => currentEditMode == EditMode.Destroy)
-                .Subscribe(obj => {
-                    SetCursorTexture(currentEditMode, obj == null);
-                })
-                .AddTo(this.gameObject);
-
-            // タイプ変更
-            dataGetter_model?.ChangableObject
-                .Where(_ => currentEditMode == EditMode.ChangeType)
-                .Subscribe(obj => {
-                    SetCursorTexture(currentEditMode, obj == null);
-                })
-                .AddTo(this.gameObject);
-
+            // クリアされたとき
+            dataGetter_model?.InteractableColliders.ObserveReset()
+                .Subscribe(_ => {
+                    SetCursorTexture(currentEditMode, false);
+                }).AddTo(this.gameObject);
         }
 
         /// <summary>

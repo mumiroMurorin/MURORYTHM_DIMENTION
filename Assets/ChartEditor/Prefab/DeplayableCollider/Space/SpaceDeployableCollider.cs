@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChartEditor
 {
-    public class SpaceDeployableCollider : MonoBehaviour, IInteractableCollider, IFreedomDeployableCollider
+    public class SpaceDeployableCollider : MonoBehaviour, IFreedomDeployableCollider
     {
         [SerializeField] SpaceDeployableUnit spaceDeployableUnit;
 

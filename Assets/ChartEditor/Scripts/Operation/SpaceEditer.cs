@@ -28,7 +28,10 @@ namespace ChartEditor
         {
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.SpaceEdit) { return; }
 
-            ISpaceEditableObject editableObject = chartEditorDataGetter.EditableObject.Value;
+            var collider = chartEditorDataGetter.GetInteractableCollider<ISpaceEditableCollider>();
+            if(collider == null) { return; }
+
+            ISpaceEditableObject editableObject = collider.Note;
             if (editableObject == null) { return; }
 
             Debug.Log("ï“èWäJén");

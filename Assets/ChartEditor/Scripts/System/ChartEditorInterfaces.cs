@@ -53,7 +53,7 @@ namespace ChartEditor
     /// <summary>
     /// 配置可能オブジェクト(コライダー)
     /// </summary>
-    public interface IDeployableCollider
+    public interface IDeployableCollider: IInteractableCollider
     {
         Transform deployParent { get; }
 
@@ -63,7 +63,7 @@ namespace ChartEditor
     /// <summary>
     /// 自由配置可能オブジェクト(コライダー)
     /// </summary>
-    public interface IFreedomDeployableCollider
+    public interface IFreedomDeployableCollider: IInteractableCollider
     {
         Transform deployParent { get; }
 
@@ -105,7 +105,7 @@ namespace ChartEditor
     /// <summary>
     /// 移動可能オブジェクト(コライダー)
     /// </summary>
-    public interface IMovableCollider
+    public interface IMovableCollider: IInteractableCollider
     {
         IMovableObject Note { get; }
     }
@@ -113,7 +113,7 @@ namespace ChartEditor
     /// <summary>
     /// 自由移動可能オブジェクト(コライダー)
     /// </summary>
-    public interface IFreedomMovableCollider
+    public interface IFreedomMovableCollider : IInteractableCollider
     {
         IFreedomMovableObject Note { get; }
     }
@@ -149,7 +149,7 @@ namespace ChartEditor
     /// <summary>
     /// スケーリング可能オブジェクト(コライダー)
     /// </summary>
-    public interface IScalableCollider
+    public interface IScalableCollider : IInteractableCollider
     {
         IScalableObject Note { get; }
 
@@ -173,7 +173,7 @@ namespace ChartEditor
     /// <summary>
     /// 削除可能オブジェクト(コライダー)
     /// </summary>
-    public interface IDestroyableCollider
+    public interface IDestroyableCollider : IInteractableCollider
     {
         IDestroyableObject Note { get; }
     }
@@ -191,7 +191,7 @@ namespace ChartEditor
     /// <summary>
     /// 接続可能オブジェクト(コライダー)
     /// </summary>
-    public interface IConnectableCollider
+    public interface IConnectableCollider : IInteractableCollider
     {
         IConnectableObject Note { get; }
     }
@@ -212,7 +212,7 @@ namespace ChartEditor
     /// <summary>
     /// タイプ変更可能オブジェクト(コライダー)
     /// </summary>
-    public interface IChangableCollider
+    public interface IChangableCollider : IInteractableCollider
     {
         IChangableObject Note { get; }
     }
@@ -230,7 +230,7 @@ namespace ChartEditor
     /// <summary>
     /// 編集可能オブジェクト(コライダー)
     /// </summary>
-    public interface ISpaceEditableCollider
+    public interface ISpaceEditableCollider : IInteractableCollider
     {
         ISpaceEditableObject Note { get; }
     }

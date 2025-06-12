@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChartEditor
 {
-    public class NoteConnectableCollider : MonoBehaviour, IInteractableCollider, IConnectableCollider
+    public class NoteConnectableCollider : MonoBehaviour, IConnectableCollider
     {
         [SerializeField] SerializeInterface<IConnectableObject> note;
 

@@ -29,7 +29,10 @@ namespace ChartEditor
         {
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.SpaceMove) { return; }
 
-            IFreedomMovableObject movableObject = chartEditorDataGetter.FreedomMovableObject.Value;
+            var collider = chartEditorDataGetter.GetInteractableCollider<IFreedomMovableCollider>();
+            if (collider == null) { return; }
+
+            IFreedomMovableObject movableObject = collider.Note;
             if (movableObject == null) { return; }
 
             movableObject.OnMoveStart();
@@ -43,7 +46,7 @@ namespace ChartEditor
             if (movedNote == null) { return; }
 
             // カーソル下の親取得
-            var deployable = chartEditorDataGetter.FreedomDeployableCollider.Value;
+            var deployable = chartEditorDataGetter.GetInteractableCollider<IDeployableCollider>();
             if (deployable == null) { return; }
             if (movedNote.Note.transform.position == deployable.deployParent.position)  { return; }
 

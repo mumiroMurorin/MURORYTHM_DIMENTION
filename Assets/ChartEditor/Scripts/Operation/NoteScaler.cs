@@ -13,6 +13,8 @@ namespace ChartEditor
         IScalableObject scaledNote;
         AddressInChart scaledAddress;
 
+        bool isRightAnchored;
+
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter)
         {
@@ -30,13 +32,16 @@ namespace ChartEditor
         {
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Scale) { return; }
 
-            IScalableObject scalableObject = chartEditorDataGetter.ScalableObject.Value;
+            var collider = chartEditorDataGetter.GetInteractableCollider<IScalableCollider>();
+            if(collider == null) { return; }
+
+            var scalableObject = collider.Note;
             if (scalableObject == null) { return; }
 
             scaledAddress = null;
-
             scalableObject.OnStartScale();
             scaledNote = scalableObject;
+            isRightAnchored = collider.IsRightEdge;
         }
 
         private void ScaleNote()
@@ -46,20 +51,15 @@ namespace ChartEditor
             if (scaledNote == null) { return; }
 
             // カーソル下の親取得
-            IDeployableCollider deployable = chartEditorDataGetter.DeployableCollider.Value;
+            var deployable = chartEditorDataGetter.GetInteractableCollider<IDeployableCollider>();
             if (deployable == null) { return; }
 
             // アドレスの取得
             AddressInChart address = deployable.Address;
-
-            if (scaledAddress == null) { scaledAddress = new AddressInChart(address); } 
-
-            // カーソル下のコライダーがその列のコライダーでなければ返す
-            //if (scaledAddress.BarIndex != address.BarIndex) { return; }
-            //if (scaledAddress.SubDivisionIndex != address.SubDivisionIndex) { return; }
+            if (scaledAddress == null) { scaledAddress = new AddressInChart(address); }
 
             // データの更新
-            scaledNote.Note.NoteData.ChangeRange(address.SliderIndex, chartEditorDataGetter.IsRightAnchored);
+            scaledNote.Note.NoteData.ChangeRange(address.SliderIndex, isRightAnchored);
 
             // オブジェクトの動作
             scaledNote.OnScale();
