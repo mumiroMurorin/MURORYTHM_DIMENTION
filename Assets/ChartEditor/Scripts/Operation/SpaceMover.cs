@@ -46,7 +46,7 @@ namespace ChartEditor
             if (movedNote == null) { return; }
 
             // カーソル下の親取得
-            var deployable = chartEditorDataGetter.GetInteractableCollider<IDeployableCollider>();
+            var deployable = chartEditorDataGetter.GetInteractableCollider<IFreedomDeployableCollider>();
             if (deployable == null) { return; }
             if (movedNote.Note.transform.position == deployable.deployParent.position)  { return; }
 

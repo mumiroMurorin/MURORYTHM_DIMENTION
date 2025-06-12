@@ -487,20 +487,25 @@ namespace ChartEditor
     /// </summary>
     public enum EditMode
     {
-        None,
-        EditingConfig,
-        Deploy,
-        Destroy,
-        Move,
-        Scale,
-        Connect,
-        Connecting,
-        ChangeType,
-        Explanation,
+        None = 0,
+        Deploy = 10,
+        Move = 20,
+        Scale = 30,
+        Connect = 40,
+        Connecting = 41,
+        ChangeType = 50,
+        Destroy = 60,
 
-        SpaceDeploy,
-        SpaceMove,
-        SpaceEdit,
+        SpaceDeploy = 100,
+        SpaceMove = 110,
+        SpaceEdit = 120,
+
+        EditBarConfig = 500,
+        EditingBarConfig = 501,
+        EditSubDivisionConfig = 510,
+        EditingSubDivisionConfig = 511,
+
+        Explanation = 1000,
     }
 
     /// <summary>

@@ -41,7 +41,7 @@ namespace ChartEditor
             scaledAddress = null;
             scalableObject.OnStartScale();
             scaledNote = scalableObject;
-            isRightAnchored = collider.IsRightEdge;
+            isRightAnchored = !collider.IsRightEdge;
         }
 
         private void ScaleNote()

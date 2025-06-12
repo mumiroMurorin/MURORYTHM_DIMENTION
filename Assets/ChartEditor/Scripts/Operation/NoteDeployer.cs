@@ -87,13 +87,12 @@ namespace ChartEditor
         {
             // 配置モードでない際は返す
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
+            var collider = chartEditorDataGetter.GetInteractableCollider<IDeployableCollider>();
 
-            var collider = chartEditorDataGetter.GetInteractableCollider<IFreedomDeployableCollider>();
             if (collider == null) { return; }
-            
             if (!isDeployedTentative) { return; }
             // 謎のヌルリファによりこの条件も追加
-            if(deployingNoteData == null) { return; }
+            if (deployingNoteData == null) { return; }
 
             // データ上の追加
             AddressInChart address = collider.Address;

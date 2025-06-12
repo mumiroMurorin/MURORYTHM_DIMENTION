@@ -8,10 +8,12 @@ namespace ChartEditor
     {
         [SerializeField] SerializeInterface<IBarDataGetter> bar;
 
+        public EditMode EditMode => EditMode.EditBarConfig;
+
         IBarDataGetter IRhythmConfigurableBarCollider.BarDataGetter => bar.Value;
     }
 
-    public interface IRhythmConfigurableBarCollider
+    public interface IRhythmConfigurableBarCollider : IInteractableCollider
     {
         IBarDataGetter BarDataGetter { get; }
     }

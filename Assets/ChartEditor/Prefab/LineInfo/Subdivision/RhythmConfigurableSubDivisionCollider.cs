@@ -8,10 +8,12 @@ namespace ChartEditor
     {
         [SerializeField] SerializeInterface<ISubDivisionDataGetter> subDivision;
 
+        public EditMode EditMode => EditMode.EditSubDivisionConfig;
+
         ISubDivisionDataGetter IRhythmConfigurableSubDivisionCollider.SubDivisionDataGetter => subDivision.Value;
     }
 
-    public interface IRhythmConfigurableSubDivisionCollider
+    public interface IRhythmConfigurableSubDivisionCollider : IInteractableCollider
     {
         ISubDivisionDataGetter SubDivisionDataGetter { get; }
     }

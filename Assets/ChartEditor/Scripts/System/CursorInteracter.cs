@@ -20,7 +20,8 @@ namespace ChartEditor
 
         List<EditMode> cursorIgnoreModes = new List<EditMode> 
         {
-            EditMode.EditingConfig,
+            EditMode.EditingBarConfig,
+            EditMode.EditingSubDivisionConfig,
             EditMode.Destroy,
             EditMode.Connecting,
             EditMode.Explanation,
@@ -109,7 +110,10 @@ namespace ChartEditor
         {
             GameObject obj = GetObjectUnderCursor();
 
-            if(currentHitObject != null && obj == currentHitObject) { あああ }
+            // ヒットオブジェクトの更新
+            // 前フレームと変わってなかったら更新しない
+            if(currentHitObject != null && obj == currentHitObject) { return; }
+            currentHitObject = obj;
 
             // カーソル下に何もなかったら返す
             if(obj == null)

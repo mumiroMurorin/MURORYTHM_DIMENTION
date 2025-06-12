@@ -31,6 +31,7 @@ namespace ChartEditor
         [Header("Models")]
         [SerializeField] ChartDataExporter chartDataExporter_model;
         [SerializeField] ChartDataImporter chartDataImporter_model;
+        [SerializeField] ConfigEditor configEditor_model;
 
         IChartEditorDataSetter editorDataSetter_model;
         IChartEditorDataGetter editorDataGetter_model;
@@ -126,7 +127,7 @@ namespace ChartEditor
         private void BindForRhythmConfig()
         {
             // リズムコンフィグ(小節線)のクリック
-            editorDataGetter_model?.RhythmConfigurableBar
+            configEditor_model?.BarConfig
                 .Where(value => value != null)
                 .Subscribe(value =>
                 {
@@ -137,7 +138,7 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // リズムコンフィグ(分線)のクリック
-            editorDataGetter_model?.RhythmConfigurableSubDivision
+            configEditor_model?.SubDivisionConfig
                 .Where(value => value != null)
                 .Subscribe(value =>
                 {
@@ -148,7 +149,7 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // リズムコンフィグ(小節線)を閉じる
-            editorDataGetter_model?.RhythmConfigurableBar
+            configEditor_model?.BarConfig
                 .Pairwise()
                 .Where(value => value.Current == null)
                 .Subscribe(value =>
@@ -159,7 +160,7 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // リズムコンフィグ(分線)を閉じる
-            editorDataGetter_model?.RhythmConfigurableSubDivision
+            configEditor_model?.SubDivisionConfig
                 .Pairwise()
                 .Where(value => value.Current == null)
                 .Subscribe(value =>
@@ -221,10 +222,7 @@ namespace ChartEditor
 
         private void CloseConfig()
         {
-            editorDataSetter_model.SetRhythmConfigurableBar(null);
-            editorDataSetter_model.SetRhythmConfigurableSubDivision(null);
-
-            editorDataSetter_model.SetEditMode(EditMode.None);
+            configEditor_model.ResetConfig();
         }
 
         /// <summary>

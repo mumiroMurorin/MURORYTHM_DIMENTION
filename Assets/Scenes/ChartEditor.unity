@@ -249,41 +249,41 @@ MonoBehaviour:
     editNoteType: 2
   toolButtonsOnGround_view:
   - toolButton_view: {fileID: 1549230533}
-    editMode: 2
+    editMode: 10
     IsHiddenInAutoMode: 1
   - toolButton_view: {fileID: 737678431}
-    editMode: 4
+    editMode: 20
     IsHiddenInAutoMode: 1
   - toolButton_view: {fileID: 345318566}
-    editMode: 5
+    editMode: 30
     IsHiddenInAutoMode: 1
   - toolButton_view: {fileID: 1244923523}
-    editMode: 6
+    editMode: 40
     IsHiddenInAutoMode: 1
   - toolButton_view: {fileID: 2044949102}
-    editMode: 8
+    editMode: 50
     IsHiddenInAutoMode: 0
   - toolButton_view: {fileID: 918684026}
-    editMode: 3
+    editMode: 60
     IsHiddenInAutoMode: 0
   toolButtonsOnSpace_view:
   - toolButton_view: {fileID: 1378272982}
     editMode: 10
     IsHiddenInAutoMode: 1
   - toolButton_view: {fileID: 683775497}
-    editMode: 11
+    editMode: 20
     IsHiddenInAutoMode: 1
   - toolButton_view: {fileID: 1331780340}
-    editMode: 6
+    editMode: 40
     IsHiddenInAutoMode: 1
   - toolButton_view: {fileID: 889695370}
-    editMode: 8
+    editMode: 50
     IsHiddenInAutoMode: 0
   - toolButton_view: {fileID: 2003928893}
-    editMode: 12
+    editMode: 120
     IsHiddenInAutoMode: 0
   - toolButton_view: {fileID: 323299652}
-    editMode: 3
+    editMode: 60
     IsHiddenInAutoMode: 0
 --- !u!1 &15992606
 GameObject:
@@ -4670,6 +4670,7 @@ MonoBehaviour:
   switchLayerButton_view: {fileID: 8938758252388477333}
   chartDataExporter_model: {fileID: 1176464164}
   chartDataImporter_model: {fileID: 1176464165}
+  configEditor_model: {fileID: 1859732683}
 --- !u!1 &435988090
 GameObject:
   m_ObjectHideFlags: 0
@@ -5997,6 +5998,7 @@ Transform:
   - {fileID: 754356523}
   - {fileID: 333189527}
   - {fileID: 625884549}
+  - {fileID: 1859732682}
   m_Father: {fileID: 961400762}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &625884548
@@ -10797,21 +10799,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorTextures:
-  - editMode: 5
+  - editMode: 30
     texture: {fileID: 2800000, guid: e10ed3e59b415044fa15f03dd84d7194, type: 3}
-  - editMode: 4
+  - editMode: 20
     texture: {fileID: 2800000, guid: 6db99975f82451845aac47b719a7b070, type: 3}
-  - editMode: 3
+  - editMode: 60
     texture: {fileID: 2800000, guid: f5a31edb7b494154d8b8ff95836a77bb, type: 3}
-  - editMode: 6
+  - editMode: 40
     texture: {fileID: 2800000, guid: 1e42591ba834b854b8d4bd52c8e855ee, type: 3}
-  - editMode: 7
+  - editMode: 41
     texture: {fileID: 2800000, guid: 1e42591ba834b854b8d4bd52c8e855ee, type: 3}
-  - editMode: 8
+  - editMode: 50
     texture: {fileID: 2800000, guid: b107f5fca73c9534ba3de0b6daa4a536, type: 3}
-  - editMode: 11
+  - editMode: 110
     texture: {fileID: 2800000, guid: 6db99975f82451845aac47b719a7b070, type: 3}
-  - editMode: 12
+  - editMode: 120
     texture: {fileID: 2800000, guid: 0a3a925b7e4ee014696f0bad12ca9266, type: 3}
 --- !u!1 &1047519566
 GameObject:
@@ -18612,6 +18614,50 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &1859732681
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1859732682}
+  - component: {fileID: 1859732683}
+  m_Layer: 0
+  m_Name: ConfigEditor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1859732682
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859732681}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 619309498}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1859732683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859732681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80ecf0283dee06c43a1610488d0fe470, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1863182002
 GameObject:
   m_ObjectHideFlags: 0

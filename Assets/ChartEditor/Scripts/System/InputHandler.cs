@@ -58,7 +58,8 @@ namespace ChartEditor
             // 説明書を読んでるときは受け付けない
             if (dataGetter.CurrentEditMode.Value == EditMode.Explanation) { return; }
             // コンフィグをいじっているときは受け付けない
-            if (dataGetter.CurrentEditMode.Value == EditMode.EditingConfig) { return; }
+            if (dataGetter.CurrentEditMode.Value == EditMode.EditingBarConfig) { return; }
+            if (dataGetter.CurrentEditMode.Value == EditMode.EditingSubDivisionConfig) { return; }
 
             var scroll = Input.mouseScrollDelta.y;
 
@@ -78,7 +79,8 @@ namespace ChartEditor
             // 説明書を読んでるときは受け付けない
             if (dataGetter.CurrentEditMode.Value == EditMode.Explanation) { return; }
             // コンフィグをいじっているときは受け付けない
-            if (dataGetter.CurrentEditMode.Value == EditMode.EditingConfig) { return; }
+            if (dataGetter.CurrentEditMode.Value == EditMode.EditingBarConfig) { return; }
+            if (dataGetter.CurrentEditMode.Value == EditMode.EditingSubDivisionConfig) { return; }
 
             var scroll = Input.mouseScrollDelta.y;
 
