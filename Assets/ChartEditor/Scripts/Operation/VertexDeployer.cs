@@ -45,7 +45,7 @@ namespace ChartEditor
 
         void Update()
         {
-            if (Input.GetMouseButtonDown(0)) { DeployVertex(); }
+            if (Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.LeftControl)) { DeployVertex(); }
         }
 
         /// <summary>

@@ -41,6 +41,12 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
             }
         }
     }
+
+
+    public override void SetVisible(bool isVisible)
+    {
+
+    }
 }
 
 /// <summary>

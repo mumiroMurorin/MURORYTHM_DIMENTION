@@ -51,6 +51,26 @@ namespace ChartEditor
     }
 
     /// <summary>
+    /// 選択可能なオブジェクト(コライダー)
+    /// </summary>
+    public interface ISelectableVertexCollider : IInteractableCollider
+    {
+        ISelectableVertexObject SelectableObject { get; }
+    }
+
+    /// <summary>
+    /// 選択可能なオブジェクト
+    /// </summary>
+    public interface ISelectableVertexObject
+    {
+        VertexObject VertexObject { get; }
+
+        void OnSelect();
+
+        void OnDeselect();
+    }
+
+    /// <summary>
     /// 配置可能オブジェクト(コライダー)
     /// </summary>
     public interface IDeployableCollider: IInteractableCollider

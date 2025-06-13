@@ -120,6 +120,7 @@ GameObject:
   - component: {fileID: 6179884458007241168}
   - component: {fileID: 7817002841536532906}
   - component: {fileID: 5219851463938888055}
+  - component: {fileID: 5668262898141623983}
   m_Layer: 9
   m_Name: MovableCollider
   m_TagString: Untagged
@@ -193,6 +194,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vertex:
     obj: {fileID: 7779273962934443966}
+--- !u!114 &5668262898141623983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7544392496070157279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f44b67e0565a2c4d8d3018e109940b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectableObject:
+    obj: {fileID: 7779273962934443966}
 --- !u!1 &7779273962934443966
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,6 +220,7 @@ GameObject:
   - component: {fileID: 5066945367664730491}
   - component: {fileID: 4966093347857159849}
   - component: {fileID: 4350208558564751355}
+  - component: {fileID: 5017586433794651079}
   m_Layer: 0
   m_Name: VertexObject
   m_TagString: Untagged
@@ -272,3 +288,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35acd4b84ff8ea946b700a552f103215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5017586433794651079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7779273962934443966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d11c2a1878b177d4fbc4a5cc0ea670b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineColorOnSelect: {r: 1, g: 0.5576175, b: 0.006289184, a: 0.78431374}

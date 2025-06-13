@@ -509,6 +509,8 @@ namespace ChartEditor
         EditSubDivisionConfig = 510,
         EditingSubDivisionConfig = 511,
 
+        Select = 900,
+
         Explanation = 1000,
     }
 
