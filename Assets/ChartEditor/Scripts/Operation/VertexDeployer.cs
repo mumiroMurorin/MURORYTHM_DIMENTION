@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using UniRx;
-using ChartEditor;
 
 namespace ChartEditor
 {

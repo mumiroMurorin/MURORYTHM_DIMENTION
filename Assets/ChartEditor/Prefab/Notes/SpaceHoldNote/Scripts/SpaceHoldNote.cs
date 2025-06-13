@@ -390,6 +390,11 @@ namespace ChartEditor
             }
         }
 
+        public void ClearVertices()
+        {
+            vertices.Clear();
+        }
+
         public SimpleVector2[] GetVertexArray()
         {
             return Vertices.Select(x => new SimpleVector2(x.Position.Value)).ToArray();
@@ -404,6 +409,11 @@ namespace ChartEditor
         public SpaceHoldVertex(Vector2 pos)
         {
             SetPosition(pos);
+        }
+
+        public SpaceHoldVertex(SpaceHoldVertex vertex)
+        {
+            SetPosition(vertex.Position.Value);
         }
 
         ReactiveProperty<Vector2> position = new ReactiveProperty<Vector2>();
