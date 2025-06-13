@@ -18,9 +18,7 @@ namespace ChartEditor
         [SerializeField] private OutlineBehaviour outline;
 
         List<Collider> colliders;
-
-        SpaceHoldVertex vertexData;
-        public SpaceHoldVertex VertexData => vertexData;
+        public SpaceHoldVertex VertexData { get; set; }
 
         CancellationTokenSource cts;
 
@@ -39,7 +37,7 @@ namespace ChartEditor
 
         public void Initialize(SpaceHoldVertex vertexData, Action onChangePositionListener, Func<Vector2, Vector2> calcPositionOnChartGround)
         {
-            this.vertexData = vertexData;
+            this.VertexData = vertexData;
             this.OnChangePositionListener += onChangePositionListener;
             this.CalcPositionOnChartGround = calcPositionOnChartGround;
         }

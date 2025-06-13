@@ -457,7 +457,7 @@ MonoBehaviour:
     - 
     - 
     - 
-  chartFilePath: "MusicData/\u30A4\u30AC\u30AF/chart_initiate.json"
+  chartFilePath: MusicData/sample/douda.json
   noteSpeed: 200
 --- !u!1001 &135123126
 PrefabInstance:

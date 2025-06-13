@@ -8,7 +8,8 @@ namespace ChartEditor
 {
     public class CameraController : MonoBehaviour
     {
-        [SerializeField] GameObject viewCameraParent;
+        [SerializeField] Transform viewCameraParent;
+        [SerializeField] GameObject setActiveObject;
         [SerializeField] GameObject offsetAxis;
 
         IChartEditorDataGetter chartEditorDataGetter;
@@ -58,9 +59,9 @@ namespace ChartEditor
             // エディタノーツモード変更の際カメラオンオフ切り替え
             chartEditorDataGetter?.EditNoteType
                 .Subscribe(mode => {
-                    if (mode == EditNoteType.Ground) { viewCameraParent.SetActive(true); }
-                    else if (mode == EditNoteType.Space) { viewCameraParent.SetActive(true); }
-                    else if (mode == EditNoteType.Vertices) { viewCameraParent.SetActive(false); }
+                    if (mode == EditNoteType.Ground) { setActiveObject.SetActive(true); }
+                    else if (mode == EditNoteType.Space) { setActiveObject.SetActive(true); }
+                    else if (mode == EditNoteType.Vertices) { setActiveObject.SetActive(false); }
                 })
                 .AddTo(this.gameObject);
         }
@@ -80,9 +81,9 @@ namespace ChartEditor
         /// </summary>
         private void MoveCamera(float ratio)
         {
-            viewCameraParent.transform.position = new Vector3(
-                viewCameraParent.transform.position.x,
-                viewCameraParent.transform.position.y,
+            viewCameraParent.position = new Vector3(
+                viewCameraParent.position.x,
+                viewCameraParent.position.y,
                 chartLength * ratio
                 );
         }

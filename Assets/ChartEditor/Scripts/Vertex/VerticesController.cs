@@ -49,7 +49,7 @@ namespace ChartEditor
             dataGetter?.EditingVertices
                 .Subscribe(note =>
                 {
-                    DisposeBindForVerticesData();
+                    ResetVerticesPreview();
                     BindForVerticesData(note?.SpaceHoldVertices);
                 })
                 .AddTo(this.gameObject);
@@ -144,7 +144,19 @@ namespace ChartEditor
         public Vector2 WorldPosToNormalizedPos(Vector3 worldPos)
         {
             Vector2 deltaPos = worldPos - centerTransform.position;
-            return new Vector2(deltaPos.x, deltaPos.y);
+            return new Vector2(deltaPos.x / (Mathf.Abs(leftLimit - rightLimit) / 2f), deltaPos.y / (Mathf.Abs(upperLimit - lowerLimit) / 2f));
+        }
+
+        private void ResetVerticesPreview()
+        {
+            DisposeBindForVerticesData();
+
+            foreach(var pair in dataToObj)
+            {
+                pair.Value.Destroy();
+            }
+
+            dataToObj.Clear();
         }
 
         private void DisposeBindForVerticesData()

@@ -60,7 +60,7 @@ namespace ChartEditor
 
         private void EndMoveVertex()
         {
-            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Move) { return; }
+            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.VertexMove) { return; }
 
             movingVertex?.OnMoveEnd();
             movingVertex = null;

@@ -110,6 +110,19 @@ namespace ChartEditor
         void OnDisable();
     }
 
+    public interface IPointDeployableObject
+    {
+        public Action OnDestroyListner { get; set; }
+
+        void OnInstantiate(IDeployableNoteData noteData, Func<AddressInChart, Transform> getParentTransformFunc);
+
+        void OnMove();
+
+        void OnDeploy();
+
+        void OnDisable();
+    }
+
     /// <summary>
     /// 移動可能オブジェクト(コライダー)
     /// </summary>
@@ -214,6 +227,24 @@ namespace ChartEditor
     public interface IDestroyableObject
     {
         NoteObject Note { get; }
+
+        void OnDestroy();
+    }
+
+    /// <summary>
+    /// 削除可能オブジェクト(コライダー)
+    /// </summary>
+    public interface IDestroyableVertexCollider : IInteractableCollider
+    {
+        IDestroyableVertex Vertex { get; }
+    }
+
+    /// <summary>
+    /// 削除可能オブジェクト
+    /// </summary>
+    public interface IDestroyableVertex
+    {
+        VertexObject Vertex { get; }
 
         void OnDestroy();
     }
