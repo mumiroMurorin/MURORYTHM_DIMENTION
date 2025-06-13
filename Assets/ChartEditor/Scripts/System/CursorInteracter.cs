@@ -8,7 +8,8 @@ namespace ChartEditor
 {
     public class CursorInteracter : MonoBehaviour, ICursorInteracter
     {
-        [SerializeField] Camera viewCamera;
+        [SerializeField] Camera groundViewCamera;
+        [SerializeField] Camera verticesViewCamera;
         [SerializeField] float rayDistance = 35f;
 
         IChartEditorDataSetter chartEditorDataSetter;
@@ -17,6 +18,7 @@ namespace ChartEditor
         int raycastLayer;
         bool isCursorIgnoremode;
         GameObject currentHitObject;
+        Camera currentViewCamera;
 
         List<EditMode> cursorIgnoreModes = new List<EditMode> 
         {
@@ -47,14 +49,34 @@ namespace ChartEditor
             // カーソル無視モードの更新
             chartEditorDataGetter?.CurrentEditMode
                 .Subscribe(mode => {
+
+                    isCursorIgnoremode = false;
+
+                    // 一つずつモードを取り出してどれかに該当したら無視モードにする
                     foreach (var ignoreMode in cursorIgnoreModes)
                     {
-                        isCursorIgnoremode = false;
-                        if (mode == ignoreMode) 
-                        {
-                            isCursorIgnoremode = true;
-                            return;
-                        }
+                        if (mode != ignoreMode) { continue; }
+
+                        isCursorIgnoremode = true;
+                        break;
+                    }
+                })
+                .AddTo(this.gameObject);
+
+            // Rayを発射するカメラの更新
+            chartEditorDataGetter?.EditNoteType
+                .Subscribe(type => {
+                    switch (type)
+                    {
+                        case EditNoteType.Ground:
+                            currentViewCamera = groundViewCamera;
+                            break;
+                        case EditNoteType.Space:
+                            currentViewCamera = groundViewCamera;
+                            break;
+                        case EditNoteType.Vertices:
+                            currentViewCamera = verticesViewCamera;
+                            break;
                     }
                 })
                 .AddTo(this.gameObject);
@@ -126,30 +148,6 @@ namespace ChartEditor
             IInteractableCollider[] allComponents = obj.GetComponents<IInteractableCollider>();
             chartEditorDataSetter.SetInteractableColliders(allComponents);
         }
-       
-        //    // インタラクトされているRhythmConfigurableColliderの更新
-        //    // あんまりよくないけどクリック処理もここでやっちゃう
-        //    // 小節線
-        //    if (obj.TryGetComponent(out IRhythmConfigurableBarCollider configurableBar))
-        //    {
-        //        if (Input.GetMouseButtonDown(0)) 
-        //        {
-        //            chartEditorDataSetter.SetEditMode(EditMode.EditingConfig);
-        //            chartEditorDataSetter.SetRhythmConfigurableBar(configurableBar);
-        //        }
-        //    }
-
-        //    // 分線
-        //    if (obj.TryGetComponent(out IRhythmConfigurableSubDivisionCollider configurableSub))
-        //    {
-        //        if (Input.GetMouseButtonDown(0)) 
-        //        {
-        //            chartEditorDataSetter.SetEditMode(EditMode.EditingConfig);
-        //            chartEditorDataSetter.SetRhythmConfigurableSubDivision(configurableSub);
-        //        }
-        //    }
-        //}
-
 
         /// <summary>
         /// カーソルに乗っかっているオブジェクトを返す
@@ -157,7 +155,7 @@ namespace ChartEditor
         /// <returns></returns>
         public GameObject GetObjectUnderCursor()
         {
-            Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = currentViewCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             // オブジェクトがなかったらnullを返す
@@ -171,7 +169,7 @@ namespace ChartEditor
         /// <returns></returns>
         public Vector3 GetWorldPositionUnderCursor()
         {
-            Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = currentViewCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             // オブジェクトがなかったらnullを返す

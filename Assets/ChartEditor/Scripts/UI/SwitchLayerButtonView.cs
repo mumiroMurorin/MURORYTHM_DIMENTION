@@ -13,6 +13,7 @@ namespace ChartEditor
         [SerializeField] TextMeshProUGUI tmp;
         [SerializeField] Color groundColor = Color.white;
         [SerializeField] Color spaceColor = Color.white;
+        [SerializeField] Color verticesColor = Color.white;
 
         public Action OnClickCloseButtonListner;
 
@@ -32,6 +33,9 @@ namespace ChartEditor
                     break;
                 case EditNoteType.Space:
                     tmp.text = $"レイヤー\n<size=30><B><color={spaceColor.ToHexString()}>Space</color></B></size>";
+                    break;
+                case EditNoteType.Vertices:
+                    tmp.text = $"レイヤー\n<size=25><B><color={verticesColor.ToHexString()}>Vertices</color></B></size>";
                     break;
             }
         }

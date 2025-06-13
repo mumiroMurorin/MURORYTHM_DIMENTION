@@ -210,8 +210,7 @@ namespace ChartEditor
 
             // レイヤー変更ボタン
             switchLayerButton_view.OnClickCloseButtonListner += () => {
-                EditNoteType current = editorDataGetter_model.EditNoteType.Value;
-                editorDataSetter_model.SetEditNoteType(current == EditNoteType.Ground ? EditNoteType.Space : EditNoteType.Ground); 
+                editorDataSetter_model.SwitchEditNoteType();
             };
 
             explanationButton_view.OnClickedListner += () => editorDataSetter_model.SetEditMode(EditMode.Explanation);

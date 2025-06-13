@@ -54,6 +54,15 @@ namespace ChartEditor
                     UpdateChartLength(seconds, optionGetter.ChartViewScale.Value);
                 })
                 .AddTo(this.gameObject);
+
+            // エディタノーツモード変更の際カメラオンオフ切り替え
+            chartEditorDataGetter?.EditNoteType
+                .Subscribe(mode => {
+                    if (mode == EditNoteType.Ground) { viewCameraParent.SetActive(true); }
+                    else if (mode == EditNoteType.Space) { viewCameraParent.SetActive(true); }
+                    else if (mode == EditNoteType.Vertices) { viewCameraParent.SetActive(false); }
+                })
+                .AddTo(this.gameObject);
         }
 
         /// <summary>
