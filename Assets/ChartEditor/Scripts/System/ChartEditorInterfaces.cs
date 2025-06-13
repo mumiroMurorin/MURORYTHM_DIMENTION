@@ -110,19 +110,6 @@ namespace ChartEditor
         void OnDisable();
     }
 
-    public interface IPointDeployableObject
-    {
-        public Action OnDestroyListner { get; set; }
-
-        void OnInstantiate(IDeployableNoteData noteData, Func<AddressInChart, Transform> getParentTransformFunc);
-
-        void OnMove();
-
-        void OnDeploy();
-
-        void OnDisable();
-    }
-
     /// <summary>
     /// 移動可能オブジェクト(コライダー)
     /// </summary>

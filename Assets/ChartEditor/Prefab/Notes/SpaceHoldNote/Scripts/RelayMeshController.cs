@@ -176,6 +176,13 @@ namespace ChartEditor
                     colliderObject.transform.localScale.y, 
                     colliderObject.transform.localScale.z
                 );
+
+            colliderObject.transform.localPosition =
+                new Vector3(
+                    leftPos.x + (rightPos.x - leftPos.x) / 2f,
+                    colliderObject.transform.localPosition.y,
+                    colliderObject.transform.localPosition.z
+                );
         }
 
         private Vector2 ConvertPositionOnChartGround(Vector2 normalizedPos)

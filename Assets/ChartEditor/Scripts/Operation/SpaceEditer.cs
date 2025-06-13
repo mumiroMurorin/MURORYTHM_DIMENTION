@@ -37,6 +37,7 @@ namespace ChartEditor
             Debug.Log("ï“èWäJén");
             chartEditorDataSetter.SetEditNoteType(EditNoteType.Vertices);
             chartEditorDataSetter.SetEditingVertices(editableObject.NoteData);
+            chartEditorDataSetter.SetEditMode(EditMode.None);
         }
 
         /// <summary>
