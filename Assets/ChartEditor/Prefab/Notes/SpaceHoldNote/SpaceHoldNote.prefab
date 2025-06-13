@@ -530,7 +530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colliderObject: {fileID: 1850755801682058433}
   vertexObjParent: {fileID: 1662506791899631096}
-  vertexObject: {fileID: 7779273962934443966, guid: f8bbc1860d74320468ec5568cd06c0dd, type: 3}
+  vertexObject: {fileID: 7779273962934443966, guid: f9e84d1c5a03cf640877d7d917166f9f, type: 3}
   centerMeshMaterial: {fileID: 2100000, guid: d0fb1e7840b242840bc210fca8b71c70, type: 2}
   leftLimit: -8
   rightLimit: 8

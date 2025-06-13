@@ -61,6 +61,14 @@ namespace ChartEditor
     }
 
     /// <summary>
+    /// 点配置可能オブジェクト(コライダー)
+    /// </summary>
+    public interface IPointDeployableCollider : IInteractableCollider
+    {
+
+    }
+
+    /// <summary>
     /// 自由配置可能オブジェクト(コライダー)
     /// </summary>
     public interface IFreedomDeployableCollider: IInteractableCollider
@@ -111,6 +119,14 @@ namespace ChartEditor
     }
 
     /// <summary>
+    /// 点移動可能オブジェクト(コライダー)
+    /// </summary>
+    public interface IPointMovableCollider : IInteractableCollider
+    {
+        IPointMovableObject Vertex { get; }
+    }
+
+    /// <summary>
     /// 自由移動可能オブジェクト(コライダー)
     /// </summary>
     public interface IFreedomMovableCollider : IInteractableCollider
@@ -138,6 +154,20 @@ namespace ChartEditor
     public interface IFreedomMovableObject
     {
         NoteObject Note { get; }
+
+        void OnMoveStart();
+
+        void OnMove();
+
+        void OnMoveEnd();
+    }
+
+    /// <summary>
+    /// 自由移動可能オブジェクト
+    /// </summary>
+    public interface IPointMovableObject
+    {
+        VertexObject Vertex { get; }
 
         void OnMoveStart();
 

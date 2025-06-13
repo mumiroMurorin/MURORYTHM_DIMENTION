@@ -13,6 +13,7 @@ namespace ChartEditor
         [SerializeField] GameObject vertexObject;
 
         [Space(20)]
+        [SerializeField] Transform centerTransform;
         [SerializeField] float leftLimit;
         [SerializeField] float rightLimit;
         [SerializeField] float upperLimit;
@@ -138,6 +139,12 @@ namespace ChartEditor
             float y = Mathf.Lerp(lowerLimit, upperLimit, (normalizedPos.y + 1f) / 2f);
 
             return new Vector2(x, y);
+        }
+
+        public Vector2 WorldPosToNormalizedPos(Vector3 worldPos)
+        {
+            Vector2 deltaPos = worldPos - centerTransform.position;
+            return new Vector2(deltaPos.x, deltaPos.y);
         }
 
         private void DisposeBindForVerticesData()
