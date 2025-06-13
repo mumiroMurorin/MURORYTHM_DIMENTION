@@ -500,6 +500,10 @@ namespace ChartEditor
         SpaceMove = 110,
         SpaceEdit = 120,
 
+        VertexDeploy = 200,
+        VertexMove = 210,
+        VertexDestroy = 220,
+
         EditBarConfig = 500,
         EditingBarConfig = 501,
         EditSubDivisionConfig = 510,

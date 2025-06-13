@@ -240,7 +240,7 @@ namespace ChartEditor
     /// </summary>
     public interface ISpaceEditableObject
     {
-
+        IVerticesControlableNoteData NoteData { get; }
     }
 
     /// <summary>

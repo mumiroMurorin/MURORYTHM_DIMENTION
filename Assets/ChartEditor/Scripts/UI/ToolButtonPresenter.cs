@@ -15,6 +15,7 @@ namespace ChartEditor
         [SerializeField] List<EditNoteTypeToToolView> toolViews;
         [SerializeField] List<ToolButtonToEditMode> toolButtonsOnGround_view;
         [SerializeField] List<ToolButtonToEditMode> toolButtonsOnSpace_view;
+        [SerializeField] List<ToolButtonToEditMode> toolButtonsOnVertices_view;
 
         IChartEditorDataSetter editorDataSetter_model;
         IChartEditorDataGetter editorDataGetter_model;
@@ -53,6 +54,13 @@ namespace ChartEditor
                 button.BindForAutomode(editorDataGetter_model.AutoEditMode, this.gameObject);
             }
 
+            // メッシュツールボタン
+            foreach (var button in toolButtonsOnVertices_view)
+            {
+                button.BindForDeploymentNoteType(editorDataGetter_model.CurrentEditMode, this.gameObject);
+                button.BindForAutomode(editorDataGetter_model.AutoEditMode, this.gameObject);
+            }
+
             // ツールビューの更新
             editorDataGetter_model.EditNoteType
                 .Subscribe(type => {
@@ -74,6 +82,12 @@ namespace ChartEditor
 
             // スペースツールボタン
             foreach (var button in toolButtonsOnSpace_view)
+            {
+                button.SetEvent(() => { editorDataSetter_model.SetEditMode(button.EditMode); });
+            }
+
+            // メッシュツールボタン
+            foreach (var button in toolButtonsOnVertices_view)
             {
                 button.SetEvent(() => { editorDataSetter_model.SetEditMode(button.EditMode); });
             }

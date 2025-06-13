@@ -607,7 +607,7 @@ MonoBehaviour:
   startMaterial: {fileID: 2100000, guid: a4b151adacf42b44bb604f1487afe6ee, type: 2}
   relayMaterial: {fileID: 2100000, guid: ba085195bd480c04ca970305e72fe911, type: 2}
   endMaterial: {fileID: 2100000, guid: 2f53ffd128c8f7345aa1fdb26cfe1037, type: 2}
-  meshMaterial: {fileID: 2100000, guid: 645475578082a8f42bb7a16def63a846, type: 2}
+  meshMaterial: {fileID: 2100000, guid: 096c53fe127642e4fb33559b498a855c, type: 2}
   meshHeight: 0.01
   noteMeshRenderer: {fileID: 5893660377328454484}
   meshRightEdge: {fileID: 7471558287435797446}
