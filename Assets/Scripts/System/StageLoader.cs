@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using VContainer;
 
 public class StageLoader : MonoBehaviour
 {
     [SerializeField] Transform stageParent;
-    [SerializeField] GameObject stagePrefab;
+    [SerializeField] StageTypeToObject[] stageTypeToPrefabs;
 
     IMusicDataGetter musicDataGetter;
     
@@ -18,17 +19,52 @@ public class StageLoader : MonoBehaviour
 
     private void Start()
     {
-        if(stagePrefab == null) { return; }
-        if(stagePrefab == null) { return; }
+        var obj = InstantiateStagePrefab(musicDataGetter.Music.Value.StageType);
+        if(obj == null) { return; }
 
-        var obj = Instantiate(stagePrefab, Vector3.zero, Quaternion.identity, stageParent);
+        obj.transform.SetParent(stageParent);
 
         if(!obj.TryGetComponent(out IStageController stageController))
         {
-            Debug.LogWarning($"【System】ステージオブジェクトにIStageControllerがアタッチされていません: {stagePrefab.name}");
+            Debug.LogWarning($"【System】ステージオブジェクトにIStageControllerがアタッチされていません: {obj.name}");
             return;
         }
 
         stageController.Initialize(musicDataGetter);
+    }
+
+    private GameObject InstantiateStagePrefab(StageType stageType)
+    {
+        if (stageTypeToPrefabs == null) 
+        {
+            Debug.LogError($"【System】ステージ配列の長さが0です");
+            return null; 
+        }
+
+        foreach (var pair in stageTypeToPrefabs)
+        {
+            GameObject obj = pair.CheckAndGetPrefab(stageType);
+
+            if (obj == null) { continue; }
+
+            // 該当したらインスタンス化して返す
+            return Instantiate(obj, Vector3.zero, Quaternion.identity);
+        }
+
+        Debug.LogError($"【System】該当するStageが見つかりません: {stageType}");
+        return null;
+    }
+
+    [Serializable]
+    private class StageTypeToObject
+    {
+        [SerializeField] StageType stageType;
+        [SerializeField] GameObject prefab;
+
+        public GameObject CheckAndGetPrefab(StageType type)
+        {
+            if(stageType != type) { return null; }
+            return prefab;
+        }
     }
 }

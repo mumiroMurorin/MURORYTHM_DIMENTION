@@ -45,5 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noteObjectOriginPrefab: {fileID: 8224908405846241423, guid: 3613f0fcc64a621458a59387d7149cd2, type: 3}
-  meshHorizontalDivisionNum: 10
+  meshDivisionNum: 10
   maxTriangleLength: 0.5

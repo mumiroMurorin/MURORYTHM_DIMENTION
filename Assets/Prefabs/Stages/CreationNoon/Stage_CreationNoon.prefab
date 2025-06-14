@@ -956,7 +956,7 @@ GameObject:
   - component: {fileID: 2888482871050711660}
   - component: {fileID: 8787467329146251009}
   m_Layer: 0
-  m_Name: Stage_Creation
+  m_Name: Stage_CreationNoon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -445,20 +445,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDebugMode: 1
   musicData_debug:
-    music_name: Echo
-    composer_name: cruster-P
+    music_name: Altale
+    composer_name: "\u524A\u9664"
     music_spr: {fileID: 21300000, guid: 9d4d84fadeb3bef4ba122b422132a3a0, type: 3}
     theme_spr: {fileID: 21300000, guid: 74ae4ef0036bbb9428f47ab31c214c32, type: 3}
-    clip: {fileID: 8300000, guid: 074a303835a350540874252c6455fb47, type: 3}
-    sample_clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 605dfac07d9de7b47959f1b99346ba07, type: 3}
+    sample_clip: {fileID: 8300000, guid: 3eaec9df25d10a64895e50106ec106f1, type: 3}
+    stageType: 102
     difficulities: 00000000000000000000000000000000
     chartPaths:
     - 
     - 
     - 
     - 
-  chartFilePath: MusicData/sample/sample1.json
-  noteSpeed: 200
+  chartFilePath: "MusicData/\u304D\u3085\u3046\u304F\u3089\u308A\u3093\u77ED\u7E2E/chart_initiate.json"
+  noteSpeed: 100
 --- !u!1001 &135123126
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1507,7 +1508,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b34ac413261e51b4891d0e321f518678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jsonData: {fileID: 4900000, guid: 2f877fecc6732c64ca54f7c1b0bb1b53, type: 3}
   judgementWindows:
   - noteType: 1
     judgementWindowObject: {fileID: 11400000, guid: 4ef97b9b8b205ff488e3d27f8a6968a2, type: 2}
@@ -1568,7 +1568,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageParent: {fileID: 864898814}
-  stagePrefab: {fileID: 5040811245919378688, guid: 2d4e8f42898cd694f843906369c6291e, type: 3}
+  stageTypeToPrefabs:
+  - stageType: 100
+    prefab: {fileID: 5040811245919378688, guid: 2d4e8f42898cd694f843906369c6291e, type: 3}
+  - stageType: 101
+    prefab: {fileID: 5040811245919378688, guid: e428b5cd533e2004d8ff571fc293c88c, type: 3}
+  - stageType: 102
+    prefab: {fileID: 5040811245919378688, guid: f86714fcd0d0ad64583da1d3ff6c1222, type: 3}
+  - stageType: 200
+    prefab: {fileID: 5040811245919378688, guid: cc1ff57546ba1d944a915e39a55fb06d, type: 3}
 --- !u!1 &505195064
 GameObject:
   m_ObjectHideFlags: 0
@@ -7545,7 +7553,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6182579293432456172, guid: a74f5192244238243a3b051e9e5b70e2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 150
+      value: 139.03116
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

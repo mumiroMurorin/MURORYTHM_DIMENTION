@@ -30,6 +30,10 @@ public class MusicData
     [SerializeField] private AudioClip sample_clip;
     public AudioClip SampleClip { get { return sample_clip; } set { sample_clip = value; } }
 
+    [Header("ステージ")]
+    [SerializeField] StageType stageType = StageType.CreationNoon;
+    public StageType StageType { get { return stageType; } set { stageType = value; } }
+
     [Header("難易度")]
     [SerializeField] private int[] difficulities = new int[4];
     public int GetDifficulity(Difficulty name) { return difficulities[(int)name]; }

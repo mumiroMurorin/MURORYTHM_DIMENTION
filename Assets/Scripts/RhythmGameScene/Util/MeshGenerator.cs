@@ -329,11 +329,34 @@ namespace MeshGenerate
                 currentMeshIndex += verticesStart.Count + verticesEnd.Count;
             }
 
+            foreach (var v in vertices)
+            {
+                if (HasInvalidVertex(v))
+                {
+                    Debug.LogError("Invalid vertex found: " + v);
+                }
+            }
+
+            foreach (var i in triangles)
+            {
+                if (i < 0 || i >= vertices.Count)
+                {
+                    Debug.LogError("Invalid triangle index: " + i);
+                }
+            }
+
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
             mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
 
             return mesh;
+        }
+
+        static bool HasInvalidVertex(Vector3 v)
+        {
+            return float.IsNaN(v.x) || float.IsNaN(v.y) || float.IsNaN(v.z)
+                || float.IsInfinity(v.x) || float.IsInfinity(v.y) || float.IsInfinity(v.z);
         }
 
         public static Mesh GenerateSpaceEdgeMesh(List<Vector2> vertices1, List<Vector2> vertices2, float length, int meshDivisionNum, bool isMeshReverse)
@@ -394,7 +417,6 @@ namespace MeshGenerate
 
             // âΩÇ‡ì¸Ç¡ÇƒÇ»Ç©Ç¡ÇΩÇÁÇ«Ç§ÇµÇÊÇ§Ç‡Ç»Ç¢ÇÃÇ≈ï‘Ç∑
             if (ratios == null) { return result; }
-            if (ratios.Count == 0) { return result; }
             if (vertices == null) { return result; }
 
             // verticesÇ™àÍì_ÇæÇ¡ÇΩÇÁàÍì_Ç…èWñÒÇ≥ÇπÇÈ

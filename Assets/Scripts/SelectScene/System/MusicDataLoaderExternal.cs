@@ -164,6 +164,16 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         musicData.ComposerName = info.ComposerName;
         musicData.SetDifficulty(info.Difficulties);
 
+        // ステージ
+        if(info.StageType == null || !Enum.TryParse<StageType>(info.StageType, ignoreCase: true, out var stageType))
+        {
+            Debug.LogWarning($"【System】ステージ情報がありません: {path}");
+        }
+        else
+        {
+            musicData.StageType = stageType;
+        }
+
         return true;
     }
 
@@ -363,6 +373,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         public string MusicName { get; set; }
         public string ComposerName { get; set; }
         public string ChartDesigner { get; set; }
+        public string StageType { get; set; }
         public int[] Difficulties { get; set; }
     }
 }

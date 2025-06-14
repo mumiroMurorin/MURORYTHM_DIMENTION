@@ -55,7 +55,9 @@ public enum OptionType
     MusicVolume,
 }
 
-//“ïˆÕ“x
+/// <summary>
+/// “ïˆÕ“x
+/// </summary>
 public enum Difficulty
 {
     Initiate = 0,
@@ -92,6 +94,14 @@ public enum ComboRank
     FullCombo = 3,
     GreatCombo = 4,
     AllPerfect = 5
+}
+
+public enum StageType
+{
+    CreationNoon = 100,
+    CreationNight = 101,
+    CreationEvening = 102,
+    Destruction = 200,
 }
 
 [System.Serializable]
