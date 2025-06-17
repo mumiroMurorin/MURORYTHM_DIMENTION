@@ -7818,7 +7818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5075881315d81e149abdd1a342001f88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vertexSelector: {fileID: 0}
+  vertexSelector: {fileID: 150958164}
 --- !u!1 &754356522
 GameObject:
   m_ObjectHideFlags: 0
@@ -11910,10 +11910,8 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: 6db99975f82451845aac47b719a7b070, type: 3}
   - editMode: 120
     texture: {fileID: 2800000, guid: 0a3a925b7e4ee014696f0bad12ca9266, type: 3}
-  - editMode: 210
+  - editMode: 211
     texture: {fileID: 2800000, guid: 6db99975f82451845aac47b719a7b070, type: 3}
-  - editMode: 220
-    texture: {fileID: 2800000, guid: f5a31edb7b494154d8b8ff95836a77bb, type: 3}
 --- !u!1 &1047519566
 GameObject:
   m_ObjectHideFlags: 0
@@ -24409,18 +24407,6 @@ PrefabInstance:
     - target: {fileID: 1066983939966789791, guid: 5e1dc73433eb881449f4360941a881a4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4009045530748792530, guid: 5e1dc73433eb881449f4360941a881a4, type: 3}
-      propertyPath: m_Height
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4009045530748792530, guid: 5e1dc73433eb881449f4360941a881a4, type: 3}
-      propertyPath: m_Radius
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4009045530748792530, guid: 5e1dc73433eb881449f4360941a881a4, type: 3}
-      propertyPath: m_Direction
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9043935081154290256, guid: 5e1dc73433eb881449f4360941a881a4, type: 3}
       propertyPath: m_Name
