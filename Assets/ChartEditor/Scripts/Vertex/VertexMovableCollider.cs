@@ -8,7 +8,7 @@ namespace ChartEditor
     {
         [SerializeField] SerializeInterface<IPointMovableObject> vertex;
 
-        public EditMode EditMode => EditMode.VertexMove;
+        public EditMode EditMode => EditMode.None;
 
         public IPointMovableObject Vertex => vertex.Value;
 

@@ -10,7 +10,7 @@ namespace ChartEditor
 
         ISelectableVertexObject ISelectableVertexCollider.SelectableObject => selectableObject.Value;
 
-        EditMode IInteractableCollider.EditMode => EditMode.Select;
+        EditMode IInteractableCollider.EditMode => EditMode.None;
     }
 
 }

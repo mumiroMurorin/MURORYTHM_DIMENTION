@@ -8,7 +8,7 @@ namespace ChartEditor
     public class VertexSelectable : MonoBehaviour, ISelectableVertexObject
     {
         [Tooltip("選択時のアウトライン色")]
-        [SerializeField] private Color outlineColorOnSelect;
+        [SerializeField] private ColorSetting outlineColorOnSelect;
 
         VertexObject vertexObject;
 
@@ -21,13 +21,12 @@ namespace ChartEditor
 
         void ISelectableVertexObject.OnDeselect()
         {
-            vertexObject.SetOutlineActive(false);
+            vertexObject.OutlineColors.Remove(outlineColorOnSelect);
         }
 
         void ISelectableVertexObject.OnSelect()
         {
-            vertexObject.SetOutlineColor(outlineColorOnSelect, true);
-            vertexObject.SetOutlineActive(true);
+            vertexObject.OutlineColors.Add(outlineColorOnSelect);
         }
     }
 

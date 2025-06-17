@@ -13,6 +13,11 @@ namespace ChartEditor
 
         IChartEditorDataGetter chartEditorDataGetter;
 
+        List<EditMode> ignoreEditModes = new List<EditMode> {
+             EditMode.VertexMoving,
+
+        };
+
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter)
         {
@@ -21,23 +26,52 @@ namespace ChartEditor
 
         void Update()
         {
-            // Ctrl押しながらクリックされた時
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0)) { Select(); }
-            // Ctrl押さずに左or右クリックしたとき
-            //else if (!Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0)) { DeselectAll(); }
-            else if (!Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(1)) { DeselectAll(); }
+            // Ctrl+左クリックで複数選択
+            if(Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0))
+            {
+                var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableVertexCollider>();
+                if (collider == null) { return; }
+
+                SelectMulti(collider.SelectableObject);
+            }
+            // Ctrlが押されず左クリックされた場合
+            else if (Input.GetMouseButtonDown(0))
+            {
+                var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableVertexCollider>();
+                
+                // カーソル先がインタラクト不可能かつ編集中でなければ選択解除する
+                if (collider == null && !IsIgnoreEditMode(chartEditorDataGetter.CurrentEditMode.Value)) 
+                {
+                    DeselectAll();
+                }
+                // インタラクト可能であれば単選択する
+                else
+                {
+                    var obj = collider.SelectableObject;
+                    SelectSingle(obj);
+                }
+            }
+        }
+
+        private void SelectSingle(ISelectableVertexObject obj)
+        {
+            // 既に含まれている場合は何もしない
+            if (selectingObjects.Contains(obj)) { return; }
+
+            // 既に選択されているオブジェクトを選択解除する
+            DeselectAll();
+
+            // 含まれていない場合はリストに追加
+            selectingObjects.Add(obj);
+            SelectingVertices.Add(obj.VertexObject);
+            obj.OnSelect();
         }
 
         /// <summary>
         /// 選択リストに追加
         /// </summary>
-        private void Select()
+        private void SelectMulti(ISelectableVertexObject obj)
         {
-            var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableVertexCollider>();
-            if (collider == null) { return; }
-
-            var obj = collider.SelectableObject;
-
             // 既に含まれている場合はそのオブジェクトをリストから削除
             if (selectingObjects.Contains(obj)) 
             {
@@ -66,6 +100,15 @@ namespace ChartEditor
 
             selectingObjects.Clear();
             SelectingVertices.Clear();
+        }
+    
+        private bool IsIgnoreEditMode(EditMode editMode)
+        {
+            foreach(var mode in ignoreEditModes)
+            {
+                if(mode == editMode) { return true; }
+            }
+            return false;
         }
     }
 

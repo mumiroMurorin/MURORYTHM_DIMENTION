@@ -25,7 +25,7 @@ namespace ChartEditor
         NoteObject noteObject;
         IVerticesControlableNoteData verticesData;
         MeshFilter centerMeshFilter;
-        Dictionary<SpaceHoldVertex, VertexObject> dataToObj = new Dictionary<SpaceHoldVertex, VertexObject>();
+        List<DataToVertexObject> dataToObj = new List<DataToVertexObject>();
         CancellationTokenSource cts = new CancellationTokenSource();
 
         private void Start()
@@ -45,15 +45,16 @@ namespace ChartEditor
             verticesData = (IVerticesControlableNoteData)noteObject.NoteData;
 
             // ObserveCountChanged()は初期化してくれないので、最初に購読
-            foreach(var vertex in verticesData.SpaceHoldVertices.Vertices)
+            for (int i = 0; i < verticesData.SpaceHoldVertices.Vertices.Count; i++)
             {
-                OnAddVertex(vertex);
+                var vertex = verticesData.SpaceHoldVertices.Vertices[i];
+                OnAddVertex(vertex, i);
             }
 
             // 辺の変更通知に対してスケール更新
             // 追加されたとき
             verticesData.SpaceHoldVertices.Vertices.ObserveAdd()
-                .Subscribe(vertex => OnAddVertex(vertex.Value))
+                .Subscribe(vertex => OnAddVertex(vertex.Value, vertex.Index))
                 .AddTo(this.gameObject);
 
             // 削除されたとき
@@ -72,16 +73,16 @@ namespace ChartEditor
             GenerateCenterMeshParent();
         }
 
-        private void OnAddVertex(SpaceHoldVertex vertex)
+        private void OnAddVertex(VertexData vertex, int index)
         {
             var obj = Instantiate(vertexObject);
-            if(!obj.TryGetComponent(out VertexObject vertexObj))
+            if (!obj.TryGetComponent(out VertexObject vertexObj))
             {
                 Debug.LogWarning("【Vertex】オブジェクトにVertexObjectがアタッチされていません");
                 return;
             }
 
-            dataToObj.Add(vertex, vertexObj);
+            dataToObj.Insert(index, new DataToVertexObject(vertex, vertexObj));
 
             vertexObj.gameObject.transform.SetParent(vertexObjParent);
             vertexObj.gameObject.transform.localPosition = Vector3.zero;
@@ -95,16 +96,17 @@ namespace ChartEditor
                 );
         }
 
-        private void OnRemoveVertex(SpaceHoldVertex vertex)
+        private void OnRemoveVertex(VertexData vertex)
         {
-            if(!dataToObj.TryGetValue(vertex,out VertexObject obj))
+            var dto = dataToObj.Find(v => v.Data == vertex);
+            if (dto == null)
             {
                 Debug.LogWarning($"【Vertex】データに対応するオブジェクトが見つかりませんでした: {vertex.Position}");
                 return;
             }
 
-            dataToObj.Remove(vertex);
-            obj.Destroy();
+            dataToObj.Remove(dto);
+            dto.Object.Destroy();
 
             UpdateMesh();
             UpdateColliderObjectScale();
@@ -114,7 +116,7 @@ namespace ChartEditor
         {
             foreach (var pair in dataToObj)
             {
-                pair.Value.Destroy();
+                pair.Object.Destroy();
             }
 
             dataToObj.Clear();
@@ -147,7 +149,7 @@ namespace ChartEditor
             List<Vector3> positions = new List<Vector3>();
             foreach(var pair in dataToObj)
             {
-                Vector3 vertexPos = pair.Value.gameObject.transform.localPosition;
+                Vector3 vertexPos = pair.Object.gameObject.transform.localPosition;
                 positions.Add(new Vector3(vertexPos.x, vertexPos.y, vertexPos.z));
             }
 
@@ -165,7 +167,7 @@ namespace ChartEditor
             Vector3 leftPos = Vector3.positiveInfinity;
             foreach (var pair in dataToObj)
             {
-                Vector3 vertexPos = pair.Value.gameObject.transform.localPosition;
+                Vector3 vertexPos = pair.Object.gameObject.transform.localPosition;
                 if(rightPos.x < vertexPos.x) { rightPos = vertexPos; }
                 if(leftPos.x > vertexPos.x) { leftPos = vertexPos; }
             }

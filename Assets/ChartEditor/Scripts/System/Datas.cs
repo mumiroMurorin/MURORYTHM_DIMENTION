@@ -482,6 +482,16 @@ namespace ChartEditor
         }
     }
 
+    [System.Serializable]
+    public class ColorSetting
+    {
+        [SerializeField] Color color;
+        [SerializeField] bool isBlinking; 
+
+        public Color Color { get { return color; } set { color = value; } }
+        public bool IsBlinking { get { return isBlinking; } set { isBlinking = value; } }
+    }
+
     /// <summary>
     /// エディットモード一覧
     /// </summary>
@@ -502,14 +512,15 @@ namespace ChartEditor
 
         VertexDeploy = 200,
         VertexMove = 210,
-        VertexDestroy = 220,
+        VertexMoving = 211,
+        //VertexDestroy = 220,
 
         EditBarConfig = 500,
         EditingBarConfig = 501,
         EditSubDivisionConfig = 510,
         EditingSubDivisionConfig = 511,
 
-        Select = 900,
+        //Select = 900,
 
         Explanation = 1000,
     }

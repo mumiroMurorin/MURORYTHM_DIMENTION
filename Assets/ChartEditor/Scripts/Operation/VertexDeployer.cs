@@ -45,7 +45,14 @@ namespace ChartEditor
 
         void Update()
         {
-            if (Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.LeftControl)) { DeployVertex(); }
+            var currentEditMode = chartEditorDataGetter.CurrentEditMode.Value;
+            if (currentEditMode != EditMode.VertexDeploy) { return; }
+
+            // 頂点オブジェクトの配置
+            if (Input.GetMouseButtonDown(0)) 
+            { 
+                DeployVertex();
+            }
         }
 
         /// <summary>
@@ -53,13 +60,11 @@ namespace ChartEditor
         /// </summary>
         private void DeployVertex()
         {
-            // 配置モードでない際は返す
-            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.VertexDeploy) { return; }
             if (deployableCollider == null) { return; }
 
             // データ上の追加
             Vector3 worldPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
-            SpaceHoldVertex vertexData = new SpaceHoldVertex(verticesController.WorldPosToNormalizedPos(worldPos));
+            VertexData vertexData = new VertexData(verticesController.WorldPosToNormalizedPos(worldPos));
 
             chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.AddVertex(vertexData);
         }

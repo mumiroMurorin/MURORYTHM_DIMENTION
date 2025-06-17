@@ -7,56 +7,44 @@ namespace ChartEditor
 {
     public class VertexDestroyer : MonoBehaviour
     {
+        [SerializeField] MultiVertexSelector vertexSelector;
         IChartEditorDataGetter chartEditorDataGetter;
-        IChartEditorDataSetter chartEditorDataSetter;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorDataSetter chartEditorDataSetter)
+        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
         {
             this.chartEditorDataGetter = chartEditorDataGetter;
-            this.chartEditorDataSetter = chartEditorDataSetter;
         }
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0)) { DestroyVertex(); }
-            // âEÉNÉäÉbÉNéûÅAÉIÅ[ÉgÉÇÅ[ÉhÇ»ÇÁÉ^ÉCÉvïœçXÉÇÅ[Éhâèú
-            else if (Input.GetMouseButtonDown(1)) { BackAutoMode(); }
+            // Delete„Ç≠„Éº„ÅßÊ∂à„Åô
+            if (Input.GetKeyDown(KeyCode.Delete)) { DestroyVertex(); }
         }
 
         private void DestroyVertex()
         {
-            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.VertexDestroy) { return; }
-
-            var collider = chartEditorDataGetter.GetInteractableCollider<IDestroyableVertexCollider>();
-            if (collider == null) { return; }
-
-            IDestroyableVertex destroyableVertex = collider.Vertex;
-            if (destroyableVertex == null) { return; }
-
             var currentEditVertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
 
-            // 3ì_à»â∫ÇæÇ¡ÇΩèÍçáè¡Ç≥Ç»Ç¢
-            if (currentEditVertices.Vertices.Count <= 3) 
+            // 3ÁÇπ‰ª•‰∏ã„Å†„Å£„ÅüÂ†¥ÂêàÊ∂à„Åï„Å™„ÅÑ
+            if (currentEditVertices.Vertices.Count - vertexSelector.SelectingVertices.Count < 3)
             {
-                Debug.Log("ÅyVerticesÅzÇ±ÇÍà»è„í∏ì_Çè¡Ç∑Ç±Ç∆ÇÕÇ≈Ç´Ç‹ÇπÇÒÅBÉÅÉbÉVÉÖÇÃê∂ê¨Ç…ÇÕ3ì_à»è„ïKóvÇ≈Ç∑");
+                Debug.Log("„ÄêVertices„Äë„Åì„Çå‰ª•‰∏äÈ†ÇÁÇπ„ÇíÊ∂à„Åô„Åì„Å®„ÅØ„Åß„Åç„Åæ„Åõ„Çì„ÄÇ„É°„ÉÉ„Ç∑„É•„ÅÆÁîüÊàê„Å´„ÅØ3ÁÇπ‰ª•‰∏äÂøÖË¶Å„Åß„Åô");
                 return;
             }
 
-            // ÉfÅ[É^Ç©ÇÁçÌèú
-            currentEditVertices.RemoveVertex(destroyableVertex.Vertex.VertexData);
+            // È†ÜÁï™„Å´Ê∂à„Åó„Å¶„ÅÑ„Åè
+            foreach (var obj in vertexSelector.SelectingVertices)
+            {
+                // Ê∂à„Åõ„Çã„ÇÑ„Å§„Å†„ÅëÊ∂à„Åô
+                if(!obj.gameObject.TryGetComponent(out IDestroyableVertex destroyable)) { continue; }
 
-            destroyableVertex.OnDestroy();
-            destroyableVertex.Vertex.VertexData = null;
-        }
+                // „Éá„Éº„Çø„Åã„ÇâÂâäÈô§
+                currentEditVertices.RemoveVertex(obj.VertexData);
 
-        /// <summary>
-        /// ÉIÅ[ÉgÉÇÅ[ÉhÇ…ñﬂÇ∑
-        /// </summary>
-        private void BackAutoMode()
-        {
-            if (!chartEditorDataGetter.AutoEditMode.Value) { return; }
-            chartEditorDataSetter.SetEditMode(EditMode.None);
+                destroyable.OnDestroy();
+                obj.VertexData = null;
+            }
         }
     }
 

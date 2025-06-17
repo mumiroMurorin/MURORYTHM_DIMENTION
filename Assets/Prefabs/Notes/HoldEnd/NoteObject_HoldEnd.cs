@@ -67,6 +67,7 @@ public class NoteObject_HoldEnd : NoteObject<NoteData_HoldEnd>
             if (bestJudgement == Judgement.Perfect)
             {
                 SendJudgementData();
+                SetDisable();
             }
         }
     }

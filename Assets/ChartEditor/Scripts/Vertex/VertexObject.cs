@@ -18,12 +18,14 @@ namespace ChartEditor
         [SerializeField] private OutlineBehaviour outline;
 
         List<Collider> colliders;
-        public SpaceHoldVertex VertexData { get; set; }
+        public VertexData VertexData { get; set; }
 
-        CancellationTokenSource cts;
+        public ReactiveCollection<ColorSetting> OutlineColors { get; private set; } = new ReactiveCollection<ColorSetting>();
 
         public Action OnChangePositionListener;
         public Func<Vector2, Vector2> CalcPositionOnChartGround;
+
+        CancellationTokenSource cts;
 
         private void Awake()
         {
@@ -34,12 +36,28 @@ namespace ChartEditor
             }
         }
 
-
-        public void Initialize(SpaceHoldVertex vertexData, Action onChangePositionListener, Func<Vector2, Vector2> calcPositionOnChartGround)
+        public void Initialize(VertexData vertexData, Action onChangePositionListener, Func<Vector2, Vector2> calcPositionOnChartGround)
         {
             this.VertexData = vertexData;
             this.OnChangePositionListener += onChangePositionListener;
             this.CalcPositionOnChartGround = calcPositionOnChartGround;
+
+            Bind();
+        }
+
+        private void Bind()
+        {
+            // アウトライン色の変更
+            OutlineColors?.ObserveAdd()
+                .Subscribe(color => SetOutlineColor(color.Value))
+                .AddTo(this.gameObject);
+
+            OutlineColors?.ObserveRemove()
+                .Subscribe(_ => {
+                    if(OutlineColors.Count == 0) { SetOutlineActive(false); }
+                    else { SetOutlineColor(OutlineColors[^1]); }
+                })
+                .AddTo(this.gameObject);
         }
 
         /// <summary>
@@ -56,9 +74,9 @@ namespace ChartEditor
         /// <summary>
         /// アウトラインカラーの設定用メソッド
         /// </summary>
-        public void SetOutlineColor(Color color, bool isBlinking)
+        private void SetOutlineColor(ColorSetting outlineColor)
         {
-            if (outline != null) { outline.OutlineColor = color; }
+            if (outline == null) { return; }
 
             // いったん点滅を止める
             if (cts != null)
@@ -68,8 +86,11 @@ namespace ChartEditor
                 cts = null;
             }
 
+            outline.OutlineColor = outlineColor.Color;
+            SetOutlineActive(true);
+
             // 点滅開始
-            if (isBlinking)
+            if (outlineColor.IsBlinking)
             {
                 cts = new CancellationTokenSource();
                 OutlineBlinkLoopAsync(cts.Token).Forget();
@@ -79,9 +100,9 @@ namespace ChartEditor
         /// <summary>
         /// アウトラインのON/OFFを切り替える
         /// </summary>
-        public void SetOutlineActive(bool active)
+        private void SetOutlineActive(bool isActive)
         {
-            if (outline != null) { outline.enabled = active; }
+            if (outline != null) { outline.enabled = isActive; }
         }
 
         /// <summary>
@@ -108,7 +129,7 @@ namespace ChartEditor
             }
             finally
             {
-                outline.OutlineColor = baseColor; // 最後に元の色に戻す
+                //outline.OutlineColor = baseColor; // 最後に元の色に戻す
             }
         }
 

@@ -37,7 +37,7 @@ namespace ChartEditor
             List<Vector3> positions = new List<Vector3>();
             foreach (var pair in verticesController.DataToObj)
             {
-                Vector3 vertexPos = pair.Value.gameObject.transform.localPosition;
+                Vector3 vertexPos = pair.Object.gameObject.transform.localPosition;
                 positions.Add(new Vector3(vertexPos.x, vertexPos.y, vertexPos.z));
             }
 

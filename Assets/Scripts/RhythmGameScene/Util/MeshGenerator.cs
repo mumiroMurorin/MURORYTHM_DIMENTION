@@ -329,6 +329,7 @@ namespace MeshGenerate
                 currentMeshIndex += verticesStart.Count + verticesEnd.Count;
             }
 
+            // 無効数チェック
             foreach (var v in vertices)
             {
                 if (HasInvalidVertex(v))
@@ -337,6 +338,7 @@ namespace MeshGenerate
                 }
             }
 
+            // 無効数チェック
             foreach (var i in triangles)
             {
                 if (i < 0 || i >= vertices.Count)

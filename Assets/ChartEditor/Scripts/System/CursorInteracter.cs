@@ -25,7 +25,6 @@ namespace ChartEditor
             EditMode.EditingBarConfig,
             EditMode.EditingSubDivisionConfig,
             EditMode.Destroy,
-            EditMode.VertexDestroy,
             EditMode.Connecting,
             EditMode.Explanation,
             EditMode.ChangeType,
@@ -156,6 +155,8 @@ namespace ChartEditor
         /// <returns></returns>
         public GameObject GetObjectUnderCursor()
         {
+            if(currentViewCamera == null) { return null; }
+
             Ray ray = currentViewCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
@@ -170,6 +171,8 @@ namespace ChartEditor
         /// <returns></returns>
         public Vector3 GetWorldPositionUnderCursor()
         {
+            if (currentViewCamera == null) { return Vector3.zero; }
+
             Ray ray = currentViewCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 

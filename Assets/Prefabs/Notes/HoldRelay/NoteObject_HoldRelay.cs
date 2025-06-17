@@ -67,6 +67,7 @@ public class NoteObject_HoldRelay : NoteObject<NoteData_HoldRelay>
             if (bestJudgement == Judgement.Perfect)
             {
                 SendJudgementData();
+                SetDisable();
             }
         }
     }

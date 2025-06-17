@@ -6,7 +6,7 @@ namespace ChartEditor
 {
     public class VertexDeployableCollider : MonoBehaviour, IPointDeployableCollider
     {
-        public EditMode EditMode => EditMode.VertexDeploy;
+        public EditMode EditMode => EditMode.None;
     }
 
 }

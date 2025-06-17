@@ -242,6 +242,15 @@
         },
         {
           "Bpm": 90.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                9,
+                10,
+                11
+              ]
+            }
+          ],
           "HoldHiddenJudgedRelayData": [
             {
               "HoldNumber": 0,
@@ -253,29 +262,13 @@
           ]
         },
         {
-          "Bpm": 90.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                9,
-                10
-              ]
-            }
-          ]
+          "Bpm": 90.0
         },
         {
           "Bpm": 90.0
         },
         {
           "Bpm": 90.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7
-              ]
-            }
-          ],
           "HoldMeshRelayData": [
             {
               "HoldNumber": 0,
@@ -288,6 +281,15 @@
         },
         {
           "Bpm": 90.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6
+              ]
+            }
+          ],
           "HoldRelayData": [
             {
               "HoldNumber": 0,

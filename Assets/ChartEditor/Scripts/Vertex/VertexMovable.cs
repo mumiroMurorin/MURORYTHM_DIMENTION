@@ -12,7 +12,7 @@ namespace ChartEditor
     public class VertexMovable : MonoBehaviour, IPointMovableObject
     {
         [Tooltip("移動時のアウトライン色")]
-        [SerializeField] private Color outlineColorOnMove;
+        [SerializeField] ColorSetting outlineColorOnMove;
         [Tooltip("移動時浮く高さ")]
         [SerializeField] float addHeightOnMove = 1f;
 
@@ -50,8 +50,7 @@ namespace ChartEditor
 
         void IPointMovableObject.OnMoveStart()
         {
-            vertexObject.SetOutlineColor(outlineColorOnMove, true);
-            vertexObject.SetOutlineActive(true);
+            vertexObject.OutlineColors.Add(outlineColorOnMove);
             vertexObject.SetCollidersActive(false);
 
             // 追加するベクトルを保存
@@ -66,7 +65,7 @@ namespace ChartEditor
 
         void IPointMovableObject.OnMoveEnd()
         {
-            vertexObject.SetOutlineActive(false);
+            vertexObject.OutlineColors.Remove(outlineColorOnMove);
             vertexObject.SetCollidersActive(true);
 
             // 追加したベクトル分元に戻す

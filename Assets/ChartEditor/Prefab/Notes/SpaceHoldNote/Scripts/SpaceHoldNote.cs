@@ -362,20 +362,48 @@ namespace ChartEditor
         };
 
         // 頂点リスト
-        ReactiveCollection<SpaceHoldVertex> vertices = new ReactiveCollection<SpaceHoldVertex>();
-        public IReadOnlyReactiveCollection<SpaceHoldVertex> Vertices => vertices;
+        ReactiveCollection<VertexData> vertices = new ReactiveCollection<VertexData>();
+        public IReadOnlyReactiveCollection<VertexData> Vertices => vertices;
 
         public SpaceHoldVertices()
         {
             SetVertices(defaultVertices.ToArray());
         }
 
-        public void AddVertex(SpaceHoldVertex vertex)
+        public void AddVertex(VertexData addVertex)
         {
-            vertices.Add(vertex);
+            // 1番目に近い頂点を見つける
+            int nearestIndex = 0;
+            float nearestSqrMagnitude = addVertex.GetSqrMagnitude(vertices[0]);
+            
+            for(int i = 0; i < vertices.Count; i++)
+            {
+                var v = vertices[i];
+                float magnitude = addVertex.GetSqrMagnitude(v);
+                // 距離短いの発見！更新！
+                if (magnitude < nearestSqrMagnitude)
+                {
+                    nearestIndex = i;
+                    nearestSqrMagnitude = magnitude;
+                }
+            }
+
+            // 最も近い頂点の前後で、より追加頂点と近い頂点を調べる
+            var backVertex = vertices[(nearestIndex + vertices.Count - 1) % vertices.Count];
+            var nextVertex = vertices[(nearestIndex + 1) % vertices.Count];
+            
+            // 頂点の追加 
+            if(addVertex.GetSqrMagnitude(nextVertex) < addVertex.GetSqrMagnitude(backVertex))
+            {
+                vertices.Insert(nearestIndex + 1, addVertex);
+            }
+            else
+            {
+                vertices.Insert(nearestIndex, addVertex);
+            }
         }
 
-        public bool RemoveVertex(SpaceHoldVertex vertex)
+        public bool RemoveVertex(VertexData vertex)
         {
             return vertices.Remove(vertex);
         }
@@ -386,7 +414,7 @@ namespace ChartEditor
 
             foreach (var pos in positions)
             {
-                vertices.Add(new SpaceHoldVertex(pos));
+                vertices.Add(new VertexData(pos));
             }
         }
 
@@ -404,14 +432,14 @@ namespace ChartEditor
     /// <summary>
     /// スペースホールドの頂点
     /// </summary>
-    public class SpaceHoldVertex
+    public class VertexData
     {
-        public SpaceHoldVertex(Vector2 pos)
+        public VertexData(Vector2 pos)
         {
             SetPosition(pos);
         }
 
-        public SpaceHoldVertex(SpaceHoldVertex vertex)
+        public VertexData(VertexData vertex)
         {
             SetPosition(vertex.Position.Value);
         }
@@ -421,6 +449,11 @@ namespace ChartEditor
         public void SetPosition(Vector2 pos)
         {
             position.Value = pos;
+        }
+
+        public float GetSqrMagnitude(VertexData another)
+        {
+            return (this.position.Value - another.position.Value).sqrMagnitude;
         }
     }
 }
