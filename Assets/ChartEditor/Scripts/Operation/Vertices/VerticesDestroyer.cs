@@ -5,7 +5,7 @@ using VContainer;
 
 namespace ChartEditor
 {
-    public class VertexDestroyer : MonoBehaviour
+    public class VerticesDestroyer : MonoBehaviour
     {
         [SerializeField] MultiVertexSelector vertexSelector;
         IChartEditorDataGetter chartEditorDataGetter;

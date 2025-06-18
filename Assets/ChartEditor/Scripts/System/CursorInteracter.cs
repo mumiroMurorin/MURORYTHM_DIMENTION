@@ -171,13 +171,13 @@ namespace ChartEditor
         /// <returns></returns>
         public Vector3 GetWorldPositionUnderCursor()
         {
-            if (currentViewCamera == null) { return Vector3.zero; }
+            if (currentViewCamera == null) { return Vector3.one * -9999; }
 
             Ray ray = currentViewCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             // オブジェクトがなかったらnullを返す
-            if (!Physics.Raycast(ray, out hit, rayDistance, raycastLayer)) { return Vector3.zero; }
+            if (!Physics.Raycast(ray, out hit, rayDistance, raycastLayer)) { return Vector3.one * -9999; }
             return hit.point;
         }
     }

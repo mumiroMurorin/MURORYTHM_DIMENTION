@@ -29,6 +29,53 @@ public static class Vector2Extensions
 
         return sum;
     }
+
+    public static Vector2 ClampToUnitCircle(this Vector2 pos)
+    {
+        // magnitude（長さ）が1以下ならそのまま返す
+        if (pos.sqrMagnitude <= 1f)
+            return pos;
+
+        // 単位ベクトルに正規化し、長さ1の円周上に制限
+        return pos.normalized;
+    }
+
+    public static Vector2 Center(this Vector2[] vertices)
+    {
+        if(vertices == null || vertices.Length == 0) { return Vector2.zero; }
+
+        var sum = new Vector2();
+        foreach(var v in vertices)
+        {
+            sum += v;
+        }
+
+        return sum / vertices.Length;
+    }
+
+    public static float AngleBetweenVectors(Vector2 a, Vector2 b, Vector2 center)
+    {
+        Vector2 dirA = a - center;
+        Vector2 dirB = b - center;
+
+        // -180～180度
+        float angle = Vector2.SignedAngle(dirA, dirB);
+        return angle;
+    }
+
+    public static Vector2 RotatePoint(Vector2 point, Vector2 center, float angleDegrees)
+    {
+        float rad = angleDegrees * Mathf.Deg2Rad;
+        float cos = Mathf.Cos(rad);
+        float sin = Mathf.Sin(rad);
+
+        Vector2 translated = point - center;
+
+        float x = translated.x * cos - translated.y * sin;
+        float y = translated.x * sin + translated.y * cos;
+
+        return new Vector2(x, y) + center;
+    }
 }
 
 /// <summary>

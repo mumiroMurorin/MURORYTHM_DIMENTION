@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using VContainer;
 
 namespace ChartEditor
 {
-    public class VertexMover : MonoBehaviour
+    public class VerticesMover : MonoBehaviour
     {
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
         [SerializeField] VerticesController verticesController;
@@ -13,7 +14,9 @@ namespace ChartEditor
 
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorDataSetter chartEditorDataSetter;
-        Dictionary<IPointMovableObject, Vector2> movableAndDelta = new Dictionary<IPointMovableObject, Vector2>();
+        Dictionary<IPointMovableObject, Vector2> rotatableAndDelta = new Dictionary<IPointMovableObject, Vector2>();
+        Vector2 centerPos;
+        Vector2 basePos;
         Vector3 cursorPos;
 
         [Inject]
@@ -31,7 +34,7 @@ namespace ChartEditor
         void Update()
         {
             var currentEditMode = chartEditorDataGetter.CurrentEditMode.Value;
-            if (currentEditMode != EditMode.VertexMove && currentEditMode != EditMode.VertexMoving) { return; }
+            if (currentEditMode != EditMode.VerticesRotate && currentEditMode != EditMode.VerticesRotating) { return; }
 
             // カーソル位置が動いたかの判定
             var currentPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
@@ -42,22 +45,22 @@ namespace ChartEditor
             if (Input.GetMouseButton(0) && delta.sqrMagnitude > 0)
             {
                 // 初クリック時＆カーソルを動かしたとき動作開始
-                if (currentEditMode != EditMode.VertexMoving)
+                if (currentEditMode != EditMode.VerticesRotating)
                 {
                     var collider = chartEditorDataGetter.GetInteractableCollider<IPointMovableCollider>();
                     if(collider == null) { return; }
 
-                    StartMoveVertices(collider);
-                    chartEditorDataSetter.SetEditMode(EditMode.VertexMoving);
+                    StartRotateVertices(collider);
+                    chartEditorDataSetter.SetEditMode(EditMode.VerticesRotating);
                 }
 
-                MoveVertex();
+                RotateVertices();
             }
             // 頂点オブジェクトの移動終了
-            else if (Input.GetMouseButtonUp(0) && currentEditMode == EditMode.VertexMoving)
+            else if (Input.GetMouseButtonUp(0) && currentEditMode == EditMode.VerticesRotating)
             {                
-                EndMoveVertex();
-                chartEditorDataSetter.SetEditMode(EditMode.VertexMove);
+                EndRotateVertices();
+                chartEditorDataSetter.SetEditMode(EditMode.VerticesRotate);
             }
 
         }
@@ -65,52 +68,59 @@ namespace ChartEditor
         /// <summary>
         /// 複数移動開始
         /// </summary>
-        private void StartMoveVertices(IPointMovableCollider movableCollider)
+        private void StartRotateVertices(IPointMovableCollider movableCollider)
         {
             if (movableCollider == null) { return; }
 
-            // 基準となる頂点オブジェクトを先に登録
-            if (!movableCollider.Vertex.Vertex.TryGetComponent(out IPointMovableObject baseVertex)) { return; }
-            movableAndDelta.Add(baseVertex, Vector2.zero);
+            // 選択された点群の中心を導出
+            centerPos = multiSelector.SelectingVertices.Select(x => x.VertexData.Position.Value).ToArray().Center();
 
             // 基準となる点の座標(正規化済み)を保存
-            Vector2 basePos = movableCollider.Vertex.Vertex.VertexData.Position.Value;
+            basePos = movableCollider.Vertex.Vertex.VertexData.Position.Value;
 
             // 複数選択されたオブジェクトから動かせるやつを取り出す
             foreach (var obj in multiSelector.SelectingVertices)
             {
                 if (!obj.TryGetComponent(out IPointMovableObject movable)) { continue; }
                 movable.OnMoveStart();
-                movableAndDelta.TryAdd(movable, obj.VertexData.Position.Value - basePos);
+                rotatableAndDelta.TryAdd(movable, obj.VertexData.Position.Value - centerPos);
             }
         }
 
-        private void MoveVertex()
+        private void RotateVertices()
         {
-            if (movableAndDelta == null || movableAndDelta.Count == 0) { return; }
+            if (rotatableAndDelta == null || rotatableAndDelta.Count == 0) { return; }
 
             // カーソル下の親取得
             var deployable = chartEditorDataGetter.GetInteractableCollider<IPointDeployableCollider>();
-            if (deployable == null) { return; }
 
-            // 頂点の移動
-            Vector2 normalized = verticesController.WorldPosToNormalizedPos(cursorInteracter.Value.GetWorldPositionUnderCursor());
+            // 配置可能な場所でなければ返す
+            if(deployable == null) { return; }
 
-            foreach(var pair in movableAndDelta)
+            // カーソル位置の取得、角度の計算
+            Vector3 worldPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
+            if (worldPos == Vector3.one * -9999) { return; }
+
+            Vector2 currentPos = verticesController.WorldPosToNormalizedPos(worldPos);
+            var angle = Vector2Extensions.AngleBetweenVectors(basePos, currentPos, centerPos);
+
+            // 回転
+            foreach (var pair in rotatableAndDelta)
             {
-                pair.Key.Vertex.VertexData.SetPosition(normalized + pair.Value);
+                var pos = Vector2Extensions.RotatePoint(pair.Key.Vertex.VertexData.Position.Value, centerPos, angle);
+                pair.Key.Vertex.VertexData.SetPosition(pos);
                 pair.Key.OnMove();
             }
         }
 
-        private void EndMoveVertex()
+        private void EndRotateVertices()
         {
-            foreach(var pair in movableAndDelta)
+            foreach(var pair in rotatableAndDelta)
             {
                 pair.Key?.OnMoveEnd();
             }
 
-            movableAndDelta.Clear();
+            rotatableAndDelta.Clear();
         }
     }
 }

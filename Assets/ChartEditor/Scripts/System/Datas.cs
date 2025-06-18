@@ -482,6 +482,118 @@ namespace ChartEditor
         }
     }
 
+    /// <summary>
+    /// スペースホールドの頂点リスト
+    /// </summary>
+    public class SpaceHoldVertices
+    {
+        List<Vector2> defaultVertices = new List<Vector2>
+        {
+            new Vector2(-0.25f, -0.5f),
+            new Vector2(-0.25f, 0f),
+            new Vector2(0.25f, 0f),
+            new Vector2(0.25f, -0.5f)
+        };
+
+        // 頂点リスト
+        ReactiveCollection<VertexData> vertices = new ReactiveCollection<VertexData>();
+        public IReadOnlyReactiveCollection<VertexData> Vertices => vertices;
+
+        public SpaceHoldVertices()
+        {
+            SetVertices(defaultVertices.ToArray());
+        }
+
+        public void AddVertex(VertexData addVertex)
+        {
+            // 1番目に近い頂点を見つける
+            int nearestIndex = 0;
+            float nearestSqrMagnitude = addVertex.GetSqrMagnitude(vertices[0]);
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                var v = vertices[i];
+                float magnitude = addVertex.GetSqrMagnitude(v);
+                // 距離短いの発見！更新！
+                if (magnitude < nearestSqrMagnitude)
+                {
+                    nearestIndex = i;
+                    nearestSqrMagnitude = magnitude;
+                }
+            }
+
+            // 最も近い頂点の前後で、より追加頂点と近い頂点を調べる
+            var backVertex = vertices[(nearestIndex + vertices.Count - 1) % vertices.Count];
+            var nextVertex = vertices[(nearestIndex + 1) % vertices.Count];
+
+            // 頂点の追加 
+            if (addVertex.GetSqrMagnitude(nextVertex) < addVertex.GetSqrMagnitude(backVertex))
+            {
+                vertices.Insert(nearestIndex + 1, addVertex);
+            }
+            else
+            {
+                vertices.Insert(nearestIndex, addVertex);
+            }
+        }
+
+        public bool RemoveVertex(VertexData vertex)
+        {
+            return vertices.Remove(vertex);
+        }
+
+        public void SetVertices(Vector2[] positions)
+        {
+            vertices.Clear();
+
+            foreach (var pos in positions)
+            {
+                vertices.Add(new VertexData(pos));
+            }
+        }
+
+        public void ClearVertices()
+        {
+            vertices.Clear();
+        }
+
+        public SimpleVector2[] GetVertexArray()
+        {
+            return Vertices.Select(x => new SimpleVector2(x.Position.Value)).ToArray();
+        }
+    }
+
+    /// <summary>
+    /// スペースホールドの頂点
+    /// </summary>
+    public class VertexData
+    {
+        public VertexData(Vector2 pos)
+        {
+            SetPosition(pos);
+        }
+
+        public VertexData(VertexData vertex)
+        {
+            SetPosition(vertex.Position.Value);
+        }
+
+        ReactiveProperty<Vector2> position = new ReactiveProperty<Vector2>();
+        public IReadOnlyReactiveProperty<Vector2> Position => position;
+        public void SetPosition(Vector2 pos)
+        {
+            // 単位円状に配置されるように正規化
+            pos = pos.ClampToUnitCircle();
+
+            position.Value = pos;
+        }
+
+        public float GetSqrMagnitude(VertexData another)
+        {
+            return (this.position.Value - another.position.Value).sqrMagnitude;
+        }
+    }
+
     [System.Serializable]
     public class ColorSetting
     {
@@ -513,6 +625,8 @@ namespace ChartEditor
         VertexDeploy = 200,
         VertexMove = 210,
         VertexMoving = 211,
+        VerticesRotate = 220,
+        VerticesRotating = 221,
         //VertexDestroy = 220,
 
         EditBarConfig = 500,

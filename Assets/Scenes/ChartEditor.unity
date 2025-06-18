@@ -9048,6 +9048,8 @@ MonoBehaviour:
   rightLimit: 4
   upperLimit: 4
   lowerLimit: -4
+  startColor: {r: 0.34591186, g: 1, b: 0.39017347, a: 1}
+  endColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &862578001
 GameObject:
   m_ObjectHideFlags: 0

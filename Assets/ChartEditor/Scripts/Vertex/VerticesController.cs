@@ -19,6 +19,10 @@ namespace ChartEditor
         [SerializeField] float upperLimit;
         [SerializeField] float lowerLimit;
 
+        [Space(20)]
+        [SerializeField] Color startColor;
+        [SerializeField] Color endColor;
+
         public Action OnAddVertexListner;
         public Action OnChangePositionListner;
         public Action OnRemoveVertexListner;
@@ -106,6 +110,7 @@ namespace ChartEditor
                 );
 
             OnAddVertexListner?.Invoke();
+            UpdateVertexColor();
         }
 
         private void OnRemoveVertex(VertexData vertex)
@@ -121,6 +126,7 @@ namespace ChartEditor
             dto.Object.Destroy();
 
             OnRemoveVertexListner?.Invoke();
+            UpdateVertexColor();
         }
 
         private void OnClearVertex()
@@ -134,6 +140,27 @@ namespace ChartEditor
             OnClearVertexListner?.Invoke();
         }
 
+        /// <summary>
+        /// 頂点オブジェクトのインデックス順色を更新する
+        /// </summary>
+        private void UpdateVertexColor()
+        {
+            if(dataToObj.Count <= 1) { return; }
+
+            for (int i = 0; i < dataToObj.Count; i++)
+            {
+                Color color = Color.Lerp(startColor, endColor, (float)i / (dataToObj.Count - 1));
+                var vertexObj = dataToObj[i].Object;
+
+                vertexObj.SetColor(color);
+            }
+        }
+
+        /// <summary>
+        /// 正規化された数値 → チャートエディタ上のWorldPos
+        /// </summary>
+        /// <param name="normalizedPos"></param>
+        /// <returns></returns>
         private Vector2 ConvertPositionOnChartGround(Vector2 normalizedPos)
         {
             float x = Mathf.Lerp(leftLimit, rightLimit, (normalizedPos.x + 1f) / 2f);
@@ -142,12 +169,20 @@ namespace ChartEditor
             return new Vector2(x, y);
         }
 
+        /// <summary>
+        /// チャートエディタ上のWorldPos → 正規化された数値
+        /// </summary>
+        /// <param name="worldPos"></param>
+        /// <returns></returns>
         public Vector2 WorldPosToNormalizedPos(Vector3 worldPos)
         {
             Vector2 deltaPos = worldPos - centerTransform.position;
             return new Vector2(deltaPos.x / (Mathf.Abs(leftLimit - rightLimit) / 2f), deltaPos.y / (Mathf.Abs(upperLimit - lowerLimit) / 2f));
         }
 
+        /// <summary>
+        /// 頂点オブジェクトとデータの削除、クリア
+        /// </summary>
         private void ResetVerticesPreview()
         {
             DisposeBindForVerticesData();
@@ -160,6 +195,9 @@ namespace ChartEditor
             dataToObj.Clear();
         }
 
+        /// <summary>
+        /// 頂点データに購読されたコールバックを捨てる
+        /// </summary>
         private void DisposeBindForVerticesData()
         {
             if (disposableForBindForVertices != null) { disposableForBindForVertices.Clear(); }

@@ -148,6 +148,11 @@ namespace ChartEditor
             }
         }
 
+        public void SetColor(Color color)
+        {
+            noteRenderer.material.color = color;
+        }
+
         public void Destroy()
         {
             Destroy(this.gameObject);
