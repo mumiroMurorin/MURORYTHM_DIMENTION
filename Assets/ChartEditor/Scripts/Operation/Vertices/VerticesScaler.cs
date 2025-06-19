@@ -14,7 +14,7 @@ namespace ChartEditor
 
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorDataSetter chartEditorDataSetter;
-        List<IPointMovableObject> scalableList = new List<IPointMovableObject>();
+        Dictionary<IPointMovableObject, Vector2> scalableAndDelta = new Dictionary<IPointMovableObject, Vector2>();
         Vector2 centerPos;
         Vector2 basePos;
         Vector3 cursorPos;
@@ -82,14 +82,14 @@ namespace ChartEditor
             foreach (var obj in multiSelector.SelectingVertices)
             {
                 if (!obj.TryGetComponent(out IPointMovableObject movable)) { continue; }
+                scalableAndDelta.TryAdd(movable, obj.VertexData.Position.Value);
                 movable.OnMoveStart();
-                scalableList.Add(movable);
             }
         }
 
         private void ScaleVertices()
         {
-            if (scalableList == null || scalableList.Count == 0) { return; }
+            if (scalableAndDelta == null || scalableAndDelta.Count == 0) { return; }
 
             // カーソル下の親取得
             var deployable = chartEditorDataGetter.GetInteractableCollider<IPointDeployableCollider>();
@@ -103,30 +103,24 @@ namespace ChartEditor
 
             // 拡大倍率の決定
             Vector2 currentPos = verticesController.WorldPosToNormalizedPos(worldPos);
-            float deltaX = Mathf.Abs(currentPos.x - basePos.x);
-            float deltaY = Mathf.Abs(currentPos.y - basePos.y);
-            float magnitude;
-            if (deltaX > deltaY) { magnitude = basePos.x != 0f ? currentPos.x / basePos.x : 0f; }
-            else { magnitude = basePos.y != 0f ? currentPos.y / basePos.y : 0f; }
+            float magnitude = (basePos - centerPos).sqrMagnitude != 0 ? (currentPos - centerPos).magnitude / (basePos - centerPos).magnitude : 0f;
 
-            basePos = currentPos;
-
-            foreach (var scalable in scalableList)
+            foreach (var pair in scalableAndDelta)
             {
-                var pos = scalable.Vertex.VertexData.Position.Value.ScalePoint(centerPos, magnitude);
-                scalable.Vertex.VertexData.SetPosition(pos);
-                scalable.OnMove();
+                var pos = pair.Value.ScalePoint(centerPos, magnitude);
+                pair.Key.Vertex.VertexData.SetPosition(pos);
+                pair.Key.OnMove();
             }
         }
 
         private void EndScaleVertices()
         {
-            foreach(var scalable in scalableList)
+            foreach (var scalable in scalableAndDelta)
             {
-                scalable?.OnMoveEnd();
+                scalable.Key?.OnMoveEnd();
             }
 
-            scalableList.Clear();
+            scalableAndDelta.Clear();
         }
     }
 }
