@@ -627,14 +627,13 @@ namespace ChartEditor
         VertexMoving = 211,
         VerticesRotate = 220,
         VerticesRotating = 221,
-        //VertexDestroy = 220,
+        VerticesScale = 230,
+        VerticesScaling = 231,
 
         EditBarConfig = 500,
         EditingBarConfig = 501,
         EditSubDivisionConfig = 510,
         EditingSubDivisionConfig = 511,
-
-        //Select = 900,
 
         Explanation = 1000,
     }

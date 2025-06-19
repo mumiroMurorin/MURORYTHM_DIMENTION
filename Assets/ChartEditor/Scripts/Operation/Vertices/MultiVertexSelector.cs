@@ -15,7 +15,7 @@ namespace ChartEditor
 
         List<EditMode> ignoreEditModes = new List<EditMode> {
              EditMode.VertexMoving,
-
+             EditMode.VerticesRotating,
         };
 
         [Inject]

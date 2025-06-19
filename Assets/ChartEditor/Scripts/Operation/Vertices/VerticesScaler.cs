@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using VContainer;
+using System.Linq;
 
 namespace ChartEditor
 {
-    public class VerticesMover : MonoBehaviour
+    public class VerticesScaler : MonoBehaviour
     {
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
         [SerializeField] VerticesController verticesController;
@@ -14,7 +14,7 @@ namespace ChartEditor
 
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorDataSetter chartEditorDataSetter;
-        List<IPointMovableObject> rotatableList = new List<IPointMovableObject>();
+        List<IPointMovableObject> scalableList = new List<IPointMovableObject>();
         Vector2 centerPos;
         Vector2 basePos;
         Vector3 cursorPos;
@@ -34,7 +34,7 @@ namespace ChartEditor
         void Update()
         {
             var currentEditMode = chartEditorDataGetter.CurrentEditMode.Value;
-            if (currentEditMode != EditMode.VerticesRotate && currentEditMode != EditMode.VerticesRotating) { return; }
+            if (currentEditMode != EditMode.VerticesScale && currentEditMode != EditMode.VerticesScaling) { return; }
 
             // カーソル位置が動いたかの判定
             var currentPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
@@ -45,29 +45,30 @@ namespace ChartEditor
             if (Input.GetMouseButton(0) && delta.sqrMagnitude > 0)
             {
                 // 初クリック時＆カーソルを動かしたとき動作開始
-                if (currentEditMode != EditMode.VerticesRotating)
+                if (currentEditMode != EditMode.VerticesScaling)
                 {
                     var collider = chartEditorDataGetter.GetInteractableCollider<IPointMovableCollider>();
                     if(collider == null) { return; }
 
-                    StartRotateVertices(collider);
-                    chartEditorDataSetter.SetEditMode(EditMode.VerticesRotating);
+                    StartScaleVertices(collider);
+                    chartEditorDataSetter.SetEditMode(EditMode.VerticesScaling);
                 }
 
-                RotateVertices();
+                ScaleVertices();
             }
             // 頂点オブジェクトの移動終了
-            else if (Input.GetMouseButtonUp(0) && currentEditMode == EditMode.VerticesRotating)
+            else if (Input.GetMouseButtonUp(0) && currentEditMode == EditMode.VerticesScaling)
             {                
-                EndRotateVertices();
-                chartEditorDataSetter.SetEditMode(EditMode.VerticesRotate);
+                EndScaleVertices();
+                chartEditorDataSetter.SetEditMode(EditMode.VerticesScale);
             }
+
         }
 
         /// <summary>
         /// 複数移動開始
         /// </summary>
-        private void StartRotateVertices(IPointMovableCollider movableCollider)
+        private void StartScaleVertices(IPointMovableCollider movableCollider)
         {
             if (movableCollider == null) { return; }
 
@@ -82,16 +83,13 @@ namespace ChartEditor
             {
                 if (!obj.TryGetComponent(out IPointMovableObject movable)) { continue; }
                 movable.OnMoveStart();
-                rotatableList.Add(movable);
+                scalableList.Add(movable);
             }
         }
 
-        /// <summary>
-        /// 回転行列をもとに移動
-        /// </summary>
-        private void RotateVertices()
+        private void ScaleVertices()
         {
-            if (rotatableList == null || rotatableList.Count == 0) { return; }
+            if (scalableList == null || scalableList.Count == 0) { return; }
 
             // カーソル下の親取得
             var deployable = chartEditorDataGetter.GetInteractableCollider<IPointDeployableCollider>();
@@ -99,31 +97,36 @@ namespace ChartEditor
             // 配置可能な場所でなければ返す
             if(deployable == null) { return; }
 
-            // カーソル位置の取得、角度の計算
+            // 移動量の検知
             Vector3 worldPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
             if (worldPos == Vector3.one * -9999) { return; }
 
+            // 拡大倍率の決定
             Vector2 currentPos = verticesController.WorldPosToNormalizedPos(worldPos);
-            var angle = Vector2Extensions.AngleBetweenVectors(basePos, currentPos, centerPos);
+            float deltaX = Mathf.Abs(currentPos.x - basePos.x);
+            float deltaY = Mathf.Abs(currentPos.y - basePos.y);
+            float magnitude;
+            if (deltaX > deltaY) { magnitude = basePos.x != 0f ? currentPos.x / basePos.x : 0f; }
+            else { magnitude = basePos.y != 0f ? currentPos.y / basePos.y : 0f; }
+
             basePos = currentPos;
 
-            // 回転
-            foreach (var rotatable in rotatableList)
+            foreach (var scalable in scalableList)
             {
-                var pos = rotatable.Vertex.VertexData.Position.Value.RotatePoint(centerPos, angle);
-                rotatable.Vertex.VertexData.SetPosition(pos);
-                rotatable.OnMove();
+                var pos = scalable.Vertex.VertexData.Position.Value.ScalePoint(centerPos, magnitude);
+                scalable.Vertex.VertexData.SetPosition(pos);
+                scalable.OnMove();
             }
         }
 
-        private void EndRotateVertices()
+        private void EndScaleVertices()
         {
-            foreach(var rotatable in rotatableList)
+            foreach(var scalable in scalableList)
             {
-                rotatable?.OnMoveEnd();
+                scalable?.OnMoveEnd();
             }
 
-            rotatableList.Clear();
+            scalableList.Clear();
         }
     }
 }

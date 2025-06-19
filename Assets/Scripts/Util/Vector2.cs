@@ -63,7 +63,7 @@ public static class Vector2Extensions
         return angle;
     }
 
-    public static Vector2 RotatePoint(Vector2 point, Vector2 center, float angleDegrees)
+    public static Vector2 RotatePoint(this Vector2 point, Vector2 center, float angleDegrees)
     {
         float rad = angleDegrees * Mathf.Deg2Rad;
         float cos = Mathf.Cos(rad);
@@ -75,6 +75,11 @@ public static class Vector2Extensions
         float y = translated.x * sin + translated.y * cos;
 
         return new Vector2(x, y) + center;
+    }
+
+    public static Vector2 ScalePoint(this Vector2 point, Vector2 center, float magnitude)
+    {
+        return center + (point - center) * magnitude;
     }
 }
 
