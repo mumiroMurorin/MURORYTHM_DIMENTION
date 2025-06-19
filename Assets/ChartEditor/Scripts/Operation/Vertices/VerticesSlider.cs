@@ -14,6 +14,14 @@ namespace ChartEditor
         {
             this.chartEditorDataGetter = chartEditorDataGetter;
         }
+
+        public void SlideIndices(int delta)
+        {
+            if(chartEditorDataGetter == null) { return; }
+            if(chartEditorDataGetter.EditingVertices.Value == null) { return; }
+
+            chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.SlideVertexIndices(delta);
+        }
     }
 
 }
