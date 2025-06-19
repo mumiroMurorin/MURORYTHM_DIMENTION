@@ -11,6 +11,7 @@ namespace ChartEditor
     {
         [SerializeField] Transform vertexObjParent;
         [SerializeField] GameObject vertexObject;
+        [SerializeField] GameObject[] laneDivisionLines;
 
         [Space(20)]
         [SerializeField] Transform centerTransform;
@@ -32,14 +33,14 @@ namespace ChartEditor
         public IReadOnlyList<DataToVertexObject> DataToObj => dataToObj;
 
         IChartEditorDataGetter dataGetter;
-        IChartEditorDataSetter dataSetter;
+        IChartEditorOptionGetter optionGetter;
         CompositeDisposable disposableForBindForVertices = new CompositeDisposable();
 
         [Inject]
-        public void Constructor(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter)
+        public void Constructor(IChartEditorDataGetter dataGetter, IChartEditorOptionGetter optionGetter)
         {
             this.dataGetter = dataGetter;
-            this.dataSetter = dataSetter;
+            this.optionGetter = optionGetter;
         }
 
         private void Start()
@@ -56,6 +57,11 @@ namespace ChartEditor
                     ResetVerticesPreview();
                     BindForVerticesData(note?.SpaceHoldVertices);
                 })
+                .AddTo(this.gameObject);
+
+            // レーン分割線の表示
+            optionGetter?.LaneDivisionNum
+                .Subscribe(SetLaneDivisionLine)
                 .AddTo(this.gameObject);
         }
 
@@ -202,6 +208,23 @@ namespace ChartEditor
         {
             if (disposableForBindForVertices != null) { disposableForBindForVertices.Clear(); }
             disposableForBindForVertices = new CompositeDisposable();
+        }
+
+        /// <summary>
+        /// 分割線の表示非表示
+        /// </summary>
+        /// <param name="divNum"></param>
+        private void SetLaneDivisionLine(int divNum)
+        {
+            if (laneDivisionLines == null) { return; }
+            if (laneDivisionLines.Length != 17) { return; }
+
+            for (int i = 0; i < 16; i++)
+            {
+                laneDivisionLines[i].SetActive(i % (16 / divNum) == 0);
+            }
+
+            laneDivisionLines[16].SetActive(true);
         }
     }
 

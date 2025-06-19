@@ -557,6 +557,11 @@ namespace ChartEditor
             vertices.Clear();
         }
 
+        public void SlideVertexIndices(int delta)
+        {
+            vertices.Rotate(delta);
+        }
+
         public SimpleVector2[] GetVertexArray()
         {
             return Vertices.Select(x => new SimpleVector2(x.Position.Value)).ToArray();
