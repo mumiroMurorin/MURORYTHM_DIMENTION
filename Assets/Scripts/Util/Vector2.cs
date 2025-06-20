@@ -81,6 +81,24 @@ public static class Vector2Extensions
     {
         return center + (point - center) * magnitude;
     }
+
+    public static Vector2 Mirror(this Vector2 point, Vector2 linePointA, Vector2 linePointB)
+    {
+        // 線分の方向ベクトル（正規化）
+        Vector2 lineDir = (linePointB - linePointA).normalized;
+
+        // 線分上のpointAからのベクトル
+        Vector2 fromAtoPoint = point - linePointA;
+
+        // 線分への射影点（ベクトル）
+        Vector2 projection = Vector2.Dot(fromAtoPoint, lineDir) * lineDir;
+
+        // 射影点のワールド座標
+        Vector2 foot = linePointA + projection;
+
+        // 対称点 = 射影点を中心に反転
+        return foot * 2 - point;
+    }
 }
 
 /// <summary>

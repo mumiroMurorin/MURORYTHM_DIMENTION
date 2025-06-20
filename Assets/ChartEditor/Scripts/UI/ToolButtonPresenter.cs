@@ -13,15 +13,18 @@ namespace ChartEditor
     {
         [Header("Views")]
         [SerializeField] List<EditNoteTypeToToolView> toolViews;
-        [Space(20),Header("Ground")]
+        [Space(10),Header("Ground")]
         [SerializeField] List<ToolButtonToEditMode> toolButtonsOnGround_view;
-        [Space(20), Header("Space")]
+        [Space(10), Header("Space")]
         [SerializeField] List<ToolButtonToEditMode> toolButtonsOnSpace_view;
-        [Space(20), Header("Vertices")]
+        [Space(10), Header("Vertices")]
         [SerializeField] List<ToolButtonToEditMode> toolButtonsOnVertices_view;
         [SerializeField] VertexIndicesSliderButtonView slideClockwiseButton_view;
         [SerializeField] VertexIndicesSliderButtonView slideCounterclockwiseButton_view;
+        [SerializeField] VerticesMirrorButtonView mirrorXAxisButton_view;
+        [SerializeField] VerticesMirrorButtonView mirrorYAxisButton_view;
         [SerializeField] VerticesSlider verticesSlider_model;
+        [SerializeField] VerticesReverser verticesReverser_model;
 
         IChartEditorDataSetter editorDataSetter_model;
         IChartEditorDataGetter editorDataGetter_model;
@@ -99,9 +102,14 @@ namespace ChartEditor
             }
 
             // 時計回りに要素番号をスライド
-            slideClockwiseButton_view.OnClickedListner += () => { verticesSlider_model.SlideIndices(+1); };
+            slideClockwiseButton_view.OnClickedListner += () => { verticesSlider_model.SlideIndices(-1); };
             // 反時計回りに要素番号をスライド
-            slideCounterclockwiseButton_view.OnClickedListner += () => { verticesSlider_model.SlideIndices(-1); };
+            slideCounterclockwiseButton_view.OnClickedListner += () => { verticesSlider_model.SlideIndices(+1); };
+
+            // X軸反転ボタン
+            mirrorXAxisButton_view.OnClickedListner += () => { verticesReverser_model?.ReverseXAxis(); };
+            // Y軸反転ボタン
+            mirrorYAxisButton_view.OnClickedListner += () => { verticesReverser_model?.ReverseYAxis(); };
         }
 
         /// <summary>

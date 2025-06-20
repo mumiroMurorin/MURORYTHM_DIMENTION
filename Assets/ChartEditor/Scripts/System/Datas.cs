@@ -562,6 +562,18 @@ namespace ChartEditor
             vertices.Rotate(delta);
         }
 
+        public void ReverseVertices(Vector2 linePointA, Vector2 linePointB)
+        {
+            foreach (var vertex in vertices)
+            {
+                var pos = vertex.Position.Value.Mirror(linePointA, linePointB);
+                vertex.SetPosition(pos);
+            }
+
+            // ‡”Ô‚ð‹t“]‚³‚¹‚é
+            vertices.ReverseElements();
+        }
+
         public SimpleVector2[] GetVertexArray()
         {
             return Vertices.Select(x => new SimpleVector2(x.Position.Value)).ToArray();
