@@ -26,6 +26,20 @@ namespace ChartEditor
         IChartEditorDataGetter dataGetter;
         IChartEditorOptionGetter optionGetter;
 
+        EditMode[] scaleIgnoreModes = new EditMode[]
+        {
+            EditMode.EditingBarConfig,
+            EditMode.EditingSubDivisionConfig,
+            EditMode.Explanation,
+        };
+
+        EditMode[] playIgnoreModes = new EditMode[]
+        {
+            EditMode.EditingBarConfig,
+            EditMode.EditingSubDivisionConfig,
+            EditMode.Explanation,
+        };
+
         [Inject]
         public void Construct(IChartEditorDataSetter dataSetter, IChartEditorDataGetter dataGetter, IChartEditorOptionSetter optionSetter, IChartEditorOptionGetter optionGetter)
         {
@@ -38,58 +52,42 @@ namespace ChartEditor
 
         private void Update()
         {
+            var scroll = Input.mouseScrollDelta.y;
+
             // 楽曲再生
-            OperateMusicPlay();
+            if (Input.GetKeyDown(playKey)) { OperateMusicPlay(); }
             // スケール変更
-            OperateChartViewScale();
+            if (Input.GetKey(KeyCode.LeftControl) && Mathf.Abs(scroll) > 0.01f) { OperateChartViewScale(scroll); }
             // 譜面スクロール
-            OperatePlaybackProgress();
+            if (!Input.GetKey(KeyCode.LeftControl) && Mathf.Abs(scroll) > 0.01f) { OperatePlaybackProgress(scroll); }
             // 保存
-            SaveChart();
+            if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.S)) SaveChart();
             // ショートカットキー
-            ShortCutKey();
+            CheckAndDoShortCutKey();
         }
 
         /// <summary>
         /// 拡大率の操作
         /// </summary>
-        private void OperateChartViewScale()
+        private void OperateChartViewScale(float delta)
         {
-            // 説明書を読んでるときは受け付けない
-            if (dataGetter.CurrentEditMode.Value == EditMode.Explanation) { return; }
-            // コンフィグをいじっているときは受け付けない
-            if (dataGetter.CurrentEditMode.Value == EditMode.EditingBarConfig) { return; }
-            if (dataGetter.CurrentEditMode.Value == EditMode.EditingSubDivisionConfig) { return; }
+            if (dataGetter.CurrentEditMode.Value.IsInEditModeList(scaleIgnoreModes)) { return; }
 
-            var scroll = Input.mouseScrollDelta.y;
-
-            if (Mathf.Abs(scroll) < 0.01f) { return; }
-            if (!Input.GetKey(KeyCode.LeftControl)) { return; }
-
-            optionSetter?.SetChartViewScale(optionGetter.ChartViewScale.Value + scroll * scalingSensitivity);
+            optionSetter?.SetChartViewScale(optionGetter.ChartViewScale.Value + delta * scalingSensitivity);
         }
 
         /// <summary>
         /// 再生位置の操作
         /// </summary>
-        private void OperatePlaybackProgress()
+        private void OperatePlaybackProgress(float delta)
         {
             // 再生中は操作を受け付けない
             if (dataGetter.PlayMode.Value == PlayMode.Play) { return; }
-            // 説明書を読んでるときは受け付けない
-            if (dataGetter.CurrentEditMode.Value == EditMode.Explanation) { return; }
-            // コンフィグをいじっているときは受け付けない
-            if (dataGetter.CurrentEditMode.Value == EditMode.EditingBarConfig) { return; }
-            if (dataGetter.CurrentEditMode.Value == EditMode.EditingSubDivisionConfig) { return; }
-
-            var scroll = Input.mouseScrollDelta.y;
-
-            if (Mathf.Abs(scroll) < 0.01f) { return; }
-            if (Input.GetKey(KeyCode.LeftControl)) { return; }
+            if (dataGetter.CurrentEditMode.Value.IsInEditModeList(playIgnoreModes)) { return; }
 
             // スクロール感度と拡大率によって変える
             float ratio = moveSensitivityMax * optionGetter.ScrollSensitivity.Value * Mathf.Clamp(10f - optionGetter.ChartViewScale.Value / 0.15f, 1f, 10f);
-            dataSetter?.SetPlaybackProgress(dataGetter.PlaybackProgress.Value + scroll * ratio);
+            dataSetter?.SetPlaybackProgress(dataGetter.PlaybackProgress.Value + delta * ratio);
         }
 
         /// <summary>
@@ -97,8 +95,6 @@ namespace ChartEditor
         /// </summary>
         private void OperateMusicPlay()
         {
-            if (!Input.GetKeyDown(playKey)) { return; }
-
             switch (dataGetter.PlayMode.Value)
             {
                 case PlayMode.Play:
@@ -113,20 +109,16 @@ namespace ChartEditor
 
         private void SaveChart()
         {
-            // Ctrl + S で保存
-            if (!Input.GetKey(KeyCode.LeftControl)) { return; }
-            if (!Input.GetKeyDown(KeyCode.S)) { return; }
-
             chartDataExporter.Export();
         }
 
-        private void ShortCutKey()
+        private void CheckAndDoShortCutKey()
         {
             if(editModeShortCutKeys == null) { return; }
 
             foreach(var key in editModeShortCutKeys)
             {
-                key.CheckAndChangeEditMode(KeyCode.LeftAlt, dataSetter.SetEditMode);
+                key.CheckAndChangeEditMode(KeyCode.LeftAlt, dataGetter.EditNoteType.Value, dataSetter.SetEditMode);
             }
         }
 
@@ -134,12 +126,14 @@ namespace ChartEditor
         class EditModeToKeycode
         {
             [SerializeField] EditMode editMode;
+            [SerializeField] EditNoteType editNoteType;
             [SerializeField] KeyCode keyCode;
 
-            public bool CheckAndChangeEditMode(KeyCode modifierKey, Action<EditMode> changeEditMode)
+            public bool CheckAndChangeEditMode(KeyCode modifierKey, EditNoteType currentEditNoteType, Action<EditMode> changeEditMode)
             {
                 if (!Input.GetKey(modifierKey)) { return false; } 
                 if (!Input.GetKeyDown(keyCode)) { return false; }
+                if (editNoteType != currentEditNoteType) { return false; }
 
                 changeEditMode.Invoke(editMode);
                 return true;

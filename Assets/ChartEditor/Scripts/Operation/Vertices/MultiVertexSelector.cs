@@ -13,9 +13,10 @@ namespace ChartEditor
 
         IChartEditorDataGetter chartEditorDataGetter;
 
-        List<EditMode> ignoreEditModes = new List<EditMode> {
+        EditMode[] ignoreEditModes = new EditMode[] {
              EditMode.VertexMoving,
              EditMode.VerticesRotating,
+             EditMode.VerticesScaling
         };
 
         [Inject]
@@ -40,7 +41,7 @@ namespace ChartEditor
                 var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableVertexCollider>();
                 
                 // カーソル先がインタラクト不可能かつ編集中でなければ選択解除する
-                if (collider == null && !IsIgnoreEditMode(chartEditorDataGetter.CurrentEditMode.Value)) 
+                if (collider == null && !chartEditorDataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) 
                 {
                     DeselectAll();
                 }
@@ -100,15 +101,6 @@ namespace ChartEditor
 
             selectingObjects.Clear();
             SelectingVertices.Clear();
-        }
-    
-        private bool IsIgnoreEditMode(EditMode editMode)
-        {
-            foreach(var mode in ignoreEditModes)
-            {
-                if(mode == editMode) { return true; }
-            }
-            return false;
         }
     }
 

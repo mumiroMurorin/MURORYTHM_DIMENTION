@@ -74,7 +74,7 @@ public class Operation_MusicSelect : MonoBehaviour
         operationSetter.Value.SetOperate(new SliderTouchData(MUSIC_SELECT_INDICES, TransitionNextPhase, musicSelectColor, musicSelectText));
 
         // “ïˆÕ“x•ÏX
-        SliderCoolDownHandler difficultyCoolDown = new SliderCoolDownHandler(afterMovingCoolTime);
+        SliderCoolDownHandler difficultyCoolDown = new SliderCoolDownHandler(afterChangeDifficultyCoolTime);
         operationSetter.Value.SetOperate(new SliderTouchData(DIFF_UP_INDICES, () => ChangeDifficulty(+1), difficultyUpColor, difficultyUpText, difficultyCoolDown));
         operationSetter.Value.SetOperate(new SliderTouchData(DIFF_DOWN_INDICES, () => ChangeDifficulty(-1), difficultyDownColor, difficultyDownText, difficultyCoolDown));
 

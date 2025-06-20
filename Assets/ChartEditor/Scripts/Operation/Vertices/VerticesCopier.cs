@@ -11,6 +11,12 @@ namespace ChartEditor
         IChartEditorDataGetter chartEditorDataGetter;
         SpaceHoldVertices vertices;
 
+        EditMode[] ignoreEditModes = new EditMode[] {
+             EditMode.VertexMoving,
+             EditMode.VerticesRotating,
+             EditMode.VerticesScaling
+        };
+
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter)
         {
@@ -31,7 +37,7 @@ namespace ChartEditor
         private void CopyVertices()
         {
             EditMode currentEditMode = chartEditorDataGetter.CurrentEditMode.Value;
-            if (currentEditMode != EditMode.VertexDeploy && currentEditMode != EditMode.VertexMove) { return; }
+            if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
 
             vertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
             Debug.Log("【Vertices】頂点リストをコピー");
@@ -43,7 +49,7 @@ namespace ChartEditor
         private void PasteVertices()
         {
             EditMode currentEditMode = chartEditorDataGetter.CurrentEditMode.Value;
-            if (currentEditMode != EditMode.VertexDeploy && currentEditMode != EditMode.VertexMove) { return; }
+            if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
             if (vertices == null) { return; }
 
             // 現在編集中の頂点データを全て消して新たに代入する

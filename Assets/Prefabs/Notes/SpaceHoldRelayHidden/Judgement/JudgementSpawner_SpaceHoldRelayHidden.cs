@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class JudgementSpawner_SpaceHoldRelayHidden : JudgementEffectSpawner
 {
-    [SerializeField] float radius = 10f;
-    [SerializeField] float addHeight = 1f;
     [SerializeField] GameObject perfectEffect;
     [SerializeField] GameObject greatEffect;
     [SerializeField] GameObject goodEffect;

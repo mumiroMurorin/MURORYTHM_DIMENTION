@@ -53,21 +53,18 @@ namespace ChartEditor
             foreach (var button in toolButtonsOnGround_view)
             {
                 button.BindForDeploymentNoteType(editorDataGetter_model.CurrentEditMode, this.gameObject);
-                button.BindForAutomode(editorDataGetter_model.AutoEditMode, this.gameObject);
             }
 
             // スペースツールボタン
             foreach (var button in toolButtonsOnSpace_view)
             {
                 button.BindForDeploymentNoteType(editorDataGetter_model.CurrentEditMode, this.gameObject);
-                button.BindForAutomode(editorDataGetter_model.AutoEditMode, this.gameObject);
             }
 
             // メッシュツールボタン
             foreach (var button in toolButtonsOnVertices_view)
             {
                 button.BindForDeploymentNoteType(editorDataGetter_model.CurrentEditMode, this.gameObject);
-                button.BindForAutomode(editorDataGetter_model.AutoEditMode, this.gameObject);
             }
 
             // ツールビューの更新
@@ -128,14 +125,13 @@ namespace ChartEditor
         }
 
         /// <summary>
-            /// ツールボタンに対するアクション他
-            /// </summary>
+        /// ツールボタンに対するアクション他
+        /// </summary>
         [Serializable]
         public class ToolButtonToEditMode
         {
             [SerializeField] ChangeEditModeButtonView toolButton_view;
             [SerializeField] EditMode editMode;
-            [SerializeField] bool IsHiddenInAutoMode;
 
             public ChangeEditModeButtonView ToolButton_view { get { return toolButton_view; } }
 
@@ -145,13 +141,6 @@ namespace ChartEditor
             {
                 reactiveProperty
                     .Subscribe(editMode => ToolButton_view.OnChangeEditMode(editMode == this.editMode))
-                    .AddTo(gameObject);
-            }
-
-            public void BindForAutomode(IReadOnlyReactiveProperty<bool> isAutoModeRP, GameObject gameObject)
-            {
-                isAutoModeRP
-                    .Subscribe(isAutomode => ToolButton_view.OnChangeAutoMode(isAutomode && IsHiddenInAutoMode))
                     .AddTo(gameObject);
             }
 

@@ -21,8 +21,8 @@ namespace ChartEditor
         {
             // 左クリック
             if (Input.GetMouseButtonDown(0)) { ChangeNoteType(); }
-            // 右クリック時、オートモードならタイプ変更モード解除
-            else if (Input.GetMouseButtonDown(1)) { BackAutoMode(); }
+            // 右クリック時、タイプ変更モード解除
+            else if (Input.GetMouseButtonDown(1)) { OnEndChangeMode(); }
         }
 
         /// <summary>
@@ -42,12 +42,8 @@ namespace ChartEditor
             changableObject.OnChangeNoteType();
         }
 
-        /// <summary>
-        /// オートモードに戻す
-        /// </summary>
-        private void BackAutoMode()
+        private void OnEndChangeMode()
         {
-            if (!chartEditorDataGetter.AutoEditMode.Value) { return; }
             chartEditorDataSetter.SetEditMode(EditMode.None);
         }
     }

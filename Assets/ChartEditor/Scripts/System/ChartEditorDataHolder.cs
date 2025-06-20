@@ -52,22 +52,8 @@ namespace ChartEditor
             if(currentEditMode.Value == editMode) { return; }
 
             currentEditMode.Value = editMode;
-            if (!autoEditMode.Value) { Debug.Log($"Change Edit Mode: {currentEditMode.Value}"); }
+            //Debug.Log($"Change Edit Mode: {currentEditMode.Value}"); 
         }
-
-
-        // 自動エディット設定モード
-        ReactiveProperty<bool> autoEditMode = new ReactiveProperty<bool>(true);
-        IReadOnlyReactiveProperty<bool> IChartEditorDataGetter.AutoEditMode => autoEditMode;
-
-        void IChartEditorDataSetter.SetAutoEditMode(bool isEnable)
-        {
-            if (autoEditMode.Value == isEnable) { return; }
-
-            autoEditMode.Value = isEnable;
-            Debug.Log($"Change Auto Edit Mode: {autoEditMode.Value}");
-        }
-
 
         // 編集ノーツタイプ
         ReactiveProperty<EditNoteType> editNoteType = new ReactiveProperty<EditNoteType>(EditNoteType.Ground);
@@ -206,8 +192,6 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<EditMode> CurrentEditMode { get; }
 
-        IReadOnlyReactiveProperty<bool> AutoEditMode { get; }
-
         IReadOnlyReactiveProperty<EditNoteType> EditNoteType { get; }
 
         IReadOnlyReactiveCollection<IInteractableCollider> InteractableColliders { get; }
@@ -237,8 +221,6 @@ namespace ChartEditor
         public void SetChartSeconds(float seconds);
 
         void SetEditMode(EditMode editMode);
-
-        void SetAutoEditMode(bool isEnable);
 
         void SetEditNoteType(EditNoteType editNoteType);
 

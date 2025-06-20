@@ -8,6 +8,7 @@ namespace ChartEditor
 {
     public class VerticesScaler : MonoBehaviour
     {
+        [SerializeField] float firstMovingThreshold = 0.15f;
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
         [SerializeField] VerticesController verticesController;
         [SerializeField] MultiVertexSelector multiSelector;
@@ -15,9 +16,11 @@ namespace ChartEditor
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorDataSetter chartEditorDataSetter;
         Dictionary<IPointMovableObject, Vector2> scalableAndDelta = new Dictionary<IPointMovableObject, Vector2>();
+        float magnitudeSum;
         Vector2 centerPos;
         Vector2 basePos;
         Vector3 cursorPos;
+        IPointMovableCollider targetCollider;
 
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorDataSetter chartEditorDataSetter)
@@ -44,13 +47,20 @@ namespace ChartEditor
             // 頂点オブジェクトを動かす
             if (Input.GetMouseButton(0) && delta.sqrMagnitude > 0)
             {
+                // 初動
+                if (magnitudeSum < firstMovingThreshold)
+                {
+                    targetCollider = chartEditorDataGetter.GetInteractableCollider<IPointMovableCollider>();
+                    magnitudeSum += delta.magnitude;
+                    return;
+                }
+
                 // 初クリック時＆カーソルを動かしたとき動作開始
                 if (currentEditMode != EditMode.VerticesScaling)
                 {
-                    var collider = chartEditorDataGetter.GetInteractableCollider<IPointMovableCollider>();
-                    if(collider == null) { return; }
+                    if(targetCollider == null) { return; }
 
-                    StartScaleVertices(collider);
+                    StartScaleVertices(targetCollider);
                     chartEditorDataSetter.SetEditMode(EditMode.VerticesScaling);
                 }
 
@@ -121,6 +131,9 @@ namespace ChartEditor
             }
 
             scalableAndDelta.Clear();
+            magnitudeSum = 0;
+            targetCollider = null;
+
         }
     }
 }

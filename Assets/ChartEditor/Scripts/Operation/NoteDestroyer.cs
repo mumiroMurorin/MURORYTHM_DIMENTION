@@ -47,7 +47,6 @@ namespace ChartEditor
         /// </summary>
         private void BackAutoMode()
         {
-            if (!chartEditorDataGetter.AutoEditMode.Value) { return; }
             chartEditorDataSetter.SetEditMode(EditMode.None);
         }
     }

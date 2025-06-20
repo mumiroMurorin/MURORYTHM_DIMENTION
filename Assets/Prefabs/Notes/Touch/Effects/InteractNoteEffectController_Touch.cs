@@ -7,9 +7,6 @@ public class InteractNoteEffectController_Touch : MonoBehaviour, IInteractNoteEf
 {
     [SerializeField] List<ParticleSystem> particleSystems;
     [SerializeField] MeshRenderer[] touchLigts;
-    [SerializeField] float existingDuration = 1.5f;
-
-
 
     public void SetEffect(NoteData_Touch noteData)
     {

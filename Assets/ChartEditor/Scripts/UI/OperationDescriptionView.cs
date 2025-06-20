@@ -19,12 +19,16 @@ namespace ChartEditor
         [System.Serializable]
         class EditModeToDescription
         {
-            [SerializeField] EditMode editMode;
-            [SerializeField] GameObject obj;
+            [SerializeField] string name = "type";
+            [SerializeField] EditMode[] targetEditModes;
+            [SerializeField] GameObject[] objs;
 
             public void CheckAndSet(EditMode currentEditMode)
             {
-                obj.SetActive(editMode == currentEditMode);
+                foreach(var obj in objs)
+                {
+                    obj.SetActive(currentEditMode.IsInEditModeList(targetEditModes));
+                }
             }
         }
     }

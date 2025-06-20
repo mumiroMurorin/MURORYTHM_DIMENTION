@@ -7,6 +7,7 @@ namespace ChartEditor
 {
     public class VerticesRotator : MonoBehaviour
     {
+        [SerializeField] float firstMovingThreshold = 0.15f;
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
         [SerializeField] VerticesController verticesController;
         [SerializeField] MultiVertexSelector multiSelector;
@@ -14,7 +15,9 @@ namespace ChartEditor
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorDataSetter chartEditorDataSetter;
         Dictionary<IPointMovableObject, Vector2> movableAndDelta = new Dictionary<IPointMovableObject, Vector2>();
+        float magnitudeSum;
         Vector3 cursorPos;
+        IPointMovableCollider targetCollider;
 
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorDataSetter chartEditorDataSetter)
@@ -39,15 +42,22 @@ namespace ChartEditor
             cursorPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
 
             // 頂点オブジェクトを動かす
-            if (Input.GetMouseButton(0) && delta.sqrMagnitude > 0)
+            if (Input.GetMouseButton(0) && delta.magnitude > 0)
             {
+                // 初動
+                if (magnitudeSum < firstMovingThreshold)
+                {
+                    targetCollider = chartEditorDataGetter.GetInteractableCollider<IPointMovableCollider>();
+                    magnitudeSum += delta.magnitude;
+                    return;
+                }
+
                 // 初クリック時＆カーソルを動かしたとき動作開始
                 if (currentEditMode != EditMode.VertexMoving)
                 {
-                    var collider = chartEditorDataGetter.GetInteractableCollider<IPointMovableCollider>();
-                    if(collider == null) { return; }
+                    if(targetCollider == null) { return; }
 
-                    StartMoveVertices(collider);
+                    StartMoveVertices(targetCollider);
                     chartEditorDataSetter.SetEditMode(EditMode.VertexMoving);
                 }
 
@@ -116,6 +126,8 @@ namespace ChartEditor
             }
 
             movableAndDelta.Clear();
+            magnitudeSum = 0;
+            targetCollider = null;
         }
     }
 }

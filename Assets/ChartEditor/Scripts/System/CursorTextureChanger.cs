@@ -17,15 +17,22 @@ namespace ChartEditor
         IChartEditorDataGetter dataGetter_model;
 
         EditMode currentEditMode;
-        List<Type> dependenceObjectType = new List<Type>
+        Dictionary<EditMode, Type> dependenceObjectType = new Dictionary<EditMode, Type>
         {
-            typeof(IMovableCollider),
-            typeof(IScalableCollider),
-            typeof(IDestroyableCollider),
-            typeof(IChangableCollider),
-            typeof(IConnectableCollider),
-            typeof(ISpaceEditableCollider),
+            { EditMode.Move,typeof(IMovableCollider) },
+            { EditMode.Scale,typeof(IScalableCollider) },
+            { EditMode.ChangeType,typeof(IChangableCollider) },
+            { EditMode.Destroy,typeof(IDestroyableCollider) },
+            { EditMode.Connect,typeof(IConnectableCollider) },
+            { EditMode.Connecting,typeof(IConnectableCollider) },
+            { EditMode.SpaceEdit,typeof(ISpaceEditableCollider) },
         };
+
+        EditMode[] ignoreEditModes = new EditMode[] {
+            EditMode.Destroy,
+            EditMode.ChangeType,
+        };
+
 
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter)
@@ -46,33 +53,28 @@ namespace ChartEditor
                 .Subscribe(value =>
                 {
                     currentEditMode = value;
+                    if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
 
-                    // オートモードの時はそのままやっちゃう
-                    if (dataGetter_model.AutoEditMode.Value)
-                    {
-                        if (currentEditMode == EditMode.Destroy) { return; }
-                        if (currentEditMode == EditMode.ChangeType) { return; }
-                        SetCursorTexture(value);
-                    }
+                    SetCursorTexture(value);
                 })
                 .AddTo(this.gameObject);
+
+            // クリアされたとき
+            dataGetter_model?.InteractableColliders.ObserveReset()
+                .Subscribe(_ => {
+                    SetCursorTexture(currentEditMode, true);
+                }).AddTo(this.gameObject);
 
             // コライダーが追加されたときカーソルを変更する
             dataGetter_model?.InteractableColliders.ObserveAdd()
                 .Subscribe(col => { 
                     foreach(var type in dependenceObjectType)
                     {
-                        if(type.IsAssignableFrom(col.GetType())) 
-                        { 
-                            SetCursorTexture(currentEditMode, true); 
+                        if (currentEditMode == type.Key && type.Value.IsAssignableFrom(col.Value.GetType())) 
+                        {
+                            SetCursorTexture(currentEditMode); 
                         }
                     }
-                }).AddTo(this.gameObject);
-
-            // クリアされたとき
-            dataGetter_model?.InteractableColliders.ObserveReset()
-                .Subscribe(_ => {
-                    SetCursorTexture(currentEditMode, false);
                 }).AddTo(this.gameObject);
         }
 
@@ -85,9 +87,9 @@ namespace ChartEditor
 
             if (!isDisable) 
             {
-                foreach (var et in cursorTextures)
+                foreach (var modeToTexture in cursorTextures)
                 {
-                    texture = et.CheckAndGetTexture(editMode);
+                    texture = modeToTexture.CheckAndGetTexture(editMode);
 
                     if (texture == null) { continue; }
                     else { break; }

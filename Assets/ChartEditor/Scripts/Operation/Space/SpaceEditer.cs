@@ -20,7 +20,6 @@ namespace ChartEditor
         void Update()
         {
             if (Input.GetMouseButtonDown(0)) { StartEditNote(); }
-            // 右クリック時、オートモードならタイプ変更モード解除
             else if (Input.GetMouseButtonDown(1)) { BackAutoMode(); }
         }
 
@@ -45,7 +44,6 @@ namespace ChartEditor
         /// </summary>
         private void BackAutoMode()
         {
-            if (!chartEditorDataGetter.AutoEditMode.Value) { return; }
             chartEditorDataSetter.SetEditMode(EditMode.None);
         }
     }

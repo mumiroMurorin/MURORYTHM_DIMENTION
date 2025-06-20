@@ -22,11 +22,6 @@ namespace ChartEditor
             button.interactable = !isInteracted;
         }
 
-        public void OnChangeAutoMode(bool isHidden)
-        {
-            button.gameObject.SetActive(!isHidden);
-        }
-
         public void OnClicked()
         {
             OnClickedListner?.Invoke();

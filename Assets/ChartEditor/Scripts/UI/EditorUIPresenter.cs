@@ -19,7 +19,6 @@ namespace ChartEditor
         [SerializeField] ChangeLaneDivNumButtonView changeLaneDivNumButton_view;
         [SerializeField] ScrollSensitivitySliderView scrollSensitivitySlider_view;
         [SerializeField] MusicNameView musicName_view;
-        [SerializeField] AutoEditModeButtonView autoEditModeButton_view;
         [SerializeField] RhythmConfigBarView rhythmConfigBar_view;
         [SerializeField] RhythmConfigSubView rhythmConfigSubDivision_view;
         [SerializeField] ImportButtonView importButton_view;
@@ -117,11 +116,6 @@ namespace ChartEditor
             editorDataGetter_model?.EditNoteType
                 .Subscribe(switchLayerButton_view.OnChangeEditNoteType)
                 .AddTo(this.gameObject);
-
-            // オートエディットモードの変更
-            editorDataGetter_model?.AutoEditMode
-                .Subscribe(autoEditModeButton_view.OnChangeAutoEditMode)
-                .AddTo(this.gameObject);
         }
 
         private void BindForRhythmConfig()
@@ -175,13 +169,6 @@ namespace ChartEditor
         {
             // 曲選択ボタン
             musicBrowseButton_view.OnClickedListner += BrowseAudioFile;
-
-            // オートエディットモードボタン
-            autoEditModeButton_view.OnClickedListner += () =>
-            {
-                bool currentMode = editorDataGetter_model.AutoEditMode.Value;
-                editorDataSetter_model.SetAutoEditMode(!currentMode);
-            };
 
             // オフセットフィールド
             offsetInputField_view.OnValueChangedListner += editorDataSetter_model.SetOffset;

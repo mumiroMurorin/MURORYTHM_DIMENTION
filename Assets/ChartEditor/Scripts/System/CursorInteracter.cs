@@ -20,7 +20,7 @@ namespace ChartEditor
         GameObject currentHitObject;
         Camera currentViewCamera;
 
-        List<EditMode> cursorIgnoreModes = new List<EditMode> 
+        EditMode[] cursorIgnoreModes = new EditMode[] 
         {
             EditMode.EditingBarConfig,
             EditMode.EditingSubDivisionConfig,
@@ -53,13 +53,7 @@ namespace ChartEditor
                     isCursorIgnoremode = false;
 
                     // 一つずつモードを取り出してどれかに該当したら無視モードにする
-                    foreach (var ignoreMode in cursorIgnoreModes)
-                    {
-                        if (mode != ignoreMode) { continue; }
-
-                        isCursorIgnoremode = true;
-                        break;
-                    }
+                    if (mode.IsInEditModeList(cursorIgnoreModes)) { isCursorIgnoremode = true; }
                 })
                 .AddTo(this.gameObject);
 
@@ -100,8 +94,6 @@ namespace ChartEditor
             if (isCursorIgnoremode) { return; }
             // カーソル下に何もないときは無効
             if (raycastEditMode == EditMode.None) { return; }
-            // オートモード中じゃなければ無効
-            if (!chartEditorDataGetter.AutoEditMode.Value) { return; }
 
             // 長押し中は無効
             if (Input.GetMouseButton(0)) { return; }
