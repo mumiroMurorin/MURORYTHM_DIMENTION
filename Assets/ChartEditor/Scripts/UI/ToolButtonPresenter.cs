@@ -13,9 +13,15 @@ namespace ChartEditor
     {
         [Header("Views")]
         [SerializeField] List<EditNoteTypeToToolView> toolViews;
+        [Space(20),Header("Ground")]
         [SerializeField] List<ToolButtonToEditMode> toolButtonsOnGround_view;
+        [Space(20), Header("Space")]
         [SerializeField] List<ToolButtonToEditMode> toolButtonsOnSpace_view;
+        [Space(20), Header("Vertices")]
         [SerializeField] List<ToolButtonToEditMode> toolButtonsOnVertices_view;
+        [SerializeField] VertexIndicesSliderButtonView slideClockwiseButton_view;
+        [SerializeField] VertexIndicesSliderButtonView slideCounterclockwiseButton_view;
+        [SerializeField] VerticesSlider verticesSlider_model;
 
         IChartEditorDataSetter editorDataSetter_model;
         IChartEditorDataGetter editorDataGetter_model;
@@ -91,6 +97,11 @@ namespace ChartEditor
             {
                 button.SetEvent(() => { editorDataSetter_model.SetEditMode(button.EditMode); });
             }
+
+            // 時計回りに要素番号をスライド
+            slideClockwiseButton_view.OnClickedListner += () => { verticesSlider_model.SlideIndices(+1); };
+            // 反時計回りに要素番号をスライド
+            slideCounterclockwiseButton_view.OnClickedListner += () => { verticesSlider_model.SlideIndices(-1); };
         }
 
         /// <summary>

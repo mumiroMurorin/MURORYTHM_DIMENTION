@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using TMPro;
+using UnityEngine.EventSystems;
 
 namespace ChartEditor
 {
@@ -43,6 +44,7 @@ namespace ChartEditor
         public void OnClickSwitchButton()
         {
             OnClickCloseButtonListner?.Invoke();
+            EventSystem.current.SetSelectedGameObject(null);
         }
     }
 
