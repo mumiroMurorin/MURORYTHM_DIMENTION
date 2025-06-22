@@ -8,16 +8,18 @@ namespace ChartEditor
 {
     public class MultiVertexSelector : MonoBehaviour
     {
+        [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
+
         List<ISelectableVertexObject> selectingObjects = new List<ISelectableVertexObject>();
         public List<VertexObject> SelectingVertices { get; private set; } = new List<VertexObject>();
 
         IChartEditorDataGetter chartEditorDataGetter;
-
         EditMode[] ignoreEditModes = new EditMode[] {
              EditMode.VertexMoving,
              EditMode.VerticesRotating,
              EditMode.VerticesScaling
         };
+        Vector3 cursorPos;
 
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter)
@@ -27,8 +29,20 @@ namespace ChartEditor
 
         void Update()
         {
+            if (chartEditorDataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
+
+            //// カーソル位置が動いたかの判定
+            //var currentPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
+            //var delta = currentPos - cursorPos;
+            //cursorPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
+
+            //// 左クリック+カーソル動作で範囲選択
+            //if (Input.GetMouseButton(0) && delta.magnitude > 0)
+            //{
+
+            //}
             // Ctrl+左クリックで複数選択
-            if(Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0))
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0))
             {
                 var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableVertexCollider>();
                 if (collider == null) { return; }
@@ -40,12 +54,12 @@ namespace ChartEditor
             {
                 var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableVertexCollider>();
                 
-                // カーソル先がインタラクト不可能かつ編集中でなければ選択解除する
-                if (collider == null && !chartEditorDataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) 
+                // カーソル先が頂点オブジェクトでないなら選択解除する
+                if (collider == null) 
                 {
                     DeselectAll();
                 }
-                // インタラクト可能であれば単選択する
+                // 頂点オブジェクトであれば単選択する
                 else
                 {
                     var obj = collider.SelectableObject;
@@ -92,11 +106,11 @@ namespace ChartEditor
         /// <summary>
         /// 複数選択解除
         /// </summary>
-        private void DeselectAll()
+        public void DeselectAll()
         {
             foreach(var obj in selectingObjects)
             {
-                obj.OnDeselect();
+                obj?.OnDeselect();
             }
 
             selectingObjects.Clear();

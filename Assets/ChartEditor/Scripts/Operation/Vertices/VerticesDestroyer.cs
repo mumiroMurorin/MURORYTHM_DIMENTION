@@ -10,6 +10,12 @@ namespace ChartEditor
         [SerializeField] MultiVertexSelector vertexSelector;
         IChartEditorDataGetter chartEditorDataGetter;
 
+        EditMode[] ignoreEditModes = new EditMode[] {
+             EditMode.VertexMoving,
+             EditMode.VerticesRotating,
+             EditMode.VerticesScaling
+        };
+
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter)
         {
@@ -24,6 +30,9 @@ namespace ChartEditor
 
         private void DestroyVertex()
         {
+            // 除外エディットモード中は返す
+            if (chartEditorDataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
+
             var currentEditVertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
 
             // 3点以下だった場合消さない
@@ -45,6 +54,9 @@ namespace ChartEditor
                 destroyable.OnDestroy();
                 obj.VertexData = null;
             }
+
+            // 選択解除
+            vertexSelector.DeselectAll();
         }
     }
 

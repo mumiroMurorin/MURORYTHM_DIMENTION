@@ -41,13 +41,18 @@ namespace ChartEditor
             var delta = currentPos - cursorPos;
             cursorPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
 
+            if (Input.GetMouseButtonDown(0))
+            {
+                Initialize();
+            }
+
             // 頂点オブジェクトを動かす
             if (Input.GetMouseButton(0) && delta.magnitude > 0)
             {
                 // 初動
                 if (magnitudeSum < firstMovingThreshold)
                 {
-                    targetCollider = chartEditorDataGetter.GetInteractableCollider<IPointMovableCollider>();
+                    if (targetCollider == null) { targetCollider = chartEditorDataGetter.GetInteractableCollider<IPointMovableCollider>(); }
                     magnitudeSum += delta.magnitude;
                     return;
                 }
@@ -55,7 +60,7 @@ namespace ChartEditor
                 // 初クリック時＆カーソルを動かしたとき動作開始
                 if (currentEditMode != EditMode.VertexMoving)
                 {
-                    if(targetCollider == null) { return; }
+                    if (targetCollider == null) { return; }
 
                     StartMoveVertices(targetCollider);
                     chartEditorDataSetter.SetEditMode(EditMode.VertexMoving);
@@ -69,7 +74,13 @@ namespace ChartEditor
                 EndMoveVertex();
                 chartEditorDataSetter.SetEditMode(EditMode.VertexMove);
             }
+        }
 
+        private void Initialize()
+        {
+            movableAndDelta.Clear();
+            magnitudeSum = 0;
+            targetCollider = null;
         }
 
         /// <summary>
@@ -125,9 +136,7 @@ namespace ChartEditor
                 pair.Key?.OnMoveEnd();
             }
 
-            movableAndDelta.Clear();
-            magnitudeSum = 0;
-            targetCollider = null;
+            Initialize();
         }
     }
 }

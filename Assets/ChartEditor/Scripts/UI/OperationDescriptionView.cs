@@ -10,7 +10,14 @@ namespace ChartEditor
 
         public void OnChangeEditMode(EditMode editMode)
         {
-            foreach(var description in descriptionObjects)
+            // 一旦全部非表示
+            foreach (var description in descriptionObjects)
+            {
+                description.InActive();
+            }
+
+            // 然るべき表示を行う
+            foreach (var description in descriptionObjects)
             {
                 description.CheckAndSet(editMode);
             }
@@ -27,7 +34,15 @@ namespace ChartEditor
             {
                 foreach(var obj in objs)
                 {
-                    obj.SetActive(currentEditMode.IsInEditModeList(targetEditModes));
+                    if (currentEditMode.IsInEditModeList(targetEditModes)) { obj.SetActive(true); }
+                }
+            }
+
+            public void InActive()
+            {
+                foreach (var obj in objs)
+                {
+                    obj.SetActive(false); 
                 }
             }
         }
