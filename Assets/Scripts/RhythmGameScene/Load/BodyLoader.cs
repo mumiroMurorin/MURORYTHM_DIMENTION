@@ -9,6 +9,7 @@ using System;
 public class BodyLoader : MonoBehaviour, IBodyLoader
 {
     [SerializeField] bool isUseSpaceInput;
+    [SerializeField] SerializeInterface<ISpaceInputHandler> spaceInputHandler;
 
     ISpaceInputGetter spaceInputGetter;
     CancellationTokenSource cts;
@@ -19,8 +20,19 @@ public class BodyLoader : MonoBehaviour, IBodyLoader
         this.spaceInputGetter = spaceInputGetter;
     }
 
+    private void Start()
+    {
+        // トラッキングの設定
+
+        // トラッキングの初期化
+        spaceInputHandler?.Value.InitializeBodyTracking();
+    }
+
     void IBodyLoader.WaitForLoadBody(Action callback)
     {
+        // トラッキング開始
+        spaceInputHandler?.Value.StartTracking();
+
         if (!isUseSpaceInput)
         {
             callback.Invoke();

@@ -4,7 +4,7 @@ using UnityEngine;
 using UniRx;
 using VContainer;
 
-public class SpaceInputHandlerForMediaPipe : MonoBehaviour
+public class SpaceInputHandlerForMediaPipe : MonoBehaviour, ISpaceInputHandler
 {
     const int RIGHT_HAND_INDEX = 19;
     const int LEFT_HAND_INDEX = 20;
@@ -26,12 +26,14 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour
 
     ISpaceInputSetter spaceInputSetter;
     ISpaceInputGetter spaceInputGetter;
+    IOptionGetter optionGetter;
 
     [Inject]
-    public void Construct(ISpaceInputSetter inputSetter,ISpaceInputGetter inputGetter)
+    public void Construct(ISpaceInputSetter inputSetter, ISpaceInputGetter inputGetter, IOptionGetter optionGetter)
     {
         spaceInputSetter = inputSetter;
         spaceInputGetter = inputGetter;
+        this.optionGetter = optionGetter;
     }
 
     private void Start()
@@ -41,7 +43,7 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour
 
     void Update()
     {
-        SetData();
+        ReadData();
         SendData();
     }
 
@@ -64,7 +66,21 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour
             .AddTo(this.gameObject);
     }
 
-    private void SetData()
+    public void InitializeBodyTracking()
+    {
+        bodyTracking.Initialize(optionGetter.TrackingSettings);
+    }
+
+    [System.Obsolete]
+    public void StartTracking()
+    {
+        bodyTracking.StartTracking();
+    }
+
+    /// <summary>
+    /// BodyTrackingの情報を正規化
+    /// </summary>
+    private void ReadData()
     {
         if (bodyTracking.LandmarkList == null) { isTracking = false; return; }
 
@@ -108,6 +124,9 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour
         );
     }
 
+    /// <summary>
+    /// データを保持クラスに送信
+    /// </summary>
     private void SendData()
     {
         if (spaceInputSetter == null) { return; }
@@ -115,5 +134,58 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour
         spaceInputSetter.SetSpaceInput(SpaceTrackingTag.RightHand, Normalize(right_hand_pos), timer.Value.Time);
         spaceInputSetter.SetSpaceInput(SpaceTrackingTag.LeftHand, Normalize(left_hand_pos), timer.Value.Time);
         spaceInputSetter.SetCanGetSpaceInput(isTracking);
+    }
+}
+
+public interface ISpaceInputHandler
+{
+    void InitializeBodyTracking();
+
+    void StartTracking();
+}
+
+/// <summary>
+/// トラッキングに関する設定項目まとめクラス
+/// </summary>
+public class BodyTrackingSettings
+{
+    // トラッキングの左右反転
+    ReactiveProperty<bool> isHorizontallyFlipped = new ReactiveProperty<bool>();
+    public IReadOnlyReactiveProperty<bool> IsHorizontallyFlipped => isHorizontallyFlipped;
+    public void SetIsHorizontallyFlipped(bool isFlipped)
+    {
+        isHorizontallyFlipped.Value = isFlipped;
+    }
+
+    // カメラ解像度(横)
+    ReactiveProperty<int> cameraWidth = new ReactiveProperty<int>();
+    public IReadOnlyReactiveProperty<int> CameraWidth => cameraWidth;
+    public void SetCameraWidth(int width)
+    {
+        cameraWidth.Value = width;
+    }
+
+    // カメラ解像度(縦)
+    ReactiveProperty<int> cameraHeight = new ReactiveProperty<int>();
+    public IReadOnlyReactiveProperty<int> CameraHeight => cameraHeight;
+    public void SetCameraHeight(int height)
+    {
+        cameraHeight.Value = height;
+    }
+
+    // 筐体真ん中(7番と8番の間)
+    ReactiveProperty<Vector3> controllerCenter = new ReactiveProperty<Vector3>(Vector3.zero);
+    public IReadOnlyReactiveProperty<Vector3> ControllerCenter => controllerCenter;
+    public void SetControllerCenter(Vector3 pos)
+    {
+        controllerCenter.Value = pos;
+    }
+
+    // 筐体サイズ(直径)
+    ReactiveProperty<Vector3> controllerSize = new ReactiveProperty<Vector3>(Vector3.one);
+    public IReadOnlyReactiveProperty<Vector3> ControllerSize => controllerSize;
+    public void SetControllerSize(Vector3 size)
+    {
+        controllerSize.Value = size;
     }
 }

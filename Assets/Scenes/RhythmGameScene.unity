@@ -2480,8 +2480,8 @@ MonoBehaviour:
   _screen: {fileID: 1071018236}
   _width: 1920
   _height: 1080
-  _fps: 30
-  _isHorizontally_flipped: 0
+  _fps: 0
+  _isHorizontally_flipped: 1
   _isVertically_flipped: 0
   _modelComplexity: 0
   _configAsset: {fileID: 4900000, guid: 5199c62ac0186dac28358b2ef639ef9b, type: 3}
@@ -6854,6 +6854,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isUseSpaceInput: 1
+  spaceInputHandler:
+    obj: {fileID: 796097596}
 --- !u!1001 &1826391570
 PrefabInstance:
   m_ObjectHideFlags: 0

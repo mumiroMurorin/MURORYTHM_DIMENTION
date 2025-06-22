@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 using Mediapipe.Unity.CoordinateSystem;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Stopwatch = System.Diagnostics.Stopwatch; // for Timestamp
 
 namespace Mediapipe.Unity.Tutorial
@@ -32,89 +35,114 @@ namespace Mediapipe.Unity.Tutorial
 
         NormalizedLandmarkList landmarkList;
         public NormalizedLandmarkList LandmarkList { get { return landmarkList; } }
+        OutputStream<NormalizedLandmarkListPacket, NormalizedLandmarkList> poseLandmarksStream;
 
-        private IEnumerator Start()
+        CancellationTokenSource initializeCts = new CancellationTokenSource();
+        CancellationTokenSource trackingCts = new CancellationTokenSource();
+
+        /// <summary>
+        /// 非同期初期化関数のラップ
+        /// </summary>
+        public void Initialize(BodyTrackingSettings settings)
+        {
+            initializeCts.CancelAndDispose();
+            initializeCts = new CancellationTokenSource();
+
+            InitializeAsync(settings, initializeCts.Token).Forget();
+        }
+
+        /// <summary>
+        /// 非同期トラッキング関数のラップ
+        /// </summary>
+        [Obsolete]
+        public void StartTracking()
+        {
+            trackingCts.CancelAndDispose();
+            trackingCts = new CancellationTokenSource();
+
+            BodyTrackAsync(trackingCts.Token).Forget();
+        }
+
+        private async UniTask InitializeAsync(BodyTrackingSettings settings, CancellationToken token)
         {
             // Webカメラの初期化チェック
             if (WebCamTexture.devices.Length == 0)
             {
                 Debug.LogError("【MediaPipe】No webcam devices found!");
-                yield break;
+                return;
             }
 
             var webCamDevice = WebCamTexture.devices[0];
-            _webCamTexture = new WebCamTexture(webCamDevice.name, _width, _height, _fps);
+            _webCamTexture = new WebCamTexture(webCamDevice.name, _width, _height);
             _webCamTexture.Play();
             Debug.Log("【MediaPipe】WebCamTexture is playing: " + _webCamTexture.isPlaying);
 
-            // Webカメラの解像度が16以上になるまで待機
-            yield return new WaitUntil(() => _webCamTexture.width > 16);
+            try
+            {
+                await UniTask.WaitUntil(() => _webCamTexture.width > 16, cancellationToken: token);
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.LogWarning("【MediaPipe】Initialization canceled during webcam wait.");
+                return;
+            }
+
             if (_webCamTexture.width <= 16)
             {
                 Debug.LogError("【MediaPipe】WebCamTexture did not initialize correctly.");
-                yield break;
-            }
-            else
-            {
-                Debug.Log("【MediaPipe】WebCamTexture initialized successfully.");
+                return;
             }
 
-            // UI のセットアップ
+            Debug.Log("【MediaPipe】WebCamTexture initialized successfully.");
+
             _screen.rectTransform.sizeDelta = new Vector2(_width, _height);
             _screen.texture = _webCamTexture;
 
-            // _inputTexture と _pixelData の初期化
             _inputTexture = new Texture2D(_width, _height, TextureFormat.RGBA32, false);
             _pixelData = new Color32[_webCamTexture.width * _webCamTexture.height];
 
-            // リソースマネージャーの初期化
-            if(_resourceManager == null)
+            _resourceManager ??= new StreamingAssetsResourceManager();
+
+            // LoadModelAssetsにCancel処理が組み込めなかったから凄く不安…
+            switch (_modelComplexity)
             {
-                _resourceManager = new StreamingAssetsResourceManager();
+                case ModelComplexity.Lite:
+                    Debug.Log("【MediaPipe】Loading Lite Pose model...");
+                    await LoadModelAssets("pose_landmark_lite.bytes");
+                    await LoadModelAssets("pose_detection.bytes");
+                    break;
+                case ModelComplexity.Full:
+                    Debug.Log("【MediaPipe】Loading Full Pose model...");
+                    await LoadModelAssets("pose_landmark_full.bytes");
+                    await LoadModelAssets("pose_detection.bytes");
+                    break;
+                case ModelComplexity.Heavy:
+                    Debug.Log("【MediaPipe】Loading Heavy Pose model...");
+                    await LoadModelAssets("pose_landmark_heavy.bytes");
+                    await LoadModelAssets("pose_detection.bytes");
+                    break;
             }
 
-            // モデルの読み込み（ポーズトラッキング用に変更）
-            if (_modelComplexity == ModelComplexity.Lite)
-            {
-                Debug.Log("【MediaPipe】Loading Lite Pose model...");
-                yield return LoadModelAssets("pose_landmark_lite.bytes");
-                yield return LoadModelAssets("pose_detection.bytes");
-            }
-            else if(_modelComplexity == ModelComplexity.Full)
-            {
-                Debug.Log("【MediaPipe】Loading Full Pose model...");
-                yield return LoadModelAssets("pose_landmark_full.bytes");
-                yield return LoadModelAssets("pose_detection.bytes");
-            }
-            else if (_modelComplexity == ModelComplexity.Heavy)
-            {
-                Debug.Log("【MediaPipe】Loading Full Pose model...");
-                yield return LoadModelAssets("pose_landmark_heavy.bytes");
-                yield return LoadModelAssets("pose_detection.bytes");
-            }
-
-            // コンフィグアセットのチェック
             if (_configAsset == null)
             {
                 Debug.LogError("【MediaPipe】Configuration asset (_configAsset) is not assigned.");
-                yield break;
+                return;
             }
+
             _graph = new CalculatorGraph(_configAsset.text);
             if (_graph == null)
             {
                 Debug.LogError("【MediaPipe】Failed to initialize CalculatorGraph.");
-                yield break;
+                return;
             }
 
-            // ポーズランドマークの出力ストリームの設定
-            var poseLandmarksStream = new OutputStream<NormalizedLandmarkListPacket, NormalizedLandmarkList>(_graph, "pose_landmarks");
+            poseLandmarksStream = new OutputStream<NormalizedLandmarkListPacket, NormalizedLandmarkList>(_graph, "pose_landmarks");
             poseLandmarksStream.StartPolling().AssertOk();
 
-            // sidePacket の作成とグラフの開始
             var sidePacket = new SidePacket();
             sidePacket.Emplace("model_complexity", new IntPacket((int)_modelComplexity));
             sidePacket.Emplace("input_rotation", new IntPacket(0));
-            sidePacket.Emplace("input_horizontally_flipped", new BoolPacket(_isHorizontally_flipped));
+            sidePacket.Emplace("input_horizontally_flipped", new BoolPacket(settings.IsHorizontallyFlipped.Value));
             sidePacket.Emplace("input_vertically_flipped", new BoolPacket(_isVertically_flipped));
             sidePacket.Emplace("smooth_landmarks", new BoolPacket(true));
             sidePacket.Emplace("enable_segmentation", new BoolPacket(true));
@@ -125,12 +153,16 @@ namespace Mediapipe.Unity.Tutorial
 
             _graph.StartRun(sidePacket).AssertOk();
             Debug.Log("【MediaPipe】Graph started successfully!");
+        }
 
+        [Obsolete]
+        private async UniTask BodyTrackAsync(CancellationToken token)
+        {
             // タイマー開始
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var screenRect = _screen.GetComponent<RectTransform>().rect;
+            // var screenRect = _screen.GetComponent<RectTransform>().rect;
 
             while (true)
             {
@@ -140,11 +172,11 @@ namespace Mediapipe.Unity.Tutorial
 
                 _graph.AddPacketToInputStream("input_video", new ImageFramePacket(imageFrame, new Timestamp(currentTimestamp))).AssertOk();
 
-                yield return new WaitForEndOfFrame();
+                await UniTask.WaitForEndOfFrame(token);
 
                 if (poseLandmarksStream.TryGetNext(out var LandMarks))
                 {
-                    if(LandMarks == null) { continue; }
+                    if (LandMarks == null) { continue; }
 
                     landmarkList = LandMarks;
                 }
@@ -182,6 +214,132 @@ namespace Mediapipe.Unity.Tutorial
                     Debug.Log("【MediaPipe】Graph disposed.");
                 }
             }
+
+            initializeCts.CancelAndDispose();
+            trackingCts.CancelAndDispose();
         }
+
+        // もともと書いてあったやつ
+        //private IEnumerator Start()
+        //{
+        //    // Webカメラの初期化チェック
+        //    if (WebCamTexture.devices.Length == 0)
+        //    {
+        //        Debug.LogError("【MediaPipe】No webcam devices found!");
+        //        yield break;
+        //    }
+
+        //    var webCamDevice = WebCamTexture.devices[0];
+        //    _webCamTexture = new WebCamTexture(webCamDevice.name, _width, _height, _fps);
+        //    _webCamTexture.Play();
+        //    Debug.Log("【MediaPipe】WebCamTexture is playing: " + _webCamTexture.isPlaying);
+
+        //    // Webカメラの解像度が16以上になるまで待機
+        //    yield return new WaitUntil(() => _webCamTexture.width > 16);
+        //    if (_webCamTexture.width <= 16)
+        //    {
+        //        Debug.LogError("【MediaPipe】WebCamTexture did not initialize correctly.");
+        //        yield break;
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("【MediaPipe】WebCamTexture initialized successfully.");
+        //    }
+
+        //    // UI のセットアップ
+        //    _screen.rectTransform.sizeDelta = new Vector2(_width, _height);
+        //    _screen.texture = _webCamTexture;
+
+        //    // _inputTexture と _pixelData の初期化
+        //    _inputTexture = new Texture2D(_width, _height, TextureFormat.RGBA32, false);
+        //    _pixelData = new Color32[_webCamTexture.width * _webCamTexture.height];
+
+        //    // リソースマネージャーの初期化
+        //    if (_resourceManager == null)
+        //    {
+        //        _resourceManager = new StreamingAssetsResourceManager();
+        //    }
+
+        //    // モデルの読み込み（ポーズトラッキング用に変更）
+        //    if (_modelComplexity == ModelComplexity.Lite)
+        //    {
+        //        Debug.Log("【MediaPipe】Loading Lite Pose model...");
+        //        yield return LoadModelAssets("pose_landmark_lite.bytes");
+        //        yield return LoadModelAssets("pose_detection.bytes");
+        //    }
+        //    else if (_modelComplexity == ModelComplexity.Full)
+        //    {
+        //        Debug.Log("【MediaPipe】Loading Full Pose model...");
+        //        yield return LoadModelAssets("pose_landmark_full.bytes");
+        //        yield return LoadModelAssets("pose_detection.bytes");
+        //    }
+        //    else if (_modelComplexity == ModelComplexity.Heavy)
+        //    {
+        //        Debug.Log("【MediaPipe】Loading Full Pose model...");
+        //        yield return LoadModelAssets("pose_landmark_heavy.bytes");
+        //        yield return LoadModelAssets("pose_detection.bytes");
+        //    }
+
+        //    // コンフィグアセットのチェック
+        //    if (_configAsset == null)
+        //    {
+        //        Debug.LogError("【MediaPipe】Configuration asset (_configAsset) is not assigned.");
+        //        yield break;
+        //    }
+        //    _graph = new CalculatorGraph(_configAsset.text);
+        //    if (_graph == null)
+        //    {
+        //        Debug.LogError("【MediaPipe】Failed to initialize CalculatorGraph.");
+        //        yield break;
+        //    }
+
+        //    // ポーズランドマークの出力ストリームの設定
+        //    var poseLandmarksStream = new OutputStream<NormalizedLandmarkListPacket, NormalizedLandmarkList>(_graph, "pose_landmarks");
+        //    poseLandmarksStream.StartPolling().AssertOk();
+
+        //    // sidePacket の作成とグラフの開始
+        //    var sidePacket = new SidePacket();
+        //    sidePacket.Emplace("model_complexity", new IntPacket((int)_modelComplexity));
+        //    sidePacket.Emplace("input_rotation", new IntPacket(0));
+        //    sidePacket.Emplace("input_horizontally_flipped", new BoolPacket(_isHorizontally_flipped));
+        //    sidePacket.Emplace("input_vertically_flipped", new BoolPacket(_isVertically_flipped));
+        //    sidePacket.Emplace("smooth_landmarks", new BoolPacket(true));
+        //    sidePacket.Emplace("enable_segmentation", new BoolPacket(true));
+        //    sidePacket.Emplace("smooth_segmentation", new BoolPacket(true));
+        //    sidePacket.Emplace("output_rotation", new IntPacket(0));
+        //    sidePacket.Emplace("output_horizontally_flipped", new BoolPacket(false));
+        //    sidePacket.Emplace("output_vertically_flipped", new BoolPacket(false));
+
+        //    _graph.StartRun(sidePacket).AssertOk();
+        //    Debug.Log("【MediaPipe】Graph started successfully!");
+
+        //    // タイマー開始
+        //    var stopwatch = new Stopwatch();
+        //    stopwatch.Start();
+
+        //    var screenRect = _screen.GetComponent<RectTransform>().rect;
+
+        //    while (true)
+        //    {
+        //        _inputTexture.SetPixels32(_webCamTexture.GetPixels32(_pixelData));
+        //        var imageFrame = new ImageFrame(ImageFormat.Types.Format.Srgba, _width, _height, _width * 4, _inputTexture.GetRawTextureData<byte>());
+        //        var currentTimestamp = stopwatch.ElapsedTicks / (System.TimeSpan.TicksPerMillisecond / 1000);
+
+        //        _graph.AddPacketToInputStream("input_video", new ImageFramePacket(imageFrame, new Timestamp(currentTimestamp))).AssertOk();
+
+        //        yield return new WaitForEndOfFrame();
+
+        //        if (poseLandmarksStream.TryGetNext(out var LandMarks))
+        //        {
+        //            if (LandMarks == null) { continue; }
+
+        //            landmarkList = LandMarks;
+        //        }
+        //        else
+        //        {
+        //            // Debug.LogWarning("【MediaPipe】No pose landmarks received.");
+        //        }
+        //    }
+        //}
     }
 }
