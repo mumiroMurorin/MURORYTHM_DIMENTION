@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
-using System.Threading;
 
 namespace TransitionerInRhythmGameScene
 {
     public class Transitioner_Play : IPhaseTransitionerInRhythmGameScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
-        [SerializeField] SerializeInterface<IMusicPlayerInRhythmGameScene> musicPlayer;
         [SerializeField] SerializeInterface<ITimeController> timer;
 
         [Tooltip("フェーズ遷移までの時間")]
@@ -34,8 +32,6 @@ namespace TransitionerInRhythmGameScene
         /// </summary>
         private void StartRhythmGame()
         {
-            // 楽曲を流す
-            musicPlayer?.Value.PlayMusic();
             // 時を進める
             timer?.Value.StartTimer();
         }

@@ -1,0 +1,9335 @@
+{
+  "BarDatas": [
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "HoldEndUnjudgeData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 1,
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 1,
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 1,
+              "Range": [
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 1,
+              "Range": [
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 2,
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 1,
+              "Range": [
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 2,
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 2,
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 2,
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 2,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6
+              ]
+            },
+            {
+              "Range": [
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6
+              ]
+            },
+            {
+              "Range": [
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "SpaceHoldStartData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                {
+                  "x": -0.418979645,
+                  "y": -0.035879612
+                },
+                {
+                  "x": -0.422451019,
+                  "y": 0.118055493
+                },
+                {
+                  "x": 0.1307888,
+                  "y": 0.109953731
+                },
+                {
+                  "x": 0.1250019,
+                  "y": -0.3240741
+                },
+                {
+                  "x": 0.6782417,
+                  "y": -0.373842567
+                },
+                {
+                  "x": 0.6782417,
+                  "y": -0.5011574
+                },
+                {
+                  "x": -0.708332062,
+                  "y": -0.5011574
+                },
+                {
+                  "x": -0.6956005,
+                  "y": -0.3576389
+                },
+                {
+                  "x": -0.03935051,
+                  "y": -0.3252315
+                },
+                {
+                  "x": -0.030090332,
+                  "y": -0.035879612
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "SpaceHoldEndData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                {
+                  "x": -0.418979645,
+                  "y": -0.035879612
+                },
+                {
+                  "x": -0.422451019,
+                  "y": 0.118055493
+                },
+                {
+                  "x": 0.1307888,
+                  "y": 0.109953731
+                },
+                {
+                  "x": 0.1250019,
+                  "y": -0.3240741
+                },
+                {
+                  "x": 0.6782417,
+                  "y": -0.373842567
+                },
+                {
+                  "x": 0.6782417,
+                  "y": -0.5011574
+                },
+                {
+                  "x": -0.708332062,
+                  "y": -0.5011574
+                },
+                {
+                  "x": -0.6956005,
+                  "y": -0.3576389
+                },
+                {
+                  "x": -0.03935051,
+                  "y": -0.3252315
+                },
+                {
+                  "x": -0.030090332,
+                  "y": -0.035879612
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "HoldStartData": [
+            {
+              "HoldNumber": 3,
+              "Range": [
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 3,
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "HoldRelayData": [
+            {
+              "HoldNumber": 3,
+              "Range": [
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 3,
+              "Range": [
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "HoldRelayData": [
+            {
+              "HoldNumber": 3,
+              "Range": [
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 3,
+              "Range": [
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "HoldRelayData": [
+            {
+              "HoldNumber": 3,
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 3,
+              "Range": [
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "HoldStartData": [
+            {
+              "HoldNumber": 4,
+              "Range": [
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 4,
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "HoldRelayData": [
+            {
+              "HoldNumber": 4,
+              "Range": [
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 4,
+              "Range": [
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 4,
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 5,
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 5,
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 5,
+              "Range": [
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 5,
+              "Range": [
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 6,
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 5,
+              "Range": [
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 6,
+              "Range": [
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 6,
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 6,
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 6,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 7,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 7,
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 7,
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 7,
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 8,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 7,
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 8,
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 8,
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 8,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 8,
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ],
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 8,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ],
+          "SpaceHoldStartData": [
+            {
+              "HoldNumber": 1,
+              "Vertices": [
+                {
+                  "x": -0.418979645,
+                  "y": -0.035879612
+                },
+                {
+                  "x": -0.422451019,
+                  "y": 0.118055493
+                },
+                {
+                  "x": 0.1307888,
+                  "y": 0.109953731
+                },
+                {
+                  "x": 0.1250019,
+                  "y": -0.3240741
+                },
+                {
+                  "x": 0.6782417,
+                  "y": -0.373842567
+                },
+                {
+                  "x": 0.6782417,
+                  "y": -0.5011574
+                },
+                {
+                  "x": -0.708332062,
+                  "y": -0.5011574
+                },
+                {
+                  "x": -0.6956005,
+                  "y": -0.3576389
+                },
+                {
+                  "x": -0.03935051,
+                  "y": -0.3252315
+                },
+                {
+                  "x": -0.030090332,
+                  "y": -0.035879612
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "SpaceHoldEndData": [
+            {
+              "HoldNumber": 1,
+              "Vertices": [
+                {
+                  "x": -0.418979645,
+                  "y": -0.035879612
+                },
+                {
+                  "x": -0.422451019,
+                  "y": 0.118055493
+                },
+                {
+                  "x": 0.1307888,
+                  "y": 0.109953731
+                },
+                {
+                  "x": 0.1250019,
+                  "y": -0.3240741
+                },
+                {
+                  "x": 0.6782417,
+                  "y": -0.373842567
+                },
+                {
+                  "x": 0.6782417,
+                  "y": -0.5011574
+                },
+                {
+                  "x": -0.708332062,
+                  "y": -0.5011574
+                },
+                {
+                  "x": -0.6956005,
+                  "y": -0.3576389
+                },
+                {
+                  "x": -0.03935051,
+                  "y": -0.3252315
+                },
+                {
+                  "x": -0.030090332,
+                  "y": -0.035879612
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 9,
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 9,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 9,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 10,
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 10,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 10,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "HoldStartData": [
+            {
+              "HoldNumber": 11,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 11,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 11,
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 12,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "HoldRelayData": [
+            {
+              "HoldNumber": 12,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 12,
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            },
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            },
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 8,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "Range": [
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "Range": [
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 13,
+              "Range": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 13,
+              "Range": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 13,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "SpaceHoldStartData": [
+            {
+              "HoldNumber": 2,
+              "Vertices": [
+                {
+                  "x": -0.663192749,
+                  "y": -0.0405091941
+                },
+                {
+                  "x": -0.6666641,
+                  "y": 0.11342591
+                },
+                {
+                  "x": -0.1134243,
+                  "y": 0.105324149
+                },
+                {
+                  "x": -0.1192112,
+                  "y": -0.328703672
+                },
+                {
+                  "x": 0.416667938,
+                  "y": -0.3611111
+                },
+                {
+                  "x": 0.431715,
+                  "y": -0.4872685
+                },
+                {
+                  "x": 0.643520355,
+                  "y": -0.490740776
+                },
+                {
+                  "x": 0.6423626,
+                  "y": -0.369212925
+                },
+                {
+                  "x": 0.7719917,
+                  "y": -0.3703704
+                },
+                {
+                  "x": 0.7731495,
+                  "y": -0.289351881
+                },
+                {
+                  "x": 0.6400471,
+                  "y": -0.284722149
+                },
+                {
+                  "x": 0.586807251,
+                  "y": 0.245370388
+                },
+                {
+                  "x": 0.8159733,
+                  "y": 0.245370388
+                },
+                {
+                  "x": 0.791667938,
+                  "y": -0.2939815
+                },
+                {
+                  "x": 0.782409668,
+                  "y": -0.5092592
+                },
+                {
+                  "x": 0.6446781,
+                  "y": -0.508101761
+                },
+                {
+                  "x": 0.434028625,
+                  "y": -0.505786955
+                },
+                {
+                  "x": -0.880785,
+                  "y": -0.4652778
+                },
+                {
+                  "x": -0.8854141,
+                  "y": -0.353009254
+                },
+                {
+                  "x": -0.2835636,
+                  "y": -0.329861075
+                },
+                {
+                  "x": -0.274303436,
+                  "y": -0.0405091941
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "SpaceHoldEndData": [
+            {
+              "HoldNumber": 2,
+              "Vertices": [
+                {
+                  "x": -0.663192749,
+                  "y": -0.0405091941
+                },
+                {
+                  "x": -0.6666641,
+                  "y": 0.11342591
+                },
+                {
+                  "x": -0.1134243,
+                  "y": 0.105324149
+                },
+                {
+                  "x": -0.1192112,
+                  "y": -0.328703672
+                },
+                {
+                  "x": 0.416667938,
+                  "y": -0.3611111
+                },
+                {
+                  "x": 0.431715,
+                  "y": -0.4872685
+                },
+                {
+                  "x": 0.643520355,
+                  "y": -0.490740776
+                },
+                {
+                  "x": 0.6423626,
+                  "y": -0.369212925
+                },
+                {
+                  "x": 0.7719917,
+                  "y": -0.3703704
+                },
+                {
+                  "x": 0.7731495,
+                  "y": -0.289351881
+                },
+                {
+                  "x": 0.6400471,
+                  "y": -0.284722149
+                },
+                {
+                  "x": 0.586807251,
+                  "y": 0.245370388
+                },
+                {
+                  "x": 0.8159733,
+                  "y": 0.245370388
+                },
+                {
+                  "x": 0.791667938,
+                  "y": -0.2939815
+                },
+                {
+                  "x": 0.782409668,
+                  "y": -0.5092592
+                },
+                {
+                  "x": 0.6446781,
+                  "y": -0.508101761
+                },
+                {
+                  "x": 0.434028625,
+                  "y": -0.505786955
+                },
+                {
+                  "x": -0.880785,
+                  "y": -0.4652778
+                },
+                {
+                  "x": -0.8854141,
+                  "y": -0.353009254
+                },
+                {
+                  "x": -0.2835636,
+                  "y": -0.329861075
+                },
+                {
+                  "x": -0.274303436,
+                  "y": -0.0405091941
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 6,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                11,
+                12,
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "SpaceHoldStartData": [
+            {
+              "HoldNumber": 3,
+              "Vertices": [
+                {
+                  "x": -0.418979645,
+                  "y": -0.035879612
+                },
+                {
+                  "x": -0.422451019,
+                  "y": 0.118055493
+                },
+                {
+                  "x": 0.1307888,
+                  "y": 0.109953731
+                },
+                {
+                  "x": 0.1250019,
+                  "y": -0.3240741
+                },
+                {
+                  "x": 0.6782417,
+                  "y": -0.373842567
+                },
+                {
+                  "x": 0.6782417,
+                  "y": -0.5011574
+                },
+                {
+                  "x": -0.708332062,
+                  "y": -0.5011574
+                },
+                {
+                  "x": -0.6956005,
+                  "y": -0.3576389
+                },
+                {
+                  "x": -0.03935051,
+                  "y": -0.3252315
+                },
+                {
+                  "x": -0.030090332,
+                  "y": -0.035879612
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "SpaceHoldEndData": [
+            {
+              "HoldNumber": 3,
+              "Vertices": [
+                {
+                  "x": -0.418979645,
+                  "y": -0.035879612
+                },
+                {
+                  "x": -0.422451019,
+                  "y": 0.118055493
+                },
+                {
+                  "x": 0.1307888,
+                  "y": 0.109953731
+                },
+                {
+                  "x": 0.1250019,
+                  "y": -0.3240741
+                },
+                {
+                  "x": 0.6782417,
+                  "y": -0.373842567
+                },
+                {
+                  "x": 0.6782417,
+                  "y": -0.5011574
+                },
+                {
+                  "x": -0.708332062,
+                  "y": -0.5011574
+                },
+                {
+                  "x": -0.6956005,
+                  "y": -0.3576389
+                },
+                {
+                  "x": -0.03935051,
+                  "y": -0.3252315
+                },
+                {
+                  "x": -0.030090332,
+                  "y": -0.035879612
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 8,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 14,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 14,
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 14,
+              "Range": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 14,
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 14,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 14,
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 14,
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 14,
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                2,
+                3,
+                4
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 14,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 8,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            },
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            },
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 15,
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 15,
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 15,
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 15,
+              "Range": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 15,
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 15,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "HoldHiddenJudgedRelayData": [
+            {
+              "HoldNumber": 15,
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 15,
+              "Range": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "HoldEndUnjudgeData": [
+            {
+              "HoldNumber": 15,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "SpaceHoldStartData": [
+            {
+              "HoldNumber": 4,
+              "Vertices": [
+                {
+                  "x": -0.663192749,
+                  "y": -0.0405091941
+                },
+                {
+                  "x": -0.6666641,
+                  "y": 0.11342591
+                },
+                {
+                  "x": -0.1134243,
+                  "y": 0.105324149
+                },
+                {
+                  "x": -0.1192112,
+                  "y": -0.328703672
+                },
+                {
+                  "x": 0.416667938,
+                  "y": -0.3611111
+                },
+                {
+                  "x": 0.431715,
+                  "y": -0.4872685
+                },
+                {
+                  "x": 0.643520355,
+                  "y": -0.490740776
+                },
+                {
+                  "x": 0.6423626,
+                  "y": -0.369212925
+                },
+                {
+                  "x": 0.7719917,
+                  "y": -0.3703704
+                },
+                {
+                  "x": 0.7731495,
+                  "y": -0.289351881
+                },
+                {
+                  "x": 0.6400471,
+                  "y": -0.284722149
+                },
+                {
+                  "x": 0.586807251,
+                  "y": 0.245370388
+                },
+                {
+                  "x": 0.8159733,
+                  "y": 0.245370388
+                },
+                {
+                  "x": 0.791667938,
+                  "y": -0.2939815
+                },
+                {
+                  "x": 0.782409668,
+                  "y": -0.5092592
+                },
+                {
+                  "x": 0.6446781,
+                  "y": -0.508101761
+                },
+                {
+                  "x": 0.434028625,
+                  "y": -0.505786955
+                },
+                {
+                  "x": -0.880785,
+                  "y": -0.4652778
+                },
+                {
+                  "x": -0.8854141,
+                  "y": -0.353009254
+                },
+                {
+                  "x": -0.2835636,
+                  "y": -0.329861075
+                },
+                {
+                  "x": -0.274303436,
+                  "y": -0.0405091941
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "SpaceHoldEndData": [
+            {
+              "HoldNumber": 4,
+              "Vertices": [
+                {
+                  "x": -0.663192749,
+                  "y": -0.0405091941
+                },
+                {
+                  "x": -0.6666641,
+                  "y": 0.11342591
+                },
+                {
+                  "x": -0.1134243,
+                  "y": 0.105324149
+                },
+                {
+                  "x": -0.1192112,
+                  "y": -0.328703672
+                },
+                {
+                  "x": 0.416667938,
+                  "y": -0.3611111
+                },
+                {
+                  "x": 0.431715,
+                  "y": -0.4872685
+                },
+                {
+                  "x": 0.643520355,
+                  "y": -0.490740776
+                },
+                {
+                  "x": 0.6423626,
+                  "y": -0.369212925
+                },
+                {
+                  "x": 0.7719917,
+                  "y": -0.3703704
+                },
+                {
+                  "x": 0.7731495,
+                  "y": -0.289351881
+                },
+                {
+                  "x": 0.6400471,
+                  "y": -0.284722149
+                },
+                {
+                  "x": 0.586807251,
+                  "y": 0.245370388
+                },
+                {
+                  "x": 0.8159733,
+                  "y": 0.245370388
+                },
+                {
+                  "x": 0.791667938,
+                  "y": -0.2939815
+                },
+                {
+                  "x": 0.782409668,
+                  "y": -0.5092592
+                },
+                {
+                  "x": 0.6446781,
+                  "y": -0.508101761
+                },
+                {
+                  "x": 0.434028625,
+                  "y": -0.505786955
+                },
+                {
+                  "x": -0.880785,
+                  "y": -0.4652778
+                },
+                {
+                  "x": -0.8854141,
+                  "y": -0.353009254
+                },
+                {
+                  "x": -0.2835636,
+                  "y": -0.329861075
+                },
+                {
+                  "x": -0.274303436,
+                  "y": -0.0405091941
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "DynamicLeftwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 8,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "HoldStartData": [
+            {
+              "HoldNumber": 16,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ],
+          "HoldRelayData": [
+            {
+              "HoldNumber": 16,
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ],
+          "HoldRelayData": [
+            {
+              "HoldNumber": 16,
+              "Range": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ],
+          "HoldRelayData": [
+            {
+              "HoldNumber": 16,
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "HoldRelayData": [
+            {
+              "HoldNumber": 16,
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ],
+          "HoldRelayData": [
+            {
+              "HoldNumber": 16,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13
+              ]
+            }
+          ],
+          "HoldRelayData": [
+            {
+              "HoldNumber": 16,
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "HoldRelayData": [
+            {
+              "HoldNumber": 16,
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DynamicRightwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "HoldEndUnjudgeData": [
+            {
+              "HoldNumber": 16,
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ],
+          "DynamicUpwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6
+              ]
+            },
+            {
+              "Range": [
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 2,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        },
+        {
+          "Bpm": 170.0
+        }
+      ]
+    }
+  ],
+  "OffsetMs": 1090.0
+}

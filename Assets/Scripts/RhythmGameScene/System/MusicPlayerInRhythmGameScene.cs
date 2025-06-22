@@ -5,16 +5,41 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using VContainer;
+using UniRx;
 
 public class MusicPlayerInRhythmGameScene : MonoBehaviour, IMusicPlayerInRhythmGameScene
 {
+    [SerializeField] SerializeInterface<ITimeGetter> timer;
+
     IMusicDataGetter musicDataGetter;
     CancellationTokenSource cts;
+    CompositeDisposable disposable = new CompositeDisposable();
 
     [Inject]
     public void Construct(IMusicDataGetter musicDataGetter)
     {
         this.musicDataGetter = musicDataGetter;
+    }
+
+    private void Start()
+    {
+        Bind();
+    }
+
+    private void Bind()
+    {
+        disposable = new CompositeDisposable();
+
+        timer?.Value.TimeRP
+            .Skip(1)
+            .Where(time => time >= 0)
+            .Subscribe(_ => {
+                PlayMusic();
+                disposable.Dispose();
+                disposable.Clear();
+            })
+            .AddTo(disposable)
+            .AddTo(this.gameObject);
     }
 
     void IMusicPlayerInRhythmGameScene.LoadMusic(Action onEndLoading)
@@ -37,7 +62,7 @@ public class MusicPlayerInRhythmGameScene : MonoBehaviour, IMusicPlayerInRhythmG
     /// <summary>
     /// 楽曲の再生
     /// </summary>
-    void IMusicPlayerInRhythmGameScene.PlayMusic()
+    public void PlayMusic()
     {
         if (musicDataGetter == null) { Debug.LogWarning("【System】 musicDataGetterがセットされていません"); return; }
         if (musicDataGetter.Music.Value == null) { Debug.LogWarning("【System】 楽曲がセットされていません"); return; }

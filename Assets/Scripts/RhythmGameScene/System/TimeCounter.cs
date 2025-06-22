@@ -1,17 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public class TimeCounter : MonoBehaviour, ITimeGetter, ITimeController
 {
-    float time;
+    [SerializeField] float firstIntervalSeconds = 2f;
+
     bool isCounting;
 
-    public float Time { get { return time; } }
+    private ReactiveProperty<float> time = new ReactiveProperty<float>();
+    public float Time { get { return time.Value; } }
+    public IReadOnlyReactiveProperty<float> TimeRP => time;
+
+    public void ResetTimer()
+    {
+        time.Value = -firstIntervalSeconds;
+        isCounting = false;
+    }
 
     public void StartTimer()
     {
-        time = 0;
+        //time = -firstIntervalSeconds;
         isCounting = true;
     }
 
@@ -24,7 +34,7 @@ public class TimeCounter : MonoBehaviour, ITimeGetter, ITimeController
     {
         if (isCounting) 
         {
-            time += UnityEngine.Time.fixedDeltaTime;
+            time.Value += UnityEngine.Time.fixedDeltaTime;
         }
     }
 }
@@ -37,10 +47,14 @@ public interface ITimeController
     void StartTimer();
 
     void StopTimer();
+
+    void ResetTimer();
 }
 
 public interface ITimeGetter
 {
     float Time { get; }
+
+    IReadOnlyReactiveProperty<float> TimeRP { get; }
 }
 

@@ -10,6 +10,7 @@ namespace TransitionerInRhythmGameScene
         [SerializeField] SerializeInterface<IChartLoader> chartLoader;
         [SerializeField] SerializeInterface<IMusicPlayerInRhythmGameScene> musicPlayer;
         [SerializeField] SerializeInterface<IScoreResetter> scoreResetter;
+        [SerializeField] SerializeInterface<ITimeController> timeController;
         [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
         
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.LoadData;
@@ -28,6 +29,9 @@ namespace TransitionerInRhythmGameScene
 
             // スコアリセット
             scoreResetter?.Value.ResetScore();
+
+            // 時間リセット
+            timeController?.Value.ResetTimer();
 
             // 楽曲の読み込み
             musicPlayer?.Value.LoadMusic(() => { 

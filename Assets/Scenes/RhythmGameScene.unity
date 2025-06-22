@@ -449,7 +449,7 @@ MonoBehaviour:
     composer_name: "\u524A\u9664"
     music_spr: {fileID: 21300000, guid: 9d4d84fadeb3bef4ba122b422132a3a0, type: 3}
     theme_spr: {fileID: 21300000, guid: 74ae4ef0036bbb9428f47ab31c214c32, type: 3}
-    clip: {fileID: 8300000, guid: 605dfac07d9de7b47959f1b99346ba07, type: 3}
+    clip: {fileID: 8300000, guid: 074a303835a350540874252c6455fb47, type: 3}
     sample_clip: {fileID: 8300000, guid: 3eaec9df25d10a64895e50106ec106f1, type: 3}
     stageType: 102
     difficulities: 00000000000000000000000000000000
@@ -458,8 +458,8 @@ MonoBehaviour:
     - 
     - 
     - 
-  chartFilePath: "MusicData/\u304D\u3085\u3046\u304F\u3089\u308A\u3093\u77ED\u7E2E/chart_initiate.json"
-  noteSpeed: 100
+  chartFilePath: "MusicData/\u30A4\u30AC\u30AF/chart_initiate_.json"
+  noteSpeed: 250
 --- !u!1001 &135123126
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5888,6 +5888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c74434d4ff0d606469669538cccbe390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firstIntervalSeconds: 1.5
 --- !u!4 &1616190399 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6974557688898039621, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
@@ -6563,6 +6564,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6115f180b1543b7419f01ed21c478cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timer:
+    obj: {fileID: 1605477129}
 --- !u!1001 &1757311144
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7007,6 +7010,8 @@ MonoBehaviour:
           obj: {fileID: 1737290705}
         scoreResetter:
           obj: {fileID: 484755816}
+        timeController:
+          obj: {fileID: 1605477129}
         phaseTransitionable:
           obj: {fileID: 1853263903}
     - rid: 4334588895060557825
@@ -7050,8 +7055,6 @@ MonoBehaviour:
       data:
         phaseTransitionable:
           obj: {fileID: 1853263903}
-        musicPlayer:
-          obj: {fileID: 1737290705}
         timer:
           obj: {fileID: 1605477129}
         waitDuration: 0.5
@@ -7553,7 +7556,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6182579293432456172, guid: a74f5192244238243a3b051e9e5b70e2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 139.03116
+      value: 150
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

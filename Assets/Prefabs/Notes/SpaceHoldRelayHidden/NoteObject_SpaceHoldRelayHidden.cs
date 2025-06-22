@@ -92,8 +92,21 @@ public class NoteObject_SpaceHoldRelayHidden : NoteObject<NoteData_SpaceHoldRela
         if (noteData.SpaceInput == null) { return false; }
         if (noteData.Timer == null) { return false; }
 
-        bool isRightIn = SpaceHoldJudgement.IsPointInPolygon(noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand).Last().Pos, noteData.Vertices);
-        bool isLeftIn = SpaceHoldJudgement.IsPointInPolygon(noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.LeftHand).Last().Pos, noteData.Vertices);
+        // ‰EŽè‚Ì”»’è
+        int rightCount = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand).Count;
+        if(rightCount < 2) { return false; }
+
+        var rightPos1 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand)[rightCount - 1].Pos;
+        var rightPos2 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand)[rightCount - 2].Pos;
+        bool isRightIn = SpaceHoldJudgement.IsSegmentIntersectingOrInsidePolygon(rightPos1, rightPos2, noteData.Vertices);
+
+        // ¶Žè‚Ì”»’è
+        int leftCount = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand).Count;
+        if (leftCount < 2) { return false; }
+
+        var leftPos1 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.LeftHand)[leftCount - 1].Pos;
+        var leftPos2 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.LeftHand)[leftCount - 2].Pos;
+        bool isLeftIn = SpaceHoldJudgement.IsSegmentIntersectingOrInsidePolygon(leftPos1, leftPos2, noteData.Vertices);
 
         return isRightIn || isLeftIn;
     }
