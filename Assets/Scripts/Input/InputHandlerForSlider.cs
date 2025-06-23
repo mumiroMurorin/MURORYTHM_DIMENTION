@@ -6,7 +6,7 @@ using System.Linq;
 using VContainer;
 using UniRx;
 
-public class InputHandler : MonoBehaviour, IInputHandler
+public abstract class InputHandlerForSlider : MonoBehaviour, IInputHandler
 {
     [Header("タッチ後のクールタイム")]
     [SerializeField] float invalidSeconds = 0.02f;
@@ -25,7 +25,11 @@ public class InputHandler : MonoBehaviour, IInputHandler
     {
         // 操作無効時間の更新
         if (invalidSeconds > invalidCount) { invalidCount += Time.deltaTime; }
+
+        EachUpdate();
     }
+
+    protected abstract void EachUpdate();
 
     void IInputHandler.OnTouchSlider(IReadOnlyReactiveCollection<int> indices, Action callback)
     {

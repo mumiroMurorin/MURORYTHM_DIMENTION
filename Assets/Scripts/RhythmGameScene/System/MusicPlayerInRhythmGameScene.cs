@@ -50,7 +50,11 @@ public class MusicPlayerInRhythmGameScene : MonoBehaviour, IMusicPlayerInRhythmG
     }
 
     private async UniTask LoadMusicAsync(AudioClip clip, Action onEndLoading, CancellationToken token)
-    {
+    { 
+        // ‚È‚¢ê‡‚Í•Ô‚·
+        if(clip == null) { onEndLoading.Invoke(); }
+
+        // Šy‹È‚ÌŽ–‘O“Ç‚Ýž‚Ý
         clip.LoadAudioData();
         await UniTask.WaitUntil(() => clip.loadState == AudioDataLoadState.Loaded, cancellationToken: token);
 

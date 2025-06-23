@@ -460,6 +460,15 @@ MonoBehaviour:
     - 
   chartFilePath: "MusicData/\u30A4\u30AC\u30AF/chart_initiate_.json"
   noteSpeed: 250
+  bodyTrackingSettings:
+    isHorizontallyFlipped:
+      value: 1
+    isVerticallyFlipped:
+      value: 0
+    controllerCenter:
+      value: {x: 0, y: 0, z: 0}
+    controllerSize:
+      value: {x: 1, y: 1, z: 1}
 --- !u!1001 &135123126
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2478,13 +2487,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _screen: {fileID: 1071018236}
-  _width: 1920
-  _height: 1080
-  _fps: 0
-  _isHorizontally_flipped: 1
-  _isVertically_flipped: 0
   _modelComplexity: 0
   _configAsset: {fileID: 4900000, guid: 5199c62ac0186dac28358b2ef639ef9b, type: 3}
+  _width: 0
+  _height: 0
+  _fps: 0
 --- !u!1001 &797444390
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3456,6 +3463,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 960448844}
+  - component: {fileID: 960448845}
   m_Layer: 0
   m_Name: Input
   m_TagString: Untagged
@@ -3480,6 +3488,20 @@ Transform:
   - {fileID: 796097597}
   m_Father: {fileID: 1514032049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &960448845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960448841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17a494f0f5f52c34191469c5ecb97218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  phaseTransitionable:
+    obj: {fileID: 1853263903}
 --- !u!1001 &993692311
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7000,9 +7022,19 @@ MonoBehaviour:
   - rid: 4334588895060557831
   - rid: 4334588895060557832
   - rid: 4334588895060557833
+  - rid: 1637505392830316544
+  - rid: 1637505392830316545
   references:
     version: 2
     RefIds:
+    - rid: 1637505392830316544
+      type: {class: Transitioner_TransitionSelectScene, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
+      data:
+        waitTime: 0
+    - rid: 1637505392830316545
+      type: {class: Transitioner_Retry, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
+      data:
+        waitTime: 0
     - rid: 4334588895060557824
       type: {class: Transitioner_LoadData, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
       data:

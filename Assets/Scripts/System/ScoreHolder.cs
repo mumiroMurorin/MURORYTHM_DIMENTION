@@ -30,8 +30,8 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     public IReadOnlyReactiveProperty<int> Combo { get { return combo; } }
 
     // Score
-    ScoreCalculater scoreCalculater;
-    public IReadOnlyReactiveProperty<float> Score { get { return scoreCalculater?.Score; } }
+    ScoreCalculater scoreCalculater = new ScoreCalculater(1);
+    public IReadOnlyReactiveProperty<float> Score { get { return scoreCalculater.Score; } }
     public void SetScoreCalculater(ScoreCalculater scoreCalculater)
     {
         this.scoreCalculater = scoreCalculater;

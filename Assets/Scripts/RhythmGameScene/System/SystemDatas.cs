@@ -17,6 +17,8 @@ public enum PhaseStatusInRhythmGame
     EndAnimation,
     FadeOut,
     TransitionResultScene,
+    TransitionSelectScene,
+    Retry,
 }
 
 /// <summary>
@@ -29,6 +31,7 @@ public enum PhaseStatusInResultScene
     Result,
     FadeOut,
     TransitionSelectScene,
+    Retry,
 }
 
 /// <summary>

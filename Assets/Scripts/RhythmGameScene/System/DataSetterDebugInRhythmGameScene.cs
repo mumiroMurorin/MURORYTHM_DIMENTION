@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using System.Linq;
 
 public class DataSetterDebugInRhythmGameScene : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
     [SerializeField] MusicData musicData_debug;
     [SerializeField] string chartFilePath;
     [SerializeField] float noteSpeed;
+    [SerializeField] BodyTrackingSettings bodyTrackingSettings;
 
     IMusicDataSetter musicDataSetter;
     IMusicDataGetter musicDataGetter;
@@ -31,7 +33,9 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
         if (!isDebugMode) { return; }
         if (musicDataSetter == null) { return; }
 
-        if (musicDataGetter.Music.Value == null)
+        Difficulty difficulty = musicDataGetter.Difficulty.Value;
+
+        if (musicDataGetter.Music.Value == null || musicDataGetter.Music.Value.GetChartPath(difficulty) == null || musicDataGetter.Music.Value.GetChartPath(difficulty) == "")
         {
             musicData_debug.SetChartPath(Difficulty.Initiate, Application.dataPath + "/" + chartFilePath);
             musicData_debug.SetChartPath(Difficulty.Fanatic, Application.dataPath + "/" + chartFilePath);
@@ -42,6 +46,8 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
 
         if (optionSetter == null) { return; }
         optionSetter.SetNoteSpeed(noteSpeed);
+        optionSetter.TrackingSettings.CopyOption(bodyTrackingSettings);
+        
 #endif
     }
 }

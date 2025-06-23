@@ -152,7 +152,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     #region ➑̐ݒ�
 
     BodyTrackingSettings trackingSettings = new BodyTrackingSettings();
-    BodyTrackingSettings IOptionGetter.TrackingSettings => trackingSettings;
+    public BodyTrackingSettings TrackingSettings => trackingSettings;
 
     #endregion
 }
@@ -203,4 +203,6 @@ public interface IOptionSetter
     void SetOption(OptionType optionType, int delta);
 
     void SetNoteSpeed(float speed);
+
+    BodyTrackingSettings TrackingSettings { get; }
 }

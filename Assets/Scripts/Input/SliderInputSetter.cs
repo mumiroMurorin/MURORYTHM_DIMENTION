@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using UniRx;
 using VContainer;
 
-public class SliderInputHandler : MonoBehaviour
+public class SliderInputSetter : MonoBehaviour
 {
     [Header("‘Î‰ž‚·‚é“ü—Í(•K‚¸’·‚³16‚É)")]
     [SerializeField] KeyCodeConfig[] configs;

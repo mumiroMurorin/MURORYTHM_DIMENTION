@@ -13,11 +13,6 @@ namespace Mediapipe.Unity.Tutorial
     public class BodyTracking : MonoBehaviour
     {
         [SerializeField] private RawImage _screen;
-        [SerializeField] private int _width;
-        [SerializeField] private int _height;
-        [SerializeField] private int _fps;
-        [SerializeField] private bool _isHorizontally_flipped = true;
-        [SerializeField] private bool _isVertically_flipped = true;
 
         // --- Pose(ボディ)トラッキング用 ---
 
@@ -25,6 +20,14 @@ namespace Mediapipe.Unity.Tutorial
         [SerializeField] ModelComplexity _modelComplexity = ModelComplexity.Full;
         [SerializeField] private TextAsset _configAsset;
 
+        [Header("横幅(確認用)")]
+        [SerializeField] private int _width;
+        [Header("縦幅(確認用)")]
+        [SerializeField] private int _height;
+        [Header("FPS(確認用)")]
+        [SerializeField] private int _fps;
+        
+        BodyTrackingSettings settings;
         CalculatorGraph _graph;
         static ResourceManager _resourceManager;
 
@@ -43,12 +46,14 @@ namespace Mediapipe.Unity.Tutorial
         /// <summary>
         /// 非同期初期化関数のラップ
         /// </summary>
-        public void Initialize(BodyTrackingSettings settings)
+        public void Initialize(BodyTrackingSettings settings = default)
         {
+            this.settings = settings;
+
             initializeCts.CancelAndDispose();
             initializeCts = new CancellationTokenSource();
 
-            InitializeAsync(settings, initializeCts.Token).Forget();
+            InitializeAsync(this.settings, initializeCts.Token).Forget();
         }
 
         /// <summary>
@@ -80,6 +85,10 @@ namespace Mediapipe.Unity.Tutorial
             try
             {
                 await UniTask.WaitUntil(() => _webCamTexture.width > 16, cancellationToken: token);
+
+                // 解像度の動的設定
+                _width = _webCamTexture.width;
+                _height = _webCamTexture.height;
             }
             catch (OperationCanceledException)
             {
@@ -143,7 +152,7 @@ namespace Mediapipe.Unity.Tutorial
             sidePacket.Emplace("model_complexity", new IntPacket((int)_modelComplexity));
             sidePacket.Emplace("input_rotation", new IntPacket(0));
             sidePacket.Emplace("input_horizontally_flipped", new BoolPacket(settings.IsHorizontallyFlipped.Value));
-            sidePacket.Emplace("input_vertically_flipped", new BoolPacket(_isVertically_flipped));
+            sidePacket.Emplace("input_vertically_flipped", new BoolPacket(settings.IsVerticallyFlipped.Value));
             sidePacket.Emplace("smooth_landmarks", new BoolPacket(true));
             sidePacket.Emplace("enable_segmentation", new BoolPacket(true));
             sidePacket.Emplace("smooth_segmentation", new BoolPacket(true));
@@ -171,8 +180,13 @@ namespace Mediapipe.Unity.Tutorial
                 var currentTimestamp = stopwatch.ElapsedTicks / (System.TimeSpan.TicksPerMillisecond / 1000);
 
                 _graph.AddPacketToInputStream("input_video", new ImageFramePacket(imageFrame, new Timestamp(currentTimestamp))).AssertOk();
+                float start = Time.realtimeSinceStartup;
 
                 await UniTask.WaitForEndOfFrame(token);
+
+                float end = Time.realtimeSinceStartup;
+                float deltaTime = end - start;
+                _fps = (int)(1f / deltaTime);
 
                 if (poseLandmarksStream.TryGetNext(out var LandMarks))
                 {

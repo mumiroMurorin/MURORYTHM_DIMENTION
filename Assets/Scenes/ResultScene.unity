@@ -383,6 +383,7 @@ MonoBehaviour:
     theme_spr: {fileID: 0}
     clip: {fileID: 0}
     sample_clip: {fileID: 0}
+    stageType: 100
     difficulities: 00000000000000000000000000000000
     chartPaths:
     - 
@@ -932,6 +933,7 @@ GameObject:
   m_Component:
   - component: {fileID: 394946494}
   - component: {fileID: 394946495}
+  - component: {fileID: 394946496}
   m_Layer: 0
   m_Name: Input
   m_TagString: Untagged
@@ -964,10 +966,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 394946493}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 866771cbcfa5e8d4c9ec5faadecd9a03, type: 3}
+  m_Script: {fileID: 11500000, guid: 0be45271b884935449aad198a0ff0283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invalidSeconds: 0.02
+  invalidSeconds: 0.15
+--- !u!114 &394946496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 394946493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00989e4278bab744b9a77a5ee3db36ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  phaseTransitionable:
+    obj: {fileID: 709638090}
 --- !u!1 &454947449
 GameObject:
   m_ObjectHideFlags: 0
@@ -1469,9 +1485,14 @@ MonoBehaviour:
   - rid: 4334588895060557836
   - rid: 4334588895060557837
   - rid: 4334588895060557838
+  - rid: 1637505392830316546
   references:
     version: 2
     RefIds:
+    - rid: 1637505392830316546
+      type: {class: Transitioner_Retry, ns: TransitionerInResultScene, asm: Assembly-CSharp}
+      data:
+        waitTime: 0
     - rid: 4334588895060557834
       type: {class: Transitioner_LoadData, ns: TransitionerInResultScene, asm: Assembly-CSharp}
       data:
