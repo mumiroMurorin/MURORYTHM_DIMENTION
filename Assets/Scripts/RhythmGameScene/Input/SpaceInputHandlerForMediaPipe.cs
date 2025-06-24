@@ -12,15 +12,12 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour, ISpaceInputHandler
     [SerializeField] SerializeInterface<ITimeGetter> timer;
 
     [SerializeField] Mediapipe.Unity.Tutorial.BodyTracking bodyTracking;
-    [SerializeField] Vector3 controllerCenter;
-    [SerializeField] Vector3 controllerSize;
 
-    [Space(30)]
-    [SerializeField] TMPro.TextMeshProUGUI velocityTextRight;
-    [SerializeField] TMPro.TextMeshProUGUI velocityTextLeft;
+    ReactiveProperty<Vector3> rightHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
+    public IReadOnlyReactiveProperty<Vector3> RightHandPos => rightHandPos;
 
-    Vector3 right_hand_pos = Vector3.zero;
-    Vector3 left_hand_pos = Vector3.zero;
+    ReactiveProperty<Vector3> leftHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
+    public IReadOnlyReactiveProperty<Vector3> LeftHandPos => leftHandPos;
 
     bool isTracking;
 
@@ -36,34 +33,10 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour, ISpaceInputHandler
         this.optionGetter = optionGetter;
     }
 
-    private void Start()
-    {
-        Bind();
-    }
-
     void Update()
     {
         ReadData();
         SendData();
-    }
-
-    private void Bind()
-    {
-        spaceInputGetter?.GetSpaceInputVelocity(SpaceTrackingTag.RightHand)
-            .Subscribe(value =>
-            {
-                if(velocityTextRight == null) { return; }
-                velocityTextRight.text = value.y.ToString("F2");
-            })
-            .AddTo(this.gameObject);
-
-        spaceInputGetter?.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand)
-            .Subscribe(value =>
-            {
-                if (velocityTextLeft == null) { return; }
-                velocityTextLeft.text = value.y.ToString("F2");
-            })
-            .AddTo(this.gameObject);
     }
 
     public void InitializeBodyTracking()
@@ -84,20 +57,39 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour, ISpaceInputHandler
     {
         if (bodyTracking.LandmarkList == null) { isTracking = false; return; }
 
-        right_hand_pos = new Vector3(
-            bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].X,
-            bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].Y,
-            bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].Z
-            );
+        // í èÌ
+        if(optionGetter == null || !optionGetter.TrackingSettings.IsHandFlipped.Value)
+        {
+            rightHandPos.Value = new Vector3(
+                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].X,
+                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].Y,
+                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].Z
+                );
 
-        left_hand_pos = new Vector3(
-            bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].X,
-            bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].Y,
-            bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].Z
-            );
+            leftHandPos.Value = new Vector3(
+                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].X,
+                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].Y,
+                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].Z
+                );
+        }
+        // îΩì]
+        else
+        {
+            leftHandPos.Value = new Vector3(
+                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].X,
+                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].Y,
+                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].Z
+              );
+
+            rightHandPos.Value = new Vector3(
+                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].X,
+                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].Y,
+                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].Z
+                );
+        }
 
         isTracking = true;
-        // Debug.Log($"ÅyMediaPipeÅzRight: {right_hand_pos} left: {left_hand_pos}");
+        //Debug.Log($"ÅyMediaPipeÅzRight: {rightHandPos} left: {leftHandPos}");
     }
 
     /// <summary>
@@ -107,21 +99,29 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour, ISpaceInputHandler
     /// <returns></returns>
     private Vector3 Normalize(Vector3 pos)
     {
-        Vector3 normalized = new Vector3(
-            (pos.x - controllerCenter.x) / (controllerSize.x / 2f),
-            (pos.y - controllerCenter.y) / (controllerSize.y / 2f),
-            (pos.z - controllerCenter.z) / (controllerSize.z / 2f)
-        );
+        Vector3 controllerLeft = optionGetter.TrackingSettings.ControllerLeftEdge.Value;
+        Vector3 controllerRight = optionGetter.TrackingSettings.ControllerRightEdge.Value;
 
-        // -1Å`1ÇÃîÕàÕÇ…é˚ÇﬂÇƒï‘Ç∑
-        Vector2 xy = new Vector2(normalized.x, normalized.y);
+        Vector3 center = controllerLeft + (controllerRight - controllerLeft) / 2f;
+        Vector3 controllerLowerCenter = optionGetter.TrackingSettings.ControllerLowerCenter.Value;
+        Vector3 controllerUpperCenter = controllerLowerCenter + (center - controllerLowerCenter) * 2f;
+
+        Vector2 xy = new Vector2(NormalizeScalar(controllerLeft, controllerRight, pos), NormalizeScalar(controllerLowerCenter, controllerUpperCenter, pos));
         xy = Vector2.ClampMagnitude(xy, 1f);
 
-        return new Vector3(
-            xy.x,
-            xy.y,
-            Mathf.Clamp(normalized.z, -1f, 1f)
-        );
+        return new Vector3(xy.x, xy.y, 0f);
+    }
+
+    public static float NormalizeScalar(Vector3 posA, Vector3 posB, Vector3 targetPos)
+    {
+        if((posA - posB).sqrMagnitude == 0) { return 0; }
+
+        Vector3 baseVec = posB - posA;
+        Vector3 toTarget = targetPos - posA;
+
+        float ratio = Vector3.Dot(toTarget, baseVec.normalized) / baseVec.magnitude;
+
+        return Mathf.Lerp(-1, 1, ratio);
     }
 
     /// <summary>
@@ -131,8 +131,8 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour, ISpaceInputHandler
     {
         if (spaceInputSetter == null) { return; }
 
-        spaceInputSetter.SetSpaceInput(SpaceTrackingTag.RightHand, Normalize(right_hand_pos), timer.Value.Time);
-        spaceInputSetter.SetSpaceInput(SpaceTrackingTag.LeftHand, Normalize(left_hand_pos), timer.Value.Time);
+        spaceInputSetter.SetSpaceInput(SpaceTrackingTag.RightHand, Normalize(rightHandPos.Value), timer.Value != null ? timer.Value.Time : 0);
+        spaceInputSetter.SetSpaceInput(SpaceTrackingTag.LeftHand, Normalize(leftHandPos.Value), timer.Value != null ? timer.Value.Time : 0);
         spaceInputSetter.SetCanGetSpaceInput(isTracking);
     }
 }
@@ -158,6 +158,14 @@ public class BodyTrackingSettings
         isHorizontallyFlipped.Value = isFlipped;
     }
 
+    [Header("éËÇÃç∂âEéØï îΩì]")]
+    [SerializeField] ReactiveProperty<bool> isHandFlipped = new ReactiveProperty<bool>();
+    public IReadOnlyReactiveProperty<bool> IsHandFlipped => isHandFlipped;
+    public void SetIsHandFlipped(bool isFlipped)
+    {
+        isHandFlipped.Value = isFlipped;
+    }
+
     [Header("ÉgÉâÉbÉLÉìÉOÇÃè„â∫îΩì]")]
     [SerializeField] ReactiveProperty<bool> isVerticallyFlipped = new ReactiveProperty<bool>();
     public IReadOnlyReactiveProperty<bool> IsVerticallyFlipped => isVerticallyFlipped;
@@ -167,19 +175,27 @@ public class BodyTrackingSettings
     }
 
     [Header("‚ûëÃê^ÇÒíÜ(7î‘Ç∆8î‘ÇÃä‘)")]
-    [SerializeField] ReactiveProperty<Vector3> controllerCenter = new ReactiveProperty<Vector3>(Vector3.zero);
-    public IReadOnlyReactiveProperty<Vector3> ControllerCenter => controllerCenter;
-    public void SetControllerCenter(Vector3 pos)
+    [SerializeField] ReactiveProperty<Vector3> controllerLowerCenter = new ReactiveProperty<Vector3>(Vector3.zero);
+    public IReadOnlyReactiveProperty<Vector3> ControllerLowerCenter => controllerLowerCenter;
+    public void SetControllerLowerCenter(Vector3 pos)
     {
-        controllerCenter.Value = pos;
+        controllerLowerCenter.Value = pos;
     }
 
-    [Header("‚ûëÃÉTÉCÉY(íºåa)")]
-    [SerializeField] ReactiveProperty<Vector3> controllerSize = new ReactiveProperty<Vector3>(Vector3.one);
-    public IReadOnlyReactiveProperty<Vector3> ControllerSize => controllerSize;
-    public void SetControllerSize(Vector3 size)
+    [Header("‚ûëÃç∂í[(0î‘)")]
+    [SerializeField] ReactiveProperty<Vector3> controllerLeftEdge = new ReactiveProperty<Vector3>(Vector3.zero);
+    public IReadOnlyReactiveProperty<Vector3> ControllerLeftEdge => controllerLeftEdge;
+    public void SetControllerLeftEdge(Vector3 pos)
     {
-        controllerSize.Value = size;
+        controllerLeftEdge.Value = pos;
+    }
+
+    [Header("‚ûëÃâEí[(15î‘)")]
+    [SerializeField] ReactiveProperty<Vector3> controllerRightEdge = new ReactiveProperty<Vector3>(Vector3.zero);
+    public IReadOnlyReactiveProperty<Vector3> ControllerRightEdge => controllerRightEdge;
+    public void SetControllerRightEdge(Vector3 pos)
+    {
+        controllerRightEdge.Value = pos;
     }
 
     /// <summary>
@@ -190,7 +206,9 @@ public class BodyTrackingSettings
     {
         SetIsHorizontallyFlipped(origin.IsHorizontallyFlipped.Value);
         SetIsVerticallyFlipped(origin.IsVerticallyFlipped.Value);
-        SetControllerCenter(origin.ControllerCenter.Value);
-        SetControllerSize(origin.ControllerSize.Value);
+        SetIsHandFlipped(origin.isHandFlipped.Value);
+        SetControllerLeftEdge(origin.controllerLeftEdge.Value);
+        SetControllerRightEdge(origin.controllerRightEdge.Value);
+        SetControllerLowerCenter(origin.controllerLowerCenter.Value);
     }
 }

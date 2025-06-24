@@ -462,13 +462,15 @@ MonoBehaviour:
   noteSpeed: 250
   bodyTrackingSettings:
     isHorizontallyFlipped:
-      value: 1
+      value: 0
     isVerticallyFlipped:
       value: 0
-    controllerCenter:
-      value: {x: 0, y: 0, z: 0}
-    controllerSize:
-      value: {x: 1, y: 1, z: 1}
+    controllerLowerCenter:
+      value: {x: 0.49, y: 0.14, z: -0.61}
+    controllerLeftEdge:
+      value: {x: 0.21, y: 0.49, z: -0.61}
+    controllerRightEdge:
+      value: {x: 0.89, y: 0.37, z: -0.61}
 --- !u!1001 &135123126
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2470,8 +2472,6 @@ MonoBehaviour:
   timer:
     obj: {fileID: 1605477129}
   bodyTracking: {fileID: 796097599}
-  controllerCenter: {x: 0.5, y: 0.5, z: -0.5}
-  controllerSize: {x: 1, y: 1, z: 1}
   velocityTextRight: {fileID: 505195066}
   velocityTextLeft: {fileID: 1019761146}
 --- !u!114 &796097599

@@ -22,8 +22,6 @@ public class BodyLoader : MonoBehaviour, IBodyLoader
 
     private void Start()
     {
-        // トラッキングの設定
-
         // トラッキングの初期化
         spaceInputHandler?.Value.InitializeBodyTracking();
     }

@@ -6,6 +6,7 @@ using System;
 using Mediapipe.Unity.CoordinateSystem;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using UniRx;
 using Stopwatch = System.Diagnostics.Stopwatch; // for Timestamp
 
 namespace Mediapipe.Unity.Tutorial
@@ -26,15 +27,22 @@ namespace Mediapipe.Unity.Tutorial
         [SerializeField] private int _height;
         [Header("FPS(確認用)")]
         [SerializeField] private int _fps;
-        
+
+        ReactiveProperty<int> fps = new ReactiveProperty<int>();
+        public IReadOnlyReactiveProperty<int> CameraFps => fps;
+
         BodyTrackingSettings settings;
         CalculatorGraph _graph;
         static ResourceManager _resourceManager;
 
         // カメラ入力用
-        WebCamTexture _webCamTexture;
+        ReactiveProperty<WebCamTexture> _webCamTexture = new ReactiveProperty<WebCamTexture>();
+        public IReadOnlyReactiveProperty<WebCamTexture> WebCamInfo => _webCamTexture;
+
         Texture2D _inputTexture;
         Color32[] _pixelData;
+
+        bool isReadyTracking;
 
         NormalizedLandmarkList landmarkList;
         public NormalizedLandmarkList LandmarkList { get { return landmarkList; } }
@@ -70,6 +78,8 @@ namespace Mediapipe.Unity.Tutorial
 
         private async UniTask InitializeAsync(BodyTrackingSettings settings, CancellationToken token)
         {
+            isReadyTracking = false;
+
             // Webカメラの初期化チェック
             if (WebCamTexture.devices.Length == 0)
             {
@@ -78,17 +88,17 @@ namespace Mediapipe.Unity.Tutorial
             }
 
             var webCamDevice = WebCamTexture.devices[0];
-            _webCamTexture = new WebCamTexture(webCamDevice.name, _width, _height);
-            _webCamTexture.Play();
-            Debug.Log("【MediaPipe】WebCamTexture is playing: " + _webCamTexture.isPlaying);
+            _webCamTexture.Value = new WebCamTexture(webCamDevice.name, _width, _height);
+            _webCamTexture.Value.Play();
+            Debug.Log("【MediaPipe】WebCamTexture is playing: " + _webCamTexture.Value.isPlaying);
 
             try
             {
-                await UniTask.WaitUntil(() => _webCamTexture.width > 16, cancellationToken: token);
+                await UniTask.WaitUntil(() => _webCamTexture.Value.width > 16, cancellationToken: token);
 
                 // 解像度の動的設定
-                _width = _webCamTexture.width;
-                _height = _webCamTexture.height;
+                _width = _webCamTexture.Value.width;
+                _height = _webCamTexture.Value.height;
             }
             catch (OperationCanceledException)
             {
@@ -96,7 +106,7 @@ namespace Mediapipe.Unity.Tutorial
                 return;
             }
 
-            if (_webCamTexture.width <= 16)
+            if (_webCamTexture.Value.width <= 16)
             {
                 Debug.LogError("【MediaPipe】WebCamTexture did not initialize correctly.");
                 return;
@@ -105,10 +115,10 @@ namespace Mediapipe.Unity.Tutorial
             Debug.Log("【MediaPipe】WebCamTexture initialized successfully.");
 
             _screen.rectTransform.sizeDelta = new Vector2(_width, _height);
-            _screen.texture = _webCamTexture;
+            _screen.texture = _webCamTexture.Value;
 
             _inputTexture = new Texture2D(_width, _height, TextureFormat.RGBA32, false);
-            _pixelData = new Color32[_webCamTexture.width * _webCamTexture.height];
+            _pixelData = new Color32[_webCamTexture.Value.width * _webCamTexture.Value.height];
 
             _resourceManager ??= new StreamingAssetsResourceManager();
 
@@ -161,12 +171,15 @@ namespace Mediapipe.Unity.Tutorial
             sidePacket.Emplace("output_vertically_flipped", new BoolPacket(false));
 
             _graph.StartRun(sidePacket).AssertOk();
+
+            isReadyTracking = true;
             Debug.Log("【MediaPipe】Graph started successfully!");
         }
 
         [Obsolete]
         private async UniTask BodyTrackAsync(CancellationToken token)
         {
+            await UniTask.WaitUntil(() => isReadyTracking == true, cancellationToken: token);
             // タイマー開始
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -175,7 +188,7 @@ namespace Mediapipe.Unity.Tutorial
 
             while (true)
             {
-                _inputTexture.SetPixels32(_webCamTexture.GetPixels32(_pixelData));
+                _inputTexture.SetPixels32(_webCamTexture.Value.GetPixels32(_pixelData));
                 var imageFrame = new ImageFrame(ImageFormat.Types.Format.Srgba, _width, _height, _width * 4, _inputTexture.GetRawTextureData<byte>());
                 var currentTimestamp = stopwatch.ElapsedTicks / (System.TimeSpan.TicksPerMillisecond / 1000);
 
@@ -184,9 +197,11 @@ namespace Mediapipe.Unity.Tutorial
 
                 await UniTask.WaitForEndOfFrame(token);
 
+                // FPSの更新
                 float end = Time.realtimeSinceStartup;
                 float deltaTime = end - start;
                 _fps = (int)(1f / deltaTime);
+                fps.Value = _fps;
 
                 if (poseLandmarksStream.TryGetNext(out var LandMarks))
                 {
@@ -210,9 +225,9 @@ namespace Mediapipe.Unity.Tutorial
 
         private void OnDestroy()
         {
-            if (_webCamTexture != null)
+            if (_webCamTexture.Value != null)
             {
-                _webCamTexture.Stop();
+                _webCamTexture.Value.Stop();
             }
 
             if (_graph != null)
@@ -244,13 +259,13 @@ namespace Mediapipe.Unity.Tutorial
         //    }
 
         //    var webCamDevice = WebCamTexture.devices[0];
-        //    _webCamTexture = new WebCamTexture(webCamDevice.name, _width, _height, _fps);
-        //    _webCamTexture.Play();
-        //    Debug.Log("【MediaPipe】WebCamTexture is playing: " + _webCamTexture.isPlaying);
+        //    _webCamTexture.Value = new WebCamTexture(webCamDevice.name, _width, _height, _fps);
+        //    _webCamTexture.Value.Play();
+        //    Debug.Log("【MediaPipe】WebCamTexture is playing: " + _webCamTexture.Value.isPlaying);
 
         //    // Webカメラの解像度が16以上になるまで待機
-        //    yield return new WaitUntil(() => _webCamTexture.width > 16);
-        //    if (_webCamTexture.width <= 16)
+        //    yield return new WaitUntil(() => _webCamTexture.Value.width > 16);
+        //    if (_webCamTexture.Value.width <= 16)
         //    {
         //        Debug.LogError("【MediaPipe】WebCamTexture did not initialize correctly.");
         //        yield break;
@@ -262,11 +277,11 @@ namespace Mediapipe.Unity.Tutorial
 
         //    // UI のセットアップ
         //    _screen.rectTransform.sizeDelta = new Vector2(_width, _height);
-        //    _screen.texture = _webCamTexture;
+        //    _screen.texture = _webCamTexture.Value;
 
         //    // _inputTexture と _pixelData の初期化
         //    _inputTexture = new Texture2D(_width, _height, TextureFormat.RGBA32, false);
-        //    _pixelData = new Color32[_webCamTexture.width * _webCamTexture.height];
+        //    _pixelData = new Color32[_webCamTexture.Value.width * _webCamTexture.Value.height];
 
         //    // リソースマネージャーの初期化
         //    if (_resourceManager == null)
@@ -335,7 +350,7 @@ namespace Mediapipe.Unity.Tutorial
 
         //    while (true)
         //    {
-        //        _inputTexture.SetPixels32(_webCamTexture.GetPixels32(_pixelData));
+        //        _inputTexture.SetPixels32(_webCamTexture.Value.GetPixels32(_pixelData));
         //        var imageFrame = new ImageFrame(ImageFormat.Types.Format.Srgba, _width, _height, _width * 4, _inputTexture.GetRawTextureData<byte>());
         //        var currentTimestamp = stopwatch.ElapsedTicks / (System.TimeSpan.TicksPerMillisecond / 1000);
 

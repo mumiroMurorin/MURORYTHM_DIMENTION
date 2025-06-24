@@ -48,6 +48,17 @@ public enum PhaseStatusInSelectScene
     TransitionRhythmGameScene,
 }
 
+/// <summary>
+/// 管理者シーンの内部ステータス
+/// </summary>
+public enum PhaseStatusInRootScene
+{
+    LoadData,
+    SettingOption,
+    TransitionSelectScene,
+    Reload,
+}
+
 public enum OptionType
 {
     None,
