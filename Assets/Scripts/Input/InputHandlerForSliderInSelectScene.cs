@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InputHandlerForSliderInSelectScene : InputHandlerForSlider
 {
+
     protected override void EachUpdate()
     {
 

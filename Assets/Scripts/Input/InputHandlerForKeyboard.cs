@@ -7,7 +7,7 @@ public abstract class InputHandlerForKeyboard : MonoBehaviour
     void Update()
     {
         // ÉQÅ[ÉÄÇÃã≠êßèIóπ
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Escape)) { QuitGame(); }
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Escape)) { QuitGame(); }
 
         EachUpdate();
     }

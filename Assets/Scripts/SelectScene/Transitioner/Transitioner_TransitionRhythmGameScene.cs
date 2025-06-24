@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 namespace TransitionerInSelectScene
 {
-    public class Transitioner_TransitionSelectScene : IPhaseTransitionerInSelectScene
+    public class Transitioner_TransitionRhythmGameScene : IPhaseTransitionerInSelectScene
     {
         const string NEXT_SCENE_NAME = "RhythmGameScene";
 

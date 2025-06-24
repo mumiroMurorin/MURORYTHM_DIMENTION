@@ -46,6 +46,7 @@ public enum PhaseStatusInSelectScene
     MusicOption,
     FadeOut,
     TransitionRhythmGameScene,
+    TransitionRootScene,
 }
 
 /// <summary>
