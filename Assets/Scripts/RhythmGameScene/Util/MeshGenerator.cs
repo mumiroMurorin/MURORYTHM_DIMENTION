@@ -305,18 +305,29 @@ namespace MeshGenerate
             {
                 float length = speed * (timeToVertices[i + 1].Timing - timeToVertices[i].Timing);
 
-                // 各頂点距離の辺全体の長さに対する割合
-                int verticesCount;
-                List<float> ratios;
+                int verticesCountStart = timeToVertices[i].Vertices.Count();    // 始点頂点数
+                int verticesCountEnd = timeToVertices[i + 1].Vertices.Count();  // 終点頂点数
+                List<Vector3> verticesStart = new List<Vector3>();              // 始点頂点リスト
+                List<Vector3> verticesEnd = new List<Vector3>();                // 終点頂点リスト
 
-                // 頂点リストを生成
-                verticesCount = timeToVertices[i].Vertices.Count();
-                ratios = Enumerable.Range(0, meshDivisionNum - verticesCount).Select(i => i / ((float)meshDivisionNum - verticesCount - 1)).ToList();
-                List<Vector3> verticesStart = GenerateVertices(timeToVertices[i].Vertices.ToList(), ratios, currentStartZ);
+                // 頂点数が違う場合は、長いほうの辺の長さを参照して点を追加する
+                if (verticesCountStart != verticesCountEnd)
+                {
+                    List<float> ratios;    // 各頂点距離の辺全体の長さに対する割合
 
-                verticesCount = timeToVertices[i + 1].Vertices.Count();
-                ratios = Enumerable.Range(0, meshDivisionNum - verticesCount).Select(i => i / ((float)meshDivisionNum - verticesCount - 1)).ToList();
-                List<Vector3> verticesEnd = GenerateVertices(timeToVertices[i + 1].Vertices.ToList(), ratios, currentStartZ + length);
+                    // 頂点リストを生成
+                    ratios = Enumerable.Range(0, meshDivisionNum - verticesCountStart).Select(i => i / ((float)meshDivisionNum - verticesCountStart - 1)).ToList();
+                    verticesStart = GenerateVertices(timeToVertices[i].Vertices.ToList(), ratios, currentStartZ);
+
+                    ratios = Enumerable.Range(0, meshDivisionNum - verticesCountEnd).Select(i => i / ((float)meshDivisionNum - verticesCountEnd - 1)).ToList();
+                    verticesEnd = GenerateVertices(timeToVertices[i + 1].Vertices.ToList(), ratios, currentStartZ + length);
+                }
+                // 頂点数が同じときは、そのままつなげる
+                else
+                {
+                    verticesStart = GenerateVertices(timeToVertices[i].Vertices.ToList(), new List<float>(), currentStartZ);
+                    verticesEnd = GenerateVertices(timeToVertices[i + 1].Vertices.ToList(), new List<float>(), currentStartZ + length);
+                }
 
                 // 頂点リストの代入
                 vertices.AddRange(verticesStart);

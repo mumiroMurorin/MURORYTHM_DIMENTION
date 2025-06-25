@@ -458,10 +458,12 @@ MonoBehaviour:
     - 
     - 
     - 
-  chartFilePath: "MusicData/\u30A4\u30AC\u30AF/chart_initiate_.json"
+  chartFilePath: MusicData/sample/sample5.json
   noteSpeed: 250
   bodyTrackingSettings:
     isHorizontallyFlipped:
+      value: 0
+    isHandFlipped:
       value: 0
     isVerticallyFlipped:
       value: 0
@@ -2472,8 +2474,6 @@ MonoBehaviour:
   timer:
     obj: {fileID: 1605477129}
   bodyTracking: {fileID: 796097599}
-  velocityTextRight: {fileID: 505195066}
-  velocityTextLeft: {fileID: 1019761146}
 --- !u!114 &796097599
 MonoBehaviour:
   m_ObjectHideFlags: 0
