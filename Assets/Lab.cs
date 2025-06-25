@@ -6,14 +6,15 @@ using UnityEngine;
 
 public class Lab : MonoBehaviour
 {
-    [SerializeField] List<Vector2> frontList;
-    [SerializeField] List<Vector2> backList;
+    [SerializeField] List<Vector3> frontList;
+    [SerializeField] List<Vector3> backList;
     [SerializeField] float depth = 5f;
     [SerializeField] int minSampleCount = 0;
 
     void Start()
     {
-        Mesh tunnel = TunnelMeshGenerator.GenerateTunnelMesh(frontList, backList, depth, minSampleCount);
+        //Mesh tunnel = TunnelMeshGenerator.GenerateTunnelMesh(frontList, backList, depth, minSampleCount);
+        Mesh tunnel = TunnelMeshGenerator.GenerateSeamlessTwistedMesh(frontList, backList);
 
         var go = new GameObject("Tunnel", typeof(MeshFilter), typeof(MeshRenderer));
         go.GetComponent<MeshFilter>().mesh = tunnel;
@@ -175,5 +176,108 @@ public static class TunnelMeshGenerator
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
         return mesh;
+    }
+
+    public static Mesh GenerateSeamlessTwistedMesh(
+    List<Vector3> fromPolygon,
+    List<Vector3> toPolygon,
+    float zOffset = 5f,
+    int interpolateSteps = 20 // 分割数
+)
+    {
+        int fromCount = fromPolygon.Count;
+        int toCount = toPolygon.Count;
+
+        // 対応点を同数に補完
+        int maxCount = Mathf.Max(fromCount, toCount);
+        var fromPoints = ResamplePolygon(fromPolygon, maxCount);
+        var toPoints = ResamplePolygon(toPolygon, maxCount);
+
+        List<Vector3> vertices = new List<Vector3>();
+        List<int> triangles = new List<int>();
+
+        // 断面ごとに線形補間してメッシュを作る
+        for (int i = 0; i <= interpolateSteps; i++)
+        {
+            float t = i / (float)interpolateSteps;
+
+            for (int j = 0; j < maxCount; j++)
+            {
+                Vector3 from = fromPoints[j];
+                Vector3 to = toPoints[j];
+                Vector3 lerp = Vector3.Lerp(from, to, t);
+                lerp.z = t * zOffset;
+                vertices.Add(lerp);
+            }
+        }
+
+        // 三角形構成
+        for (int i = 0; i < interpolateSteps; i++)
+        {
+            int baseIndex = i * maxCount;
+            for (int j = 0; j < maxCount; j++)
+            {
+                int current = baseIndex + j;
+                int next = baseIndex + (j + 1) % maxCount;
+                int upper = current + maxCount;
+                int upperNext = next + maxCount;
+
+                // 2 triangles = quad
+                triangles.Add(current);
+                triangles.Add(upper);
+                triangles.Add(upperNext);
+
+                triangles.Add(current);
+                triangles.Add(upperNext);
+                triangles.Add(next);
+            }
+        }
+
+        var mesh = new Mesh();
+        mesh.SetVertices(vertices);
+        mesh.SetTriangles(triangles, 0);
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+        return mesh;
+    }
+
+    private static List<Vector3> ResamplePolygon(List<Vector3> points, int targetCount)
+    {
+        float totalLength = 0f;
+        for (int i = 0; i < points.Count; i++)
+            totalLength += Vector3.Distance(points[i], points[(i + 1) % points.Count]);
+
+        float segmentLength = totalLength / targetCount;
+        List<Vector3> resampled = new List<Vector3>();
+        float accumulated = 0f;
+
+        int currentIndex = 0;
+        Vector3 current = points[0];
+        Vector3 next = points[1];
+        float remaining = Vector3.Distance(current, next);
+
+        resampled.Add(current);
+
+        for (int i = 1; i < targetCount; i++)
+        {
+            float distanceToNext = segmentLength;
+
+            while (distanceToNext > remaining)
+            {
+                distanceToNext -= remaining;
+                currentIndex = (currentIndex + 1) % points.Count;
+                current = points[currentIndex];
+                next = points[(currentIndex + 1) % points.Count];
+                remaining = Vector3.Distance(current, next);
+            }
+
+            Vector3 dir = (next - current).normalized;
+            Vector3 newPoint = current + dir * distanceToNext;
+            resampled.Add(newPoint);
+            current = newPoint;
+            remaining -= distanceToNext;
+        }
+
+        return resampled;
     }
 }

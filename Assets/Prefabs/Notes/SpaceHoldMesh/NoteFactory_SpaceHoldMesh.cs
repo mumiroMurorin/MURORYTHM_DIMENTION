@@ -104,7 +104,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
             });
         }
 
-        Mesh mesh = MeshGenerator.GenerateSpaceEdgeMesh(timeToVertices, optionHolder.NoteSpeed.Value, meshDivisionNum, maxTriangleLength, isMeshReverse);
+        Mesh mesh = SpaceHoldMeshGenerator.GenerateSpaceHoldEdgeMesh(timeToVertices, optionHolder.NoteSpeed.Value, meshDivisionNum, maxTriangleLength, isMeshReverse);
         meshFilter.mesh = mesh;
 
         obj.AddComponent<Deformable>().AddDeformer(groundDeformer);

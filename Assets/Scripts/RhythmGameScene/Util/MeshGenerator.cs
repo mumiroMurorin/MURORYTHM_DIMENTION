@@ -6,91 +6,11 @@ using LibTessDotNet;
 
 namespace MeshGenerate
 {
-    public class MeshGenerator
+    /// <summary>
+    /// GroundHoldMeshの生成をつかさどるクラス
+    /// </summary>
+    public class GroundHoldMeshGenerator
     {
-        /// <summary>
-        /// 引数頂点リストからメッシュ(自己交差なし)の生成
-        /// </summary>
-        /// <param name="vertices"></param>
-        /// <returns></returns>
-        public static Mesh GenerateMesh(List<Vector3> vertices)
-        {
-            if (vertices == null || vertices.Count < 3)
-            {
-                Debug.LogWarning("【Note】頂点リストが無効です（3点以上必要）");
-                return null;
-            }
-
-            // LibTessDotNetの初期化
-            Tess tess = new Tess();
-            ContourVertex[] contour = new ContourVertex[vertices.Count];
-
-            for (int i = 0; i < vertices.Count; i++)
-            {
-                contour[i] = new ContourVertex
-                {
-                    Position = new Vec3(vertices[i].x, vertices[i].y, vertices[i].z)
-                };
-            }
-
-            // 頂点リストを輪郭として追加
-            tess.AddContour(contour, ContourOrientation.Original);
-
-            // 三角形分割を実行
-            tess.Tessellate(WindingRule.EvenOdd, ElementType.Polygons, 3);
-
-            // Mesh作成
-            Mesh mesh = new Mesh();
-            Vector3[] meshVertices = new Vector3[tess.Vertices.Length];
-            int[] meshTriangles = new int[tess.Elements.Length];
-
-            for (int i = 0; i < tess.Vertices.Length; i++)
-            {
-                meshVertices[i] = new Vector3(tess.Vertices[i].Position.X, tess.Vertices[i].Position.Y, 0);
-            }
-
-            for (int i = 0; i < tess.Elements.Length; i++)
-            {
-                meshTriangles[i] = tess.Elements[i];
-            }
-
-            mesh.vertices = meshVertices;
-            mesh.triangles = meshTriangles;
-            mesh.RecalculateNormals();
-            mesh.RecalculateBounds();
-
-            return mesh;
-        }
-
-        /// <summary>
-        /// 4点からメッシュを生成する
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="c"></param>
-        /// <param name="d"></param>
-        /// <returns></returns>
-        public static Mesh GenerateMesh(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
-        {
-            var mesh = new Mesh();
-
-            mesh.vertices = new[] { a, b, c, d };
-            mesh.triangles = new[] { 0, 1, 2, 2, 3, 0 };
-
-            mesh.uv = new[]
-            {
-                new Vector2(0f, 0f), // a
-                new Vector2(1f, 0f), // b
-                new Vector2(1f, 1f), // c
-                new Vector2(0f, 1f)  // d
-            };
-
-            mesh.RecalculateNormals();
-            mesh.RecalculateBounds();
-
-            return mesh;
-        }
-
         /// <summary>
         /// グラウンド沿いのメッシュを生成する
         /// </summary>
@@ -158,7 +78,7 @@ namespace MeshGenerate
                     uvs.AddRange(uvListEnd);
 
                     // トライアングルインデックスを生成、代入
-                    triangles.AddRange(GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count, false));
+                    triangles.AddRange(MeshGenerator.GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count, false));
 
                     localZ += divLength;
                     currentMeshIndex += verticesStart.Count + verticesEnd.Count;
@@ -197,7 +117,7 @@ namespace MeshGenerate
                 list.Add(f);
             }
 
-            foreach(float f in addIndex)
+            foreach (float f in addIndex)
             {
                 list.Add(f);
             }
@@ -251,28 +171,13 @@ namespace MeshGenerate
 
             return uvList;
         }
+    }
 
-        /// <summary>
-        /// メッシュのトライアングルインデックスを生成
-        /// </summary>
-        private static List<int> GenerateTriangles(int startIndex, int countStart, int countEnd, bool isReverse)
-        {
-            List<int> triangles = new List<int>();
-            int halfCount = Mathf.Min(countStart, countEnd) - 1;
-
-            for (int i = 0; i < halfCount; i++)
-            {
-                triangles.Add(isReverse ? startIndex + i : startIndex + i + 1);
-                triangles.Add(isReverse ? startIndex + i + 1 : startIndex + i);
-                triangles.Add(startIndex + i + countStart);
-
-                triangles.Add(isReverse ? startIndex + i + countStart : startIndex + i + 1);
-                triangles.Add(isReverse ? startIndex + i + 1 : startIndex + i + countStart);
-                triangles.Add(startIndex + i + countStart + 1);
-            }
-            return triangles;
-        }
-
+    /// <summary>
+    /// SpaceHoldMeshの生成をつかさどるクラス
+    /// </summary>
+    public class SpaceHoldMeshGenerator
+    {
         /// <summary>
         /// 立体的なオブジェクトの側面を生成する
         /// </summary>
@@ -281,7 +186,7 @@ namespace MeshGenerate
         /// <param name="meshDivisionNum"></param>
         /// <param name="isMeshReverse"></param>
         /// <returns></returns>
-        public static Mesh GenerateSpaceEdgeMesh(List<TimeToVertices> timeToVertices, float speed, int meshDivisionNum, float limitLength, bool isMeshReverse)
+        public static Mesh GenerateSpaceHoldEdgeMesh(List<TimeToVertices> timeToVertices, float speed, int meshDivisionNum, float lerpThresholdDepth, bool isMeshReverse)
         {
             Mesh mesh = new Mesh();
             mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;    // ドデカイメッシュに対応
@@ -294,16 +199,16 @@ namespace MeshGenerate
             int currentMeshIndex = 0;
 
             // 最大頂点数を調べて分割数を更新する
-            foreach(var timeToVertice in timeToVertices)
+            foreach (var timeToVertice in timeToVertices)
             {
-                if(meshDivisionNum < timeToVertice.Vertices.Length) 
+                if (meshDivisionNum < timeToVertice.Vertices.Length)
                 { meshDivisionNum = timeToVertice.Vertices.Length; }
             }
 
+            // 中継点の数だけ繰り返す
             for (int i = 0; i < timeToVertices.Count - 1; i++)
             {
-                float length = speed * (timeToVertices[i + 1].Timing - timeToVertices[i].Timing);
-
+                float depth = speed * (timeToVertices[i + 1].Timing - timeToVertices[i].Timing);    // 奥行
                 int verticesCountStart = timeToVertices[i].Vertices.Count();    // 始点頂点数
                 int verticesCountEnd = timeToVertices[i + 1].Vertices.Count();  // 終点頂点数
                 List<Vector3> verticesStart = new List<Vector3>();              // 始点頂点リスト
@@ -314,54 +219,47 @@ namespace MeshGenerate
                 {
                     List<float> ratios;    // 各頂点距離の辺全体の長さに対する割合
 
-                    // 頂点リストを生成
+                    // 始点終点に同数となるような頂点を打ち、頂点リストを生成
                     ratios = Enumerable.Range(0, meshDivisionNum - verticesCountStart).Select(i => i / ((float)meshDivisionNum - verticesCountStart - 1)).ToList();
                     verticesStart = GenerateVertices(timeToVertices[i].Vertices.ToList(), ratios, currentStartZ);
 
                     ratios = Enumerable.Range(0, meshDivisionNum - verticesCountEnd).Select(i => i / ((float)meshDivisionNum - verticesCountEnd - 1)).ToList();
-                    verticesEnd = GenerateVertices(timeToVertices[i + 1].Vertices.ToList(), ratios, currentStartZ + length);
+                    verticesEnd = GenerateVertices(timeToVertices[i + 1].Vertices.ToList(), ratios, currentStartZ + depth);
                 }
                 // 頂点数が同じときは、そのままつなげる
                 else
                 {
                     verticesStart = GenerateVertices(timeToVertices[i].Vertices.ToList(), new List<float>(), currentStartZ);
-                    verticesEnd = GenerateVertices(timeToVertices[i + 1].Vertices.ToList(), new List<float>(), currentStartZ + length);
-
-                    Debug.Log("start: " + string.Join(",", verticesStart));
-                    Debug.Log("end: " + string.Join(",", verticesEnd));
+                    verticesEnd = GenerateVertices(timeToVertices[i + 1].Vertices.ToList(), new List<float>(), currentStartZ + depth);
                 }
 
-                // 頂点リストの代入
-                vertices.AddRange(verticesStart);
-                vertices.AddRange(verticesEnd);
+                // メッシュを線形補間
+                var interpolationVerticesList = LinearInterpolationVertices(verticesStart, verticesEnd, Mathf.CeilToInt(depth / lerpThresholdDepth));
 
-                // トライアングルインデックスを生成、代入
-                var tris = GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count, isMeshReverse);
-                Debug.Log("triangles: " + string.Join(",", tris));
-                triangles.AddRange(tris);
-
-                currentStartZ += length;
-                currentMeshIndex += verticesStart.Count + verticesEnd.Count;
-            }
-
-            // 無効数チェック
-            foreach (var v in vertices)
-            {
-                if (HasInvalidVertex(v))
+                // 線形補間された全ての頂点リスト
+                for (int j = 0; j < interpolationVerticesList.Count - 1; j++)
                 {
-                    Debug.LogError("Invalid vertex found: " + v);
+                    var verticesA = interpolationVerticesList[j];
+                    var verticesB = interpolationVerticesList[j + 1];
+
+                    // 頂点リストの代入
+                    vertices.AddRange(verticesA);
+                    vertices.AddRange(verticesB);
+
+                    // トライアングルインデックスを生成、代入
+                    var tris = MeshGenerator.GenerateTriangles(currentMeshIndex, verticesA.Count, verticesB.Count, isMeshReverse);
+                    triangles.AddRange(tris);
+
+                    currentMeshIndex += verticesA.Count + verticesB.Count;
                 }
+
+                currentStartZ += depth;
             }
 
-            // 無効数チェック
-            foreach (var i in triangles)
-            {
-                if (i < 0 || i >= vertices.Count)
-                {
-                    Debug.LogError("Invalid triangle index: " + i);
-                }
-            }
+            // 不正チェック
+            if (!CheckValidMesh(vertices, triangles)) { return null; }
 
+            // 計算した値をそれぞれ代入
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
             mesh.RecalculateNormals();
@@ -370,55 +268,75 @@ namespace MeshGenerate
             return mesh;
         }
 
+        /// <summary>
+        /// 線形補間して滑らかなメッシュにする(始点終点共に同じ長さであること)
+        /// </summary>
+        /// <param name="startVertices"></param>
+        /// <param name="endVertices"></param>
+        /// <param name="interpolateSteps"></param>
+        /// <returns></returns>
+        static List<List<Vector3>> LinearInterpolationVertices(List<Vector3> startVertices, List<Vector3> endVertices, int interpolateSteps = 10)
+        {
+            if(startVertices.Count != endVertices.Count) { return null; }
+
+            var verticesList = new List<List<Vector3>>();
+
+            for (int i = 0; i <= interpolateSteps; i++)
+            {
+                List<Vector3> vertices = new List<Vector3>();
+                float t = i / (float)interpolateSteps;
+
+                for (int j = 0; j < startVertices.Count; j++)
+                {
+                    Vector3 from = startVertices[j];
+                    Vector3 to = endVertices[j];
+                    Vector3 lerp = Vector3.Lerp(from, to, t);
+                    //lerp.z = t * zOffset;
+                    vertices.Add(lerp);
+                }
+
+                verticesList.Add(vertices);
+                //Debug.Log($"LinearInterpolation: {vertices.Count}");
+            }
+
+            return verticesList;
+        }
+
+        /// <summary>
+        /// 不正な値がないかチェック
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <param name="triangles"></param>
+        /// <returns></returns>
+        static bool CheckValidMesh(List<Vector3> vertices, List<int> triangles)
+        {
+            // 無効数チェック
+            foreach (var v in vertices)
+            {
+                if (HasInvalidVertex(v))
+                {
+                    Debug.LogError("【Mesh】Invalid vertex found: " + v);
+                    return false;
+                }
+            }
+
+            // 無効数チェック
+            foreach (var i in triangles)
+            {
+                if (i < 0 || i >= vertices.Count)
+                {
+                    Debug.LogError($"【Mesh】Invalid triangle index: {i}/{vertices.Count}");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         static bool HasInvalidVertex(Vector3 v)
         {
             return float.IsNaN(v.x) || float.IsNaN(v.y) || float.IsNaN(v.z)
                 || float.IsInfinity(v.x) || float.IsInfinity(v.y) || float.IsInfinity(v.z);
-        }
-
-        public static Mesh GenerateSpaceEdgeMesh(List<Vector2> vertices1, List<Vector2> vertices2, float length, int meshDivisionNum, bool isMeshReverse)
-        {
-            Mesh mesh = new Mesh();
-            // ドデカイメッシュに対応
-            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
-
-            List<int> triangles = new List<int>();
-            List<Vector3> vertices = new List<Vector3>();
-            List<Vector2> uvs = new List<Vector2>();
-            float currentStartZ = 0;
-            int currentMeshIndex = 0;
-
-            // 最大頂点数を調べて分割数を更新する
-            meshDivisionNum = Mathf.Max(meshDivisionNum, vertices1.Count, vertices2.Count);
-
-            // 各頂点距離の辺全体の長さに対する割合
-            int verticesCount;
-            List<float> ratios;
-
-            // 頂点リストを生成
-            verticesCount = vertices1.Count();
-            ratios = Enumerable.Range(0, meshDivisionNum - verticesCount).Select(i => i / ((float)meshDivisionNum - verticesCount - 1)).ToList();
-            List<Vector3> verticesStart = GenerateVertices(vertices1.ToList(), ratios, currentStartZ);
-
-            verticesCount = vertices2.Count();
-            ratios = Enumerable.Range(0, meshDivisionNum - verticesCount).Select(i => i / ((float)meshDivisionNum - verticesCount - 1)).ToList();
-            List<Vector3> verticesEnd = GenerateVertices(vertices2.ToList(), ratios, currentStartZ + length);
-
-            // 頂点リストの代入
-            vertices.AddRange(verticesStart);
-            vertices.AddRange(verticesEnd);
-
-            // トライアングルインデックスを生成、代入
-            triangles.AddRange(GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count, isMeshReverse));
-
-            currentMeshIndex += verticesStart.Count + verticesEnd.Count;
-
-            // 代入
-            mesh.vertices = vertices.ToArray();
-            mesh.triangles = triangles.ToArray();
-            mesh.RecalculateNormals();
-
-            return mesh;
         }
 
         /// <summary>
@@ -525,6 +443,117 @@ namespace MeshGenerate
             return distance;
         }
 
+    }
+
+    /// <summary>
+    /// その他メッシュの生成をつかさどるクラス
+    /// </summary>
+    public class MeshGenerator
+    {
+        /// <summary>
+        /// 引数頂点リストからメッシュ(自己交差なし)の生成
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <returns></returns>
+        public static Mesh GenerateMesh(List<Vector3> vertices)
+        {
+            if (vertices == null || vertices.Count < 3)
+            {
+                Debug.LogWarning("【Note】頂点リストが無効です（3点以上必要）");
+                return null;
+            }
+
+            // LibTessDotNetの初期化
+            Tess tess = new Tess();
+            ContourVertex[] contour = new ContourVertex[vertices.Count];
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                contour[i] = new ContourVertex
+                {
+                    Position = new Vec3(vertices[i].x, vertices[i].y, vertices[i].z)
+                };
+            }
+
+            // 頂点リストを輪郭として追加
+            tess.AddContour(contour, ContourOrientation.Original);
+
+            // 三角形分割を実行
+            tess.Tessellate(WindingRule.EvenOdd, ElementType.Polygons, 3);
+
+            // Mesh作成
+            Mesh mesh = new Mesh();
+            Vector3[] meshVertices = new Vector3[tess.Vertices.Length];
+            int[] meshTriangles = new int[tess.Elements.Length];
+
+            for (int i = 0; i < tess.Vertices.Length; i++)
+            {
+                meshVertices[i] = new Vector3(tess.Vertices[i].Position.X, tess.Vertices[i].Position.Y, 0);
+            }
+
+            for (int i = 0; i < tess.Elements.Length; i++)
+            {
+                meshTriangles[i] = tess.Elements[i];
+            }
+
+            mesh.vertices = meshVertices;
+            mesh.triangles = meshTriangles;
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+
+            return mesh;
+        }
+
+        /// <summary>
+        /// 4点からメッシュを生成する
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public static Mesh GenerateMesh(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
+        {
+            var mesh = new Mesh();
+
+            mesh.vertices = new[] { a, b, c, d };
+            mesh.triangles = new[] { 0, 1, 2, 2, 3, 0 };
+
+            mesh.uv = new[]
+            {
+                new Vector2(0f, 0f), // a
+                new Vector2(1f, 0f), // b
+                new Vector2(1f, 1f), // c
+                new Vector2(0f, 1f)  // d
+            };
+
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+
+            return mesh;
+        }
+
+        /// <summary>
+        /// メッシュのトライアングルインデックスを生成
+        /// </summary>
+        public static List<int> GenerateTriangles(int startIndex, int countStart, int countEnd, bool isReverse)
+        {
+            List<int> triangles = new List<int>();
+            int halfCount = Mathf.Min(countStart, countEnd) - 1;
+
+            for (int i = 0; i < halfCount; i++)
+            {
+                triangles.Add(isReverse ? startIndex + i : startIndex + i + 1);
+                triangles.Add(isReverse ? startIndex + i + 1 : startIndex + i);
+                triangles.Add(startIndex + i + countStart);
+
+                triangles.Add(isReverse ? startIndex + i + countStart : startIndex + i + 1);
+                triangles.Add(isReverse ? startIndex + i + 1 : startIndex + i + countStart);
+                triangles.Add(startIndex + i + countStart + 1);
+            }
+            return triangles;
+        }
+
         /// <summary>
         /// 正規化
         /// </summary>
@@ -601,5 +630,4 @@ namespace MeshGenerate
             return mesh;
         }
     }
-
 }
