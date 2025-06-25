@@ -284,14 +284,13 @@ namespace MeshGenerate
         public static Mesh GenerateSpaceEdgeMesh(List<TimeToVertices> timeToVertices, float speed, int meshDivisionNum, float limitLength, bool isMeshReverse)
         {
             Mesh mesh = new Mesh();
-            // ドデカイメッシュに対応
-            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;    // ドデカイメッシュに対応
 
-            List<int> triangles = new List<int>();
-            List<Vector3> vertices = new List<Vector3>();
-            List<Vector2> uvs = new List<Vector2>();
-            float currentStartZ = 0;
-            float maxLength = speed * (timeToVertices[^1].Timing - timeToVertices[0].Timing);
+            List<int> triangles = new List<int>();          // 三角形形成順リスト
+            List<Vector3> vertices = new List<Vector3>();   // 頂点リスト
+            List<Vector2> uvs = new List<Vector2>();        // UV座標リスト
+            float currentStartZ = 0;                        // 計算済みZ
+            float maxLength = speed * (timeToVertices[^1].Timing - timeToVertices[0].Timing);    // Mesh全体のZ長
             int currentMeshIndex = 0;
 
             // 最大頂点数を調べて分割数を更新する
@@ -327,6 +326,9 @@ namespace MeshGenerate
                 {
                     verticesStart = GenerateVertices(timeToVertices[i].Vertices.ToList(), new List<float>(), currentStartZ);
                     verticesEnd = GenerateVertices(timeToVertices[i + 1].Vertices.ToList(), new List<float>(), currentStartZ + length);
+
+                    Debug.Log("start: " + string.Join(",", verticesStart));
+                    Debug.Log("end: " + string.Join(",", verticesEnd));
                 }
 
                 // 頂点リストの代入
@@ -334,7 +336,9 @@ namespace MeshGenerate
                 vertices.AddRange(verticesEnd);
 
                 // トライアングルインデックスを生成、代入
-                triangles.AddRange(GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count, isMeshReverse));
+                var tris = GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count, isMeshReverse);
+                Debug.Log("triangles: " + string.Join(",", tris));
+                triangles.AddRange(tris);
 
                 currentStartZ += length;
                 currentMeshIndex += verticesStart.Count + verticesEnd.Count;
