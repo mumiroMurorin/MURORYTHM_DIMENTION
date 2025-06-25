@@ -458,7 +458,7 @@ MonoBehaviour:
     - 
     - 
     - 
-  chartFilePath: MusicData/sample/sample5.json
+  chartFilePath: MusicData/sample/sample6.json
   noteSpeed: 250
   bodyTrackingSettings:
     isHorizontallyFlipped:

@@ -93,9 +93,6 @@ namespace ChartConvert
             IClippedJudgableNote targetNote = sortedList[index];
             JudgementWindow targetWindow = targetNote.JudgementWindow;
 
-            // 前判定端
-            float startJudgement = targetNote.Timing - targetWindow.GoodWindowFaster;
-
             // 前判定を削る
             int i = index;
             while (true)
@@ -105,7 +102,11 @@ namespace ChartConvert
 
                 IClippedJudgableNote previousNote = sortedList[i];
 
+                // ノーツが完全被りの場合は戻す
+                if(targetNote.Timing == previousNote.Timing) { continue; }
+
                 // 判定枠が被らなくなったらおしまい
+                float startJudgement = targetNote.Timing - targetWindow.GoodWindowFaster;    // 前判定端
                 float previousEndJudgement = previousNote.Timing + previousNote.JudgementWindow.GoodWindowLatter;
                 float cover = previousEndJudgement - startJudgement;
                 if (cover < 0) { break; }
