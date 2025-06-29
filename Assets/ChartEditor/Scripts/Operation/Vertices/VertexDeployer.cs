@@ -65,18 +65,29 @@ namespace ChartEditor
             if (deployableCollider == null) { return; }
 
             Vector3 worldPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
-            
+
             // データ上の追加
             VertexData vertexData = new VertexData(verticesController.WorldPosToNormalizedPos(worldPos));
 
             // RedoUndoに対応
-            Record(() => chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.AddVertex(vertexData),
-                () => verticesDestroyer.DestroyVertex(vertexData));
+            Record(() =>
+            // 配置
+            {
+                DeployVertex(vertexData);
+            }, () =>
+            // 配置取り消し
+            {
+                verticesDestroyer.DestroyVertex(vertexData);
+            }); 
         }
 
+        /// <summary>
+        /// 引数の頂点データを配置する
+        /// </summary>
+        /// <param name="data"></param>
         public void DeployVertex(VertexData data)
         {
-
+            chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.AddVertex(data);
         }
     }
 }

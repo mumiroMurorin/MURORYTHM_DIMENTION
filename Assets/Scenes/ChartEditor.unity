@@ -9473,6 +9473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5075881315d81e149abdd1a342001f88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vertexDeployer: {fileID: 844488598}
   verticesController: {fileID: 853621225}
   vertexSelector: {fileID: 150958164}
 --- !u!1 &754356522

@@ -506,8 +506,6 @@ namespace ChartEditor
 
         public void AddVertex(VertexData addVertex)
         {
-            Debug.Log("‚«‚¿‚á");
-
             // 1”Ô–Ú‚É‹ß‚¢’¸“_‚ðŒ©‚Â‚¯‚é
             int nearestIndex = 0;
             float nearestSqrMagnitude = addVertex.GetSqrMagnitude(vertices[0]);

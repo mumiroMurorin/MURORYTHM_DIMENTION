@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
-using System.Linq;
+using static UndoRedo.History;
 
 namespace ChartEditor
 {
     public class VerticesDestroyer : MonoBehaviour
     {
+        [SerializeField] VertexDeployer vertexDeployer;
         [SerializeField] VerticesController verticesController;
         [SerializeField] MultiVertexSelector vertexSelector;
         IChartEditorDataGetter chartEditorDataGetter;
@@ -47,14 +48,24 @@ namespace ChartEditor
                 return;
             }
 
-            // 順番に消していく
-            foreach (var data in vertexSelector.SelectingVertices)
-            {
-                DestroyVertex(data);
-            }
+            var vertices = new List<VertexData>(vertexSelector.SelectingVertices);
 
-            // 選択解除
-            vertexSelector.DeselectAll();
+            // RedoUndoに対応
+            Record(() =>
+            // 削除
+            {
+                foreach (var data in vertices) { DestroyVertex(data); }
+
+                // 選択解除
+                vertexSelector.DeselectAll();
+
+            }, () =>
+            // 削除取り消し
+            {
+                foreach (var data in vertices) { vertexDeployer.DeployVertex(data); }
+            });
+
+            
         }
 
         /// <summary>
