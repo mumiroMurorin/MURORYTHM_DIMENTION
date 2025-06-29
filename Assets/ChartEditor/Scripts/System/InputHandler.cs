@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using VContainer;
+using static UndoRedo.History;
 
 namespace ChartEditor
 {
@@ -62,6 +63,10 @@ namespace ChartEditor
             if (!Input.GetKey(KeyCode.LeftControl) && Mathf.Abs(scroll) > 0.01f) { OperatePlaybackProgress(scroll); }
             // 保存
             if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.S)) SaveChart();
+            // Undo
+            if (Input.GetKey(KeyCode.LeftControl) && !Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Z)) { Undo(); }
+            // Redo
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Z)) { Redo(); }
             // ショートカットキー
             CheckAndDoShortCutKey();
         }

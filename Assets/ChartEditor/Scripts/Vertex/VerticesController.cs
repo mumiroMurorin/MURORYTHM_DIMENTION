@@ -29,8 +29,8 @@ namespace ChartEditor
         public Action OnRemoveVertexListner;
         public Action OnClearVertexListner;
 
-        List<DataToVertexObject> dataToObj = new List<DataToVertexObject>();
-        public IReadOnlyList<DataToVertexObject> DataToObj => dataToObj;
+        DataToVertexObjectList dataToObj = new DataToVertexObjectList();
+        public DataToVertexObjectList DataToObj => dataToObj;
 
         IChartEditorDataGetter dataGetter;
         IChartEditorOptionGetter optionGetter;
@@ -105,7 +105,7 @@ namespace ChartEditor
                 return;
             }
 
-            dataToObj.Insert(index, new DataToVertexObject(vertex, vertexObj));
+            dataToObj.List.Insert(index, new DataToVertexObject(vertex, vertexObj));
             
             vertexObj.gameObject.transform.SetParent(vertexObjParent);
             vertexObj.gameObject.transform.localPosition = Vector3.zero;
@@ -121,14 +121,14 @@ namespace ChartEditor
 
         private void OnRemoveVertex(VertexData vertex)
         {
-            var dto = dataToObj.Find(v => v.Data == vertex);
+            var dto = dataToObj.List.Find(v => v.Data == vertex);
             if (dto == null)
             {
                 Debug.LogWarning($"【Vertex】データに対応するオブジェクトが見つかりませんでした: {vertex.Position}");
                 return;
             }
 
-            dataToObj.Remove(dto);
+            dataToObj.List.Remove(dto);
             dto.Object.Destroy();
 
             OnRemoveVertexListner?.Invoke();
@@ -137,11 +137,6 @@ namespace ChartEditor
 
         private void OnClearVertex()
         {
-            foreach (var pair in dataToObj)
-            {
-                pair.Object.Destroy();
-            }
-
             dataToObj.Clear();
             OnClearVertexListner?.Invoke();
         }
@@ -151,12 +146,12 @@ namespace ChartEditor
         /// </summary>
         private void UpdateVertexColor()
         {
-            if(dataToObj.Count <= 1) { return; }
+            if(dataToObj.List.Count <= 1) { return; }
 
-            for (int i = 0; i < dataToObj.Count; i++)
+            for (int i = 0; i < dataToObj.List.Count; i++)
             {
-                Color color = Color.Lerp(startColor, endColor, (float)i / (dataToObj.Count - 1));
-                var vertexObj = dataToObj[i].Object;
+                Color color = Color.Lerp(startColor, endColor, (float)i / (dataToObj.List.Count - 1));
+                var vertexObj = dataToObj.List[i].Object;
 
                 vertexObj.SetColor(color);
             }
@@ -193,11 +188,6 @@ namespace ChartEditor
         {
             DisposeBindForVerticesData();
 
-            foreach(var pair in dataToObj)
-            {
-                pair.Object.Destroy();
-            }
-
             dataToObj.Clear();
         }
 
@@ -225,6 +215,25 @@ namespace ChartEditor
             }
 
             laneDivisionLines[16].SetActive(true);
+        }
+    }
+
+    public class DataToVertexObjectList
+    {
+        List<DataToVertexObject> list = new List<DataToVertexObject>();
+
+        public List<DataToVertexObject> List { get { return list; } }
+
+        public VertexObject GetObject(VertexData data) { return list.Find(x => x.Data == data).Object; }
+
+        public void Clear()
+        {
+            foreach (var pair in list)
+            {
+                pair.Object.Destroy();
+            }
+
+            list.Clear();
         }
     }
 

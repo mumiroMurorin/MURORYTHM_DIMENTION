@@ -35,7 +35,7 @@ namespace ChartEditor
         {
             // センターメッシュ
             List<Vector3> positions = new List<Vector3>();
-            foreach (var pair in verticesController.DataToObj)
+            foreach (var pair in verticesController.DataToObj.List)
             {
                 Vector3 vertexPos = pair.Object.gameObject.transform.localPosition;
                 positions.Add(new Vector3(vertexPos.x, vertexPos.y, vertexPos.z));

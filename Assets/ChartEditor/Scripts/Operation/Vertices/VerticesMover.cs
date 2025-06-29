@@ -98,9 +98,11 @@ namespace ChartEditor
             Vector2 basePos = movableCollider.Vertex.Vertex.VertexData.Position.Value;
 
             // 複数選択されたオブジェクトから動かせるやつを取り出す
-            foreach (var obj in multiSelector.SelectingVertices)
+            foreach (var data in multiSelector.SelectingVertices)
             {
+                var obj = verticesController.DataToObj.GetObject(data);
                 if (!obj.TryGetComponent(out IPointMovableObject movable)) { continue; }
+
                 movable.OnMoveStart();
                 movableAndDelta.TryAdd(movable, obj.VertexData.Position.Value - basePos);
             }

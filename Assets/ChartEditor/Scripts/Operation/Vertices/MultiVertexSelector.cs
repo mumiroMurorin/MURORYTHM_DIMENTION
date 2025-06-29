@@ -11,7 +11,7 @@ namespace ChartEditor
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
 
         List<ISelectableVertexObject> selectingObjects = new List<ISelectableVertexObject>();
-        public List<VertexObject> SelectingVertices { get; private set; } = new List<VertexObject>();
+        public List<VertexData> SelectingVertices { get; private set; } = new List<VertexData>();
 
         IChartEditorDataGetter chartEditorDataGetter;
         EditMode[] ignoreEditModes = new EditMode[] {
@@ -78,7 +78,7 @@ namespace ChartEditor
 
             // 含まれていない場合はリストに追加
             selectingObjects.Add(obj);
-            SelectingVertices.Add(obj.VertexObject);
+            SelectingVertices.Add(obj.VertexObject.VertexData);
             obj.OnSelect();
         }
 
@@ -91,14 +91,14 @@ namespace ChartEditor
             if (selectingObjects.Contains(obj)) 
             {
                 selectingObjects.Remove(obj);
-                SelectingVertices.Remove(obj.VertexObject);
+                SelectingVertices.Remove(obj.VertexObject.VertexData);
                 obj.OnDeselect();
             }
             // 含まれていない場合はリストに追加
             else
             {
                 selectingObjects.Add(obj);
-                SelectingVertices.Add(obj.VertexObject);
+                SelectingVertices.Add(obj.VertexObject.VertexData);
                 obj.OnSelect();
             }
         }

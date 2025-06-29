@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using System.Linq;
 
 namespace ChartEditor
 {
     public class VerticesDestroyer : MonoBehaviour
     {
+        [SerializeField] VerticesController verticesController;
         [SerializeField] MultiVertexSelector vertexSelector;
         IChartEditorDataGetter chartEditorDataGetter;
 
@@ -25,14 +27,17 @@ namespace ChartEditor
         private void Update()
         {
             // Deleteキーで消す
-            if (Input.GetKeyDown(KeyCode.Delete)) { DestroyVertex(); }
+            if (Input.GetKeyDown(KeyCode.Delete)) 
+            {
+                // 除外エディットモード中は返す
+                if (chartEditorDataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
+
+                DestroyVertices();
+            }
         }
 
-        private void DestroyVertex()
+        private void DestroyVertices()
         {
-            // 除外エディットモード中は返す
-            if (chartEditorDataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
-
             var currentEditVertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
 
             // 3点以下だった場合消さない
@@ -43,20 +48,30 @@ namespace ChartEditor
             }
 
             // 順番に消していく
-            foreach (var obj in vertexSelector.SelectingVertices)
+            foreach (var data in vertexSelector.SelectingVertices)
             {
-                // 消せるやつだけ消す
-                if(!obj.gameObject.TryGetComponent(out IDestroyableVertex destroyable)) { continue; }
-
-                // データから削除
-                currentEditVertices.RemoveVertex(obj.VertexData);
-
-                destroyable.OnDestroy();
-                obj.VertexData = null;
+                DestroyVertex(data);
             }
 
             // 選択解除
             vertexSelector.DeselectAll();
+        }
+
+        /// <summary>
+        /// 引数の頂点データをオブジェクトごと消す
+        /// </summary>
+        /// <param name="data"></param>
+        public void DestroyVertex(VertexData data)
+        {
+            // オブジェクトの削除
+            var obj = verticesController.DataToObj.GetObject(data);
+            if (obj.gameObject.TryGetComponent(out IDestroyableVertex destroyable)) { destroyable.OnDestroy(); }
+
+            // データの削除
+            var currentEditVertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
+            currentEditVertices.RemoveVertex(data);
+
+            data = null;
         }
     }
 

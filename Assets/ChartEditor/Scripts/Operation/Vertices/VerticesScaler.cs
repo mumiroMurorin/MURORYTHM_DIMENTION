@@ -95,15 +95,17 @@ namespace ChartEditor
             if (movableCollider == null) { return; }
 
             // 選択された点群の中心を導出
-            centerPos = multiSelector.SelectingVertices.Select(x => x.VertexData.Position.Value).ToArray().Center();
+            centerPos = multiSelector.SelectingVertices.Select(x => x.Position.Value).ToArray().Center();
 
             // 基準となる点の座標(正規化済み)を保存
             basePos = movableCollider.Vertex.Vertex.VertexData.Position.Value;
 
             // 複数選択されたオブジェクトから動かせるやつを取り出す
-            foreach (var obj in multiSelector.SelectingVertices)
+            foreach (var data in multiSelector.SelectingVertices)
             {
+                var obj = verticesController.DataToObj.GetObject(data);
                 if (!obj.TryGetComponent(out IPointMovableObject movable)) { continue; }
+
                 scalableAndDelta.TryAdd(movable, obj.VertexData.Position.Value);
                 movable.OnMoveStart();
             }

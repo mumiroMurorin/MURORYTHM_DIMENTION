@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using UniRx;
+using static UndoRedo.History;
 
 namespace ChartEditor
 {
     public class VertexDeployer : MonoBehaviour
     {
         [SerializeField] VerticesController verticesController;
+        [SerializeField] VerticesDestroyer verticesDestroyer;
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
         
         IChartEditorDataGetter chartEditorDataGetter;
@@ -50,7 +52,7 @@ namespace ChartEditor
 
             // 頂点オブジェクトの配置
             if (Input.GetMouseButtonDown(0)) 
-            { 
+            {
                 DeployVertex();
             }
         }
@@ -62,11 +64,19 @@ namespace ChartEditor
         {
             if (deployableCollider == null) { return; }
 
-            // データ上の追加
             Vector3 worldPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
+            
+            // データ上の追加
             VertexData vertexData = new VertexData(verticesController.WorldPosToNormalizedPos(worldPos));
 
-            chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.AddVertex(vertexData);
+            // RedoUndoに対応
+            Record(() => chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.AddVertex(vertexData),
+                () => verticesDestroyer.DestroyVertex(vertexData));
+        }
+
+        public void DeployVertex(VertexData data)
+        {
+
         }
     }
 }
