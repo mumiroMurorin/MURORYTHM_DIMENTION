@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using System.Linq;
+using static UndoRedo.History;
 
 namespace ChartEditor
 {
@@ -17,6 +19,8 @@ namespace ChartEditor
         Dictionary<IPointMovableObject, Vector2> movableAndDelta = new Dictionary<IPointMovableObject, Vector2>();
         float magnitudeSum;
         Vector3 cursorPos;
+        Vector2 basePos;
+        Vector2 lastPos;
         IPointMovableCollider targetCollider;
 
         [Inject]
@@ -49,7 +53,7 @@ namespace ChartEditor
             // 頂点オブジェクトを動かす
             if (Input.GetMouseButton(0) && delta.magnitude > 0)
             {
-                // 初動
+                // 初動、誤動作防止のためある程度カーソルが動くまで待つ
                 if (magnitudeSum < firstMovingThreshold)
                 {
                     if (targetCollider == null) { targetCollider = chartEditorDataGetter.GetInteractableCollider<IPointMovableCollider>(); }
@@ -66,6 +70,10 @@ namespace ChartEditor
                     chartEditorDataSetter.SetEditMode(EditMode.VertexMoving);
                 }
 
+                // 配置可能な場所でなければ返す
+                var deployable = chartEditorDataGetter.GetInteractableCollider<IPointDeployableCollider>();
+                if (deployable == null) { return; }
+
                 MoveVertex();
             }
             // 頂点オブジェクトの移動終了
@@ -80,6 +88,7 @@ namespace ChartEditor
         {
             movableAndDelta.Clear();
             magnitudeSum = 0;
+            basePos = Vector2.zero;
             targetCollider = null;
         }
 
@@ -95,7 +104,7 @@ namespace ChartEditor
             movableAndDelta.Add(baseVertex, Vector2.zero);
 
             // 基準となる点の座標(正規化済み)を保存
-            Vector2 basePos = movableCollider.Vertex.Vertex.VertexData.Position.Value;
+            basePos = movableCollider.Vertex.Vertex.VertexData.Position.Value;
 
             // 複数選択されたオブジェクトから動かせるやつを取り出す
             foreach (var data in multiSelector.SelectingVertices)
@@ -108,29 +117,35 @@ namespace ChartEditor
             }
         }
 
+        /// <summary>
+        /// 移動中はカーソル位置を取得しつつ位置を更新する
+        /// </summary>
         private void MoveVertex()
         {
             if (movableAndDelta == null || movableAndDelta.Count == 0) { return; }
 
-            // カーソル下の親取得
-            var deployable = chartEditorDataGetter.GetInteractableCollider<IPointDeployableCollider>();
-
-            // 配置可能な場所でなければ返す
-            if(deployable == null) { return; }
-
             // 頂点の移動
-            Vector3 worldPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
-            if (worldPos == Vector3.one * -9999) { return; }
+            if (cursorPos == Vector3.one * -9999) { return; }
 
-            Vector2 normalized = verticesController.WorldPosToNormalizedPos(worldPos);
-
+            lastPos = verticesController.WorldPosToNormalizedPos(cursorPos);
             foreach (var pair in movableAndDelta)
             {
-                pair.Key.Vertex.VertexData.SetPosition(normalized + pair.Value);
+                pair.Key.Vertex.VertexData.SetPosition(lastPos + pair.Value);
                 pair.Key.OnMove();
             }
         }
 
+        private void MoveVertex(VertexData data, Vector2 toPos)
+        {
+            //var obj = verticesController.DataToObj.GetObject(data);
+            // if (!obj.TryGetComponent(out IPointMovableObject movable)) { }
+
+            data.SetPosition(toPos);
+        }
+
+        /// <summary>
+        /// 移動終了
+        /// </summary>
         private void EndMoveVertex()
         {
             foreach(var pair in movableAndDelta)
@@ -138,7 +153,29 @@ namespace ChartEditor
                 pair.Key?.OnMoveEnd();
             }
 
+            // 頂点の動きを登録
+            var movableAndDeltaCopy = new Dictionary<IPointMovableObject, Vector2>(movableAndDelta);
+            Vector2 basePosCopy = basePos;
+            Vector2 lastPosCopy = lastPos;
+            Record(() =>
+            // もう一度移動
+            {
+                foreach (var pair in movableAndDeltaCopy)
+                {
+                    MoveVertex(pair.Key.Vertex.VertexData, pair.Value + lastPosCopy);
+                }
+            }, () =>
+            // 戻す
+            {
+                foreach (var pair in movableAndDeltaCopy)
+                {
+                    MoveVertex(pair.Key.Vertex.VertexData, pair.Value + basePosCopy);
+                }
+            });
+
             Initialize();
         }
+
+
     }
 }

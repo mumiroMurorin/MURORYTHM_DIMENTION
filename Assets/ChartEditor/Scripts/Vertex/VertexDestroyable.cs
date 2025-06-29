@@ -17,7 +17,6 @@ namespace ChartEditor
 
         void IDestroyableVertex.OnDestroy()
         {
-            vertex.VertexData = null;
             vertex.Destroy();
         }
     }

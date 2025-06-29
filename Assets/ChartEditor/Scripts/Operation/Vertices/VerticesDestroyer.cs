@@ -81,8 +81,6 @@ namespace ChartEditor
             // データの削除
             var currentEditVertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
             currentEditVertices.RemoveVertex(data);
-
-            data = null;
         }
     }
 
