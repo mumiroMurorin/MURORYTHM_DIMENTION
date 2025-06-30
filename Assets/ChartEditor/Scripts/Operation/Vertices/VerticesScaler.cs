@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using System.Linq;
+using static UndoRedo.Vertices.VerticesMoveRecord;
 
 namespace ChartEditor
 {
@@ -16,6 +17,7 @@ namespace ChartEditor
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorDataSetter chartEditorDataSetter;
         Dictionary<IPointMovableObject, Vector2> scalableAndDelta = new Dictionary<IPointMovableObject, Vector2>();
+        List<VertexDataToPos> previousPos;
         float magnitudeSum;
         Vector2 centerPos;
         Vector2 basePos;
@@ -100,6 +102,8 @@ namespace ChartEditor
             // 基準となる点の座標(正規化済み)を保存
             basePos = movableCollider.Vertex.Vertex.VertexData.Position.Value;
 
+            previousPos = new List<VertexDataToPos>();
+
             // 複数選択されたオブジェクトから動かせるやつを取り出す
             foreach (var data in multiSelector.SelectingVertices)
             {
@@ -108,6 +112,8 @@ namespace ChartEditor
 
                 scalableAndDelta.TryAdd(movable, obj.VertexData.Position.Value);
                 movable.OnMoveStart();
+
+                previousPos.Add(new VertexDataToPos(data, data.Position.Value));
             }
         }
 
@@ -139,10 +145,16 @@ namespace ChartEditor
 
         private void EndScaleVertices()
         {
+            var currentPos = new List<VertexDataToPos>();
             foreach (var scalable in scalableAndDelta)
             {
                 scalable.Key?.OnMoveEnd();
+
+                var data = scalable.Key.Vertex.VertexData;
+                currentPos.Add(new VertexDataToPos(data, data.Position.Value));
             }
+
+            RecordVertcesMoving(previousPos, currentPos);
 
             Initialize();
         }

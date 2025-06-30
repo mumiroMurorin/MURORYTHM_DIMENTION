@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using VContainer;
+using static UndoRedo.Vertices.VerticesMoveRecord;
 
 namespace ChartEditor
 {
@@ -15,8 +16,11 @@ namespace ChartEditor
 
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorDataSetter chartEditorDataSetter;
-        List<IPointMovableObject> rotatableList = new List<IPointMovableObject>();
+
+        Dictionary<IPointMovableObject, Vector2> movableAndPos = new Dictionary<IPointMovableObject, Vector2>();
+        List<VertexDataToPos> previousPos;
         float magnitudeSum;
+        float rotateAngle;
         Vector2 centerPos;
         Vector2 basePos;
         Vector3 cursorPos;
@@ -92,6 +96,8 @@ namespace ChartEditor
             // 基準となる点の座標(正規化済み)を保存
             basePos = movableCollider.Vertex.Vertex.VertexData.Position.Value;
 
+            previousPos = new List<VertexDataToPos>();
+
             // 複数選択されたオブジェクトから動かせるやつを取り出す
             foreach (var data in multiSelector.SelectingVertices)
             {
@@ -99,7 +105,9 @@ namespace ChartEditor
                 if (!obj.TryGetComponent(out IPointMovableObject movable)) { continue; }
 
                 movable.OnMoveStart();
-                rotatableList.Add(movable);
+                movableAndPos.Add(movable, movable.Vertex.VertexData.Position.Value);
+
+                previousPos.Add(new VertexDataToPos(data, data.Position.Value));
             }
         }
 
@@ -108,7 +116,7 @@ namespace ChartEditor
         /// </summary>
         private void RotateVertices()
         {
-            if (rotatableList == null || rotatableList.Count == 0) { return; }
+            if (movableAndPos == null || movableAndPos.Count == 0) { return; }
 
             // カーソル下の親取得
             var deployable = chartEditorDataGetter.GetInteractableCollider<IPointDeployableCollider>();
@@ -117,35 +125,44 @@ namespace ChartEditor
             if(deployable == null) { return; }
 
             // カーソル位置の取得、角度の計算
-            Vector3 worldPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
-            if (worldPos == Vector3.one * -9999) { return; }
+            if (cursorPos == Vector3.one * -9999) { return; }
 
-            Vector2 currentPos = verticesController.WorldPosToNormalizedPos(worldPos);
-            var angle = Vector2Extensions.AngleBetweenVectors(basePos, currentPos, centerPos);
-            basePos = currentPos;
+            Vector2 currentPos = verticesController.WorldPosToNormalizedPos(cursorPos);
+            rotateAngle = Vector2Extensions.AngleBetweenVectors(basePos, currentPos, centerPos);
 
             // 回転
-            foreach (var rotatable in rotatableList)
+            foreach (var pair in movableAndPos)
             {
-                var pos = rotatable.Vertex.VertexData.Position.Value.RotatePoint(centerPos, angle);
-                rotatable.Vertex.VertexData.SetPosition(pos);
-                rotatable.OnMove();
+                RotateVertex(pair.Key.Vertex.VertexData, pair.Value, centerPos, rotateAngle);
+                pair.Key.OnMove();
             }
+        }
+
+        private void RotateVertex(VertexData data, Vector2 originPos, Vector2 centerPos, float angle)
+        {
+            var pos = originPos.RotatePoint(centerPos, angle);
+            data.SetPosition(pos);
         }
 
         private void Initialize()
         {
-            rotatableList.Clear();
+            movableAndPos.Clear();
             magnitudeSum = 0;
             targetCollider = null;
         }
 
         private void EndRotateVertices()
         {
-            foreach(var rotatable in rotatableList)
+            var currentPos = new List<VertexDataToPos>();
+            foreach(var pair in movableAndPos)
             {
-                rotatable?.OnMoveEnd();
+                pair.Key?.OnMoveEnd();
+
+                var data = pair.Key.Vertex.VertexData;
+                currentPos.Add(new VertexDataToPos(data, data.Position.Value));
             }
+
+            RecordVertcesMoving(previousPos, currentPos);
 
             Initialize();
         }

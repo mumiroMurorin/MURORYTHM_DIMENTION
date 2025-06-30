@@ -595,11 +595,14 @@ namespace ChartEditor
             SetPosition(vertex.Position.Value);
         }
 
+        /// <summary>
+        /// 正規化後の頂点座標
+        /// </summary>
         ReactiveProperty<Vector2> position = new ReactiveProperty<Vector2>();
         public IReadOnlyReactiveProperty<Vector2> Position => position;
         public void SetPosition(Vector2 pos)
         {
-            // 単位円状に配置されるように正規化
+            // 単位円上に配置されるように正規化
             pos = pos.ClampToUnitCircle();
 
             position.Value = pos;
@@ -609,6 +612,25 @@ namespace ChartEditor
         {
             return (this.position.Value - another.position.Value).sqrMagnitude;
         }
+
+        /// <summary>
+        /// 座標番号
+        /// </summary>
+        ReactiveProperty<int> index = new ReactiveProperty<int>();
+        IReadOnlyReactiveProperty<int> Index => index;
+        public void SetIndex(int index) { this.index.Value = index; }
+    }
+
+    public class VertexDataToPos
+    {
+        public VertexDataToPos(VertexData data,Vector2 pos)
+        {
+            this.Data = data;
+            this.Pos = pos;
+        }
+
+        public VertexData Data { get; set; }
+        public Vector2 Pos { get; set; }
     }
 
     [System.Serializable]
