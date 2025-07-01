@@ -506,6 +506,20 @@ namespace ChartEditor
 
         public void AddVertex(VertexData addVertex)
         {
+            // 新規追加
+            if(addVertex.BackVertex == null)
+            {
+                InsertVertexNearByNearestIndex(addVertex);
+            }
+            // Undoで元のデータが存在するとき
+            else
+            {
+                InsertVertexAfterSpecific(addVertex, addVertex.BackVertex);
+            }
+        }
+
+        private void InsertVertexNearByNearestIndex(VertexData addVertex)
+        {
             // 1番目に近い頂点を見つける
             int nearestIndex = 0;
             float nearestSqrMagnitude = addVertex.GetSqrMagnitude(vertices[0]);
@@ -535,6 +549,19 @@ namespace ChartEditor
             {
                 vertices.Insert(nearestIndex, addVertex);
             }
+        }
+
+        private void InsertVertexAfterSpecific(VertexData addVertex, VertexData backVertex)
+        {
+            int i = vertices.IndexOf(backVertex);
+            if(i < 0) 
+            { 
+                Debug.LogWarning($"【Vertices】探していたBackVertexは存在しません");
+                InsertVertexNearByNearestIndex(addVertex);
+                return;
+            }
+
+            vertices.Insert(i, addVertex);
         }
 
         public bool RemoveVertex(VertexData vertex)
@@ -614,11 +641,9 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 座標番号
+        /// 前頂点
         /// </summary>
-        ReactiveProperty<int> index = new ReactiveProperty<int>();
-        IReadOnlyReactiveProperty<int> Index => index;
-        public void SetIndex(int index) { this.index.Value = index; }
+        public VertexData BackVertex { get; set; }
     }
 
     public class VertexDataToPos
