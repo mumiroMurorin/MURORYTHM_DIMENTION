@@ -11,7 +11,7 @@ namespace ChartEditor
     {
         [SerializeField] float firstMovingThreshold = 0.15f;
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
-        [SerializeField] VerticesController verticesController;
+        [SerializeField] VertexObjectsController verticesController;
         [SerializeField] MultiVertexSelector multiSelector;
 
         IChartEditorDataGetter chartEditorDataGetter;

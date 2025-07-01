@@ -487,7 +487,7 @@ namespace ChartEditor
     /// </summary>
     public class SpaceHoldVertices
     {
-        List<Vector2> defaultVertices = new List<Vector2>
+        Vector2[] defaultPositions = new Vector2[]
         {
             new Vector2(-0.25f, -0.5f),
             new Vector2(-0.25f, 0f),
@@ -501,23 +501,27 @@ namespace ChartEditor
 
         public SpaceHoldVertices()
         {
-            SetVertices(defaultVertices.ToArray());
+            SetVertices(defaultPositions);
         }
 
         public void AddVertex(VertexData addVertex)
         {
             // 新規追加
-            if(addVertex.BackVertex == null)
+            if(addVertex.VertexIndex == -1)
             {
                 InsertVertexNearByNearestIndex(addVertex);
             }
             // Undoで元のデータが存在するとき
             else
             {
-                InsertVertexAfterSpecific(addVertex, addVertex.BackVertex);
+                InsertVertexAfterSpecific(addVertex, addVertex.VertexIndex);
             }
         }
 
+        /// <summary>
+        /// 頂点の新規追加
+        /// </summary>
+        /// <param name="addVertex"></param>
         private void InsertVertexNearByNearestIndex(VertexData addVertex)
         {
             // 1番目に近い頂点を見つける
@@ -549,24 +553,46 @@ namespace ChartEditor
             {
                 vertices.Insert(nearestIndex, addVertex);
             }
+
+            UpdateVertexIndex();
         }
 
-        private void InsertVertexAfterSpecific(VertexData addVertex, VertexData backVertex)
+        /// <summary>
+        /// 頂点の再追加
+        /// </summary>
+        /// <param name="addVertex"></param>
+        /// <param name="backVertex"></param>
+        private void InsertVertexAfterSpecific(VertexData addVertex, int index)
         {
-            int i = vertices.IndexOf(backVertex);
-            if(i < 0) 
-            { 
-                Debug.LogWarning($"【Vertices】探していたBackVertexは存在しません");
+            if(index < 0 || index > vertices.Count) 
+            {
+                Debug.LogWarning($"【Vertices】indexが範囲外のため新規追加します: {index}/{vertices.Count}");
                 InsertVertexNearByNearestIndex(addVertex);
                 return;
             }
 
-            vertices.Insert(i, addVertex);
+            vertices.Insert(index, addVertex);
+            UpdateVertexIndex();
+        }
+
+        /// <summary>
+        /// 頂点インデックスを更新
+        /// </summary>
+        private void UpdateVertexIndex()
+        {
+            int i = 0;
+            foreach(var v in vertices)
+            {
+                v.VertexIndex = i++;
+            }
         }
 
         public bool RemoveVertex(VertexData vertex)
         {
-            return vertices.Remove(vertex);
+            var b = vertices.Remove(vertex);
+            UpdateVertexIndex();
+
+            return b;
         }
 
         public void SetVertices(Vector2[] positions)
@@ -576,6 +602,20 @@ namespace ChartEditor
             foreach (var pos in positions)
             {
                 vertices.Add(new VertexData(pos));
+            }
+
+            UpdateVertexIndex();
+        }
+
+        public void SetVertices(List<VertexData> vertexDataList)
+        {
+            vertices.Clear();
+
+            vertexDataList.Sort((a, b) => a.VertexIndex - b.VertexIndex);
+            
+            foreach(var v in vertexDataList)
+            {
+                AddVertex(v);
             }
         }
 
@@ -587,6 +627,7 @@ namespace ChartEditor
         public void SlideVertexIndices(int delta)
         {
             vertices.Rotate(delta);
+            UpdateVertexIndex();
         }
 
         public void ReverseVertices(Vector2 linePointA, Vector2 linePointB)
@@ -599,6 +640,7 @@ namespace ChartEditor
 
             // 順番を逆転させる
             vertices.ReverseElements();
+            UpdateVertexIndex();
         }
 
         public SimpleVector2[] GetVertexArray()
@@ -620,6 +662,7 @@ namespace ChartEditor
         public VertexData(VertexData vertex)
         {
             SetPosition(vertex.Position.Value);
+            VertexIndex = vertex.VertexIndex;
         }
 
         /// <summary>
@@ -640,10 +683,7 @@ namespace ChartEditor
             return (this.position.Value - another.position.Value).sqrMagnitude;
         }
 
-        /// <summary>
-        /// 前頂点
-        /// </summary>
-        public VertexData BackVertex { get; set; }
+        public int VertexIndex { get; set; } = -1;
     }
 
     public class VertexDataToPos

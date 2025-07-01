@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using static UndoRedo.History;
 
 namespace ChartEditor
 {
@@ -20,7 +21,17 @@ namespace ChartEditor
             if(chartEditorDataGetter == null) { return; }
             if(chartEditorDataGetter.EditingVertices.Value == null) { return; }
 
-            chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.SlideVertexIndices(delta);
+            var vertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
+
+            Record(() => 
+            // ‚¸‚ç‚·
+            {
+                vertices.SlideVertexIndices(delta);
+            }, () =>
+            // ‹t‚É‚¸‚ç‚·
+            {
+                vertices.SlideVertexIndices(-delta);
+            });
         }
     }
 

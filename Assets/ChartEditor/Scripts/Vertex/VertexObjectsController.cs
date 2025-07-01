@@ -4,10 +4,11 @@ using UnityEngine;
 using UniRx;
 using System;
 using VContainer;
+using static UndoRedo.History;
 
 namespace ChartEditor
 {
-    public class VerticesController : MonoBehaviour
+    public class VertexObjectsController : MonoBehaviour
     {
         [SerializeField] Transform vertexObjParent;
         [SerializeField] GameObject vertexObject;
@@ -33,13 +34,15 @@ namespace ChartEditor
         public DataToVertexObjectList DataToObj => dataToObj;
 
         IChartEditorDataGetter dataGetter;
+        IChartEditorDataSetter dataSetter;
         IChartEditorOptionGetter optionGetter;
         CompositeDisposable disposableForBindForVertices = new CompositeDisposable();
 
         [Inject]
-        public void Constructor(IChartEditorDataGetter dataGetter, IChartEditorOptionGetter optionGetter)
+        public void Constructor(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, IChartEditorOptionGetter optionGetter)
         {
             this.dataGetter = dataGetter;
+            this.dataSetter = dataSetter;
             this.optionGetter = optionGetter;
         }
 
@@ -224,7 +227,7 @@ namespace ChartEditor
 
         public List<DataToVertexObject> List { get { return list; } }
 
-        public VertexObject GetObject(VertexData data) { return list.Find(x => x.Data == data).Object; }
+        public VertexObject GetObject(VertexData data) { return list.Find(x => x.Data == data)?.Object; }
 
         public void Clear()
         {

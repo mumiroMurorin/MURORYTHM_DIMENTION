@@ -14,7 +14,7 @@ namespace ChartEditor
     [System.Serializable]
     public class NoteData_SpaceHold : IChainNoteData, ITypeChangableNoteData, IVerticesControlableNoteData
     {
-        public NoteData_SpaceHold() { }
+        public NoteData_SpaceHold() {  }
 
         public NoteData_SpaceHold(NoteData_SpaceHold data)
         {

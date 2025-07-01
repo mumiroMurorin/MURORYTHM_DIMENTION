@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using UniRx;
-using static UndoRedo.Vertices.VerticesMoveRecord;
+using static UndoRedo.History;
 
 namespace ChartEditor
 {
@@ -22,15 +22,17 @@ namespace ChartEditor
             if (chartEditorDataGetter == null) { return; }
             if (chartEditorDataGetter.EditingVertices.Value == null) { return; }
 
-            // ˆÈ‘O‚ÌÀ•W‚ð‹L˜^
-            var previousPos = ConvertVertexDatas(chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.Vertices);
+            var vertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
 
+            Record(() =>
             // ”½“]
-            chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.ReverseVertices(new Vector2(0, 1), new Vector2(0, -1));
-
-            // Œ»Ý‚ÌÀ•W‚à‹L˜^‚µ‚ÄRedoUndo—p‚É“o˜^
-            var currentPos = ConvertVertexDatas(chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.Vertices);
-            RecordVertcesMoving(previousPos, currentPos);
+            {
+                vertices.ReverseVertices(new Vector2(0, 1), new Vector2(0, -1));
+            }, () =>
+            // “¯‚¶‚­”½“]
+            {
+                vertices.ReverseVertices(new Vector2(0, 1), new Vector2(0, -1));
+            });
         }
 
         public void ReverseXAxis()
@@ -38,15 +40,18 @@ namespace ChartEditor
             if (chartEditorDataGetter == null) { return; }
             if (chartEditorDataGetter.EditingVertices.Value == null) { return; }
 
-            // ˆÈ‘O‚ÌÀ•W‚ð‹L˜^
-            var previousPos = ConvertVertexDatas(chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.Vertices);
+            var vertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
 
+            Record(() =>
             // ”½“]
-            chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.ReverseVertices(new Vector2(1, 0), new Vector2(-1, 0));
-
-            // Œ»Ý‚ÌÀ•W‚à‹L˜^‚µ‚ÄRedoUndo—p‚É“o˜^
-            var currentPos = ConvertVertexDatas(chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.Vertices);
-            RecordVertcesMoving(previousPos, currentPos);
+            {
+                vertices.ReverseVertices(new Vector2(1, 0), new Vector2(-1, 0));
+            }, () =>
+            // “¯‚¶‚­”½“]
+            {
+                vertices.ReverseVertices(new Vector2(1, 0), new Vector2(-1, 0));
+            });
+            
         }
 
         private List<VertexDataToPos> ConvertVertexDatas(IReadOnlyReactiveCollection<VertexData> vertexDatas)

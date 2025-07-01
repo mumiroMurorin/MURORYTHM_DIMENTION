@@ -10841,7 +10841,7 @@ GameObject:
   - component: {fileID: 853621224}
   - component: {fileID: 853621225}
   m_Layer: 0
-  m_Name: VerticesController
+  m_Name: VertexObjectsController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -176,7 +176,9 @@ namespace UndoRedo
                 var prev = CurrentState.PrevState;
                 if (prev == null)
                 {
+#if UNITY_EDITOR
                     UnityEngine.Debug.Log("Invalid operation.");
+# endif
                     return;
                 }
 

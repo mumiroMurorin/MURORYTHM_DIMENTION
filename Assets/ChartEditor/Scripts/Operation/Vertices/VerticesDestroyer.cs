@@ -9,7 +9,7 @@ namespace ChartEditor
     public class VerticesDestroyer : MonoBehaviour
     {
         [SerializeField] VertexDeployer vertexDeployer;
-        [SerializeField] VerticesController verticesController;
+        [SerializeField] VertexObjectsController verticesController;
         [SerializeField] MultiVertexSelector vertexSelector;
         IChartEditorDataGetter chartEditorDataGetter;
 
@@ -54,7 +54,7 @@ namespace ChartEditor
             Record(() =>
             // 削除
             {
-                foreach (var data in vertices) { DestroyVertex(data); }
+                foreach (var data in vertices) { DestroyVertex(currentEditVertices, data); }
 
                 // 選択解除
                 vertexSelector.DeselectAll();
@@ -62,7 +62,7 @@ namespace ChartEditor
             }, () =>
             // 削除取り消し
             {
-                foreach (var data in vertices) { vertexDeployer.DeployVertex(data); }
+                foreach (var data in vertices) { vertexDeployer.DeployVertex(currentEditVertices, data); }
             });
 
             
@@ -72,15 +72,14 @@ namespace ChartEditor
         /// 引数の頂点データをオブジェクトごと消す
         /// </summary>
         /// <param name="data"></param>
-        public void DestroyVertex(VertexData data)
+        public void DestroyVertex(SpaceHoldVertices vertices, VertexData data)
         {
             // オブジェクトの削除
             var obj = verticesController.DataToObj.GetObject(data);
-            if (obj.gameObject.TryGetComponent(out IDestroyableVertex destroyable)) { destroyable.OnDestroy(); }
+            if (obj != null && obj.gameObject.TryGetComponent(out IDestroyableVertex destroyable)) { destroyable.OnDestroy(); }
 
             // データの削除
-            var currentEditVertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
-            currentEditVertices.RemoveVertex(data);
+            vertices.RemoveVertex(data);
         }
     }
 

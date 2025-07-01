@@ -9,7 +9,7 @@ namespace ChartEditor
 {
     public class VertexDeployer : MonoBehaviour
     {
-        [SerializeField] VerticesController verticesController;
+        [SerializeField] VertexObjectsController verticesController;
         [SerializeField] VerticesDestroyer verticesDestroyer;
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
         
@@ -69,15 +69,16 @@ namespace ChartEditor
             // データ上の追加
             VertexData vertexData = new VertexData(verticesController.WorldPosToNormalizedPos(worldPos));
 
+            var vertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
             // RedoUndoに対応
             Record(() =>
             // 配置
             {
-                DeployVertex(vertexData);
+                DeployVertex(vertices, vertexData);
             }, () =>
             // 配置取り消し
             {
-                verticesDestroyer.DestroyVertex(vertexData);
+                verticesDestroyer.DestroyVertex(vertices, vertexData);
             }); 
         }
 
@@ -85,9 +86,9 @@ namespace ChartEditor
         /// 引数の頂点データを配置する
         /// </summary>
         /// <param name="data"></param>
-        public void DeployVertex(VertexData data)
+        public void DeployVertex(SpaceHoldVertices vertices, VertexData data)
         {
-            chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.AddVertex(data);
+            vertices.AddVertex(data);
         }
     }
 }

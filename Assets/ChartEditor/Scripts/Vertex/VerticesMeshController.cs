@@ -8,7 +8,7 @@ namespace ChartEditor
 {
     public class VerticesMeshController : MonoBehaviour
     {
-        [SerializeField] VerticesController verticesController;
+        [SerializeField] VertexObjectsController verticesController;
         [SerializeField] Transform meshParent;
         [SerializeField] Material centerMeshMaterial;
 

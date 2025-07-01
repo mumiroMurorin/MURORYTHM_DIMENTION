@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using System.Linq;
 using UniRx;
+using static UndoRedo.History;
 
 namespace ChartEditor
 {
     public class VerticesCopier : MonoBehaviour
     {
         IChartEditorDataGetter chartEditorDataGetter;
-        SpaceHoldVertices vertices;
+        List<VertexData> copiedVertices;
 
         EditMode[] ignoreEditModes = new EditMode[] {
              EditMode.VertexMoving,
@@ -39,7 +41,7 @@ namespace ChartEditor
             EditMode currentEditMode = chartEditorDataGetter.CurrentEditMode.Value;
             if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
 
-            vertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
+            copiedVertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.Vertices.Select(v => new VertexData(v)).ToList();
             Debug.Log("【Vertices】頂点リストをコピー");
         }
 
@@ -50,18 +52,24 @@ namespace ChartEditor
         {
             EditMode currentEditMode = chartEditorDataGetter.CurrentEditMode.Value;
             if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
-            if (vertices == null) { return; }
+            if (copiedVertices == null) { return; }
 
             // 現在編集中の頂点データを全て消して新たに代入する
             var currentEdit = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
-            var positionList = new Vector2[vertices.Vertices.Count];
-            for(int i = 0;i< vertices.Vertices.Count; i++)
-            {
-                positionList[i] = vertices.Vertices[i].Position.Value;
-            }
+            var copiedVerticesCopy = new List<VertexData>(copiedVertices);
+            var originVertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.Vertices.Select(v => new VertexData(v)).ToList();
 
-            currentEdit.SetVertices(positionList);
-            Debug.Log("【Vertices】頂点リストを張り付け");
+            Record(() =>
+            // 張り付け
+            {
+                currentEdit.SetVertices(copiedVerticesCopy);
+            }, () =>
+            // 元に戻す
+            {
+                currentEdit.SetVertices(originVertices);
+            });
+           
+            //Debug.Log("【Vertices】頂点リストを張り付け");
         }
     }
 
