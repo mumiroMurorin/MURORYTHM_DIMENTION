@@ -231,7 +231,7 @@ namespace ChartEditor
     {
         const int DEFAULT_BEAT_COUNT = 4;
         const float DEFAULT_BEAT_UNIT = 4;
-        const int DEFAULT_DIVISION_NUM = 2;
+        const int DEFAULT_DIVISION_NUM = 4;
         const float DEFAULT_BPM = 256;
 
         public ChartData(int barNum)
@@ -353,12 +353,53 @@ namespace ChartEditor
                 return false; 
             }
 
-            // 新たな場所に追加
+            // アドレスを正規化して新たな場所に追加
+            NormalizeAddress(newAddress);
+            Debug.Log(newAddress);
             SubDivisionDataInBeat newSubDivision = BarDatas[newAddress.BarIndex].SubDivisionDatas[newAddress.SubDivisionIndex];
             newSubDivision.AddNote(noteData);
 
             noteData.SetAddress(newAddress);
             return true;
+        }
+
+        /// <summary>
+        /// アドレスを正規化する
+        /// </summary>
+        /// <param name="address"></param>
+        private void NormalizeAddress(AddressInChart address)
+        {
+            // 分線番号が上限を突破しているとき
+            while (address.SubDivisionIndex >= barDatas[address.BarIndex].SubDivisionDatas.Count)
+            {
+                // 範囲外(MAX)に出てしまうとき
+                if(BarDatas.Count <= address.BarIndex + 1) 
+                {
+                    address.SetSubDivisionIndex(barDatas[address.BarIndex].SubDivisionDatas.Count - 1);
+                    address.SetBarIndex(barDatas.Count - 1);
+                    break;
+                }
+
+                address.SetSubDivisionIndex(address.SubDivisionIndex - barDatas[address.BarIndex].SubDivisionDatas.Count);
+                address.SetBarIndex(address.BarIndex + 1);
+            }
+
+            // 分線番号が下限を突破しているとき
+            while (address.SubDivisionIndex < 0)
+            {
+                // 範囲外(MIN)に出てしまうとき
+                if (address.BarIndex - 1 < 0)
+                {
+                    address.SetSubDivisionIndex(0);
+                    address.SetBarIndex(0);
+                    break;
+                }
+
+                address.SetBarIndex(address.BarIndex - 1);
+                address.SetSubDivisionIndex(address.SubDivisionIndex + barDatas[address.BarIndex].SubDivisionDatas.Count);
+            }
+
+            address.SetSliderIndex(Mathf.Clamp(address.SliderIndex, 0, 15));
         }
 
         public Transform GetPlacementLocation(AddressInChart address)
@@ -403,6 +444,16 @@ namespace ChartEditor
                 this.subDivisionIndex = new ReactiveProperty<int>(address.SubDivisionIndex);
                 this.sliderIndex = new ReactiveProperty<float>(address.SliderIndex);
             }
+        }
+
+        public static AddressInChart operator+ (AddressInChart z, AddressInChart w)
+        {
+            return new AddressInChart(z.BarIndex + w.BarIndex, z.SubDivisionIndex + w.SubDivisionIndex, z.SliderIndex + w.SliderIndex);
+        }
+
+        public static AddressInChart operator- (AddressInChart z, AddressInChart w)
+        {
+            return new AddressInChart(z.BarIndex - w.BarIndex, z.SubDivisionIndex - w.SubDivisionIndex, z.SliderIndex - w.SliderIndex);
         }
 
         /// <summary>
@@ -716,7 +767,9 @@ namespace ChartEditor
         None = 0,
         Deploy = 10,
         Move = 20,
+        Moving = 21,
         Scale = 30,
+        Scaling = 31,
         Connect = 40,
         Connecting = 41,
         ChangeType = 50,
@@ -724,6 +777,7 @@ namespace ChartEditor
         SpaceDeploy = 100,
         SpaceMove = 110,
         SpaceEdit = 120,
+        NoteSelect = 150,
 
         VertexDeploy = 200,
         VertexMove = 210,

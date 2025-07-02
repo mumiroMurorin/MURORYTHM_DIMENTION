@@ -22,6 +22,7 @@ namespace ChartEditor
 
         EditMode[] cursorIgnoreModes = new EditMode[] 
         {
+            EditMode.NoteSelect,
             EditMode.EditingBarConfig,
             EditMode.EditingSubDivisionConfig,
             EditMode.Connecting,
