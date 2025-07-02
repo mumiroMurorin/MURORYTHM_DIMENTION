@@ -18,7 +18,6 @@ namespace ChartEditor
 
         void IDestroyableObject.OnDestroy()
         {
-            noteObject.NoteData = null;
             noteObject.Destroy();
         }
     }

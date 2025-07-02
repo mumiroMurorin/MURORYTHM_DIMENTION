@@ -14,7 +14,8 @@ namespace ChartEditor
         // SubclassSelectorを自作クラスの中にいれると上手く動作しないので苦肉の策
         [Tooltip("ノートデータ(抽象クラス)")]
         [SerializeReference, SubclassSelector] IDeployableNoteData[] noteDataList;
-        [SerializeField] NoteTypeToNoteObject[] notes;
+        [SerializeField] NoteTypeToNoteObjectList noteList;
+        [SerializeField] NoteObjectsController noteObjectsController;
 
         IDeployableObject deployingNote;
         IChartEditorDataGetter chartEditorDataGetter;
@@ -100,6 +101,8 @@ namespace ChartEditor
             
             // オブジェクトの設置
             deployingNote.OnDeploy();
+            noteObjectsController.DataToObj.List.Add(new DataToNoteObject(deployingNoteData, deployingNote.Note));
+
             InstantiateNote();
         }
 
@@ -108,7 +111,7 @@ namespace ChartEditor
         /// </summary>
         private void InstantiateNote()
         {
-            GameObject origin = GetNote(chartEditorDataGetter.DeploymentNoteType.Value);
+            GameObject origin = noteList.GetNote(chartEditorDataGetter.DeploymentNoteType.Value);
             if (origin == null) { return; }
 
             GameObject obj = Instantiate(origin);
@@ -140,7 +143,7 @@ namespace ChartEditor
         /// <param name="groundNoteData"></param>
         public void DeployForNoteData(IDeployableNoteData noteData)
         {
-            GameObject origin = GetNote(noteData.NoteType);
+            GameObject origin = noteList.GetNote(noteData.NoteType);
             if (origin == null) { return; }
 
             GameObject obj = Instantiate(origin);
@@ -164,6 +167,8 @@ namespace ChartEditor
             Transform parent = chartEditorDataGetter.ChartData.Value.GetPlacementLocation(noteData.Address);
             deployable.OnMove(parent);
             deployable.OnDeploy();
+
+            noteObjectsController.DataToObj.List.Add(new DataToNoteObject(noteData, deployable.Note));
         }
 
         /// <summary>
@@ -179,22 +184,6 @@ namespace ChartEditor
         {
             deployingNote = null;
             deployingNoteData = null;
-        }
-
-        /// <summary>
-        /// 引数に対応するノーツを返す
-        /// </summary>
-        /// <param name="noteType"></param>
-        /// <returns></returns>
-        private GameObject GetNote(DeploymentNoteType noteType)
-        {
-            foreach(var note in notes)
-            {
-                if(noteType == note.DeploymentNoteType) { return note.NoteObject; }
-            }
-
-            //Debug.LogWarning($"対応するノーツが存在しませんでした: {noteType}");
-            return null;
         }
 
         private Transform GetNoteParentTransform(AddressInChart address)
@@ -216,6 +205,28 @@ namespace ChartEditor
             return null;
         }
 
+    }
+
+    [System.Serializable]
+    public class NoteTypeToNoteObjectList
+    {
+        [SerializeField] NoteTypeToNoteObject[] notePrefabs;
+
+        /// <summary>
+        /// 引数に対応するノーツを返す
+        /// </summary>
+        /// <param name="noteType"></param>
+        /// <returns></returns>
+        public GameObject GetNote(DeploymentNoteType noteType)
+        {
+            foreach (var note in notePrefabs)
+            {
+                if (noteType == note.DeploymentNoteType) { return note.NoteObject; }
+            }
+
+            //Debug.LogWarning($"対応するノーツが存在しませんでした: {noteType}");
+            return null;
+        }
     }
 
     [System.Serializable]

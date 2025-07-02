@@ -476,7 +476,7 @@ namespace ChartEditor
             return address.BarIndex == this.BarIndex && address.SubDivisionIndex == this.SubDivisionIndex && address.SliderIndex == this.SliderIndex;
         }
 
-        public string GetAddressText()
+        public override string ToString()
         {
             return $"#{BarIndex} - {SubDivisionIndex} - {SliderIndex}";
         }
@@ -720,7 +720,6 @@ namespace ChartEditor
         Connect = 40,
         Connecting = 41,
         ChangeType = 50,
-        Destroy = 60,
 
         SpaceDeploy = 100,
         SpaceMove = 110,

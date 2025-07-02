@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   warninigNoteTypes: 
-  warningOutlineColor: {r: 1, g: 1, b: 0, a: 1}
+  warningOutlineColor: {r: 1, g: 0.03659363, b: 0, a: 1}
   blinkDuration: 0.5
   outline: {fileID: 5852951285136684504}
   noteObject: {fileID: 0}

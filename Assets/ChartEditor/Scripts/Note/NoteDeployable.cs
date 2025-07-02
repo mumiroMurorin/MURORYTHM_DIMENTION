@@ -9,10 +9,12 @@ namespace ChartEditor
     public class NoteDeployable : MonoBehaviour, IDeployableObject
     {
         [Tooltip("配置時のアウトライン色")]
-        [SerializeField] private Color outlineColorOnDeploying;
+        [SerializeField] private ColorSetting outlineColorOnDeploying;
         [SerializeField] private Renderer noteRenderer;
 
         NoteObject noteObject;
+        public NoteObject Note { get { return noteObject; } private set { noteObject = value; } }
+
         public Action OnDestroyListner { get; set; }
 
         private void Awake()
@@ -27,8 +29,7 @@ namespace ChartEditor
             noteObject.SetCollidersActive(false);
 
             // アウトラインの設定
-            noteObject.SetOutlineColor(outlineColorOnDeploying, true);
-            noteObject.SetOutlineActive(true);
+            noteObject.OutlineColors.Add(outlineColorOnDeploying);
 
             noteObject.NoteData = noteData;
             noteObject.GetParentTransformFunc = getParentTransformFunc;
@@ -38,7 +39,7 @@ namespace ChartEditor
         void IDeployableObject.OnDeploy()
         {
             // アウトラインを消す
-            noteObject.SetOutlineActive(false);
+            noteObject.OutlineColors.Remove(outlineColorOnDeploying);
 
             noteRenderer.material.color *= new Color(1, 1, 1, 2f);
             noteObject.SetCollidersActive(true);

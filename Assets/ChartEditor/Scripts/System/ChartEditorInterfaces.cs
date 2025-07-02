@@ -71,6 +71,26 @@ namespace ChartEditor
     }
 
     /// <summary>
+    /// 選択可能なノート(コライダー)
+    /// </summary>
+    public interface ISelectableNoteCollider : IInteractableCollider
+    {
+        ISelectableNoteObject SelectableObject { get; }
+    }
+
+    /// <summary>
+    /// 選択可能なノート
+    /// </summary>
+    public interface ISelectableNoteObject
+    {
+        NoteObject NoteObject { get; }
+
+        void OnSelect();
+
+        void OnDeselect();
+    }
+
+    /// <summary>
     /// 配置可能オブジェクト(コライダー)
     /// </summary>
     public interface IDeployableCollider: IInteractableCollider
@@ -103,6 +123,8 @@ namespace ChartEditor
     /// </summary>
     public interface IDeployableObject
     {
+        public NoteObject Note { get; }
+
         public Action OnDestroyListner { get; set; }
 
         void OnInstantiate(IDeployableNoteData noteData, Func<AddressInChart, Transform> getParentTransformFunc);
@@ -221,14 +243,6 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// 削除可能オブジェクト(コライダー)
-    /// </summary>
-    public interface IDestroyableCollider : IInteractableCollider
-    {
-        IDestroyableObject Note { get; }
-    }
-
-    /// <summary>
     /// 削除可能オブジェクト
     /// </summary>
     public interface IDestroyableObject
@@ -236,14 +250,6 @@ namespace ChartEditor
         NoteObject Note { get; }
 
         void OnDestroy();
-    }
-
-    /// <summary>
-    /// 削除可能オブジェクト(コライダー)
-    /// </summary>
-    public interface IDestroyableVertexCollider : IInteractableCollider
-    {
-        IDestroyableVertex Vertex { get; }
     }
 
     /// <summary>

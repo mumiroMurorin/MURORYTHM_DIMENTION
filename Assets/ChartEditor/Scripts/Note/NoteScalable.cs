@@ -13,6 +13,8 @@ namespace ChartEditor
     {
         [Tooltip("配置時の元となる GameObject")]
         [SerializeField] GameObject origin;
+        [Tooltip("選択時のアウトライン色")]
+        [SerializeField] private ColorSetting outlineColorOnScaling;
 
         NoteObject noteObject;
         CancellationTokenSource cts = new CancellationTokenSource();
@@ -41,6 +43,7 @@ namespace ChartEditor
 
         void IScalableObject.OnStartScale()
         {
+            noteObject.OutlineColors.Add(outlineColorOnScaling);
             noteObject.SetCollidersActive(false);
         }
 
@@ -51,6 +54,7 @@ namespace ChartEditor
 
         void IScalableObject.OnFinishScale()
         {
+            noteObject.OutlineColors.Remove(outlineColorOnScaling);
             noteObject.SetCollidersActive(true);
         }
 

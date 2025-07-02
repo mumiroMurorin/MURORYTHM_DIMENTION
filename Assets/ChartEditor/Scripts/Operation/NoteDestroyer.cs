@@ -8,9 +8,15 @@ namespace ChartEditor
     public class NoteDestroyer : MonoBehaviour
     {
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
+        [SerializeField] MultiNoteSelector noteSelector;
+        [SerializeField] NoteObjectsController noteObjectsController;
 
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorDataSetter chartEditorDataSetter;
+
+        EditMode[] ignoreEditModes = new EditMode[] {
+             
+        };
 
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorDataSetter chartEditorDataSetter)
@@ -21,34 +27,37 @@ namespace ChartEditor
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0)) { DestroyNote(); }
-            // 右クリック時、オートモードならタイプ変更モード解除
-            else if (Input.GetMouseButtonDown(1)) { BackAutoMode(); }
+            if(chartEditorDataGetter.EditNoteType.Value != EditNoteType.Ground &&
+                chartEditorDataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
+
+            // Deleteキーで消す
+            if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                // 除外エディットモード中は返す
+                if (chartEditorDataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
+
+                DestroyNotes();
+            }
         }
 
-        private void DestroyNote()
+        private void DestroyNotes()
         {
-            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Destroy) { return; }
+            foreach(var data in noteSelector.SelectingNotes) { DestroyNote(data); }
+        }
 
-            var collider = chartEditorDataGetter.GetInteractableCollider<IDestroyableCollider>();
-            if (collider == null) { return; }
-
-            IDestroyableObject destroyableObject = collider.Note;
-            if (destroyableObject == null) { return; }
-
-            chartEditorDataGetter.ChartData.Value.RemoveNote(destroyableObject.Note.NoteData);
+        public void DestroyNote(IDeployableNoteData noteData)
+        {
+            // オブジェクトの削除
+            var noteObject = noteObjectsController.DataToObj.GetObject(noteData);
+            if (noteObject == null || !noteObject.TryGetComponent(out IDestroyableObject destroyableObject)) { return; }
 
             destroyableObject.OnDestroy();
-            destroyableObject.Note.NoteData = null;
+
+            // データの削除
+            noteObjectsController.DataToObj.Remove(noteData);
+            chartEditorDataGetter.ChartData.Value.RemoveNote(noteData);
         }
 
-        /// <summary>
-        /// オートモードに戻す
-        /// </summary>
-        private void BackAutoMode()
-        {
-            chartEditorDataSetter.SetEditMode(EditMode.None);
-        }
     }
 
 }

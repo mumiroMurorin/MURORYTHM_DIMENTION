@@ -27,6 +27,8 @@ namespace ChartEditor
 
         private void Update()
         {
+            if (chartEditorDataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
+
             // Deleteキーで消す
             if (Input.GetKeyDown(KeyCode.Delete)) 
             {

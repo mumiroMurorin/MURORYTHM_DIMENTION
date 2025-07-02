@@ -25,10 +25,10 @@ namespace ChartEditor
         [SerializeField] Color startColor;
         [SerializeField] Color endColor;
 
-        public Action OnAddVertexListner;
-        public Action OnChangePositionListner;
-        public Action OnRemoveVertexListner;
-        public Action OnClearVertexListner;
+        public Action OnAddVertexListner { get; set; }
+        public Action OnChangePositionListner { get; set; }
+        public Action OnRemoveVertexListner { get; set; }
+        public Action OnClearVertexListner { get; set; }
 
         DataToVertexObjectList dataToObj = new DataToVertexObjectList();
         public DataToVertexObjectList DataToObj => dataToObj;

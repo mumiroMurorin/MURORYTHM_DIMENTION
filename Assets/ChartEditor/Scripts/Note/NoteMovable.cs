@@ -12,7 +12,7 @@ namespace ChartEditor
     public class NoteMovable : MonoBehaviour, IMovableObject
     {
         [Tooltip("移動時のアウトライン色")]
-        [SerializeField] private Color outlineColorOnMove;
+        [SerializeField] private ColorSetting outlineColorOnMove;
         [Tooltip("移動時浮く高さ")]
         [SerializeField] float addHeightOnMove = 1f;
 
@@ -57,8 +57,7 @@ namespace ChartEditor
 
         void IMovableObject.OnMoveStart()
         {
-            noteObject.SetOutlineColor(outlineColorOnMove, true);
-            noteObject.SetOutlineActive(true);
+            noteObject.OutlineColors.Add(outlineColorOnMove);
             noteObject.SetCollidersActive(false);
 
             // 追加するベクトルを保存
@@ -73,7 +72,7 @@ namespace ChartEditor
 
         void IMovableObject.OnMoveEnd()
         {
-            noteObject.SetOutlineActive(false);
+            noteObject.OutlineColors.Remove(outlineColorOnMove);
             noteObject.SetCollidersActive(true);
 
             // 追加したベクトル分元に戻す

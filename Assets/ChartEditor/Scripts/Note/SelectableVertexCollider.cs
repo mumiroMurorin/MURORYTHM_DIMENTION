@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChartEditor
 {
-    public class SelectableCollider : MonoBehaviour, ISelectableVertexCollider
+    public class SelectableVertexCollider : MonoBehaviour, ISelectableVertexCollider
     {
         [SerializeField] SerializeInterface<ISelectableVertexObject> selectableObject;
 

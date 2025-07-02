@@ -27,6 +27,8 @@ namespace ChartEditor
 
         void Update()
         {
+            if(chartEditorDataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
+
             // 頂点リストのコピー
             if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C)) { CopyVertices(); }
             // 頂点リストの貼り付け

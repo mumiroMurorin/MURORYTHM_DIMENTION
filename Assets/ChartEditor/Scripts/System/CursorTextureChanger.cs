@@ -22,14 +22,12 @@ namespace ChartEditor
             { EditMode.Move,typeof(IMovableCollider) },
             { EditMode.Scale,typeof(IScalableCollider) },
             { EditMode.ChangeType,typeof(IChangableCollider) },
-            { EditMode.Destroy,typeof(IDestroyableCollider) },
             { EditMode.Connect,typeof(IConnectableCollider) },
             { EditMode.Connecting,typeof(IConnectableCollider) },
             { EditMode.SpaceEdit,typeof(ISpaceEditableCollider) },
         };
 
         EditMode[] ignoreEditModes = new EditMode[] {
-            EditMode.Destroy,
             EditMode.ChangeType,
         };
 
