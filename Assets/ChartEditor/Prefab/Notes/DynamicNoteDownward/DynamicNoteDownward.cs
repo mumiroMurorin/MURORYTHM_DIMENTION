@@ -42,6 +42,7 @@ namespace ChartEditor
 
             foreach (float index in range)
             {
+                if(index < 0 || 15 < index) { continue; }
                 this.range.Add(index);
             }
 

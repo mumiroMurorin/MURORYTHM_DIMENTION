@@ -355,7 +355,7 @@ namespace ChartEditor
 
             // アドレスを正規化して新たな場所に追加
             NormalizeAddress(newAddress);
-            Debug.Log(newAddress);
+            //Debug.Log(newAddress);
             SubDivisionDataInBeat newSubDivision = BarDatas[newAddress.BarIndex].SubDivisionDatas[newAddress.SubDivisionIndex];
             newSubDivision.AddNote(noteData);
 

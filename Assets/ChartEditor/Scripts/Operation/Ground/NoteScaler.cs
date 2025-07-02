@@ -14,8 +14,8 @@ namespace ChartEditor
         IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter dataSetter;
 
-        List<IScalableObject> scalableObjects;
-        IScalableObject scaledNote;
+        Dictionary<IScalableObject, int> scalableAndDelta = new Dictionary<IScalableObject, int>();
+        IScalableObject baseNote;
         AddressInChart scaledAddress;
         bool isRightAnchored;
 
@@ -51,8 +51,9 @@ namespace ChartEditor
 
             Initialize();
             
-            scaledNote = scalableObject;
+            baseNote = scalableObject;
             isRightAnchored = !collider.IsRightEdge;
+            var baseNoteData = baseNote.Note.NoteData;
 
             // 複数選択されたオブジェクトから拡大縮小できるやつを取り出す
             foreach (var data in notesSelector.SelectingNotes)
@@ -62,17 +63,24 @@ namespace ChartEditor
 
                 // ノーツオブジェクト側の動作
                 scalable.OnStartScale();
-                
+
                 // リストに保存
-                scalableObjects.Add(scalable);
+                int delta = 0;
+                if(isRightAnchored) { delta = (int)(data.Address.SliderIndex - baseNoteData.Address.SliderIndex); }
+                else { delta = (int)(data.Address.SliderIndex + data.Range.Count - baseNoteData.Address.SliderIndex - baseNoteData.Range.Count); }
+
+                scalableAndDelta.TryAdd(scalable, delta);
             }
 
             dataSetter?.SetEditMode(EditMode.Scaling);
         }
 
+        /// <summary>
+        /// クリック中(拡大縮小中)
+        /// </summary>
         private void ScaleNote()
         {
-            if (scalableObjects == null || scalableObjects.Count == 0) { return; }
+            if (scalableAndDelta == null || scalableAndDelta.Count == 0) { return; }
 
             // カーソル下の親取得
             var deployable = dataGetter.GetInteractableCollider<IDeployableCollider>();
@@ -82,28 +90,33 @@ namespace ChartEditor
             AddressInChart address = deployable.Address;
             if (scaledAddress == null) { scaledAddress = new AddressInChart(address); }
 
-            foreach (var scalable in scalableObjects)
+            foreach (var pair in scalableAndDelta)
             {
                 // データの更新
-                scalable.Note.NoteData.ChangeRange(address.SliderIndex - , isRightAnchored);
+                pair.Key.Note.NoteData.ChangeRange(pair.Value + address.SliderIndex, isRightAnchored);
 
                 // オブジェクトの動作
-                scalable.OnScale();
+                pair.Key.OnScale();
             }
         }
 
+        /// <summary>
+        /// クリック終了時(拡大縮小終了)
+        /// </summary>
         private void FinishScaleNote()
         {
-            if (dataGetter.CurrentEditMode.Value != EditMode.Scale) { return; }
+            foreach (var pair in scalableAndDelta)
+            {
+                pair.Key?.OnFinishScale();
+            }
 
-            scaledNote?.OnFinishScale();
-            scaledNote = null;
+            Initialize();
         }
 
         private void Initialize()
         {
             scaledAddress = null;
-            scalableObjects.Clear();
+            scalableAndDelta.Clear();
         }
     }
 

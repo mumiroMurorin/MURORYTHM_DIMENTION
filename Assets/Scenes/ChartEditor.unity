@@ -4658,8 +4658,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorInteracter:
     obj: {fileID: 1038807069}
-  notesSelector: {fileID: 0}
-  notesController: {fileID: 0}
+  notesSelector: {fileID: 267646778}
+  notesController: {fileID: 1645756594}
 --- !u!1 &332016922
 GameObject:
   m_ObjectHideFlags: 0
