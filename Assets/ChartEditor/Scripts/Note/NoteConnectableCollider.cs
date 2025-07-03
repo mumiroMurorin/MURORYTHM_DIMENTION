@@ -8,7 +8,7 @@ namespace ChartEditor
     {
         [SerializeField] SerializeInterface<IConnectableObject> note;
 
-        public EditMode EditMode => EditMode.Connect;
+        public EditMode EditMode => EditMode.None;
 
         public IConnectableObject Note => note.Value;
 

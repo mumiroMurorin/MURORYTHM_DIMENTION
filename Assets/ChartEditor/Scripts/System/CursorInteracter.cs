@@ -25,6 +25,7 @@ namespace ChartEditor
             EditMode.NoteSelect,
             EditMode.EditingBarConfig,
             EditMode.EditingSubDivisionConfig,
+            EditMode.Connect,
             EditMode.Connecting,
             EditMode.Explanation,
             EditMode.ChangeType,

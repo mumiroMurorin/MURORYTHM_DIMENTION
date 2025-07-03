@@ -78,8 +78,8 @@ GameObject:
   - component: {fileID: 817799982000358718}
   - component: {fileID: 7947380020270672316}
   - component: {fileID: 7507685374718297931}
-  - component: {fileID: 1879133377605130450}
   - component: {fileID: 2378236554927455431}
+  - component: {fileID: 1330525078139495190}
   m_Layer: 9
   m_Name: ScalableColliderRight
   m_TagString: Untagged
@@ -138,20 +138,6 @@ MonoBehaviour:
   note:
     obj: {fileID: 5475620226950634511}
   isRightEdge: 1
---- !u!114 &1879133377605130450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3511318229296851223}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0229111819c1664ca2238d8b8459d38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  note:
-    obj: {fileID: 5475620226950634511}
 --- !u!114 &2378236554927455431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,6 +151,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   note:
+    obj: {fileID: 5475620226950634511}
+--- !u!114 &1330525078139495190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3511318229296851223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f23f35eaecf6bb4ba7dab81ca6fe3a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectableObject:
     obj: {fileID: 5475620226950634511}
 --- !u!1 &3719472305083736302
 GameObject:
@@ -325,6 +325,7 @@ GameObject:
   - component: {fileID: 5680730002281049432}
   - component: {fileID: 8571971541714523689}
   - component: {fileID: 2042939825380956139}
+  - component: {fileID: 4744609545541269163}
   m_Layer: 0
   m_Name: DynamicDownward
   m_TagString: Untagged
@@ -380,7 +381,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69510d7ddfd43574fa6add420035ad59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineColorOnDeploying: {r: 1, g: 0, b: 0.92156863, a: 0.78431374}
+  outlineColorOnDeploying:
+    color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
+    isBlinking: 0
   noteRenderer: {fileID: 5893660377328454484}
 --- !u!114 &5680730002281049432
 MonoBehaviour:
@@ -394,7 +397,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc92915a8710724bb7fba33fdc3614b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineColorOnMove: {r: 1, g: 0, b: 0, a: 0.78431374}
+  outlineColorOnMove:
+    color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
+    isBlinking: 0
   addHeightOnMove: 1
 --- !u!114 &8571971541714523689
 MonoBehaviour:
@@ -409,6 +414,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   origin: {fileID: 3719472305083736302}
+  outlineColorOnScaling:
+    color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
+    isBlinking: 0
 --- !u!114 &2042939825380956139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,6 +429,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e4ecdfbef92314d8aa5f412679e880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4744609545541269163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5475620226950634511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28ac7821903802c48ba7fea6e453d88e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineColorOnSelect:
+    color: {r: 1, g: 0.49411765, b: 0, a: 0.78431374}
+    isBlinking: 1
 --- !u!1 &7846833803484370955
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,8 +455,8 @@ GameObject:
   - component: {fileID: 5425902933548003900}
   - component: {fileID: 3312604737733778148}
   - component: {fileID: 2266046564571738400}
-  - component: {fileID: 5572198058306670097}
   - component: {fileID: 6495107031725986632}
+  - component: {fileID: 2166783250996269922}
   m_Layer: 9
   m_Name: ScalableColliderLeft
   m_TagString: Untagged
@@ -492,20 +515,6 @@ MonoBehaviour:
   note:
     obj: {fileID: 5475620226950634511}
   isRightEdge: 0
---- !u!114 &5572198058306670097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7846833803484370955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0229111819c1664ca2238d8b8459d38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  note:
-    obj: {fileID: 5475620226950634511}
 --- !u!114 &6495107031725986632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -520,6 +529,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   note:
     obj: {fileID: 5475620226950634511}
+--- !u!114 &2166783250996269922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7846833803484370955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f23f35eaecf6bb4ba7dab81ca6fe3a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectableObject:
+    obj: {fileID: 5475620226950634511}
 --- !u!1 &7983332021642989188
 GameObject:
   m_ObjectHideFlags: 0
@@ -532,7 +555,7 @@ GameObject:
   - component: {fileID: 8764774069622436691}
   - component: {fileID: 2964328565487233477}
   - component: {fileID: 2228441479770991026}
-  - component: {fileID: 1275047894595005607}
+  - component: {fileID: 7485321192462541745}
   m_Layer: 9
   m_Name: MovableCollider
   m_TagString: Untagged
@@ -611,7 +634,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   note:
     obj: {fileID: 5475620226950634511}
---- !u!114 &1275047894595005607
+--- !u!114 &7485321192462541745
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -620,10 +643,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7983332021642989188}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0229111819c1664ca2238d8b8459d38, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f23f35eaecf6bb4ba7dab81ca6fe3a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  note:
+  selectableObject:
     obj: {fileID: 5475620226950634511}
 --- !u!1001 &5200321963045387869
 PrefabInstance:

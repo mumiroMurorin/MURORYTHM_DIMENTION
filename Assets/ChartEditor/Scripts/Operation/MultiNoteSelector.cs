@@ -15,7 +15,11 @@ namespace ChartEditor
 
         IChartEditorDataGetter chartEditorDataGetter;
         EditMode[] ignoreEditModes = new EditMode[] {
-
+            EditMode.Connecting,
+            EditMode.EditingBarConfig,
+            EditMode.EditingSubDivisionConfig,
+            EditMode.Moving,
+            EditMode.Scaling,
         };
         Vector3 cursorPos;
 
