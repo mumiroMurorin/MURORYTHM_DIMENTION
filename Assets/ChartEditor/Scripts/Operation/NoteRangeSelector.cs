@@ -9,8 +9,9 @@ namespace ChartEditor
     public class NoteRangeSelector : MonoBehaviour
     {
         [SerializeField] MultiNoteSelector multiNoteSelector;
-        [SerializeField] float minZ;
-        [SerializeField] float maxZ;
+        [SerializeField] NoteObjectsController notesController;
+        [SerializeField] float minY;
+        [SerializeField] float maxY;
         [SerializeField] Camera mainCamera;
 
         List<ISelectableNoteObject> selectingObjects = new List<ISelectableNoteObject>();
@@ -18,9 +19,6 @@ namespace ChartEditor
         Vector2 startPos;
         Vector2 endPos;
         bool isSelecting = false;
-
-        public List<GameObject> selectableObjects;
-        public List<GameObject> selectedObjects = new List<GameObject>();
 
         IChartEditorDataGetter chartEditorDataGetter;
         EditMode[] ignoreEditModes = new EditMode[] {
@@ -47,16 +45,13 @@ namespace ChartEditor
 
             // カーソル先にオブジェクトがある場合は返す
             var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableNoteCollider>();
-            if (collider != null) { return; }
+            if (!isSelecting && collider != null) { return; }
 
-            // 選択開始
             if (Input.GetMouseButtonDown(0))
             {
                 startPos = Input.mousePosition;
                 isSelecting = true;
             }
-
-            // 選択終了
             if (Input.GetMouseButtonUp(0))
             {
                 endPos = Input.mousePosition;
@@ -67,43 +62,33 @@ namespace ChartEditor
 
         void OnGUI()
         {
-            if (isSelecting)
-            {
-                var rect = GetScreenRect(startPos, Input.mousePosition);
-                DrawScreenRect(rect, new Color(0.8f, 0.8f, 1f, 0.25f));
-                DrawScreenRectBorder(rect, 2, Color.blue);
-            }
+            if (!isSelecting) return;
+
+            Rect guiRect = GetScreenRectForGUI(startPos, Input.mousePosition);
+            DrawScreenRect(guiRect, new Color(0, 0.5f, 1f, 0.25f));
+            DrawScreenRectBorder(guiRect, 2, Color.blue);
         }
 
         void SelectObjects()
         {
-            selectedObjects.Clear();
+            Rect selectionRect = GetScreenRectForContains(startPos, endPos);
 
-            Rect selectionRect = GetScreenRect(startPos, endPos);
-
-            foreach (GameObject obj in selectableObjects)
+            foreach (var dtn in notesController.DataToObj.List)
             {
+                var obj = dtn.Object;
                 Vector3 screenPos = mainCamera.WorldToScreenPoint(obj.transform.position);
+
+                Debug.Log(screenPos);
 
                 // カメラの前方にあるか
                 if (screenPos.z < 0f) { continue; }
+                if (obj.transform.position.y < minY || maxY < obj.transform.position.y) { continue; }
 
-                if (selectionRect.Contains(screenPos, true))
-                {
-                    selectedObjects.Add(obj);
-                    // ここで色を変えるなどのフィードバックを入れても良い
-                }
+                if (!selectionRect.Contains((Vector2)screenPos)) { continue; }
+                if (!dtn.Object.TryGetComponent(out ISelectableNoteObject selectable)) { continue; }
+
+                multiNoteSelector.SelectMulti(selectable);
             }
-        }
-
-        // Rect作成ユーティリティ
-        public static Rect GetScreenRect(Vector2 screenPosition1, Vector2 screenPosition2)
-        {
-            screenPosition1.y = Screen.height - screenPosition1.y;
-            screenPosition2.y = Screen.height - screenPosition2.y;
-            var topLeft = Vector2.Min(screenPosition1, screenPosition2);
-            var bottomRight = Vector2.Max(screenPosition1, screenPosition2);
-            return Rect.MinMaxRect(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
         }
 
         // GUI描画用
@@ -112,6 +97,29 @@ namespace ChartEditor
             GUI.color = color;
             GUI.DrawTexture(rect, Texture2D.whiteTexture);
             GUI.color = Color.white;
+        }
+
+        /// <summary>
+        /// 識別用：ScreenPoint 判定に使う Rect （左下原点）
+        /// </summary>
+        public static Rect GetScreenRectForContains(Vector2 screenPosition1, Vector2 screenPosition2)
+        {
+            Vector2 min = Vector2.Min(screenPosition1, screenPosition2);
+            Vector2 max = Vector2.Max(screenPosition1, screenPosition2);
+            return Rect.MinMaxRect(min.x, min.y, max.x, max.y);
+        }
+
+        /// <summary>
+        /// 描画用：OnGUI で使う Rect （左上原点）
+        /// </summary>
+        public static Rect GetScreenRectForGUI(Vector2 screenPosition1, Vector2 screenPosition2)
+        {
+            // Y を反転
+            screenPosition1.y = Screen.height - screenPosition1.y;
+            screenPosition2.y = Screen.height - screenPosition2.y;
+            Vector2 min = Vector2.Min(screenPosition1, screenPosition2);
+            Vector2 max = Vector2.Max(screenPosition1, screenPosition2);
+            return Rect.MinMaxRect(min.x, min.y, max.x, max.y);
         }
 
         public static void DrawScreenRectBorder(Rect rect, float thickness, Color color)

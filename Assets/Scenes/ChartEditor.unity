@@ -3989,12 +3989,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 416f51b1514d39c43b29819d8e4dc1fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  multiNoteSelector: {fileID: 0}
-  minZ: 0
-  maxZ: 0
+  multiNoteSelector: {fileID: 267646778}
+  notesController: {fileID: 1645756594}
+  minY: 16.9
+  maxY: 35
   mainCamera: {fileID: 1476752237}
-  selectableObjects: []
-  selectedObjects: []
 --- !u!1 &269730899
 GameObject:
   m_ObjectHideFlags: 0

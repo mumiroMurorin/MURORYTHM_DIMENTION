@@ -77,7 +77,7 @@ namespace ChartEditor
         /// <summary>
         /// 選択リストに追加
         /// </summary>
-        private void SelectMulti(ISelectableNoteObject obj)
+        public void SelectMulti(ISelectableNoteObject obj)
         {
             // 既に含まれている場合はそのオブジェクトをリストから削除
             if (selectingObjects.Contains(obj)) 
