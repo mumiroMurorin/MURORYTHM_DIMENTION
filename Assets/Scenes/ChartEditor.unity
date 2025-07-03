@@ -3940,6 +3940,7 @@ GameObject:
   m_Component:
   - component: {fileID: 267646777}
   - component: {fileID: 267646778}
+  - component: {fileID: 267646779}
   m_Layer: 0
   m_Name: MultiNoteSelector
   m_TagString: Untagged
@@ -3976,6 +3977,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorInteracter:
     obj: {fileID: 1038807069}
+--- !u!114 &267646779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 267646776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 416f51b1514d39c43b29819d8e4dc1fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  multiNoteSelector: {fileID: 0}
+  minZ: 0
+  maxZ: 0
+  mainCamera: {fileID: 1476752237}
+  selectableObjects: []
+  selectedObjects: []
 --- !u!1 &269730899
 GameObject:
   m_ObjectHideFlags: 0
@@ -12231,8 +12250,8 @@ Transform:
   m_Children:
   - {fileID: 1493495056}
   - {fileID: 1517439683}
-  - {fileID: 300942495}
   - {fileID: 619309498}
+  - {fileID: 300942495}
   - {fileID: 1038807070}
   - {fileID: 391895708}
   - {fileID: 417232260}
@@ -21429,6 +21448,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 150958163}
   - {fileID: 844488597}
   - {fileID: 433511807}
   - {fileID: 1292948780}
@@ -21437,7 +21457,6 @@ Transform:
   - {fileID: 1713911977}
   - {fileID: 747862864}
   - {fileID: 1476009161}
-  - {fileID: 150958163}
   m_Father: {fileID: 300942495}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1671950407
@@ -24002,11 +24021,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 267646777}
   - {fileID: 1797220170}
   - {fileID: 754356523}
   - {fileID: 333189527}
   - {fileID: 1859732682}
-  - {fileID: 267646777}
   m_Father: {fileID: 1130407549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1870833399
