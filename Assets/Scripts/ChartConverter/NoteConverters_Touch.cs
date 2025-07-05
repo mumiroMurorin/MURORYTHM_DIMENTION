@@ -27,7 +27,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_Touch data = new NoteDataOrigin_Touch()
             {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+                Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray()
             };
 
             dataOrigin.TouchNoteData.Add(data);
@@ -61,10 +61,8 @@ namespace ChartConvert
                 IDeployableNoteData noteData = new ChartEditor.NoteData_Touch();
 
                 // データのセット
-                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
-
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 noteData.SetAddress(address);
-                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
 
                 dataInChartEditor.AddNote(noteData);
             }

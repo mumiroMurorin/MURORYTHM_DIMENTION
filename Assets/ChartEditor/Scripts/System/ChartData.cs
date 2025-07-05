@@ -308,14 +308,14 @@ namespace ChartEditor
         /// <summary>
         /// ƒm[ƒc‚ğ’Ç‰Á‚·‚é
         /// </summary>
-        public void AddNote(IDeployableNoteData noteData, AddressInChart address)
+        public void AddNote(IDeployableNoteData noteData)
         {
             // V‚½‚ÈêŠ‚É’Ç‰Á
-            SubDivisionDataInBeat newSubDivision = BarDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
+            var address = noteData.Address;
+            var newSubDivision = BarDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
             newSubDivision.AddNote(noteData);
 
-            noteData.SetAddress(address);
-            Debug.Log($"y”z’uz:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
+            Debug.Log($"y”z’uz:\n #{address.BarIndex} - {address.SubDivisionIndex} - ({address.Range[0]}~{address.Range[^1]})");
         }
 
         /// <summary>
@@ -323,8 +323,8 @@ namespace ChartEditor
         /// </summary>
         public void RemoveNote(IDeployableNoteData noteData)
         {
-            AddressInChart address = noteData.Address;
-            SubDivisionDataInBeat subDivision = barDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
+            var address = new AddressInChart(noteData.Address);
+            var subDivision = barDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
 
             if (!subDivision.RemoveNote(noteData))
             {
@@ -344,10 +344,10 @@ namespace ChartEditor
         /// <returns></returns>
         public bool ChangeNoteAddress(IDeployableNoteData noteData, AddressInChart newAddress)
         {
-            AddressInChart oldAddress = noteData.Address;
+            var oldAddress = new AddressInChart(noteData.Address);
 
             // ŒÃ‚¢êŠ‚©‚çíœ
-            SubDivisionDataInBeat oldSubDivision = BarDatas[oldAddress.BarIndex].SubDivisionDatas[oldAddress.SubDivisionIndex];
+            var oldSubDivision = BarDatas[oldAddress.BarIndex].SubDivisionDatas[oldAddress.SubDivisionIndex];
             if (!oldSubDivision.RemoveNote(noteData))
             {
                 Debug.LogError($"yˆÚ“®zíœ‚É¸”s‚µ‚Ü‚µ‚½\n ŠY“–‚·‚éƒm[ƒc‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
@@ -356,11 +356,12 @@ namespace ChartEditor
 
             // ƒAƒhƒŒƒX‚ğ³‹K‰»‚µ‚ÄV‚½‚ÈêŠ‚É’Ç‰Á
             NormalizeAddress(newAddress);
-            //Debug.Log(newAddress);
-            SubDivisionDataInBeat newSubDivision = BarDatas[newAddress.BarIndex].SubDivisionDatas[newAddress.SubDivisionIndex];
+
+            var newSubDivision = BarDatas[newAddress.BarIndex].SubDivisionDatas[newAddress.SubDivisionIndex];
             newSubDivision.AddNote(noteData);
 
-            noteData.SetAddress(newAddress);
+            noteData.SetAddress(new AddressWithinRange(newAddress, noteData.Address.Range.Count));
+
             return true;
         }
 
@@ -370,21 +371,6 @@ namespace ChartEditor
         /// <param name="address"></param>
         private void NormalizeAddress(AddressInChart address)
         {
-            // •ªü”Ô†‚ªãŒÀ‚ğ“Ë”j‚µ‚Ä‚¢‚é‚Æ‚«
-            while (address.SubDivisionIndex >= barDatas[address.BarIndex].SubDivisionDatas.Count)
-            {
-                // ”ÍˆÍŠO(MAX)‚Éo‚Ä‚µ‚Ü‚¤‚Æ‚«
-                if (BarDatas.Count <= address.BarIndex + 1)
-                {
-                    address.SetSubDivisionIndex(barDatas[address.BarIndex].SubDivisionDatas.Count - 1);
-                    address.SetBarIndex(barDatas.Count - 1);
-                    break;
-                }
-
-                address.SetSubDivisionIndex(address.SubDivisionIndex - barDatas[address.BarIndex].SubDivisionDatas.Count);
-                address.SetBarIndex(address.BarIndex + 1);
-            }
-
             // •ªü”Ô†‚ª‰ºŒÀ‚ğ“Ë”j‚µ‚Ä‚¢‚é‚Æ‚«
             while (address.SubDivisionIndex < 0)
             {
@@ -398,6 +384,21 @@ namespace ChartEditor
 
                 address.SetBarIndex(address.BarIndex - 1);
                 address.SetSubDivisionIndex(address.SubDivisionIndex + barDatas[address.BarIndex].SubDivisionDatas.Count);
+            }
+
+            // •ªü”Ô†‚ªãŒÀ‚ğ“Ë”j‚µ‚Ä‚¢‚é‚Æ‚«
+            while (address.SubDivisionIndex >= barDatas[address.BarIndex].SubDivisionDatas.Count)
+            {
+                // ”ÍˆÍŠO(MAX)‚Éo‚Ä‚µ‚Ü‚¤‚Æ‚«
+                if (BarDatas.Count <= address.BarIndex + 1)
+                {
+                    address.SetSubDivisionIndex(barDatas[address.BarIndex].SubDivisionDatas.Count - 1);
+                    address.SetBarIndex(barDatas.Count - 1);
+                    break;
+                }
+
+                address.SetSubDivisionIndex(address.SubDivisionIndex - barDatas[address.BarIndex].SubDivisionDatas.Count);
+                address.SetBarIndex(address.BarIndex + 1);
             }
 
             address.SetSliderIndex(Mathf.Clamp(address.SliderIndex, 0, 15));

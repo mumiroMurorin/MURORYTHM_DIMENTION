@@ -18,8 +18,7 @@ namespace ChartEditor
 
         public NoteData_Hold(NoteData_Hold data)
         {
-            this.Address = new AddressInChart(data.Address);
-            this.SetRange(data.Range.ToList());
+            this.Address = new AddressWithinRange(data.Address);
         }
 
         ReactiveProperty<DeploymentNoteType> noteType = new ReactiveProperty<DeploymentNoteType>(DeploymentNoteType.Hold);
@@ -42,17 +41,7 @@ namespace ChartEditor
             NoteType = noteType;
         }
 
-        public AddressInChart Address { get; private set; }
-
-        /// <summary>
-        /// ”z’u”ÍˆÍ (Šî–{0`15)
-        /// </summary>
-        ReactiveCollection<float> range = new ReactiveCollection<float>() { 0 };
-
-        /// <summary>
-        /// ƒm[ƒc‚ÌˆÚ“®AŠg‘åk¬‚ÌŠÄ‹
-        /// </summary>
-        public IReadOnlyReactiveCollection<float> Range { get { return range; } }
+        public AddressWithinRange Address { get; private set; }
 
         public void ChangeNoteType()
         {
@@ -109,72 +98,20 @@ namespace ChartEditor
             }
         }
 
-        public void SetRange(List<float> range)
+        public void SetAddress(AddressWithinRange address)
         {
-            this.range.Clear();
-
-            foreach (float index in range)
-            {
-                if(index < 0 || 15 < index) { continue; }
-                this.range.Add(index);
-            }
-
-            Address.SetSliderIndex(this.range.First());
-        }
-
-        public void ChangeRange(float index, bool isRightAnchored)
-        {
-            List<float> shifted = new List<float>();
-            float min = range.First();
-            float max = range.Last();
-
-            // ‰EŒÅ’è‚Å¶‘¤‚Æindex‚ªˆê‚Ì‚Æ‚«•Ô‚·
-            if (isRightAnchored && (int)min == index) { return; }
-            // ¶ŒÅ’è‚Å‰E‘¤‚Æindex‚ªˆê‚Ì‚Æ‚«•Ô‚·
-            if (!isRightAnchored && (int)max == index) { return; }
-
-            // ‰EŒÅ’è‚Å¶‘¤‚ÉL‚Î‚·
-            if (isRightAnchored && index <= max)
-            {
-                for (float i = index; i <= max; i++) { shifted.Add(i); }
-            }
-            // ¶ŒÅ’è‚Å‰E‘¤‚ÉL‚Î‚·
-            else if (!isRightAnchored && index >= min)
-            {
-                for (float i = min; i <= index; i++) { shifted.Add(i); }
-            }
-            else
-            {
-                return;
-            }
-
-            SetRange(shifted);
-            Debug.Log($"yŠg‘åz\n {range.First()} ` {range.Last()}");
-        }
-
-        public void SetAddress(AddressInChart address)
-        {
-            // “¯‚¶ƒAƒhƒŒƒX‚È‚ç•Ô‚·
-            if (Address != null && Address.IsSameAddress(address)) { return; }
-
             // •¶ß‚ªXV‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Îƒ`ƒFƒCƒ“‚ÌXV‚Í‚µ‚È‚¢
             bool isUpdateSubLocate = true;
             if(Address == null) { isUpdateSubLocate = false; }
             else if(Address.BarIndex == address.BarIndex && Address.SubDivisionIndex == address.SubDivisionIndex) { isUpdateSubLocate = false; }
 
-            if (Address == null) { Address = new AddressInChart(address); }
+            if (Address == null) { Address = new AddressWithinRange(); }
             else
             {
-                Debug.Log($"yˆÚ“®z:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
+                //Debug.Log($"yˆÚ“®z:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
                 Address.SetSameAddress(address);
             }
 
-            // ˆÚ“®‚É”º‚¤”ÍˆÍ‚ÌƒZƒbƒg
-            int startIndex = (int)address.SliderIndex;
-            List<float> currentRange = range.ToList();
-            List<float> shifted = currentRange.Select(i => i - currentRange[0] + startIndex).ToList();
-
-            SetRange(shifted);
             if (isUpdateSubLocate) { UpdateChainNote(); }
         }
 

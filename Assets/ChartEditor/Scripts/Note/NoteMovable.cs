@@ -48,7 +48,7 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
 
-            noteObject.NoteData.Address.SliderIndexRP
+            noteObject.NoteData.Address.RangeRP.ObserveAdd()
                 .Subscribe(_ => {
                     OnChangeAddress(noteObject.NoteData.Address);
                 })
@@ -84,7 +84,7 @@ namespace ChartEditor
         /// アドレスが更新された時の動作
         /// </summary>
         /// <param name="address"></param>
-        private void OnChangeAddress(AddressInChart address)
+        private void OnChangeAddress(AddressWithinRange address)
         {
             Transform parent = noteObject.GetParentTransformFunc(address);
 

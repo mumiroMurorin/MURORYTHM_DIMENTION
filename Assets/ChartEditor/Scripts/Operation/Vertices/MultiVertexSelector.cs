@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using UnityEngine;
 using VContainer;
 using UniRx;
@@ -31,16 +32,6 @@ namespace ChartEditor
         {
             if (chartEditorDataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
 
-            //// カーソル位置が動いたかの判定
-            //var currentPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
-            //var delta = currentPos - cursorPos;
-            //cursorPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
-
-            //// 左クリック+カーソル動作で範囲選択
-            //if (Input.GetMouseButton(0) && delta.magnitude > 0)
-            //{
-
-            //}
             // Ctrl+左クリックで複数選択
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0))
             {
@@ -52,9 +43,11 @@ namespace ChartEditor
             // Ctrlが押されず左クリックされた場合
             else if (Input.GetMouseButtonDown(0))
             {
-                var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableVertexCollider>();
-                
+                // カーソルがUI上にあるときは返す
+                if (EventSystem.current.IsPointerOverGameObject()) { return; }
+
                 // カーソル先が頂点オブジェクトでないなら選択解除する
+                var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableVertexCollider>();
                 if (collider == null) 
                 {
                     DeselectAll();

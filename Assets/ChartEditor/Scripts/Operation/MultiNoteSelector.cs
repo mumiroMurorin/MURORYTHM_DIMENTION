@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using UniRx;
+using UnityEngine.EventSystems;
 
 namespace ChartEditor
 {
@@ -44,9 +45,11 @@ namespace ChartEditor
             // Ctrlが押されず左クリックされた場合
             else if (Input.GetMouseButtonDown(0))
             {
-                var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableNoteCollider>();
-                
+                // カーソルがUI上にあるときは返す
+                if (EventSystem.current.IsPointerOverGameObject()) { return; }
+
                 // カーソル先が頂点オブジェクトでないなら選択解除する
+                var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableNoteCollider>();
                 if (collider == null) 
                 {
                     DeselectAll();

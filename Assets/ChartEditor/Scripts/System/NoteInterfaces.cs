@@ -9,18 +9,9 @@ namespace ChartEditor
     {
         DeploymentNoteType NoteType { get; }
 
-        AddressInChart Address { get; }
+        AddressWithinRange Address { get; }
 
-        /// <summary>
-        /// ƒm[ƒc‚ÌˆÚ“®AŠg‘åk¬‚ÌŠÄ‹
-        /// </summary>
-        IReadOnlyReactiveCollection<float> Range { get; }
-
-        void SetRange(List<float> range);
-
-        void ChangeRange(float index, bool isRightAnchored);
-
-        void SetAddress(AddressInChart address);
+        void SetAddress(AddressWithinRange address);
 
         IDeployableNoteData Copy();
     }

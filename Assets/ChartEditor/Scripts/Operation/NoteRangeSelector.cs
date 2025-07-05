@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using UnityEngine;
 using VContainer;
 using UniRx;
@@ -14,16 +15,12 @@ namespace ChartEditor
         [SerializeField] float maxY;
         [SerializeField] Camera mainCamera;
 
-        List<ISelectableNoteObject> selectingObjects = new List<ISelectableNoteObject>();
-
         Vector2 startPos;
         Vector2 endPos;
         bool isSelecting = false;
 
         IChartEditorDataGetter chartEditorDataGetter;
         EditMode[] ignoreEditModes = new EditMode[] {
-            EditMode.Deploy,
-            EditMode.SpaceDeploy,
             EditMode.Connecting,
             EditMode.EditBarConfig,
             EditMode.EditingBarConfig,
@@ -47,11 +44,17 @@ namespace ChartEditor
             var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableNoteCollider>();
             if (!isSelecting && collider != null) { return; }
 
+            // 範囲選択開始
             if (Input.GetMouseButtonDown(0))
             {
+                // カーソルがUI上にあるときは返す
+                if (EventSystem.current.IsPointerOverGameObject()) { return; }
+
                 startPos = Input.mousePosition;
                 isSelecting = true;
             }
+            
+            // 範囲選択終了
             if (Input.GetMouseButtonUp(0))
             {
                 endPos = Input.mousePosition;
@@ -77,8 +80,6 @@ namespace ChartEditor
             {
                 var obj = dtn.Object;
                 Vector3 screenPos = mainCamera.WorldToScreenPoint(obj.transform.position);
-
-                Debug.Log(screenPos);
 
                 // カメラの前方にあるか
                 if (screenPos.z < 0f) { continue; }

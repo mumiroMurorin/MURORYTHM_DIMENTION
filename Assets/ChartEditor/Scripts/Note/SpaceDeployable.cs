@@ -20,7 +20,7 @@ namespace ChartEditor
             noteObject = GetComponent<NoteObject>();
         }
 
-        void IFreedomDeployableObject.OnInstantiate(IDeployableNoteData noteData, Func<AddressInChart, Transform> getParentTransformFunc)
+        void IFreedomDeployableObject.OnInstantiate(IDeployableNoteData noteData, Func<AddressWithinRange, Transform> getParentTransformFunc)
         {
             noteRenderer.material.color *= new Color(1, 1, 1, 0.5f);
             this.gameObject.SetActive(false);
@@ -43,7 +43,7 @@ namespace ChartEditor
             noteObject.SetCollidersActive(true);
         }
 
-        void IFreedomDeployableObject.OnMove(Transform parent, Vector3 worldPos)
+        void IFreedomDeployableObject.OnMove(Transform parent)
         {
             // 親オブジェクトに合わせた位置調整
             // まだ設置していないので引数のTransformを参照

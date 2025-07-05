@@ -127,7 +127,7 @@ namespace ChartEditor
 
         public Action OnDestroyListner { get; set; }
 
-        void OnInstantiate(IDeployableNoteData noteData, Func<AddressInChart, Transform> getParentTransformFunc);
+        void OnInstantiate(IDeployableNoteData noteData, Func<AddressWithinRange, Transform> getParentTransformFunc);
 
         void OnMove(Transform parent);
 
@@ -143,9 +143,9 @@ namespace ChartEditor
     {
         public Action OnDestroyListner { get; set; }
 
-        void OnInstantiate(IDeployableNoteData noteData, Func<AddressInChart, Transform> getParentTransformFunc);
+        void OnInstantiate(IDeployableNoteData noteData, Func<AddressWithinRange, Transform> getParentTransformFunc);
 
-        void OnMove(Transform parent, Vector3 worldPos);
+        void OnMove(Transform parent);
 
         void OnDeploy();
 

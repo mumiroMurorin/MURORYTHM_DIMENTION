@@ -97,7 +97,8 @@ namespace ChartEditor
 
             // データ上の追加
             AddressInChart address = collider.Address;
-            chartEditorDataGetter.ChartData.Value.AddNote(deployingNoteData, address);
+            deployingNoteData.SetAddress(new AddressWithinRange(address, 1));
+            chartEditorDataGetter.ChartData.Value.AddNote(deployingNoteData);
             
             // オブジェクトの設置
             deployingNote.OnDeploy();
@@ -164,7 +165,7 @@ namespace ChartEditor
             deployable.OnDestroyListner += () => OnDestroyDeployingNote();
 
             // 配置
-            Transform parent = chartEditorDataGetter.ChartData.Value.GetPlacementLocation(noteData.Address);
+            Transform parent = chartEditorDataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(noteData.Address));
             deployable.OnMove(parent);
             deployable.OnDeploy();
 
@@ -186,9 +187,9 @@ namespace ChartEditor
             deployingNoteData = null;
         }
 
-        private Transform GetNoteParentTransform(AddressInChart address)
+        private Transform GetNoteParentTransform(AddressWithinRange address)
         {
-            return chartEditorDataGetter.ChartData.Value.GetPlacementLocation(address);
+            return chartEditorDataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(address));
         }
 
         private IDeployableNoteData GetNoteData(DeploymentNoteType noteType)

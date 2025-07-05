@@ -28,7 +28,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_DynamicUpward data = new NoteDataOrigin_DynamicUpward()
             {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+                Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray()
             };
 
             dataOrigin.DynamicUpwardData.Add(data);
@@ -62,11 +62,8 @@ namespace ChartConvert
                 IDeployableNoteData noteData = new ChartEditor.NoteData_DynamicUpward();
 
                 // データのセット
-                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
-
-                Debug.Log(address.BarIndex);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 noteData.SetAddress(address);
-                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
 
                 dataInChartEditor.AddNote(noteData);
             }
@@ -95,7 +92,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_DynamicDownward data = new NoteDataOrigin_DynamicDownward()
             {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+                Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray()
             };
 
             dataOrigin.DynamicDownwardData.Add(data);
@@ -129,11 +126,8 @@ namespace ChartConvert
                 IDeployableNoteData noteData = new ChartEditor.NoteData_DynamicDownward();
 
                 // データのセット
-                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
-
-                Debug.Log(address.BarIndex);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 noteData.SetAddress(address);
-                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
 
                 dataInChartEditor.AddNote(noteData);
             }
@@ -162,7 +156,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_DynamicRightward data = new NoteDataOrigin_DynamicRightward()
             {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+                Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray()
             };
 
             dataOrigin.DynamicRightwardData.Add(data);
@@ -197,11 +191,8 @@ namespace ChartConvert
                 IDeployableNoteData noteData = new ChartEditor.NoteData_DynamicRightward();
 
                 // データのセット
-                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
-
-                Debug.Log(address.BarIndex);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 noteData.SetAddress(address);
-                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
 
                 dataInChartEditor.AddNote(noteData);
             }
@@ -230,7 +221,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_DynamicLeftward data = new NoteDataOrigin_DynamicLeftward()
             {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray()
+                Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray()
             };
 
             dataOrigin.DynamicLeftwardData.Add(data);
@@ -264,11 +255,8 @@ namespace ChartConvert
                 IDeployableNoteData noteData = new ChartEditor.NoteData_DynamicLeftward();
 
                 // データのセット
-                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
-
-                Debug.Log(address.BarIndex);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 noteData.SetAddress(address);
-                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
 
                 dataInChartEditor.AddNote(noteData);
             }

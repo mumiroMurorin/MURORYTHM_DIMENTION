@@ -33,10 +33,10 @@ namespace ChartEditor
             await UniTask.WaitUntil(() => noteObject.NoteData != null, cancellationToken: token);
 
             // ObserveCountChanged()は初期化してくれないので、最初に大きさを変える
-            OnChangeScale(noteObject.NoteData.Range.Count);
+            OnChangeScale(noteObject.NoteData.Address.Range.Count);
 
             // 大きさの変更通知に対してスケール更新
-            noteObject.NoteData.Range.ObserveCountChanged()
+            noteObject.NoteData.Address.RangeRP.ObserveCountChanged()
                 .Subscribe(OnChangeScale)
                 .AddTo(this.gameObject);
         }

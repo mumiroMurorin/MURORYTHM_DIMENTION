@@ -12,7 +12,7 @@ namespace ChartConvert
     /// </summary>
     public class SpaceHoldStartConverter : ISpaceHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
-        const int SLIDER_INDEX_NUM = 100;
+        readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
         int currentHoldNumber = 0;
 
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
@@ -75,7 +75,7 @@ namespace ChartConvert
                 if (noteData is not IVerticesControlableNoteData) { return false; }
 
                 // データのセット
-                var address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, SLIDER_INDEX_NUM);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
                 var chainData = (IChainNoteData)noteData;
                 var verticesData = (IVerticesControlableNoteData)noteData;
 
@@ -106,7 +106,7 @@ namespace ChartConvert
     /// </summary>
     public class SpaceHoldRelayConverter : ISpaceHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
-        const int SLIDER_INDEX_NUM = 100;
+        readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
 
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
@@ -178,7 +178,7 @@ namespace ChartConvert
                 if (noteData is not IVerticesControlableNoteData) { return false; }
 
                 // データのセット
-                var address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, SLIDER_INDEX_NUM);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
                 var chainData = (IChainNoteData)noteData;
                 var verticesData = (IVerticesControlableNoteData)noteData;
 
@@ -210,7 +210,7 @@ namespace ChartConvert
     /// </summary>
     public class SpaceHoldMeshRelayConverter : ISpaceHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
-        const int SLIDER_INDEX_NUM = 100;
+        readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
 
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
@@ -271,7 +271,7 @@ namespace ChartConvert
                 if (noteData is not IVerticesControlableNoteData) { return false; }
 
                 // データのセット
-                var address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, SLIDER_INDEX_NUM);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
                 var chainData = (IChainNoteData)noteData;
                 var verticesData = (IVerticesControlableNoteData)noteData;
 
@@ -303,7 +303,7 @@ namespace ChartConvert
     /// </summary>
     public class SpaceHoldHiddenJudgedRelay : ISpaceHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
-        const int SLIDER_INDEX_NUM = 100;
+        readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
 
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
@@ -376,7 +376,7 @@ namespace ChartConvert
                 if (noteData is not IVerticesControlableNoteData) { return false; }
 
                 // データのセット
-                var address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, SLIDER_INDEX_NUM);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
                 var chainData = (IChainNoteData)noteData;
                 var verticesData = (IVerticesControlableNoteData)noteData;
 
@@ -408,7 +408,7 @@ namespace ChartConvert
     /// </summary>
     public class SpaceHoldEndConverter : ISpaceHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
-        const int SLIDER_INDEX_NUM = 100;
+        readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
 
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
         {
@@ -482,7 +482,7 @@ namespace ChartConvert
                 if (noteData is not IVerticesControlableNoteData) { return false; }
 
                 // データのセット
-                var address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, SLIDER_INDEX_NUM);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
                 var chainData = (IChainNoteData)noteData;
                 var verticesData = (IVerticesControlableNoteData)noteData;
 

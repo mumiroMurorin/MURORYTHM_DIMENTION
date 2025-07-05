@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using VContainer;
 
 namespace ChartEditor
@@ -65,9 +66,10 @@ namespace ChartEditor
                 scalable.OnStartScale();
 
                 // リストに保存
-                int delta = 0;
-                if(isRightAnchored) { delta = (int)(data.Address.SliderIndex - baseNoteData.Address.SliderIndex); }
-                else { delta = (int)(data.Address.SliderIndex + data.Range.Count - baseNoteData.Address.SliderIndex - baseNoteData.Range.Count); }
+                int delta;
+                var address = data.Address;
+                if (isRightAnchored) { delta = (int)(address.Range[0] - baseNoteData.Address.Range[^1]); }
+                else { delta = (int)(address.Range[0] + address.Range.Count - baseNoteData.Address.Range[0] - baseNoteData.Address.Range.Count); }
 
                 scalableAndDelta.TryAdd(scalable, delta);
             }
@@ -93,11 +95,48 @@ namespace ChartEditor
             foreach (var pair in scalableAndDelta)
             {
                 // データの更新
-                pair.Key.Note.NoteData.ChangeRange(pair.Value + address.SliderIndex, isRightAnchored);
+                var noteAddress = pair.Key.Note.NoteData.Address;
+                ChangeRange(noteAddress, pair.Value + address.SliderIndex, isRightAnchored);
 
                 // オブジェクトの動作
                 pair.Key.OnScale();
             }
+        }
+
+        /// <summary>
+        /// ノート範囲を変える
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="index"></param>
+        /// <param name="isRightAnchored"></param>
+        public void ChangeRange(AddressWithinRange address, float index, bool isRightAnchored)
+        {
+            List<float> shifted = new List<float>();
+            float min = address.Range.First();
+            float max = address.Range.Last();
+
+            // 右固定で左側とindexが一緒のとき返す
+            if (isRightAnchored && (int)min == index) { return; }
+            // 左固定で右側とindexが一緒のとき返す
+            if (!isRightAnchored && (int)max == index) { return; }
+
+            // 右固定で左側に伸ばす
+            if (isRightAnchored && index <= max)
+            {
+                for (float i = index; i <= max; i++) { shifted.Add(i); }
+            }
+            // 左固定で右側に伸ばす
+            else if (!isRightAnchored && index >= min)
+            {
+                for (float i = min; i <= index; i++) { shifted.Add(i); }
+            }
+            else
+            {
+                return;
+            }
+
+            address.SetRange(shifted);
+            Debug.Log($"【拡大】\n {address.Range.First()} ～ {address.Range.Last()}");
         }
 
         /// <summary>

@@ -79,8 +79,7 @@ namespace ChartEditor
             // それでもなかったら返す
             if (deployingNote == null) { return; }
 
-            Vector3 pos = new Vector3(cursorInteracter.Value.GetWorldPositionUnderCursor().x, deployable.deployParent.position.y, deployable.deployParent.position.z);
-            deployingNote.OnMove(deployable.deployParent, pos);
+            deployingNote.OnMove(deployable.deployParent);
             isDeployedTentative = true;
         }
 
@@ -101,7 +100,9 @@ namespace ChartEditor
 
             // データ上の追加
             AddressInChart address = collider.Address;
-            chartEditorDataGetter.ChartData.Value.AddNote(deployingNoteData, address);
+            deployingNoteData.SetAddress(new AddressWithinRange(address, 1));
+            Debug.Log(deployingNoteData.Address.Range.Count);
+            chartEditorDataGetter.ChartData.Value.AddNote(deployingNoteData);
             
             // オブジェクトの設置
             deployingNote.OnDeploy();
@@ -166,8 +167,8 @@ namespace ChartEditor
             deployable.OnDestroyListner += () => OnDestroyDeployingNote();
 
             // 配置
-            Transform parent = chartEditorDataGetter.ChartData.Value.GetPlacementLocation(noteData.Address);
-            deployable.OnMove(parent, Vector3.zero); //※修正必
+            Transform parent = chartEditorDataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(noteData.Address));
+            deployable.OnMove(parent);
             deployable.OnDeploy();
         }
 
@@ -202,9 +203,9 @@ namespace ChartEditor
             return null;
         }
 
-        private Transform GetNoteParentTransform(AddressInChart address)
+        private Transform GetNoteParentTransform(AddressWithinRange address)
         {
-            return chartEditorDataGetter.ChartData.Value.GetPlacementLocation(address);
+            return chartEditorDataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(address));
         }
 
         private IDeployableNoteData GetNoteData(DeploymentNoteType noteType)

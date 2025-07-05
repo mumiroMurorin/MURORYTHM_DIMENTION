@@ -18,8 +18,7 @@ namespace ChartEditor
 
         public NoteData_SpaceHold(NoteData_SpaceHold data)
         {
-            this.Address = new AddressInChart(data.Address);
-            this.SetRange(data.Range.ToList());
+            this.Address = new AddressWithinRange(data.Address);
         }
 
         // ノートタイプ
@@ -48,17 +47,7 @@ namespace ChartEditor
         /// </summary>
         public SpaceHoldVertices SpaceHoldVertices { get; private set; } = new SpaceHoldVertices();
 
-        public AddressInChart Address { get; private set; }
-
-        /// <summary>
-        /// 配置範囲 (基本0～15)
-        /// </summary>
-        ReactiveCollection<float> range = new ReactiveCollection<float>() { 0 };
-
-        /// <summary>
-        /// ノーツの移動、拡大縮小の監視
-        /// </summary>
-        public IReadOnlyReactiveCollection<float> Range { get { return range; } }
+        public AddressWithinRange Address { get; private set; }
 
         public void ChangeNoteType()
         {
@@ -102,12 +91,6 @@ namespace ChartEditor
 
         private void UpdateNoteType()
         {
-            // 終点ノーツが変なことになってたら元に戻す
-            //if(NextNote.Value == null && NoteType != DeploymentNoteType.SpaceHoldEndUnjudge)
-            //{
-            //    NoteType = DeploymentNoteType.SpaceHold;
-            //}
-
             // 始点ノーツが変なことになってたら元に戻す
             if (BackNote.Value == null) 
             {
@@ -115,72 +98,20 @@ namespace ChartEditor
             }
         }
 
-        public void SetRange(List<float> range)
+        public void SetAddress(AddressWithinRange address)
         {
-            this.range.Clear();
-
-            foreach (float index in range)
-            {
-                if(index < 0 || 15 < index) { continue; }
-                this.range.Add(index);
-            }
-
-            Address.SetSliderIndex(this.range.First());
-        }
-
-        public void ChangeRange(float index, bool isRightAnchored)
-        {
-            List<float> shifted = new List<float>();
-            float min = range.First();
-            float max = range.Last();
-
-            // 右固定で左側とindexが一緒のとき返す
-            if (isRightAnchored && (int)min == index) { return; }
-            // 左固定で右側とindexが一緒のとき返す
-            if (!isRightAnchored && (int)max == index) { return; }
-
-            // 右固定で左側に伸ばす
-            if (isRightAnchored && index <= max)
-            {
-                for (float i = index; i <= max; i++) { shifted.Add(i); }
-            }
-            // 左固定で右側に伸ばす
-            else if (!isRightAnchored && index >= min)
-            {
-                for (float i = min; i <= index; i++) { shifted.Add(i); }
-            }
-            else
-            {
-                return;
-            }
-
-            SetRange(shifted);
-            Debug.Log($"【拡大】\n {range.First()} ～ {range.Last()}");
-        }
-
-        public void SetAddress(AddressInChart address)
-        {
-            // 同じアドレスなら返す
-            if (Address != null && Address.IsSameAddress(address)) { return; }
-
             // 文節が更新されていなければチェインの更新はしない
             bool isUpdateSubLocate = true;
             if(Address == null) { isUpdateSubLocate = false; }
             else if(Address.BarIndex == address.BarIndex && Address.SubDivisionIndex == address.SubDivisionIndex) { isUpdateSubLocate = false; }
 
-            if (Address == null) { Address = new AddressInChart(address); }
+            if (Address == null) { Address = new AddressWithinRange(); }
             else
             {
-                Debug.Log($"【移動】:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
+                //Debug.Log($"【移動】:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
                 Address.SetSameAddress(address);
             }
 
-            // 移動に伴う範囲のセット
-            int startIndex = (int)address.SliderIndex;
-            List<float> currentRange = range.ToList();
-            List<float> shifted = currentRange.Select(i => i - currentRange[0] + startIndex).ToList();
-
-            SetRange(shifted);
             if (isUpdateSubLocate) { UpdateChainNote(); }
         }
 

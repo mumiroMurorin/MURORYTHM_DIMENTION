@@ -64,7 +64,7 @@ namespace ChartEditor
                 movable.OnMoveStart();
 
                 // 差分を保存
-                movableAndDelta.TryAdd(movable, movable.Note.NoteData.Address - baseAddress);
+                movableAndDelta.TryAdd(movable, new AddressInChart(movable.Note.NoteData.Address) - baseAddress);
             }
 
             dataSetter?.SetEditMode(EditMode.Moving);
@@ -80,7 +80,7 @@ namespace ChartEditor
             // カーソル下の親取得
             var deployable = dataGetter.GetInteractableCollider<IDeployableCollider>();
             if (deployable == null) { return; }
-            if (baseNote.Note.transform.position == deployable.deployParent.position) { return; }
+            //if (baseNote.Note.transform.position == deployable.deployParent.position) { return; }
 
             // アドレスの移動
             foreach (var pair in movableAndDelta)

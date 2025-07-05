@@ -35,7 +35,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_HoldStart data = new NoteDataOrigin_HoldStart()
             {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
+                Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray(),
                 HoldNumber = currentHoldNumber
             };
 
@@ -54,11 +54,11 @@ namespace ChartConvert
                 if (noteData is not IChainNoteData) { return false; }
 
                 // データのセット
-                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 IChainNoteData chainData = (IChainNoteData)noteData;
+                ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.Hold);
 
                 noteData.SetAddress(address);
-                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
                 dataInChartEditor.AddNote(noteData);
 
                 // ディクショナリーへの保存
@@ -140,7 +140,7 @@ namespace ChartConvert
             DeploymentNoteType noteType = noteDataInEditor.NoteType;
             NoteDataOrigin_HoldRelay data = new NoteDataOrigin_HoldRelay()
             {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
+                Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray(),
                 HoldNumber = number
             };
 
@@ -159,12 +159,11 @@ namespace ChartConvert
                 if (noteData is not ITypeChangableNoteData) { return false; }
 
                 // データのセット
-                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 IChainNoteData chainData = (IChainNoteData)noteData;
                 ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.Hold);
 
                 noteData.SetAddress(address);
-                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
                 dataInChartEditor.AddNote(noteData);
 
                 // リストへの保存
@@ -248,7 +247,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_HoldMeshRelay data = new NoteDataOrigin_HoldMeshRelay()
             {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
+                Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray(),
                 HoldNumber = number
             };
 
@@ -267,12 +266,11 @@ namespace ChartConvert
                 if (noteData is not ITypeChangableNoteData) { return false; }
 
                 // データのセット
-                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 IChainNoteData chainData = (IChainNoteData)noteData;
-                ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.HoldHidden);
+                ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.Hold);
 
                 noteData.SetAddress(address);
-                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
                 dataInChartEditor.AddNote(noteData);
 
                 // リストへの保存
@@ -349,7 +347,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_HoldHiddenJudgedRelay data = new NoteDataOrigin_HoldHiddenJudgedRelay()
             {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
+                Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray(),
                 HoldNumber = number
             };
 
@@ -368,12 +366,11 @@ namespace ChartConvert
                 if (noteData is not ITypeChangableNoteData) { return false; }
 
                 // データのセット
-                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 IChainNoteData chainData = (IChainNoteData)noteData;
-                ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.HoldHiddenJudged);
+                ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.Hold);
 
                 noteData.SetAddress(address);
-                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
                 dataInChartEditor.AddNote(noteData);
 
                 // リストへの保存
@@ -460,7 +457,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_HoldEnd data = new NoteDataOrigin_HoldEnd()
             {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
+                Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray(),
                 HoldNumber = number
             };
 
@@ -478,11 +475,11 @@ namespace ChartConvert
                 if (noteData is not IChainNoteData) { return false; }
 
                 // データのセット
-                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 IChainNoteData chainData = (IChainNoteData)noteData;
+                ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.Hold);
 
                 noteData.SetAddress(address);
-                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
                 dataInChartEditor.AddNote(noteData);
 
                 // リストへの保存
@@ -568,7 +565,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_HoldEndUnjudge data = new NoteDataOrigin_HoldEndUnjudge()
             {
-                Range = noteDataInEditor.Range.Select(x => (int)x).ToArray(),
+                Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray(),
                 HoldNumber = number
             };
 
@@ -587,11 +584,11 @@ namespace ChartConvert
                 ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.HoldEndUnjudge);
 
                 // データのセット
-                AddressInChart address = new AddressInChart(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range[0]);
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 IChainNoteData chainData = (IChainNoteData)noteData;
+                ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.Hold);
 
                 noteData.SetAddress(address);
-                noteData.SetRange(noteDataOrigin.Range.Select(x => (float)x).ToList());
                 dataInChartEditor.AddNote(noteData);
 
                 // リストへの保存
