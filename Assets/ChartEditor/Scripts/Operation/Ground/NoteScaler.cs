@@ -68,7 +68,7 @@ namespace ChartEditor
                 // ƒŠƒXƒg‚É•Û‘¶
                 int delta;
                 var address = data.Address;
-                if (isRightAnchored) { delta = (int)(address.Range[0] - baseNoteData.Address.Range[^1]); }
+                if (isRightAnchored) { delta = (int)(address.Range[0] - baseNoteData.Address.Range[0]); }
                 else { delta = (int)(address.Range[0] + address.Range.Count - baseNoteData.Address.Range[0] - baseNoteData.Address.Range.Count); }
 
                 scalableAndDelta.TryAdd(scalable, delta);
