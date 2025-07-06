@@ -342,11 +342,10 @@ namespace ChartEditor
         /// <param name="noteData"></param>
         /// <param name="newAddress"></param>
         /// <returns></returns>
-        public bool ChangeNoteAddress(IDeployableNoteData noteData, AddressInChart newAddress)
+        public bool ChangeNoteAddress(IDeployableNoteData noteData, AddressInChart oldAddress, AddressInChart newAddress)
         {
-            var oldAddress = new AddressInChart(noteData.Address);
-
             // 古い場所から削除
+            Debug.Log(oldAddress + ", " + newAddress);
             var oldSubDivision = BarDatas[oldAddress.BarIndex].SubDivisionDatas[oldAddress.SubDivisionIndex];
             if (!oldSubDivision.RemoveNote(noteData))
             {
@@ -354,54 +353,106 @@ namespace ChartEditor
                 return false;
             }
 
-            // アドレスを正規化して新たな場所に追加
-            NormalizeAddress(newAddress);
-
             var newSubDivision = BarDatas[newAddress.BarIndex].SubDivisionDatas[newAddress.SubDivisionIndex];
             newSubDivision.AddNote(noteData);
-
-            noteData.SetAddress(new AddressWithinRange(newAddress, noteData.Address.Range.Count));
 
             return true;
         }
 
         /// <summary>
-        /// アドレスを正規化する
+        /// アドレス間の距離(分線の数)を返す
+        /// </summary>
+        /// <param name="addressA"></param>
+        /// <param name="AddressB"></param>
+        /// <returns></returns>
+        public int GetAddressDelta(AddressInChart targetAddress, AddressInChart baseAddress)
+        {
+            AddressInChart former = new AddressInChart(targetAddress.IsEarlierThan(baseAddress) ? targetAddress : baseAddress);
+            AddressInChart latter = new AddressInChart(targetAddress.IsEarlierThan(baseAddress) ? baseAddress : targetAddress);
+
+            int delta = 0;
+            for (int i = former.BarIndex; i < BarDatas.Count; i++)
+            {
+                var barData = BarDatas[i];
+
+                if (i != latter.BarIndex) 
+                { 
+                    delta += barData.SubDivisionDatas.Count - former.SubDivisionIndex;
+                    former.SetSubDivisionIndex(0);
+                }
+                else 
+                {
+                    delta += latter.SubDivisionIndex - former.SubDivisionIndex;
+                    break;
+                }
+            }
+
+            return targetAddress.IsEarlierThan(baseAddress) ? -delta : delta;
+        }
+
+        /// <summary>
+        /// アドレスに分線数を足す
         /// </summary>
         /// <param name="address"></param>
-        private void NormalizeAddress(AddressInChart address)
+        /// <param name="delta"></param>
+        public AddressInChart AddressAddition(AddressInChart address, int delta)
         {
-            // 分線番号が下限を突破しているとき
-            while (address.SubDivisionIndex < 0)
+            var copy = new AddressInChart(address);
+
+            if(delta >= 0)
             {
-                // 範囲外(MIN)に出てしまうとき
-                if (address.BarIndex - 1 < 0)
+                for (int i = copy.BarIndex; i < BarDatas.Count; i++)
                 {
-                    address.SetSubDivisionIndex(0);
-                    address.SetBarIndex(0);
-                    break;
+                    var barData = BarDatas[i];
+
+                    // 0になったら終わり
+                    if (delta == 0) { break; }
+
+                    // 小節1個越えるとき
+                    if (barData.SubDivisionDatas.Count <= copy.SubDivisionIndex + delta)
+                    {
+                        delta -= barData.SubDivisionDatas.Count - copy.SubDivisionIndex;
+
+                        copy.SetBarIndex(copy.BarIndex + 1);
+                        copy.SetSubDivisionIndex(0);
+                    }
+                    // この小節にあるとき
+                    else
+                    {
+                        copy.SetSubDivisionIndex(copy.SubDivisionIndex + delta);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = copy.BarIndex; i < BarDatas.Count; i--)
+                {
+                    var barData = BarDatas[i];
+                    var barDaraBack = BarDatas[i - 1];
+
+                    // 0になったら終わり
+                    if (delta == 0) { break; }
+
+                    // 小節1個越えるとき
+                    if (copy.SubDivisionIndex + delta < 0)
+                    {
+                        delta += copy.SubDivisionIndex;
+
+                        copy.SetBarIndex(copy.BarIndex - 1);
+                        copy.SetSubDivisionIndex(barDaraBack.SubDivisionDatas.Count - 1);
+                    }
+                    // この小節にあるとき
+                    else
+                    {
+                        copy.SetSubDivisionIndex(copy.SubDivisionIndex + delta);
+                        break;
+                    }
                 }
 
-                address.SetBarIndex(address.BarIndex - 1);
-                address.SetSubDivisionIndex(address.SubDivisionIndex + barDatas[address.BarIndex].SubDivisionDatas.Count);
             }
-
-            // 分線番号が上限を突破しているとき
-            while (address.SubDivisionIndex >= barDatas[address.BarIndex].SubDivisionDatas.Count)
-            {
-                // 範囲外(MAX)に出てしまうとき
-                if (BarDatas.Count <= address.BarIndex + 1)
-                {
-                    address.SetSubDivisionIndex(barDatas[address.BarIndex].SubDivisionDatas.Count - 1);
-                    address.SetBarIndex(barDatas.Count - 1);
-                    break;
-                }
-
-                address.SetSubDivisionIndex(address.SubDivisionIndex - barDatas[address.BarIndex].SubDivisionDatas.Count);
-                address.SetBarIndex(address.BarIndex + 1);
-            }
-
-            address.SetSliderIndex(Mathf.Clamp(address.SliderIndex, 0, 15));
+            
+            return copy;
         }
 
         public Transform GetPlacementLocation(AddressInChart address)

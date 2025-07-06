@@ -14,9 +14,8 @@ namespace ChartEditor
         IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter dataSetter;
 
-        Dictionary<IMovableObject, AddressInChart> movableAndDelta = new Dictionary<IMovableObject, AddressInChart>();
+        Dictionary<IMovableObject, AddressDelta> movableAndDelta = new Dictionary<IMovableObject, AddressDelta>();
         AddressInChart baseAddress;
-        IMovableObject baseNote;
 
         [Inject]
         public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter)
@@ -52,7 +51,6 @@ namespace ChartEditor
 
             // 基準となるクリックされたノーツ情報を保存
             baseAddress = new AddressInChart(movableObject.Note.NoteData.Address);
-            baseNote = movableObject;
 
             // 複数選択されたオブジェクトから動かせるやつを取り出す
             foreach (var data in notesSelector.SelectingNotes)
@@ -64,7 +62,12 @@ namespace ChartEditor
                 movable.OnMoveStart();
 
                 // 差分を保存
-                movableAndDelta.TryAdd(movable, new AddressInChart(movable.Note.NoteData.Address) - baseAddress);
+                var subDelta = dataGetter.ChartData.Value.GetAddressDelta(new AddressInChart(movable.Note.NoteData.Address), baseAddress);
+                var sliderDelta = movable.Note.NoteData.Address.Range[0] - baseAddress.SliderIndex;
+                var delta = new AddressDelta(subDelta, (int)sliderDelta);
+                Debug.Log("ここ: " + subDelta + "," + sliderDelta);
+
+                movableAndDelta.TryAdd(movable, delta);
             }
 
             dataSetter?.SetEditMode(EditMode.Moving);
@@ -85,7 +88,12 @@ namespace ChartEditor
             // アドレスの移動
             foreach (var pair in movableAndDelta)
             {
-                dataGetter.ChartData.Value.ChangeNoteAddress(pair.Key.Note.NoteData, deployable.Address + pair.Value);
+                var noteData = pair.Key.Note.NoteData;
+
+                var newAddress = dataGetter.ChartData.Value.AddressAddition(deployable.Address, pair.Value.SubDivisionDelta);
+                newAddress.SetSliderIndex(deployable.Address.SliderIndex + pair.Value.SliderDelta);
+                noteData.SetAddress(new AddressWithinRange(newAddress, noteData.Address.Range.Count));
+
                 pair.Key.OnMove();
             }
         }
@@ -109,8 +117,19 @@ namespace ChartEditor
         private void Initialize()
         {
             baseAddress = null;
-            baseNote = null;
             movableAndDelta.Clear();
+        }
+
+        class AddressDelta
+        {
+            public AddressDelta(int subDelta, int sliderDelta)
+            {
+                SubDivisionDelta = subDelta;
+                SliderDelta = sliderDelta;
+            }
+
+            public int SubDivisionDelta { get; set; }
+            public int SliderDelta { get; set; }
         }
     }
 }

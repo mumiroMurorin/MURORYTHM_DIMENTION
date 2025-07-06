@@ -51,7 +51,8 @@ namespace ChartEditor
             if (movedNote.Note.transform.position == deployable.deployParent.position)  { return; }
 
             // アドレスの移動
-            chartEditorDataGetter.ChartData.Value.ChangeNoteAddress(movedNote.Note.NoteData, deployable.Address);
+            var noteData = movedNote.Note.NoteData;
+            noteData.SetAddress(new AddressWithinRange(deployable.Address, noteData.Address.Range.Count));
 
             // オブジェクト側の行動
             movedNote.OnMove();

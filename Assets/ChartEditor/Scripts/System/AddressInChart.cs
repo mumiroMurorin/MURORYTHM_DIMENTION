@@ -108,6 +108,25 @@ namespace ChartEditor
             return address.BarIndex == this.BarIndex && address.SubDivisionIndex == this.SubDivisionIndex && address.SliderIndex == this.SliderIndex;
         }
 
+        /// <summary>
+        /// どちらが先のアドレスか返す
+        /// 引数のほうが遅ければTrue
+        /// </summary>
+        /// <param name="address"></param>
+        public bool IsEarlierThan(AddressInChart address)
+        {
+            // 違う小節番号の場合
+            if (this.barIndex.Value < address.barIndex.Value) { return true; }
+            else if (this.barIndex.Value > address.barIndex.Value) { return false; }
+
+            // 同じ小節番号の場合、分節番号で判断
+            if (this.subDivisionIndex.Value < address.subDivisionIndex.Value) { return true; }
+            else if (this.subDivisionIndex.Value > address.subDivisionIndex.Value) { return false; }
+
+            // 全く同じ場合falseを返す
+            return false;
+        }
+
         public override string ToString()
         {
             return $"#{BarIndex} - {SubDivisionIndex} - {SliderIndex}";

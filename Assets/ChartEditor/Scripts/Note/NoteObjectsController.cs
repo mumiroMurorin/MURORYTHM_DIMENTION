@@ -22,6 +22,36 @@ namespace ChartEditor
             this.dataSetter = dataSetter;
             this.optionGetter = optionGetter;
         }
+
+        public void AddNote(IDeployableNoteData data, NoteObject obj)
+        {
+            DataToObj.List.Add(new DataToNoteObject(data, obj));
+            BindForNoteAddress(data);
+        }
+
+        private void BindForNoteAddress(IDeployableNoteData data)
+        {
+            // ノーツデータの移動
+            // 小節線移動時
+            data.Address.BarIndexRP
+                .Pairwise()
+                .Subscribe(pair => {
+                    var oldAddress = new AddressInChart(pair.Previous, data.Address.SubDivisionIndex, data.Address.Range[0]);
+                    var newAddress = new AddressInChart(data.Address);
+                    dataGetter.ChartData.Value.ChangeNoteAddress(data, oldAddress, newAddress);
+                })
+                .AddTo(this.gameObject);
+
+            // 分線移動時
+            data.Address.SubDivisionIndexRP
+                .Pairwise()
+                .Subscribe(pair => {
+                    var oldAddress = new AddressInChart(data.Address.BarIndex, pair.Previous, data.Address.Range[0]);
+                    var newAddress = new AddressInChart(data.Address);
+                    dataGetter.ChartData.Value.ChangeNoteAddress(data, oldAddress, newAddress);
+                })
+                .AddTo(this.gameObject);
+        }
     }
 
     public class DataToNoteObjectList

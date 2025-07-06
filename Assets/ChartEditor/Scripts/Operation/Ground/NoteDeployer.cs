@@ -102,7 +102,8 @@ namespace ChartEditor
             
             // オブジェクトの設置
             deployingNote.OnDeploy();
-            noteObjectsController.DataToObj.List.Add(new DataToNoteObject(deployingNoteData, deployingNote.Note));
+
+            noteObjectsController.AddNote(deployingNoteData, deployingNote.Note);
 
             InstantiateNote();
         }
@@ -169,7 +170,7 @@ namespace ChartEditor
             deployable.OnMove(parent);
             deployable.OnDeploy();
 
-            noteObjectsController.DataToObj.List.Add(new DataToNoteObject(noteData, deployable.Note));
+            noteObjectsController.AddNote(noteData, deployable.Note);
         }
 
         /// <summary>
