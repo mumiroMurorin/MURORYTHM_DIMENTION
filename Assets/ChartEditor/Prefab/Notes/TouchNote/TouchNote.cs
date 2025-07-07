@@ -23,11 +23,11 @@ namespace ChartEditor
 
         public DeploymentNoteType NoteType => DeploymentNoteType.TouchNote;
 
-        public AddressWithinRange Address { get; private set; } = new AddressWithinRange();
+        public AddressWithinRange Address { get; private set; }
 
         public void SetAddress(AddressWithinRange address)
         {
-            if (Address == null) { Address = new AddressWithinRange(); }
+            if (Address == null) { Address = new AddressWithinRange(address); }
             else
             {
                 //Debug.Log($"yˆÚ“®z:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");

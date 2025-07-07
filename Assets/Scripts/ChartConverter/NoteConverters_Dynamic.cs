@@ -127,7 +127,9 @@ namespace ChartConvert
 
                 // データのセット
                 var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
+
                 noteData.SetAddress(address);
+
 
                 dataInChartEditor.AddNote(noteData);
             }
@@ -192,7 +194,9 @@ namespace ChartConvert
 
                 // データのセット
                 var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
+
                 noteData.SetAddress(address);
+
 
                 dataInChartEditor.AddNote(noteData);
             }
@@ -256,6 +260,7 @@ namespace ChartConvert
 
                 // データのセット
                 var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
+
                 noteData.SetAddress(address);
 
                 dataInChartEditor.AddNote(noteData);

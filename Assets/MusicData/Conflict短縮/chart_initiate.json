@@ -637,7 +637,7 @@
         },
         {
           "Bpm": 160.0,
-          "HoldHiddenJudgedRelayData": [
+          "HoldMeshRelayData": [
             {
               "HoldNumber": 2,
               "Range": [
@@ -1092,7 +1092,7 @@
         },
         {
           "Bpm": 160.0,
-          "SpaceHoldHiddenJudgedRelayData": [
+          "SpaceHoldMeshRelayData": [
             {
               "HoldNumber": 2,
               "Vertices": [
@@ -1147,7 +1147,7 @@
         },
         {
           "Bpm": 160.0,
-          "SpaceHoldHiddenJudgedRelayData": [
+          "SpaceHoldMeshRelayData": [
             {
               "HoldNumber": 1,
               "Vertices": [
@@ -1202,7 +1202,7 @@
         },
         {
           "Bpm": 160.0,
-          "SpaceHoldHiddenJudgedRelayData": [
+          "SpaceHoldMeshRelayData": [
             {
               "HoldNumber": 1,
               "Vertices": [
@@ -1682,7 +1682,7 @@
         },
         {
           "Bpm": 160.0,
-          "HoldHiddenJudgedRelayData": [
+          "HoldMeshRelayData": [
             {
               "HoldNumber": 4,
               "Range": [
@@ -1883,7 +1883,7 @@
         },
         {
           "Bpm": 160.0,
-          "SpaceHoldHiddenJudgedRelayData": [
+          "SpaceHoldMeshRelayData": [
             {
               "HoldNumber": 3,
               "Vertices": [
@@ -1994,7 +1994,7 @@
         },
         {
           "Bpm": 160.0,
-          "SpaceHoldHiddenJudgedRelayData": [
+          "SpaceHoldMeshRelayData": [
             {
               "HoldNumber": 4,
               "Vertices": [
@@ -2099,7 +2099,7 @@
         },
         {
           "Bpm": 160.0,
-          "SpaceHoldHiddenJudgedRelayData": [
+          "SpaceHoldMeshRelayData": [
             {
               "HoldNumber": 5,
               "Vertices": [
@@ -2211,7 +2211,7 @@
         },
         {
           "Bpm": 160.0,
-          "SpaceHoldHiddenJudgedRelayData": [
+          "SpaceHoldMeshRelayData": [
             {
               "HoldNumber": 6,
               "Vertices": [
@@ -2663,7 +2663,7 @@
         },
         {
           "Bpm": 160.0,
-          "HoldHiddenJudgedRelayData": [
+          "HoldMeshRelayData": [
             {
               "HoldNumber": 6,
               "Range": [

@@ -177,6 +177,7 @@ namespace ChartConvert
                     Debug.LogWarning($"yConverterzHoldRelay‚Ì•ÏŠ·‚ÌÛAHoldNumber‚ª‘¶İ‚µ‚Ü‚¹‚ñ‚Å‚µ‚½: {noteDataOrigin.HoldNumber}");
                     return false;
                 }
+
             }
 
             return true;

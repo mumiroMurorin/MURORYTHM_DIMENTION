@@ -262,5 +262,10 @@ namespace ChartEditor
             // ‘S‚­“¯‚¶ê‡false‚ğ•Ô‚·
             return false;
         }
+
+        public override string ToString()
+        {
+            return $"#{BarIndex} - {SubDivisionIndex} - {Range[0]}~{Range[^1]}";
+        }
     }
 }
