@@ -61,7 +61,6 @@ namespace ChartConvert
                 new HoldEndConverter(),
                 new HoldEndUnjudgeConverter(),
                 new HoldMeshRelayConverter(),
-                //new HoldHiddenJudgedRelay(),
             };
 
             spaceHoldConverters = new List<IChainNoteConvertable>()
@@ -70,7 +69,6 @@ namespace ChartConvert
                 new SpaceHoldRelayConverter(),
                 new SpaceHoldEndConverter(),
                 new SpaceHoldMeshRelayConverter(),
-                //new SpaceHoldHiddenJudgedRelay(),
             };
         }
 

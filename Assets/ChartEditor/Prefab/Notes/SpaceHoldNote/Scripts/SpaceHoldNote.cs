@@ -32,8 +32,6 @@ namespace ChartEditor
         {
             if (noteType != DeploymentNoteType.SpaceHold &&
                 noteType != DeploymentNoteType.SpaceHoldHidden)
-                // && noteType != DeploymentNoteType.SpaceHoldHiddenJudged )
-                // && noteType != DeploymentNoteType.SpaceHoldEndUnjudge) 
             {
                 Debug.LogWarning($"ÅyNoteÅzSpaceHoldNoteÇÕ {noteType} Ç…ëŒâûÇµÇƒÇ¢Ç‹ÇπÇÒ");
                 return;
@@ -154,9 +152,7 @@ namespace ChartEditor
         private bool CheckSameNoteTypeGroup(DeploymentNoteType noteType)
         {
             return noteType == DeploymentNoteType.SpaceHold ||
-                //noteType == DeploymentNoteType.SpaceHoldEndUnjudge ||
                 noteType == DeploymentNoteType.SpaceHoldHidden; 
-                // || noteType == DeploymentNoteType.SpaceHoldHiddenJudged;
         }
 
         /// <summary>

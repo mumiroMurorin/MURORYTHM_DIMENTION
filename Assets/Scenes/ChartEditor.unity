@@ -1357,11 +1357,9 @@ MonoBehaviour:
   noteDataList:
   - rid: 3422109081925582848
   notes:
-  - noteType: 9
+  - noteType: 800
     noteObject: {fileID: 5475620226950634511, guid: 41e3941ad64096049b60bc5b270486d2, type: 3}
-  - noteType: 10
-    noteObject: {fileID: 5475620226950634511, guid: 41e3941ad64096049b60bc5b270486d2, type: 3}
-  - noteType: 11
+  - noteType: 810
     noteObject: {fileID: 5475620226950634511, guid: 41e3941ad64096049b60bc5b270486d2, type: 3}
   references:
     version: 2
@@ -16279,25 +16277,25 @@ MonoBehaviour:
   notesViewport_view: {fileID: 788903304}
   noteButtons_view:
   - noteButton_view: {fileID: 1547042622}
-    noteType: 0
+    noteType: 10
     editNoteType: 1
   - noteButton_view: {fileID: 1671950409}
-    noteType: 1
+    noteType: 100
     editNoteType: 1
   - noteButton_view: {fileID: 199875580}
-    noteType: 2
+    noteType: 110
     editNoteType: 1
   - noteButton_view: {fileID: 1942083208}
-    noteType: 3
+    noteType: 120
     editNoteType: 1
   - noteButton_view: {fileID: 94919055}
-    noteType: 4
+    noteType: 130
     editNoteType: 1
   - noteButton_view: {fileID: 1924637620}
-    noteType: 5
+    noteType: 510
     editNoteType: 1
   - noteButton_view: {fileID: 902988903}
-    noteType: 9
+    noteType: 800
     editNoteType: 2
 --- !u!1 &1224848592
 GameObject:
@@ -16918,23 +16916,21 @@ MonoBehaviour:
   - rid: 5896496808941584384
   noteList:
     notePrefabs:
-    - noteType: 0
+    - noteType: 10
       noteObject: {fileID: 5475620226950634511, guid: a3e1d74dfae71aa458e010bbb30b2e2a, type: 3}
-    - noteType: 1
+    - noteType: 100
       noteObject: {fileID: 5475620226950634511, guid: 3397deb5cc08664408f85453b7a11802, type: 3}
-    - noteType: 2
+    - noteType: 110
       noteObject: {fileID: 5475620226950634511, guid: 1d9f8156d6b999042bcfab00cfd8c8da, type: 3}
-    - noteType: 3
+    - noteType: 120
       noteObject: {fileID: 5475620226950634511, guid: c2b8d046c25504b469dd1cbcc3247b65, type: 3}
-    - noteType: 4
+    - noteType: 130
       noteObject: {fileID: 5475620226950634511, guid: 770935c34230ed34c9308bc8ab93a437, type: 3}
-    - noteType: 5
+    - noteType: 510
       noteObject: {fileID: 5475620226950634511, guid: df1462ddc3f8d704c90bada7e7496fb6, type: 3}
-    - noteType: 6
+    - noteType: 520
       noteObject: {fileID: 5475620226950634511, guid: df1462ddc3f8d704c90bada7e7496fb6, type: 3}
-    - noteType: 7
-      noteObject: {fileID: 5475620226950634511, guid: df1462ddc3f8d704c90bada7e7496fb6, type: 3}
-    - noteType: 8
+    - noteType: 530
       noteObject: {fileID: 5475620226950634511, guid: df1462ddc3f8d704c90bada7e7496fb6, type: 3}
   noteObjectsController: {fileID: 1645756594}
   references:

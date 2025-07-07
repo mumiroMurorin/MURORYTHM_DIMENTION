@@ -292,19 +292,18 @@ namespace ChartEditor
     /// </summary>
     public enum DeploymentNoteType
     {
-        TouchNote,
-        DynamicGroundUpward,
-        DynamicGroundDownward,
-        DynamicGroundRightward,
-        DynamicGroundLeftward,
-        Hold,
-        HoldHidden,
-        //HoldHiddenJudged,
-        HoldEndUnjudge,
+        TouchNote = 10,
 
-        SpaceHold,
-        SpaceHoldHidden,
-        //SpaceHoldHiddenJudged,
-        //SpaceHoldEndUnjudge
+        DynamicGroundUpward = 100,
+        DynamicGroundDownward = 110,
+        DynamicGroundRightward = 120,
+        DynamicGroundLeftward = 130,
+
+        Hold = 510,
+        HoldHidden = 520,
+        HoldEndUnjudge = 530,
+
+        SpaceHold = 800,
+        SpaceHoldHidden = 810,
     }
 }

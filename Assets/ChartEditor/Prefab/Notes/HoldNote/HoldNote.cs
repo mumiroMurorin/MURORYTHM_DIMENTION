@@ -31,7 +31,6 @@ namespace ChartEditor
         {
             if (noteType != DeploymentNoteType.Hold &&
                 noteType != DeploymentNoteType.HoldHidden &&
-                //noteType != DeploymentNoteType.HoldHiddenJudged &&
                 noteType != DeploymentNoteType.HoldEndUnjudge)
             {
                 Debug.LogWarning($"ÅyNoteÅzHoldNoteÇÕ {noteType} Ç…ëŒâûÇµÇƒÇ¢Ç‹ÇπÇÒ");
@@ -171,7 +170,6 @@ namespace ChartEditor
             return noteType == DeploymentNoteType.Hold ||
                 noteType == DeploymentNoteType.HoldEndUnjudge ||
                 noteType == DeploymentNoteType.HoldHidden;
-                //|| noteType == DeploymentNoteType.HoldHiddenJudged;
         }
 
 
