@@ -7,6 +7,8 @@ namespace ChartEditor
 {
     public class NoteMover : MonoBehaviour
     {
+        [Header("レーン(ノーツ)1マス分の横幅")]
+        [SerializeField] float noteUnitWidth = 1f;
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
         [SerializeField] MultiNoteSelector notesSelector;
         [SerializeField] NoteObjectsController notesController;
@@ -17,6 +19,7 @@ namespace ChartEditor
         Dictionary<IMovableObject, AddressDelta> movableAndDelta = new Dictionary<IMovableObject, AddressDelta>();
         AddressInChart baseAddress;
         IDeployableCollider lastLocation;
+        int pointerToAxisDelta;
 
         [Inject]
         public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter)
@@ -53,6 +56,10 @@ namespace ChartEditor
             // 基準となるクリックされたノーツ情報を保存
             baseAddress = new AddressInChart(movableObject.Note.NoteData.Address);
 
+            // マウスカーソルからノーツの軸までの差を算出
+            float deltaX = cursorInteracter.Value.GetWorldPositionUnderCursor().x - movableObject.Note.transform.position.x;
+            pointerToAxisDelta = (int)((deltaX + noteUnitWidth / 2f) / noteUnitWidth);
+
             // 複数選択されたオブジェクトから動かせるやつを取り出す
             foreach (var data in notesSelector.SelectingNotes)
             {
@@ -65,7 +72,7 @@ namespace ChartEditor
                 // 差分を保存
                 var subDelta = dataGetter.ChartData.Value.GetAddressDelta(new AddressInChart(movable.Note.NoteData.Address), baseAddress);
                 var sliderDelta = movable.Note.NoteData.Address.Range[0] - baseAddress.SliderIndex;
-                var delta = new AddressDelta(subDelta, (int)sliderDelta);
+                var delta = new AddressDelta(subDelta, (int)sliderDelta, movable.Note.NoteData.Address.Range.Count);
 
                 movableAndDelta.TryAdd(movable, delta);
             }
@@ -94,8 +101,8 @@ namespace ChartEditor
                 var noteData = pair.Key.Note.NoteData;
 
                 var newAddress = dataGetter.ChartData.Value.AddressAddition(deployable.Address, pair.Value.SubDivisionDelta);
-                newAddress.SetSliderIndex(deployable.Address.SliderIndex + pair.Value.SliderDelta);
-                noteData.SetAddress(new AddressWithinRange(newAddress, noteData.Address.Range.Count));
+                newAddress.SetSliderIndex(deployable.Address.SliderIndex + pair.Value.SliderDelta - pointerToAxisDelta);
+                noteData.SetAddress(new AddressWithinRange(newAddress, pair.Value.RangeCount));
 
                 pair.Key.OnMove();
             }
@@ -120,19 +127,22 @@ namespace ChartEditor
         private void Initialize()
         {
             baseAddress = null;
+            pointerToAxisDelta = 0;
             movableAndDelta.Clear();
         }
 
         class AddressDelta
         {
-            public AddressDelta(int subDelta, int sliderDelta)
+            public AddressDelta(int subDelta, int sliderDelta, int rangeCount)
             {
                 SubDivisionDelta = subDelta;
                 SliderDelta = sliderDelta;
+                RangeCount = rangeCount;
             }
 
             public int SubDivisionDelta { get; set; }
             public int SliderDelta { get; set; }
+            public int RangeCount { get; set; }
         }
     }
 }
