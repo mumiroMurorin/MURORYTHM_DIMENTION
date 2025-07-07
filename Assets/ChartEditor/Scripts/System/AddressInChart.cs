@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System.Linq;
+using System;
 
 namespace ChartEditor
 {
@@ -222,11 +223,18 @@ namespace ChartEditor
         {
             this.range.Clear();
 
-            foreach (float index in range)
+            // ê≥ãKâª
+            for(int i = 0; i < range.Count; i++)
             {
-                if ((index < 0 || 15 < index) && index != 100) { continue; }
-                this.range.Add(index);
+                float index = range[i];
+
+                if (index == 100) { continue; }
+                else if (index < 0) { range[i] = 0; }
+                else if (15 < index) { range[i] = 15; }
             }
+
+            // èdï°çÌèúÇµÇƒí«â¡
+            foreach(var index in range.Distinct().OrderBy(x => x)) { this.range.Add(index); }
         }
 
         public void SetSameAddress(AddressWithinRange address)

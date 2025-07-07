@@ -16,6 +16,7 @@ namespace ChartEditor
 
         Dictionary<IMovableObject, AddressDelta> movableAndDelta = new Dictionary<IMovableObject, AddressDelta>();
         AddressInChart baseAddress;
+        IDeployableCollider lastLocation;
 
         [Inject]
         public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter)
@@ -65,7 +66,6 @@ namespace ChartEditor
                 var subDelta = dataGetter.ChartData.Value.GetAddressDelta(new AddressInChart(movable.Note.NoteData.Address), baseAddress);
                 var sliderDelta = movable.Note.NoteData.Address.Range[0] - baseAddress.SliderIndex;
                 var delta = new AddressDelta(subDelta, (int)sliderDelta);
-                Debug.Log("ここ: " + subDelta + "," + sliderDelta);
 
                 movableAndDelta.TryAdd(movable, delta);
             }
@@ -83,7 +83,10 @@ namespace ChartEditor
             // カーソル下の親取得
             var deployable = dataGetter.GetInteractableCollider<IDeployableCollider>();
             if (deployable == null) { return; }
-            //if (baseNote.Note.transform.position == deployable.deployParent.position) { return; }
+            if (lastLocation == deployable) { return; }
+
+            // 最新配置場所の更新
+            lastLocation = deployable;
 
             // アドレスの移動
             foreach (var pair in movableAndDelta)

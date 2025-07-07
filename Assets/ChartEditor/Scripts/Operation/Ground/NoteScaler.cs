@@ -17,6 +17,7 @@ namespace ChartEditor
 
         Dictionary<IScalableObject, int> scalableAndDelta = new Dictionary<IScalableObject, int>();
         IScalableObject baseNote;
+        IDeployableCollider lastLocation;
         AddressInChart scaledAddress;
         bool isRightAnchored;
 
@@ -87,6 +88,10 @@ namespace ChartEditor
             // カーソル下の親取得
             var deployable = dataGetter.GetInteractableCollider<IDeployableCollider>();
             if (deployable == null) { return; }
+            if (lastLocation == deployable) { return; }
+
+            // 最新配置場所の更新
+            lastLocation = deployable;
 
             // アドレスの取得
             AddressInChart address = deployable.Address;

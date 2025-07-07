@@ -14,6 +14,7 @@ namespace ChartEditor
         IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter dataSetter;
         IChartEditorOptionGetter optionGetter;
+        AddressInChart stackAddress;
 
         [Inject]
         public void Constructor(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, IChartEditorOptionGetter optionGetter)
@@ -38,6 +39,30 @@ namespace ChartEditor
                 .Subscribe(pair => {
                     var oldAddress = new AddressInChart(pair.Previous, data.Address.SubDivisionIndex, data.Address.Range[0]);
                     var newAddress = new AddressInChart(data.Address);
+
+                    if (!dataGetter.ChartData.Value.IsExistAddressInChart(oldAddress))
+                    {
+                        if (stackAddress == null)
+                        {
+                            Debug.LogError("スタックアドレスがnullかつ元アドレスが正規でありません");
+                            return;
+                        }
+
+                        oldAddress = stackAddress;
+                        stackAddress = null;
+                    }
+                    if (!dataGetter.ChartData.Value.IsExistAddressInChart(newAddress))
+                    {
+                        if (stackAddress != null)
+                        {
+                            Debug.LogError("スタックアドレスがnullでないかつ新アドレスが正規でありません");
+                            return;
+                        }
+
+                        stackAddress = oldAddress;
+                        return;
+                    }
+
                     dataGetter.ChartData.Value.ChangeNoteAddress(data, oldAddress, newAddress);
                 })
                 .AddTo(this.gameObject);
@@ -48,6 +73,30 @@ namespace ChartEditor
                 .Subscribe(pair => {
                     var oldAddress = new AddressInChart(data.Address.BarIndex, pair.Previous, data.Address.Range[0]);
                     var newAddress = new AddressInChart(data.Address);
+
+                    if (!dataGetter.ChartData.Value.IsExistAddressInChart(oldAddress))
+                    {
+                        if (stackAddress == null)
+                        {
+                            Debug.LogError("スタックアドレスがnullかつ元アドレスが正規でありません");
+                            return;
+                        }
+
+                        oldAddress = stackAddress;
+                        stackAddress = null;
+                    }
+                    if (!dataGetter.ChartData.Value.IsExistAddressInChart(newAddress))
+                    {
+                        if (stackAddress != null)
+                        {
+                            Debug.LogError("スタックアドレスがnullでないかつ新アドレスが正規でありません");
+                            return;
+                        }
+
+                        stackAddress = oldAddress;
+                        return;
+                    }
+
                     dataGetter.ChartData.Value.ChangeNoteAddress(data, oldAddress, newAddress);
                 })
                 .AddTo(this.gameObject);

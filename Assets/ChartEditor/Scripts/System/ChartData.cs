@@ -312,6 +312,9 @@ namespace ChartEditor
         {
             // V‚½‚ÈêŠ‚É’Ç‰Á
             var address = noteData.Address;
+
+            if (!IsExistAddressInChart(new AddressInChart(address))) { return; }
+
             var newSubDivision = BarDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
             newSubDivision.AddNote(noteData);
 
@@ -324,6 +327,9 @@ namespace ChartEditor
         public void RemoveNote(IDeployableNoteData noteData)
         {
             var address = new AddressInChart(noteData.Address);
+            
+            if (!IsExistAddressInChart(new AddressInChart(address))) { return; }
+
             var subDivision = barDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
 
             if (!subDivision.RemoveNote(noteData))
@@ -345,7 +351,6 @@ namespace ChartEditor
         public bool ChangeNoteAddress(IDeployableNoteData noteData, AddressInChart oldAddress, AddressInChart newAddress)
         {
             // ŒÃ‚¢êŠ‚©‚çíœ
-            Debug.Log(oldAddress + ", " + newAddress);
             var oldSubDivision = BarDatas[oldAddress.BarIndex].SubDivisionDatas[oldAddress.SubDivisionIndex];
             if (!oldSubDivision.RemoveNote(noteData))
             {
@@ -356,6 +361,15 @@ namespace ChartEditor
             var newSubDivision = BarDatas[newAddress.BarIndex].SubDivisionDatas[newAddress.SubDivisionIndex];
             newSubDivision.AddNote(noteData);
 
+            return true;
+        }
+
+        public bool IsExistAddressInChart(AddressInChart address)
+        {
+            if(address.BarIndex >= BarDatas.Count) { return false; }
+            if(address.BarIndex < 0) { return false; }
+            if(address.SubDivisionIndex >= BarDatas[address.BarIndex].SubDivisionDatas.Count) { return false; }
+            if(address.SubDivisionIndex < 0) { return false; }
             return true;
         }
 
@@ -411,6 +425,13 @@ namespace ChartEditor
                     // ¬ß1ŒÂ‰z‚¦‚é‚Æ‚«
                     if (barData.SubDivisionDatas.Count <= copy.SubDivisionIndex + delta)
                     {
+                        // ’[‚ð’´‚¦‚é‚Æ‚«
+                        if (i + 1 >= BarDatas.Count)
+                        {
+                            copy.SetSubDivisionIndex(barData.SubDivisionDatas.Count - 1);
+                            break;
+                        }
+
                         delta -= barData.SubDivisionDatas.Count - copy.SubDivisionIndex;
 
                         copy.SetBarIndex(copy.BarIndex + 1);
@@ -428,19 +449,24 @@ namespace ChartEditor
             {
                 for (int i = copy.BarIndex; i < BarDatas.Count; i--)
                 {
-                    var barData = BarDatas[i];
-                    var barDaraBack = BarDatas[i - 1];
-
                     // 0‚É‚È‚Á‚½‚çI‚í‚è
                     if (delta == 0) { break; }
 
                     // ¬ß1ŒÂ‰z‚¦‚é‚Æ‚«
                     if (copy.SubDivisionIndex + delta < 0)
                     {
-                        delta += copy.SubDivisionIndex;
+                        // ’[‚ð’´‚¦‚é‚Æ‚«
+                        if (i - 1 < 0)
+                        {
+                            copy.SetSubDivisionIndex(0);
+                            break;
+                        }
+
+                        var barDataBack = BarDatas[i - 1];
+                        delta += copy.SubDivisionIndex + 1;
 
                         copy.SetBarIndex(copy.BarIndex - 1);
-                        copy.SetSubDivisionIndex(barDaraBack.SubDivisionDatas.Count - 1);
+                        copy.SetSubDivisionIndex(barDataBack.SubDivisionDatas.Count - 1);
                     }
                     // ‚±‚Ì¬ß‚É‚ ‚é‚Æ‚«
                     else
