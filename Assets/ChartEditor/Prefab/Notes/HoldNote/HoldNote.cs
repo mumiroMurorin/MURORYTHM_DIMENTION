@@ -31,8 +31,8 @@ namespace ChartEditor
         {
             if (noteType != DeploymentNoteType.Hold &&
                 noteType != DeploymentNoteType.HoldHidden &&
-                noteType != DeploymentNoteType.HoldHiddenJudged &&
-                noteType != DeploymentNoteType.HoldEndUnjudge) 
+                //noteType != DeploymentNoteType.HoldHiddenJudged &&
+                noteType != DeploymentNoteType.HoldEndUnjudge)
             {
                 Debug.LogWarning($"【Note】HoldNoteは {noteType} に対応していません");
                 return;
@@ -65,16 +65,12 @@ namespace ChartEditor
             {
                 switch (NoteType)
                 {
-                    // 可視 → 判定なし不可視(中継点のみ)
+                    // 可視 → 不可視
                     case DeploymentNoteType.Hold:
                         NoteType = DeploymentNoteType.HoldHidden;
                         break;
-                    // 判定なし不可視 → 判定あり不可視
+                    // 不可視 → 可視
                     case DeploymentNoteType.HoldHidden:
-                        NoteType = DeploymentNoteType.HoldHiddenJudged;
-                        break;
-                    // 判定あり不可視 → 可視
-                    case DeploymentNoteType.HoldHiddenJudged:
                         NoteType = DeploymentNoteType.Hold;
                         break;
                 }
@@ -174,8 +170,8 @@ namespace ChartEditor
         {
             return noteType == DeploymentNoteType.Hold ||
                 noteType == DeploymentNoteType.HoldEndUnjudge ||
-                noteType == DeploymentNoteType.HoldHidden ||
-                noteType == DeploymentNoteType.HoldHiddenJudged;
+                noteType == DeploymentNoteType.HoldHidden;
+                //|| noteType == DeploymentNoteType.HoldHiddenJudged;
         }
 
 

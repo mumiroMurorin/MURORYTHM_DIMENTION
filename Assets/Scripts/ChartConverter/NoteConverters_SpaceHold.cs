@@ -301,107 +301,107 @@ namespace ChartConvert
     /// <summary>
     /// スペースホールド中継点
     /// </summary>
-    public class SpaceHoldHiddenJudgedRelay : ISpaceHoldDataToRhythmGameConvertable, IChainNoteConvertable
-    {
-        readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
+    //public class SpaceHoldHiddenJudgedRelay : ISpaceHoldDataToRhythmGameConvertable, IChainNoteConvertable
+    //{
+    //    readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
-        {
-            if (dataOrigin.SpaceHoldHiddenJudgedRelayData == null) { return true; }
+    //    public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+    //    {
+    //        if (dataOrigin.SpaceHoldHiddenJudgedRelayData == null) { return true; }
 
-            foreach (var noteOrigin in dataOrigin.SpaceHoldHiddenJudgedRelayData)
-            {
-                NoteData_SpaceHoldRelayHidden noteData = new NoteData_SpaceHoldRelayHidden
-                {
-                    Vertices = noteOrigin.Vertices.Select(x=> x.ToVector2()).ToArray(),
-                    Timing = timing
-                };
+    //        foreach (var noteOrigin in dataOrigin.SpaceHoldHiddenJudgedRelayData)
+    //        {
+    //            NoteData_SpaceHoldRelayHidden noteData = new NoteData_SpaceHoldRelayHidden
+    //            {
+    //                Vertices = noteOrigin.Vertices.Select(x=> x.ToVector2()).ToArray(),
+    //                Timing = timing
+    //            };
 
-                chartData.AddNoteData(noteData);
-            }
+    //            chartData.AddNoteData(noteData);
+    //        }
 
-            return true;
-        }
+    //        return true;
+    //    }
 
-        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin,  Dictionary<IChainNoteData, int> nextNoteToNumber)
-        {
-            if (noteDataInEditor.NoteType != DeploymentNoteType.SpaceHoldHiddenJudged) { return false; }
-            if (noteDataInEditor is not IVerticesControlableNoteData) { return false; }
+    //    public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin,  Dictionary<IChainNoteData, int> nextNoteToNumber)
+    //    {
+    //        if (noteDataInEditor.NoteType != DeploymentNoteType.SpaceHoldHiddenJudged) { return false; }
+    //        if (noteDataInEditor is not IVerticesControlableNoteData) { return false; }
 
-            var verticesData = ((IVerticesControlableNoteData)noteDataInEditor);
-            var thisNote = (IChainNoteData)noteDataInEditor;
-            var backNote = thisNote.BackNote.Value;
-            var nextNote = thisNote.NextNote.Value;
-            if (backNote == null && nextNote != null) { return false; }
-            if (backNote != null && nextNote == null) { return false; }
+    //        var verticesData = ((IVerticesControlableNoteData)noteDataInEditor);
+    //        var thisNote = (IChainNoteData)noteDataInEditor;
+    //        var backNote = thisNote.BackNote.Value;
+    //        var nextNote = thisNote.NextNote.Value;
+    //        if (backNote == null && nextNote != null) { return false; }
+    //        if (backNote != null && nextNote == null) { return false; }
 
-            // ディクショナリーからHoldNumberを探す
-            if (!nextNoteToNumber.TryGetValue(thisNote, out int number))
-            {
-                Debug.LogWarning($"【Converter】SpaceHoldHiddenJudgedの変換の際、ノーツが見つかりませんでした");
-                return false;
-            }
-            else
-            {
-                nextNoteToNumber.Remove(thisNote);
-                nextNoteToNumber.Add(nextNote, number);
-            }
+    //        // ディクショナリーからHoldNumberを探す
+    //        if (!nextNoteToNumber.TryGetValue(thisNote, out int number))
+    //        {
+    //            Debug.LogWarning($"【Converter】SpaceHoldHiddenJudgedの変換の際、ノーツが見つかりませんでした");
+    //            return false;
+    //        }
+    //        else
+    //        {
+    //            nextNoteToNumber.Remove(thisNote);
+    //            nextNoteToNumber.Add(nextNote, number);
+    //        }
 
-            // 新たにインスタンス化
-            if (dataOrigin.SpaceHoldHiddenJudgedRelayData == null)
-            {
-                dataOrigin.SpaceHoldHiddenJudgedRelayData = new List<NoteDataOrigin_SpaceHoldHiddenJudgedRelay>();
-            }
+    //        // 新たにインスタンス化
+    //        if (dataOrigin.SpaceHoldHiddenJudgedRelayData == null)
+    //        {
+    //            dataOrigin.SpaceHoldHiddenJudgedRelayData = new List<NoteDataOrigin_SpaceHoldHiddenJudgedRelay>();
+    //        }
 
-            // 追加するデータのインスタンス化
-            NoteDataOrigin_SpaceHoldHiddenJudgedRelay data = new NoteDataOrigin_SpaceHoldHiddenJudgedRelay()
-            {
-                Vertices = verticesData.SpaceHoldVertices.GetVertexArray(),
-                HoldNumber = number
-            };
+    //        // 追加するデータのインスタンス化
+    //        NoteDataOrigin_SpaceHoldHiddenJudgedRelay data = new NoteDataOrigin_SpaceHoldHiddenJudgedRelay()
+    //        {
+    //            Vertices = verticesData.SpaceHoldVertices.GetVertexArray(),
+    //            HoldNumber = number
+    //        };
 
-            dataOrigin.SpaceHoldHiddenJudgedRelayData.Add(data);
-            return true;
-        }
+    //        dataOrigin.SpaceHoldHiddenJudgedRelayData.Add(data);
+    //        return true;
+    //    }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor,  Dictionary<int, IChainNoteData> numberToStartNote)
-        {
-            if (dataOrigin.SpaceHoldHiddenJudgedRelayData == null) { return true; }
+    //    public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor,  Dictionary<int, IChainNoteData> numberToStartNote)
+    //    {
+    //        if (dataOrigin.SpaceHoldHiddenJudgedRelayData == null) { return true; }
 
-            foreach (var noteDataOrigin in dataOrigin.SpaceHoldHiddenJudgedRelayData)
-            {
-                IDeployableNoteData noteData = new ChartEditor.NoteData_SpaceHold();
-                if (noteData is not IChainNoteData) { return false; }
-                if (noteData is not ITypeChangableNoteData) { return false; }
-                if (noteData is not IVerticesControlableNoteData) { return false; }
+    //        foreach (var noteDataOrigin in dataOrigin.SpaceHoldHiddenJudgedRelayData)
+    //        {
+    //            IDeployableNoteData noteData = new ChartEditor.NoteData_SpaceHold();
+    //            if (noteData is not IChainNoteData) { return false; }
+    //            if (noteData is not ITypeChangableNoteData) { return false; }
+    //            if (noteData is not IVerticesControlableNoteData) { return false; }
 
-                // データのセット
-                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
-                var chainData = (IChainNoteData)noteData;
-                var verticesData = (IVerticesControlableNoteData)noteData;
+    //            // データのセット
+    //            var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
+    //            var chainData = (IChainNoteData)noteData;
+    //            var verticesData = (IVerticesControlableNoteData)noteData;
 
-                ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.SpaceHoldHiddenJudged);
-                verticesData.SpaceHoldVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
-                noteData.SetAddress(address);
-                dataInChartEditor.AddNote(noteData);
+    //            ((ITypeChangableNoteData)noteData).SetNoteType(DeploymentNoteType.SpaceHoldHiddenJudged);
+    //            verticesData.SpaceHoldVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
+    //            noteData.SetAddress(address);
+    //            dataInChartEditor.AddNote(noteData);
 
-                // リストへの保存
-                if (numberToStartNote.TryGetValue(noteDataOrigin.HoldNumber, out var startNote))
-                {
-                    // 繋げる
-                    startNote.AddChainNote(chainData, false);
-                }
-                else
-                {
-                    Debug.LogWarning($"【Converter】SpaceHoldHiddenJudgedの変換の際、HoldNumberが存在しませんでした: {noteDataOrigin.HoldNumber}");
-                    return false;
-                }
-            }
+    //            // リストへの保存
+    //            if (numberToStartNote.TryGetValue(noteDataOrigin.HoldNumber, out var startNote))
+    //            {
+    //                // 繋げる
+    //                startNote.AddChainNote(chainData, false);
+    //            }
+    //            else
+    //            {
+    //                Debug.LogWarning($"【Converter】SpaceHoldHiddenJudgedの変換の際、HoldNumberが存在しませんでした: {noteDataOrigin.HoldNumber}");
+    //                return false;
+    //            }
+    //        }
 
-            return true;
-        }
+    //        return true;
+    //    }
 
-    }
+    //}
 
     /// <summary>
     /// スペースホールド終点(中継点データに変換)

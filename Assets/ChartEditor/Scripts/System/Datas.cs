@@ -299,12 +299,12 @@ namespace ChartEditor
         DynamicGroundLeftward,
         Hold,
         HoldHidden,
-        HoldHiddenJudged,
+        //HoldHiddenJudged,
         HoldEndUnjudge,
 
         SpaceHold,
         SpaceHoldHidden,
-        SpaceHoldHiddenJudged,
+        //SpaceHoldHiddenJudged,
         //SpaceHoldEndUnjudge
     }
 }

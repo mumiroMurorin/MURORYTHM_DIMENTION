@@ -31,8 +31,8 @@ namespace ChartEditor
         public void SetNoteType(DeploymentNoteType noteType)
         {
             if (noteType != DeploymentNoteType.SpaceHold &&
-                noteType != DeploymentNoteType.SpaceHoldHidden &&
-                noteType != DeploymentNoteType.SpaceHoldHiddenJudged )
+                noteType != DeploymentNoteType.SpaceHoldHidden)
+                // && noteType != DeploymentNoteType.SpaceHoldHiddenJudged )
                 // && noteType != DeploymentNoteType.SpaceHoldEndUnjudge) 
             {
                 Debug.LogWarning($"【Note】SpaceHoldNoteは {noteType} に対応していません");
@@ -51,40 +51,21 @@ namespace ChartEditor
 
         public void ChangeNoteType()
         {
-            // 終点
-            if(NextNote.Value == null)
+            // 始点終点は必ず判定あり
+            if(NextNote.Value == null || BackNote.Value == null) { return; }
+
+            switch (NoteType)
             {
-                //switch (NoteType)
-                //{
-                //    // 判定あり終点 → 判定なし終点
-                //    case DeploymentNoteType.SpaceHold:
-                //        NoteType = DeploymentNoteType.SpaceHoldEndUnjudge;
-                //        break;
-                //    // 判定なし終点 → 判定あり終点
-                //    case DeploymentNoteType.SpaceHoldEndUnjudge:
-                //        NoteType = DeploymentNoteType.SpaceHold;
-                //        break;
-                //}
+                // 可視 → 不可視(中継点のみ)
+                case DeploymentNoteType.SpaceHold:
+                    NoteType = DeploymentNoteType.SpaceHoldHidden;
+                    break;
+                // 不可視 → 可視
+                case DeploymentNoteType.SpaceHoldHidden:
+                    NoteType = DeploymentNoteType.SpaceHold;
+                    break;
             }
-            // 中継点
-            else
-            {
-                switch (NoteType)
-                {
-                    // 可視 → 判定なし不可視(中継点のみ)
-                    case DeploymentNoteType.SpaceHold:
-                        NoteType = DeploymentNoteType.SpaceHoldHidden;
-                        break;
-                    // 判定なし不可視 → 判定あり不可視
-                    case DeploymentNoteType.SpaceHoldHidden:
-                        NoteType = DeploymentNoteType.SpaceHoldHiddenJudged;
-                        break;
-                    // 判定あり不可視 → 可視
-                    case DeploymentNoteType.SpaceHoldHiddenJudged:
-                        NoteType = DeploymentNoteType.SpaceHold;
-                        break;
-                }
-            }
+
 
             UpdateNoteType();
         }
@@ -174,8 +155,8 @@ namespace ChartEditor
         {
             return noteType == DeploymentNoteType.SpaceHold ||
                 //noteType == DeploymentNoteType.SpaceHoldEndUnjudge ||
-                noteType == DeploymentNoteType.SpaceHoldHidden ||
-                noteType == DeploymentNoteType.SpaceHoldHiddenJudged;
+                noteType == DeploymentNoteType.SpaceHoldHidden; 
+                // || noteType == DeploymentNoteType.SpaceHoldHiddenJudged;
         }
 
         /// <summary>

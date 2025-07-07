@@ -7879,6 +7879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 096c1e36b61a75f48a2b1c762cc9de67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteUnitWidth: 1
   cursorInteracter:
     obj: {fileID: 1038807069}
   notesSelector: {fileID: 267646778}

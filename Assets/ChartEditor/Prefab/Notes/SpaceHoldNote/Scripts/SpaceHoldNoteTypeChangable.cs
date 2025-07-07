@@ -14,8 +14,8 @@ namespace ChartEditor
         [SerializeField] MeshRenderer noteMeshRenderer;
         [SerializeField] Color normalColor = Color.white;
         [SerializeField] Color hiddenColor = new Color(1, 1, 1, 0.25f); 
-        [SerializeField] Color hiddenJudgedColor = new Color(1, 0.5f, 0.5f, 0.25f); 
-        [SerializeField] Color holdEndUnjudgeColor = new Color(1, 0.5f, 0.5f, 0.25f); 
+        //[SerializeField] Color hiddenJudgedColor = new Color(1, 0.5f, 0.5f, 0.25f); 
+        //[SerializeField] Color holdEndUnjudgeColor = new Color(1, 0.5f, 0.5f, 0.25f); 
 
         NoteObject noteObject;
         ITypeChangableNoteData noteData;
@@ -67,7 +67,7 @@ namespace ChartEditor
         {
             if (noteType == DeploymentNoteType.SpaceHold) { noteMeshRenderer.material.color = normalColor; }
             else if (noteType == DeploymentNoteType.SpaceHoldHidden) { noteMeshRenderer.material.color = hiddenColor; }
-            else if (noteType == DeploymentNoteType.SpaceHoldHiddenJudged) { noteMeshRenderer.material.color = hiddenJudgedColor; }
+            //else if (noteType == DeploymentNoteType.SpaceHoldHiddenJudged) { noteMeshRenderer.material.color = hiddenJudgedColor; }
             // else if(noteType == DeploymentNoteType.SpaceHoldEndUnjudge) { noteMeshRenderer.material.color = holdEndUnjudgeColor; }
         }
 
