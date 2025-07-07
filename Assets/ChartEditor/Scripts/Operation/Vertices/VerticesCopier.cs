@@ -71,7 +71,7 @@ namespace ChartEditor
                 currentEdit.SetVertices(originVertices);
             });
            
-            //Debug.Log("【Vertices】頂点リストを張り付け");
+            Debug.Log("【Vertices】頂点リストを張り付け");
         }
     }
 

@@ -14,7 +14,7 @@ namespace ChartEditor
 
         public NoteObject NoteObject => noteObject;
 
-        private void Start()
+        private void Awake()
         {
             noteObject = GetComponent<NoteObject>();
         }

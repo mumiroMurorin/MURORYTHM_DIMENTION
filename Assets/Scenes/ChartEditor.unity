@@ -7514,6 +7514,53 @@ MonoBehaviour:
   beatCountField: {fileID: 160008675}
   beatUnitField: {fileID: 1865241296}
   divisionNumField: {fileID: 881953206}
+--- !u!1 &612392382
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 612392383}
+  - component: {fileID: 612392384}
+  m_Layer: 0
+  m_Name: NoteCopier
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &612392383
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612392382}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1868679337}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &612392384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612392382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8dd2e95fd1e0bd41be4101ce72b948e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  multiNoteSelector: {fileID: 267646778}
+  noteObjectsController: {fileID: 1645756594}
+  noteDeployer: {fileID: 1250030799}
 --- !u!1 &616121943
 GameObject:
   m_ObjectHideFlags: 0
@@ -24021,6 +24068,7 @@ Transform:
   - {fileID: 1797220170}
   - {fileID: 754356523}
   - {fileID: 333189527}
+  - {fileID: 612392383}
   - {fileID: 1859732682}
   m_Father: {fileID: 1130407549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -26543,7 +26591,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playKey: 32
   scalingSensitivity: 0.3
-  moveSensitivityMax: 0.05
+  moveSensitivityMax: 0.035
   editModeShortCutKeys:
   - editMode: 50
     editNoteType: 1

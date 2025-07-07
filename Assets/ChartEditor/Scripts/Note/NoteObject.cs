@@ -46,6 +46,9 @@ namespace ChartEditor
 
         private void Bind()
         {
+            // 最初からセットしてあったら色を変える
+            if (OutlineColors.Count > 0) { SetOutlineColor(OutlineColors[^1]); }
+
             // アウトライン色の変更
             OutlineColors?.ObserveAdd()
                 .Subscribe(color => SetOutlineColor(color.Value))

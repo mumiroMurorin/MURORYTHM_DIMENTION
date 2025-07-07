@@ -17,15 +17,15 @@ namespace ChartEditor
         [SerializeField] NoteTypeToNoteObjectList noteList;
         [SerializeField] NoteObjectsController noteObjectsController;
 
+        IChartEditorDataGetter dataGetter;
         IDeployableObject deployingNote;
-        IChartEditorDataGetter chartEditorDataGetter;
         IDeployableNoteData deployingNoteData;
         bool isDeployedTentative;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(IChartEditorDataGetter dataGetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.dataGetter = dataGetter;
         }
 
         private void Start()
@@ -36,23 +36,23 @@ namespace ChartEditor
         private void Bind()
         {
             // ノーツの削除
-            chartEditorDataGetter.CurrentEditMode
+            dataGetter.CurrentEditMode
                 .Where(editMode => editMode != EditMode.Deploy)
                 .Subscribe(editMode => DestroyNote())
                 .AddTo(this.gameObject);
 
             // ノーツの仮配置
-            chartEditorDataGetter.InteractableColliders.ObserveAdd()
+            dataGetter.InteractableColliders.ObserveAdd()
                 .Subscribe(collider =>
                 {
                     if (collider.Value is IDeployableCollider matched) { UpdateNotePosition(matched); }
                 }).AddTo(this.gameObject);
 
             // 配置ノーツの種類の変更
-            chartEditorDataGetter.DeploymentNoteType
+            dataGetter.DeploymentNoteType
                 .Subscribe(noteType =>
                 {
-                    if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
+                    if (dataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
                     DestroyNote();
                 })
                 .AddTo(this.gameObject);
@@ -60,7 +60,11 @@ namespace ChartEditor
 
         void Update()
         {
-            if (Input.GetMouseButtonDown(0)) { DeployNote(); }
+            // 配置モードでない際は返す
+            if (dataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
+
+            // 左クリックで配置
+            if (Input.GetMouseButtonDown(0)) { DeployNoteOnClick(); }
         }
 
         /// <summary>
@@ -69,11 +73,11 @@ namespace ChartEditor
         private void UpdateNotePosition(IDeployableCollider deployable)
         {
             // 配置モードでない際は返す
-            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
+            if (dataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
             if (deployable == null) { return; }
 
             // 配置ノーツが無かったら新規インスタンス化
-            if (deployingNote == null) { InstantiateNote(); }
+            if (deployingNote == null) { SpawnNewNote(dataGetter.DeploymentNoteType.Value); }
             // それでもなかったら返す
             if (deployingNote == null) { return; }
 
@@ -82,13 +86,11 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ノーツの配置
+        /// 左クリックによるノーツの配置
         /// </summary>
-        private void DeployNote()
+        private void DeployNoteOnClick()
         {
-            // 配置モードでない際は返す
-            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
-            var collider = chartEditorDataGetter.GetInteractableCollider<IDeployableCollider>();
+            var collider = dataGetter.GetInteractableCollider<IDeployableCollider>();
 
             if (collider == null) { return; }
             if (!isDeployedTentative) { return; }
@@ -98,62 +100,38 @@ namespace ChartEditor
             // データ上の追加
             AddressInChart address = collider.Address;
             deployingNoteData.SetAddress(new AddressWithinRange(address, 1));
-            chartEditorDataGetter.ChartData.Value.AddNote(deployingNoteData);
+            dataGetter.ChartData.Value.AddNote(deployingNoteData);
             
             // オブジェクトの設置
             deployingNote.OnDeploy();
 
             noteObjectsController.AddNote(deployingNoteData, deployingNote.Note);
 
-            InstantiateNote();
+            SpawnNewNote(dataGetter.DeploymentNoteType.Value);
         }
 
         /// <summary>
         /// ノートの生成
         /// </summary>
-        private void InstantiateNote()
+        private void SpawnNewNote(DeploymentNoteType noteType)
         {
-            GameObject origin = noteList.GetNote(chartEditorDataGetter.DeploymentNoteType.Value);
-            if (origin == null) { return; }
+            deployingNoteData = GetNoteData(noteType);
+            deployingNote = InstantiateNoteObject(deployingNoteData);
 
-            GameObject obj = Instantiate(origin);
-
-            if (!obj.TryGetComponent(out IDeployableObject deployable))
-            {
-                Debug.LogWarning("ノーツにIDeployableObjectがくっついてねぇぞ！");
-                return;
-            }
-
-            deployingNoteData = GetNoteData(chartEditorDataGetter.DeploymentNoteType.Value);
-
-            // チェインノーツのときデータセット
-            if(deployingNoteData is IChainNoteData)
-            {
-                ((IChainNoteData)deployingNoteData).SetNoteObject(obj.GetComponent<IConnectableObject>());
-            }
-
-            deployable.OnInstantiate(deployingNoteData, GetNoteParentTransform);
-            deployable.OnDestroyListner += () => OnDestroyDeployingNote();
-
-            deployingNote = deployable;
             isDeployedTentative = false;
         }
 
-        /// <summary>
-        /// 外部データから配置
-        /// </summary>
-        /// <param name="groundNoteData"></param>
-        public void DeployForNoteData(IDeployableNoteData noteData)
+        private IDeployableObject InstantiateNoteObject(IDeployableNoteData noteData)
         {
             GameObject origin = noteList.GetNote(noteData.NoteType);
-            if (origin == null) { return; }
+            if (origin == null) { return null; }
 
             GameObject obj = Instantiate(origin);
 
             if (!obj.TryGetComponent(out IDeployableObject deployable))
             {
                 Debug.LogWarning("ノーツにIDeployableObjectがくっついてねぇぞ！");
-                return;
+                return null;
             }
 
             // チェインノーツのときデータセット
@@ -165,13 +143,29 @@ namespace ChartEditor
             deployable.OnInstantiate(noteData, GetNoteParentTransform);
             deployable.OnDestroyListner += () => OnDestroyDeployingNote();
 
-            // 配置
-            Transform parent = chartEditorDataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(noteData.Address));
-            deployable.OnMove(parent);
-            deployable.OnDeploy();
-
-            noteObjectsController.AddNote(noteData, deployable.Note);
+            return deployable;
         }
+
+        /// <summary>
+        /// 外部データから配置
+        /// </summary>
+        /// <param name="groundNoteData"></param>
+        public void DeployForNoteData(IDeployableNoteData noteData, bool isAddDataForChartData = true)
+        {
+            // データの追加
+            if (isAddDataForChartData) { dataGetter.ChartData.Value.AddNote(noteData); }
+
+            var obj = InstantiateNoteObject(noteData);
+            if (obj == null) { return; }
+
+            // 配置
+            Transform parent = dataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(noteData.Address));
+            obj.OnMove(parent);
+            obj.OnDeploy();
+
+            noteObjectsController.AddNote(noteData, obj.Note);
+        }
+
 
         /// <summary>
         /// ノートの削除
@@ -190,7 +184,7 @@ namespace ChartEditor
 
         private Transform GetNoteParentTransform(AddressWithinRange address)
         {
-            return chartEditorDataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(address));
+            return dataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(address));
         }
 
         private IDeployableNoteData GetNoteData(DeploymentNoteType noteType)
