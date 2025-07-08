@@ -7561,6 +7561,7 @@ MonoBehaviour:
   multiNoteSelector: {fileID: 267646778}
   noteObjectsController: {fileID: 1645756594}
   noteDeployer: {fileID: 1250030799}
+  cursorInteracter: {fileID: 1038807071}
 --- !u!1 &616121943
 GameObject:
   m_ObjectHideFlags: 0

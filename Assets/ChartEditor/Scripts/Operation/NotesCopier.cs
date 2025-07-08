@@ -13,8 +13,9 @@ namespace ChartEditor
         [SerializeField] MultiNoteSelector multiNoteSelector;
         [SerializeField] NoteObjectsController noteObjectsController;
         [SerializeField] NoteDeployer noteDeployer;
+        [SerializeField] CursorInteracter cursorInteracter;
 
-        IChartEditorDataGetter chartEditorDataGetter;
+        IChartEditorDataGetter dataGetter;
         List<IDeployableNoteData> copiedNotes;
 
         EditMode[] ignoreEditModes = new EditMode[] {
@@ -26,14 +27,14 @@ namespace ChartEditor
         };
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(IChartEditorDataGetter dataGetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.dataGetter = dataGetter;
         }
 
         void Update()
         {
-            if(chartEditorDataGetter.EditNoteType.Value != EditNoteType.Ground) { return; }
+            if(dataGetter.EditNoteType.Value != EditNoteType.Ground) { return; }
 
             // ノーツのコピー
             if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C)) { CopyNotes(); }
@@ -46,7 +47,7 @@ namespace ChartEditor
         /// </summary>
         private void CopyNotes()
         {
-            EditMode currentEditMode = chartEditorDataGetter.CurrentEditMode.Value;
+            EditMode currentEditMode = dataGetter.CurrentEditMode.Value;
             if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
 
             copiedNotes = new List<IDeployableNoteData>(multiNoteSelector.SelectingNotes);
@@ -58,17 +59,25 @@ namespace ChartEditor
         /// </summary>
         private void PasteVertices()
         {
-            EditMode currentEditMode = chartEditorDataGetter.CurrentEditMode.Value;
+            var currentEditMode = dataGetter.CurrentEditMode.Value;
+            var collider = dataGetter.GetInteractableCollider<IDeployableCollider>();
+
             if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
             if (copiedNotes == null) { return; }
+            if (collider == null) { return; }
 
-            var copiedNotesCopy = copiedNotes.Select(x => x.Copy()).ToList();
+            var copiedNotesCopy = copiedNotes.Select(x => x.Copy()).OrderedByAddress().ToList();
+            var cursorAddress = collider.Address;
+            var addressDelta = dataGetter.ChartData.Value.GetAddressDelta(cursorAddress, new AddressInChart(copiedNotesCopy[0].Address));
 
             // 全選択解除
             multiNoteSelector.DeselectAll();
 
             foreach (var data in copiedNotesCopy)
             {
+                var address = dataGetter.ChartData.Value.AddressAddition(new AddressInChart(data.Address), addressDelta);
+
+                data.SetAddress(new AddressWithinRange(address, data.Address.Range.Count));
                 noteDeployer.DeployForNoteData(data);
 
                 // 選択する
