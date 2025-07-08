@@ -15,6 +15,8 @@ namespace ChartEditor
         [SerializeField] List<EditNoteTypeToToolView> toolViews;
         [Space(10),Header("Ground")]
         [SerializeField] List<ToolButtonToEditMode> toolButtonsOnGround_view;
+        [SerializeField] ButtonView notesMirrorButton_view;
+        [SerializeField] NotesMirror notesMirror_model;
         [Space(10), Header("Space")]
         [SerializeField] List<ToolButtonToEditMode> toolButtonsOnSpace_view;
         [Space(10), Header("Vertices")]
@@ -26,18 +28,18 @@ namespace ChartEditor
         [SerializeField] VerticesSlider verticesSlider_model;
         [SerializeField] VerticesReverser verticesReverser_model;
 
-        IChartEditorDataSetter editorDataSetter_model;
-        IChartEditorDataGetter editorDataGetter_model;
-        IChartEditorOptionSetter optionDataSetter_model;
-        IChartEditorOptionGetter optionDataGetter_model;
+        IChartEditorDataSetter dataSetter_model;
+        IChartEditorDataGetter dataGetter_model;
+        IChartEditorOptionSetter optionSetter_model;
+        IChartEditorOptionGetter optionGetter_model;
 
         [Inject]
         public void Construct(IChartEditorDataSetter chartEditorDataSetter, IChartEditorDataGetter chartEditorDataGetter, IChartEditorOptionSetter optionDataSetter, IChartEditorOptionGetter optionDataGetter)
         {
-            editorDataSetter_model = chartEditorDataSetter;
-            optionDataSetter_model = optionDataSetter;
-            editorDataGetter_model = chartEditorDataGetter;
-            optionDataGetter_model = optionDataGetter;
+            dataSetter_model = chartEditorDataSetter;
+            optionSetter_model = optionDataSetter;
+            dataGetter_model = chartEditorDataGetter;
+            optionGetter_model = optionDataGetter;
         }
 
         void Start()
@@ -52,23 +54,23 @@ namespace ChartEditor
             // グラウンドツールボタン
             foreach (var button in toolButtonsOnGround_view)
             {
-                button.BindForDeploymentNoteType(editorDataGetter_model.CurrentEditMode, this.gameObject);
+                button.BindForDeploymentNoteType(dataGetter_model.CurrentEditMode, this.gameObject);
             }
 
             // スペースツールボタン
             foreach (var button in toolButtonsOnSpace_view)
             {
-                button.BindForDeploymentNoteType(editorDataGetter_model.CurrentEditMode, this.gameObject);
+                button.BindForDeploymentNoteType(dataGetter_model.CurrentEditMode, this.gameObject);
             }
 
             // メッシュツールボタン
             foreach (var button in toolButtonsOnVertices_view)
             {
-                button.BindForDeploymentNoteType(editorDataGetter_model.CurrentEditMode, this.gameObject);
+                button.BindForDeploymentNoteType(dataGetter_model.CurrentEditMode, this.gameObject);
             }
 
             // ツールビューの更新
-            editorDataGetter_model.EditNoteType
+            dataGetter_model.EditNoteType
                 .Subscribe(type => {
                     foreach (var view in toolViews)
                     {
@@ -83,19 +85,22 @@ namespace ChartEditor
             // グラウンドツールボタン
             foreach (var button in toolButtonsOnGround_view)
             {
-                button.SetEvent(() => { editorDataSetter_model.SetEditMode(button.EditMode); });
+                button.SetEvent(() => { dataSetter_model.SetEditMode(button.EditMode); });
             }
+
+            // ノーツを反転
+            notesMirrorButton_view.OnPushButtonListner += () => { notesMirror_model?.MirrorSelectingNotes(); };
 
             // スペースツールボタン
             foreach (var button in toolButtonsOnSpace_view)
             {
-                button.SetEvent(() => { editorDataSetter_model.SetEditMode(button.EditMode); });
+                button.SetEvent(() => { dataSetter_model.SetEditMode(button.EditMode); });
             }
 
             // メッシュツールボタン
             foreach (var button in toolButtonsOnVertices_view)
             {
-                button.SetEvent(() => { editorDataSetter_model.SetEditMode(button.EditMode); });
+                button.SetEvent(() => { dataSetter_model.SetEditMode(button.EditMode); });
             }
 
             // 時計回りに要素番号をスライド

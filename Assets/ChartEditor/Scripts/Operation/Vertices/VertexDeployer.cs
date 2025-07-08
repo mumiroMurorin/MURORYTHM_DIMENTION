@@ -13,13 +13,15 @@ namespace ChartEditor
         [SerializeField] VerticesDestroyer verticesDestroyer;
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
         
-        IChartEditorDataGetter chartEditorDataGetter;
+        IChartEditorDataGetter dataGetter;
+        INotesDataGetter notesGetter;
         IPointDeployableCollider deployableCollider;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(IChartEditorDataGetter dataGetter, INotesDataGetter notesGetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.notesGetter = notesGetter;
+            this.dataGetter = dataGetter;
         }
 
         private void Start()
@@ -30,7 +32,7 @@ namespace ChartEditor
         private void Bind()
         {
             // 頂点配置可能に
-            chartEditorDataGetter.InteractableColliders.ObserveAdd()
+            dataGetter.InteractableColliders.ObserveAdd()
                 .Subscribe(collider =>
                 {
                     if (collider.Value is IPointDeployableCollider matched) 
@@ -40,14 +42,14 @@ namespace ChartEditor
                 }).AddTo(this.gameObject);
 
             // 頂点配置不可能に
-            chartEditorDataGetter.InteractableColliders.ObserveReset()
+            dataGetter.InteractableColliders.ObserveReset()
                 .Subscribe(_ => { deployableCollider = null; })
                 .AddTo(this.gameObject);
         }
 
         void Update()
         {
-            var currentEditMode = chartEditorDataGetter.CurrentEditMode.Value;
+            var currentEditMode = dataGetter.CurrentEditMode.Value;
             if (currentEditMode != EditMode.VertexDeploy) { return; }
 
             // 頂点オブジェクトの配置
@@ -69,7 +71,7 @@ namespace ChartEditor
             // データ上の追加
             VertexData vertexData = new VertexData(verticesController.WorldPosToNormalizedPos(worldPos));
 
-            var vertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
+            var vertices = notesGetter.EditingVertices.Value.SpaceHoldVertices;
             // RedoUndoに対応
             Record(() =>
             // 配置

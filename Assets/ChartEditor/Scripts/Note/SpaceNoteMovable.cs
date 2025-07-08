@@ -84,7 +84,7 @@ namespace ChartEditor
         /// アドレスが更新された時の動作
         /// </summary>
         /// <param name="address"></param>
-        private void OnChangeAddress(AddressWithinRange address)
+        private void OnChangeAddress(IReadOnlyAddressWithinRange address)
         {
             Transform parent = noteObject.GetParentTransformFunc(address);
 

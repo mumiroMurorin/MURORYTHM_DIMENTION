@@ -10,7 +10,6 @@ namespace ChartEditor
     public class NoteRangeSelector : MonoBehaviour
     {
         [SerializeField] MultiNoteSelector multiNoteSelector;
-        [SerializeField] NoteObjectsController notesController;
         [SerializeField] float minY;
         [SerializeField] float maxY;
         [SerializeField] Camera mainCamera;
@@ -19,7 +18,9 @@ namespace ChartEditor
         Vector2 endPos;
         bool isSelecting = false;
 
-        IChartEditorDataGetter chartEditorDataGetter;
+        IChartEditorDataGetter dataGetter;
+        INotesDataGetter notesGetter;
+
         EditMode[] ignoreEditModes = new EditMode[] {
             EditMode.Connecting,
             EditMode.EditBarConfig,
@@ -31,17 +32,18 @@ namespace ChartEditor
         };
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(IChartEditorDataGetter dataGetter, INotesDataGetter notesGetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.dataGetter = dataGetter;
+            this.notesGetter = notesGetter;
         }
 
         void Update()
         {
-            if (chartEditorDataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
+            if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
 
             // カーソル先にオブジェクトがある場合は返す
-            var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableNoteCollider>();
+            var collider = dataGetter.GetInteractableCollider<ISelectableNoteCollider>();
             if (!isSelecting && collider != null) { return; }
 
             // 範囲選択開始
@@ -76,7 +78,7 @@ namespace ChartEditor
         {
             Rect selectionRect = GetScreenRectForContains(startPos, endPos);
 
-            foreach (var dtn in notesController.DataToObj.List)
+            foreach (var dtn in notesGetter.DataToNoteObject)
             {
                 var obj = dtn.Object;
                 Vector3 screenPos = mainCamera.WorldToScreenPoint(obj.transform.position);

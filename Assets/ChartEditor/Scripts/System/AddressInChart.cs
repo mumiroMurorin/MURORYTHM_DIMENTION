@@ -39,7 +39,7 @@ namespace ChartEditor
             }
         }
 
-        public AddressInChart(AddressWithinRange rangeAddress)
+        public AddressInChart(IReadOnlyAddressWithinRange rangeAddress)
         {
             if (rangeAddress == null)
             {
@@ -134,7 +134,7 @@ namespace ChartEditor
         }
     }
 
-    public class AddressWithinRange
+    public class AddressWithinRange : IReadOnlyAddressWithinRange
     {
         const int BAR_INDEX_DEFAULT = 0;
         const int SUBDIVISION_INDEX_DEFAULT = 0;
@@ -149,7 +149,7 @@ namespace ChartEditor
             SetRange(range);
         }
 
-        public AddressWithinRange(AddressWithinRange address)
+        public AddressWithinRange(IReadOnlyAddressWithinRange address)
         {
             if (address == null)
             {
@@ -236,8 +236,22 @@ namespace ChartEditor
             // d•¡íœ‚µ‚Ä’Ç‰Á
             foreach(var index in range.Distinct().OrderBy(x => x)) { this.range.Add(index); }
         }
+        public void MirrorRange()
+        {
+            var newRange = new List<float>();
 
-        public void SetSameAddress(AddressWithinRange address)
+            for (int i = 0; i < this.range.Count; i++)
+            {
+                float index = this.range[i];
+
+                if (index == 100) { return; }
+                newRange.Add(15 - index);
+            }
+
+            SetRange(newRange);
+        }
+
+        public void SetSameAddress(IReadOnlyAddressWithinRange address)
         {
             SetBarIndex(address.BarIndex);
             SetSubDivisionIndex(address.SubDivisionIndex);
@@ -249,15 +263,15 @@ namespace ChartEditor
         /// ˆø”‚Ì‚Ù‚¤‚ª’x‚¯‚ê‚ÎTrue
         /// </summary>
         /// <param name="address"></param>
-        public bool IsEarlierThan(AddressWithinRange address)
+        public bool IsEarlierThan(IReadOnlyAddressWithinRange address)
         {
             // ˆá‚¤¬ß”Ô†‚Ìê‡
-            if (this.barIndex.Value < address.barIndex.Value) { return true; }
-            else if (this.barIndex.Value > address.barIndex.Value) { return false; }
+            if (this.barIndex.Value < address.BarIndex) { return true; }
+            else if (this.barIndex.Value > address.BarIndex) { return false; }
 
             // “¯‚¶¬ß”Ô†‚Ìê‡A•ªß”Ô†‚Å”»’f
-            if (this.subDivisionIndex.Value < address.subDivisionIndex.Value) { return true; }
-            else if (this.subDivisionIndex.Value > address.subDivisionIndex.Value) { return false; }
+            if (this.subDivisionIndex.Value < address.SubDivisionIndex) { return true; }
+            else if (this.subDivisionIndex.Value > address.SubDivisionIndex) { return false; }
 
             // ‘S‚­“¯‚¶ê‡false‚ğ•Ô‚·
             return false;
@@ -267,5 +281,21 @@ namespace ChartEditor
         {
             return $"#{BarIndex} - {SubDivisionIndex} - {Range[0]}~{Range[^1]}";
         }
+    }
+
+    public interface IReadOnlyAddressWithinRange
+    {
+        int BarIndex { get; }
+        IReadOnlyReactiveProperty<int> BarIndexRP { get; }
+
+        int SubDivisionIndex { get; }
+        IReadOnlyReactiveProperty<int> SubDivisionIndexRP { get; }
+
+        List<float> Range { get; }
+        IReadOnlyReactiveCollection<float> RangeRP { get; }
+
+        bool IsEarlierThan(IReadOnlyAddressWithinRange address);
+
+        string ToString();
     }
 }

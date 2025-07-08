@@ -49,7 +49,7 @@ namespace ChartEditor
                 {
                     foreach(var noteData in subData.NoteDatas)
                     {
-                        groundDeployer.DeployForNoteData(noteData, false);
+                        groundDeployer.DeployForNoteData(noteData);
                         spaceDeployer.DeployForNoteData(noteData);
                     }
                 }

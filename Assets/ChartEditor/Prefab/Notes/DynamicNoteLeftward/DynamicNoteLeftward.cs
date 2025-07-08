@@ -18,20 +18,20 @@ namespace ChartEditor
 
         public NoteData_DynamicLeftward(NoteData_DynamicLeftward data)
         {
-            this.SetAddress(new AddressWithinRange(data.Address));
+            this.SetAddress(new AddressWithinRange(data.address));
         }
 
         public DeploymentNoteType NoteType => DeploymentNoteType.DynamicGroundLeftward;
 
-        public AddressWithinRange Address { get; private set; }
+        AddressWithinRange address;
+        public IReadOnlyAddressWithinRange Address => address;
 
-        public void SetAddress(AddressWithinRange address)
+        public void SetAddress(IReadOnlyAddressWithinRange address)
         {
-            if (Address == null) { Address = new AddressWithinRange(address); }
+            if (Address == null) { this.address = new AddressWithinRange(address); }
             else
             {
-                //Debug.Log($"yˆÚ“®z:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
-                Address.SetSameAddress(address);
+                this.address.SetSameAddress(address);
             }
         }
 

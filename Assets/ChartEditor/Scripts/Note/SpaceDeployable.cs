@@ -13,6 +13,7 @@ namespace ChartEditor
         [SerializeField] private Renderer noteRenderer;
 
         NoteObject noteObject;
+        public NoteObject Note => noteObject;
         public Action OnDestroyListner { get; set; }
 
         private void Awake()
@@ -20,7 +21,7 @@ namespace ChartEditor
             noteObject = GetComponent<NoteObject>();
         }
 
-        void IFreedomDeployableObject.OnInstantiate(IDeployableNoteData noteData, Func<AddressWithinRange, Transform> getParentTransformFunc)
+        void IFreedomDeployableObject.OnInstantiate(IDeployableNoteData noteData, Func<IReadOnlyAddressWithinRange, Transform> getParentTransformFunc)
         {
             noteRenderer.material.color *= new Color(1, 1, 1, 0.5f);
             this.gameObject.SetActive(false);

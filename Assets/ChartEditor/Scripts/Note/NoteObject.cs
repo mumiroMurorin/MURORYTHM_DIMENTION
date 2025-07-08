@@ -26,7 +26,7 @@ namespace ChartEditor
 
         public IDeployableNoteData NoteData { get; set; }
 
-        public Func<AddressWithinRange, Transform> GetParentTransformFunc { get; set; }
+        public Func<IReadOnlyAddressWithinRange, Transform> GetParentTransformFunc { get; set; }
 
         CancellationTokenSource cts;
 

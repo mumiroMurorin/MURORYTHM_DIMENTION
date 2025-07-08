@@ -33,16 +33,14 @@ namespace ChartEditor
         DataToVertexObjectList dataToObj = new DataToVertexObjectList();
         public DataToVertexObjectList DataToObj => dataToObj;
 
-        IChartEditorDataGetter dataGetter;
-        IChartEditorDataSetter dataSetter;
+        INotesDataGetter notesGetter;
         IChartEditorOptionGetter optionGetter;
         CompositeDisposable disposableForBindForVertices = new CompositeDisposable();
 
         [Inject]
-        public void Constructor(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, IChartEditorOptionGetter optionGetter)
+        public void Constructor(IChartEditorOptionGetter optionGetter, INotesDataGetter notesGetter)
         {
-            this.dataGetter = dataGetter;
-            this.dataSetter = dataSetter;
+            this.notesGetter = notesGetter;
             this.optionGetter = optionGetter;
         }
 
@@ -54,7 +52,7 @@ namespace ChartEditor
         private void Bind()
         {
             // 編集中メッシュオブジェクトが変わったとき
-            dataGetter?.EditingVertices
+            notesGetter?.EditingVertices
                 .Subscribe(note =>
                 {
                     ResetVerticesPreview();

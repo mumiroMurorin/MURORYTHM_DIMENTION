@@ -10,12 +10,12 @@ namespace ChartEditor
 {
     public class NotesCopier : MonoBehaviour
     {
-        [SerializeField] MultiNoteSelector multiNoteSelector;
-        [SerializeField] NoteObjectsController noteObjectsController;
         [SerializeField] NoteDeployer noteDeployer;
-        [SerializeField] CursorInteracter cursorInteracter;
 
+        INotesDataGetter notesGetter;
+        INotesDataSetter notesSetter;
         IChartEditorDataGetter dataGetter;
+        IChartEditorDataSetter dataSetter;
         List<IDeployableNoteData> copiedNotes;
 
         EditMode[] ignoreEditModes = new EditMode[] {
@@ -27,9 +27,12 @@ namespace ChartEditor
         };
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter)
+        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, INotesDataGetter notesGetter, INotesDataSetter notesSetter)
         {
+            this.notesGetter = notesGetter;
+            this.notesSetter = notesSetter;
             this.dataGetter = dataGetter;
+            this.dataSetter = dataSetter;
         }
 
         void Update()
@@ -50,7 +53,7 @@ namespace ChartEditor
             EditMode currentEditMode = dataGetter.CurrentEditMode.Value;
             if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
 
-            copiedNotes = new List<IDeployableNoteData>(multiNoteSelector.SelectingNotes);
+            copiedNotes = new List<IDeployableNoteData>(notesGetter.SelectingNotes);
             Debug.Log("【Notes】ノーツをコピー");
         }
 
@@ -71,7 +74,7 @@ namespace ChartEditor
             var addressDelta = dataGetter.ChartData.Value.GetAddressDelta(cursorAddress, new AddressInChart(copiedNotesCopy[0].Address));
 
             // 全選択解除
-            multiNoteSelector.DeselectAll();
+            notesSetter.ClearSelectingNotes();
 
             foreach (var data in copiedNotesCopy)
             {
@@ -81,8 +84,8 @@ namespace ChartEditor
                 noteDeployer.DeployForNoteData(data);
 
                 // 選択する
-                if(!noteObjectsController.DataToObj.GetObject(data).TryGetComponent(out ISelectableNoteObject selectable)) { continue; }
-                multiNoteSelector.SelectMulti(selectable);
+                if(!notesGetter.GetNoteObject(data).TryGetComponent(out ISelectableNoteObject selectable)) { continue; }
+                notesSetter.TryAddSelectingNotes(selectable.NoteObject.NoteData);
             }
            
             Debug.Log("【Notes】ノーツを張り付け");

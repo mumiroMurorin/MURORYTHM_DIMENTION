@@ -18,7 +18,7 @@ namespace ChartEditor
 
         public NoteData_Hold(NoteData_Hold data)
         {
-            this.Address = new AddressWithinRange(data.Address);
+            SetAddress(data.address);
         }
 
         ReactiveProperty<DeploymentNoteType> noteType = new ReactiveProperty<DeploymentNoteType>(DeploymentNoteType.Hold);
@@ -40,7 +40,8 @@ namespace ChartEditor
             NoteType = noteType;
         }
 
-        public AddressWithinRange Address { get; private set; }
+        AddressWithinRange address;
+        public IReadOnlyAddressWithinRange Address => address;
 
         public void ChangeNoteType()
         {
@@ -93,18 +94,17 @@ namespace ChartEditor
             }
         }
 
-        public void SetAddress(AddressWithinRange address)
+        public void SetAddress(IReadOnlyAddressWithinRange address)
         {
             // 文節が更新されていなければチェインの更新はしない
             bool isUpdateSubLocate = true;
             if(Address == null) { isUpdateSubLocate = false; }
             else if(Address.BarIndex == address.BarIndex && Address.SubDivisionIndex == address.SubDivisionIndex) { isUpdateSubLocate = false; }
 
-            if (Address == null) { Address = new AddressWithinRange(address); }
+            if (Address == null) { this.address = new AddressWithinRange(address); }
             else
             {
-                //Debug.Log($"【移動】:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
-                Address.SetSameAddress(address);
+                this.address.SetSameAddress(address);
             }
 
             if (isUpdateSubLocate) { UpdateChainNote(); }

@@ -8,20 +8,22 @@ namespace ChartEditor
 {
     public class VerticesSlider : MonoBehaviour
     {
-        IChartEditorDataGetter chartEditorDataGetter;
+        IChartEditorDataGetter dataGetter;
+        INotesDataGetter notesGetter;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(IChartEditorDataGetter dataGetter, INotesDataGetter notesGetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.dataGetter = dataGetter;
+            this.notesGetter = notesGetter;
         }
 
         public void SlideIndices(int delta)
         {
-            if(chartEditorDataGetter == null) { return; }
-            if(chartEditorDataGetter.EditingVertices.Value == null) { return; }
+            if(dataGetter == null) { return; }
+            if(notesGetter.EditingVertices.Value == null) { return; }
 
-            var vertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
+            var vertices = notesGetter.EditingVertices.Value.SpaceHoldVertices;
 
             Record(() => 
             // ‚¸‚ç‚·

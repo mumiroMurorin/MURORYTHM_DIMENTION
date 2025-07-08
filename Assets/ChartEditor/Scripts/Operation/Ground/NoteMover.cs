@@ -10,9 +10,8 @@ namespace ChartEditor
         [Header("レーン(ノーツ)1マス分の横幅")]
         [SerializeField] float noteUnitWidth = 1f;
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
-        [SerializeField] MultiNoteSelector notesSelector;
-        [SerializeField] NoteObjectsController notesController;
 
+        INotesDataGetter notesGetter;
         IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter dataSetter;
 
@@ -22,8 +21,9 @@ namespace ChartEditor
         int pointerToAxisDelta;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter)
+        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter,INotesDataGetter notesGetter)
         {
+            this.notesGetter = notesGetter;
             this.dataGetter = dataGetter;
             this.dataSetter = dataSetter;
         }
@@ -35,7 +35,7 @@ namespace ChartEditor
                 dataGetter.CurrentEditMode.Value != EditMode.Moving) { return; }
 
             if (Input.GetMouseButtonDown(0)) { StartMovingNotes(); }
-            else if (Input.GetMouseButton(0)) { MoveNotes(); } 
+            else if (Input.GetMouseButton(0)) { MoveNotesOnClick(); } 
             else if (Input.GetMouseButtonUp(0)) { EndMoveNote(); }
         }
 
@@ -61,9 +61,9 @@ namespace ChartEditor
             pointerToAxisDelta = (int)((deltaX + noteUnitWidth / 2f) / noteUnitWidth);
 
             // 複数選択されたオブジェクトから動かせるやつを取り出す
-            foreach (var data in notesSelector.SelectingNotes)
+            foreach (var data in notesGetter.SelectingNotes)
             {
-                var obj = notesController.DataToObj.GetObject(data);
+                var obj = notesGetter.GetNoteObject(data);
                 if (!obj.TryGetComponent(out IMovableObject movable)) { continue; }
 
                 // ノーツオブジェクト側の動作
@@ -80,10 +80,7 @@ namespace ChartEditor
             dataSetter?.SetEditMode(EditMode.Moving);
         }
         
-        /// <summary>
-        /// クリック中(移動中)
-        /// </summary>
-        private void MoveNotes()
+        private void MoveNotesOnClick()
         {
             if (movableAndDelta == null || movableAndDelta.Count == 0) { return; }
 
@@ -98,14 +95,24 @@ namespace ChartEditor
             // アドレスの移動
             foreach (var pair in movableAndDelta)
             {
-                var noteData = pair.Key.Note.NoteData;
-
                 var newAddress = dataGetter.ChartData.Value.AddressAddition(deployable.Address, pair.Value.SubDivisionDelta);
                 newAddress.SetSliderIndex(deployable.Address.SliderIndex + pair.Value.SliderDelta - pointerToAxisDelta);
-                noteData.SetAddress(new AddressWithinRange(newAddress, pair.Value.RangeCount));
 
-                pair.Key.OnMove();
+                MoveNote(pair.Key, new AddressWithinRange(newAddress, pair.Value.RangeCount));
             }
+        }
+
+        /// <summary>
+        /// ノートを指定されたアドレスに移動させる
+        /// </summary>
+        /// <param name="movableObject"></param>
+        /// <param name="newAddress"></param>
+        public void MoveNote(IMovableObject movableObject, AddressWithinRange newAddress)
+        {
+            var noteData = movableObject.Note.NoteData;
+            noteData.SetAddress(newAddress);
+
+            movableObject.OnMove();
         }
 
         /// <summary>

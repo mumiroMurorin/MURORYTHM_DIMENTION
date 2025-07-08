@@ -9,12 +9,10 @@ namespace ChartEditor
 {
     public class MultiNoteSelector : MonoBehaviour
     {
-        [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
+        IChartEditorDataGetter dataGetter;
+        INotesDataGetter notesGetter;
+        INotesDataSetter notesSetter;
 
-        List<ISelectableNoteObject> selectingObjects = new List<ISelectableNoteObject>();
-        public List<IDeployableNoteData> SelectingNotes { get; private set; } = new List<IDeployableNoteData>();
-
-        IChartEditorDataGetter chartEditorDataGetter;
         EditMode[] ignoreEditModes = new EditMode[] {
             EditMode.Connecting,
             EditMode.EditingBarConfig,
@@ -22,22 +20,55 @@ namespace ChartEditor
             EditMode.Moving,
             EditMode.Scaling,
         };
-        Vector3 cursorPos;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(INotesDataGetter notesGetter, INotesDataSetter notesSetter, IChartEditorDataGetter dataGetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.dataGetter = dataGetter;
+            this.notesGetter = notesGetter;
+            this.notesSetter = notesSetter;
+        }
+
+        private void Start()
+        {
+            Bind();
+        }
+
+        private void Bind()
+        {
+            // 選択中ノーツにデータが追加された時の挙動
+            notesGetter.SelectingNotes.ObserveAdd()
+                .Subscribe(data => {
+                    var obj = notesGetter.GetNoteObject(data.Value);
+                    if (obj == null) { return; }
+                    if (!obj.TryGetComponent(out ISelectableNoteObject selectable)) { return; }
+
+                    // 選択
+                    selectable.OnSelect();
+                })
+                .AddTo(this.gameObject);
+
+            // 選択中ノーツからデータが削除された時の挙動
+            notesGetter.SelectingNotes.ObserveRemove()
+                .Subscribe(data => {
+                    var obj = notesGetter.GetNoteObject(data.Value);
+                    if (obj == null) { return; }
+                    if (!obj.TryGetComponent(out ISelectableNoteObject selectable)) { return; }
+
+                    // 選択解除
+                    selectable.OnDeselect();
+                })
+                .AddTo(this.gameObject);
         }
 
         void Update()
         {
-            if (chartEditorDataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
+            if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
 
             // Ctrl+左クリックで複数選択
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0))
             {
-                var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableNoteCollider>();
+                var collider = dataGetter.GetInteractableCollider<ISelectableNoteCollider>();
                 if (collider == null) { return; }
 
                 SelectMulti(collider.SelectableObject);
@@ -48,11 +79,11 @@ namespace ChartEditor
                 // カーソルがUI上にあるときは返す
                 if (EventSystem.current.IsPointerOverGameObject()) { return; }
 
-                // カーソル先が頂点オブジェクトでないなら選択解除する
-                var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableNoteCollider>();
+                // カーソル先がノートオブジェクトでないなら選択全解除する
+                var collider = dataGetter.GetInteractableCollider<ISelectableNoteCollider>();
                 if (collider == null) 
                 {
-                    DeselectAll();
+                    notesSetter.ClearSelectingNotes();
                 }
                 // ノートであれば単選択する
                 else
@@ -66,15 +97,13 @@ namespace ChartEditor
         private void SelectSingle(ISelectableNoteObject obj)
         {
             // 既に含まれている場合は何もしない
-            if (selectingObjects.Contains(obj)) { return; }
+            foreach(var n in notesGetter.SelectingNotes) { if (n == obj.NoteObject.NoteData) { return; }; }
 
             // 既に選択されているオブジェクトを選択解除する
-            DeselectAll();
+            notesSetter.ClearSelectingNotes();
 
             // 含まれていない場合はリストに追加
-            selectingObjects.Add(obj);
-            SelectingNotes.Add(obj.NoteObject.NoteData);
-            obj.OnSelect();
+            notesSetter.TryAddSelectingNotes(obj.NoteObject.NoteData);
         }
 
         /// <summary>
@@ -82,34 +111,10 @@ namespace ChartEditor
         /// </summary>
         public void SelectMulti(ISelectableNoteObject obj)
         {
-            // 既に含まれている場合はそのオブジェクトをリストから削除
-            if (selectingObjects.Contains(obj)) 
-            {
-                selectingObjects.Remove(obj);
-                SelectingNotes.Remove(obj.NoteObject.NoteData);
-                obj.OnDeselect();
-            }
-            // 含まれていない場合はリストに追加
-            else
-            {
-                selectingObjects.Add(obj);
-                SelectingNotes.Add(obj.NoteObject.NoteData);
-                obj.OnSelect();
-            }
-        }
-
-        /// <summary>
-        /// 複数選択解除
-        /// </summary>
-        public void DeselectAll()
-        {
-            foreach(var obj in selectingObjects)
-            {
-                obj?.OnDeselect();
-            }
-
-            selectingObjects.Clear();
-            SelectingNotes.Clear();
+            // 追加
+            if (notesSetter.TryAddSelectingNotes(obj.NoteObject.NoteData)) { return; }
+            // 削除
+            notesSetter.TryRemoveSelectingNotes(obj.NoteObject.NoteData);
         }
     }
 

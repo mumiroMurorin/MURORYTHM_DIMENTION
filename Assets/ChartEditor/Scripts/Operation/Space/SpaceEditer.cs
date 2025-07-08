@@ -7,12 +7,14 @@ namespace ChartEditor
 {
     public class SpaceEditor : MonoBehaviour
     {
+        INotesDataSetter notesSetter;
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorDataSetter chartEditorDataSetter;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorDataSetter chartEditorDataSetter)
+        public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorDataSetter chartEditorDataSetter, INotesDataSetter notesSetter)
         {
+            this.notesSetter = notesSetter;
             this.chartEditorDataGetter = chartEditorDataGetter;
             this.chartEditorDataSetter = chartEditorDataSetter;
         }
@@ -35,8 +37,8 @@ namespace ChartEditor
 
             Debug.Log("ï“èWäJén");
             chartEditorDataSetter.SetEditNoteType(EditNoteType.Vertices);
-            chartEditorDataSetter.SetEditingVertices(editableObject.NoteData);
             chartEditorDataSetter.SetEditMode(EditMode.None);
+            notesSetter.SetEditingVertices(editableObject.NoteData);
         }
 
         /// <summary>

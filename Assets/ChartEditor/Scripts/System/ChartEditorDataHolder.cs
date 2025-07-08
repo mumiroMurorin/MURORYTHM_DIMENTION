@@ -90,8 +90,9 @@ namespace ChartEditor
 
         #endregion
 
-        #region DeploymentNoteType 配置ノーツ関係
+        #region ノーツデータ関係
 
+        // 配置中のノーツタイプ
         ReactiveProperty<DeploymentNoteType> deploymentNoteType = new ReactiveProperty<DeploymentNoteType>(ChartEditor.DeploymentNoteType.TouchNote);
         IReadOnlyReactiveProperty<DeploymentNoteType> IChartEditorDataGetter.DeploymentNoteType => deploymentNoteType;
         void IChartEditorDataSetter.SetNoteType(DeploymentNoteType noteType)
@@ -100,9 +101,7 @@ namespace ChartEditor
             Debug.Log($"Change Deployment Note: {deploymentNoteType.Value}");
         }
 
-        #endregion
-
-
+        // インタラクトされているコライダーたち
         ReactiveCollection<IInteractableCollider> interactableColliders = new ReactiveCollection<IInteractableCollider>();
         public IReadOnlyReactiveCollection<IInteractableCollider> InteractableColliders => interactableColliders;
         public T GetInteractableCollider<T>() where T : IInteractableCollider
@@ -125,14 +124,7 @@ namespace ChartEditor
             }
         }
 
-        // 編集中の頂点ありオブジェクト
-        ReactiveProperty<IVerticesControlableNoteData> editingVertices = new ReactiveProperty<IVerticesControlableNoteData>();
-        public IReadOnlyReactiveProperty<IVerticesControlableNoteData> EditingVertices => editingVertices;
-        public void SetEditingVertices(IVerticesControlableNoteData data)
-        {
-            if(editingVertices.Value == data) { return; }
-            editingVertices.Value = data;
-        }
+        #endregion
 
         #region PlayMode プレイモード関係
 
@@ -196,8 +188,6 @@ namespace ChartEditor
 
         IReadOnlyReactiveCollection<IInteractableCollider> InteractableColliders { get; }
 
-        IReadOnlyReactiveProperty<IVerticesControlableNoteData> EditingVertices { get; }
-
         T GetInteractableCollider<T>() where T : IInteractableCollider;
 
         IReadOnlyReactiveProperty<DeploymentNoteType> DeploymentNoteType { get; }
@@ -229,8 +219,6 @@ namespace ChartEditor
         void SetNoteType(DeploymentNoteType noteType);
 
         void SetInteractableColliders(IInteractableCollider[] colliders);
-
-        void SetEditingVertices(IVerticesControlableNoteData data);
 
         void SetPlayMode(PlayMode playMode);
 

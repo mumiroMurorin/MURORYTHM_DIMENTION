@@ -15,17 +15,19 @@ namespace ChartEditor
         [Tooltip("ノートデータ(抽象クラス)")]
         [SerializeReference, SubclassSelector] IDeployableNoteData[] noteDataList;
         [SerializeField] NoteTypeToNoteObjectList noteList;
-        [SerializeField] NoteObjectsController noteObjectsController;
 
         IChartEditorDataGetter dataGetter;
+        INotesDataSetter notesSetter;
+
         IDeployableObject deployingNote;
         IDeployableNoteData deployingNoteData;
         bool isDeployedTentative;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter)
+        public void Construct(IChartEditorDataGetter dataGetter,INotesDataSetter notesSetter)
         {
             this.dataGetter = dataGetter;
+            this.notesSetter = notesSetter;
         }
 
         private void Start()
@@ -100,12 +102,10 @@ namespace ChartEditor
             // データ上の追加
             AddressInChart address = collider.Address;
             deployingNoteData.SetAddress(new AddressWithinRange(address, 1));
-            dataGetter.ChartData.Value.AddNote(deployingNoteData);
-            
+            notesSetter.AddDataToNoteObject(deployingNoteData, deployingNote.Note);
+
             // オブジェクトの設置
             deployingNote.OnDeploy();
-
-            noteObjectsController.AddNote(deployingNoteData, deployingNote.Note);
 
             SpawnNewNote(dataGetter.DeploymentNoteType.Value);
         }
@@ -150,11 +150,8 @@ namespace ChartEditor
         /// 外部データから配置
         /// </summary>
         /// <param name="groundNoteData"></param>
-        public void DeployForNoteData(IDeployableNoteData noteData, bool isAddDataForChartData = true)
+        public void DeployForNoteData(IDeployableNoteData noteData)
         {
-            // データの追加
-            if (isAddDataForChartData) { dataGetter.ChartData.Value.AddNote(noteData); }
-
             var obj = InstantiateNoteObject(noteData);
             if (obj == null) { return; }
 
@@ -163,7 +160,7 @@ namespace ChartEditor
             obj.OnMove(parent);
             obj.OnDeploy();
 
-            noteObjectsController.AddNote(noteData, obj.Note);
+            notesSetter.AddDataToNoteObject(noteData, obj.Note);
         }
 
 
@@ -184,7 +181,7 @@ namespace ChartEditor
             deployingNoteData = null;
         }
 
-        private Transform GetNoteParentTransform(AddressWithinRange address)
+        private Transform GetNoteParentTransform(IReadOnlyAddressWithinRange address)
         {
             return dataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(address));
         }
@@ -222,7 +219,6 @@ namespace ChartEditor
                 if (noteType == note.DeploymentNoteType) { return note.NoteObject; }
             }
 
-            //Debug.LogWarning($"対応するノーツが存在しませんでした: {noteType}");
             return null;
         }
     }

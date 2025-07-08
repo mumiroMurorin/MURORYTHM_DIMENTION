@@ -8,33 +8,39 @@ namespace ChartEditor
     public class NoteDestroyer : MonoBehaviour
     {
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
-        [SerializeField] MultiNoteSelector noteSelector;
-        [SerializeField] NoteObjectsController noteObjectsController;
 
-        IChartEditorDataGetter chartEditorDataGetter;
-        IChartEditorDataSetter chartEditorDataSetter;
+        INotesDataGetter notesGetter;
+        INotesDataSetter notesSetter;
+        IChartEditorDataGetter dataGetter;
+        IChartEditorDataSetter dataSetter;
 
         EditMode[] ignoreEditModes = new EditMode[] {
-             
+             EditMode.Connecting,
+             EditMode.EditingBarConfig,
+             EditMode.EditingSubDivisionConfig,
+             EditMode.Moving,
+             EditMode.Scaling,
         };
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorDataSetter chartEditorDataSetter)
+        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, INotesDataGetter notesGetter, INotesDataSetter notesSetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
-            this.chartEditorDataSetter = chartEditorDataSetter;
+            this.notesGetter = notesGetter;
+            this.notesSetter = notesSetter;
+            this.dataGetter = dataGetter;
+            this.dataSetter = dataSetter;
         }
 
         private void Update()
         {
-            if(chartEditorDataGetter.EditNoteType.Value != EditNoteType.Ground &&
-                chartEditorDataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
+            if(dataGetter.EditNoteType.Value != EditNoteType.Ground &&
+                dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
 
             // Deleteキーで消す
             if (Input.GetKeyDown(KeyCode.Delete))
             {
                 // 除外エディットモード中は返す
-                if (chartEditorDataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
+                if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
 
                 DestroyNotes();
             }
@@ -42,20 +48,19 @@ namespace ChartEditor
 
         private void DestroyNotes()
         {
-            foreach(var data in noteSelector.SelectingNotes) { DestroyNote(data); }
+            foreach(var data in notesGetter.SelectingNotes) { DestroyNote(data); }
         }
 
         public void DestroyNote(IDeployableNoteData noteData)
         {
             // オブジェクトの削除
-            var noteObject = noteObjectsController.DataToObj.GetObject(noteData);
+            var noteObject = notesGetter.GetNoteObject(noteData);
             if (noteObject == null || !noteObject.TryGetComponent(out IDestroyableObject destroyableObject)) { return; }
 
             destroyableObject.OnDestroy();
 
             // データの削除
-            noteObjectsController.DataToObj.Remove(noteData);
-            chartEditorDataGetter.ChartData.Value.RemoveNote(noteData);
+            notesSetter.RemoveDataToNoteObject(noteData);
         }
 
     }

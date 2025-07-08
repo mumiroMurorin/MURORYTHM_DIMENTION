@@ -10,7 +10,8 @@ namespace ChartEditor
 {
     public class VerticesCopier : MonoBehaviour
     {
-        IChartEditorDataGetter chartEditorDataGetter;
+        INotesDataGetter notesGetter;
+        IChartEditorDataGetter dataGetter;
         List<VertexData> copiedVertices;
 
         EditMode[] ignoreEditModes = new EditMode[] {
@@ -20,14 +21,15 @@ namespace ChartEditor
         };
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(IChartEditorDataGetter dataGetter, INotesDataGetter notesGetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.notesGetter = notesGetter;
+            this.dataGetter = dataGetter;
         }
 
         void Update()
         {
-            if(chartEditorDataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
+            if(dataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
 
             // 頂点リストのコピー
             if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C)) { CopyVertices(); }
@@ -40,10 +42,10 @@ namespace ChartEditor
         /// </summary>
         private void CopyVertices()
         {
-            EditMode currentEditMode = chartEditorDataGetter.CurrentEditMode.Value;
+            EditMode currentEditMode = dataGetter.CurrentEditMode.Value;
             if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
 
-            copiedVertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.Vertices.Select(v => new VertexData(v)).ToList();
+            copiedVertices = notesGetter.EditingVertices.Value.SpaceHoldVertices.Vertices.Select(v => new VertexData(v)).ToList();
             Debug.Log("【Vertices】頂点リストをコピー");
         }
 
@@ -52,14 +54,14 @@ namespace ChartEditor
         /// </summary>
         private void PasteVertices()
         {
-            EditMode currentEditMode = chartEditorDataGetter.CurrentEditMode.Value;
+            EditMode currentEditMode = dataGetter.CurrentEditMode.Value;
             if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
             if (copiedVertices == null) { return; }
 
             // 現在編集中の頂点データを全て消して新たに代入する
-            var currentEdit = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
+            var currentEdit = notesGetter.EditingVertices.Value.SpaceHoldVertices;
             var copiedVerticesCopy = new List<VertexData>(copiedVertices);
-            var originVertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices.Vertices.Select(v => new VertexData(v)).ToList();
+            var originVertices = notesGetter.EditingVertices.Value.SpaceHoldVertices.Vertices.Select(v => new VertexData(v)).ToList();
 
             Record(() =>
             // 張り付け

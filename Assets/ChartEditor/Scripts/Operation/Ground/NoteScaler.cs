@@ -9,9 +9,8 @@ namespace ChartEditor
     public class NoteScaler : MonoBehaviour
     {
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
-        [SerializeField] MultiNoteSelector notesSelector;
-        [SerializeField] NoteObjectsController notesController;
 
+        INotesDataGetter notesGetter;
         IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter dataSetter;
 
@@ -22,8 +21,9 @@ namespace ChartEditor
         bool isRightAnchored;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter)
+        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, INotesDataGetter notesGetter)
         {
+            this.notesGetter = notesGetter;
             this.dataGetter = dataGetter;
             this.dataSetter = dataSetter;
         }
@@ -58,9 +58,9 @@ namespace ChartEditor
             var baseNoteData = baseNote.Note.NoteData;
 
             // 複数選択されたオブジェクトから拡大縮小できるやつを取り出す
-            foreach (var data in notesSelector.SelectingNotes)
+            foreach (var data in notesGetter.SelectingNotes)
             {
-                var obj = notesController.DataToObj.GetObject(data);
+                var obj = notesGetter.GetNoteObject(data);
                 if (!obj.TryGetComponent(out IScalableObject scalable)) { continue; }
 
                 // ノーツオブジェクト側の動作
@@ -100,8 +100,7 @@ namespace ChartEditor
             foreach (var pair in scalableAndDelta)
             {
                 // データの更新
-                var noteAddress = pair.Key.Note.NoteData.Address;
-                ChangeRange(noteAddress, pair.Value + address.SliderIndex, isRightAnchored);
+                ChangeRange(pair.Key, pair.Value + address.SliderIndex, isRightAnchored);
 
                 // オブジェクトの動作
                 pair.Key.OnScale();
@@ -114,9 +113,10 @@ namespace ChartEditor
         /// <param name="address"></param>
         /// <param name="index"></param>
         /// <param name="isRightAnchored"></param>
-        public void ChangeRange(AddressWithinRange address, float index, bool isRightAnchored)
+        private void ChangeRange(IScalableObject scalableNote, float index, bool isRightAnchored)
         {
-            List<float> shifted = new List<float>();
+            var address = scalableNote.Note.NoteData.Address;
+            var shifted = new List<float>();
             float min = address.Range.First();
             float max = address.Range.Last();
 
@@ -140,7 +140,11 @@ namespace ChartEditor
                 return;
             }
 
-            address.SetRange(shifted);
+            var newAddress = new AddressWithinRange(address);
+            newAddress.SetRange(shifted);
+
+            scalableNote.Note.NoteData.SetAddress(newAddress);
+
             Debug.Log($"【拡大】\n {address.Range.First()} ～ {address.Range.Last()}");
         }
 

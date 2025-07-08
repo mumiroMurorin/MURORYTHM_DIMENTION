@@ -9,9 +9,9 @@ namespace ChartEditor
     {
         DeploymentNoteType NoteType { get; }
 
-        AddressWithinRange Address { get; }
+        IReadOnlyAddressWithinRange Address { get; }
 
-        void SetAddress(AddressWithinRange address);
+        void SetAddress(IReadOnlyAddressWithinRange address);
 
         IDeployableNoteData Copy();
     }

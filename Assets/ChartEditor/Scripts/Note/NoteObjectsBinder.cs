@@ -6,28 +6,44 @@ using UniRx;
 
 namespace ChartEditor
 {
-    public class NoteObjectsController : MonoBehaviour
+    public class NoteObjectsBinder : MonoBehaviour
     {
-        DataToNoteObjectList dataToObj = new DataToNoteObjectList();
-        public DataToNoteObjectList DataToObj => dataToObj;
-
         IChartEditorDataGetter dataGetter;
-        IChartEditorDataSetter dataSetter;
-        IChartEditorOptionGetter optionGetter;
+        INotesDataGetter notesGetter;
+
         AddressInChart stackAddress;
 
         [Inject]
-        public void Constructor(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, IChartEditorOptionGetter optionGetter)
+        public void Constructor(IChartEditorDataGetter dataGetter, INotesDataGetter notesGetter)
         {
             this.dataGetter = dataGetter;
-            this.dataSetter = dataSetter;
-            this.optionGetter = optionGetter;
+            this.notesGetter = notesGetter;
         }
 
-        public void AddNote(IDeployableNoteData data, NoteObject obj)
+        private void Start()
         {
-            DataToObj.List.Add(new DataToNoteObject(data, obj));
-            BindForNoteAddress(data);
+            Bind();
+        }
+
+        private void Bind()
+        {
+            // 追加された時の挙動
+            notesGetter.DataToNoteObject.ObserveAdd()
+                .Subscribe(data => { 
+                    BindForNoteAddress(data.Value.Data);
+
+                    // 譜面データへのノーツデータの追加
+                    dataGetter.ChartData.Value.AddNote(data.Value.Data);
+                })
+                .AddTo(this.gameObject);
+
+            // 削除された時の挙動
+            notesGetter.DataToNoteObject.ObserveRemove()
+                .Subscribe(data => {
+                    // 譜面データからノーツデータの削除
+                    dataGetter.ChartData.Value.RemoveNote(data.Value.Data);
+                })
+                .AddTo(this.gameObject);
         }
 
         private void BindForNoteAddress(IDeployableNoteData data)
@@ -101,48 +117,5 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
         }
-    }
-
-    public class DataToNoteObjectList
-    {
-        List<DataToNoteObject> list = new List<DataToNoteObject>();
-
-        public List<DataToNoteObject> List { get { return list; } }
-
-        public bool Remove(IDeployableNoteData data)
-        {
-            var dto = list.Find(n => n.Data == data);
-            if (dto == null)
-            {
-                Debug.LogWarning($"【Note】データに対応するオブジェクトが見つかりませんでした: {data.Address}");
-                return false;
-            }
-
-            return list.Remove(dto);
-        }
-
-        public NoteObject GetObject(IDeployableNoteData data) { return list.Find(x => x.Data == data)?.Object; }
-
-        public void Clear()
-        {
-            foreach (var pair in list)
-            {
-                pair.Object.Destroy();
-            }
-
-            list.Clear();
-        }
-    }
-
-    public class DataToNoteObject
-    {
-        public DataToNoteObject(IDeployableNoteData data, NoteObject obj)
-        {
-            this.Data = data;
-            this.Object = obj;
-        }
-
-        public IDeployableNoteData Data { get; set; }
-        public NoteObject Object { get; set; }
     }
 }

@@ -11,7 +11,9 @@ namespace ChartEditor
         [SerializeField] VertexDeployer vertexDeployer;
         [SerializeField] VertexObjectsController verticesController;
         [SerializeField] MultiVertexSelector vertexSelector;
-        IChartEditorDataGetter chartEditorDataGetter;
+
+        INotesDataGetter notesGetter;
+        IChartEditorDataGetter dataGetter;
 
         EditMode[] ignoreEditModes = new EditMode[] {
              EditMode.VertexMoving,
@@ -20,20 +22,21 @@ namespace ChartEditor
         };
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(IChartEditorDataGetter dataGetter, INotesDataGetter notesGetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.notesGetter = notesGetter;
+            this.dataGetter = dataGetter;
         }
 
         private void Update()
         {
-            if (chartEditorDataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
+            if (dataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
 
             // Deleteキーで消す
             if (Input.GetKeyDown(KeyCode.Delete)) 
             {
                 // 除外エディットモード中は返す
-                if (chartEditorDataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
+                if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
 
                 DestroyVertices();
             }
@@ -41,7 +44,7 @@ namespace ChartEditor
 
         private void DestroyVertices()
         {
-            var currentEditVertices = chartEditorDataGetter.EditingVertices.Value.SpaceHoldVertices;
+            var currentEditVertices = notesGetter.EditingVertices.Value.SpaceHoldVertices;
 
             // 3点以下だった場合消さない
             if (currentEditVertices.Vertices.Count - vertexSelector.SelectingVertices.Count < 3)
