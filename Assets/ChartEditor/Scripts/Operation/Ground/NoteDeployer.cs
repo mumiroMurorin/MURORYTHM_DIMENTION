@@ -141,7 +141,7 @@ namespace ChartEditor
             }
 
             deployable.OnInstantiate(noteData, GetNoteParentTransform);
-            deployable.OnDestroyListner += () => OnDestroyDeployingNote();
+            deployable.OnDestroyListner += () => OnDestroyDeployingNote(noteData);
 
             return deployable;
         }
@@ -176,8 +176,10 @@ namespace ChartEditor
             deployingNote.OnDisable();
         }
 
-        private void OnDestroyDeployingNote()
+        private void OnDestroyDeployingNote(IDeployableNoteData noteData)
         {
+            if (noteData != deployingNoteData) { return; }
+
             deployingNote = null;
             deployingNoteData = null;
         }

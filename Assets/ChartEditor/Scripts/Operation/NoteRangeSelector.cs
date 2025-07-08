@@ -55,7 +55,7 @@ namespace ChartEditor
             }
             
             // ”ÍˆÍ‘I‘ğI—¹
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(0) && isSelecting)
             {
                 endPos = Input.mousePosition;
                 isSelecting = false;
