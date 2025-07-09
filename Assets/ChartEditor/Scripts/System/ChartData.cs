@@ -149,23 +149,38 @@ namespace ChartEditor
 
             // bpmは以前のやつを使う
             if (bpm == -1) { bpm = this.subDivisionDatas[0].Bpm.Value; }
-            List<SubDivisionDataInBeat> subDivisionDatas = new List<SubDivisionDataInBeat>();
 
-            // カウント数 * 分割数が分線の数
-            for (int i = 0; i < beatCount * divNum; i++)
+            // 元あった分線データを割り振る
+            var indexToSubdivisionData = new List<IndexToSubdivisionData>();
+            var beforeList = Enumerable.Range(0, this.subDivisionDatas.Count).Select(i => (float)i / this.subDivisionDatas.Count).ToList();
+            var afterList = Enumerable.Range(0, beatCount * divNum).Select(i => (float)i / (beatCount * divNum)).ToList();
+            beforeList.SnapToNearest(afterList);
+
+            for(int i = 0; i < this.subDivisionDatas.Count; i++)
             {
-                subDivisionDatas.Add(new SubDivisionDataInBeat(bpm, barIndex, i));
+                indexToSubdivisionData.Add(new IndexToSubdivisionData((int)beforeList[i], this.subDivisionDatas[i]));
             }
 
-            // データセット
+            // 新規セット
+            // カウント数 * 分割数が分線の数
+            var subDivisionDatas = new List<SubDivisionDataInBeat>();
+            for (int i = 0; i < beatCount * divNum; i++) { subDivisionDatas.Add(new SubDivisionDataInBeat(bpm, barIndex, i)); }
             SetSubDivisionDatas(subDivisionDatas);
+
+            // 以前あったノーツを割り振る
+            foreach (var sub in indexToSubdivisionData)
+            {
+                foreach (var note in sub.Subdivision.NoteDatas)
+                {
+                    note.SetAddress(new AddressWithinRange(barIndex, sub.Index, note.Address.Range));
+                }
+            }
         }
 
         public Transform GetPlacementLocation(AddressInChart address)
         {
             if (address.SubDivisionIndex >= subDivisionDatas.Count)
             {
-                // Debug.LogError($"【System】値が分線の数を超えています: {address.SubDivisionIndex}/{subDivisionDatas.Count}");
                 return null;
             }
 
@@ -220,6 +235,19 @@ namespace ChartEditor
 
             this.divisionNum.Value = divisionNum;
             UpdateSubDivisionData(this.beatCount.Value, this.beatUnit.Value, divisionNum);
+        }
+
+        private class IndexToSubdivisionData
+        {
+            public IndexToSubdivisionData(int index, SubDivisionDataInBeat subData)
+            {
+                Index = index;
+                Subdivision = subData;
+            }
+
+            public int Index { get; set; }
+
+            public SubDivisionDataInBeat Subdivision { get; set; }
         }
 
         #endregion
