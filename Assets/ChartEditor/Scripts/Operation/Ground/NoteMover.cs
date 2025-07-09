@@ -28,7 +28,7 @@ namespace ChartEditor
             this.dataSetter = dataSetter;
         }
 
-        void Update()
+        void LateUpdate()
         {
             // 配置モードのみ
             if (dataGetter.CurrentEditMode.Value != EditMode.Move &&
@@ -125,6 +125,8 @@ namespace ChartEditor
                 pair.Key?.OnMoveEnd();
             }
 
+            dataSetter?.SetEditMode(EditMode.Move);
+
             Initialize();
         }
 
@@ -134,6 +136,7 @@ namespace ChartEditor
         private void Initialize()
         {
             baseAddress = null;
+            lastLocation = null;
             pointerToAxisDelta = 0;
             movableAndDelta.Clear();
         }

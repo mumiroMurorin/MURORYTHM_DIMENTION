@@ -50,7 +50,6 @@ namespace ChartEditor
             // カーソル無視モードの更新
             chartEditorDataGetter?.CurrentEditMode
                 .Subscribe(mode => {
-
                     isCursorIgnoremode = false;
 
                     // 一つずつモードを取り出してどれかに該当したら無視モードにする

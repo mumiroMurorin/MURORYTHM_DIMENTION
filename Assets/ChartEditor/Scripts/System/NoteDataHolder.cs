@@ -60,8 +60,6 @@ namespace ChartEditor
             if (editingVertices.Value == data) { return; }
             editingVertices.Value = data;
         }
-
-
     }
 
     public class DataToNoteObject

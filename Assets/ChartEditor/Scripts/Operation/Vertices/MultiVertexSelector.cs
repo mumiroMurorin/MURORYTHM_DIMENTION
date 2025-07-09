@@ -14,7 +14,7 @@ namespace ChartEditor
         List<ISelectableVertexObject> selectingObjects = new List<ISelectableVertexObject>();
         public List<VertexData> SelectingVertices { get; private set; } = new List<VertexData>();
 
-        IChartEditorDataGetter chartEditorDataGetter;
+        IChartEditorDataGetter dataGetter;
         EditMode[] ignoreEditModes = new EditMode[] {
              EditMode.VertexMoving,
              EditMode.VerticesRotating,
@@ -23,19 +23,20 @@ namespace ChartEditor
         Vector3 cursorPos;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter)
+        public void Construct(IChartEditorDataGetter dataGetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.dataGetter = dataGetter;
         }
 
         void Update()
         {
-            if (chartEditorDataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
+            if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
+            if (dataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
 
             // Ctrl+左クリックで複数選択
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0))
             {
-                var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableVertexCollider>();
+                var collider = dataGetter.GetInteractableCollider<ISelectableVertexCollider>();
                 if (collider == null) { return; }
 
                 SelectMulti(collider.SelectableObject);
@@ -47,7 +48,7 @@ namespace ChartEditor
                 if (EventSystem.current.IsPointerOverGameObject()) { return; }
 
                 // カーソル先が頂点オブジェクトでないなら選択解除する
-                var collider = chartEditorDataGetter.GetInteractableCollider<ISelectableVertexCollider>();
+                var collider = dataGetter.GetInteractableCollider<ISelectableVertexCollider>();
                 if (collider == null) 
                 {
                     DeselectAll();

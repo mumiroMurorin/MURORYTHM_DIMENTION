@@ -8,7 +8,7 @@ namespace ChartEditor
 {
     public class ConfigEditor : MonoBehaviour
     {
-        IChartEditorDataGetter chartEditorDataGetter;
+        IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter chartEditorDataSetter;
 
         ReactiveProperty<IRhythmConfigurableSubDivisionCollider> subDivisionConfig = new ReactiveProperty<IRhythmConfigurableSubDivisionCollider>();
@@ -18,14 +18,17 @@ namespace ChartEditor
         public IReadOnlyReactiveProperty<IRhythmConfigurableBarCollider> BarConfig => barConfig;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorDataSetter chartEditorDataSetter)
+        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter chartEditorDataSetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
+            this.dataGetter = dataGetter;
             this.chartEditorDataSetter = chartEditorDataSetter;
         }
 
         private void Update()
         {
+            if(dataGetter.EditNoteType.Value == EditNoteType.Vertices) { return; }
+            if(dataGetter.CurrentEditMode.Value != EditMode.EditBarConfig && dataGetter.CurrentEditMode.Value != EditMode.EditSubDivisionConfig) { return; }
+
             // 左クリック
             if (Input.GetMouseButtonDown(0)) { EditConfig(); }
         }
@@ -35,8 +38,8 @@ namespace ChartEditor
         /// </summary>
         private void EditConfig()
         {
-            var subDivisionCollider = chartEditorDataGetter.GetInteractableCollider<IRhythmConfigurableSubDivisionCollider>();
-            var barCollider = chartEditorDataGetter.GetInteractableCollider<IRhythmConfigurableBarCollider>();
+            var subDivisionCollider = dataGetter.GetInteractableCollider<IRhythmConfigurableSubDivisionCollider>();
+            var barCollider = dataGetter.GetInteractableCollider<IRhythmConfigurableBarCollider>();
 
             // エディットモードの変更
             if(subDivisionCollider != null)

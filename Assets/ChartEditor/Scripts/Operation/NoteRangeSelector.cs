@@ -29,6 +29,7 @@ namespace ChartEditor
             EditMode.EditingSubDivisionConfig,
             EditMode.Moving,
             EditMode.Scaling,
+            EditMode.SpaceMoving,
         };
 
         [Inject]
@@ -40,6 +41,7 @@ namespace ChartEditor
 
         void Update()
         {
+            if (dataGetter.EditNoteType.Value != EditNoteType.Ground && dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
 
             // カーソル先にオブジェクトがある場合は返す

@@ -249,6 +249,7 @@ namespace ChartEditor
 
         SpaceDeploy = 100,
         SpaceMove = 110,
+        SpaceMoving = 111,
         SpaceEdit = 120,
         NoteSelect = 150,
 

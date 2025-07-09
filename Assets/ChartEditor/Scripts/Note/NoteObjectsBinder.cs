@@ -8,16 +8,21 @@ namespace ChartEditor
 {
     public class NoteObjectsBinder : MonoBehaviour
     {
+        [SerializeField] DeploymentNoteType defaultNoteType_ground;
+        [SerializeField] DeploymentNoteType defaultNoteType_space;
+
         IChartEditorDataGetter dataGetter;
+        IChartEditorDataSetter dataSetter;
         INotesDataGetter notesGetter;
 
         AddressInChart stackAddress;
 
         [Inject]
-        public void Constructor(IChartEditorDataGetter dataGetter, INotesDataGetter notesGetter)
+        public void Constructor(IChartEditorDataGetter dataGetter, INotesDataGetter notesGetter, IChartEditorDataSetter dataSetter)
         {
             this.dataGetter = dataGetter;
             this.notesGetter = notesGetter;
+            this.dataSetter = dataSetter;
         }
 
         private void Start()
@@ -42,6 +47,21 @@ namespace ChartEditor
                 .Subscribe(data => {
                     // 譜面データからノーツデータの削除
                     dataGetter.ChartData.Value.RemoveNote(data.Value.Data);
+                })
+                .AddTo(this.gameObject);
+
+            // 編集レイヤーが変更された時、配置ノートタイプを変更する
+            dataGetter.EditNoteType
+                .Subscribe(type => {
+                    switch (type)
+                    {
+                        case EditNoteType.Ground:
+                            dataSetter.SetNoteType(defaultNoteType_ground);
+                            break;
+                        case EditNoteType.Space:
+                            dataSetter.SetNoteType(defaultNoteType_space);
+                            break;
+                    }
                 })
                 .AddTo(this.gameObject);
         }

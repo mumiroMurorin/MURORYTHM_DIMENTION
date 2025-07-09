@@ -47,6 +47,7 @@ namespace ChartEditor
             dataGetter.InteractableColliders.ObserveAdd()
                 .Subscribe(collider =>
                 {
+                    if (dataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
                     if (collider.Value is IDeployableCollider matched) { UpdateNotePosition(matched); }
                 }).AddTo(this.gameObject);
 
@@ -75,7 +76,6 @@ namespace ChartEditor
         private void UpdateNotePosition(IDeployableCollider deployable)
         {
             // 配置モードでない際は返す
-            if (dataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
             if (deployable == null) { return; }
 
             // 配置ノーツが無かったら新規インスタンス化
@@ -116,6 +116,8 @@ namespace ChartEditor
         private void SpawnNewNote(DeploymentNoteType noteType)
         {
             deployingNoteData = GetNoteData(noteType);
+            if (deployingNoteData == null) { return; }
+
             deployingNote = InstantiateNoteObject(deployingNoteData);
 
             isDeployedTentative = false;
@@ -135,9 +137,9 @@ namespace ChartEditor
             }
 
             // チェインノーツのときデータセット
-            if (noteData is IChainNoteData)
+            if (noteData is IChainNoteData chainData)
             {
-                ((IChainNoteData)noteData).SetNoteObject(obj.GetComponent<IConnectableObject>());
+                chainData.SetNoteObject(obj.GetComponent<IConnectableObject>());
             }
 
             deployable.OnInstantiate(noteData, GetNoteParentTransform);

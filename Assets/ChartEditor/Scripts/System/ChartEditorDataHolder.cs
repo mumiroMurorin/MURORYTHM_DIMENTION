@@ -98,7 +98,6 @@ namespace ChartEditor
         void IChartEditorDataSetter.SetNoteType(DeploymentNoteType noteType)
         {
             deploymentNoteType.Value = noteType;
-            Debug.Log($"Change Deployment Note: {deploymentNoteType.Value}");
         }
 
         // インタラクトされているコライダーたち

@@ -23,7 +23,8 @@ namespace ChartEditor
              EditMode.EditingBarConfig,
              EditMode.EditingSubDivisionConfig,
              EditMode.Moving,
-             EditMode.Scaling
+             EditMode.Scaling,
+             EditMode.SpaceMoving,
         };
 
         [Inject]
