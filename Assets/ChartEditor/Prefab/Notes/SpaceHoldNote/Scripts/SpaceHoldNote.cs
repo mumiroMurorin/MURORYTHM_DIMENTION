@@ -19,6 +19,7 @@ namespace ChartEditor
         public NoteData_SpaceHold(NoteData_SpaceHold data)
         {
             SetAddress(data.address);
+            SpaceHoldVertices.SetVertices(data.SpaceHoldVertices.Vertices.Select(x => new VertexData(x)).ToList());
         }
 
         // ノートタイプ

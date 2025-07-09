@@ -63,7 +63,7 @@ namespace ChartEditor
                 movable.OnMoveStart();
 
                 // ·•ª‚ğ•Û‘¶
-                var subDelta = dataGetter.ChartData.Value.GetAddressDelta(new AddressInChart(movable.Note.NoteData.Address), baseAddress);
+                var subDelta = dataGetter.ChartData.Value.GetSubdivisionDelta(new AddressInChart(movable.Note.NoteData.Address), baseAddress);
                 movableAndDelta.TryAdd(movable, subDelta);
             }
 

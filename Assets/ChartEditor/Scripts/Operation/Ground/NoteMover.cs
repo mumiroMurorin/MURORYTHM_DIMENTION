@@ -70,7 +70,7 @@ namespace ChartEditor
                 movable.OnMoveStart();
 
                 // 差分を保存
-                var subDelta = dataGetter.ChartData.Value.GetAddressDelta(new AddressInChart(movable.Note.NoteData.Address), baseAddress);
+                var subDelta = dataGetter.ChartData.Value.GetSubdivisionDelta(new AddressInChart(movable.Note.NoteData.Address), baseAddress);
                 var sliderDelta = movable.Note.NoteData.Address.Range[0] - baseAddress.SliderIndex;
                 var delta = new AddressDelta(subDelta, (int)sliderDelta, movable.Note.NoteData.Address.Range.Count);
 

@@ -4021,7 +4021,6 @@ Transform:
   - {fileID: 630248960}
   - {fileID: 305315783}
   - {fileID: 1954645995}
-  - {fileID: 612392383}
   m_Father: {fileID: 1130407549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &277957612
@@ -6176,6 +6175,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 472052857}
   m_CullTransparentMesh: 1
+--- !u!1 &475878890
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 475878891}
+  m_Layer: 0
+  m_Name: SpaceCopier
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &475878891
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475878890}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1996800864}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &479663212
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7410,7 +7440,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 269730900}
+  m_Father: {fileID: 1868679337}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &612392384
 MonoBehaviour:
@@ -7425,6 +7455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noteDeployer: {fileID: 1250030799}
+  spaceDeployer: {fileID: 71458740}
 --- !u!1 &616121943
 GameObject:
   m_ObjectHideFlags: 0
@@ -23804,6 +23835,7 @@ Transform:
   - {fileID: 1797220170}
   - {fileID: 754356523}
   - {fileID: 333189527}
+  - {fileID: 612392383}
   - {fileID: 1859732682}
   m_Father: {fileID: 1130407549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -25629,6 +25661,7 @@ Transform:
   - {fileID: 71458739}
   - {fileID: 119860485}
   - {fileID: 625884549}
+  - {fileID: 475878891}
   m_Father: {fileID: 1130407549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1998163569

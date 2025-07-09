@@ -379,7 +379,7 @@ namespace ChartEditor
         /// <param name="addressA"></param>
         /// <param name="AddressB"></param>
         /// <returns></returns>
-        public int GetAddressDelta(AddressInChart targetAddress, AddressInChart baseAddress)
+        public int GetSubdivisionDelta(AddressInChart targetAddress, AddressInChart baseAddress)
         {
             AddressInChart former = new AddressInChart(targetAddress.IsEarlierThan(baseAddress) ? targetAddress : baseAddress);
             AddressInChart latter = new AddressInChart(targetAddress.IsEarlierThan(baseAddress) ? baseAddress : targetAddress);
@@ -409,21 +409,21 @@ namespace ChartEditor
         /// </summary>
         /// <param name="address"></param>
         /// <param name="delta"></param>
-        public AddressInChart AddressAddition(AddressInChart address, int delta)
+        public AddressInChart AddressAddition(AddressInChart address, int subdivisionDelta)
         {
             var copy = new AddressInChart(address);
 
-            if(delta >= 0)
+            if(subdivisionDelta >= 0)
             {
                 for (int i = copy.BarIndex; i < BarDatas.Count; i++)
                 {
                     var barData = BarDatas[i];
 
                     // 0Ç…Ç»Ç¡ÇΩÇÁèIÇÌÇË
-                    if (delta == 0) { break; }
+                    if (subdivisionDelta == 0) { break; }
 
                     // è¨êﬂ1å¬âzÇ¶ÇÈÇ∆Ç´
-                    if (barData.SubDivisionDatas.Count <= copy.SubDivisionIndex + delta)
+                    if (barData.SubDivisionDatas.Count <= copy.SubDivisionIndex + subdivisionDelta)
                     {
                         // í[Çí¥Ç¶ÇÈÇ∆Ç´
                         if (i + 1 >= BarDatas.Count)
@@ -432,7 +432,7 @@ namespace ChartEditor
                             break;
                         }
 
-                        delta -= barData.SubDivisionDatas.Count - copy.SubDivisionIndex;
+                        subdivisionDelta -= barData.SubDivisionDatas.Count - copy.SubDivisionIndex;
 
                         copy.SetBarIndex(copy.BarIndex + 1);
                         copy.SetSubDivisionIndex(0);
@@ -440,7 +440,7 @@ namespace ChartEditor
                     // Ç±ÇÃè¨êﬂÇ…Ç†ÇÈÇ∆Ç´
                     else
                     {
-                        copy.SetSubDivisionIndex(copy.SubDivisionIndex + delta);
+                        copy.SetSubDivisionIndex(copy.SubDivisionIndex + subdivisionDelta);
                         break;
                     }
                 }
@@ -450,10 +450,10 @@ namespace ChartEditor
                 for (int i = copy.BarIndex; i < BarDatas.Count; i--)
                 {
                     // 0Ç…Ç»Ç¡ÇΩÇÁèIÇÌÇË
-                    if (delta == 0) { break; }
+                    if (subdivisionDelta == 0) { break; }
 
                     // è¨êﬂ1å¬âzÇ¶ÇÈÇ∆Ç´
-                    if (copy.SubDivisionIndex + delta < 0)
+                    if (copy.SubDivisionIndex + subdivisionDelta < 0)
                     {
                         // í[Çí¥Ç¶ÇÈÇ∆Ç´
                         if (i - 1 < 0)
@@ -463,7 +463,7 @@ namespace ChartEditor
                         }
 
                         var barDataBack = BarDatas[i - 1];
-                        delta += copy.SubDivisionIndex + 1;
+                        subdivisionDelta += copy.SubDivisionIndex + 1;
 
                         copy.SetBarIndex(copy.BarIndex - 1);
                         copy.SetSubDivisionIndex(barDataBack.SubDivisionDatas.Count - 1);
@@ -471,7 +471,7 @@ namespace ChartEditor
                     // Ç±ÇÃè¨êﬂÇ…Ç†ÇÈÇ∆Ç´
                     else
                     {
-                        copy.SetSubDivisionIndex(copy.SubDivisionIndex + delta);
+                        copy.SetSubDivisionIndex(copy.SubDivisionIndex + subdivisionDelta);
                         break;
                     }
                 }
