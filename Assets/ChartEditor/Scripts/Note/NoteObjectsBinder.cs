@@ -77,21 +77,10 @@ namespace ChartEditor
 
         private void BindForChartData(ChartData chartData)
         {
-            // 既にあるデータにバインド
-            if(chartData != null && chartData.BarDatas != null)
-            {
-                foreach (var bar in chartData?.BarDatas)
-                {
-                    BindForBarData(bar);
-                }
-            }
+            if (chartData == null) { return; }
 
-            // 小節線データが追加された時
-            chartData?.BarDatas.ObserveAdd()
-                .Subscribe(bar => {
-                    BindForBarData(bar.Value);
-                })
-                .AddTo(this.gameObject);
+            chartData.OnAddNoteListener += OnAddNoteData;
+            chartData.OnRemoveNoteListener += OnRemoveNoteData;
 
             // 小節線データが削除された時
             chartData?.BarDatas.ObserveRemove()
@@ -107,54 +96,6 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
         }
 
-        private void BindForBarData(BarDataInChart barData)
-        {
-            // 既にあるデータにバインド
-            foreach (var sub in barData.SubDivisionDatas)
-            {
-                BindForSubdivisionData(sub);
-            }
-
-            // 分線データが追加された時
-            barData?.SubDivisionDatas.ObserveAdd()
-                .Subscribe(sub => {
-                    BindForSubdivisionData(sub.Value);
-                })
-                .AddTo(this.gameObject);
-
-            // 分線データが削除された時
-            barData?.SubDivisionDatas.ObserveRemove()
-                .Subscribe(sub => {
-                    foreach (var note in sub.Value.NoteDatas)
-                    {
-                        OnRemoveNoteData(note);
-                    }
-                })
-                .AddTo(this.gameObject);
-        }
-
-        private void BindForSubdivisionData(SubDivisionDataInBeat subData)
-        {
-            // 既にあるデータにバインド
-            foreach(var note in subData.NoteDatas)
-            {
-                OnAddNoteData(note);
-            }
-
-            // ノートが追加された時
-            subData?.NoteDatas.ObserveAdd()
-                .Subscribe(note => {
-                    OnAddNoteData(note.Value);
-                })
-                .AddTo(this.gameObject);
-
-            // ノートが削除された時
-            subData?.NoteDatas.ObserveRemove()
-                .Subscribe(note => {
-                    OnRemoveNoteData(note.Value);
-                })
-                .AddTo(this.gameObject);
-        }
 
         private void BindForNoteAddress(IDeployableNoteData data)
         {

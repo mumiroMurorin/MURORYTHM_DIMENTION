@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System.Linq;
+using System;
 
 namespace ChartEditor
 {
@@ -263,6 +264,9 @@ namespace ChartEditor
         const int DEFAULT_DIVISION_NUM = 4;
         const float DEFAULT_BPM = 256;
 
+        public Action<IDeployableNoteData> OnAddNoteListener { get; set; }
+        public Action<IDeployableNoteData> OnRemoveNoteListener { get; set; }
+
         public ChartData(int barNum)
         {
             for (int i = 0; i < barNum; i++)
@@ -346,6 +350,8 @@ namespace ChartEditor
             var newSubDivision = BarDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
             newSubDivision.AddNote(noteData);
 
+            OnAddNoteListener?.Invoke(noteData);
+
             Debug.Log($"y”z’uz:\n #{address.BarIndex} - {address.SubDivisionIndex} - ({address.Range[0]}~{address.Range[^1]})");
         }
 
@@ -366,6 +372,8 @@ namespace ChartEditor
             }
             else
             {
+                OnRemoveNoteListener?.Invoke(noteData);
+
                 Debug.Log($"yíœz:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
             }
         }
