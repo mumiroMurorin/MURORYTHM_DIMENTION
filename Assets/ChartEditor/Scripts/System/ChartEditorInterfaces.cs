@@ -137,24 +137,6 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// 自由配置可能オブジェクト
-    /// </summary>
-    public interface IFreedomDeployableObject
-    {
-        public NoteObject Note { get; }
-     
-        public Action OnDestroyListner { get; set; }
-
-        void OnInstantiate(IDeployableNoteData noteData, Func<IReadOnlyAddressWithinRange, Transform> getParentTransformFunc);
-
-        void OnMove(Transform parent);
-
-        void OnDeploy();
-
-        void OnDisable();
-    }
-
-    /// <summary>
     /// 移動可能オブジェクト(コライダー)
     /// </summary>
     public interface IMovableCollider: IInteractableCollider

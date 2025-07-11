@@ -45,21 +45,34 @@ namespace ChartEditor
         /// 小節線に対するデータのセット
         /// </summary>
         /// <param name="barData"></param>
-        public void SetData(BarDataInChart barData)
+        public void SetData(ChartData chartData, int barIndex)
         {
-            // BeatCount、BeatUnitのセット
-            if (!string.IsNullOrWhiteSpace(beatCountField.text) && int.TryParse(beatCountField.text, out int beatCount) &&
-                !string.IsNullOrWhiteSpace(beatUnitField.text) && float.TryParse(beatUnitField.text, out float beatUnit)) 
+            int beatCount = 1;
+            float beatUnit = 1;
+            int divNum = 1;
+
+            // BeatCountのセット
+            if (string.IsNullOrWhiteSpace(beatCountField.text) || !int.TryParse(beatCountField.text, out beatCount))
             {
-                barData.SetBeatCount(beatCount);
-                barData.SetBeatUnit(beatUnit);
+                Debug.Log($"BeatUnitに有効な数字を入力してください: {beatCount}");
+                return;
+            }
+
+            // BeatUnitのセット
+            if (string.IsNullOrWhiteSpace(beatUnitField.text) || !float.TryParse(beatUnitField.text, out beatUnit)) 
+            {
+                Debug.Log($"BeatUnitに有効な数字を入力してください: {beatUnit}");
+                return;
             }
 
             // DivisionNumのセット
-            if (!string.IsNullOrWhiteSpace(divisionNumField.text) && int.TryParse(divisionNumField.text, out int divNum))
+            if (string.IsNullOrWhiteSpace(divisionNumField.text) || !int.TryParse(divisionNumField.text, out divNum))
             {
-                barData.SetDivisionNum(divNum);
+                Debug.Log($"DivisionNumに有効な数字を入力してください: {divNum}");
+                return;
             }
+
+            chartData.SetBarDataProperty(barIndex, beatCount, beatUnit, divNum);
         }
 
         public void OnClickedApplyButton()

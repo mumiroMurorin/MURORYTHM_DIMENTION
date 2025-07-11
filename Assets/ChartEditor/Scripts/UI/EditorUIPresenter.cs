@@ -33,7 +33,7 @@ namespace ChartEditor
         [SerializeField] ConfigEditor configEditor_model;
 
         IChartEditorDataSetter editorDataSetter_model;
-        IChartEditorDataGetter editorDataGetter_model;
+        IChartEditorDataGetter dataGetter_model;
         IChartEditorOptionSetter optionDataSetter_model;
         IChartEditorOptionGetter optionDataGetter_model;
 
@@ -44,7 +44,7 @@ namespace ChartEditor
         {
             editorDataSetter_model = chartEditorDataSetter;
             optionDataSetter_model = optionDataSetter;
-            editorDataGetter_model = chartEditorDataGetter;
+            dataGetter_model = chartEditorDataGetter;
             optionDataGetter_model = optionDataGetter;
         }
 
@@ -59,14 +59,14 @@ namespace ChartEditor
         private void BindForOther()
         {
             // 楽曲選択の可視不可視
-            editorDataGetter_model?.PlayMode
+            dataGetter_model?.PlayMode
                 .Subscribe(musicBrowseButton_view.OnChangePlayMode)
                 .AddTo(this.gameObject);
 
             // オフセットフィールドのインタラクト可不可
             // エクスポートフィールドのインタラクト可不可
             // 説明書ボタンのインタラクト可不可
-            editorDataGetter_model?.PlayMode
+            dataGetter_model?.PlayMode
                 .Subscribe(value => { 
                     offsetInputField_view?.OnChangePlayMode(value);
                     exportButton_view?.OnChangePlayMode(value);
@@ -78,7 +78,7 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // オフセットの変更
-            editorDataGetter_model?.Offset
+            dataGetter_model?.Offset
                 .Subscribe(offsetInputField_view.OnChangeMainBPM)
                 .AddTo(this.gameObject);
 
@@ -93,27 +93,27 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // 楽曲名の変更
-            editorDataGetter_model?.Music
+            dataGetter_model?.Music
                 .Subscribe(musicName_view.OnChangeMusic)
                 .AddTo(this.gameObject);
 
             // 説明文の表示
-            editorDataGetter_model?.CurrentEditMode
+            dataGetter_model?.CurrentEditMode
                 .Subscribe(description_view.OnChangeEditMode)
                 .AddTo(this.gameObject);
 
             // 説明書の表示、非表示
-            editorDataGetter_model?.CurrentEditMode
+            dataGetter_model?.CurrentEditMode
                 .Subscribe(explanation_view.OnChangeEditMode)
                 .AddTo(this.gameObject);
 
             // レイヤー変更ボタンのインタラクト可不可
-            editorDataGetter_model?.CurrentEditMode
+            dataGetter_model?.CurrentEditMode
                 .Subscribe(switchLayerButton_view.OnChangeEditMode)
                 .AddTo(this.gameObject);
 
             // レイヤー変更ボタンの更新
-            editorDataGetter_model?.EditNoteType
+            dataGetter_model?.EditNoteType
                 .Subscribe(switchLayerButton_view.OnChangeEditNoteType)
                 .AddTo(this.gameObject);
         }
@@ -148,7 +148,7 @@ namespace ChartEditor
                 .Where(value => value.Current == null)
                 .Subscribe(value =>
                 {
-                    rhythmConfigBar_view.SetData(value.Previous.BarDataGetter.BarData);
+                    rhythmConfigBar_view.SetData(dataGetter_model.ChartData.Value ,value.Previous.BarDataGetter.BarData.BarIndex);
                     rhythmConfigBar_view.SetActive(false);
                 })
                 .AddTo(this.gameObject);
@@ -159,7 +159,7 @@ namespace ChartEditor
                 .Where(value => value.Current == null)
                 .Subscribe(value =>
                 {
-                    rhythmConfigSubDivision_view.SetData(value.Previous.SubDivisionDataGetter.SubDivisionData, editorDataGetter_model.ChartData.Value);
+                    rhythmConfigSubDivision_view.SetData(value.Previous.SubDivisionDataGetter.SubDivisionData, dataGetter_model.ChartData.Value);
                     rhythmConfigSubDivision_view.SetActive(false);
                 })
                 .AddTo(this.gameObject);

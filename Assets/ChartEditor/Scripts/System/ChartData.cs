@@ -110,12 +110,12 @@ namespace ChartEditor
             this.beatCount.Value = beatCount;
             this.beatUnit.Value = beatUnit;
             this.divisionNum.Value = divNum;
-            this.barIndex = barIndex;
+            this.BarIndex = barIndex;
 
-            UpdateSubDivisionData(beatCount, beatUnit, divNum, bpm);
+            UpdateSubDivisionData(beatCount, divNum, bpm);
         }
 
-        public int barIndex;
+        public int BarIndex { get; set; }
 
         /// <summary>
         /// 小節内の分線データ
@@ -141,41 +141,20 @@ namespace ChartEditor
         /// </summary>
         /// <param name="beatCount">n分の</param>
         /// <param name="beatUnit">m拍子</param>
-        private void UpdateSubDivisionData(int beatCount, float beatUnit, int divNum, float bpm = -1)
+        private void UpdateSubDivisionData(int beatCount, int divNum, float bpm = -1)
         {
             if (beatCount <= 0) { return; }
-            if (beatUnit <= 0) { return; }
             if (divNum <= 0) { return; }
             if (bpm == -1 && this.subDivisionDatas.Count == 0) { return; }
 
             // bpmは以前のやつを使う
             if (bpm == -1) { bpm = this.subDivisionDatas[0].Bpm.Value; }
 
-            //// 元あった分線データを割り振る
-            //var indexToSubdivisionData = new List<IndexToSubdivisionData>();
-            //var beforeList = Enumerable.Range(0, this.subDivisionDatas.Count).Select(i => (float)i / this.subDivisionDatas.Count).ToList();
-            //var afterList = Enumerable.Range(0, beatCount * divNum).Select(i => (float)i / (beatCount * divNum)).ToList();
-            //beforeList.SnapToNearest(afterList);
-
-            //for(int i = 0; i < this.subDivisionDatas.Count; i++)
-            //{
-            //    indexToSubdivisionData.Add(new IndexToSubdivisionData((int)beforeList[i], this.subDivisionDatas[i]));
-            //}
-
             // 新規セット
             // カウント数 * 分割数が分線の数
             var subDivisionDatas = new List<SubDivisionDataInBeat>();
-            for (int i = 0; i < beatCount * divNum; i++) { subDivisionDatas.Add(new SubDivisionDataInBeat(bpm, barIndex, i)); }
+            for (int i = 0; i < beatCount * divNum; i++) { subDivisionDatas.Add(new SubDivisionDataInBeat(bpm, BarIndex, i)); }
             SetSubDivisionDatas(subDivisionDatas);
-
-            //// 以前あったノーツを割り振る
-            //foreach (var sub in indexToSubdivisionData)
-            //{
-            //    foreach (var note in sub.Subdivision.NoteDatas)
-            //    {
-            //        note.SetAddress(new AddressWithinRange(barIndex, sub.Index, note.Address.Range));
-            //    }
-            //}
         }
 
         public Transform GetPlacementLocation(AddressInChart address)
@@ -203,7 +182,7 @@ namespace ChartEditor
             if (this.beatCount.Value == beatCount) { return; }
 
             this.beatCount.Value = beatCount;
-            UpdateSubDivisionData(beatCount, this.beatUnit.Value, this.divisionNum.Value);
+            UpdateSubDivisionData(beatCount, this.divisionNum.Value);
         }
 
         /// <summary>
@@ -219,7 +198,6 @@ namespace ChartEditor
             if (this.beatUnit.Value == beatUnit) { return; }
 
             this.beatUnit.Value = beatUnit;
-            //UpdateSubDivisionData(this.beatCount.Value, beatUnit, this.divisionNum.Value);
         }
 
         /// <summary>
@@ -235,20 +213,7 @@ namespace ChartEditor
             if (this.divisionNum.Value == divisionNum) { return; }
 
             this.divisionNum.Value = divisionNum;
-            UpdateSubDivisionData(this.beatCount.Value, this.beatUnit.Value, divisionNum);
-        }
-
-        private class IndexToSubdivisionData
-        {
-            public IndexToSubdivisionData(int index, SubDivisionDataInBeat subData)
-            {
-                Index = index;
-                Subdivision = subData;
-            }
-
-            public int Index { get; set; }
-
-            public SubDivisionDataInBeat Subdivision { get; set; }
+            UpdateSubDivisionData(this.beatCount.Value, divisionNum);
         }
 
         #endregion
@@ -308,6 +273,56 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 小節線の設定変更
+        /// </summary>
+        /// <param name="barIndex"></param>
+        /// <param name="beatCount"></param>
+        /// <param name="beatUnit"></param>
+        /// <param name="divNum"></param>
+        public void SetBarDataProperty(int barIndex, int beatCount, float beatUnit, int divNum)
+        {
+            BarDataInChart barData = barDatas[barIndex];
+
+            // 値が変わらなかった場合は何もしない
+            if(barData.BeatCount.Value == beatCount && barData.BeatUnit.Value == beatUnit && barData.DivisionNum.Value == divNum) { return; }
+
+            // 元あった分線データを割り振る
+            var indexToSubdivisionData = new List<IndexToSubdivisionData>();
+            var beforeList = Enumerable.Range(0, barData.SubDivisionDatas.Count).Select(i => (float)i / barData.SubDivisionDatas.Count).ToList();
+            var afterList = Enumerable.Range(0, beatCount * divNum).Select(i => (float)i / (beatCount * divNum)).ToList();
+            beforeList = beforeList.SnapToNearest(afterList);
+
+            // 以前のデータを保存し、ノーツを削除
+            for (int i = 0; i < barData.SubDivisionDatas.Count; i++)
+            {
+                var subData = barData.SubDivisionDatas[i];
+
+                int noteCount = subData.NoteDatas.Count;
+                for (int j = 0; j < noteCount; j++) 
+                {
+                    var note = subData.NoteDatas[0];
+                    var index = (int)(beforeList[i] * (beatCount * divNum));
+
+                    indexToSubdivisionData.Add(new IndexToSubdivisionData(index, note));
+                    RemoveNote(note);
+                }
+            }
+
+            // データをセットして小節線内のデータをアップデート
+            barData.SetBeatCount(beatCount);
+            barData.SetBeatUnit(beatUnit);
+            barData.SetDivisionNum(divNum);
+
+            // 以前あったノーツを割り振る
+            foreach (var sub in indexToSubdivisionData)
+            {
+                var newNote = sub.Note.Copy();
+                newNote.SetAddress(new AddressWithinRange(barData.BarIndex, sub.Index, newNote.Address.Range));
+                AddNote(newNote);
+            }
+        }
+
+        /// <summary>
         /// 小節線の追加
         /// </summary>
         /// <param name="length"></param>
@@ -337,6 +352,33 @@ namespace ChartEditor
             }
         }
 
+        public Transform GetPlacementLocation(AddressInChart address)
+        {
+            if (address.BarIndex >= barDatas.Count)
+            {
+                // Debug.LogError($"【System】値が小節線の数を超えています: {address.BarIndex}");
+                return null;
+            }
+
+            return barDatas[address.BarIndex].GetPlacementLocation(address);
+        }
+
+
+        private class IndexToSubdivisionData
+        {
+            public IndexToSubdivisionData(int index, IDeployableNoteData noteData)
+            {
+                Index = index;
+                Note = noteData;
+            }
+
+            public int Index { get; set; }
+
+            public IDeployableNoteData Note { get; set; }
+        }
+
+        #region NotesOperation
+
         /// <summary>
         /// ノーツを追加する
         /// </summary>
@@ -361,7 +403,7 @@ namespace ChartEditor
         public void RemoveNote(IDeployableNoteData noteData)
         {
             var address = new AddressInChart(noteData.Address);
-            
+
             if (!IsExistAddressInChart(new AddressInChart(address))) { return; }
 
             var subDivision = barDatas[address.BarIndex].SubDivisionDatas[address.SubDivisionIndex];
@@ -400,12 +442,17 @@ namespace ChartEditor
             return true;
         }
 
+        #endregion
+
+
+        #region Address
+
         public bool IsExistAddressInChart(AddressInChart address)
         {
-            if(address.BarIndex >= BarDatas.Count) { return false; }
-            if(address.BarIndex < 0) { return false; }
-            if(address.SubDivisionIndex >= BarDatas[address.BarIndex].SubDivisionDatas.Count) { return false; }
-            if(address.SubDivisionIndex < 0) { return false; }
+            if (address.BarIndex >= BarDatas.Count) { return false; }
+            if (address.BarIndex < 0) { return false; }
+            if (address.SubDivisionIndex >= BarDatas[address.BarIndex].SubDivisionDatas.Count) { return false; }
+            if (address.SubDivisionIndex < 0) { return false; }
             return true;
         }
 
@@ -425,12 +472,12 @@ namespace ChartEditor
             {
                 var barData = BarDatas[i];
 
-                if (i != latter.BarIndex) 
-                { 
+                if (i != latter.BarIndex)
+                {
                     delta += barData.SubDivisionDatas.Count - former.SubDivisionIndex;
                     former.SetSubDivisionIndex(0);
                 }
-                else 
+                else
                 {
                     delta += latter.SubDivisionIndex - former.SubDivisionIndex;
                     break;
@@ -449,7 +496,7 @@ namespace ChartEditor
         {
             var copy = new AddressInChart(address);
 
-            if(subdivisionDelta >= 0)
+            if (subdivisionDelta >= 0)
             {
                 for (int i = copy.BarIndex; i < BarDatas.Count; i++)
                 {
@@ -513,19 +560,10 @@ namespace ChartEditor
                 }
 
             }
-            
+
             return copy;
         }
 
-        public Transform GetPlacementLocation(AddressInChart address)
-        {
-            if (address.BarIndex >= barDatas.Count)
-            {
-                // Debug.LogError($"【System】値が小節線の数を超えています: {address.BarIndex}");
-                return null;
-            }
-
-            return barDatas[address.BarIndex].GetPlacementLocation(address);
-        }
+        #endregion
     }
 }

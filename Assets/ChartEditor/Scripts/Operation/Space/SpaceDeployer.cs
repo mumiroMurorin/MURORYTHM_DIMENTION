@@ -16,7 +16,7 @@ namespace ChartEditor
 
         IChartEditorDataGetter dataGetter;
 
-        IFreedomDeployableObject deployingNote;
+        IDeployableObject deployingNote;
         IDeployableNoteData deployingNoteData;
         bool isDeployedTentative;
 
@@ -114,16 +114,16 @@ namespace ChartEditor
             isDeployedTentative = false;
         }
 
-        private IFreedomDeployableObject InstantiateNoteObject(IDeployableNoteData noteData)
+        private IDeployableObject InstantiateNoteObject(IDeployableNoteData noteData)
         {
             GameObject origin = noteList.GetNote(noteData.NoteType);
             if (origin == null) { return null; }
 
             GameObject obj = Instantiate(origin);
 
-            if (!obj.TryGetComponent(out IFreedomDeployableObject deployable))
+            if (!obj.TryGetComponent(out IDeployableObject deployable))
             {
-                Debug.LogWarning("ノーツにIFreedomDeployableObjectがくっついてねぇぞ！");
+                Debug.LogWarning("ノーツにIDeployableObjectがくっついてねぇぞ！");
                 return null;
             }
 

@@ -6,7 +6,7 @@ using System;
 namespace ChartEditor
 {
     [RequireComponent(typeof(NoteObject))]
-    public class SpaceDeployable : MonoBehaviour, IFreedomDeployableObject
+    public class SpaceDeployable : MonoBehaviour, IDeployableObject
     {
         [Tooltip("配置時のアウトライン色")]
         [SerializeField] private ColorSetting outlineColorOnDeploying;
@@ -21,7 +21,7 @@ namespace ChartEditor
             noteObject = GetComponent<NoteObject>();
         }
 
-        void IFreedomDeployableObject.OnInstantiate(IDeployableNoteData noteData, Func<IReadOnlyAddressWithinRange, Transform> getParentTransformFunc)
+        void IDeployableObject.OnInstantiate(IDeployableNoteData noteData, Func<IReadOnlyAddressWithinRange, Transform> getParentTransformFunc)
         {
             noteRenderer.material.color *= new Color(1, 1, 1, 0.5f);
             this.gameObject.SetActive(false);
@@ -35,7 +35,7 @@ namespace ChartEditor
 
         }
 
-        void IFreedomDeployableObject.OnDeploy()
+        void IDeployableObject.OnDeploy()
         {
             // アウトラインを消す
             noteObject.OutlineColors.Remove(outlineColorOnDeploying);
@@ -44,7 +44,7 @@ namespace ChartEditor
             noteObject.SetCollidersActive(true);
         }
 
-        void IFreedomDeployableObject.OnMove(Transform parent)
+        void IDeployableObject.OnMove(Transform parent)
         {
             // 親オブジェクトに合わせた位置調整
             // まだ設置していないので引数のTransformを参照
@@ -54,7 +54,7 @@ namespace ChartEditor
             this.gameObject.SetActive(true);
         }
 
-        void IFreedomDeployableObject.OnDisable()
+        void IDeployableObject.OnDisable()
         {
             noteObject.Destroy();
         }
