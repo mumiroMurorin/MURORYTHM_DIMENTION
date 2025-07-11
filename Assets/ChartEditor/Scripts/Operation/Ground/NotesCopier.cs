@@ -86,8 +86,7 @@ namespace ChartEditor
                 data.SetAddress(new AddressWithinRange(address, data.Address.Range.Count));
 
                 // ”z’u
-                if (data.Address.Range[0] == 100) { spaceDeployer.DeployForNoteData(data); }
-                else { noteDeployer.DeployForNoteData(data); }
+                dataGetter.ChartData.Value.AddNote(data);
 
                 // ‘I‘ð‚·‚é
                 if(!notesGetter.GetNoteObject(data).TryGetComponent(out ISelectableNoteObject selectable)) { continue; }

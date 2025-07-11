@@ -150,16 +150,16 @@ namespace ChartEditor
             // bpmは以前のやつを使う
             if (bpm == -1) { bpm = this.subDivisionDatas[0].Bpm.Value; }
 
-            // 元あった分線データを割り振る
-            var indexToSubdivisionData = new List<IndexToSubdivisionData>();
-            var beforeList = Enumerable.Range(0, this.subDivisionDatas.Count).Select(i => (float)i / this.subDivisionDatas.Count).ToList();
-            var afterList = Enumerable.Range(0, beatCount * divNum).Select(i => (float)i / (beatCount * divNum)).ToList();
-            beforeList.SnapToNearest(afterList);
+            //// 元あった分線データを割り振る
+            //var indexToSubdivisionData = new List<IndexToSubdivisionData>();
+            //var beforeList = Enumerable.Range(0, this.subDivisionDatas.Count).Select(i => (float)i / this.subDivisionDatas.Count).ToList();
+            //var afterList = Enumerable.Range(0, beatCount * divNum).Select(i => (float)i / (beatCount * divNum)).ToList();
+            //beforeList.SnapToNearest(afterList);
 
-            for(int i = 0; i < this.subDivisionDatas.Count; i++)
-            {
-                indexToSubdivisionData.Add(new IndexToSubdivisionData((int)beforeList[i], this.subDivisionDatas[i]));
-            }
+            //for(int i = 0; i < this.subDivisionDatas.Count; i++)
+            //{
+            //    indexToSubdivisionData.Add(new IndexToSubdivisionData((int)beforeList[i], this.subDivisionDatas[i]));
+            //}
 
             // 新規セット
             // カウント数 * 分割数が分線の数
@@ -167,14 +167,14 @@ namespace ChartEditor
             for (int i = 0; i < beatCount * divNum; i++) { subDivisionDatas.Add(new SubDivisionDataInBeat(bpm, barIndex, i)); }
             SetSubDivisionDatas(subDivisionDatas);
 
-            // 以前あったノーツを割り振る
-            foreach (var sub in indexToSubdivisionData)
-            {
-                foreach (var note in sub.Subdivision.NoteDatas)
-                {
-                    note.SetAddress(new AddressWithinRange(barIndex, sub.Index, note.Address.Range));
-                }
-            }
+            //// 以前あったノーツを割り振る
+            //foreach (var sub in indexToSubdivisionData)
+            //{
+            //    foreach (var note in sub.Subdivision.NoteDatas)
+            //    {
+            //        note.SetAddress(new AddressWithinRange(barIndex, sub.Index, note.Address.Range));
+            //    }
+            //}
         }
 
         public Transform GetPlacementLocation(AddressInChart address)

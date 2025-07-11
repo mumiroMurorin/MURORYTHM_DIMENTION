@@ -9,16 +9,13 @@ namespace ChartEditor
 {
     public class ChartDataImporter : MonoBehaviour
     {
-        [SerializeField] NoteDeployer groundDeployer;
-        [SerializeField] SpaceDeployer spaceDeployer;
-
-        IChartEditorDataGetter editorDataGetter;
+        IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter editorDataSetter;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter editorDataGetter, IChartEditorDataSetter editorDataSetter)
+        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter editorDataSetter)
         {
-            this.editorDataGetter = editorDataGetter;
+            this.dataGetter = dataGetter;
             this.editorDataSetter = editorDataSetter;
         }
 
@@ -49,8 +46,7 @@ namespace ChartEditor
                 {
                     foreach(var noteData in subData.NoteDatas)
                     {
-                        groundDeployer.DeployForNoteData(noteData);
-                        spaceDeployer.DeployForNoteData(noteData);
+                        dataGetter.ChartData.Value.AddNote(noteData);
                     }
                 }
             }

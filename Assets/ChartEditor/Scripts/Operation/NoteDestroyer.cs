@@ -10,9 +10,7 @@ namespace ChartEditor
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
 
         INotesDataGetter notesGetter;
-        INotesDataSetter notesSetter;
         IChartEditorDataGetter dataGetter;
-        IChartEditorDataSetter dataSetter;
 
         EditMode[] ignoreEditModes = new EditMode[] {
              EditMode.Connecting,
@@ -23,12 +21,10 @@ namespace ChartEditor
         };
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, INotesDataGetter notesGetter, INotesDataSetter notesSetter)
+        public void Construct(IChartEditorDataGetter dataGetter, INotesDataGetter notesGetter)
         {
             this.notesGetter = notesGetter;
-            this.notesSetter = notesSetter;
             this.dataGetter = dataGetter;
-            this.dataSetter = dataSetter;
         }
 
         private void Update()
@@ -53,14 +49,8 @@ namespace ChartEditor
 
         public void DestroyNote(IDeployableNoteData noteData)
         {
-            // オブジェクトの削除
-            var noteObject = notesGetter.GetNoteObject(noteData);
-            if (noteObject == null || !noteObject.TryGetComponent(out IDestroyableObject destroyableObject)) { return; }
-
-            destroyableObject.OnDestroy();
-
             // データの削除
-            notesSetter.RemoveDataToNoteObject(noteData);
+            dataGetter.ChartData.Value.RemoveNote(noteData);
         }
 
     }

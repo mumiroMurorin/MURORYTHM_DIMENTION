@@ -8,9 +8,6 @@ namespace ChartEditor
 {
     public class NoteObjectsBinder : MonoBehaviour
     {
-        // SubclassSelectorを自作クラスの中にいれると上手く動作しないので苦肉の策
-        [Tooltip("ノートデータ(抽象クラス)")]
-        [SerializeReference, SubclassSelector] IDeployableNoteData[] noteDataList;
         [SerializeField] NoteTypeToNoteObjectList noteList;
 
         [SerializeField] DeploymentNoteType defaultNoteType_ground;
@@ -39,24 +36,6 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // DataToNoteObjectに項目が追加された時の挙動
-            notesGetter.DataToNoteObject.ObserveAdd()
-                .Subscribe(data => { 
-                    BindForNoteAddress(data.Value.Data);
-
-                    // 譜面データへのノーツデータの追加
-                    dataGetter.ChartData.Value.AddNote(data.Value.Data);
-                })
-                .AddTo(this.gameObject);
-
-            // 削除された時の挙動
-            notesGetter.DataToNoteObject.ObserveRemove()
-                .Subscribe(data => {
-                    // 譜面データからノーツデータの削除
-                    dataGetter.ChartData.Value.RemoveNote(data.Value.Data);
-                })
-                .AddTo(this.gameObject);
-
             // 編集レイヤーが変更された時、配置ノートタイプを変更する
             dataGetter.EditNoteType
                 .Subscribe(type => {
@@ -75,79 +54,23 @@ namespace ChartEditor
             // 譜面データが追加された時
             dataGetter?.ChartData
                 .Subscribe(chart => {
+                    // リセット
+                    if (chart != null && chart.BarDatas != null) 
+                    {
+                        foreach (var bar in chart?.BarDatas)
+                        {
+                            foreach (var sub in bar.SubDivisionDatas)
+                            {
+                                foreach (var note in sub.NoteDatas)
+                                {
+                                    OnRemoveNoteData(note);
+                                }
+                            }
+                        }
+                    }
+
+                    // 購読
                     BindForChartData(chart);
-                })
-                .AddTo(this.gameObject);
-        }
-
-        private void BindForNoteAddress(IDeployableNoteData data)
-        {
-            // ノーツデータの移動
-            // 小節線移動時
-            data.Address.BarIndexRP
-                .Pairwise()
-                .Subscribe(pair => {
-                    var oldAddress = new AddressInChart(pair.Previous, data.Address.SubDivisionIndex, data.Address.Range[0]);
-                    var newAddress = new AddressInChart(data.Address);
-
-                    if (!dataGetter.ChartData.Value.IsExistAddressInChart(oldAddress))
-                    {
-                        if (stackAddress == null)
-                        {
-                            Debug.LogError("スタックアドレスがnullかつ元アドレスが正規でありません");
-                            return;
-                        }
-
-                        oldAddress = stackAddress;
-                        stackAddress = null;
-                    }
-                    if (!dataGetter.ChartData.Value.IsExistAddressInChart(newAddress))
-                    {
-                        if (stackAddress != null)
-                        {
-                            Debug.LogError("スタックアドレスがnullでないかつ新アドレスが正規でありません");
-                            return;
-                        }
-
-                        stackAddress = oldAddress;
-                        return;
-                    }
-
-                    dataGetter.ChartData.Value.ChangeNoteAddress(data, oldAddress, newAddress);
-                })
-                .AddTo(this.gameObject);
-
-            // 分線移動時
-            data.Address.SubDivisionIndexRP
-                .Pairwise()
-                .Subscribe(pair => {
-                    var oldAddress = new AddressInChart(data.Address.BarIndex, pair.Previous, data.Address.Range[0]);
-                    var newAddress = new AddressInChart(data.Address);
-
-                    if (!dataGetter.ChartData.Value.IsExistAddressInChart(oldAddress))
-                    {
-                        if (stackAddress == null)
-                        {
-                            Debug.LogError("スタックアドレスがnullかつ元アドレスが正規でありません");
-                            return;
-                        }
-
-                        oldAddress = stackAddress;
-                        stackAddress = null;
-                    }
-                    if (!dataGetter.ChartData.Value.IsExistAddressInChart(newAddress))
-                    {
-                        if (stackAddress != null)
-                        {
-                            Debug.LogError("スタックアドレスがnullでないかつ新アドレスが正規でありません");
-                            return;
-                        }
-
-                        stackAddress = oldAddress;
-                        return;
-                    }
-
-                    dataGetter.ChartData.Value.ChangeNoteAddress(data, oldAddress, newAddress);
                 })
                 .AddTo(this.gameObject);
         }
@@ -155,15 +78,31 @@ namespace ChartEditor
         private void BindForChartData(ChartData chartData)
         {
             // 既にあるデータにバインド
-            foreach(var bar in chartData?.BarDatas)
+            if(chartData != null && chartData.BarDatas != null)
             {
-                BindForBarData(bar);
+                foreach (var bar in chartData?.BarDatas)
+                {
+                    BindForBarData(bar);
+                }
             }
 
             // 小節線データが追加された時
             chartData?.BarDatas.ObserveAdd()
                 .Subscribe(bar => {
                     BindForBarData(bar.Value);
+                })
+                .AddTo(this.gameObject);
+
+            // 小節線データが削除された時
+            chartData?.BarDatas.ObserveRemove()
+                .Subscribe(bar => {
+                    foreach(var sub in bar.Value.SubDivisionDatas)
+                    {
+                        foreach (var note in sub.NoteDatas)
+                        {
+                            OnRemoveNoteData(note);
+                        }
+                    }
                 })
                 .AddTo(this.gameObject);
         }
@@ -186,10 +125,9 @@ namespace ChartEditor
             // 分線データが削除された時
             barData?.SubDivisionDatas.ObserveRemove()
                 .Subscribe(sub => {
-                    // DataToObjリストから全て削除
                     foreach (var note in sub.Value.NoteDatas)
                     {
-                        notesSetter.RemoveDataToNoteObject(note);
+                        OnRemoveNoteData(note);
                     }
                 })
                 .AddTo(this.gameObject);
@@ -213,18 +151,115 @@ namespace ChartEditor
             // ノートが削除された時
             subData?.NoteDatas.ObserveRemove()
                 .Subscribe(note => {
-                    // DataToObjリストから削除
-                    notesSetter.RemoveDataToNoteObject(note.Value);
+                    OnRemoveNoteData(note.Value);
                 })
                 .AddTo(this.gameObject);
         }
 
+        private void BindForNoteAddress(IDeployableNoteData data)
+        {
+            data.Address.BarIndexRP
+                .Pairwise()
+                .Subscribe(pair => {
+                    var oldAddress = new AddressInChart(pair.Previous, data.Address.SubDivisionIndex, data.Address.Range[0]);
+                    var newAddress = new AddressInChart(data.Address);
+
+                    if (!dataGetter.ChartData.Value.IsExistAddressInChart(oldAddress))
+                    {
+                        if (stackAddress == null)
+                        {
+                            Debug.LogError("【Note】スタックアドレスがありません");
+                            return;
+                        }
+
+                        oldAddress = stackAddress;
+                        stackAddress = null;
+                    }
+                    if (!dataGetter.ChartData.Value.IsExistAddressInChart(newAddress))
+                    {
+                        if (stackAddress != null)
+                        {
+                            Debug.LogError("【Note】スタックアドレスが既に存在します");
+                            return;
+                        }
+
+                        stackAddress = oldAddress;
+                        return;
+                    }
+
+                    dataGetter.ChartData.Value.ChangeNoteAddress(data, oldAddress, newAddress);
+                })
+                .AddTo(this.gameObject);
+
+            data.Address.SubDivisionIndexRP
+                .Pairwise()
+                .Subscribe(pair => {
+                    var oldAddress = new AddressInChart(data.Address.BarIndex, pair.Previous, data.Address.Range[0]);
+                    var newAddress = new AddressInChart(data.Address);
+
+                    if (!dataGetter.ChartData.Value.IsExistAddressInChart(oldAddress))
+                    {
+                        if (stackAddress == null)
+                        {
+                            Debug.LogError("【Note】スタックアドレスがありません");
+                            return;
+                        }
+
+                        oldAddress = stackAddress;
+                        stackAddress = null;
+                    }
+                    if (!dataGetter.ChartData.Value.IsExistAddressInChart(newAddress))
+                    {
+                        if (stackAddress != null)
+                        {
+                            Debug.LogError("【Note】スタックアドレスが既に存在します");
+                            return;
+                        }
+
+                        stackAddress = oldAddress;
+                        return;
+                    }
+
+                    dataGetter.ChartData.Value.ChangeNoteAddress(data, oldAddress, newAddress);
+                })
+                .AddTo(this.gameObject);
+        }
+
+        /// <summary>
+        /// ノーツがデータ上に追加された時、オブジェクトを配置する
+        /// </summary>
+        /// <param name="note"></param>
         private void OnAddNoteData(IDeployableNoteData note)
         {
-            // オブジェクトを配置
+            // オブジェクトのインスタンス化
             var obj = InstantiateNoteObject(note);
+
+            // 配置
+            Transform parent = dataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(note.Address));
+            obj.OnMove(parent);
+            obj.OnDeploy();
+
             // DataToObjリストに追加
             notesSetter.AddDataToNoteObject(note, obj.Note);
+
+            // バインド
+            BindForNoteAddress(note);
+        }
+
+        /// <summary>
+        /// ノーツがデータ上から削除された時、オブジェクトを削除する
+        /// </summary>
+        /// <param name="note"></param>
+        private void OnRemoveNoteData(IDeployableNoteData note)
+        {
+            // オブジェクトの削除
+            var noteObject = notesGetter.GetNoteObject(note);
+            if (noteObject == null || !noteObject.TryGetComponent(out IDestroyableObject destroyableObject)) { return; }
+
+            destroyableObject.OnDestroy();
+
+            // データの削除
+            notesSetter.RemoveDataToNoteObject(note);
         }
 
         /// <summary>
@@ -265,5 +300,37 @@ namespace ChartEditor
         {
             return dataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(address));
         }
+    }
+
+    [System.Serializable]
+    public class NoteTypeToNoteObjectList
+    {
+        [SerializeField] NoteTypeToNoteObject[] notePrefabs;
+
+        /// <summary>
+        /// 引数に対応するノーツを返す
+        /// </summary>
+        /// <param name="noteType"></param>
+        /// <returns></returns>
+        public GameObject GetNote(DeploymentNoteType noteType)
+        {
+            foreach (var note in notePrefabs)
+            {
+                if (noteType == note.DeploymentNoteType) { return note.NoteObject; }
+            }
+
+            return null;
+        }
+    }
+
+    [System.Serializable]
+    public class NoteTypeToNoteObject
+    {
+        [SerializeField] DeploymentNoteType noteType;
+        [SerializeField] GameObject noteObject;
+
+        public DeploymentNoteType DeploymentNoteType { get { return noteType; } }
+
+        public GameObject NoteObject { get { return noteObject; } }
     }
 }

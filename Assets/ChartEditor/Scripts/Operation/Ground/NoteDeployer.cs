@@ -9,25 +9,22 @@ namespace ChartEditor
 {
     public class NoteDeployer : MonoBehaviour
     {
-        [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
-
         // SubclassSelectorを自作クラスの中にいれると上手く動作しないので苦肉の策
+        [SerializeField] NoteTypeToNoteObjectList noteList;
         [Tooltip("ノートデータ(抽象クラス)")]
         [SerializeReference, SubclassSelector] IDeployableNoteData[] noteDataList;
-        [SerializeField] NoteTypeToNoteObjectList noteList;
+        [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
 
         IChartEditorDataGetter dataGetter;
-        INotesDataSetter notesSetter;
 
         IDeployableObject deployingNote;
         IDeployableNoteData deployingNoteData;
         bool isDeployedTentative;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter,INotesDataSetter notesSetter)
+        public void Construct(IChartEditorDataGetter dataGetter)
         {
             this.dataGetter = dataGetter;
-            this.notesSetter = notesSetter;
         }
 
         private void Start()
@@ -96,17 +93,14 @@ namespace ChartEditor
 
             if (collider == null) { return; }
             if (!isDeployedTentative) { return; }
-            // 謎のヌルリファによりこの条件も追加
             if (deployingNoteData == null) { return; }
 
             // データ上の追加
-            AddressInChart address = collider.Address;
+            var address = collider.Address;
             deployingNoteData.SetAddress(new AddressWithinRange(address, 1));
-            notesSetter.AddDataToNoteObject(deployingNoteData, deployingNote.Note);
+            dataGetter.ChartData.Value.AddNote(deployingNoteData);
 
-            // オブジェクトの設置
-            deployingNote.OnDeploy();
-
+            DestroyNote();
             SpawnNewNote(dataGetter.DeploymentNoteType.Value);
         }
 
@@ -149,24 +143,6 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 外部データから配置
-        /// </summary>
-        /// <param name="groundNoteData"></param>
-        public void DeployForNoteData(IDeployableNoteData noteData)
-        {
-            var obj = InstantiateNoteObject(noteData);
-            if (obj == null) { return; }
-
-            // 配置
-            Transform parent = dataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(noteData.Address));
-            obj.OnMove(parent);
-            obj.OnDeploy();
-
-            notesSetter.AddDataToNoteObject(noteData, obj.Note);
-        }
-
-
-        /// <summary>
         /// ノートの削除
         /// </summary>
         private void DestroyNote()
@@ -190,9 +166,9 @@ namespace ChartEditor
 
         private IDeployableNoteData GetNoteData(DeploymentNoteType noteType)
         {
-            foreach(var data in noteDataList)
+            foreach (var data in noteDataList)
             {
-                if(data.NoteType == noteType) 
+                if (data.NoteType == noteType)
                 {
                     return data.Copy();
                 }
@@ -202,38 +178,6 @@ namespace ChartEditor
             return null;
         }
 
-    }
-
-    [System.Serializable]
-    public class NoteTypeToNoteObjectList
-    {
-        [SerializeField] NoteTypeToNoteObject[] notePrefabs;
-
-        /// <summary>
-        /// 引数に対応するノーツを返す
-        /// </summary>
-        /// <param name="noteType"></param>
-        /// <returns></returns>
-        public GameObject GetNote(DeploymentNoteType noteType)
-        {
-            foreach (var note in notePrefabs)
-            {
-                if (noteType == note.DeploymentNoteType) { return note.NoteObject; }
-            }
-
-            return null;
-        }
-    }
-
-    [System.Serializable]
-    public class NoteTypeToNoteObject
-    {
-        [SerializeField] DeploymentNoteType noteType;
-        [SerializeField] GameObject noteObject;
-
-        public DeploymentNoteType DeploymentNoteType { get { return noteType; } }
-
-        public GameObject NoteObject { get { return noteObject; } }
     }
 }
 
