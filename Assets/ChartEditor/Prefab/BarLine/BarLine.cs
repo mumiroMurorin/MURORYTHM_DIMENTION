@@ -191,6 +191,7 @@ namespace ChartEditor
 
                     ReDeployOtherLineOnChangeBarData(barData);
                     AdjustPositionOnChangeLineData();
+                    UpdateLayer(dataGetter.EditNoteType.Value);
                 })
                 .AddTo(this.gameObject);
             
@@ -205,8 +206,7 @@ namespace ChartEditor
             // レイヤー変更を監視
             dataGetter?.EditNoteType
                 .Subscribe(editMode => {
-                    groundLayerAffectables.Value.OnChangeLayer(editMode);
-                    spaceLayerAffectables.Value.OnChangeLayer(editMode);
+                    UpdateLayer(editMode);
                 })
                 .AddTo(this.gameObject);
         }
@@ -265,6 +265,16 @@ namespace ChartEditor
             // += 1秒あたりのz距離 * 秒数
             //  = 1秒あたりのz距離 * (60f / bpm) * (4f / beatUnit) / 分割数
             nextZ.Value = transform.position.z + chartLengthParSecond * (60f / bpm) * (4f / beatUnit) / divNum;
+        }
+
+        /// <summary>
+        /// レイヤーを更新する
+        /// </summary>
+        /// <param name="editNoteType"></param>
+        private void UpdateLayer(EditNoteType editNoteType)
+        {
+            groundLayerAffectables.Value.OnChangeLayer(editNoteType);
+            spaceLayerAffectables.Value.OnChangeLayer(editNoteType);
         }
 
         #endregion 
