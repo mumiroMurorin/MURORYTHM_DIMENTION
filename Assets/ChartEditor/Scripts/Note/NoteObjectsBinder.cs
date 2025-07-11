@@ -96,7 +96,6 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
         }
 
-
         private void BindForNoteAddress(IDeployableNoteData data)
         {
             data.Address.BarIndexRP
@@ -208,7 +207,7 @@ namespace ChartEditor
         /// </summary>
         /// <param name="noteData"></param>
         /// <returns></returns>
-        private IDeployableObject InstantiateNoteObject(IDeployableNoteData noteData)
+        private IDeployableObject InstantiateGroundNoteObject(IDeployableNoteData noteData)
         {
             GameObject origin = noteList.GetNote(noteData.NoteType);
             if (origin == null) { return null; }
@@ -218,6 +217,35 @@ namespace ChartEditor
             if (!obj.TryGetComponent(out IDeployableObject deployable))
             {
                 Debug.LogWarning("ノーツにIDeployableObjectがくっついてねぇぞ！");
+                return null;
+            }
+
+            // チェインノーツのときデータセット
+            if (noteData is IChainNoteData chainData)
+            {
+                chainData.SetNoteObject(obj.GetComponent<IConnectableObject>());
+            }
+
+            deployable.OnInstantiate(noteData, GetNoteParentTransform);
+
+            return deployable;
+        }
+
+        /// <summary>
+        /// スペースノートのインスタンス化
+        /// </summary>
+        /// <param name="noteData"></param>
+        /// <returns></returns>
+        private IFreedomDeployableObject InstantiateSpaceNoteObject(IDeployableNoteData noteData)
+        {
+            GameObject origin = noteList.GetNote(noteData.NoteType);
+            if (origin == null) { return null; }
+
+            GameObject obj = Instantiate(origin);
+
+            if (!obj.TryGetComponent(out IFreedomDeployableObject deployable))
+            {
+                Debug.LogWarning("ノーツにIFreedomDeployableObjectがくっついてねぇぞ！");
                 return null;
             }
 

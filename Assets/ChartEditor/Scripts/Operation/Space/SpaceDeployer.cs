@@ -9,25 +9,21 @@ namespace ChartEditor
 {
     public class SpaceDeployer : MonoBehaviour
     {
-        [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
-
         // SubclassSelectorを自作クラスの中にいれると上手く動作しないので苦肉の策
+        [SerializeField] NoteTypeToNoteObjectList noteList;
         [Tooltip("ノートデータ(抽象クラス)")]
         [SerializeReference, SubclassSelector] IDeployableNoteData[] noteDataList;
-        [SerializeField] NoteTypeToNoteObjectList noteList;
 
         IChartEditorDataGetter dataGetter;
-        INotesDataSetter notesSetter;
 
         IFreedomDeployableObject deployingNote;
         IDeployableNoteData deployingNoteData;
         bool isDeployedTentative;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter, INotesDataSetter notesSetter)
+        public void Construct(IChartEditorDataGetter dataGetter)
         {
             this.dataGetter = dataGetter;
-            this.notesSetter = notesSetter;
         }
 
         private void Start()
@@ -94,17 +90,14 @@ namespace ChartEditor
 
             if (collider == null) { return; }
             if (!isDeployedTentative) { return; }
-            // 謎のヌルリファによりこの条件も追加
-            if(deployingNoteData == null) { return; }
+            if (deployingNoteData == null) { return; }
 
             // データ上の追加
-            AddressInChart address = collider.Address;
+            var address = collider.Address;
             deployingNoteData.SetAddress(new AddressWithinRange(address, 1));
-            notesSetter.AddDataToNoteObject(deployingNoteData, deployingNote.Note);
+            dataGetter.ChartData.Value.AddNote(deployingNoteData);
 
-            // オブジェクトの設置
-            deployingNote.OnDeploy();
-
+            DestroyNote();
             SpawnNewNote(dataGetter.DeploymentNoteType.Value);
         }
 
@@ -144,23 +137,6 @@ namespace ChartEditor
             deployable.OnDestroyListner += () => OnDestroyDeployingNote(noteData);
 
             return deployable;
-        }
-
-        /// <summary>
-        /// 外部データから配置
-        /// </summary>
-        /// <param name="groundNoteData"></param>
-        public void DeployForNoteData(IDeployableNoteData noteData)
-        {
-            var obj = InstantiateNoteObject(noteData);
-            if (obj == null) { return; }
-
-            // 配置
-            Transform parent = dataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(noteData.Address));
-            obj.OnMove(parent);
-            obj.OnDeploy();
-
-            notesSetter.AddDataToNoteObject(noteData, obj.Note);
         }
 
         /// <summary>

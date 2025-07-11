@@ -13,7 +13,6 @@ namespace ChartEditor
         [SerializeField] NoteTypeToNoteObjectList noteList;
         [Tooltip("ノートデータ(抽象クラス)")]
         [SerializeReference, SubclassSelector] IDeployableNoteData[] noteDataList;
-        [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
 
         IChartEditorDataGetter dataGetter;
 
