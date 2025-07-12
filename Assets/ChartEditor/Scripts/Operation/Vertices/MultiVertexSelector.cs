@@ -20,7 +20,6 @@ namespace ChartEditor
              EditMode.VerticesRotating,
              EditMode.VerticesScaling
         };
-        Vector3 cursorPos;
 
         [Inject]
         public void Construct(IChartEditorDataGetter dataGetter)
@@ -79,7 +78,7 @@ namespace ChartEditor
         /// <summary>
         /// 選択リストに追加
         /// </summary>
-        private void SelectMulti(ISelectableVertexObject obj)
+        public void SelectMulti(ISelectableVertexObject obj)
         {
             // 既に含まれている場合はそのオブジェクトをリストから削除
             if (selectingObjects.Contains(obj)) 

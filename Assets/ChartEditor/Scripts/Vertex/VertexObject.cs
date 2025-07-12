@@ -5,6 +5,7 @@ using UnityFx.Outline;
 using System;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using TMPro;
 
 namespace ChartEditor
 {
@@ -12,10 +13,11 @@ namespace ChartEditor
     {
         [Header("Basic Settings")]
         [Tooltip("明滅時間")]
-        [SerializeField] private float blinkDuration = 1f;
-        [SerializeField] private Renderer noteRenderer;
-        [SerializeField] private GameObject[] colliderObjects;
-        [SerializeField] private OutlineBehaviour outline;
+        [SerializeField] float blinkDuration = 1f;
+        [SerializeField] Renderer noteRenderer;
+        [SerializeField] GameObject[] colliderObjects;
+        [SerializeField] OutlineBehaviour outline;
+        [SerializeField] TextMeshPro indexTmp;
 
         List<Collider> colliders;
         public VertexData VertexData { get; set; }
@@ -50,6 +52,11 @@ namespace ChartEditor
             // アウトライン色の変更
             OutlineColors?.ObserveAdd()
                 .Subscribe(color => SetOutlineColor(color.Value))
+                .AddTo(this.gameObject);
+
+            // IndexUIの更新
+            VertexData?.VertexIndexRP
+                .Subscribe(value => { indexTmp.text = value.ToString(); })
                 .AddTo(this.gameObject);
 
             OutlineColors?.ObserveRemove()

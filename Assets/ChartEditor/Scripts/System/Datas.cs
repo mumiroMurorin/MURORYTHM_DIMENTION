@@ -207,7 +207,9 @@ namespace ChartEditor
             return (this.position.Value - another.position.Value).sqrMagnitude;
         }
 
-        public int VertexIndex { get; set; } = -1;
+        ReactiveProperty<int> vertexIndex = new ReactiveProperty<int>(-1);
+        public int VertexIndex { get { return vertexIndex.Value; } set { vertexIndex.Value = value; } }
+        public IReadOnlyReactiveProperty<int> VertexIndexRP => vertexIndex;
     }
 
     public class VertexDataToPos
@@ -260,6 +262,7 @@ namespace ChartEditor
         VerticesRotating = 221,
         VerticesScale = 230,
         VerticesScaling = 231,
+        VerticesSelect = 290,
 
         EditBarConfig = 500,
         EditingBarConfig = 501,

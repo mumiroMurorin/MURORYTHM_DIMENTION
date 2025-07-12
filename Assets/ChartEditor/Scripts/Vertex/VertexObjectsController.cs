@@ -30,18 +30,21 @@ namespace ChartEditor
         public Action OnRemoveVertexListner { get; set; }
         public Action OnClearVertexListner { get; set; }
 
-        DataToVertexObjectList dataToObj = new DataToVertexObjectList();
-        public DataToVertexObjectList DataToObj => dataToObj;
-
+        IChartEditorDataGetter dataGetter;
+        IChartEditorDataSetter dataSetter;
         INotesDataGetter notesGetter;
+        INotesDataSetter notesSetter;
         IChartEditorOptionGetter optionGetter;
         CompositeDisposable disposableForBindForVertices = new CompositeDisposable();
 
         [Inject]
-        public void Constructor(IChartEditorOptionGetter optionGetter, INotesDataGetter notesGetter)
+        public void Constructor(IChartEditorOptionGetter optionGetter, INotesDataGetter notesGetter, INotesDataSetter notesSetter, IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter)
         {
             this.notesGetter = notesGetter;
+            this.notesSetter = notesSetter;
             this.optionGetter = optionGetter;
+            this.dataGetter = dataGetter;
+            this.dataSetter = dataSetter;
         }
 
         private void Start()
@@ -51,6 +54,18 @@ namespace ChartEditor
 
         private void Bind()
         {
+            // 編集レイヤーが変更された時、モードを変更する
+            dataGetter?.EditNoteType
+                .Subscribe(type => {
+                    switch (type)
+                    {
+                        case EditNoteType.Vertices:
+                            dataSetter.SetEditMode(EditMode.VerticesSelect);
+                            break;
+                    }
+                })
+                .AddTo(this.gameObject);
+
             // 編集中メッシュオブジェクトが変わったとき
             notesGetter?.EditingVertices
                 .Subscribe(note =>
@@ -106,7 +121,7 @@ namespace ChartEditor
                 return;
             }
 
-            dataToObj.List.Insert(index, new DataToVertexObject(vertex, vertexObj));
+            notesSetter.InsertVertex(index, new DataToVertexObject(vertex, vertexObj));
             
             vertexObj.gameObject.transform.SetParent(vertexObjParent);
             vertexObj.gameObject.transform.localPosition = Vector3.zero;
@@ -122,15 +137,13 @@ namespace ChartEditor
 
         private void OnRemoveVertex(VertexData vertex)
         {
-            var dto = dataToObj.List.Find(v => v.Data == vertex);
-            if (dto == null)
-            {
-                Debug.LogWarning($"【Vertex】データに対応するオブジェクトが見つかりませんでした: {vertex.Position}");
-                return;
-            }
+            var obj = notesGetter.GetVertexObject(vertex);
+            
+            if (!notesSetter.RemoveVertexDataToObject(vertex)) { return; }
+            if (obj == null) { return; }
 
-            dataToObj.List.Remove(dto);
-            dto.Object.Destroy();
+            // オブジェクトの削除
+            if (obj != null && obj.gameObject.TryGetComponent(out IDestroyableVertex destroyable)) { destroyable.OnDestroy(); }
 
             OnRemoveVertexListner?.Invoke();
             UpdateVertexColor();
@@ -138,7 +151,7 @@ namespace ChartEditor
 
         private void OnClearVertex()
         {
-            dataToObj.Clear();
+            notesSetter.ClearDataToVertexObjectList();
             OnClearVertexListner?.Invoke();
         }
 
@@ -147,12 +160,13 @@ namespace ChartEditor
         /// </summary>
         private void UpdateVertexColor()
         {
-            if(dataToObj.List.Count <= 1) { return; }
+            int dtoCount = notesGetter.DataToVertexObject.Count;
+            if (dtoCount <= 1) { return; }
 
-            for (int i = 0; i < dataToObj.List.Count; i++)
+            for (int i = 0; i < dtoCount; i++)
             {
-                Color color = Color.Lerp(startColor, endColor, (float)i / (dataToObj.List.Count - 1));
-                var vertexObj = dataToObj.List[i].Object;
+                Color color = Color.Lerp(startColor, endColor, (float)i / (dtoCount - 1));
+                var vertexObj = notesGetter.GetVertexObject(i);
 
                 vertexObj.SetColor(color);
             }
@@ -189,7 +203,7 @@ namespace ChartEditor
         {
             DisposeBindForVerticesData();
 
-            dataToObj.Clear();
+            notesSetter.ClearDataToVertexObjectList();
         }
 
         /// <summary>
@@ -217,36 +231,5 @@ namespace ChartEditor
 
             laneDivisionLines[16].SetActive(true);
         }
-    }
-
-    public class DataToVertexObjectList
-    {
-        List<DataToVertexObject> list = new List<DataToVertexObject>();
-
-        public List<DataToVertexObject> List { get { return list; } }
-
-        public VertexObject GetObject(VertexData data) { return list.Find(x => x.Data == data)?.Object; }
-
-        public void Clear()
-        {
-            foreach (var pair in list)
-            {
-                pair.Object.Destroy();
-            }
-
-            list.Clear();
-        }
-    }
-
-    public class DataToVertexObject
-    {
-        public DataToVertexObject(VertexData data, VertexObject obj)
-        {
-            this.Data = data;
-            this.Object = obj;
-        }
-
-        public VertexData Data { get; set; }
-        public VertexObject Object { get; set; }
     }
 }

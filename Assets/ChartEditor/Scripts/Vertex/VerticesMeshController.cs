@@ -14,6 +14,16 @@ namespace ChartEditor
 
         MeshFilter centerMeshFilter;
 
+        INotesDataSetter notesSetter;
+        INotesDataGetter notesGetter;
+
+        [Inject]
+        public void Constructor(INotesDataGetter notesGetter, INotesDataSetter notesSetter)
+        {
+            this.notesGetter = notesGetter;
+            this.notesSetter = notesSetter;
+        }
+
         private void Start()
         {
             GenerateCenterMeshParent();
@@ -35,9 +45,9 @@ namespace ChartEditor
         {
             // センターメッシュ
             List<Vector3> positions = new List<Vector3>();
-            foreach (var pair in verticesController.DataToObj.List)
+            for(int i = 0; i < notesGetter.DataToVertexObject.Count; i++)
             {
-                Vector3 vertexPos = pair.Object.gameObject.transform.localPosition;
+                Vector3 vertexPos = notesGetter.GetVertexObject(i).gameObject.transform.localPosition;
                 positions.Add(new Vector3(vertexPos.x, vertexPos.y, vertexPos.z));
             }
 

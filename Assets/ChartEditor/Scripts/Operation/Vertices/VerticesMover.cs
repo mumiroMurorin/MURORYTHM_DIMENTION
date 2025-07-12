@@ -14,8 +14,9 @@ namespace ChartEditor
         [SerializeField] VertexObjectsController verticesController;
         [SerializeField] MultiVertexSelector multiSelector;
 
-        IChartEditorDataGetter chartEditorDataGetter;
-        IChartEditorDataSetter chartEditorDataSetter;
+        IChartEditorDataGetter dataGetter;
+        IChartEditorDataSetter dataSetter;
+        INotesDataGetter notesGetter;
 
         Dictionary<IPointMovableObject, Vector2> movableAndDelta = new Dictionary<IPointMovableObject, Vector2>();
         List<VertexDataToPos> previousPos;
@@ -25,10 +26,11 @@ namespace ChartEditor
         IPointMovableCollider targetCollider;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorDataSetter chartEditorDataSetter)
+        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter,INotesDataGetter notesGetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
-            this.chartEditorDataSetter = chartEditorDataSetter;
+            this.dataGetter = dataGetter;
+            this.dataSetter = dataSetter;
+            this.notesGetter = notesGetter;
         }
 
         private void Start()
@@ -38,7 +40,7 @@ namespace ChartEditor
 
         void Update()
         {
-            var currentEditMode = chartEditorDataGetter.CurrentEditMode.Value;
+            var currentEditMode = dataGetter.CurrentEditMode.Value;
             if (currentEditMode != EditMode.VertexMove && currentEditMode != EditMode.VertexMoving) { return; }
 
             // カーソル位置が動いたかの判定
@@ -57,7 +59,7 @@ namespace ChartEditor
                 // 初動、誤動作防止のためある程度カーソルが動くまで待つ
                 if (magnitudeSum < firstMovingThreshold)
                 {
-                    if (targetCollider == null) { targetCollider = chartEditorDataGetter.GetInteractableCollider<IPointMovableCollider>(); }
+                    if (targetCollider == null) { targetCollider = dataGetter.GetInteractableCollider<IPointMovableCollider>(); }
                     magnitudeSum += delta.magnitude;
                     return;
                 }
@@ -68,11 +70,11 @@ namespace ChartEditor
                     if (targetCollider == null) { return; }
 
                     StartMoveVertices(targetCollider);
-                    chartEditorDataSetter.SetEditMode(EditMode.VertexMoving);
+                    dataSetter.SetEditMode(EditMode.VertexMoving);
                 }
 
                 // 配置可能な場所でなければ返す
-                var deployable = chartEditorDataGetter.GetInteractableCollider<IPointDeployableCollider>();
+                var deployable = dataGetter.GetInteractableCollider<IPointDeployableCollider>();
                 if (deployable == null) { return; }
 
                 MoveVertex();
@@ -81,7 +83,7 @@ namespace ChartEditor
             else if (Input.GetMouseButtonUp(0) && currentEditMode == EditMode.VertexMoving)
             {                
                 EndMoveVertex();
-                chartEditorDataSetter.SetEditMode(EditMode.VertexMove);
+                dataSetter.SetEditMode(EditMode.VertexMove);
             }
         }
 
@@ -112,7 +114,7 @@ namespace ChartEditor
             // 複数選択されたオブジェクトから動かせるやつを取り出す
             foreach (var data in multiSelector.SelectingVertices)
             {
-                var obj = verticesController.DataToObj.GetObject(data);
+                var obj = notesGetter.GetVertexObject(data);
                 if (!obj.TryGetComponent(out IPointMovableObject movable)) { continue; }
 
                 movable.OnMoveStart();

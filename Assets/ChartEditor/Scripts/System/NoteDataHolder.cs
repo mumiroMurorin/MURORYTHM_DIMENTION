@@ -31,7 +31,7 @@ namespace ChartEditor
         }
 
 
-        // ノートデータ→ノートオブジェクト
+        // ノートデータ → ノートオブジェクト
         ReactiveCollection<DataToNoteObject> dataToNoteObject = new ReactiveCollection<DataToNoteObject>();
         public IReadOnlyReactiveCollection<DataToNoteObject> DataToNoteObject => dataToNoteObject;
         public void AddDataToNoteObject(IDeployableNoteData data, NoteObject obj)
@@ -60,6 +60,39 @@ namespace ChartEditor
             if (editingVertices.Value == data) { return; }
             editingVertices.Value = data;
         }
+
+        // 頂点データ → 頂点オブジェクト
+        ReactiveCollection<DataToVertexObject> dataToVertexObject = new ReactiveCollection<DataToVertexObject>();
+        public IReadOnlyReactiveCollection<DataToVertexObject> DataToVertexObject => dataToVertexObject;
+        public VertexObject GetVertexObject(VertexData data) { return dataToVertexObject.FirstOrDefault(x => x.Data == data)?.Object; }
+        public VertexObject GetVertexObject(int index) 
+        {
+            return (index >= 0 && index < dataToVertexObject.Count) ? dataToVertexObject[index].Object : null;
+        }
+        public bool RemoveVertexDataToObject(VertexData data)
+        {
+            var dto = dataToVertexObject.FirstOrDefault(n => n.Data == data);
+            if (dto == null)
+            {
+                Debug.LogWarning($"【Vertex】データに対応するオブジェクトが見つかりませんでした: {data.Position}");
+                return false;
+            }
+
+            return dataToVertexObject.Remove(dto);
+        }
+        public void InsertVertex(int index, DataToVertexObject data)
+        {
+            dataToVertexObject.Insert(index, data);
+        }
+        public void ClearDataToVertexObjectList()
+        {
+            foreach (var pair in dataToVertexObject)
+            {
+                pair.Object.Destroy();
+            }
+
+            dataToVertexObject.Clear();
+        }
     }
 
     public class DataToNoteObject
@@ -75,6 +108,18 @@ namespace ChartEditor
         public NoteObject Object { get; set; }
     }
 
+    public class DataToVertexObject
+    {
+        public DataToVertexObject(VertexData data, VertexObject obj)
+        {
+            this.Data = data;
+            this.Object = obj;
+        }
+
+        public VertexData Data { get; set; }
+        public VertexObject Object { get; set; }
+    }
+
     public interface INotesDataGetter
     {
         IReadOnlyReactiveCollection<IDeployableNoteData> SelectingNotes { get; }
@@ -84,6 +129,12 @@ namespace ChartEditor
         IReadOnlyReactiveCollection<DataToNoteObject> DataToNoteObject { get; }
 
         NoteObject GetNoteObject(IDeployableNoteData data);
+
+        IReadOnlyReactiveCollection<DataToVertexObject> DataToVertexObject { get; }
+
+        VertexObject GetVertexObject(VertexData data);
+
+        VertexObject GetVertexObject(int index);
     }
 
     public interface INotesDataSetter
@@ -99,5 +150,11 @@ namespace ChartEditor
         void AddDataToNoteObject(IDeployableNoteData data, NoteObject obj);
 
         bool RemoveDataToNoteObject(IDeployableNoteData data);
+
+        bool RemoveVertexDataToObject(VertexData data);
+
+        void InsertVertex(int index, DataToVertexObject data);
+
+        void ClearDataToVertexObjectList();
     }
 }

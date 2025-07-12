@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using System.Linq;
 using static UndoRedo.History;
 
 namespace ChartEditor
@@ -53,13 +54,16 @@ namespace ChartEditor
                 return;
             }
 
-            var vertices = new List<VertexData>(vertexSelector.SelectingVertices);
+            // 逆index順(大きいほうから削除するため)
+            var verticesReverse = new List<VertexData>(vertexSelector.SelectingVertices.OrderByDescending(x => x.VertexIndex));
+            // index順(小さいほうから追加するため)
+            var verticesSorted = new List<VertexData>(vertexSelector.SelectingVertices.OrderBy(x => x.VertexIndex));
 
             // RedoUndoに対応
             Record(() =>
             // 削除
             {
-                foreach (var data in vertices) { DestroyVertex(currentEditVertices, data); }
+                foreach (var data in verticesReverse) { DestroyVertex(currentEditVertices, data); }
 
                 // 選択解除
                 vertexSelector.DeselectAll();
@@ -67,10 +71,8 @@ namespace ChartEditor
             }, () =>
             // 削除取り消し
             {
-                foreach (var data in vertices) { vertexDeployer.DeployVertex(currentEditVertices, data); }
+                foreach (var data in verticesSorted) { vertexDeployer.DeployVertex(currentEditVertices, data); }
             });
-
-            
         }
 
         /// <summary>
@@ -79,10 +81,6 @@ namespace ChartEditor
         /// <param name="data"></param>
         public void DestroyVertex(SpaceHoldVertices vertices, VertexData data)
         {
-            // オブジェクトの削除
-            var obj = verticesController.DataToObj.GetObject(data);
-            if (obj != null && obj.gameObject.TryGetComponent(out IDestroyableVertex destroyable)) { destroyable.OnDestroy(); }
-
             // データの削除
             vertices.RemoveVertex(data);
         }

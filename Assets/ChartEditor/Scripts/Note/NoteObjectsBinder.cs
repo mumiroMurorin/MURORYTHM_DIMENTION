@@ -36,16 +36,18 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // 編集レイヤーが変更された時、配置ノートタイプを変更する
+            // 編集レイヤーが変更された時、配置ノートタイプと編集モードを変更する
             dataGetter.EditNoteType
                 .Subscribe(type => {
                     switch (type)
                     {
                         case EditNoteType.Ground:
                             dataSetter.SetNoteType(defaultNoteType_ground);
+                            dataSetter.SetEditMode(EditMode.Deploy);
                             break;
                         case EditNoteType.Space:
                             dataSetter.SetNoteType(defaultNoteType_space);
+                            dataSetter.SetEditMode(EditMode.SpaceDeploy);
                             break;
                     }
                 })
