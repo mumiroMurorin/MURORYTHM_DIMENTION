@@ -8,7 +8,7 @@ namespace ChartEditor
     {
         [SerializeField] SerializeInterface<ISpaceEditableObject> note;
 
-        public EditMode EditMode => EditMode.SpaceEdit;
+        public EditMode EditMode => EditMode.None;
 
         public ISpaceEditableObject Note => note.Value;
     }

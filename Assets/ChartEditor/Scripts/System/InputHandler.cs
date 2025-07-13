@@ -130,6 +130,7 @@ namespace ChartEditor
         [System.Serializable]
         class EditModeToKeycode
         {
+            [SerializeField] string modeName;
             [SerializeField] EditMode editMode;
             [SerializeField] EditNoteType editNoteType;
             [SerializeField] KeyCode keyCode;

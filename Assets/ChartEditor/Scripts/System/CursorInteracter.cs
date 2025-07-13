@@ -29,7 +29,6 @@ namespace ChartEditor
             EditMode.Connecting,
             EditMode.Explanation,
             EditMode.ChangeType,
-            EditMode.SpaceEdit,
         };
 
         [Inject]

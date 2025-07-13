@@ -15,8 +15,6 @@ namespace ChartConvert
         private List<IUnchainedNoteConvertable> unchainConverters = new List<IUnchainedNoteConvertable>();
         private List<IChainNoteConvertable> holdConverters = new List<IChainNoteConvertable>();
         private List<IChainNoteConvertable> spaceHoldConverters = new List<IChainNoteConvertable>();
-        private Dictionary<int, IChainNoteData> holdNumberToChainNote = new Dictionary<int, IChainNoteData>();
-        private Dictionary<int, IChainNoteData> spaceHoldNumberToChainNote = new Dictionary<int, IChainNoteData>();
 
         public bool Import(ChartDataOrigin dataOrigin, ref ChartEditor.ChartData chartData, IChartEditorDataSetter dataSetter)
         {
@@ -111,12 +109,12 @@ namespace ChartConvert
 
             foreach (var converter in holdConverters)
             {
-                isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor, holdNumberToChainNote);
+                isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor);
             }
 
             foreach (var converter in spaceHoldConverters)
             {
-                isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor, spaceHoldNumberToChainNote);
+                isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor);
             }
 
             return isSucceed;

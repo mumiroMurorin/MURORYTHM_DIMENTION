@@ -36,10 +36,8 @@ namespace ChartConvert
 
     public interface IChainNoteConvertable
     {
-        bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin, 
-            Dictionary<IChainNoteData, int> nextNoteToNumber);
+        bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin);
 
-        bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor,
-            Dictionary<int, IChainNoteData> numberToStartNote);
+        bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor);
     }
 }

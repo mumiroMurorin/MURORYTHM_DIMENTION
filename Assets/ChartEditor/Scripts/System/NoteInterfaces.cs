@@ -20,17 +20,12 @@ namespace ChartEditor
     {
         IConnectableObject NoteObject { get; }
 
-        IReadOnlyReactiveProperty<IChainNoteData> NextNote { get; }
+        /// <summary>
+        /// 基本チェイン関係はこれに依存
+        /// </summary>
+        IReadOnlyReactiveProperty<int> ChainIndex { get; }
 
-        IReadOnlyReactiveProperty<IChainNoteData> BackNote { get; }
-
-        void SetNextNote(IChainNoteData nextNote, bool isUpdateNoteType = true);
-
-        void SetBackNote(IChainNoteData backNote, bool isUpdateNoteType = true);
-
-        void AddChainNote(IChainNoteData addNote, bool isUpdateNoteType = true);
-
-        void RemoveNote();
+        public void SetChainIndex(int index);
 
         void SetNoteObject(IConnectableObject noteObject);
     }

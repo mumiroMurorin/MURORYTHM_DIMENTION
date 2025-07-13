@@ -23,14 +23,26 @@ namespace ChartEditor
         [SerializeField] Transform meshRightEdge;
         [SerializeField] Transform meshLeftEdge;
 
+        // 右端左端
         Transform IConnectableObject.MeshRightEdge => meshRightEdge;
         Transform IConnectableObject.MeshLeftEdge => meshLeftEdge;
 
+        // ノート本体
         NoteObject noteObject;
         NoteObject IConnectableObject.Note => noteObject;
 
+        // 次ノート
+        ReactiveProperty<IConnectableObject> nextNote = new ReactiveProperty<IConnectableObject>();
+        IReadOnlyReactiveProperty<IConnectableObject> IConnectableObject.NextNote => nextNote;
+        void IConnectableObject.SetNextNote(IConnectableObject nextNote) { this.nextNote.Value = nextNote; }
+
+        // 前ノート
+        ReactiveProperty<IConnectableObject> backNote = new ReactiveProperty<IConnectableObject>();
+        IReadOnlyReactiveProperty<IConnectableObject> IConnectableObject.BackNote => backNote;
+        void IConnectableObject.SetBackNote(IConnectableObject backNote) { this.backNote.Value = backNote; }
+
+        // メンバ変数
         GameObject meshObject;
-        IChainNoteData chainNoteData;
         List<IDisposable> nextNoteDisposables = new List<IDisposable>();
         CancellationTokenSource cts = new CancellationTokenSource();
 
@@ -48,26 +60,22 @@ namespace ChartEditor
             // ノートデータが存在するまで待つ
             await UniTask.WaitUntil(() => noteObject.NoteData.Address != null, cancellationToken: token);
 
-            // IChainNoteDataに変換
-            if (noteObject.NoteData is not IChainNoteData) { return; }
-            chainNoteData = (IChainNoteData)(noteObject.NoteData);
-
             // 次ノーツが変わった時購読しなおす
-            chainNoteData.NextNote
+            nextNote
                 .Subscribe(next => {
                     DisposeHoldMesh();
-                    ChangeNoteMaterial(chainNoteData.BackNote.Value, next);
+                    ChangeNoteMaterial(backNote.Value, next);
                     if(next != null)
                     {
-                        BindForThisNote(chainNoteData);
+                        BindForThisNote();
                         BindForNextNote(next);
                     }
                 })
                 .AddTo(this.gameObject);
 
-            chainNoteData.BackNote
+            backNote
                 .Subscribe(back => {
-                    ChangeNoteMaterial(back, chainNoteData.NextNote.Value);
+                    ChangeNoteMaterial(back, nextNote.Value);
                 })
                 .AddTo(this.gameObject);
         }
@@ -76,23 +84,22 @@ namespace ChartEditor
         /// このノーツに対するバインド
         /// </summary>
         /// <param name="thisNote"></param>
-        private void BindForThisNote(IChainNoteData thisNote)
+        private void BindForThisNote()
         {
-            if (thisNote.NextNote == null) { return; }
-            if (thisNote.NextNote.Value == null) { return; }
-            IChainNoteData nextNote = thisNote.NextNote.Value;
+            if (this.nextNote == null) { return; }
+            if (this.nextNote.Value == null) { return; }
 
             // 2フレームごとに位置が変わってないかチェック
             var disposable1 = Observable.IntervalFrame(2)
                 .Select(_ => meshLeftEdge.position)
                 .DistinctUntilChanged()
-                .Subscribe(_ => GenerateMesh(nextNote.NoteObject.MeshRightEdge.position, nextNote.NoteObject.MeshLeftEdge.position))
+                .Subscribe(_ => GenerateMesh(nextNote.Value.MeshRightEdge.position, nextNote.Value.MeshLeftEdge.position))
                 .AddTo(this);
 
             var disposable2 = Observable.IntervalFrame(2)
                 .Select(_ => meshRightEdge.position)
                 .DistinctUntilChanged()
-                .Subscribe(_ => GenerateMesh(nextNote.NoteObject.MeshRightEdge.position, nextNote.NoteObject.MeshLeftEdge.position))
+                .Subscribe(_ => GenerateMesh(nextNote.Value.MeshRightEdge.position, nextNote.Value.MeshLeftEdge.position))
                 .AddTo(this);
 
             nextNoteDisposables.Add(disposable1);
@@ -103,19 +110,19 @@ namespace ChartEditor
         /// 次ノーツに対するバインド
         /// </summary>
         /// <param name="nextNote"></param>
-        private void BindForNextNote(IChainNoteData nextNote)
+        private void BindForNextNote(IConnectableObject nextNote)
         {
             // 2フレームごとに位置が変わってないかチェック
             var disposable1 = Observable.IntervalFrame(2)
-                .Select(_ => nextNote.NoteObject.MeshLeftEdge.position)
+                .Select(_ => nextNote.MeshLeftEdge.position)
                 .DistinctUntilChanged()
-                .Subscribe(_ => GenerateMesh(nextNote.NoteObject.MeshRightEdge.position, nextNote.NoteObject.MeshLeftEdge.position))
+                .Subscribe(_ => GenerateMesh(nextNote.MeshRightEdge.position, nextNote.MeshLeftEdge.position))
                 .AddTo(this);
 
             var disposable2 = Observable.IntervalFrame(2)
-                .Select(_ => nextNote.NoteObject.MeshRightEdge.position)
+                .Select(_ => nextNote.MeshRightEdge.position)
                 .DistinctUntilChanged()
-                .Subscribe(_ => GenerateMesh(nextNote.NoteObject.MeshRightEdge.position, nextNote.NoteObject.MeshLeftEdge.position))
+                .Subscribe(_ => GenerateMesh(nextNote.MeshRightEdge.position, nextNote.MeshLeftEdge.position))
                 .AddTo(this);
 
             nextNoteDisposables.Add(disposable1);
@@ -141,7 +148,7 @@ namespace ChartEditor
         /// マテリアルの変更
         /// </summary>
         /// <param name="holdNoteType"></param>
-        private void ChangeNoteMaterial(IChainNoteData back, IChainNoteData next)
+        private void ChangeNoteMaterial(IConnectableObject back, IConnectableObject next)
         {
             if (back != null && next != null) { noteMeshRenderer.material = relayMaterial; }
             else if (back != null && next == null) { noteMeshRenderer.material = endMaterial; }
@@ -170,7 +177,7 @@ namespace ChartEditor
 
         private void OnDestroy()
         {
-            chainNoteData?.RemoveNote();
+            //thisChainData?.RemoveNote();
 
             if (cts != null)
             {

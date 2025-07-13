@@ -15,8 +15,6 @@ namespace ChartConvert
         private List<IUnchainedNoteConvertable> unchainConverters = new List<IUnchainedNoteConvertable>();
         private List<IChainNoteConvertable> holdConverters = new List<IChainNoteConvertable>();
         private List<IChainNoteConvertable> spaceHoldConverters = new List<IChainNoteConvertable>();
-        private Dictionary<IChainNoteData, int> nextHoldNoteToNumber = new Dictionary<IChainNoteData, int>();
-        private Dictionary<IChainNoteData, int> nextSpaceHoldNoteToNumber = new Dictionary<IChainNoteData, int>();
 
         public ChartDataOrigin Export(ChartEditor.ChartData chartData, float offset)
         {
@@ -45,7 +43,6 @@ namespace ChartConvert
                 new HoldEndConverter(),
                 new HoldEndUnjudgeConverter(),
                 new HoldMeshRelayConverter(),
-                //new HoldHiddenJudgedRelay(),
             };
 
             spaceHoldConverters = new List<IChainNoteConvertable>
@@ -54,7 +51,6 @@ namespace ChartConvert
                 new SpaceHoldRelayConverter(),
                 new SpaceHoldEndConverter(),
                 new SpaceHoldMeshRelayConverter(),
-                //new SpaceHoldHiddenJudgedRelay(),
             };
         }
 
@@ -135,9 +131,6 @@ namespace ChartConvert
             // 変換に成功したかの判定
             bool isSucceed = true;
 
-            // 同じ分節にchainノーツがあった時順番を変える
-            ReorderChainedNotesInSubdivision(dataInEditor);
-
             // ノーツデータを一つずつ取り出して
             foreach (var noteData in dataInEditor.NoteDatas)
             {
@@ -153,13 +146,13 @@ namespace ChartConvert
                 // 変換関数で変換出来るか総当たり(ホールドノーツ)
                 foreach (var converter in holdConverters)
                 {
-                    isSucceedLocal |= converter.AddDataForOrigin(noteData, dataOrigin, nextHoldNoteToNumber);
+                    isSucceedLocal |= converter.AddDataForOrigin(noteData, dataOrigin);
                 }
 
                 // 変換関数で変換出来るか総当たり(スぺースホールドノーツ)
                 foreach (var converter in spaceHoldConverters)
                 {
-                    isSucceedLocal |= converter.AddDataForOrigin(noteData, dataOrigin, nextSpaceHoldNoteToNumber);
+                    isSucceedLocal |= converter.AddDataForOrigin(noteData, dataOrigin);
                 }
 
                 // 変換成功判定
@@ -171,101 +164,6 @@ namespace ChartConvert
             }
 
             return isSucceed;
-        }
-
-        /// <summary>
-        /// 分節データ内のノーツデータを並び替え
-        /// </summary>
-        /// <param name="dataInEditor"></param>
-        private void ReorderChainedNotesInSubdivision(SubDivisionDataInBeat dataInEditor)
-        {
-            // 同じ分節に配置されているChainノーツ(始点)をあぶりだす
-            var chainNoteStarts = FindChainNotesInSubdivision(dataInEditor);
-
-            // 同分節のチェインノーツがなければ返す
-            if (chainNoteStarts.Count == 0) { return; }
-
-            foreach (var note in chainNoteStarts)
-            {
-                // 順番に(削除してから)代入する
-                var chainNote = note;
-                while (chainNote != null)
-                {
-                    dataInEditor.RemoveNote(chainNote);
-                    dataInEditor.AddNote(chainNote);
-
-                    if (!IsInSameSubdivision(chainNote, chainNote.NextNote.Value)) { break; }
-                    chainNote = chainNote.NextNote.Value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 同じ分節に配置されているChainノーツをあぶりだす
-        /// </summary>
-        /// <param name="dataInEditor"></param>
-        /// <returns></returns>
-        private List<IChainNoteData> FindChainNotesInSubdivision(SubDivisionDataInBeat dataInEditor)
-        {
-            List<IChainNoteData> chainNotes = new List<IChainNoteData>();
-            foreach (var note in dataInEditor.NoteDatas)
-            {
-                // Chainノーツである場合のみ
-                if (note is not IChainNoteData) { continue; }
-                var thisNote = (IChainNoteData)note;
-                var nextNote = thisNote.NextNote.Value;
-                var backNote = thisNote.BackNote.Value;
-
-                // 次ノーツが同じ分節に配置されていた場合
-                if (nextNote != null && IsInSameSubdivision(thisNote, nextNote))
-                {
-                    // 一番最初のチェインノーツをあぶりだす
-                    IChainNoteData chainNote = GetFirstChainNoteInSameSubdivision(thisNote);
-                    chainNotes.Add(chainNote);
-                }
-                // 前ノーツが同じ分節に配置されていた場合
-                else if (backNote != null && IsInSameSubdivision(thisNote, backNote))
-                {
-                    // 一番最初のチェインノーツをあぶりだす
-                    IChainNoteData chainNote = GetFirstChainNoteInSameSubdivision(thisNote);
-                    chainNotes.Add(chainNote);
-                }
-            }
-
-            chainNotes = chainNotes.Distinct().ToList();
-
-            return chainNotes;
-        }
-
-        /// <summary>
-        /// 同分節内の一番最初のチェインノーツをあぶりだす
-        /// </summary>
-        /// <param name="chainNote"></param>
-        /// <returns></returns>
-        private IChainNoteData GetFirstChainNoteInSameSubdivision(IChainNoteData chainNote)
-        {
-            while (chainNote != null && IsInSameSubdivision(chainNote, chainNote.BackNote.Value))
-            {
-                chainNote = chainNote.BackNote.Value;
-            }
-
-            return chainNote;
-        }
-
-        /// <summary>
-        /// ノーツが同じ分節内にあるか返す
-        /// </summary>
-        /// <param name="note1"></param>
-        /// <param name="note2"></param>
-        /// <returns></returns>
-        private bool IsInSameSubdivision(IDeployableNoteData note1, IDeployableNoteData note2)
-        {
-            if (note1 == null) { return false; }
-            if (note2 == null) { return false; }
-            if (note1.Address.BarIndex != note2.Address.BarIndex) { return false; }
-            if (note1.Address.SubDivisionIndex != note2.Address.SubDivisionIndex) { return false; }
-
-            return true;
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UniRx;
 
 namespace ChartEditor
 {
@@ -263,8 +264,15 @@ namespace ChartEditor
 
         Transform MeshLeftEdge { get; }
 
-        NoteObject Note { get; }
+        IReadOnlyReactiveProperty<IConnectableObject> NextNote { get; }
 
+        IReadOnlyReactiveProperty<IConnectableObject> BackNote { get; }
+
+        void SetNextNote(IConnectableObject nextNote);
+
+        void SetBackNote(IConnectableObject backNote);
+
+        NoteObject Note { get; }
     }
 
     /// <summary>

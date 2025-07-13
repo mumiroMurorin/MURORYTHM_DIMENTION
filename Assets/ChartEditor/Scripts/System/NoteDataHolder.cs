@@ -52,6 +52,44 @@ namespace ChartEditor
         public NoteObject GetNoteObject(IDeployableNoteData data) { return dataToNoteObject.FirstOrDefault(x => x.Data == data)?.Object; }
 
 
+        // 接続データ
+        Dictionary<int, SortedChainNoteDataList> indexToChainNoteDataList = new Dictionary<int, SortedChainNoteDataList>();
+        public void AddChainNote(IChainNoteData addNote)
+        {
+            // 含まれているとき
+            if (indexToChainNoteDataList.TryGetValue(addNote.ChainIndex.Value, out var list)) 
+            {
+                list.AddChainNoteData(addNote);
+            }
+            // 新規のとき
+            else
+            {
+                var addList = new SortedChainNoteDataList();
+                addList.AddChainNoteData(addNote);
+                indexToChainNoteDataList.Add(addNote.ChainIndex.Value, addList);
+            }
+        }
+        public bool RemoveChainNote(IChainNoteData addNote)
+        {
+            // 含まれてないとき
+            if (!indexToChainNoteDataList.TryGetValue(addNote.ChainIndex.Value, out var list)) { return false; }
+            return list.RemoveChainNoteData(addNote);
+        }
+        /// <summary>
+        /// 使用できる最小のインデックスを返す
+        /// </summary>
+        /// <returns></returns>
+        public int GetUsableChainNoteIndex() 
+        {
+            int i = 0;
+            while (indexToChainNoteDataList.ContainsKey(i))
+            {
+                i++;
+            }
+            return i;
+        }
+
+
         // 編集中の頂点ありオブジェクト
         ReactiveProperty<IVerticesControlableNoteData> editingVertices = new ReactiveProperty<IVerticesControlableNoteData>();
         public IReadOnlyReactiveProperty<IVerticesControlableNoteData> EditingVertices => editingVertices;
@@ -120,6 +158,33 @@ namespace ChartEditor
         public VertexObject Object { get; set; }
     }
 
+    /// <summary>
+    /// Address順にソートされることが保証されたChainNoteDataList
+    /// </summary>
+    public class SortedChainNoteDataList
+    {
+        ReactiveCollection<IChainNoteData> chainNoteList = new ReactiveCollection<IChainNoteData>();
+        public IReadOnlyReactiveCollection<IChainNoteData> ChainNoteList => chainNoteList;
+
+        public void AddChainNoteData(IChainNoteData addData)
+        {
+            // 挿入するインデックスを調べる
+            int insertIndex = 0;
+            for(insertIndex = 0; insertIndex < chainNoteList.Count; insertIndex++)
+            {
+                var current = chainNoteList[insertIndex];
+                if (addData.Address.IsEarlierThan(current.Address)) { break; }
+            }
+
+            chainNoteList.Insert(insertIndex, addData);
+        }
+
+        public bool RemoveChainNoteData(IChainNoteData removeData)
+        {
+            return chainNoteList.Remove(removeData);
+        }
+    }
+
     public interface INotesDataGetter
     {
         IReadOnlyReactiveCollection<IDeployableNoteData> SelectingNotes { get; }
@@ -129,6 +194,8 @@ namespace ChartEditor
         IReadOnlyReactiveCollection<DataToNoteObject> DataToNoteObject { get; }
 
         NoteObject GetNoteObject(IDeployableNoteData data);
+
+        int GetUsableChainNoteIndex();
 
         IReadOnlyReactiveCollection<DataToVertexObject> DataToVertexObject { get; }
 

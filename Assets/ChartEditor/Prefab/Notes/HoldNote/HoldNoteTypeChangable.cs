@@ -47,16 +47,15 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // IChainNoteData‚É•ÏŠ·
-            if (noteObject.NoteData is not IChainNoteData) { return; }
-            var chainData = (IChainNoteData)noteObject.NoteData;
+            if (noteObject.NoteData is not IChainNoteData chainData) { return; }
 
-            chainData.NextNote
+            chainData.NoteObject.NextNote
                 .Subscribe(next => {
                     ChangeNoteColor(noteData.NoteTypeRP.Value);
                 })
                 .AddTo(this.gameObject);
 
-            chainData.BackNote
+            chainData.NoteObject.BackNote
                 .Subscribe(back => {
                     ChangeNoteColor(noteData.NoteTypeRP.Value);
                 })
@@ -67,7 +66,6 @@ namespace ChartEditor
         {
             if (noteType == DeploymentNoteType.Hold) { noteMeshRenderer.material.color = normalColor; }
             else if (noteType == DeploymentNoteType.HoldHidden) { noteMeshRenderer.material.color = hiddenColor; }
-            //else if (noteType == DeploymentNoteType.HoldHiddenJudged) { noteMeshRenderer.material.color = hiddenJudgedColor; }
             else if(noteType == DeploymentNoteType.HoldEndUnjudge) { noteMeshRenderer.material.color = holdEndUnjudgeColor; }
         }
 
