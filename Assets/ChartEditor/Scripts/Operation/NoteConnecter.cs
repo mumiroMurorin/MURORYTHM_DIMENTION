@@ -4,6 +4,7 @@ using UnityEngine;
 using VContainer;
 using UniRx;
 using System;
+using System.Linq;
 
 namespace ChartEditor
 {
@@ -15,7 +16,7 @@ namespace ChartEditor
         IChartEditorDataSetter dataSetter;
         INotesDataGetter notesGetter;
 
-        Dictionary<IChainNoteData, IDisposable> noteDataToDisposable = new Dictionary<IChainNoteData, IDisposable>();
+        Dictionary<IChainNoteData, List<IDisposable>> noteDataToDisposables = new Dictionary<IChainNoteData, List<IDisposable>>();
         IChainNoteData startNote;
         int connectingChainIndex;
 
@@ -75,24 +76,29 @@ namespace ChartEditor
             if (connectingChainIndex == UNCHAINED_INDEX && addNote.ChainIndex.Value == UNCHAINED_INDEX)
             {
                 connectingChainIndex = notesGetter.GetUsableChainNoteIndex();
-                startNote.SetChainIndex(connectingChainIndex);
             }
             // í«â¡ÉmÅ[ÉgÇ™î‘çÜÇéùÇ¡ÇƒÇ¢ÇΩÇ∆Ç´ÅAî‘çÜÇçXêV
             // å≥ÉmÅ[ÉgÇ™î‘çÜÇéùÇ¡ÇƒÇ¢ÇΩèÍçáÇÕâΩÇ‡ÇµÇ»Ç¢(connectingChainIndexÇ…ä˘Ç…ë„ì¸çœ)
             else if (connectingChainIndex == UNCHAINED_INDEX && addNote.ChainIndex.Value != UNCHAINED_INDEX)
             {
                 connectingChainIndex = addNote.ChainIndex.Value;
-                startNote.SetChainIndex(connectingChainIndex);
             }
 
             // åqÇ™Ç¡ÇƒÇÈÉmÅ[ÉcÇÕëSïîåqÇ∞ÇÈ
-            var chainList = notesGetter.GetChainNoteList(addNote.ChainIndex.Value)?.ChainNoteList;
+            var chainList = notesGetter.GetChainNoteList(addNote.ChainIndex.Value)?.ChainNoteList.ToList();
             if(chainList != null)
             {
+                ConnectNote(startNote, connectingChainIndex);
                 foreach (var chain in chainList)
                 {
                     ConnectNote(chain, connectingChainIndex);
                 }
+            }
+            // Ç¬Ç»Ç™Ç¡ÇƒÇ»Ç¢Ç∆Ç´
+            else
+            {
+                ConnectNote(startNote, connectingChainIndex);
+                ConnectNote(addNote, connectingChainIndex);
             }
         }
 
@@ -105,23 +111,33 @@ namespace ChartEditor
             UpdateChainNoteObj(chainNote, chainIndex);
 
             // Ç∑Ç≈Ç…çwì«Ç≥ÇÍÇƒÇ¢ÇΩÇ∆Ç´ÅAîjä¸
-            if (noteDataToDisposable.TryGetValue(chainNote, out var dis))
+            if (noteDataToDisposables.TryGetValue(chainNote, out var disposables))
             {
-                dis.Dispose();
+                foreach(var dis in disposables) { dis.Dispose(); }
+                noteDataToDisposables.Remove(chainNote);
             }
 
             // çwì«
             var noteList = notesGetter.GetChainNoteList(chainIndex);
-            var dispossable = noteList.ChainNoteList.ObserveCountChanged()
+            var disposable1 = noteList.ChainNoteList.ObserveCountChanged()
                 .Subscribe(_ => {
                     UpdateChainNoteObj(chainNote, chainIndex);
                 })
                 .AddTo(this.gameObject);
 
+            var disposable2 = chainNote.Address.BarIndexRP
+                .Subscribe(_ => { noteList.UpdateChainNoteData(chainNote); })
+                .AddTo(this.gameObject);
+
+            var disposable3 = chainNote.Address.SubDivisionIndexRP
+                .Subscribe(_ => { noteList.UpdateChainNoteData(chainNote); })
+                .AddTo(this.gameObject);
+
             // çwì«ÉfÅ[É^ÇÃí«â¡ÅAçXêV
-            if(!noteDataToDisposable.TryAdd(chainNote, dispossable))
+            var disList = new List<IDisposable>() { disposable1, disposable2, disposable3 };
+            if (!noteDataToDisposables.TryAdd(chainNote, disList))
             {
-                noteDataToDisposable[chainNote] = dispossable;
+                noteDataToDisposables[chainNote] = disList;
             }
         }
 
@@ -133,22 +149,16 @@ namespace ChartEditor
         private void UpdateChainNoteObj(IChainNoteData chainNote, int chainIndex)
         {
             // NextNoteÇ∆BackNoteÇçXêVÇ∑ÇÈ
-
             var noteList = notesGetter.GetChainNoteList(chainIndex);
             int index = noteList.IndexOf(chainNote);
 
-            if(index < 0) 
-            { 
-                Debug.LogWarning($"ÅyConnecterÅzäYìñÉmÅ[ÉgÇ™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÇ≈ÇµÇΩ: {chainNote}, {chainIndex}"); 
-                return;
-            }
+            if(index < 0) { return; }
 
             var backNoteObj = index > 0 ? noteList.ChainNoteList[index - 1].NoteObject : null;
             var nextNoteObj = index < noteList.ChainNoteList.Count - 1 ? noteList.ChainNoteList[index + 1].NoteObject : null;
 
             chainNote.NoteObject.SetBackNote(backNoteObj);
             chainNote.NoteObject.SetNextNote(nextNoteObj);
-            Debug.Log($"Ç´ÇøÇ·: {chainIndex}, {backNoteObj}, {nextNoteObj}");
         }
 
         /// <summary>

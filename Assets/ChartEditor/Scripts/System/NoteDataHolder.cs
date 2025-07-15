@@ -199,6 +199,12 @@ namespace ChartEditor
             return chainNoteList.Remove(removeData);
         }
 
+        public void UpdateChainNoteData(IChainNoteData data)
+        {
+            RemoveChainNoteData(data);
+            AddChainNoteData(data);
+        }
+
         public int IndexOf(IChainNoteData targetData)
         {
             return chainNoteList.IndexOf(targetData);
