@@ -62,8 +62,6 @@ namespace ChartEditor
         /// </summary>
         private void StartConnectOnClick()
         {
-            if(dataGetter.CurrentEditMode.Value != EditMode.Connect) { return; }
-
             var collider = dataGetter.GetInteractableCollider<IConnectableCollider>();
             if(collider == null) { return; }
 
@@ -83,8 +81,6 @@ namespace ChartEditor
         /// </summary>
         private void ConnectNoteOnClick()
         {
-            if (dataGetter.CurrentEditMode.Value != EditMode.Connecting) { return; }
-
             var collider = dataGetter.GetInteractableCollider<IConnectableCollider>();
             if (collider == null) { return; }
 
@@ -128,8 +124,6 @@ namespace ChartEditor
         /// </summary>
         private void DisConnectNoteOnClick()
         {
-            if (dataGetter.CurrentEditMode.Value != EditMode.Connecting) { return; }
-
             var collider = dataGetter.GetInteractableCollider<IConnectableCollider>();
             if (collider == null) { return; }
 
@@ -193,6 +187,8 @@ namespace ChartEditor
         private void DisconnectNote(IChainNoteData chainNote)
         {
             notesGetter.RemoveChainNote(chainNote);
+            chainNote.SetChainIndex(-1);
+            UpdateChainNoteObj(chainNote, -1);
 
             // çwì«ÇÃîjä¸
             if (noteDataToDisposables.TryGetValue(chainNote, out var disposables))
@@ -212,9 +208,14 @@ namespace ChartEditor
         {
             // NextNoteÇ∆BackNoteÇçXêVÇ∑ÇÈ
             var noteList = notesGetter.GetChainNoteList(chainIndex);
-            int index = noteList.IndexOf(chainNote);
+            int index = noteList != null ? noteList.IndexOf(chainNote) : -1;
 
-            if(index < 0) { return; }
+            if(index < 0) 
+            {
+                chainNote.NoteObject.SetBackNote(null);
+                chainNote.NoteObject.SetNextNote(null);
+                return;
+            }
 
             var backNoteObj = index > 0 ? noteList.ChainNoteList[index - 1].NoteObject : null;
             var nextNoteObj = index < noteList.ChainNoteList.Count - 1 ? noteList.ChainNoteList[index + 1].NoteObject : null;
