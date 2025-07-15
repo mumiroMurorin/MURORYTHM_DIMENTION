@@ -108,6 +108,8 @@ namespace ChartEditor
             notesGetter.RemoveChainNote(chainNote);
             chainNote.SetChainIndex(chainIndex);
             notesGetter.AddChainNote(chainNote);
+
+            // ノート順のアップデート
             UpdateChainNoteObj(chainNote, chainIndex);
 
             // すでに購読されていたとき、破棄
@@ -142,7 +144,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ChainNoteDataに対する購読
+        /// ノートの前後を更新
         /// </summary>
         /// <param name="chainNote"></param>
         /// <param name="chainIndex"></param>
