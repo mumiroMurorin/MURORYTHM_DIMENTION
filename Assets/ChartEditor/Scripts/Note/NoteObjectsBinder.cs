@@ -226,6 +226,8 @@ namespace ChartEditor
             if (noteData is IChainNoteData chainData)
             {
                 chainData.SetNoteObject(obj.GetComponent<IConnectableObject>());
+                // íœŽž‚Ì‹““®
+                chainData.NoteObject.OnDestroyListner += () => { notesGetter.RemoveChainNote(chainData); };
             }
 
             deployable.OnInstantiate(noteData, GetNoteParentTransform);

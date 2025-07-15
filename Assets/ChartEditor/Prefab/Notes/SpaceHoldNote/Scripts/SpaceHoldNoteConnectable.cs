@@ -24,6 +24,8 @@ namespace ChartEditor
         [SerializeField] Transform meshRightEdge;
         [SerializeField] Transform meshLeftEdge;
 
+        public Action OnDestroyListner { get; set; }
+
         // ‰E’[¶’[
         Transform IConnectableObject.MeshRightEdge => meshRightEdge;
         Transform IConnectableObject.MeshLeftEdge => meshLeftEdge;
@@ -179,6 +181,8 @@ namespace ChartEditor
 
         private void OnDestroy()
         {
+            OnDestroyListner?.Invoke();
+
             if (cts != null)
             {
                 cts.Cancel();

@@ -18,6 +18,7 @@ namespace ChartEditor
 
         Dictionary<IChainNoteData, List<IDisposable>> noteDataToDisposables = new Dictionary<IChainNoteData, List<IDisposable>>();
         IChainNoteData startNote;
+        bool isConnecting;
         int connectingChainIndex;
 
         [Inject]
@@ -32,8 +33,27 @@ namespace ChartEditor
         {
             EditMode editMode = dataGetter.CurrentEditMode.Value;
 
+            if(editMode != EditMode.Connect && editMode != EditMode.Connecting && editMode != EditMode.DisConnect) 
+            {
+                isConnecting = false;
+                return; 
+            }
+
+            // Ctrl押されている間は接続解除モード
+            if (Input.GetKey(KeyCode.LeftControl)) { dataSetter.SetEditMode(EditMode.DisConnect); }
+            // それ以外は接続モード
+            else if (isConnecting) { dataSetter.SetEditMode(EditMode.Connecting); }
+            else { dataSetter.SetEditMode(EditMode.Connect); }
+
+            editMode = dataGetter.CurrentEditMode.Value;
+
+            // 接続モード開始
             if (Input.GetMouseButtonDown(0) && editMode == EditMode.Connect) { StartConnectOnClick(); }
+            // 接続解除
+            else if (Input.GetMouseButtonDown(0) && editMode == EditMode.DisConnect) { DisConnectNoteOnClick(); }
+            // 接続
             else if (Input.GetMouseButtonDown(0) && editMode == EditMode.Connecting) { ConnectNoteOnClick(); }
+            // 接続モード終了
             else if (Input.GetMouseButtonDown(1)) { EndConnect(); }
         }
 
@@ -51,10 +71,11 @@ namespace ChartEditor
             if (connectableObject == null) { return; }
             if (connectableObject.Note.NoteData is not IChainNoteData) { return; }
 
-            dataSetter.SetEditMode(EditMode.Connecting);
             startNote = (IChainNoteData)connectableObject.Note.NoteData;
-
             connectingChainIndex = startNote.ChainIndex.Value;
+
+            dataSetter.SetEditMode(EditMode.Connecting);
+            isConnecting = true;
         }
 
         /// <summary>
@@ -102,6 +123,28 @@ namespace ChartEditor
             }
         }
 
+        /// <summary>
+        /// ノーツの接続解除
+        /// </summary>
+        private void DisConnectNoteOnClick()
+        {
+            if (dataGetter.CurrentEditMode.Value != EditMode.Connecting) { return; }
+
+            var collider = dataGetter.GetInteractableCollider<IConnectableCollider>();
+            if (collider == null) { return; }
+
+            IConnectableObject connectableObject = collider.Note;
+            if (connectableObject == null) { return; }
+            if (connectableObject.Note.NoteData is not IChainNoteData removeNote) { return; }
+
+            DisconnectNote(removeNote);
+        }
+
+        /// <summary>
+        /// ノートの接続
+        /// </summary>
+        /// <param name="chainNote"></param>
+        /// <param name="chainIndex"></param>
         private void ConnectNote(IChainNoteData chainNote, int chainIndex)
         {
             // データの入れ替え
@@ -144,6 +187,23 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// ノートの接続解除
+        /// </summary>
+        /// <param name="chainNote"></param>
+        private void DisconnectNote(IChainNoteData chainNote)
+        {
+            notesGetter.RemoveChainNote(chainNote);
+
+            // 購読の破棄
+            if (noteDataToDisposables.TryGetValue(chainNote, out var disposables))
+            {
+                foreach (var dis in disposables) { dis.Dispose(); }
+                noteDataToDisposables.Remove(chainNote);
+            }
+        }
+
+
+        /// <summary>
         /// ノートの前後を更新
         /// </summary>
         /// <param name="chainNote"></param>
@@ -169,7 +229,9 @@ namespace ChartEditor
         private void EndConnect()
         {
             if (dataGetter.CurrentEditMode.Value != EditMode.Connecting) { return; }
+
             dataSetter.SetEditMode(EditMode.None);
+            isConnecting = false;
         }
     }
 }

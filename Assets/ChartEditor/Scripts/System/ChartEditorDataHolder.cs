@@ -52,7 +52,7 @@ namespace ChartEditor
             if(currentEditMode.Value == editMode) { return; }
 
             currentEditMode.Value = editMode;
-            //Debug.Log($"Change Edit Mode: {currentEditMode.Value}"); 
+            Debug.Log($"Change Edit Mode: {currentEditMode.Value}"); 
         }
 
         // 編集ノーツタイプ

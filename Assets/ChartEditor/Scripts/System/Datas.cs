@@ -247,6 +247,7 @@ namespace ChartEditor
         Scaling = 31,
         Connect = 40,
         Connecting = 41,
+        DisConnect = 42,
         ChangeType = 50,
 
         SpaceDeploy = 100,
