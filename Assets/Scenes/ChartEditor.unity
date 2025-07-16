@@ -13827,12 +13827,12 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: 1e42591ba834b854b8d4bd52c8e855ee, type: 3}
   - editMode: 41
     texture: {fileID: 2800000, guid: 1e42591ba834b854b8d4bd52c8e855ee, type: 3}
+  - editMode: 42
+    texture: {fileID: 2800000, guid: f676641e23cdde54c8f45defea3fcd9b, type: 3}
   - editMode: 50
     texture: {fileID: 2800000, guid: b107f5fca73c9534ba3de0b6daa4a536, type: 3}
   - editMode: 110
     texture: {fileID: 2800000, guid: 6db99975f82451845aac47b719a7b070, type: 3}
-  - editMode: 120
-    texture: {fileID: 2800000, guid: 0a3a925b7e4ee014696f0bad12ca9266, type: 3}
   - editMode: 211
     texture: {fileID: 2800000, guid: 6db99975f82451845aac47b719a7b070, type: 3}
   - editMode: 221

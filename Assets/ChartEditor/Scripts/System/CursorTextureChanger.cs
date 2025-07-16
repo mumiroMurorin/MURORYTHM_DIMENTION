@@ -24,6 +24,7 @@ namespace ChartEditor
             { EditMode.ChangeType,typeof(IChangableCollider) },
             { EditMode.Connect,typeof(IConnectableCollider) },
             { EditMode.Connecting,typeof(IConnectableCollider) },
+            { EditMode.DisConnect,typeof(IConnectableCollider) },
         };
 
         EditMode[] ignoreEditModes = new EditMode[] {

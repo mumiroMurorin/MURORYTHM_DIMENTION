@@ -15,6 +15,7 @@ namespace ChartEditor
 
         EditMode[] ignoreEditModes = new EditMode[] {
             EditMode.Connecting,
+            EditMode.DisConnect,
             EditMode.EditingBarConfig,
             EditMode.EditingSubDivisionConfig,
             EditMode.Moving,
