@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using UniRx;
-using ChartEditor;
+using static UndoRedo.History;
 
 namespace ChartEditor
 {
@@ -92,10 +92,18 @@ namespace ChartEditor
             if (!isDeployedTentative) { return; }
             if (deployingNoteData == null) { return; }
 
-            // データ上の追加
             var address = collider.Address;
             deployingNoteData.SetAddress(new AddressWithinRange(address, 1));
-            dataGetter.ChartData.Value.AddNote(deployingNoteData);
+            var deployedData = deployingNoteData;
+
+            // データ上の追加
+            Record(() => {
+                dataGetter.ChartData.Value.AddNote(deployedData);
+            },
+            // Undoで削除
+            () => {
+                dataGetter.ChartData.Value.RemoveNote(deployedData);
+            });
 
             DestroyNote();
             SpawnNewNote(dataGetter.DeploymentNoteType.Value);

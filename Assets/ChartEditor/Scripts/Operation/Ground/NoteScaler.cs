@@ -178,6 +178,7 @@ namespace ChartEditor
         {
             scaledAddress = null;
             scalableAndDelta.Clear();
+            previousAddress.Clear();
         }
     }
 

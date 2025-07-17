@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using static UndoRedo.Notes.NotesMoveRecord;
 
 namespace ChartEditor
 {
@@ -14,6 +15,7 @@ namespace ChartEditor
         INotesDataGetter notesGetter;
 
         Dictionary<IFreedomMovableObject, int> movableAndDelta = new Dictionary<IFreedomMovableObject, int>();
+        List<NoteDataToAddress> previousAddress;
         IFreedomDeployableCollider lastLocation;
         AddressInChart baseAddress;
 
@@ -52,6 +54,7 @@ namespace ChartEditor
 
             // 基準となるクリックされたノーツ情報を保存
             baseAddress = new AddressInChart(movableObject.Note.NoteData.Address);
+            previousAddress = new List<NoteDataToAddress>();
 
             // 複数選択されたオブジェクトから動かせるやつを取り出す
             foreach (var data in notesGetter.SelectingNotes)
@@ -65,6 +68,7 @@ namespace ChartEditor
                 // 差分を保存
                 var subDelta = dataGetter.ChartData.Value.GetSubdivisionDelta(new AddressInChart(movable.Note.NoteData.Address), baseAddress);
                 movableAndDelta.TryAdd(movable, subDelta);
+                previousAddress.Add(new NoteDataToAddress(data, data.Address));
             }
 
             dataSetter?.SetEditMode(EditMode.SpaceMoving);
@@ -109,14 +113,24 @@ namespace ChartEditor
         /// </summary>
         private void EndMoveNote()
         {
+            var currentAddress = new List<NoteDataToAddress>();
+
             foreach (var pair in movableAndDelta)
             {
-                pair.Key?.OnMoveEnd();
+                pair.Key?.OnMoveEnd(); 
+                
+                var noteData = pair.Key.Note.NoteData;
+                currentAddress.Add(new NoteDataToAddress(noteData, noteData.Address));
             }
+
+            // 移動を終えたときはじめて登録
+            RecordNotesMoving(previousAddress, currentAddress);
 
             dataSetter?.SetEditMode(EditMode.SpaceMove);
 
             Initialize();
+
+            Debug.Log("きちゃ");
         }
 
         /// <summary>
@@ -127,6 +141,7 @@ namespace ChartEditor
             baseAddress = null;
             lastLocation = null;
             movableAndDelta.Clear();
+            previousAddress?.Clear();
         }
     }
 }

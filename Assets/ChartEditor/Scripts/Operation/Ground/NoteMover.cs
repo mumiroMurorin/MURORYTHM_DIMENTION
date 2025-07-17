@@ -150,6 +150,7 @@ namespace ChartEditor
             lastLocation = null;
             pointerToAxisDelta = 0;
             movableAndDelta.Clear();
+            previousAddress?.Clear();
         }
 
         class AddressDelta
