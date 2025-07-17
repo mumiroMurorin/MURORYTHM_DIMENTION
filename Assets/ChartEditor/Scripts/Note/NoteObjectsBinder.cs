@@ -98,7 +98,7 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
         }
 
-        private void BindForNoteAddress(IDeployableNoteData data)
+        private void BindForNoteAddress(IDeployableNoteData data, GameObject noteObj)
         {
             data.Address.BarIndexRP
                 .Pairwise()
@@ -131,11 +131,13 @@ namespace ChartEditor
 
                     dataGetter.ChartData.Value.ChangeNoteAddress(data, oldAddress, newAddress);
                 })
-                .AddTo(this.gameObject);
+                .AddTo(this.gameObject)
+                .AddTo(noteObj);
 
             data.Address.SubDivisionIndexRP
                 .Pairwise()
-                .Subscribe(pair => {
+                .Subscribe(pair =>
+                {
                     var oldAddress = new AddressInChart(data.Address.BarIndex, pair.Previous, data.Address.Range[0]);
                     var newAddress = new AddressInChart(data.Address);
 
@@ -164,7 +166,8 @@ namespace ChartEditor
 
                     dataGetter.ChartData.Value.ChangeNoteAddress(data, oldAddress, newAddress);
                 })
-                .AddTo(this.gameObject);
+                .AddTo(this.gameObject)
+                .AddTo(noteObj);
         }
 
         /// <summary>
@@ -185,7 +188,7 @@ namespace ChartEditor
             notesSetter.AddDataToNoteObject(note, obj.Note);
 
             // ƒoƒCƒ“ƒh
-            BindForNoteAddress(note);
+            BindForNoteAddress(note, obj.Note.gameObject);
         }
 
         /// <summary>

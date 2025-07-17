@@ -212,6 +212,24 @@ namespace ChartEditor
         public IReadOnlyReactiveProperty<int> VertexIndexRP => vertexIndex;
     }
 
+    public class NoteDataToAddress
+    {
+        public NoteDataToAddress(IDeployableNoteData noteData, AddressWithinRange address)
+        {
+            this.NoteData = noteData;
+            this.Address = address;
+        }
+
+        public NoteDataToAddress(IDeployableNoteData noteData, IReadOnlyAddressWithinRange address)
+        {
+            this.NoteData = noteData;
+            this.Address = new AddressWithinRange(address);
+        }
+
+        public IDeployableNoteData NoteData { get; set; }
+        public AddressWithinRange Address { get; set; }
+    }
+
     public class VertexDataToPos
     {
         public VertexDataToPos(VertexData data,Vector2 pos)

@@ -38,3 +38,33 @@ namespace UndoRedo.Vertices
         }
     }
 }
+
+namespace UndoRedo.Notes
+{
+    public static class NotesMoveRecord
+    {
+        public static void RecordNotesMoving(List<NoteDataToAddress> previous, List<NoteDataToAddress> current)
+        {
+            Record(() =>
+            // ˆÚ“®
+            {
+                foreach (var pair in current)
+                {
+                    MoveNote(pair.NoteData, pair.Address);
+                }
+            }, () =>
+            // –ß‚·
+            {
+                foreach (var pair in previous)
+                {
+                    MoveNote(pair.NoteData, pair.Address);
+                }
+            });
+        }
+
+        public static void MoveNote(IDeployableNoteData noteData, AddressWithinRange address)
+        {
+            noteData.SetAddress(address);
+        }
+    }
+}

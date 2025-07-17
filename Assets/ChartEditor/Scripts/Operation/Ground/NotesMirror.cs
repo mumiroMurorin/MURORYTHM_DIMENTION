@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using static UndoRedo.Notes.NotesMoveRecord;
 
 namespace ChartEditor
 {
@@ -21,10 +22,23 @@ namespace ChartEditor
 
         public void MirrorSelectingNotes()
         {
+            // ŒÃ‚¢ƒAƒhƒŒƒX‚ğ‹L˜^‚µ‚Ä”½“]
+            var previousAddress = new List<NoteDataToAddress>();
             foreach (var note in notesGetter.SelectingNotes)
             {
+                previousAddress.Add(new NoteDataToAddress(note, note.Address));
                 MirrorNote(note);
             }
+
+            // V‚µ‚¢ƒAƒhƒŒƒX‚ğ‹L˜^
+            var currentAddress = new List<NoteDataToAddress>();
+            foreach (var note in notesGetter.SelectingNotes)
+            {
+                currentAddress.Add(new NoteDataToAddress(note, note.Address));
+            }
+
+            // RedoUndo‚É“o˜^
+            RecordNotesMoving(previousAddress, currentAddress);
 
             Debug.Log($"y”½“]z");
         }

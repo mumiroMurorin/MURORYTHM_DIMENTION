@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using VContainer;
+using static UndoRedo.Notes.NotesMoveRecord;
 
 namespace ChartEditor
 {
@@ -15,6 +16,7 @@ namespace ChartEditor
         IChartEditorDataSetter dataSetter;
 
         Dictionary<IScalableObject, int> scalableAndDelta = new Dictionary<IScalableObject, int>();
+        List<NoteDataToAddress> previousAddress;
         IScalableObject baseNote;
         IDeployableCollider lastLocation;
         AddressInChart scaledAddress;
@@ -52,7 +54,9 @@ namespace ChartEditor
             if (scalableObject == null) { return; }
 
             Initialize();
-            
+
+            previousAddress = new List<NoteDataToAddress>();
+
             baseNote = scalableObject;
             isRightAnchored = !collider.IsRightEdge;
             var baseNoteData = baseNote.Note.NoteData;
@@ -73,6 +77,7 @@ namespace ChartEditor
                 else { delta = (int)(address.Range[0] + address.Range.Count - baseNoteData.Address.Range[0] - baseNoteData.Address.Range.Count); }
 
                 scalableAndDelta.TryAdd(scalable, delta);
+                previousAddress.Add(new NoteDataToAddress(data, data.Address));
             }
 
             dataSetter?.SetEditMode(EditMode.Scaling);
@@ -153,10 +158,18 @@ namespace ChartEditor
         /// </summary>
         private void FinishScaleNote()
         {
+            var currentAddress = new List<NoteDataToAddress>();
             foreach (var pair in scalableAndDelta)
             {
                 pair.Key?.OnFinishScale();
+
+                var noteData = pair.Key.Note.NoteData;
+                currentAddress.Add(new NoteDataToAddress(noteData, noteData.Address));
             }
+
+
+            // à⁄ìÆÇèIÇ¶ÇΩÇ∆Ç´ÇÕÇ∂ÇﬂÇƒìoò^
+            RecordNotesMoving(previousAddress, currentAddress);
 
             Initialize();
         }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using static UndoRedo.Notes.NotesMoveRecord;
 
 namespace ChartEditor
 {
@@ -16,6 +17,7 @@ namespace ChartEditor
         IChartEditorDataSetter dataSetter;
 
         Dictionary<IMovableObject, AddressDelta> movableAndDelta = new Dictionary<IMovableObject, AddressDelta>();
+        List<NoteDataToAddress> previousAddress;
         AddressInChart baseAddress;
         IDeployableCollider lastLocation;
         int pointerToAxisDelta;
@@ -53,6 +55,8 @@ namespace ChartEditor
             if (collider == null) { return; }
             if (movableObject == null) { return; }
 
+            previousAddress = new List<NoteDataToAddress>();
+
             // 基準となるクリックされたノーツ情報を保存
             baseAddress = new AddressInChart(movableObject.Note.NoteData.Address);
 
@@ -75,6 +79,7 @@ namespace ChartEditor
                 var delta = new AddressDelta(subDelta, (int)sliderDelta, movable.Note.NoteData.Address.Range.Count);
 
                 movableAndDelta.TryAdd(movable, delta);
+                previousAddress.Add(new NoteDataToAddress(data, data.Address));
             }
 
             dataSetter?.SetEditMode(EditMode.Moving);
@@ -111,7 +116,6 @@ namespace ChartEditor
         {
             var noteData = movableObject.Note.NoteData;
             noteData.SetAddress(newAddress);
-
             movableObject.OnMove();
         }
 
@@ -120,10 +124,17 @@ namespace ChartEditor
         /// </summary>
         private void EndMoveNote()
         {
+            var currentAddress = new List<NoteDataToAddress>();
             foreach (var pair in movableAndDelta)
             {
                 pair.Key?.OnMoveEnd();
+
+                var noteData = pair.Key.Note.NoteData;
+                currentAddress.Add(new NoteDataToAddress(noteData, noteData.Address));
             }
+
+            // 移動を終えたときはじめて登録
+            RecordNotesMoving(previousAddress, currentAddress);
 
             dataSetter?.SetEditMode(EditMode.Move);
 
