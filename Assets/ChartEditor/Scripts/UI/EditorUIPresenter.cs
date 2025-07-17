@@ -31,6 +31,7 @@ namespace ChartEditor
         [SerializeField] ChartDataExporter chartDataExporter_model;
         [SerializeField] ChartDataImporter chartDataImporter_model;
         [SerializeField] ConfigEditor configEditor_model;
+        [SerializeField] LaneExtender laneExtender_model;
 
         IChartEditorDataSetter editorDataSetter_model;
         IChartEditorDataGetter dataGetter_model;
@@ -186,10 +187,10 @@ namespace ChartEditor
             importButton_view.OnClickedListner += chartDataImporter_model.Import;
 
             // 譜面延長ボタン
-            chartExtendButton_view.OnClickedListner += () => editorDataSetter_model.ChangeChartLength(1);
+            chartExtendButton_view.OnClickedListner += () => laneExtender_model.ChangeChartLength(1);
 
             // 譜面縮小ボタン
-            chartShortenButton_view.OnClickedListner += () => editorDataSetter_model.ChangeChartLength(-1);
+            chartShortenButton_view.OnClickedListner += () => laneExtender_model.ChangeChartLength(-1);
 
             // リズムコンフィグ
             rhythmConfigBar_view.OnClickedApplyButtonListner += () => CloseConfig();
