@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using static UndoRedo.History;
 
 namespace ChartEditor
 {
@@ -20,7 +21,7 @@ namespace ChartEditor
         private void Update()
         {
             // 左クリック
-            if (Input.GetMouseButtonDown(0)) { ChangeNoteType(); }
+            if (Input.GetMouseButtonDown(0)) { ChangeNoteTypeOnClick(); }
             // 右クリック時、タイプ変更モード解除
             else if (Input.GetMouseButtonDown(1)) { OnEndChangeMode(); }
         }
@@ -28,7 +29,7 @@ namespace ChartEditor
         /// <summary>
         /// ノーツタイプの変更
         /// </summary>
-        private void ChangeNoteType()
+        private void ChangeNoteTypeOnClick()
         {
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.ChangeType) { return; }
 
@@ -38,7 +39,17 @@ namespace ChartEditor
             var changableObject = collider.Note;
             if (changableObject.NoteData == null) { return; }
 
-            changableObject.NoteData.ChangeNoteType();
+            Record(() => { 
+                ChangeNoteType(changableObject, true); 
+            }, 
+            () => {
+                ChangeNoteType(changableObject, false);
+            });
+        }
+
+        private void ChangeNoteType(IChangableObject changableObject, bool isDone)
+        {
+            changableObject.NoteData.ChangeNoteType(isDone);
             changableObject.OnChangeNoteType();
         }
 

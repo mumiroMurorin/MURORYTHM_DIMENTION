@@ -15,7 +15,7 @@ namespace ChartEditor
         INotesDataGetter notesGetter;
 
         Dictionary<IFreedomMovableObject, int> movableAndDelta = new Dictionary<IFreedomMovableObject, int>();
-        List<NoteDataToAddress> previousAddress;
+        List<NoteDataToAddress> previousAddress = new List<NoteDataToAddress>();
         IFreedomDeployableCollider lastLocation;
         AddressInChart baseAddress;
 
@@ -124,13 +124,12 @@ namespace ChartEditor
             }
 
             // ˆÚ“®‚ğI‚¦‚½‚Æ‚«‚Í‚¶‚ß‚Ä“o˜^
-            RecordNotesMoving(previousAddress, currentAddress);
+            var previousAddressCopy = new List<NoteDataToAddress>(previousAddress);
+            RecordNotesMoving(previousAddressCopy, currentAddress);
 
             dataSetter?.SetEditMode(EditMode.SpaceMove);
 
             Initialize();
-
-            Debug.Log("‚«‚¿‚á");
         }
 
         /// <summary>

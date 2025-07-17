@@ -16,7 +16,7 @@ namespace ChartEditor
         IChartEditorDataSetter dataSetter;
 
         Dictionary<IScalableObject, int> scalableAndDelta = new Dictionary<IScalableObject, int>();
-        List<NoteDataToAddress> previousAddress;
+        List<NoteDataToAddress> previousAddress = new List<NoteDataToAddress>();
         IScalableObject baseNote;
         IDeployableCollider lastLocation;
         AddressInChart scaledAddress;
@@ -167,9 +167,9 @@ namespace ChartEditor
                 currentAddress.Add(new NoteDataToAddress(noteData, noteData.Address));
             }
 
-
             // à⁄ìÆÇèIÇ¶ÇΩÇ∆Ç´ÇÕÇ∂ÇﬂÇƒìoò^
-            RecordNotesMoving(previousAddress, currentAddress);
+            var previousAddressCopy = new List<NoteDataToAddress>(previousAddress);
+            RecordNotesMoving(previousAddressCopy, currentAddress);
 
             Initialize();
         }
@@ -178,7 +178,7 @@ namespace ChartEditor
         {
             scaledAddress = null;
             scalableAndDelta.Clear();
-            previousAddress.Clear();
+            previousAddress?.Clear();
         }
     }
 

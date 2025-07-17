@@ -34,7 +34,7 @@ namespace ChartEditor
     {
         IReadOnlyReactiveProperty<DeploymentNoteType> NoteTypeRP { get; }
 
-        void ChangeNoteType();
+        void ChangeNoteType(bool isDone);
 
         void SetNoteType(DeploymentNoteType noteType);
     }

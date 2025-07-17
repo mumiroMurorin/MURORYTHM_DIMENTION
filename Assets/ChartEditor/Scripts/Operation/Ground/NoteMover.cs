@@ -17,7 +17,7 @@ namespace ChartEditor
         IChartEditorDataSetter dataSetter;
 
         Dictionary<IMovableObject, AddressDelta> movableAndDelta = new Dictionary<IMovableObject, AddressDelta>();
-        List<NoteDataToAddress> previousAddress;
+        List<NoteDataToAddress> previousAddress = new List<NoteDataToAddress>();
         AddressInChart baseAddress;
         IDeployableCollider lastLocation;
         int pointerToAxisDelta;
@@ -134,7 +134,8 @@ namespace ChartEditor
             }
 
             // 移動を終えたときはじめて登録
-            RecordNotesMoving(previousAddress, currentAddress);
+            var previousAddressCopy = new List<NoteDataToAddress>(previousAddress);
+            RecordNotesMoving(previousAddressCopy, currentAddress);
 
             dataSetter?.SetEditMode(EditMode.Move);
 

@@ -50,7 +50,7 @@ namespace ChartEditor
 
             NoteType = noteType;
         }
-        public void ChangeNoteType()
+        public void ChangeNoteType(bool isDone)
         {
             // 終点
             if(NoteObject.NextNote.Value == null)
@@ -59,11 +59,13 @@ namespace ChartEditor
                 {
                     // 判定あり終点 → 判定なし終点
                     case DeploymentNoteType.Hold:
-                        NoteType = DeploymentNoteType.HoldEndUnjudge;
+                        if (isDone) { NoteType = DeploymentNoteType.HoldEndUnjudge; }
+                        else { NoteType = DeploymentNoteType.HoldEndUnjudge; }
                         break;
                     // 判定なし終点 → 判定あり終点
                     case DeploymentNoteType.HoldEndUnjudge:
-                        NoteType = DeploymentNoteType.Hold;
+                        if (isDone) { NoteType = DeploymentNoteType.Hold; }
+                        else { NoteType = DeploymentNoteType.Hold; }
                         break;
                 }
             }

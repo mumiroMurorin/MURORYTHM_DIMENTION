@@ -5,6 +5,7 @@ using VContainer;
 using UniRx;
 using System;
 using System.Linq;
+using static UndoRedo.History;
 
 namespace ChartEditor
 {
@@ -101,22 +102,53 @@ namespace ChartEditor
                 connectingChainIndex = addNote.ChainIndex.Value;
             }
 
-            // Œq‚ª‚Á‚Ä‚éƒm[ƒc‚Í‘S•”Œq‚°‚é
             var chainList = notesGetter.GetChainNoteList(addNote.ChainIndex.Value)?.ChainNoteList.ToList();
-            if(chainList != null)
-            {
-                ConnectNote(startNote, connectingChainIndex);
-                foreach (var chain in chainList)
+            int chainListIndexOrigin = chainList == null || chainList.Count == 0 ? -1 : chainList[0].ChainIndex.Value;
+            var startNoteCopy = startNote;
+            int startNoteIndexOrigin = startNote.ChainIndex.Value;
+            int connectingChainIndexCopy = connectingChainIndex;
+
+            // Ú‘±
+            Record(() => {
+                // Œq‚ª‚Á‚Ä‚éƒm[ƒc‚Í‘S•”Œq‚°‚é
+                if (chainList != null)
                 {
-                    ConnectNote(chain, connectingChainIndex);
+                    ConnectNote(startNoteCopy, connectingChainIndexCopy);
+                    foreach (var chain in chainList)
+                    {
+                        ConnectNote(chain, connectingChainIndexCopy);
+                    }
                 }
-            }
-            // ‚Â‚È‚ª‚Á‚Ä‚È‚¢‚Æ‚«
-            else
-            {
-                ConnectNote(startNote, connectingChainIndex);
-                ConnectNote(addNote, connectingChainIndex);
-            }
+                // ‚Â‚È‚ª‚Á‚Ä‚È‚¢‚Æ‚«
+                else
+                {
+                    ConnectNote(startNoteCopy, connectingChainIndexCopy);
+                    ConnectNote(addNote, connectingChainIndexCopy);
+                }
+            }, 
+            // Ú‘±‰ğœ
+            () => {
+                // Œq‚ª‚Á‚Ä‚½ƒm[ƒc‚Í‘S•”Œq‚°‚ÄŒ³‚É–ß‚·
+                if (chainList != null)
+                {
+                    DisconnectNote(startNoteCopy);
+                    ConnectNote(startNoteCopy, startNoteIndexOrigin);
+
+                    foreach (var chain in chainList)
+                    {
+                        DisconnectNote(chain);
+                        ConnectNote(chain, chainListIndexOrigin);
+                    }
+                }
+                // •Ê‚ÉŒq‚ª‚Á‚Ä‚È‚©‚Á‚½‚çÚ‘±‰ğœ‚·‚é‚¾‚¯
+                else
+                {
+                    DisconnectNote(startNoteCopy);
+                    ConnectNote(startNoteCopy, startNoteIndexOrigin);
+
+                    DisconnectNote(addNote);
+                }
+            });
         }
 
         /// <summary>
@@ -141,6 +173,8 @@ namespace ChartEditor
         /// <param name="chainIndex"></param>
         private void ConnectNote(IChainNoteData chainNote, int chainIndex)
         {
+            if(chainIndex == -1) { return; }
+
             // ƒf[ƒ^‚Ì“ü‚ê‘Ö‚¦
             notesGetter.RemoveChainNote(chainNote);
             chainNote.SetChainIndex(chainIndex);

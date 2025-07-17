@@ -17,7 +17,7 @@ namespace ChartEditor
         INotesDataSetter notesSetter;
         IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter dataSetter;
-        List<IDeployableNoteData> copiedNotes;
+        Dictionary<IDeployableNoteData, AddressWithinRange> copiedNotes;
 
         EditMode[] ignoreEditModes = new EditMode[] {
              EditMode.Connecting,
@@ -47,7 +47,7 @@ namespace ChartEditor
             // ノーツのコピー
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C)) { CopyNotes(); }
             // ノーツの貼り付け
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V)) { PasteVertices(); }
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V)) { PasteNotes(); }
         }
 
         /// <summary>
@@ -55,14 +55,19 @@ namespace ChartEditor
         /// </summary>
         private void CopyNotes()
         {
-            copiedNotes = new List<IDeployableNoteData>(notesGetter.SelectingNotes);
+            copiedNotes = new Dictionary<IDeployableNoteData, AddressWithinRange>();
+
+            foreach(var note in notesGetter.SelectingNotes)
+            {
+                copiedNotes.Add(note, new AddressWithinRange(note.Address));
+            }
             Debug.Log("【Notes】ノーツをコピー");
         }
 
         /// <summary>
         /// ノーツの張り付け
         /// </summary>
-        private void PasteVertices()
+        private void PasteNotes()
         {
             var currentEditMode = dataGetter.CurrentEditMode.Value;
             var groundCollider = dataGetter.GetInteractableCollider<IDeployableCollider>();
@@ -72,28 +77,47 @@ namespace ChartEditor
             if (copiedNotes == null) { return; }
             if (groundCollider == null && spaceCollider == null) { return; }
 
-            var copiedNotesCopy = copiedNotes.Select(x => x.Copy()).OrderedByAddress().ToList();
+            // コピーされたノーツをコピーしたり
+            var copiedNotesCopy = copiedNotes.ToDictionary(
+                    pair => pair.Key.Copy(),     
+                    pair => pair.Value 
+                );
+            var firstNoteAddress = copiedNotesCopy.Keys.OrderedByAddress().ToList().First()?.Address;
             var cursorAddress = groundCollider != null ? groundCollider.Address : spaceCollider.Address;
-            var subdivisionDelta = dataGetter.ChartData.Value.GetSubdivisionDelta(cursorAddress, new AddressInChart(copiedNotesCopy[0].Address));
+            var subdivisionDelta = dataGetter.ChartData.Value.GetSubdivisionDelta(cursorAddress, new AddressInChart(firstNoteAddress));
 
-            // 全選択解除
-            notesSetter.ClearSelectingNotes();
+            // ペースト
+            Record(() => {
+                notesSetter.ClearSelectingNotes();    // 全選択解除
+                foreach (var pair in copiedNotesCopy) { PasetNote(pair.Key, pair.Value, subdivisionDelta); }
+            }, 
+            // 削除
+            () => {
+                foreach (var pair in copiedNotesCopy) { DeleteNote(pair.Key); }
+            });
 
-            foreach (var data in copiedNotesCopy)
+            Debug.Log("【Notes】ノーツを張り付け");
+
+        }
+
+        private void PasetNote(IDeployableNoteData data, AddressWithinRange originAddress, int subdivisionDelta)
+        {
+            var address = dataGetter.ChartData.Value.AddressAddition(new AddressInChart(originAddress), subdivisionDelta);
+            data.SetAddress(new AddressWithinRange(address, data.Address.Range.Count));
+
+            // 配置
+            dataGetter.ChartData.Value.AddNote(data);
+
+            // 選択する
+            if (notesGetter.GetNoteObject(data).TryGetComponent(out ISelectableNoteObject selectable)) 
             {
-                var address = dataGetter.ChartData.Value.AddressAddition(new AddressInChart(data.Address), subdivisionDelta);
-
-                data.SetAddress(new AddressWithinRange(address, data.Address.Range.Count));
-
-                // 配置
-                dataGetter.ChartData.Value.AddNote(data);
-
-                // 選択する
-                if(!notesGetter.GetNoteObject(data).TryGetComponent(out ISelectableNoteObject selectable)) { continue; }
                 notesSetter.TryAddSelectingNotes(selectable.NoteObject.NoteData);
             }
-           
-            Debug.Log("【Notes】ノーツを張り付け");
+        }
+
+        private void DeleteNote(IDeployableNoteData data)
+        {
+            dataGetter.ChartData.Value.RemoveNote(data);
         }
     }
 
