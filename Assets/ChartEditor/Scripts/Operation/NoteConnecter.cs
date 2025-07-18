@@ -171,7 +171,7 @@ namespace ChartEditor
         /// </summary>
         /// <param name="chainNote"></param>
         /// <param name="chainIndex"></param>
-        private void ConnectNote(IChainNoteData chainNote, int chainIndex)
+        public void ConnectNote(IChainNoteData chainNote, int chainIndex)
         {
             if(chainIndex == -1) { return; }
 

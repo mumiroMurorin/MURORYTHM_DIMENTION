@@ -5,7 +5,7 @@ using UniRx;
 
 namespace ChartEditor
 {
-    public class SubdivisionLine : MonoBehaviour, ISubDivisionDataGetter, ILinePositioner
+    public class SubdivisionLine : MonoBehaviour, ILinePositioner, ISubdivisionLineData
     {
         [SerializeField] SubdivisionLineInfoView lineInfo_view;
 
@@ -18,11 +18,11 @@ namespace ChartEditor
         ReactiveProperty<float> nextZ = new ReactiveProperty<float>();
         IReadOnlyReactiveProperty<float> ILinePositioner.NextZ => nextZ;
 
-        SubDivisionDataInBeat subDivisionData;
-        public SubDivisionDataInBeat SubDivisionData => subDivisionData;
+        ISubDivisionDataGetter subDivisionData;
+        public ISubDivisionDataGetter SubDivisionData => subDivisionData;
 
-        BarDataInChart barData;
-        BarDataInChart ILinePositioner.BarData => barData;
+        IBarDataGetter barData;
+        public IBarDataGetter BarData => barData;
 
         public void Initialize(SubDivisionDataInBeat subDivisionData, ILinePositioner backData, IChartEditorOptionGetter optionGetter)
         {
@@ -62,7 +62,7 @@ namespace ChartEditor
         /// 分線上のデータ更新
         /// </summary>
         /// <param name="barData"></param>
-        private void SetSubDivisionLineData(SubDivisionDataInBeat subDivisionData, SubDivisionDataInBeat backData)
+        private void SetSubDivisionLineData(ISubDivisionDataGetter subDivisionData, ISubDivisionDataGetter backData)
         {
             // BPM
             float bpm = backData == null || subDivisionData.Bpm.Value != backData.Bpm.Value ?
@@ -112,9 +112,9 @@ namespace ChartEditor
 
     }
 
-    public interface ISubDivisionDataGetter
+    public interface ISubdivisionLineData
     {
-        SubDivisionDataInBeat SubDivisionData { get; }
+        ISubDivisionDataGetter SubDivisionData { get; }
     }
 
 }

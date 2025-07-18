@@ -6,11 +6,11 @@ namespace ChartEditor
 {
     public class RhythmConfigurableSubDivisionCollider : MonoBehaviour, IRhythmConfigurableSubDivisionCollider
     {
-        [SerializeField] SerializeInterface<ISubDivisionDataGetter> subDivision;
+        [SerializeField] SerializeInterface<ISubdivisionLineData> subDivision;
 
         public EditMode EditMode => EditMode.EditSubDivisionConfig;
 
-        ISubDivisionDataGetter IRhythmConfigurableSubDivisionCollider.SubDivisionDataGetter => subDivision.Value;
+        ISubDivisionDataGetter IRhythmConfigurableSubDivisionCollider.SubDivisionDataGetter => subDivision.Value.SubDivisionData;
     }
 
     public interface IRhythmConfigurableSubDivisionCollider : IInteractableCollider

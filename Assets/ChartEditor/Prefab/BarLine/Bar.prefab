@@ -570,6 +570,10 @@ PrefabInstance:
       value: BarLineInfo
       objectReference: {fileID: 0}
     - target: {fileID: 4682175507429664136, guid: 6fcf3b158d2a9d7429b5a50718c85768, type: 3}
+      propertyPath: bar
+      value: 
+      objectReference: {fileID: 4502022922388785154}
+    - target: {fileID: 4682175507429664136, guid: 6fcf3b158d2a9d7429b5a50718c85768, type: 3}
       propertyPath: bar.obj
       value: 
       objectReference: {fileID: 4481383044102371496}

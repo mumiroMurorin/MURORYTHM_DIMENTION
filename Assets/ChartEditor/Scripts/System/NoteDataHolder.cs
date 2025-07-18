@@ -53,6 +53,7 @@ namespace ChartEditor
             return dataToNoteObject.Remove(dto);
         }
         public NoteObject GetNoteObject(IDeployableNoteData data) { return dataToNoteObject.FirstOrDefault(x => x.Data == data)?.Object; }
+        public CompositeDisposable GetNoteDisposable(IDeployableNoteData data) { return dataToNoteObject.FirstOrDefault(x => x.Data == data)?.OnDestroyDisposables; }
 
         #endregion
 
@@ -154,11 +155,14 @@ namespace ChartEditor
         {
             this.Data = data;
             this.Object = obj;
+            this.OnDestroyDisposables = new CompositeDisposable(); 
         }
 
         public IDeployableNoteData Data { get; set; }
 
         public NoteObject Object { get; set; }
+
+        public CompositeDisposable OnDestroyDisposables { get; set; }
     }
 
     public class DataToVertexObject
@@ -220,6 +224,8 @@ namespace ChartEditor
         IReadOnlyReactiveCollection<DataToNoteObject> DataToNoteObject { get; }
 
         NoteObject GetNoteObject(IDeployableNoteData data);
+
+        CompositeDisposable GetNoteDisposable(IDeployableNoteData data);
 
         SortedChainNoteDataList GetChainNoteList(int index);
 

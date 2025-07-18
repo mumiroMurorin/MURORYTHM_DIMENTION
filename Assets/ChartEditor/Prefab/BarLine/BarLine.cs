@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace ChartEditor
 {
-    public class BarLine : MonoBehaviour, IBarDataGetter, ISubDivisionDataGetter, ILinePositioner
+    public class BarLine : MonoBehaviour, ILinePositioner, IBarLineData
     {
         [SerializeField] BarLineInfoView lineInfo_view;
         [SerializeField] SubdivisionLineInfoView subInfo_view;
@@ -32,10 +32,10 @@ namespace ChartEditor
         IReadOnlyReactiveProperty<float> ILinePositioner.NextZ => nextZ;
 
         BarDataInChart barData;
-        public BarDataInChart BarData => barData;
+        public IBarDataGetter BarData => barData;
 
         ReactiveProperty<SubDivisionDataInBeat> subDivisionData = new ReactiveProperty<SubDivisionDataInBeat>();
-        public SubDivisionDataInBeat SubDivisionData => subDivisionData.Value;
+        public ISubDivisionDataGetter SubDivisionData => subDivisionData.Value;
 
         /// <summary>
         /// 分線の最後尾
@@ -81,7 +81,7 @@ namespace ChartEditor
         /// 小節線上のデータ更新
         /// </summary>
         /// <param name="barData"></param>
-        private void SetBarLineData(BarDataInChart barData, BarDataInChart backData)
+        private void SetBarLineData(IBarDataGetter barData, IBarDataGetter backData)
         {
             // 小節番号
             int barNumber = this.barNumber;
@@ -102,7 +102,7 @@ namespace ChartEditor
         /// 分線上のデータ更新
         /// </summary>
         /// <param name="barData"></param>
-        private void SetSubDivisionLineData(SubDivisionDataInBeat barData, SubDivisionDataInBeat backData)
+        private void SetSubDivisionLineData(ISubDivisionDataGetter barData, ISubDivisionDataGetter backData)
         {
             // BPM
             float bpm = backData == null || barData.Bpm.Value != backData.Bpm.Value ?
@@ -134,7 +134,7 @@ namespace ChartEditor
             backData?.SubDivisionData.Bpm
                 .Subscribe(bpm =>
                 {
-                    SetSubDivisionLineData(SubDivisionData, backData.SubDivisionData);
+                    SetSubDivisionLineData(subDivisionData.Value, backData.SubDivisionData);
                 })
                 .AddTo(this.gameObject);
         }
@@ -242,7 +242,7 @@ namespace ChartEditor
 
             float chartLengthParSecond = optionGetter.ChartViewScale.Value;
             float beatUnit = barData.BeatUnit.Value;
-            float bpm = SubDivisionData.Bpm.Value;
+            float bpm = subDivisionData.Value.Bpm.Value;
             int divNum = barData.DivisionNum.Value;
 
             // zの追加
@@ -258,7 +258,7 @@ namespace ChartEditor
         {
             float chartLengthParSecond = optionGetter.ChartViewScale.Value;
             float beatUnit = barData.BeatUnit.Value;
-            float bpm = SubDivisionData.Bpm.Value;
+            float bpm = subDivisionData.Value.Bpm.Value;
             int divNum = barData.DivisionNum.Value;
 
             // zの追加
@@ -375,9 +375,9 @@ namespace ChartEditor
         }
     }
 
-    public interface IBarDataGetter
+    public interface IBarLineData : ISubdivisionLineData
     {
-        BarDataInChart BarData { get; }
+        IBarDataGetter BarData { get; }
     }
 
     public interface ILinePositioner
@@ -386,8 +386,8 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<float> NextZ { get; }
 
-        SubDivisionDataInBeat SubDivisionData { get; }
+        ISubDivisionDataGetter SubDivisionData { get; }
 
-        BarDataInChart BarData { get; }
+        IBarDataGetter BarData { get; }
     }
 }

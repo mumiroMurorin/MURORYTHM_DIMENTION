@@ -31,7 +31,7 @@ namespace ChartConvert
             {
                 var bar = dataOrigin.BarDatas[i];
 
-                if (!SetDataFromBarData(bar, chartData.BarDatas[i])) { isSucceed = false; }
+                if (!SetDataFromBarData(bar, chartData.BarDatas[i], chartData.AddNote)) { isSucceed = false; }
             }
 
             if (isSucceed) { Debug.Log("【Converter】譜面データの変換成功"); }
@@ -70,7 +70,7 @@ namespace ChartConvert
             };
         }
 
-        private bool SetDataFromBarData(BarDataOrigin barDataOrigin, ChartEditor.BarDataInChart dataInChartEditor)
+        private bool SetDataFromBarData(BarDataOrigin barDataOrigin, ChartEditor.BarDataInChart dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
         {
             bool isSucceed = true;
 
@@ -88,13 +88,13 @@ namespace ChartConvert
             {
                 var sub = barDataOrigin.SubDivisionDatas[i];
 
-                if (!SetDataFromSubDivisionData(sub, dataInChartEditor.SubDivisionDatas[i])) { isSucceed = false; }
+                if (!SetDataFromSubDivisionData(sub, dataInChartEditor.SubDivisionDatas[i], onAddNoteData)) { isSucceed = false; }
             }
 
             return isSucceed;
         }
 
-        private bool SetDataFromSubDivisionData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        private bool SetDataFromSubDivisionData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
         {
             bool isSucceed = true;
 
@@ -104,17 +104,17 @@ namespace ChartConvert
             // 一つずつ取り出して変換
             foreach (var converter in unchainConverters)
             {
-                isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor);
+                isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor, onAddNoteData);
             }
 
             foreach (var converter in holdConverters)
             {
-                isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor);
+                isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor, onAddNoteData);
             }
 
             foreach (var converter in spaceHoldConverters)
             {
-                isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor);
+                isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor, onAddNoteData);
             }
 
             return isSucceed;

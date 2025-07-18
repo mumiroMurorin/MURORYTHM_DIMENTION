@@ -43,7 +43,6 @@ namespace ChartConvert
             var nextNote = chainData.NoteObject.NextNote.Value;
             if (backNote != null) { return false; }
             if (backNote == null && nextNote == null) { return false; }
-            if (backNote != null && nextNote != null) { return false; }
 
             // 新たにインスタンス化
             if (dataOrigin.SpaceHoldMeshRelayData == null)
@@ -62,7 +61,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ISubDivisionDataGetter dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
         {
             if (dataOrigin.SpaceHoldStartData == null) { return true; }
 
@@ -78,7 +77,7 @@ namespace ChartConvert
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
                 verticesData.SpaceHoldVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
-                dataInChartEditor.AddNote(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -138,7 +137,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ISubDivisionDataGetter dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
         {
             if (dataOrigin.SpaceHoldRelayData == null) { return true; }
 
@@ -154,7 +153,7 @@ namespace ChartConvert
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
                 verticesData.SpaceHoldVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
-                dataInChartEditor.AddNote(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -203,7 +202,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ISubDivisionDataGetter dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
         {
             if (dataOrigin.SpaceHoldMeshRelayData == null) { return true; }
 
@@ -221,7 +220,7 @@ namespace ChartConvert
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
                 verticesData.SpaceHoldVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
-                dataInChartEditor.AddNote(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -265,7 +264,6 @@ namespace ChartConvert
             var nextNote = chainData.NoteObject.NextNote.Value;
             if (nextNote != null) { return false; }
             if (backNote == null && nextNote == null) { return false; }
-            if (backNote != null && nextNote != null) { return false; }
 
             // 新たにインスタンス化
             if (dataOrigin.SpaceHoldEndData == null)
@@ -284,7 +282,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ISubDivisionDataGetter dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
         {
             if (dataOrigin.SpaceHoldEndData == null) { return true; }
 
@@ -300,7 +298,7 @@ namespace ChartConvert
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
                 verticesData.SpaceHoldVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
-                dataInChartEditor.AddNote(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;

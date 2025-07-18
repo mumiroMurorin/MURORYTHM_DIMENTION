@@ -52,7 +52,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ISubDivisionDataGetter dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
         {
             if (dataOrigin.TouchNoteData == null) { return true; }
 
@@ -64,7 +64,7 @@ namespace ChartConvert
                 var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 noteData.SetAddress(address);
 
-                dataInChartEditor.AddNote(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;

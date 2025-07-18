@@ -4,6 +4,7 @@ using UnityEngine;
 using VContainer;
 using JsonUtil;
 using ChartConvert;
+using static UndoRedo.History;
 
 namespace ChartEditor
 {
@@ -30,26 +31,8 @@ namespace ChartEditor
             editorDataSetter.SetChartData(chartData);
             chartImporter.Import(chartDataOrigin, ref chartData, editorDataSetter);
 
-            // ノーツの配置
-            DeployNote(chartData);
-        }
-
-        /// <summary>
-        /// ノーツの配置をChartDataを参照して行う
-        /// </summary>
-        /// <param name="chartData"></param>
-        private void DeployNote(ChartData chartData)
-        {
-            foreach(var barData in chartData.BarDatas)
-            {
-                foreach(var subData in barData.SubDivisionDatas)
-                {
-                    foreach(var noteData in subData.NoteDatas)
-                    {
-                        dataGetter.ChartData.Value.AddNote(noteData);
-                    }
-                }
-            }
+            // RedoUndoリセット
+            ResetStates();
         }
     }
 

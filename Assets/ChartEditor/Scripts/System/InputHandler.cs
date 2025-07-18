@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using VContainer;
+using UnityEngine.EventSystems;
 using static UndoRedo.History;
 
 namespace ChartEditor
@@ -14,7 +15,7 @@ namespace ChartEditor
         [Header("マウス関係")]
         [Tooltip("拡大縮小の感度")]
         [SerializeField] float scalingSensitivity = 0.1f;
-        [Tooltip("再生位置移動の感度基準")]
+        [Tooltip("再生位置移動の感度基準(z/scroll)")]
         [SerializeField] float moveSensitivityMax = 0.01f;
         [Header("ショートカットキー")]
         [SerializeField] EditModeToKeycode[] editModeShortCutKeys;
@@ -77,6 +78,8 @@ namespace ChartEditor
         private void OperateChartViewScale(float delta)
         {
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(scaleIgnoreModes)) { return; }
+            // カーソルがUI上にあるときは返す
+            //if (EventSystem.current.IsPointerOverGameObject()) { return; }
 
             optionSetter?.SetChartViewScale(optionGetter.ChartViewScale.Value + delta * scalingSensitivity);
         }
@@ -89,10 +92,17 @@ namespace ChartEditor
             // 再生中は操作を受け付けない
             if (dataGetter.PlayMode.Value == PlayMode.Play) { return; }
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(playIgnoreModes)) { return; }
+            // カーソルがUI上にあるときは返す
+            if (EventSystem.current.IsPointerOverGameObject()) { return; }
 
-            // スクロール感度と拡大率によって変える
-            float ratio = moveSensitivityMax * optionGetter.ScrollSensitivity.Value * Mathf.Clamp(10f - optionGetter.ChartViewScale.Value / 0.15f, 1f, 10f);
-            dataSetter?.SetPlaybackProgress(dataGetter.PlaybackProgress.Value + delta * ratio);
+            // スクロール感度と譜面長さによって変える
+            float chartSeconds = dataGetter.ChartSeconds.Value;
+            float groundLength = chartSeconds * optionGetter.ChartViewScale.Value;
+            float movementPerScroll = moveSensitivityMax * optionGetter.ScrollSensitivity.Value;
+            float ratio = (movementPerScroll * delta) / groundLength;
+
+            //float ratio = moveSensitivityMax * optionGetter.ScrollSensitivity.Value * Mathf.Clamp(10f - optionGetter.ChartViewScale.Value / 0.15f, 1f, 10f);
+            dataSetter?.SetPlaybackProgress(dataGetter.PlaybackProgress.Value + ratio);
         }
 
         /// <summary>

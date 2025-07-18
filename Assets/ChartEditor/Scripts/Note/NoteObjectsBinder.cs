@@ -13,6 +13,8 @@ namespace ChartEditor
         [SerializeField] DeploymentNoteType defaultNoteType_ground;
         [SerializeField] DeploymentNoteType defaultNoteType_space;
 
+        [SerializeField] NoteConnecter noteConnecter;
+
         IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter dataSetter;
         INotesDataSetter notesSetter;
@@ -56,21 +58,6 @@ namespace ChartEditor
             // 譜面データが追加された時
             dataGetter?.ChartData
                 .Subscribe(chart => {
-                    // リセット
-                    if (chart != null && chart.BarDatas != null) 
-                    {
-                        foreach (var bar in chart?.BarDatas)
-                        {
-                            foreach (var sub in bar.SubDivisionDatas)
-                            {
-                                foreach (var note in sub.NoteDatas)
-                                {
-                                    OnRemoveNoteData(note);
-                                }
-                            }
-                        }
-                    }
-
                     // 購読
                     BindForChartData(chart);
                 })
@@ -98,7 +85,7 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
         }
 
-        private void BindForNoteAddress(IDeployableNoteData data, GameObject noteObj)
+        private void BindForNoteAddress(IDeployableNoteData data,GameObject noteObj, CompositeDisposable disposable = default)
         {
             data.Address.BarIndexRP
                 .Pairwise()
@@ -132,7 +119,8 @@ namespace ChartEditor
                     dataGetter.ChartData.Value.ChangeNoteAddress(data, oldAddress, newAddress);
                 })
                 .AddTo(this.gameObject)
-                .AddTo(noteObj);
+                .AddTo(noteObj)
+                .AddTo(disposable);
 
             data.Address.SubDivisionIndexRP
                 .Pairwise()
@@ -167,7 +155,8 @@ namespace ChartEditor
                     dataGetter.ChartData.Value.ChangeNoteAddress(data, oldAddress, newAddress);
                 })
                 .AddTo(this.gameObject)
-                .AddTo(noteObj);
+                .AddTo(noteObj)
+                .AddTo(disposable);
         }
 
         /// <summary>
@@ -188,7 +177,7 @@ namespace ChartEditor
             notesSetter.AddDataToNoteObject(note, obj.Note);
 
             // バインド
-            BindForNoteAddress(note, obj.Note.gameObject);
+            BindForNoteAddress(note, obj.Note.gameObject, notesGetter.GetNoteDisposable(note));
         }
 
         /// <summary>
@@ -202,6 +191,9 @@ namespace ChartEditor
             if (noteObject == null || !noteObject.TryGetComponent(out IDestroyableObject destroyableObject)) { return; }
 
             destroyableObject.OnDestroy();
+
+            // 購読の解除
+            notesGetter.GetNoteDisposable(note).Dispose();
 
             // データの削除
             notesSetter.RemoveDataToNoteObject(note);
@@ -229,8 +221,8 @@ namespace ChartEditor
             if (noteData is IChainNoteData chainData)
             {
                 chainData.SetNoteObject(obj.GetComponent<IConnectableObject>());
-                // 削除時の挙動
-                chainData.NoteObject.OnDestroyListner += () => { notesGetter.RemoveChainNote(chainData); };
+                chainData.NoteObject.OnDestroyListner += () => { notesGetter.RemoveChainNote(chainData); };    // 削除時の挙動
+                noteConnecter.ConnectNote(chainData, chainData.ChainIndex.Value);
             }
 
             deployable.OnInstantiate(noteData, GetNoteParentTransform);

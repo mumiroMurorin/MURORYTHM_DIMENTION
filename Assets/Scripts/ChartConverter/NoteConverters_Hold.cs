@@ -23,7 +23,6 @@ namespace ChartConvert
             var nextNote = thisNote.NoteObject.NextNote.Value;
             if (backNote != null) { return false; }
             if (backNote == null && nextNote == null) { return false; }
-            if (backNote != null && nextNote != null) { return false; }
 
             // 新たにインスタンス化
             if (dataOrigin.HoldStartData == null)
@@ -42,7 +41,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ISubDivisionDataGetter dataInChartEditor ,Action<IDeployableNoteData> onAddNoteData)
         {
             if (dataOrigin.HoldStartData == null) { return true; }
 
@@ -58,7 +57,7 @@ namespace ChartConvert
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
                 typeChangableData.SetNoteType(DeploymentNoteType.Hold);
-                dataInChartEditor.AddNote(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -124,7 +123,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ISubDivisionDataGetter dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
         {
             if (dataOrigin.HoldRelayData == null) { return true; }
 
@@ -140,7 +139,7 @@ namespace ChartConvert
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
                 typeChangableData.SetNoteType(DeploymentNoteType.Hold);
-                dataInChartEditor.AddNote(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -206,7 +205,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ISubDivisionDataGetter dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
         {
             if (dataOrigin.HoldMeshRelayData == null) { return true; }
 
@@ -222,7 +221,7 @@ namespace ChartConvert
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
                 typeChangableData.SetNoteType(DeploymentNoteType.HoldHidden);
-                dataInChartEditor.AddNote(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -262,7 +261,6 @@ namespace ChartConvert
             var nextNote = thisNote.NoteObject.NextNote.Value;
             if (nextNote != null) { return false; }
             if (backNote == null && nextNote == null) { return false; }
-            if (backNote != null && nextNote != null) { return false; }
 
             // 新たにインスタンス化
             if (dataOrigin.HoldEndData == null)
@@ -281,7 +279,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ISubDivisionDataGetter dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
         {
             if (dataOrigin.HoldEndData == null) { return true; }
 
@@ -297,7 +295,7 @@ namespace ChartConvert
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
                 typeChangableData.SetNoteType(DeploymentNoteType.Hold);
-                dataInChartEditor.AddNote(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -347,7 +345,6 @@ namespace ChartConvert
             var nextNote = thisNote.NoteObject.NextNote.Value;
             if (nextNote != null) { return false; }
             if (backNote == null && nextNote == null) { return false; }
-            if (backNote != null && nextNote != null) { return false; }
 
             // 新たにインスタンス化
             if (dataOrigin.HoldEndUnjudgeData == null)
@@ -366,7 +363,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor)
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ISubDivisionDataGetter dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
         {
             if (dataOrigin.HoldEndUnjudgeData == null) { return true; }
 
@@ -382,7 +379,7 @@ namespace ChartConvert
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
                 typeChangableData.SetNoteType(DeploymentNoteType.HoldEndUnjudge);
-                dataInChartEditor.AddNote(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;

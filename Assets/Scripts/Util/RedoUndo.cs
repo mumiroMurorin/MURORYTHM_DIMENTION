@@ -233,6 +233,21 @@ namespace UndoRedo
             }
         }
 
+        static public void ResetStates()
+        {
+            lock (Lock)
+            {
+                States.Clear();
+                States = new List<State>();
+                States.Add(new State());
+
+                TransCommand = new TransactionCommand();
+                Transacting = false;
+
+                CurrentStateIndex = 0;
+            }
+        }
+
         #endregion
 
         #region Private methods

@@ -21437,6 +21437,7 @@ MonoBehaviour:
       noteObject: {fileID: 5475620226950634511, guid: 41e3941ad64096049b60bc5b270486d2, type: 3}
   defaultNoteType_ground: 10
   defaultNoteType_space: 800
+  noteConnecter: {fileID: 754356524}
 --- !u!4 &1645756595
 Transform:
   m_ObjectHideFlags: 0
@@ -26790,7 +26791,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playKey: 32
   scalingSensitivity: 0.3
-  moveSensitivityMax: 0.035
+  moveSensitivityMax: 0.5
   editModeShortCutKeys:
   - modeName: NoteSelect1 [Alt+S]
     editMode: 150

@@ -10,7 +10,7 @@ namespace ChartEditor
     /// <summary>
     /// 分線のデータ
     /// </summary>
-    public class SubDivisionDataInBeat
+    public class SubDivisionDataInBeat : ISubDivisionDataGetter
     {
         const int SPACE_LOCATION_INDEX = 100;
 
@@ -26,17 +26,17 @@ namespace ChartEditor
         public SubdivisionConfig SubConfig { get { return new SubdivisionConfig(this.bpm.Value); } }
 
         // Ground配置場所
-        public Transform[] PlacementLocation { private get; set; }
+        Transform[] placementLocation;
         public void SetPlacementLocation(Transform[] locates)
         {
-            PlacementLocation = locates;
+            placementLocation = locates;
         }
 
         // 宙配置場所
-        public Transform SpaceLocation { private get; set; }
+        Transform spaceLocation;
         public void SetSpaceLocation(Transform locate)
         {
-            SpaceLocation = locate;
+            spaceLocation = locate;
         }
 
         #region ノーツデータ
@@ -45,7 +45,6 @@ namespace ChartEditor
         /// その分線に配置されたノーツのデータ
         /// </summary>
         ReactiveCollection<IDeployableNoteData> noteDatas = new ReactiveCollection<IDeployableNoteData>();
-
         /// <summary>
         /// ノーツの追加、削除の監視用
         /// </summary>
@@ -66,7 +65,7 @@ namespace ChartEditor
             // 宙配置場所
             if (address.SliderIndex == SPACE_LOCATION_INDEX)
             {
-                return SpaceLocation;
+                return spaceLocation;
             }
 
             // グラウンド配置場所
@@ -76,7 +75,7 @@ namespace ChartEditor
                 return null;
             }
 
-            return PlacementLocation[(int)address.SliderIndex];
+            return placementLocation[(int)address.SliderIndex];
         }
 
         #endregion
@@ -102,7 +101,7 @@ namespace ChartEditor
     /// <summary>
     /// 小節のデータ
     /// </summary>
-    public class BarDataInChart
+    public class BarDataInChart : IBarDataGetter
     {
         public BarDataInChart(BarConfig barConfig, SubdivisionConfig subConfig, int barIndex)
         {
@@ -530,5 +529,34 @@ namespace ChartEditor
         }
 
         #endregion
+    }
+
+
+    public interface ISubDivisionDataGetter
+    {
+        int BarIndex { get; }
+
+        int SubDivisionIndex { get; }
+
+        SubdivisionConfig SubConfig { get; }
+
+        IReadOnlyReactiveCollection<IDeployableNoteData> NoteDatas { get; }
+
+        IReadOnlyReactiveProperty<float> Bpm { get; }
+    }
+
+    public interface IBarDataGetter
+    {
+        int BarIndex { get; }
+
+        BarConfig BarConfig { get; }
+
+        IReadOnlyReactiveProperty<int> BeatCount { get; }
+
+        IReadOnlyReactiveProperty<float> BeatUnit { get; }
+
+        IReadOnlyReactiveProperty<int> DivisionNum { get; }
+
+        IReadOnlyReactiveCollection<SubDivisionDataInBeat> SubDivisionDatas { get; }
     }
 }

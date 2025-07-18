@@ -11,10 +11,15 @@ namespace ChartEditor
         #region Chart 譜面関係
 
         ReactiveProperty<ChartData> chartData = new ReactiveProperty<ChartData>();
-
         public IReadOnlyReactiveProperty<ChartData> ChartData => chartData;
         public void SetChartData(ChartData chartData)
         {
+            // リセット
+            if (this.chartData != null && this.chartData.Value != null && this.chartData.Value.BarDatas != null) 
+            { 
+                this.chartData.Value.RemoveBar(this.chartData.Value.BarDatas.Count);
+            }
+
             this.chartData.Value = chartData;
         }
 
@@ -32,7 +37,6 @@ namespace ChartEditor
         // 譜面長さ
         ReactiveProperty<float> chartSeconds = new ReactiveProperty<float>(0);
         public IReadOnlyReactiveProperty<float> ChartSeconds => chartSeconds;
-
         public void SetChartSeconds(float seconds)
         {
             if(seconds < 0) { return; }
@@ -46,7 +50,6 @@ namespace ChartEditor
         // エディットモード
         ReactiveProperty<EditMode> currentEditMode = new ReactiveProperty<EditMode>(EditMode.None);
         IReadOnlyReactiveProperty<EditMode> IChartEditorDataGetter.CurrentEditMode => currentEditMode;
-
         void IChartEditorDataSetter.SetEditMode(EditMode editMode) 
         {
             if(currentEditMode.Value == editMode) { return; }
@@ -58,7 +61,6 @@ namespace ChartEditor
         // 編集ノーツタイプ
         ReactiveProperty<EditNoteType> editNoteType = new ReactiveProperty<EditNoteType>(EditNoteType.Ground);
         IReadOnlyReactiveProperty<EditNoteType> IChartEditorDataGetter.EditNoteType => editNoteType;
-
         public void SetEditNoteType(EditNoteType editNoteType)
         {
             if (this.editNoteType.Value == editNoteType) { return; }
@@ -66,7 +68,6 @@ namespace ChartEditor
             this.editNoteType.Value = editNoteType;
             Debug.Log($"Change Edit Note Type: {this.editNoteType.Value}");
         }
-
         void IChartEditorDataSetter.SwitchEditNoteType()
         {
             EditNoteType current = editNoteType.Value;

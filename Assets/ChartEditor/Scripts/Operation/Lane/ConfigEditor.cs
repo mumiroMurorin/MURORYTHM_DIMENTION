@@ -59,8 +59,8 @@ namespace ChartEditor
 
         public void ChangeBarConfig(BarConfig barConfig)
         {
-            int barIndex = barConfigCollider.Value.BarDataGetter.BarData.BarIndex;
-            var previousBarData = barConfigCollider.Value.BarDataGetter.BarData;
+            int barIndex = barConfigCollider.Value.BarDataGetter.BarIndex;
+            var previousBarData = barConfigCollider.Value.BarDataGetter;
             var previousBarConfig = previousBarData.BarConfig;
 
             // コンフィグが変更できるか調べる
@@ -84,7 +84,7 @@ namespace ChartEditor
         /// コンフィグが変更できるか調べる
         /// </summary>
         /// <returns></returns>
-        private bool IsChangableBarConfig(BarDataInChart previousBarData, BarConfig barConfig)
+        private bool IsChangableBarConfig(IBarDataGetter previousBarData, BarConfig barConfig)
         {
             // 公約数分線上意外にノーツがある場合は変更できない
             int oldCount = previousBarData.SubDivisionDatas.Count;
@@ -110,7 +110,7 @@ namespace ChartEditor
         /// <param name="beforeConfig"></param>
         /// <param name="afterConfig"></param>
         /// <param name="barData"></param>
-        private void ChangeBarConfig(int barIndex, BarConfig afterConfig, BarDataInChart barData)
+        private void ChangeBarConfig(int barIndex, BarConfig afterConfig, IBarDataGetter barData)
         {
             // 元あった分線データを割り振る
             int newSubCount = afterConfig.BeatCount * afterConfig.DivisionNum;
@@ -135,7 +135,7 @@ namespace ChartEditor
                 }
             }
 
-            // コンフィグの変更
+            // コンフィグ変更
             dataGetter.ChartData.Value.SetBarDataConfig(barIndex, afterConfig);
 
             // 以前あったノーツを割り振る
@@ -149,9 +149,9 @@ namespace ChartEditor
 
         public void ChangeSubDivisionConfig(SubdivisionConfig subConfig)
         {
-            int barIndex = subConfigCollider.Value.SubDivisionDataGetter.SubDivisionData.BarIndex;
-            int subIndex = subConfigCollider.Value.SubDivisionDataGetter.SubDivisionData.SubDivisionIndex;
-            var previousSubConfig = subConfigCollider.Value.SubDivisionDataGetter.SubDivisionData.SubConfig;
+            int barIndex = subConfigCollider.Value.SubDivisionDataGetter.BarIndex;
+            int subIndex = subConfigCollider.Value.SubDivisionDataGetter.SubDivisionIndex;
+            var previousSubConfig = subConfigCollider.Value.SubDivisionDataGetter.SubConfig;
 
             // 変更
             Record(() => {
