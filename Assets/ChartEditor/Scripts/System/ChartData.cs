@@ -14,15 +14,16 @@ namespace ChartEditor
     {
         const int SPACE_LOCATION_INDEX = 100;
 
-        public SubDivisionDataInBeat(float bpm, int barIndex, int subIndex)
+        public SubDivisionDataInBeat(SubdivisionConfig config, int barIndex, int subIndex)
         {
-            SetBpm(bpm);
+            SetBpm(config.Bpm);
             BarIndex = barIndex;
             SubDivisionIndex = subIndex;
         }
 
         public int BarIndex { get; }
         public int SubDivisionIndex { get; }
+        public SubdivisionConfig SubConfig { get { return new SubdivisionConfig(this.bpm.Value); } }
 
         // Ground配置場所
         public Transform[] PlacementLocation { private get; set; }
@@ -89,9 +90,7 @@ namespace ChartEditor
         /// BPM変化
         /// </summary>
         ReactiveProperty<float> bpm = new ReactiveProperty<float>();
-
         public IReadOnlyReactiveProperty<float> Bpm => bpm;
-
         public void SetBpm(float bpm)
         {
             this.bpm.Value = Mathf.Clamp(bpm, BPM_MIN, BPM_MAX);
@@ -105,14 +104,14 @@ namespace ChartEditor
     /// </summary>
     public class BarDataInChart
     {
-        public BarDataInChart(int beatCount, float beatUnit, int divNum, float bpm, int barIndex)
+        public BarDataInChart(BarConfig barConfig, SubdivisionConfig subConfig, int barIndex)
         {
-            this.beatCount.Value = beatCount;
-            this.beatUnit.Value = beatUnit;
-            this.divisionNum.Value = divNum;
+            this.beatCount.Value = barConfig.BeatCount;
+            this.beatUnit.Value = barConfig.BeatUnit;
+            this.divisionNum.Value = barConfig.DivisionNum;
             this.BarIndex = barIndex;
 
-            UpdateSubDivisionData(beatCount, divNum, bpm);
+            UpdateSubDivisionData(barConfig.BeatCount, barConfig.DivisionNum, subConfig.Bpm);
         }
 
         public int BarIndex { get; set; }
@@ -121,12 +120,10 @@ namespace ChartEditor
         /// 小節内の分線データ
         /// </summary>
         ReactiveCollection<SubDivisionDataInBeat> subDivisionDatas = new ReactiveCollection<SubDivisionDataInBeat>();
-
         /// <summary>
         /// 分線の代入、クリアの監視
         /// </summary>
         public IReadOnlyReactiveCollection<SubDivisionDataInBeat> SubDivisionDatas => subDivisionDatas;
-
         public void SetSubDivisionDatas(List<SubDivisionDataInBeat> subDivisionDatas)
         {
             this.subDivisionDatas.Clear();
@@ -153,7 +150,8 @@ namespace ChartEditor
             // 新規セット
             // カウント数 * 分割数が分線の数
             var subDivisionDatas = new List<SubDivisionDataInBeat>();
-            for (int i = 0; i < beatCount * divNum; i++) { subDivisionDatas.Add(new SubDivisionDataInBeat(bpm, BarIndex, i)); }
+            var subConfig = new SubdivisionConfig(bpm);
+            for (int i = 0; i < beatCount * divNum; i++) { subDivisionDatas.Add(new SubDivisionDataInBeat(subConfig, BarIndex, i)); }
             SetSubDivisionDatas(subDivisionDatas);
         }
 
@@ -169,13 +167,13 @@ namespace ChartEditor
 
         #region その他データ
 
+        public BarConfig BarConfig { get { return new BarConfig(this.beatCount.Value, this.beatUnit.Value, this.divisionNum.Value); } }
+
         /// <summary>
         /// n/m拍子のn
         /// </summary>
         ReactiveProperty<int> beatCount = new ReactiveProperty<int>();
-
         public IReadOnlyReactiveProperty<int> BeatCount => beatCount;
-
         public void SetBeatCount(int beatCount)
         {
             beatCount = (int)Mathf.Clamp(beatCount, 0, float.MaxValue);
@@ -189,9 +187,7 @@ namespace ChartEditor
         /// n/m拍子のm
         /// </summary>
         ReactiveProperty<float> beatUnit = new ReactiveProperty<float>();
-
         public IReadOnlyReactiveProperty<float> BeatUnit => beatUnit;
-
         public void SetBeatUnit(float beatUnit)
         {
             beatUnit = Mathf.Clamp(beatUnit, 0, float.MaxValue);
@@ -204,9 +200,7 @@ namespace ChartEditor
         /// 分割数 (〇分割)
         /// </summary>
         ReactiveProperty<int> divisionNum = new ReactiveProperty<int>();
-
         public IReadOnlyReactiveProperty<int> DivisionNum => divisionNum;
-
         public void SetDivisionNum(int divisionNum)
         {
             divisionNum = (int)Mathf.Clamp(divisionNum, 0, float.MaxValue);
@@ -236,7 +230,9 @@ namespace ChartEditor
         {
             for (int i = 0; i < barNum; i++)
             {
-                BarDataInChart barData = new BarDataInChart(DEFAULT_BEAT_COUNT, DEFAULT_BEAT_UNIT, DEFAULT_DIVISION_NUM, DEFAULT_BPM, i);
+                var barConfig = new BarConfig(DEFAULT_BEAT_COUNT, DEFAULT_BEAT_UNIT, DEFAULT_DIVISION_NUM);
+                var subConfig = new SubdivisionConfig(DEFAULT_BPM);
+                BarDataInChart barData = new BarDataInChart(barConfig, subConfig, i);
                 barDatas.Add(barData);
             }
         }
@@ -252,22 +248,19 @@ namespace ChartEditor
         /// 特定の分線から後のBPMを一括で変更する
         /// </summary>
         /// <param name="subDivisionData"></param>
-        public void SetBPMFromSubDivisionUnit(SubDivisionDataInBeat findData, float bpm)
+        public void SetSubDivisionConfig(int barIndex, int subIndex, SubdivisionConfig subConfig, bool isBpmChangeCascading = true)
         {
             if (barDatas == null) { return; }
 
-            bool isFound = false;
-
-            // 特定のデータをしらみつぶしに探す
-            foreach (var bar in barDatas)
+            for(int i = barIndex; i < barDatas.Count; i++)
             {
-                foreach (var sub in bar.SubDivisionDatas)
+                var barData = barDatas[i];
+                for (int j = 0; j < barData.SubDivisionDatas.Count; j++)
                 {
-                    // 見つかったらフラグオン
-                    if (sub == findData) { isFound = true; }
+                    if(i == barIndex && j < subIndex) { continue; }
 
-                    // フラグオンならBPM変更
-                    if (isFound) { sub.SetBpm(bpm); }
+                    var subData = barData.SubDivisionDatas[j];
+                    subData.SetBpm(subConfig.Bpm);
                 }
             }
         }
@@ -279,17 +272,18 @@ namespace ChartEditor
         /// <param name="beatCount"></param>
         /// <param name="beatUnit"></param>
         /// <param name="divNum"></param>
-        public void SetBarDataProperty(int barIndex, int beatCount, float beatUnit, int divNum)
+        public void SetBarDataConfig(int barIndex, BarConfig config)
         {
             BarDataInChart barData = barDatas[barIndex];
 
             // 値が変わらなかった場合は何もしない
-            if(barData.BeatCount.Value == beatCount && barData.BeatUnit.Value == beatUnit && barData.DivisionNum.Value == divNum) { return; }
+            if(barData.BeatCount.Value == config.BeatCount && barData.BeatUnit.Value == config.BeatUnit && barData.DivisionNum.Value == config.DivisionNum) { return; }
 
             // 元あった分線データを割り振る
+            int newSubCount = config.BeatCount * config.DivisionNum;
             var indexToSubdivisionData = new List<IndexToSubdivisionData>();
             var beforeList = Enumerable.Range(0, barData.SubDivisionDatas.Count).Select(i => (float)i / barData.SubDivisionDatas.Count).ToList();
-            var afterList = Enumerable.Range(0, beatCount * divNum).Select(i => (float)i / (beatCount * divNum)).ToList();
+            var afterList = Enumerable.Range(0, newSubCount).Select(i => (float)i / newSubCount).ToList();
             beforeList = beforeList.SnapToNearest(afterList);
 
             // 以前のデータを保存し、ノーツを削除
@@ -301,7 +295,7 @@ namespace ChartEditor
                 for (int j = 0; j < noteCount; j++) 
                 {
                     var note = subData.NoteDatas[0];
-                    var index = (int)(beforeList[i] * (beatCount * divNum));
+                    var index = (int)(beforeList[i] * newSubCount);
 
                     indexToSubdivisionData.Add(new IndexToSubdivisionData(index, note));
                     RemoveNote(note);
@@ -309,9 +303,9 @@ namespace ChartEditor
             }
 
             // データをセットして小節線内のデータをアップデート
-            barData.SetBeatCount(beatCount);
-            barData.SetBeatUnit(beatUnit);
-            barData.SetDivisionNum(divNum);
+            barData.SetBeatCount(config.BeatCount);
+            barData.SetBeatUnit(config.BeatUnit);
+            barData.SetDivisionNum(config.DivisionNum);
 
             // 以前あったノーツを割り振る
             foreach (var sub in indexToSubdivisionData)
@@ -335,7 +329,9 @@ namespace ChartEditor
 
             for (int i = 0; i < length; i++)
             {
-                BarDataInChart barData = new BarDataInChart(DEFAULT_BEAT_COUNT, DEFAULT_BEAT_UNIT, DEFAULT_DIVISION_NUM, bpm, barDataCount + i);
+                var barConfig = new BarConfig(DEFAULT_BEAT_COUNT, DEFAULT_BEAT_UNIT, DEFAULT_DIVISION_NUM);
+                var subConfig = new SubdivisionConfig(bpm);
+                BarDataInChart barData = new BarDataInChart(barConfig, subConfig, barDataCount + i);
                 barDatas.Add(barData);
             }
         }

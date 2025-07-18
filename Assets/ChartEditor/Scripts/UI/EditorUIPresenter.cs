@@ -122,45 +122,45 @@ namespace ChartEditor
         private void BindForRhythmConfig()
         {
             // リズムコンフィグ(小節線)のクリック
-            configEditor_model?.BarConfig
-                .Where(value => value != null)
+            dataGetter_model?.CurrentEditMode
+                .Where(mode => mode == EditMode.EditingBarConfig)
                 .Subscribe(value =>
                 {
-                    BarDataInChart data = value.BarDataGetter.BarData;
-                    rhythmConfigBar_view.SetDataOnUI(data.BeatCount.Value, data.BeatUnit.Value, data.DivisionNum.Value);
+                    var config = configEditor_model.BarConfig.Value.BarDataGetter.BarData.BarConfig;
+                    rhythmConfigBar_view.SetDataOnUI(config);
                     rhythmConfigBar_view.SetActive(true);
                 })
                 .AddTo(this.gameObject);
 
             // リズムコンフィグ(分線)のクリック
-            configEditor_model?.SubDivisionConfig
-                .Where(value => value != null)
+            dataGetter_model?.CurrentEditMode
+                .Where(mode => mode == EditMode.EditingSubDivisionConfig)
                 .Subscribe(value =>
                 {
-                    SubDivisionDataInBeat data = value.SubDivisionDataGetter.SubDivisionData;
-                    rhythmConfigSubDivision_view.SetDataOnUI(data.Bpm.Value);
+                    var config = configEditor_model.SubDivisionConfig.Value.SubDivisionDataGetter.SubDivisionData.SubConfig;
+                    rhythmConfigSubDivision_view.SetDataOnUI(config);
                     rhythmConfigSubDivision_view.SetActive(true);
                 })
                 .AddTo(this.gameObject);
 
             // リズムコンフィグ(小節線)を閉じる
-            configEditor_model?.BarConfig
+            dataGetter_model?.CurrentEditMode
                 .Pairwise()
-                .Where(value => value.Current == null)
+                .Where(pair => pair.Previous == EditMode.EditingBarConfig)
                 .Subscribe(value =>
                 {
-                    rhythmConfigBar_view.SetData(dataGetter_model.ChartData.Value ,value.Previous.BarDataGetter.BarData.BarIndex);
+                    rhythmConfigBar_view.SetData(configEditor_model.ChangeBarConfig);
                     rhythmConfigBar_view.SetActive(false);
                 })
                 .AddTo(this.gameObject);
 
             // リズムコンフィグ(分線)を閉じる
-            configEditor_model?.SubDivisionConfig
+            dataGetter_model?.CurrentEditMode
                 .Pairwise()
-                .Where(value => value.Current == null)
+                .Where(pair => pair.Previous == EditMode.EditingSubDivisionConfig)
                 .Subscribe(value =>
                 {
-                    rhythmConfigSubDivision_view.SetData(value.Previous.SubDivisionDataGetter.SubDivisionData, dataGetter_model.ChartData.Value);
+                    rhythmConfigSubDivision_view.SetData(configEditor_model.ChangeSubDivisionConfig);
                     rhythmConfigSubDivision_view.SetActive(false);
                 })
                 .AddTo(this.gameObject);

@@ -242,6 +242,32 @@ namespace ChartEditor
         public Vector2 Pos { get; set; }
     }
 
+    public class BarConfig
+    {
+        public BarConfig(int beatCount, float beatUnit, int divNum) 
+        {
+            this.BeatCount = beatCount;
+            this.BeatUnit = beatUnit;
+            this.DivisionNum = divNum;
+        }
+
+        public int BeatCount { get; set; }
+
+        public float BeatUnit { get; set; }
+
+        public int DivisionNum { get; set; }
+    }
+
+    public class SubdivisionConfig
+    {
+        public SubdivisionConfig(float bpm)
+        {
+            this.Bpm = bpm;
+        }
+
+        public float Bpm { get; set; }
+    }
+
     [System.Serializable]
     public class ColorSetting
     {

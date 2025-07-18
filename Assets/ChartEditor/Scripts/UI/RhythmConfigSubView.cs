@@ -22,13 +22,13 @@ namespace ChartEditor
         /// その時点の引数のデータ代入
         /// bpm以外 -1 で非表示
         /// </summary>
-        public void SetDataOnUI(float bpm = -1)
+        public void SetDataOnUI(SubdivisionConfig subConfig)
         {
             // 表示非表示
-            bpmField.interactable = bpm != -1;
+            bpmField.interactable = subConfig.Bpm != -1;
 
             // 数値のセット
-            bpmField.text = bpm == -1 ? "" : bpm.ToString();
+            bpmField.text = subConfig.Bpm == -1 ? "" : subConfig.Bpm.ToString();
         }
 
         /// <summary>
@@ -48,13 +48,19 @@ namespace ChartEditor
         ///  以降の分線全部BPMセット
         /// </summary>
         /// <param name="subDivisionData"></param>
-        public void SetData(SubDivisionDataInBeat subDivisionData, ChartData chart)
+        public void SetData(Action<SubdivisionConfig> setSubdivisionConfig)
         {
+            float bpm = 1;
+
             // BPMのセット
-            if (!string.IsNullOrWhiteSpace(bpmField.text) && float.TryParse(bpmField.text, out float bpm))
+            if (string.IsNullOrWhiteSpace(bpmField.text) || !float.TryParse(bpmField.text, out bpm))
             {
-                chart.SetBPMFromSubDivisionUnit(subDivisionData, bpm);
+                Debug.Log($"DivisionNumに有効な数字を入力してください: {bpmField.text}");
+                return;
             }
+
+            var subdivConfig = new SubdivisionConfig(bpm);
+            setSubdivisionConfig.Invoke(subdivConfig);
         }
 
         public void OnClickedApplyButton()
