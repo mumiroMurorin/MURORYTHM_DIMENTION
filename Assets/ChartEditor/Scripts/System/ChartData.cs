@@ -279,25 +279,15 @@ namespace ChartEditor
             // 値が変わらなかった場合は何もしない
             if(barData.BeatCount.Value == config.BeatCount && barData.BeatUnit.Value == config.BeatUnit && barData.DivisionNum.Value == config.DivisionNum) { return; }
 
-            // 元あった分線データを割り振る
-            int newSubCount = config.BeatCount * config.DivisionNum;
-            var indexToSubdivisionData = new List<IndexToSubdivisionData>();
-            var beforeList = Enumerable.Range(0, barData.SubDivisionDatas.Count).Select(i => (float)i / barData.SubDivisionDatas.Count).ToList();
-            var afterList = Enumerable.Range(0, newSubCount).Select(i => (float)i / newSubCount).ToList();
-            beforeList = beforeList.SnapToNearest(afterList);
-
-            // 以前のデータを保存し、ノーツを削除
+            // ノーツを削除
             for (int i = 0; i < barData.SubDivisionDatas.Count; i++)
             {
                 var subData = barData.SubDivisionDatas[i];
-
                 int noteCount = subData.NoteDatas.Count;
+
                 for (int j = 0; j < noteCount; j++) 
                 {
                     var note = subData.NoteDatas[0];
-                    var index = (int)(beforeList[i] * newSubCount);
-
-                    indexToSubdivisionData.Add(new IndexToSubdivisionData(index, note));
                     RemoveNote(note);
                 }
             }
@@ -306,14 +296,6 @@ namespace ChartEditor
             barData.SetBeatCount(config.BeatCount);
             barData.SetBeatUnit(config.BeatUnit);
             barData.SetDivisionNum(config.DivisionNum);
-
-            // 以前あったノーツを割り振る
-            foreach (var sub in indexToSubdivisionData)
-            {
-                var newNote = sub.Note.Copy();
-                newNote.SetAddress(new AddressWithinRange(barData.BarIndex, sub.Index, newNote.Address.Range));
-                AddNote(newNote);
-            }
         }
 
         /// <summary>
@@ -359,19 +341,6 @@ namespace ChartEditor
             return barDatas[address.BarIndex].GetPlacementLocation(address);
         }
 
-
-        private class IndexToSubdivisionData
-        {
-            public IndexToSubdivisionData(int index, IDeployableNoteData noteData)
-            {
-                Index = index;
-                Note = noteData;
-            }
-
-            public int Index { get; set; }
-
-            public IDeployableNoteData Note { get; set; }
-        }
 
         #region NotesOperation
 

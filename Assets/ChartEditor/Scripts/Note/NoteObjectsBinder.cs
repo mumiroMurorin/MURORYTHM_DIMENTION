@@ -145,7 +145,7 @@ namespace ChartEditor
                     {
                         if (stackAddress == null)
                         {
-                            Debug.LogError("【Note】スタックアドレスがありません");
+                            Debug.LogError($"【Note】スタックアドレスがありません: {oldAddress}");
                             return;
                         }
 

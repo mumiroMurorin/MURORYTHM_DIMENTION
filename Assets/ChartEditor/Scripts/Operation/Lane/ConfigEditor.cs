@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System.Linq;
+using System;
 using VContainer;
 using static UndoRedo.History;
 
@@ -27,17 +29,17 @@ namespace ChartEditor
 
         private void Update()
         {
-            if(dataGetter.EditNoteType.Value == EditNoteType.Vertices) { return; }
+            if(dataGetter.EditNoteType.Value != EditNoteType.Ground && dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
             if(dataGetter.CurrentEditMode.Value != EditMode.EditBarConfig && dataGetter.CurrentEditMode.Value != EditMode.EditSubDivisionConfig) { return; }
 
             // 左クリック
-            if (Input.GetMouseButtonDown(0)) { EditConfig(); }
+            if (Input.GetMouseButtonDown(0)) { StartEditConfigOnClick(); }
         }
 
         /// <summary>
         /// コンフィグの編集
         /// </summary>
-        private void EditConfig()
+        private void StartEditConfigOnClick()
         {
             var subDivisionCollider = dataGetter.GetInteractableCollider<IRhythmConfigurableSubDivisionCollider>();
             var barCollider = dataGetter.GetInteractableCollider<IRhythmConfigurableBarCollider>();
@@ -62,31 +64,87 @@ namespace ChartEditor
             var previousBarConfig = previousBarData.BarConfig;
 
             // コンフィグが変更できるか調べる
-            // 公約数分線上意外にノーツがある場合は変更できない
-            int oldCount = previousBarData.SubDivisionDatas.Count;
-            int newCount = barConfig.BeatCount * barConfig.DivisionNum;
-            for (int i = 0; i < oldCount; i++) 
+            if (!IsChangableBarConfig(previousBarData, barConfig)) 
             {
-                // 整数かどうかの判定,分線の位置が被るかどうかの判定
-                Debug.Log((newCount * i) % oldCount);
-                if ((newCount * i) % oldCount == 0) { continue; }
-
-                // 被らない分線上にノートがあったら警告吐いて終了
-                if(previousBarData.SubDivisionDatas[i].NoteDatas.Count > 0) 
-                {
-                    Debug.Log($"【コンフィグ】対応しない分線上にノーツがあるため変更できません");
-                    return;
-                }
+                Debug.Log($"【コンフィグ】対応しない分線上にノーツがあるため変更できません");
+                return;
             }
 
             // 変更
             Record(() => {
-                dataGetter.ChartData.Value.SetBarDataConfig(barIndex, barConfig);
+                ChangeBarConfig(barIndex, barConfig, previousBarData);
             }, 
             // 元に戻す
             () => {
-                dataGetter.ChartData.Value.SetBarDataConfig(barIndex, previousBarConfig);
+                ChangeBarConfig(barIndex, previousBarConfig, previousBarData);
             });
+        }
+
+        /// <summary>
+        /// コンフィグが変更できるか調べる
+        /// </summary>
+        /// <returns></returns>
+        private bool IsChangableBarConfig(BarDataInChart previousBarData, BarConfig barConfig)
+        {
+            // 公約数分線上意外にノーツがある場合は変更できない
+            int oldCount = previousBarData.SubDivisionDatas.Count;
+            int newCount = barConfig.BeatCount * barConfig.DivisionNum;
+            for (int i = 0; i < oldCount; i++)
+            {
+                // 整数かどうかの判定,分線の位置が被るかどうかの判定
+                if ((newCount * i) % oldCount == 0) { continue; }
+
+                // 被らない分線上にノートがあったら警告吐いて終了
+                if (previousBarData.SubDivisionDatas[i].NoteDatas.Count > 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// コンフィグの変更、もとあったノーツを再編成する
+        /// </summary>
+        /// <param name="beforeConfig"></param>
+        /// <param name="afterConfig"></param>
+        /// <param name="barData"></param>
+        private void ChangeBarConfig(int barIndex, BarConfig afterConfig, BarDataInChart barData)
+        {
+            // 元あった分線データを割り振る
+            int newSubCount = afterConfig.BeatCount * afterConfig.DivisionNum;
+            var indexToSubdivisionData = new List<IndexToSubdivisionData>();
+            var beforeList = Enumerable.Range(0, barData.SubDivisionDatas.Count).Select(i => (float)i / barData.SubDivisionDatas.Count).ToList();
+            var afterList = Enumerable.Range(0, newSubCount).Select(i => (float)i / newSubCount).ToList();
+            beforeList = beforeList.SnapToNearest(afterList);
+
+            // 以前のデータを保存し、ノーツを削除
+            for (int i = 0; i < barData.SubDivisionDatas.Count; i++)
+            {
+                var subData = barData.SubDivisionDatas[i];
+
+                int noteCount = subData.NoteDatas.Count;
+                for (int j = 0; j < noteCount; j++)
+                {
+                    var note = subData.NoteDatas[0];
+                    var index = (int)(beforeList[i] * newSubCount);
+
+                    indexToSubdivisionData.Add(new IndexToSubdivisionData(index, note));
+                    dataGetter.ChartData.Value.RemoveNote(note);
+                }
+            }
+
+            // コンフィグの変更
+            dataGetter.ChartData.Value.SetBarDataConfig(barIndex, afterConfig);
+
+            // 以前あったノーツを割り振る
+            foreach (var sub in indexToSubdivisionData)
+            {
+                var newNote = sub.Note;
+                newNote.SetAddress(new AddressWithinRange(barData.BarIndex, sub.Index, newNote.Address.Range));
+                dataGetter.ChartData.Value.AddNote(newNote);
+            }
         }
 
         public void ChangeSubDivisionConfig(SubdivisionConfig subConfig)
@@ -105,9 +163,22 @@ namespace ChartEditor
             });
         }
 
-        public void ResetConfig()
+        public void CloseConfig()
         {
             dataSetter.SetEditMode(EditMode.None);
+        }
+
+        private class IndexToSubdivisionData
+        {
+            public IndexToSubdivisionData(int index, IDeployableNoteData noteData)
+            {
+                Index = index;
+                Note = noteData;
+            }
+
+            public int Index { get; set; }
+
+            public IDeployableNoteData Note { get; set; }
         }
     }
 

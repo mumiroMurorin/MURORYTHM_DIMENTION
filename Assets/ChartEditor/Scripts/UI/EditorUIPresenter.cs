@@ -193,8 +193,8 @@ namespace ChartEditor
             chartShortenButton_view.OnClickedListner += () => laneExtender_model.ChangeChartLength(-1);
 
             // リズムコンフィグ
-            rhythmConfigBar_view.OnClickedApplyButtonListner += () => CloseConfig();
-            rhythmConfigSubDivision_view.OnClickedApplyButtonListner += () => CloseConfig();
+            rhythmConfigBar_view.OnClickedApplyButtonListner += () => configEditor_model.CloseConfig();
+            rhythmConfigSubDivision_view.OnClickedApplyButtonListner += () => configEditor_model.CloseConfig();
 
             // レイヤー変更ボタン
             switchLayerButton_view.OnClickCloseButtonListner += () => {
@@ -205,11 +205,6 @@ namespace ChartEditor
 
             // 説明書を閉じる
             explanation_view.OnClickCloseButtonListner += () => editorDataSetter_model.SetEditMode(EditMode.None);
-        }
-
-        private void CloseConfig()
-        {
-            configEditor_model.ResetConfig();
         }
 
         /// <summary>
