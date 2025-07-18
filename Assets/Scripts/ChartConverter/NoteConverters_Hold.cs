@@ -104,7 +104,7 @@ namespace ChartConvert
             // 前後ノーツチェック
             var backNote = thisNote.NoteObject.BackNote.Value;
             var nextNote = thisNote.NoteObject.NextNote.Value;
-            if (backNote != null || nextNote != null) { return false; }
+            if (backNote == null || nextNote == null) { return false; }
 
             // 新たにインスタンス化
             if (dataOrigin.HoldRelayData == null)
@@ -186,7 +186,7 @@ namespace ChartConvert
             // 前後ノーツチェック
             var backNote = thisNote.NoteObject.BackNote.Value;
             var nextNote = thisNote.NoteObject.NextNote.Value;
-            if (backNote != null || nextNote != null) { return false; }
+            if (backNote == null || nextNote == null) { return false; }
 
             // 新たにインスタンス化
             if (dataOrigin.HoldMeshRelayData == null)

@@ -158,7 +158,7 @@ namespace ChartConvert
                 // 変換成功判定
                 if (!isSucceedLocal)
                 {
-                    Debug.LogWarning($"【Converter】ノーツデータの変換に失敗しました: {noteData.Address},{noteData.NoteType}");
+                    Debug.LogWarning($"【Converter】ノーツデータの変換に失敗しました: {noteData.Address}, {noteData.NoteType}");
                     isSucceed = false;
                 }
             }

@@ -101,7 +101,6 @@ namespace ChartEditor
             float movementPerScroll = moveSensitivityMax * optionGetter.ScrollSensitivity.Value;
             float ratio = (movementPerScroll * delta) / groundLength;
 
-            //float ratio = moveSensitivityMax * optionGetter.ScrollSensitivity.Value * Mathf.Clamp(10f - optionGetter.ChartViewScale.Value / 0.15f, 1f, 10f);
             dataSetter?.SetPlaybackProgress(dataGetter.PlaybackProgress.Value + ratio);
         }
 

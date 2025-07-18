@@ -130,7 +130,7 @@ namespace ChartEditor
 
         public override string ToString()
         {
-            return $"#{BarIndex} - {SubDivisionIndex} - {SliderIndex}";
+            return $"#{BarIndex + 1} - {SubDivisionIndex} - {SliderIndex}";
         }
     }
 
@@ -279,7 +279,7 @@ namespace ChartEditor
 
         public override string ToString()
         {
-            return $"#{BarIndex} - {SubDivisionIndex} - {Range[0]}~{Range[^1]}";
+            return $"#{BarIndex + 1} - {SubDivisionIndex} - {Range[0]}~{Range[^1]}";
         }
     }
 

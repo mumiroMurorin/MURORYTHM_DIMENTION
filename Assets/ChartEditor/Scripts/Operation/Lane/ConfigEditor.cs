@@ -112,6 +112,8 @@ namespace ChartEditor
         /// <param name="barData"></param>
         private void ChangeBarConfig(int barIndex, BarConfig afterConfig, IBarDataGetter barData)
         {
+            if(barData.BarConfig == afterConfig) { return; }
+
             // Œ³‚ ‚Á‚½•ªüƒf[ƒ^‚ğŠ„‚èU‚é
             int newSubCount = afterConfig.BeatCount * afterConfig.DivisionNum;
             var indexToSubdivisionData = new List<IndexToSubdivisionData>();
@@ -128,7 +130,7 @@ namespace ChartEditor
                 for (int j = 0; j < noteCount; j++)
                 {
                     var note = subData.NoteDatas[0];
-                    var index = (int)(beforeList[i] * newSubCount);
+                    var index = (int)MathF.Round(beforeList[i] * newSubCount);
 
                     indexToSubdivisionData.Add(new IndexToSubdivisionData(index, note));
                     dataGetter.ChartData.Value.RemoveNote(note);

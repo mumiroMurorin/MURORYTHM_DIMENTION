@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System.Linq;
+using System;
 
 namespace ChartEditor
 {
@@ -256,6 +257,24 @@ namespace ChartEditor
         public float BeatUnit { get; set; }
 
         public int DivisionNum { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is not BarConfig other)
+                return false;
+
+            return BeatCount == other.BeatCount &&
+                   BeatUnit == other.BeatUnit &&
+                   DivisionNum == other.DivisionNum;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(BeatCount, BeatUnit, DivisionNum);
+        }
+
+        public static bool operator ==(BarConfig a, BarConfig b) => Equals(a, b);
+        public static bool operator !=(BarConfig a, BarConfig b) => !Equals(a, b);
     }
 
     public class SubdivisionConfig

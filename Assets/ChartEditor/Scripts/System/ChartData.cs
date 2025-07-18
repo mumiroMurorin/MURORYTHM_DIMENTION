@@ -358,7 +358,7 @@ namespace ChartEditor
 
             OnAddNoteListener?.Invoke(noteData);
 
-            Debug.Log($"ÅyîzíuÅz:\n #{address.BarIndex} - {address.SubDivisionIndex} - ({address.Range[0]}~{address.Range[^1]})");
+            Debug.Log($"ÅyîzíuÅz:\n{address}");
         }
 
         /// <summary>
