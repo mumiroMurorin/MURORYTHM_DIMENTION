@@ -45,7 +45,7 @@ namespace ChartConvert
             if (backNote == null && nextNote == null) { return false; }
 
             // 新たにインスタンス化
-            if (dataOrigin.SpaceHoldMeshRelayData == null)
+            if (dataOrigin.SpaceHoldStartData == null)
             {
                 dataOrigin.SpaceHoldStartData = new List<NoteDataOrigin_SpaceHoldStart>();
             }

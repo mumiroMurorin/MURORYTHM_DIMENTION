@@ -22,20 +22,26 @@ public class BodyLoader : MonoBehaviour, IBodyLoader
 
     private void Start()
     {
+#if UNITY_EDITOR
+        if (!isUseSpaceInput) { return; }
+#endif
+
         // トラッキングの初期化
         spaceInputHandler?.Value.InitializeBodyTracking();
     }
 
     void IBodyLoader.WaitForLoadBody(Action callback)
     {
-        // トラッキング開始
-        spaceInputHandler?.Value.StartTracking();
-
+#if UNITY_EDITOR
         if (!isUseSpaceInput)
         {
             callback.Invoke();
             return;
         }
+#endif
+
+        // トラッキング開始
+        spaceInputHandler?.Value.StartTracking();
 
         cts = new CancellationTokenSource();
         LoadBodyAsync(callback, cts.Token).Forget();
