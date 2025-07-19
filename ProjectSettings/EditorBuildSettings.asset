@@ -5,22 +5,22 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MusicSelectScene.unity
     guid: 48b60a8f945d12547be9d2b11f192390
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/RhythmGameScene.unity
     guid: 32f02080a0b7c514a8f31da2d047114d
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/ResultScene.unity
     guid: 12e1e63510be5854da97635e7b5f2d0b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/RootScene.unity
     guid: 973dc23bcf8e77944a74104b35056399
   - enabled: 0
     path: Assets/Scenes/Lab.unity
     guid: a0a12b9015ac1e5489e48e5202225c49
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/ChartEditor.unity
     guid: f64b26b25fe80fe43bd80bf3b59baaa3
   m_configObjects:
