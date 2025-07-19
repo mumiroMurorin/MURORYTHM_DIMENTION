@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using System.Linq;
 using static UndoRedo.History;
 
 namespace ChartEditor
@@ -45,15 +46,15 @@ namespace ChartEditor
 
         private void DestroyNotes()
         {
-            var datas = notesGetter.SelectingNotes;
+            var datasCopy = notesGetter.SelectingNotes.ToList();
             
             // íœ
             Record(() => { 
-                foreach(var data in datas) { DestroyNote(data); }
+                foreach(var data in datasCopy) { DestroyNote(data); }
             }, 
             // ”z’u
             () => {
-                foreach (var data in datas) { DeployNote(data); }
+                foreach (var data in datasCopy) { DeployNote(data); }
             });
         }
 
