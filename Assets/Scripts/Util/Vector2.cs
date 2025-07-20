@@ -120,3 +120,25 @@ public class SimpleVector2
 
     public Vector2 ToVector2() => new Vector2(x, y);
 }
+
+/// <summary>
+/// JsonファイルにシリアライズしやすいVector3
+/// </summary>
+[System.Serializable]
+public class SimpleVector3
+{
+    public float x;
+    public float y;
+    public float z;
+
+    public SimpleVector3() { }
+
+    public SimpleVector3(Vector3 v)
+    {
+        x = v.x;
+        y = v.y;
+        z = v.z;
+    }
+
+    public Vector2 ToVector3() => new Vector3(x, y, z);
+}

@@ -12,6 +12,7 @@ namespace TransitionerInRhythmGameScene
         [SerializeField] SerializeInterface<IScoreResetter> scoreResetter;
         [SerializeField] SerializeInterface<ITimeController> timeController;
         [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
+        [SerializeField] BodyTrackingSettingsLoader trackingSettingsLoader;
         
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.LoadData;
 
@@ -26,6 +27,9 @@ namespace TransitionerInRhythmGameScene
         void IPhaseTransitionerInRhythmGameScene.Transition()
         {
             Debug.Log("【Transition】Transition to \"LoadData\"");
+
+            // トラッキングセッティング読み込み
+            trackingSettingsLoader?.LoadBodyTrackingSettings();
 
             // スコアリセット
             scoreResetter?.Value.ResetScore();

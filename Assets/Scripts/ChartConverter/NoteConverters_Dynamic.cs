@@ -35,7 +35,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             if (dataOrigin.DynamicUpwardData == null) { return true; }
 
@@ -47,7 +47,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.AddNoteData(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -99,7 +99,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             if (dataOrigin.DynamicDownwardData == null) { return true; }
 
@@ -111,7 +111,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.AddNoteData(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -164,7 +164,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
 
             if (dataOrigin.DynamicRightwardData == null) { return true; }
@@ -177,7 +177,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.AddNoteData(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -230,7 +230,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             if (dataOrigin.DynamicLeftwardData == null) { return true; }
 
@@ -242,7 +242,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.AddNoteData(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;

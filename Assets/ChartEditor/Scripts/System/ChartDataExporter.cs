@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using ChartConvert;
-using JsonUtil;
+using static JsonUtil.JsonWriter;
 
 namespace ChartEditor
 {
@@ -23,7 +23,7 @@ namespace ChartEditor
 
             ChartDataOrigin chartDataOrigin = chartExporter.Export(editorDataGetter.ChartData.Value, editorDataGetter.Offset.Value);
 
-            JsonConverter.TrySaveToJsonFileDialog(chartDataOrigin);
+            TrySaveToJsonFileDialog(chartDataOrigin);
         }
     }
 

@@ -8,7 +8,7 @@ using System;
 
 namespace JsonUtil
 {
-    public static class JsonConverter
+    public static class JsonWriter
     {
         /// <summary>
         /// クラスをJson形式で書き出す
@@ -164,6 +164,7 @@ namespace JsonUtil
             try
             {
                 string json = File.ReadAllText(filePath);
+                Debug.Log($"{filePath} \n{json}");
                 result = JsonConvert.DeserializeObject<T>(json);
                 return true;
             }

@@ -34,7 +34,7 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             if (dataOrigin.TouchNoteData == null) { return true; }
 
@@ -46,7 +46,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.AddNoteData(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;

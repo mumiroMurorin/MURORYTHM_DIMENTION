@@ -14,17 +14,17 @@ namespace ChartConvert
     /// </summary>
     public interface IUnchainDataToRhythmGameConvertable
     {
-        bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing);
+        bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing);
     }
 
     public interface IHoldDataToRhythmGameConvertable
     {
-        bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing, Dictionary<int, List<TimeToRange>> numberToRanges);
+        bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing, Dictionary<int, List<TimeToRange>> numberToRanges);
     }
 
     public interface ISpaceHoldDataToRhythmGameConvertable
     {
-        bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing);
+        bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing);
     }
 
     public interface IUnchainedNoteConvertable

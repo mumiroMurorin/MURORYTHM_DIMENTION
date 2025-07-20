@@ -13,6 +13,8 @@ namespace TransitionerInRootScene
         const string NEXT_SCENE_NAME = "RootScene";
 
         [SerializeField] float waitTime = 0f;
+        [SerializeField] BodyTrackingSettingsSaver trackingSettingsSaver;
+
 
         readonly PhaseStatusInRootScene status = PhaseStatusInRootScene.Reload;
         CancellationTokenSource cts = new CancellationTokenSource();
@@ -25,6 +27,10 @@ namespace TransitionerInRootScene
         void IPhaseTransitionerInRootScene.Transition()
         {
             Debug.Log("ÅyTransitionÅzTransition to \"Reload\"");
+
+            // ÉfÅ[É^ï€ë∂
+            trackingSettingsSaver?.SaveBodyTrackingSettings();
+
             LoadSceneAsync(cts.Token).Forget();
         }
 

@@ -10,6 +10,7 @@ namespace TransitionerInRootScene
         [SerializeField] SerializeInterface<IPhaseTransitionableInRootScene> phaseTransitionable;
         [SerializeField] SerializeInterface<ITimeController> timeController;
         [SerializeField] SerializeInterface<ISpaceInputHandler> spaceInputHandler;
+        [SerializeField] BodyTrackingSettingsLoader trackingSettingsLoader;
         
         readonly PhaseStatusInRootScene status = PhaseStatusInRootScene.LoadData;
 
@@ -24,6 +25,9 @@ namespace TransitionerInRootScene
         void IPhaseTransitionerInRootScene.Transition()
         {
             Debug.Log("【Transition】Transition to \"LoadData\"");
+
+            // セッティングのロード
+            trackingSettingsLoader?.LoadBodyTrackingSettings();
 
             // 時間リセット
             timeController?.Value.ResetTimer();

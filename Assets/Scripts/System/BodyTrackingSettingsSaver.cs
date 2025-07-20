@@ -1,0 +1,32 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using static BodyTrackingSettingsConverter;
+using VContainer;
+using System.IO;
+
+public class BodyTrackingSettingsSaver : MonoBehaviour
+{
+    IOptionGetter optionGetter;
+
+    [Inject]
+    public void Construct(IOptionGetter optionGetter)
+    {
+        this.optionGetter = optionGetter;
+    }
+
+    /// <summary>
+    /// BodyTrackingSettingsÇÃï€ë∂
+    /// </summary>
+    public void SaveBodyTrackingSettings()
+    {
+        if(optionGetter == null) { return; }
+
+        if (!Save(optionGetter.TrackingSettings))
+        {
+            Debug.LogWarning("ÅySystemÅzBodyTrackingSettingsÇÃï€ë∂Ç…é∏îsÇµÇ‹ÇµÇΩ");
+        }
+
+        Debug.Log("ÅySystemÅzBodyTrackingSettingsÇÃï€ë∂Ç…ê¨å˜");
+    }
+}

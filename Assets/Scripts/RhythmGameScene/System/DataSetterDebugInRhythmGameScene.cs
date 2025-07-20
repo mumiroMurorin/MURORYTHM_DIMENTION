@@ -11,7 +11,7 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
     [SerializeField] MusicData musicData_debug;
     [SerializeField] string chartFilePath;
     [SerializeField] float noteSpeed;
-    [SerializeField] BodyTrackingSettings bodyTrackingSettings;
+    [SerializeField] BodyTrackingSettingsDTO bodyTrackingSettings;
 
     IMusicDataSetter musicDataSetter;
     IMusicDataGetter musicDataGetter;
@@ -46,7 +46,7 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
 
         if (optionSetter == null) { return; }
         optionSetter.SetNoteSpeed(noteSpeed);
-        optionSetter.TrackingSettings.CopyOption(bodyTrackingSettings);
+        optionSetter.TrackingSettings.SetFromDTO(bodyTrackingSettings);
         
 #endif
     }

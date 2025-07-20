@@ -20,15 +20,6 @@ public class BodyLoader : MonoBehaviour, IBodyLoader
         this.spaceInputGetter = spaceInputGetter;
     }
 
-    private void Start()
-    {
-#if UNITY_EDITOR
-        if (!isUseSpaceInput) { return; }
-#endif
-
-        // トラッキングの初期化
-        spaceInputHandler?.Value.InitializeBodyTracking();
-    }
 
     void IBodyLoader.WaitForLoadBody(Action callback)
     {
@@ -39,6 +30,9 @@ public class BodyLoader : MonoBehaviour, IBodyLoader
             return;
         }
 #endif
+
+        // トラッキングの初期化
+        spaceInputHandler?.Value.InitializeBodyTracking();
 
         // トラッキング開始
         spaceInputHandler?.Value.StartTracking();

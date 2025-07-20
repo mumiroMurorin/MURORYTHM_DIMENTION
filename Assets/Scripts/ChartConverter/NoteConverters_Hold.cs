@@ -63,19 +63,19 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing, Dictionary<int, List<TimeToRange>> timeToRanges)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing, Dictionary<int, List<TimeToRange>> holdNumberToRanges)
         {
             if (dataOrigin.HoldStartData == null) { return true; }
 
             foreach (var noteOrigin in dataOrigin.HoldStartData)
             {
-                if (timeToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange)) 
+                if (holdNumberToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange)) 
                 {
                     Debug.LogWarning($"ÅyConverterÅzHoldStartÇÃïœä∑ÇÃç€ÅAä˘Ç…HoldNumberÇ™ë∂ç›ÇµÇ‹ÇµÇΩ: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                timeToRanges.Add(noteOrigin.HoldNumber, new List<TimeToRange>() { new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()) });
+                holdNumberToRanges.Add(noteOrigin.HoldNumber, new List<TimeToRange>() { new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()) });
 
                 NoteData_HoldStart noteData = new NoteData_HoldStart
                 {
@@ -83,7 +83,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.AddNoteData(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -145,13 +145,13 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing, Dictionary<int, List<TimeToRange>> timeToRanges)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing, Dictionary<int, List<TimeToRange>> holdNumberToRanges)
         {
             if (dataOrigin.HoldRelayData == null) { return true; }
 
             foreach (var noteOrigin in dataOrigin.HoldRelayData)
             {
-                if (!timeToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
+                if (!holdNumberToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
                 {
                     Debug.LogWarning($"ÅyConverterÅzHoldRelayÇÃïœä∑ÇÃç€ÅAÉmÅ[ÉcÇ™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÇ≈ÇµÇΩ: {noteOrigin.HoldNumber}");
                     return false;
@@ -166,7 +166,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.AddNoteData(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -227,13 +227,13 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing, Dictionary<int, List<TimeToRange>> timeToRanges)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing, Dictionary<int, List<TimeToRange>> holdNumberToRanges)
         {
             if (dataOrigin.HoldMeshRelayData == null) { return true; }
 
             foreach (var noteOrigin in dataOrigin.HoldMeshRelayData)
             {
-                if (!timeToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
+                if (!holdNumberToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
                 {
                     Debug.LogWarning($"ÅyConverterÅzHoldMeshRelayÇÃïœä∑ÇÃç€ÅAÉmÅ[ÉcÇ™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÇ≈ÇµÇΩ: {noteOrigin.HoldNumber}");
                     return false;
@@ -301,13 +301,13 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing, Dictionary<int, List<TimeToRange>> timeToRanges)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing, Dictionary<int, List<TimeToRange>> holdNumberToRanges)
         {
             if (dataOrigin.HoldEndData == null) { return true; }
 
             foreach (var noteOrigin in dataOrigin.HoldEndData)
             {
-                if (!timeToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
+                if (!holdNumberToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
                 {
                     Debug.LogWarning($"ÅyConverterÅzHoldEndÇÃïœä∑ÇÃç€ÅAÉmÅ[ÉcÇ™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÇ≈ÇµÇΩ: {noteOrigin.HoldNumber}");
                     return false;
@@ -322,7 +322,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.AddNoteData(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -385,13 +385,13 @@ namespace ChartConvert
             return true;
         }
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing, Dictionary<int, List<TimeToRange>> timeToRanges)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing, Dictionary<int, List<TimeToRange>> holdNumberToRanges)
         {
             if (dataOrigin.HoldEndUnjudgeData == null) { return true; }
 
             foreach (var noteOrigin in dataOrigin.HoldEndUnjudgeData)
             {
-                if (!timeToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
+                if (!holdNumberToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
                 {
                     Debug.LogWarning($"ÅyConverterÅzHoldEndUnjudgeÇÃïœä∑ÇÃç€ÅAÉmÅ[ÉcÇ™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÇ≈ÇµÇΩ: {noteOrigin.HoldNumber}");
                     return false;
@@ -405,7 +405,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.AddNoteData(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -420,13 +420,13 @@ namespace ChartConvert
     {
         Dictionary<int, List<TimeToRange>> numberToHoldMeshDataOrigin = new Dictionary<int, List<TimeToRange>>();
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             AddHoldStartData(dataOrigin, timing);
             AddHoldRelayData(dataOrigin, timing);
             AddHoldMeshRelayData(dataOrigin, timing);
-            AddHoldEndData(dataOrigin, chartData, timing);
-            AddHoldEndUnjudgeData(dataOrigin, chartData, timing);
+            AddHoldEndData(dataOrigin, onAddNoteData, timing);
+            AddHoldEndUnjudgeData(dataOrigin, onAddNoteData, timing);
 
             return true;
         }
@@ -493,7 +493,7 @@ namespace ChartConvert
             return true;
         }
 
-        private bool AddHoldEndData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        private bool AddHoldEndData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             if (dataOrigin.HoldEndData == null) { return true; }
 
@@ -508,13 +508,13 @@ namespace ChartConvert
                 }
 
                 meshList.Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
-                chartData.AddNoteData(GenerateNoteData_HoldMesh(meshList));
+                onAddNoteData(GenerateNoteData_HoldMesh(meshList));
             }
 
             return true;
         }
 
-        private bool AddHoldEndUnjudgeData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        private bool AddHoldEndUnjudgeData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             if (dataOrigin.HoldEndUnjudgeData == null) { return true; }
 
@@ -529,7 +529,7 @@ namespace ChartConvert
                 }
 
                 meshList.Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
-                chartData.AddNoteData(GenerateNoteData_HoldMesh(meshList));
+                onAddNoteData(GenerateNoteData_HoldMesh(meshList));
             }
 
             return true;

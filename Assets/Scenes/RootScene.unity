@@ -5998,14 +5998,17 @@ MonoBehaviour:
           obj: {fileID: 169492386}
         spaceInputHandler:
           obj: {fileID: 1858772567}
+        trackingSettingsLoader: {fileID: 1683062510}
     - rid: 4868282893601341441
       type: {class: Transitioner_Reload, ns: TransitionerInRootScene, asm: Assembly-CSharp}
       data:
         waitTime: 0
+        trackingSettingsSaver: {fileID: 1683062509}
     - rid: 4868282893601341442
       type: {class: Transitioner_TransitionSelectScene, ns: TransitionerInRootScene, asm: Assembly-CSharp}
       data:
         waitTime: 0
+        trackingSettingsSaver: {fileID: 1683062509}
     - rid: 4868282893601341443
       type: {class: Transitioner_Setting, ns: TransitionerInRootScene, asm: Assembly-CSharp}
       data: 
@@ -15480,6 +15483,63 @@ Transform:
   - {fileID: 933479909}
   m_Father: {fileID: 9096713374871658206}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1683062507
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1683062508}
+  - component: {fileID: 1683062509}
+  - component: {fileID: 1683062510}
+  m_Layer: 0
+  m_Name: BodyTrackingSettingsHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1683062508
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683062507}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2059081898}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1683062509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683062507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cedd27e55b521649af9a6c0f1094cc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1683062510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683062507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deffd5774cba1d940bdf2539014e31af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1690322161
 GameObject:
   m_ObjectHideFlags: 0
@@ -17396,6 +17456,7 @@ MonoBehaviour:
   - {fileID: 1227248049}
   - {fileID: 1820663993}
   - {fileID: 930470052}
+  - {fileID: 1683062507}
 --- !u!1 &1913698759
 GameObject:
   m_ObjectHideFlags: 0
@@ -18272,6 +18333,7 @@ Transform:
   - {fileID: 1868772609}
   - {fileID: 664878660}
   - {fileID: 169492387}
+  - {fileID: 1683062508}
   - {fileID: 1665867159}
   - {fileID: 930470053}
   m_Father: {fileID: 0}

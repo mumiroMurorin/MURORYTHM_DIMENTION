@@ -32,7 +32,7 @@ namespace ChartConvert
             // 分線を一つずつ取り出す
             foreach (var bar in dataOrigin.BarDatas)
             {
-                if (!SetdataFromBarData(bar, chartData, calcTiming))
+                if (!SetdataFromBarData(bar, chartData.AddNoteData, calcTiming))
                 {
                     isSucceed = false;
                 }
@@ -85,7 +85,7 @@ namespace ChartConvert
         /// <param name="barDataOrigin"></param>
         /// <param name="chartData"></param>
         /// <returns></returns>
-        private bool SetdataFromBarData(BarDataOrigin barDataOrigin, ChartData chartData, CalcTimingClass calcTiming)
+        private bool SetdataFromBarData(BarDataOrigin barDataOrigin, Action<INoteData> onAddNoteData, CalcTimingClass calcTiming)
         {
             bool isSucceed = true;
 
@@ -100,7 +100,7 @@ namespace ChartConvert
                 float bpm = sub.Bpm;
                 float timing = calcTiming.CurrentTiming;
 
-                if (!SetDataFromSubDivisionData(sub, chartData, timing))
+                if (!SetDataFromSubDivisionData(sub, onAddNoteData, timing))
                 {
                     isSucceed = false;
                 }
@@ -118,7 +118,7 @@ namespace ChartConvert
         /// <param name="chartData"></param>
         /// <param name="calcTiming"></param>
         /// <returns></returns>
-        private bool SetDataFromSubDivisionData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float secondsPassed)
+        private bool SetDataFromSubDivisionData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float secondsPassed)
         {
             bool isSucceed = true;
 
@@ -126,7 +126,7 @@ namespace ChartConvert
             // タッチ系
             foreach (var converter in unChainConverters)
             {
-                if (!converter.AddDataForGameData(dataOrigin, chartData, secondsPassed))
+                if (!converter.AddDataForGameData(dataOrigin, onAddNoteData, secondsPassed))
                 {
                     isSucceed = false;
                 }
@@ -135,7 +135,7 @@ namespace ChartConvert
             // ホールド系
             foreach (var converter in holdConverters)
             {
-                if (!converter.AddDataForGameData(dataOrigin, chartData, secondsPassed, holdNumberToRanges)) 
+                if (!converter.AddDataForGameData(dataOrigin, onAddNoteData, secondsPassed, holdNumberToRanges)) 
                 {
                     isSucceed = false;
                 }
@@ -144,7 +144,7 @@ namespace ChartConvert
             // スペースホールド系
             foreach (var converter in spaceHoldConverters)
             {
-                if (!converter.AddDataForGameData(dataOrigin, chartData, secondsPassed))
+                if (!converter.AddDataForGameData(dataOrigin, onAddNoteData, secondsPassed))
                 {
                     isSucceed = false;
                 }

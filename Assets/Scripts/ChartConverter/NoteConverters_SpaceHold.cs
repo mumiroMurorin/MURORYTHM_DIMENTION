@@ -14,7 +14,7 @@ namespace ChartConvert
     {
         readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             if (dataOrigin.SpaceHoldStartData == null) { return true; }
 
@@ -26,7 +26,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.AddNoteData(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -91,7 +91,7 @@ namespace ChartConvert
     {
         readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             if (dataOrigin.SpaceHoldRelayData == null) { return true; }
 
@@ -103,7 +103,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.AddNoteData(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -168,7 +168,7 @@ namespace ChartConvert
     {
         readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             // ì¡Ç…èàóùÇ»Çµ
             return true;
@@ -235,7 +235,7 @@ namespace ChartConvert
     {
         readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             if (dataOrigin.SpaceHoldEndData == null) { return true; }
 
@@ -247,7 +247,7 @@ namespace ChartConvert
                     Timing = timing
                 };
 
-                chartData.AddNoteData(noteData);
+                onAddNoteData(noteData);
             }
 
             return true;
@@ -312,12 +312,12 @@ namespace ChartConvert
     {
         Dictionary<int, List<TimeToVertices>> numberToHoldMeshDataOrigin = new Dictionary<int, List<TimeToVertices>>();
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             AddHoldStartData(dataOrigin, timing);
             AddHoldRelayData(dataOrigin, timing);
             AddHoldMeshRelayData(dataOrigin, timing);
-            AddHoldEndData(dataOrigin, chartData, timing);
+            AddHoldEndData(dataOrigin, onAddNoteData, timing);
 
             return true;
         }
@@ -383,7 +383,7 @@ namespace ChartConvert
             return true;
         }
 
-        private bool AddHoldEndData(SubDivisionDataOrigin dataOrigin, ChartData chartData, float timing)
+        private bool AddHoldEndData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             if (dataOrigin.SpaceHoldEndData == null) { return true; }
 
@@ -398,7 +398,7 @@ namespace ChartConvert
                 }
 
                 meshList.Add(new TimeToVertices { Vertices = noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), Timing = timing });
-                chartData.AddNoteData(GenerateNoteData_SpaceHoldMesh(meshList));
+                onAddNoteData(GenerateNoteData_SpaceHoldMesh(meshList));
             }
 
             return true;

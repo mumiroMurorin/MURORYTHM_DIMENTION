@@ -461,18 +461,12 @@ MonoBehaviour:
   chartFilePath: "MusicData/sample/\u5982\u6708\u69D8_\u6539\u5909.json"
   noteSpeed: 250
   bodyTrackingSettings:
-    isHorizontallyFlipped:
-      value: 0
-    isHandFlipped:
-      value: 0
-    isVerticallyFlipped:
-      value: 0
-    controllerLowerCenter:
-      value: {x: 0.49, y: 0.14, z: -0.61}
-    controllerLeftEdge:
-      value: {x: 0.21, y: 0.49, z: -0.61}
-    controllerRightEdge:
-      value: {x: 0.89, y: 0.37, z: -0.61}
+    isHorizontallyFlipped: 0
+    isHandFlipped: 0
+    isVerticallyFlipped: 0
+    controllerLowerCenter: {x: 0, y: 0, z: 0}
+    controllerLeftEdge: {x: 0, y: 0, z: 0}
+    controllerRightEdge: {x: 0, y: 0, z: 0}
 --- !u!1001 &135123126
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1487,6 +1481,7 @@ GameObject:
   - component: {fileID: 484755820}
   - component: {fileID: 484755821}
   - component: {fileID: 484755822}
+  - component: {fileID: 484755823}
   m_Layer: 0
   m_Name: DataLoader
   m_TagString: Untagged
@@ -1590,6 +1585,18 @@ MonoBehaviour:
     prefab: {fileID: 5040811245919378688, guid: f86714fcd0d0ad64583da1d3ff6c1222, type: 3}
   - stageType: 200
     prefab: {fileID: 5040811245919378688, guid: cc1ff57546ba1d944a915e39a55fb06d, type: 3}
+--- !u!114 &484755823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484755816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deffd5774cba1d940bdf2539014e31af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &505195064
 GameObject:
   m_ObjectHideFlags: 0
@@ -6875,7 +6882,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed07db9c99ac59f4e9da1284ad6c5307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUseSpaceInput: 0
+  isUseSpaceInput: 1
   spaceInputHandler:
     obj: {fileID: 796097596}
 --- !u!1001 &1826391570
@@ -7048,6 +7055,7 @@ MonoBehaviour:
           obj: {fileID: 1605477129}
         phaseTransitionable:
           obj: {fileID: 1853263903}
+        trackingSettingsLoader: {fileID: 484755823}
     - rid: 4334588895060557825
       type: {class: Transitioner_LoadChart, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
       data:
