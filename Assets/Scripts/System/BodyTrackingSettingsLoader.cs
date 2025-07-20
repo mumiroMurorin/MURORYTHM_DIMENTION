@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static JsonUtil.JsonWriter;
 using static JsonUtil.JsonLoader;
+using static BodyTrackingSettingsConverter;
 using VContainer;
 using System.IO;
 
@@ -23,9 +24,16 @@ public class BodyTrackingSettingsLoader : MonoBehaviour
     {
         if (optionGetter == null) { return; }
 
-        if (!BodyTrackingSettingsConverter.Load(out BodyTrackingSettingsDTO dto))
+        if (!IsExistFile())
+        {
+            Debug.Log("ÅySystemÅzBodyTrackingSettingsÇÃÉtÉ@ÉCÉãÇÕÇ†ÇËÇ‹ÇπÇÒ");
+            return;
+        }
+
+        if (!Load(out BodyTrackingSettingsDTO dto))
         {
             Debug.LogWarning("ÅySystemÅzBodyTrackingSettingsÇÃÉçÅ[ÉhÇ…é∏îsÇµÇ‹ÇµÇΩ");
+            return;
         }
 
         optionGetter.TrackingSettings.SetFromDTO(dto);
@@ -50,5 +58,11 @@ public static class BodyTrackingSettingsConverter
         string filePath = Path.Combine(Application.persistentDataPath, FILE_NAME);
 
         return TryLoadFromJsonFile(filePath, out settingsDTO);
+    }
+
+    public static bool IsExistFile()
+    {
+        string filePath = Path.Combine(Application.persistentDataPath, FILE_NAME);
+        return File.Exists(filePath);
     }
 }

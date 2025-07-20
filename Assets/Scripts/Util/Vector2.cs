@@ -140,5 +140,5 @@ public class SimpleVector3
         z = v.z;
     }
 
-    public Vector2 ToVector3() => new Vector3(x, y, z);
+    public Vector3 ToVector3() => new Vector3(x, y, z);
 }

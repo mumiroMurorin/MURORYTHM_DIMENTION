@@ -164,7 +164,6 @@ namespace JsonUtil
             try
             {
                 string json = File.ReadAllText(filePath);
-                Debug.Log($"{filePath} \n{json}");
                 result = JsonConvert.DeserializeObject<T>(json);
                 return true;
             }

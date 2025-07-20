@@ -65,12 +65,12 @@ public class BodyTrackingSettings
     {
         if(dto == null) { return; }
 
-        SetIsHorizontallyFlipped(dto.IsHorizontallyFlipped);
-        SetIsVerticallyFlipped(dto.IsVerticallyFlipped);
-        SetIsHandFlipped(dto.IsHandFlipped);
-        SetControllerLowerCenter(dto.ControllerLowerCenter);
-        SetControllerLeftEdge(dto.ControllerLeftEdge);
-        SetControllerRightEdge(dto.ControllerRightEdge);
+        SetIsHorizontallyFlipped(dto.isHorizontallyFlipped);
+        SetIsVerticallyFlipped(dto.isVerticallyFlipped);
+        SetIsHandFlipped(dto.isHandFlipped);
+        SetControllerLowerCenter(dto.controllerLowerCenter.ToVector3());
+        SetControllerLeftEdge(dto.controllerLeftEdge.ToVector3());
+        SetControllerRightEdge(dto.controllerRightEdge.ToVector3());
     }
 }
 
@@ -80,6 +80,8 @@ public class BodyTrackingSettings
 [System.Serializable]
 public class BodyTrackingSettingsDTO
 {
+    public BodyTrackingSettingsDTO() { }
+
     public BodyTrackingSettingsDTO(BodyTrackingSettings settings)
     {
         this.isHorizontallyFlipped = settings.IsHorizontallyFlipped.Value;
@@ -91,26 +93,20 @@ public class BodyTrackingSettingsDTO
     }
 
     // トラッキングの左右反転
-    [SerializeField] bool isHorizontallyFlipped;
-    public bool IsHorizontallyFlipped { get { return isHorizontallyFlipped; } }
+    public bool isHorizontallyFlipped;
 
     // 手の左右識別反転
-    [SerializeField] bool isHandFlipped;
-    public bool IsHandFlipped { get { return isHandFlipped; } }
+    public bool isHandFlipped;
 
     // トラッキングの左右識別反転
-    [SerializeField] bool isVerticallyFlipped;
-    public bool IsVerticallyFlipped { get { return isVerticallyFlipped; } }
+    public bool isVerticallyFlipped;
 
     // コントローラ真ん中(7番と8番の間)
-    [SerializeField] SimpleVector3 controllerLowerCenter;
-    public Vector3 ControllerLowerCenter { get { return controllerLowerCenter.ToVector3(); } }
+    public SimpleVector3 controllerLowerCenter;
 
     // コントローラ左端(0番)
-    [SerializeField] SimpleVector3 controllerLeftEdge;
-    public Vector3 ControllerLeftEdge { get { return controllerLeftEdge.ToVector3(); } }
+    public SimpleVector3 controllerLeftEdge;
 
     // コントローラ右端(15番)
-    [SerializeField] SimpleVector3 controllerRightEdge;
-    public Vector3 ControllerRightEdge { get { return controllerRightEdge.ToVector3(); } }
+    public SimpleVector3 controllerRightEdge;
 }
