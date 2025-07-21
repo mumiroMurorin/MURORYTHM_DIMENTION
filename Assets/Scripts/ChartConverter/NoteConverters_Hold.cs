@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using ChartEditor;
+using static JudgementUtil.Hold.HoldJudgement;
 using System;
 
 namespace ChartConvert
@@ -551,4 +552,216 @@ namespace ChartConvert
         }
     }
 
+    /// <summary>
+    /// ホールド判定点
+    /// </summary>
+    public class HoldJudgementPointConverter : IUnchainDataToRhythmGameConvertable
+    {
+        Dictionary<int, List<TimeToDetail>> numberToHoldMeshDataOrigin = new Dictionary<int, List<TimeToDetail>>();
+
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
+        {
+            AddHoldStartData(dataOrigin.HoldStartData, dataOrigin.Bpm, timing);
+            AddHoldRelayData(dataOrigin.HoldRelayData, dataOrigin.Bpm, timing);
+            AddHoldMeshRelayData(dataOrigin.HoldMeshRelayData, dataOrigin.Bpm, timing);
+            AddHoldEndData(dataOrigin.HoldEndData, onAddNoteData, dataOrigin.Bpm, timing);
+            AddHoldEndUnjudgeData(dataOrigin.HoldEndUnjudgeData, onAddNoteData, dataOrigin.Bpm, timing);
+
+            return true;
+        }
+
+        private bool AddHoldStartData(List<NoteDataOrigin_HoldStart> dataOrigin, float bpm, float timing)
+        {
+            if (dataOrigin == null) { return true; }
+
+            // 始点、メッシュデータ格納リストの作成
+            foreach (var noteOrigin in dataOrigin)
+            {
+                // 一度ディクショナリーに格納
+                List<TimeToDetail> meshList;
+                // ディクショナリーに登録されていなければ新規作成
+                if (numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out meshList))
+                {
+                    Debug.LogWarning($"【Converter】始点データが既に登録されています: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                meshList = new List<TimeToDetail>();
+                meshList.Add(new TimeToDetail(timing, noteOrigin.Range.Select(x => (float)x).ToArray(), true, bpm));
+                numberToHoldMeshDataOrigin.Add(noteOrigin.HoldNumber, meshList);
+            }
+
+            return true;
+        }
+
+        private bool AddHoldRelayData(List<NoteDataOrigin_HoldRelay> dataOrigin, float bpm, float timing)
+        {
+            if (dataOrigin == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin)
+            {
+                // ディクショナリーに登録されていなければ新規作成
+                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                {
+                    Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                meshList.Add(new TimeToDetail(timing, noteOrigin.Range.Select(x => (float)x).ToArray(), true, bpm));
+            }
+
+            return true;
+        }
+
+        private bool AddHoldMeshRelayData(List<NoteDataOrigin_HoldMeshRelay> dataOrigin, float bpm, float timing)
+        {
+            if (dataOrigin == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin)
+            {
+                // ディクショナリーに登録されていなければ新規作成
+                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                {
+                    Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                meshList.Add(new TimeToDetail(timing, noteOrigin.Range.Select(x => (float)x).ToArray(), false, bpm));
+            }
+
+            return true;
+        }
+
+        private bool AddHoldEndData(List<NoteDataOrigin_HoldEnd> dataOrigin, Action<INoteData> onAddNoteData, float bpm, float timing)
+        {
+            if (dataOrigin == null) { return true; }
+
+            // 終点、メッシュデータ格納リストにデータを追加後、譜面データに代入
+            foreach (var noteOrigin in dataOrigin)
+            {
+                // ディクショナリーに登録されていなければ返す
+                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                {
+                    Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                meshList.Add(new TimeToDetail(timing, noteOrigin.Range.Select(x => (float)x).ToArray(), true, bpm));
+
+                foreach(var note in GenerateNoteData_JudgementPoint(meshList))
+                {
+                    onAddNoteData(note);
+                }
+            }
+
+            return true;
+        }
+
+        private bool AddHoldEndUnjudgeData(List<NoteDataOrigin_HoldEndUnjudge> dataOrigin, Action<INoteData> onAddNoteData, float bpm, float timing)
+        {
+            if (dataOrigin == null) { return true; }
+
+            // 終点、メッシュデータ格納リストにデータを追加後、譜面データに代入
+            foreach (var noteOrigin in dataOrigin)
+            {
+                // ディクショナリーに登録されていなければ返す
+                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                {
+                    Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                meshList.Add(new TimeToDetail(timing, noteOrigin.Range.Select(x => (float)x).ToArray(), true, bpm));
+
+                foreach (var note in GenerateNoteData_JudgementPoint(meshList))
+                {
+                    onAddNoteData(note);
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// List＜HoldMeshOriginAndTiming＞ → List<NoteData_HoldRelayHidden>
+        /// </summary>
+        /// <param name="meshDataList"></param>
+        /// <returns></returns>
+        private List<NoteData_HoldRelayHidden> GenerateNoteData_JudgementPoint(List<TimeToDetail> timeToDetails)
+        {
+            var noteDatas = new List<NoteData_HoldRelayHidden>();
+
+            float interval = CalcInterval(timeToDetails[0].Bpm);
+            float mergin = interval / 2f;
+            int index = 0;
+
+            for (float count = timeToDetails[0].Timing; count < timeToDetails[^1].Timing; count += interval)
+            {
+                var detail = timeToDetails[index];
+
+                // インターバルの更新
+                while (index + 1 < timeToDetails.Count && timeToDetails[index + 1].Timing < count)
+                {
+                    index++;
+                    interval = CalcInterval(detail.Bpm);
+                    mergin = interval / 2f;
+                }
+
+                // 近くに判定点があったら追加しない
+                if (IsNearJudgementPoint(timeToDetails, count, mergin)) { continue; }
+
+                // 判定点の追加
+                noteDatas.Add(ConvertNoteData(timeToDetails, count));
+            }
+
+            return noteDatas;
+        }
+
+        private NoteData_HoldRelayHidden ConvertNoteData(List<TimeToDetail> details, float time)
+        {
+            var noteData = new NoteData_HoldRelayHidden();
+
+            noteData.Timing = time;
+            noteData.TimeToRanges = details.Select(x => x.ToTimeToRange()).ToList();
+            noteData.Range = GetJudgeRange(noteData.TimeToRanges, time).ToArray();
+
+            return noteData;
+        }
+
+        private bool IsNearJudgementPoint(List<TimeToDetail> details, float timing, float margin)
+        {
+            foreach(var detail in details)
+            {
+                if(Mathf.Abs(detail.Timing - timing) < margin && detail.IsJudgement) { return true; }
+            }
+
+            return false;
+        }
+
+        private float CalcInterval(float bpm)
+        {
+            // 8分間隔
+            return 30f / bpm;
+        }
+
+        private class TimeToDetail
+        {
+            public TimeToDetail(float timing, float[] range, bool isJudgement, float bpm)
+            {
+                Timing = timing;
+                Range = range;
+                IsJudgement = isJudgement;
+                Bpm = bpm;
+            }
+
+            public float Timing { get; set; }
+            public float[] Range { get; set; }
+            public float Bpm { get; set; }
+            public bool IsJudgement { get; set; }
+            public TimeToRange ToTimeToRange()
+            {
+                return new TimeToRange(this.Timing, this.Range);
+            }
+        }
+    }
 }

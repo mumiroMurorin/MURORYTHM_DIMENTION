@@ -68,13 +68,13 @@ public class NoteFactory_HoldRelayHidden : NoteFactory<NoteData_HoldRelayHidden>
         GameObject origin = Instantiate(noteObjectOriginPrefab);
 
         // ノーツオブジェクトを生成
-        GameObject noteObj = GenerateNoteObject(data.Range.Length);
+        //GameObject noteObj = GenerateNoteObject(data.Range.Length);
 
         // originにくっつける
-        noteObj.transform.SetParent(origin.transform);
+        //noteObj.transform.SetParent(origin.transform);
 
         // 角度(レーン)調整
-        noteObj.transform.eulerAngles = new Vector3(0, 0, CalcNoteTransform.NoteAngle(data.Range));
+        //noteObj.transform.eulerAngles = new Vector3(0, 0, CalcNoteTransform.NoteAngle(data.Range));
 
         // コンポーネントを取得
         NoteObject<NoteData_HoldRelayHidden> note = origin.GetComponent<NoteObject<NoteData_HoldRelayHidden>>();

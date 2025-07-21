@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System.Linq;
-using JudgementUtil.SpacaHold;
+using static JudgementUtil.SpacaHold.SpaceHoldJudgement;
 
 /// <summary>
 /// タッチノーツにアタッチされるクラス
@@ -13,6 +13,7 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     NoteData_SpaceHoldRelay noteData;
 
     Judgement bestJudgement = Judgement.Miss;
+    Vector2[] judgeRange;
     bool isJudged;
 
     /// <summary>
@@ -26,7 +27,32 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
 
     private void Update()
     {
-        // 判定時間内かつスライダーが押されているとき
+        if (noteData == null) { return; }
+
+        // 判定時間過ぎてるとき
+        if (IsPassJudgementRange())
+        {
+            SendJudgementData();
+            SetDisable();
+            return;
+        }
+
+        // 判定時間内でないとき
+        if (!IsInJudgementTimeRange()) { return; }
+
+        // 判定範囲の更新
+        // 前判定
+        if (noteData.Timing >= noteData.Timer.Time)
+        {
+            judgeRange = InterpolatePoints(noteData.TimeToVertices, noteData.Timer.Time);
+        }
+        // 後ろ判定、判定時間時のレンジをキープ
+        else
+        {
+            judgeRange = noteData.Vertices;
+        }
+
+        // 判定時間内かつ枠内に手があるとき
         if (IsInJudgementTimeRange() && IsInSpaceRange())
         {
             // 記録した判定よりいい判定だったとき判定の更新
@@ -40,13 +66,8 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
             if (bestJudgement == Judgement.Perfect)
             {
                 SendJudgementData();
+                SetDisable();
             }
-        }
-        // 判定時間を過ぎたとき
-        else if (IsPassJudgementRange())
-        {
-            SendJudgementData();
-            SetDisable();
         }
     }
 
@@ -98,7 +119,7 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
 
         var rightPos1 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand)[rightCount - 1].Pos;
         var rightPos2 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand)[rightCount - 2].Pos;
-        bool isRightIn = SpaceHoldJudgement.IsSegmentIntersectingOrInsidePolygon(rightPos1, rightPos2, noteData.Vertices);
+        bool isRightIn = IsSegmentIntersectingOrInsidePolygon(rightPos1, rightPos2, noteData.Vertices);
 
         // 左手の判定
         int leftCount = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand).Count;
@@ -106,7 +127,7 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
 
         var leftPos1 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.LeftHand)[leftCount - 1].Pos;
         var leftPos2 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.LeftHand)[leftCount - 2].Pos;
-        bool isLeftIn = SpaceHoldJudgement.IsSegmentIntersectingOrInsidePolygon(leftPos1, leftPos2, noteData.Vertices);
+        bool isLeftIn = IsSegmentIntersectingOrInsidePolygon(leftPos1, leftPos2, noteData.Vertices);
 
         return isRightIn || isLeftIn;
     }
@@ -146,6 +167,8 @@ public class NoteData_SpaceHoldRelay : INoteData, IJudgableNoteData
     public JudgementWindow JudgementWindow { get; set; }
 
     public Vector2[] Vertices { get; set; }
+
+    public List<TimeToVertices> TimeToVertices { get; set; }
 
     public Mesh Mesh { get; set; }
 

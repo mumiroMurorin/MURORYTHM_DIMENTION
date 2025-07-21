@@ -44,9 +44,6 @@ namespace JudgementUtil.Hold
                 former.Range[^1];
 
             return Enumerable.Range((int)startRange, (int)Mathf.Ceil(endRange) - (int)startRange + 1).ToList() ?? new List<int>();
-
-            //Debug.Log($"Range: {startRange} , {endRange}");
-            //Debug.Log("judgeRange: " + string.Join(",", judgeRange.Select(n => n.ToString())));
         }
     }   
 }

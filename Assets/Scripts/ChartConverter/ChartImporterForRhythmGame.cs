@@ -13,10 +13,11 @@ namespace ChartConvert
     public class ChartImporterForRhythmGame
     {
         // ここに変換関数を記述していく
-        private List<IUnchainDataToRhythmGameConvertable> unChainConverters = new List<IUnchainDataToRhythmGameConvertable>();
-        private List<IHoldDataToRhythmGameConvertable> holdConverters = new List<IHoldDataToRhythmGameConvertable>();
-        private List<ISpaceHoldDataToRhythmGameConvertable> spaceHoldConverters = new List<ISpaceHoldDataToRhythmGameConvertable>();
-        private Dictionary<int, List<TimeToRange>> holdNumberToRanges = new Dictionary<int, List<TimeToRange>>();
+        List<IUnchainDataToRhythmGameConvertable> unChainConverters = new List<IUnchainDataToRhythmGameConvertable>();
+        List<IHoldDataToRhythmGameConvertable> holdConverters = new List<IHoldDataToRhythmGameConvertable>();
+        List<ISpaceHoldDataToRhythmGameConvertable> spaceHoldConverters = new List<ISpaceHoldDataToRhythmGameConvertable>();
+        Dictionary<int, List<TimeToRange>> chainNumberToRanges = new Dictionary<int, List<TimeToRange>>();
+        Dictionary<int, List<TimeToVertices>> chainNumberToVertices = new Dictionary<int, List<TimeToVertices>>();
 
 
         public ChartData Import(ChartDataOrigin dataOrigin, INoteSpawnDataOptionHolder optionHolder)
@@ -57,8 +58,10 @@ namespace ChartConvert
                 new DynamicLeftwardConverter(),
 
                 new HoldMeshConverter(),
+                new HoldJudgementPointConverter(),
 
                 new SpaceHoldMeshConverter(),
+                new SpaceHoldJudgementPointConverter(),
             };
 
             holdConverters = new List<IHoldDataToRhythmGameConvertable>()
@@ -135,7 +138,7 @@ namespace ChartConvert
             // ホールド系
             foreach (var converter in holdConverters)
             {
-                if (!converter.AddDataForGameData(dataOrigin, onAddNoteData, secondsPassed, holdNumberToRanges)) 
+                if (!converter.AddDataForGameData(dataOrigin, onAddNoteData, secondsPassed, chainNumberToRanges)) 
                 {
                     isSucceed = false;
                 }
@@ -144,7 +147,7 @@ namespace ChartConvert
             // スペースホールド系
             foreach (var converter in spaceHoldConverters)
             {
-                if (!converter.AddDataForGameData(dataOrigin, onAddNoteData, secondsPassed))
+                if (!converter.AddDataForGameData(dataOrigin, onAddNoteData, secondsPassed, chainNumberToVertices))
                 {
                     isSucceed = false;
                 }
@@ -153,34 +156,34 @@ namespace ChartConvert
             return isSucceed;
         }
 
-        /// <summary>
-        /// ノーツが流れてくる時間を計算するクラス
-        /// </summary>
-        private class CalcTimingClass
-        {
-            float timePassedSec;
-
-            public float CurrentTiming { get { return timePassedSec; } }
-
-            public CalcTimingClass(float musicOffsetMs, float optionOffsetMs)
-            {
-                timePassedSec = -(musicOffsetMs + optionOffsetMs) / 1000f;
-            }
-
-            public float AddTiming(float beatUnit, float divNum, float bpm)
-            {
-                // 1分節の時間[sec]
-                // = 1秒間に打たれる4分音符の数 * (BeatUnit / 4f) / 分割数
-                // = (60f / 1分間に打たれる4分音符の数(BPM)) * (4f / BeatUnit) / 分割数  
-                float subDivisionSeconds = (60f / bpm) * (4f / beatUnit) / divNum;
-
-                // 次の分節の時間[sec]
-                // = 経過時間[sec] + 1分節の時間[sec]
-                timePassedSec += subDivisionSeconds;
-                return timePassedSec;
-            }
-
-        }
     }
 
+    /// <summary>
+    /// ノーツが流れてくる時間を計算するクラス
+    /// </summary>
+    public class CalcTimingClass
+    {
+        float timePassedSec;
+
+        public float CurrentTiming { get { return timePassedSec; } }
+
+        public CalcTimingClass(float musicOffsetMs, float optionOffsetMs)
+        {
+            timePassedSec = -(musicOffsetMs + optionOffsetMs) / 1000f;
+        }
+
+        public float AddTiming(float beatUnit, float divNum, float bpm)
+        {
+            // 1分節の時間[sec]
+            // = 1秒間に打たれる4分音符の数 * (BeatUnit / 4f) / 分割数
+            // = (60f / 1分間に打たれる4分音符の数(BPM)) * (4f / BeatUnit) / 分割数  
+            float subDivisionSeconds = (60f / bpm) * (4f / beatUnit) / divNum;
+
+            // 次の分節の時間[sec]
+            // = 経過時間[sec] + 1分節の時間[sec]
+            timePassedSec += subDivisionSeconds;
+            return timePassedSec;
+        }
+
+    }
 }

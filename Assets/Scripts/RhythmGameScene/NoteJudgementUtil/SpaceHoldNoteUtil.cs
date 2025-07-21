@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace JudgementUtil.SpacaHold
 {
@@ -90,6 +91,45 @@ namespace JudgementUtil.SpacaHold
             return d1 * d2 < 0 && d3 * d4 < 0;
         }
 
+        public static Vector2[] InterpolatePoints(List<TimeToVertices> timeToVertices, float timing)
+        {
+            var timeList = timeToVertices.Select(x => x.Timing).ToList();
+            int index = LowerBound(timeList, timing);
+            float ratio = (timeToVertices[index].Timing - timeToVertices[index - 1].Timing) / (timing - timeToVertices[index - 1].Timing);
+
+            return InterpolatePoints(timeToVertices[index - 1].Vertices, timeToVertices[index].Vertices, ratio);
+        }
+
+        /// <summary>
+        /// 中間点を出力
+        /// </summary>
+        /// <param name="listA"></param>
+        /// <param name="listB"></param>
+        /// <param name="ratio"></param>
+        /// <returns></returns>
+        private static Vector2[] InterpolatePoints(Vector2[] listA, Vector2[] listB, float ratio)
+        {
+            if (listA.Length != listB.Length) 
+            {
+                Debug.LogError("listAとlistBの長さが一致していません");
+                return null;
+            }
+
+            Vector2[] result = new Vector2[listA.Length];
+
+            for (int i = 0; i < listA.Length; i++)
+            {
+                Vector2 pointA = listA[i];
+                Vector2 pointB = listB[i];
+
+                // 線分ABの中の比率 ratio の点を計算（線形補間）
+                Vector2 interpolated = Vector2.Lerp(pointA, pointB, ratio);
+                result[i] = interpolated;
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// 外積
         /// </summary>
@@ -99,6 +139,26 @@ namespace JudgementUtil.SpacaHold
         private static float Cross(Vector2 a, Vector2 b)
         {
             return a.x * b.y - a.y * b.x;
+        }
+
+        /// <summary>
+        /// 二分探索
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        private static int LowerBound(List<float> list, float target)
+        {
+            int left = 0, right = list.Count;
+            while (left < right)
+            {
+                int mid = (left + right) / 2;
+                if (list[mid] < target)
+                    left = mid + 1;
+                else
+                    right = mid;
+            }
+            return left;
         }
     }
 }

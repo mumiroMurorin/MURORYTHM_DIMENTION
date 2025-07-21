@@ -24,7 +24,7 @@ namespace ChartConvert
 
     public interface ISpaceHoldDataToRhythmGameConvertable
     {
-        bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing);
+        bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing, Dictionary<int, List<TimeToVertices>> numberToVertices);
     }
 
     public interface IUnchainedNoteConvertable

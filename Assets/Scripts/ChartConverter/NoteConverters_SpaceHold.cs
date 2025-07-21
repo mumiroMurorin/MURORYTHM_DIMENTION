@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using ChartEditor;
 using System;
+using static JudgementUtil.SpacaHold.SpaceHoldJudgement;
 
 namespace ChartConvert
 {
@@ -14,15 +15,25 @@ namespace ChartConvert
     {
         readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing, Dictionary<int, List<TimeToVertices>> holdNumberToVertices)
         {
             if (dataOrigin.SpaceHoldStartData == null) { return true; }
 
             foreach (var noteOrigin in dataOrigin.SpaceHoldStartData)
             {
+                if (holdNumberToVertices.TryGetValue(noteOrigin.HoldNumber, out var timeToVertices))
+                {
+                    Debug.LogWarning($"【Converter】SpaceHoldStartの変換の際、既にHoldNumberが存在しました: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                timeToVertices = new List<TimeToVertices>() { new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()) };
+                holdNumberToVertices.Add(noteOrigin.HoldNumber, timeToVertices);
+
                 NoteData_SpaceHoldRelay noteData = new NoteData_SpaceHoldRelay
                 {
                     Vertices = noteOrigin.Vertices.Select(x=> x.ToVector2()).ToArray(),
+                    TimeToVertices = timeToVertices,
                     Timing = timing
                 };
 
@@ -91,15 +102,24 @@ namespace ChartConvert
     {
         readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing, Dictionary<int, List<TimeToVertices>> holdNumberToVertices)
         {
             if (dataOrigin.SpaceHoldRelayData == null) { return true; }
 
             foreach (var noteOrigin in dataOrigin.SpaceHoldRelayData)
             {
+                if (!holdNumberToVertices.TryGetValue(noteOrigin.HoldNumber, out var timeToVertices))
+                {
+                    Debug.LogWarning($"【Converter】SpaceHoldRelayの変換の際、ノーツが見つかりませんでした: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                timeToVertices.Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
+
                 NoteData_SpaceHoldRelay noteData = new NoteData_SpaceHoldRelay
                 {
                     Vertices = noteOrigin.Vertices.Select(x=> x.ToVector2()).ToArray(),
+                    TimeToVertices = timeToVertices,
                     Timing = timing
                 };
 
@@ -168,7 +188,7 @@ namespace ChartConvert
     {
         readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing, Dictionary<int, List<TimeToVertices>> holdNumberToVertices)
         {
             // 特に処理なし
             return true;
@@ -235,15 +255,24 @@ namespace ChartConvert
     {
         readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
 
-        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing, Dictionary<int, List<TimeToVertices>> holdNumberToVertices)
         {
             if (dataOrigin.SpaceHoldEndData == null) { return true; }
 
             foreach (var noteOrigin in dataOrigin.SpaceHoldEndData)
             {
+                if (!holdNumberToVertices.TryGetValue(noteOrigin.HoldNumber, out var timeToVertices))
+                {
+                    Debug.LogWarning($"【Converter】SpaceHoldRelayの変換の際、ノーツが見つかりませんでした: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                timeToVertices.Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
+
                 NoteData_SpaceHoldRelay noteData = new NoteData_SpaceHoldRelay
                 {
-                    Vertices = noteOrigin.Vertices.Select(x=> x.ToVector2()).ToArray(),
+                    Vertices = noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(),
+                    TimeToVertices = timeToVertices,
                     Timing = timing
                 };
 
@@ -338,7 +367,7 @@ namespace ChartConvert
                 }
 
                 meshList = new List<TimeToVertices>();
-                meshList.Add(new TimeToVertices { Vertices = noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), Timing = timing });
+                meshList.Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
                 numberToHoldMeshDataOrigin.Add(noteOrigin.HoldNumber, meshList);
             }
 
@@ -358,7 +387,7 @@ namespace ChartConvert
                     return false;
                 }
 
-                meshList.Add(new TimeToVertices { Vertices = noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), Timing = timing });
+                meshList.Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
             }
 
             return true;
@@ -377,7 +406,7 @@ namespace ChartConvert
                     return false;
                 }
 
-                meshList.Add(new TimeToVertices { Vertices = noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), Timing = timing });
+                meshList.Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
             }
 
             return true;
@@ -397,7 +426,7 @@ namespace ChartConvert
                     return false;
                 }
 
-                meshList.Add(new TimeToVertices { Vertices = noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), Timing = timing });
+                meshList.Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
                 onAddNoteData(GenerateNoteData_SpaceHoldMesh(meshList));
             }
 
@@ -417,6 +446,198 @@ namespace ChartConvert
             noteData.TimeToVertices = timeToVertices;
 
             return noteData;
+        }
+    }
+
+    /// <summary>
+    /// スペースホールド判定点
+    /// </summary>
+    public class SpaceHoldJudgementPointConverter : IUnchainDataToRhythmGameConvertable
+    {
+        Dictionary<int, List<TimeToDetail>> numberToHoldMeshDataOrigin = new Dictionary<int, List<TimeToDetail>>();
+
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
+        {
+            AddHoldStartData(dataOrigin.SpaceHoldStartData, dataOrigin.Bpm, timing);
+            AddHoldRelayData(dataOrigin.SpaceHoldRelayData, dataOrigin.Bpm, timing);
+            AddHoldMeshRelayData(dataOrigin.SpaceHoldMeshRelayData, dataOrigin.Bpm, timing);
+            AddHoldEndData(dataOrigin.SpaceHoldEndData, onAddNoteData, dataOrigin.Bpm, timing);
+
+            return true;
+        }
+
+        private bool AddHoldStartData(List<NoteDataOrigin_SpaceHoldStart> dataOrigin, float bpm, float timing)
+        {
+            if (dataOrigin == null) { return true; }
+
+            // 始点、メッシュデータ格納リストの作成
+            foreach (var noteOrigin in dataOrigin)
+            {
+                // 一度ディクショナリーに格納
+                // ディクショナリーに登録されていなければ新規作成
+                if (numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                {
+                    Debug.LogWarning($"【Converter】始点データが既に登録されています: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                meshList = new List<TimeToDetail>();
+                meshList.Add(new TimeToDetail(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), true, bpm));
+                numberToHoldMeshDataOrigin.Add(noteOrigin.HoldNumber, meshList);
+            }
+
+            return true;
+        }
+
+        private bool AddHoldRelayData(List<NoteDataOrigin_SpaceHoldRelay> dataOrigin, float bpm, float timing)
+        {
+            if (dataOrigin == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin)
+            {
+                // ディクショナリーに登録されてたらエラー
+                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                {
+                    Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                meshList.Add(new TimeToDetail(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), true, bpm));
+            }
+
+            return true;
+        }
+
+        private bool AddHoldMeshRelayData(List<NoteDataOrigin_SpaceHoldMeshRelay> dataOrigin, float bpm, float timing)
+        {
+            if (dataOrigin == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin)
+            {
+                // ディクショナリーに登録されてたらエラー
+                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                {
+                    Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                meshList.Add(new TimeToDetail(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), false, bpm));
+            }
+
+            return true;
+        }
+
+        private bool AddHoldEndData(List<NoteDataOrigin_SpaceHoldEnd> dataOrigin, Action<INoteData> onAddNoteData, float bpm, float timing)
+        {
+            if (dataOrigin == null) { return true; }
+
+            // 終点、メッシュデータ格納リストにデータを追加後、譜面データに代入
+            foreach (var noteOrigin in dataOrigin)
+            {
+                // ディクショナリーに登録されていなければ返す
+                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                {
+                    Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                meshList.Add(new TimeToDetail(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), true, bpm));
+                foreach(var note in GenerateNoteData_JudgementPoint(meshList)) { onAddNoteData(note); }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// List＜HoldMeshOriginAndTiming＞ → List<NoteData_SpaceHoldRelayHidden>
+        /// </summary>
+        /// <param name="meshDataList"></param>
+        /// <returns></returns>
+        private List<NoteData_SpaceHoldRelayHidden> GenerateNoteData_JudgementPoint(List<TimeToDetail> timeToDetails)
+        {
+            var noteDatas = new List<NoteData_SpaceHoldRelayHidden>();
+
+            float interval = CalcInterval(timeToDetails[0].Bpm);
+            float mergin = interval / 2f;
+            int index = 0;
+
+            for (float count = timeToDetails[0].Timing; count < timeToDetails[^1].Timing; count += interval)
+            {
+                var detail = timeToDetails[index];
+
+                // インターバルの更新
+                while (index + 1 < timeToDetails.Count && timeToDetails[index + 1].Timing < count)
+                {
+                    index++;
+                    interval = CalcInterval(detail.Bpm);
+                    mergin = interval / 2f;
+                }
+
+                // 近くに判定点があったら追加しない
+                if (IsNearJudgementPoint(timeToDetails, count, mergin)) { continue; }
+
+                // 判定点の追加
+                noteDatas.Add(ConvertNoteData(timeToDetails, count));
+            }
+
+            return noteDatas;
+        }
+
+        private NoteData_SpaceHoldRelayHidden ConvertNoteData(List<TimeToDetail> details, float time)
+        {
+            var noteData = new NoteData_SpaceHoldRelayHidden();
+
+            Vector2[] backVertices = new Vector2[];
+            Vector2[] nextVertices = new Vector2[];
+
+            for(int i = 1; i < details.Count; i++)
+            {
+                if(details[i].Timing < time) { continue; }
+                backVertices = details[i - 1].Vertices;
+                nextVertices = details[i].Vertices;
+            }
+
+            noteData.Timing = time;
+            noteData.Vertices = InterpolatePoints(backVertices,nextVertices, time).ToArray();
+
+            return noteData;
+        }
+
+        private bool IsNearJudgementPoint(List<TimeToDetail> details, float timing, float margin)
+        {
+            foreach (var detail in details)
+            {
+                if (Mathf.Abs(detail.Timing - timing) < margin && detail.IsJudgement) { return true; }
+            }
+
+            return false;
+        }
+
+        private float CalcInterval(float bpm)
+        {
+            // 8分間隔
+            return 30f / bpm;
+        }
+
+
+        private class TimeToDetail
+        {
+            public TimeToDetail(float timing, Vector2[] vertices, bool isJudgement, float bpm)
+            {
+                Timing = timing;
+                Vertices = vertices;
+                IsJudgement = isJudgement;
+                Bpm = bpm;
+            }
+
+            public float Timing { get; set; }
+            public Vector2[] Vertices { get; set; }
+            public float Bpm { get; set; }
+            public bool IsJudgement { get; set; }
+            public TimeToVertices ToTimeToRange()
+            {
+                return new TimeToVertices(this.Timing, this.Vertices);
+            }
         }
     }
 }

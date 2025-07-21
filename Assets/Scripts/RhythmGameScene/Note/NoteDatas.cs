@@ -215,6 +215,12 @@ public class TimeToRange
 /// </summary>
 public class TimeToVertices
 {
+    public TimeToVertices(float timing, Vector2[] vertices)
+    {
+        this.Timing = timing;
+        this.Vertices = vertices;
+    }
+
     public float Timing { get; set; }
     public Vector2[] Vertices { get; set; }
 }

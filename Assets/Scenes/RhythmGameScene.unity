@@ -458,15 +458,8 @@ MonoBehaviour:
     - 
     - 
     - 
-  chartFilePath: "MusicData/sample/\u5982\u6708\u69D8_\u6539\u5909.json"
+  chartFilePath: MusicData/sample/sample2.json
   noteSpeed: 250
-  bodyTrackingSettings:
-    isHorizontallyFlipped: 0
-    isHandFlipped: 0
-    isVerticallyFlipped: 0
-    controllerLowerCenter: {x: 0, y: 0, z: 0}
-    controllerLeftEdge: {x: 0, y: 0, z: 0}
-    controllerRightEdge: {x: 0, y: 0, z: 0}
 --- !u!1001 &135123126
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1967,6 +1960,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8041809009821441237, guid: 96b60450192f5b84aaa6262da9a06534, type: 3}
+      propertyPath: missEffect
+      value: 
+      objectReference: {fileID: 236632514292461701, guid: 7bbdf412a09f79c4cb14f23774e4b0ac, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
