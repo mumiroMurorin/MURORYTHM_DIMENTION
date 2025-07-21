@@ -130,6 +130,57 @@ namespace JudgementUtil.SpacaHold
             return result;
         }
 
+        public static List<Vector2> InterpolatePoints(List<Vector2> sourcePoints, List<Vector2> targetPoints, float t, int maxCount)
+        {
+            if (sourcePoints == null || targetPoints == null || sourcePoints.Count < 2 || targetPoints.Count < 2)
+            {
+                Debug.LogError("Invalid input points.");
+                return new List<Vector2>();
+            }
+
+            List<Vector2> result = new List<Vector2>();
+            float totalLength = GetTotalLength(sourcePoints);
+            float interval = totalLength / (maxCount - 1);
+
+            float accumulatedDistance = 0f;
+            int currentSegment = 0;
+
+            for (int i = 0; i < maxCount; i++)
+            {
+                float distance = i * interval;
+
+                // Advance to the segment that contains the target distance
+                while (currentSegment < sourcePoints.Count - 1 &&
+                       accumulatedDistance + Vector2.Distance(sourcePoints[currentSegment], sourcePoints[currentSegment + 1]) < distance)
+                {
+                    accumulatedDistance += Vector2.Distance(sourcePoints[currentSegment], sourcePoints[currentSegment + 1]);
+                    currentSegment++;
+                }
+
+                float segmentLength = Vector2.Distance(sourcePoints[currentSegment], sourcePoints[currentSegment + 1]);
+                float segmentT = (segmentLength == 0f) ? 0f : (distance - accumulatedDistance) / segmentLength;
+
+                // 現在のsourceとtargetの区間の補間点
+                Vector2 src = Vector2.Lerp(sourcePoints[currentSegment], sourcePoints[currentSegment + 1], segmentT);
+                Vector2 tgt = Vector2.Lerp(targetPoints[currentSegment], targetPoints[currentSegment + 1], segmentT);
+
+                // 最終的な補間
+                result.Add(Vector2.Lerp(src, tgt, t));
+            }
+
+            return result;
+        }
+
+        private static float GetTotalLength(List<Vector2> points)
+        {
+            float length = 0f;
+            for (int i = 0; i < points.Count - 1; i++)
+            {
+                length += Vector2.Distance(points[i], points[i + 1]);
+            }
+            return length;
+        }
+
         /// <summary>
         /// 外積
         /// </summary>

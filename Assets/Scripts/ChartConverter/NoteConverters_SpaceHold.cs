@@ -454,6 +454,8 @@ namespace ChartConvert
     /// </summary>
     public class SpaceHoldJudgementPointConverter : IUnchainDataToRhythmGameConvertable
     {
+        const int MESH_DIVISION_NUM = 10;
+
         Dictionary<int, List<TimeToDetail>> numberToHoldMeshDataOrigin = new Dictionary<int, List<TimeToDetail>>();
 
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
@@ -587,18 +589,22 @@ namespace ChartConvert
         {
             var noteData = new NoteData_SpaceHoldRelayHidden();
 
-            Vector2[] backVertices = new Vector2[];
-            Vector2[] nextVertices = new Vector2[];
+            Vector2[] backVertices = new Vector2[0];
+            Vector2[] nextVertices = new Vector2[0];
+            float t = 0;
 
             for(int i = 1; i < details.Count; i++)
             {
                 if(details[i].Timing < time) { continue; }
+                
                 backVertices = details[i - 1].Vertices;
                 nextVertices = details[i].Vertices;
+
+                t = (details[i].Timing - details[i - 1].Timing) / (time - details[i - 1].Timing);
             }
 
             noteData.Timing = time;
-            noteData.Vertices = InterpolatePoints(backVertices,nextVertices, time).ToArray();
+            noteData.Vertices = InterpolatePoints(backVertices.ToList(), nextVertices.ToList(), t, 10).ToArray();
 
             return noteData;
         }

@@ -5,9 +5,6 @@ using UniRx;
 using System.Linq;
 using static JudgementUtil.SpacaHold.SpaceHoldJudgement;
 
-/// <summary>
-/// タッチノーツにアタッチされるクラス
-/// </summary>
 public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
 {
     NoteData_SpaceHoldRelay noteData;
@@ -119,7 +116,7 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
 
         var rightPos1 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand)[rightCount - 1].Pos;
         var rightPos2 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand)[rightCount - 2].Pos;
-        bool isRightIn = IsSegmentIntersectingOrInsidePolygon(rightPos1, rightPos2, noteData.Vertices);
+        bool isRightIn = IsSegmentIntersectingOrInsidePolygon(rightPos1, rightPos2, judgeRange);
 
         // 左手の判定
         int leftCount = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand).Count;
@@ -127,7 +124,7 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
 
         var leftPos1 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.LeftHand)[leftCount - 1].Pos;
         var leftPos2 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.LeftHand)[leftCount - 2].Pos;
-        bool isLeftIn = IsSegmentIntersectingOrInsidePolygon(leftPos1, leftPos2, noteData.Vertices);
+        bool isLeftIn = IsSegmentIntersectingOrInsidePolygon(leftPos1, leftPos2, judgeRange);
 
         return isRightIn || isLeftIn;
     }

@@ -20,7 +20,6 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
 
     INoteSpawnDataOptionHolder optionHolder;
     ISliderInputGetter sliderInputGetter;
-    IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
     GameObject groundObject;
     Deformer groundDeformer;
@@ -31,7 +30,6 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         this.groundObject = initializingData.GroundObject;
         this.groundDeformer = initializingData.GroundDeformer;
         this.sliderInputGetter = initializingData.SliderInputGetter;
-        this.judgementRecorder = initializingData.JudgementRecorder;
         this.timer = initializingData.Timer;
     }
 
