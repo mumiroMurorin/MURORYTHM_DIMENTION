@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: 7947380020270672316}
   - component: {fileID: 7507685374718297931}
   - component: {fileID: 2378236554927455431}
+  - component: {fileID: 8767408982992842242}
   - component: {fileID: 6673232370638861221}
   m_Layer: 9
   m_Name: ScalableColliderRight
@@ -185,6 +186,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d4dece7e41b5d148ac938a6cb1e0698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  note:
+    obj: {fileID: 5475620226950634511}
+--- !u!114 &8767408982992842242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3511318229296851223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f4399c2d0e5184090d43d7e4b52665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   note:
@@ -265,7 +280,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 84794a0467fabb04dad8cba7fc6dee00, type: 2}
+  - {fileID: 2100000, guid: 21d004c48c3ad564da4a34105666a7c9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -324,6 +339,7 @@ GameObject:
   - component: {fileID: 7126901341016802860}
   - component: {fileID: 5680730002281049432}
   - component: {fileID: 8571971541714523689}
+  - component: {fileID: 6470152028779950006}
   - component: {fileID: 4794746996959122190}
   - component: {fileID: 2042939825380956139}
   m_Layer: 0
@@ -417,6 +433,21 @@ MonoBehaviour:
   outlineColorOnScaling:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
     isBlinking: 1
+--- !u!114 &6470152028779950006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5475620226950634511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c88539d00265d14e9fe522aace94e47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noteMeshRenderer: {fileID: 5893660377328454484}
+  normalMaterial: {fileID: 2100000, guid: 84794a0467fabb04dad8cba7fc6dee00, type: 2}
+  divineMaterial: {fileID: 2100000, guid: 21d004c48c3ad564da4a34105666a7c9, type: 2}
 --- !u!114 &4794746996959122190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456,6 +487,7 @@ GameObject:
   - component: {fileID: 3312604737733778148}
   - component: {fileID: 2266046564571738400}
   - component: {fileID: 6495107031725986632}
+  - component: {fileID: 3094969708588845792}
   - component: {fileID: 6522748473136005971}
   m_Layer: 9
   m_Name: ScalableColliderLeft
@@ -529,6 +561,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   note:
     obj: {fileID: 5475620226950634511}
+--- !u!114 &3094969708588845792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7846833803484370955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f4399c2d0e5184090d43d7e4b52665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  note:
+    obj: {fileID: 5475620226950634511}
 --- !u!114 &6522748473136005971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -554,6 +600,7 @@ GameObject:
   - component: {fileID: 8187530652102092990}
   - component: {fileID: 8764774069622436691}
   - component: {fileID: 2228441479770991026}
+  - component: {fileID: 6533182585987689655}
   - component: {fileID: 7812852767415321886}
   m_Layer: 9
   m_Name: MovableCollider
@@ -608,6 +655,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d4dece7e41b5d148ac938a6cb1e0698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  note:
+    obj: {fileID: 5475620226950634511}
+--- !u!114 &6533182585987689655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7983332021642989188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f4399c2d0e5184090d43d7e4b52665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   note:

@@ -281,8 +281,14 @@ namespace ChartEditor
         /// <param name="editNoteType"></param>
         private void UpdateLayer(EditNoteType editNoteType)
         {
+            // åyÇ≠Ç∑ÇÈÇΩÇﬂÇÃèàíu(å¯â Ç†ÇËÅH)
+            Physics.autoSyncTransforms = false;
+            
             groundLayerAffectables.Value.OnChangeLayer(editNoteType);
             spaceLayerAffectables.Value.OnChangeLayer(editNoteType);
+
+            Physics.SyncTransforms();
+            Physics.autoSyncTransforms = true;
         }
 
         /// <summary>

@@ -94,7 +94,7 @@ namespace ChartEditor
         #region ノーツデータ関係
 
         // 配置中のノーツタイプ
-        ReactiveProperty<DeploymentNoteType> deploymentNoteType = new ReactiveProperty<DeploymentNoteType>(ChartEditor.DeploymentNoteType.TouchNote);
+        ReactiveProperty<DeploymentNoteType> deploymentNoteType = new ReactiveProperty<DeploymentNoteType>(ChartEditor.DeploymentNoteType.Touch);
         IReadOnlyReactiveProperty<DeploymentNoteType> IChartEditorDataGetter.DeploymentNoteType => deploymentNoteType;
         void IChartEditorDataSetter.SetNoteType(DeploymentNoteType noteType)
         {

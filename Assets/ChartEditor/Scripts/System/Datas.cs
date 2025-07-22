@@ -359,7 +359,8 @@ namespace ChartEditor
     /// </summary>
     public enum DeploymentNoteType
     {
-        TouchNote = 10,
+        Touch = 10,
+        DivineTouch = 11,
 
         DynamicGroundUpward = 100,
         DynamicGroundDownward = 110,

@@ -12,7 +12,7 @@ namespace ChartConvert
     /// </summary>
     public class TouchNoteConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
     {
-        readonly DeploymentNoteType type = DeploymentNoteType.TouchNote;
+        readonly DeploymentNoteType type = DeploymentNoteType.Touch;
 
         public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
