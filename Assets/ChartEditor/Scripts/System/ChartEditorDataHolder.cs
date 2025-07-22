@@ -174,6 +174,17 @@ namespace ChartEditor
         }
 
         #endregion
+
+        #region スクリーンサイズ
+
+        ReactiveProperty<Resolution> resolution = new ReactiveProperty<Resolution>(ChartEditor.Resolution.w1920_1080);
+        public IReadOnlyReactiveProperty<Resolution> Resolution => resolution;
+        public void SetResolution(Resolution resolution)
+        {
+            this.resolution.Value = resolution;
+        }
+
+        #endregion
     }
 
     public interface IChartEditorDataGetter
@@ -200,6 +211,7 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<AudioClip> Music { get; }
 
+        IReadOnlyReactiveProperty<Resolution> Resolution { get; }
     }
 
     public interface IChartEditorDataSetter
@@ -227,5 +239,7 @@ namespace ChartEditor
         void SetOffset(float offset);
 
         void SetMusic(AudioClip clip);
+
+        void SetResolution(Resolution resolution);
     }
 }

@@ -111,7 +111,7 @@ public class NoteObject_DivineTouch : NoteObject<NoteData_DivineTouch>
 /// </summary>
 public class NoteData_DivineTouch : INoteData, IClippedJudgableNote
 {
-    public NoteType NoteType => NoteType.Touch;
+    public NoteType NoteType => NoteType.DivineTouch;
 
     public float Timing { get; set; }
 

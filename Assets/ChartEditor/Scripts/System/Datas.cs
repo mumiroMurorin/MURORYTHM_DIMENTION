@@ -355,6 +355,16 @@ namespace ChartEditor
     }
 
     /// <summary>
+    /// インデックスを明示的に宣言しないこと
+    /// </summary>
+    public enum Resolution
+    {
+        w1920_1080,
+        w1280_720,
+        fullScreen,
+    }
+
+    /// <summary>
     /// 配置ノーツ一覧
     /// </summary>
     public enum DeploymentNoteType

@@ -20,10 +20,10 @@ namespace ChartEditor
 
         private void Update()
         {
+            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.ChangeType) { return; }
+
             // 左クリック
             if (Input.GetMouseButtonDown(0)) { ChangeNoteTypeOnClick(); }
-            // 右クリック時、タイプ変更モード解除
-            else if (Input.GetMouseButtonDown(1)) { OnEndChangeMode(); }
         }
 
         /// <summary>
@@ -31,7 +31,6 @@ namespace ChartEditor
         /// </summary>
         private void ChangeNoteTypeOnClick()
         {
-            if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.ChangeType) { return; }
 
             var collider = chartEditorDataGetter.GetInteractableCollider<IChangableCollider>();
             if (collider == null) { return; }
@@ -51,11 +50,6 @@ namespace ChartEditor
         {
             changableObject.NoteData.ChangeNoteType(isDone);
             changableObject.OnChangeNoteType();
-        }
-
-        private void OnEndChangeMode()
-        {
-            chartEditorDataSetter.SetEditMode(EditMode.None);
         }
     }
 

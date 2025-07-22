@@ -95,7 +95,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
     public void Generate(Action callback = null)
     {
         GenerateTouchNote(chartDataGetter.Chart.GetNoteDataList(NoteType.Touch).OfType<NoteData_Touch>().ToList());
-        GenerateTouchNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DivineTouch).OfType<NoteData_DivineTouch>().ToList());
+        GenerateDevineTouchNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DivineTouch).OfType<NoteData_DivineTouch>().ToList());
         GenerateDynamicGroundUpwardNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DynamicGroundUpward).OfType<NoteData_DynamicGroundUpward>().ToList());
         GenerateDynamicGroundRightwardNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DynamicGroundRightward).OfType<NoteData_DynamicGroundRightward>().ToList());
         GenerateDynamicGroundLeftwardNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DynamicGroundLeftward).OfType<NoteData_DynamicGroundLeftward>().ToList());
@@ -132,7 +132,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
     /// 神タッチノーツの生成
     /// </summary>
     /// <param name="noteData_Touches"></param>
-    private void GenerateTouchNote(List<NoteData_DivineTouch> noteDatas)
+    private void GenerateDevineTouchNote(List<NoteData_DivineTouch> noteDatas)
     {
         if (noteDatas == null) { return; }
 

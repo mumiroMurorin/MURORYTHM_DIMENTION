@@ -26,6 +26,7 @@ namespace ChartEditor
         [SerializeField] OperationDescriptionView description_view;
         [SerializeField] ExplanationButtonView explanationButton_view;
         [SerializeField] ExplanationView explanation_view;
+        [SerializeField] ScreenSizeDropDownView screenSizeDropDown_view;
         [SerializeField] SwitchLayerButtonView switchLayerButton_view;
         [Header("Models")]
         [SerializeField] ChartDataExporter chartDataExporter_model;
@@ -106,6 +107,11 @@ namespace ChartEditor
             // 説明書の表示、非表示
             dataGetter_model?.CurrentEditMode
                 .Subscribe(explanation_view.OnChangeEditMode)
+                .AddTo(this.gameObject);
+
+            // 解像度の変更
+            dataGetter_model?.Resolution
+                .Subscribe(screenSizeDropDown_view.OnChangeResolution)
                 .AddTo(this.gameObject);
 
             // レイヤー変更ボタンのインタラクト可不可
@@ -191,6 +197,9 @@ namespace ChartEditor
 
             // 譜面縮小ボタン
             chartShortenButton_view.OnClickedListner += () => laneExtender_model.ChangeChartLength(-1);
+
+            // 解像度変更ボタン
+            screenSizeDropDown_view.OnChangeValueListner += (resolution) => editorDataSetter_model.SetResolution(resolution);
 
             // リズムコンフィグ
             rhythmConfigBar_view.OnClickedApplyButtonListner += () => configEditor_model.CloseConfig();

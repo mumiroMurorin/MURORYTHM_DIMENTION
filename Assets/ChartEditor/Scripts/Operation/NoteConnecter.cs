@@ -265,7 +265,7 @@ namespace ChartEditor
         {
             if (dataGetter.CurrentEditMode.Value != EditMode.Connecting) { return; }
 
-            dataSetter.SetEditMode(EditMode.None);
+            dataSetter.SetEditMode(EditMode.Connect);
             isConnecting = false;
         }
     }
