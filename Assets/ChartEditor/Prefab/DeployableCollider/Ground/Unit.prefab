@@ -46,6 +46,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
+  maxHeight: 0.075
+  minHeight: 0.05
+  minZ: 0.1
+  maxZ: 20
+  boxCollider: {fileID: 5680690272428923005}
 --- !u!1 &5922435924603316268
 GameObject:
   m_ObjectHideFlags: 0

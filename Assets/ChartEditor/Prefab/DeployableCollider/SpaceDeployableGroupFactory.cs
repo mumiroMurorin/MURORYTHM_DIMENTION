@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ChartEditor
 {
-    public class SpaceDeployableGroupFactory : MonoBehaviour, ILaneDeployable<SubDivisionDataInBeat>, ILayerAffectable
+    public class SpaceDeployableGroupFactory : MonoBehaviour, ILaneDeployable<SubDivisionDataInBeat>, ILayerAffectable, IScaleAffectable
     {
         [SerializeField] GameObject spaceDeployableColliderObj;
         [SerializeField] float heightOnGroundEditMode;
@@ -53,6 +53,14 @@ namespace ChartEditor
                         deployable.gameObject.transform.position = new Vector3(pos.x, heightOnSpaceEditMode, pos.z);
                         break;
                 }
+            }
+        }
+
+        void IScaleAffectable.OnChangeSize(float z)
+        {
+            foreach (var col in spaceDeployableColliders)
+            {
+                col.ChangeSize(z);
             }
         }
     }

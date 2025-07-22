@@ -54,6 +54,16 @@ namespace ChartEditor
         }
         public NoteObject GetNoteObject(IDeployableNoteData data) { return dataToNoteObject.FirstOrDefault(x => x.Data == data)?.Object; }
         public CompositeDisposable GetNoteDisposable(IDeployableNoteData data) { return dataToNoteObject.FirstOrDefault(x => x.Data == data)?.OnDestroyDisposables; }
+        public void ClearDataToNoteObjectList()
+        {
+            foreach (var pair in dataToNoteObject)
+            {
+                pair.Object?.Destroy();
+            }
+
+            dataToNoteObject.Clear();
+        }
+
 
         #endregion
 
@@ -255,6 +265,8 @@ namespace ChartEditor
         void AddDataToNoteObject(IDeployableNoteData data, NoteObject obj);
 
         bool RemoveDataToNoteObject(IDeployableNoteData data);
+
+        void ClearDataToNoteObjectList();
 
         bool RemoveVertexDataToObject(VertexData data);
 

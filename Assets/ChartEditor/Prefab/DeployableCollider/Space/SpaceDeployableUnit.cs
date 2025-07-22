@@ -6,6 +6,13 @@ namespace ChartEditor
 {
     public class SpaceDeployableUnit : MonoBehaviour
     {
+        [SerializeField] float maxHeight = 0.075f;
+        [SerializeField] float minHeight = 0.05f;
+        [SerializeField] float minZ = 0.1f;
+        [SerializeField] float maxZ = 50f;
+
+        [SerializeField] BoxCollider boxCollider;
+
         int index = 100;
 
         public AddressInChart Address { get; private set; }
@@ -13,6 +20,12 @@ namespace ChartEditor
         public void SetAddress(int barIndex, int subIndex)
         {
             Address = new AddressInChart(barIndex, subIndex, index);
+        }
+
+        public void ChangeSize(float z)
+        {
+            float heigt = Mathf.Lerp(minHeight, maxHeight, 1f - (Mathf.Clamp(z, minZ, maxZ) - minZ) / (maxZ - minZ));
+            boxCollider.size = new Vector3(boxCollider.size.x, heigt, z);
         }
 
         public Transform GetNoteDeployableUnitTransforms()

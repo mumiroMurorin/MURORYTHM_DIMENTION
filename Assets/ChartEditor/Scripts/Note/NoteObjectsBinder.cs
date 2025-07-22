@@ -58,6 +58,9 @@ namespace ChartEditor
             // 譜面データが追加された時
             dataGetter?.ChartData
                 .Subscribe(chart => {
+                    // データクリア
+                    notesSetter.ClearDataToNoteObjectList();
+
                     // 購読
                     BindForChartData(chart);
                 })

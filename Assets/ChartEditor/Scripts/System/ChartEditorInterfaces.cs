@@ -39,6 +39,11 @@ namespace ChartEditor
         void OnChangeLayer(EditNoteType editNoteType);
     }
 
+    public interface IScaleAffectable
+    {
+        void OnChangeSize(float z);
+    }
+
     /// <summary>
     /// インタラクト可能なオブジェクト(コライダー)
     /// </summary>

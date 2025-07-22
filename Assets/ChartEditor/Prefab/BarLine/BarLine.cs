@@ -20,6 +20,10 @@ namespace ChartEditor
         [SerializeField] SerializeInterface<ILayerAffectable> groundLayerAffectables;
         [SerializeField] SerializeInterface<ILayerAffectable> spaceLayerAffectables;
 
+        [Header("IScaleAffectable")]
+        [SerializeField] SerializeInterface<IScaleAffectable> groundScaleAffectable;
+        [SerializeField] SerializeInterface<IScaleAffectable> spaceScaleAffectable;
+
         IChartEditorOptionGetter optionGetter;
         IChartEditorDataGetter dataGetter;
         IReadOnlyReactiveProperty<ILinePositioner> backData;
@@ -249,6 +253,8 @@ namespace ChartEditor
             // += 1•b‚ ‚½‚è‚Ìz‹——£ * •b”
             //  = 1•b‚ ‚½‚è‚Ìz‹——£ * (60f / bpm) * (4f / beatUnit) / •ªŠ„”
             nextZ.Value = currentZ + chartLengthParSecond * (60f / bpm) * (4f / beatUnit) / divNum;
+
+            UpdateColliderSize(nextZ.Value - currentZ);
         }
 
         /// <summary>
@@ -265,6 +271,8 @@ namespace ChartEditor
             // += 1•b‚ ‚½‚è‚Ìz‹——£ * •b”
             //  = 1•b‚ ‚½‚è‚Ìz‹——£ * (60f / bpm) * (4f / beatUnit) / •ªŠ„”
             nextZ.Value = transform.position.z + chartLengthParSecond * (60f / bpm) * (4f / beatUnit) / divNum;
+
+            UpdateColliderSize(nextZ.Value - transform.position.z);
         }
 
         /// <summary>
@@ -275,6 +283,15 @@ namespace ChartEditor
         {
             groundLayerAffectables.Value.OnChangeLayer(editNoteType);
             spaceLayerAffectables.Value.OnChangeLayer(editNoteType);
+        }
+
+        /// <summary>
+        /// ”z’uêŠ‚Ì‘å‚«‚³‚ğXV‚·‚é
+        /// </summary>
+        private void UpdateColliderSize(float z)
+        {
+            spaceScaleAffectable.Value.OnChangeSize(z);
+            groundScaleAffectable.Value.OnChangeSize(z);
         }
 
         #endregion 
@@ -363,15 +380,6 @@ namespace ChartEditor
             subDivisionLine.Initialize(subData, backData, optionGetter);
 
             return obj;
-        }
-
-        /// <summary>
-        /// ¬ß“à‚ÅŠg‘åk¬
-        /// </summary>
-        public void Scaling(float current, float previous)
-        {
-            // •ªü‚àƒXƒP[ƒŠƒ“ƒO
-            AdjustPositionOnChangeLineData();
         }
     }
 

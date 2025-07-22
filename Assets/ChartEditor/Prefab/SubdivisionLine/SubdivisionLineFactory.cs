@@ -20,7 +20,7 @@ namespace ChartEditor
             subdivisionLines = new List<SubdivisionLine>();
         }
 
-        GameObject ILaneDeployable<SubDivisionDataInBeat>.Deploy(SubDivisionDataInBeat subDivisionData, Vector3 pos,Transform parent)
+        GameObject ILaneDeployable<SubDivisionDataInBeat>.Deploy(SubDivisionDataInBeat subDivisionData, Vector3 pos, Transform parent)
         {
             GameObject obj = Instantiate(subdivisionLineObj);
             if (parent) { obj.transform.SetParent(parent); }

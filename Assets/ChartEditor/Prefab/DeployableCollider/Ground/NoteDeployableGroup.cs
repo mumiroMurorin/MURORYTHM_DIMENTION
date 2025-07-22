@@ -16,6 +16,14 @@ namespace ChartEditor
             }
         }
 
+        public void ChangeSize(float z)
+        {
+            foreach (var unit in units)
+            {
+                unit.ChangeSize(z);
+            }
+        }
+
         public Transform[] GetNoteDeployableUnitTransforms()
         {
             List<Transform> transforms = new List<Transform>();

@@ -33,6 +33,9 @@ namespace ChartEditor
 
         #region Scale Šg‘å—¦
 
+        const float MAX_SCALE = 100f;
+        const float MIN_SCALE = 1f;
+
         /// <summary>
         /// 1•bŠÔ‚ÌƒOƒ‰ƒEƒ“ƒh’·‚³
         /// </summary>
@@ -41,7 +44,8 @@ namespace ChartEditor
 
         void IChartEditorOptionSetter.SetChartViewScale(float scale)
         {
-            chartViewScale.Value = Mathf.Clamp(scale, 0.1f, float.MaxValue);
+            chartViewScale.Value = Mathf.Clamp(scale, MIN_SCALE, MAX_SCALE);
+            Debug.Log(chartViewScale.Value);
         }
 
         #endregion

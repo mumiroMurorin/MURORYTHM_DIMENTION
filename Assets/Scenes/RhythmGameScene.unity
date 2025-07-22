@@ -458,7 +458,7 @@ MonoBehaviour:
     - 
     - 
     - 
-  chartFilePath: MusicData/sample/sample2.json
+  chartFilePath: "MusicData/sample/\u5982\u6708\u69D8_\u6539\u5909.json"
   noteSpeed: 250
 --- !u!1001 &135123126
 PrefabInstance:

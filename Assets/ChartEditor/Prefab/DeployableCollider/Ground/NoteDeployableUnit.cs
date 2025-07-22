@@ -8,7 +8,20 @@ namespace ChartEditor
     {
         [SerializeField] int index;
 
+        [SerializeField] float maxHeight = 0.075f;
+        [SerializeField] float minHeight = 0.05f;
+        [SerializeField] float minZ = 0.1f;
+        [SerializeField] float maxZ = 50f;
+
+        [SerializeField] BoxCollider boxCollider;
+
         public AddressInChart Address { get; private set; }
+
+        public void ChangeSize(float z)
+        {
+            float heigt = Mathf.Lerp(minHeight, maxHeight, 1f - (Mathf.Clamp(z, minZ, maxZ) - minZ) / (maxZ - minZ));
+            boxCollider.size = new Vector3(boxCollider.size.x, heigt, z);
+        }
 
         public void SetAddress(int barIndex, int subIndex)
         {

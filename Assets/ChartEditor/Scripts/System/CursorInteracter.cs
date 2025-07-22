@@ -92,8 +92,8 @@ namespace ChartEditor
 
             // 無視リストに入ってるモード中であれば無効
             if (isCursorIgnoremode) { return; }
-            // カーソル下に何もないときは無効
-            if (raycastEditMode == EditMode.None) { return; }
+            // -カーソル下に何もないときは無効-
+            // if (raycastEditMode == EditMode.None) { return; }
 
             // 長押し中は無効
             if (Input.GetMouseButton(0)) { return; }
