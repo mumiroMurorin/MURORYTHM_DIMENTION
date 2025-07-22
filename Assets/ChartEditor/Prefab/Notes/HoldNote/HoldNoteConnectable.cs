@@ -19,7 +19,7 @@ namespace ChartEditor
         [SerializeField] Material meshMaterial;
 
         [Tooltip("警告アウトライン色")]
-        [SerializeField] ColorSetting outlineColorOnStacking;
+        [SerializeField] ColorSetting outlineColorOnAlone;
 
         [Space(40)]
         [SerializeField] float meshHeight = 0.01f;
@@ -51,6 +51,7 @@ namespace ChartEditor
         GameObject meshObject;
         List<IDisposable> nextNoteDisposables = new List<IDisposable>();
         CancellationTokenSource cts = new CancellationTokenSource();
+        bool isAlone;
 
         private void Start()
         {
@@ -71,7 +72,8 @@ namespace ChartEditor
                 .Subscribe(next => {
                     DisposeHoldMesh();
                     ChangeNoteMaterial(backNote.Value, next);
-                    if(next != null)
+                    SetWarning();
+                    if (next != null)
                     {
                         BindForThisNote();
                         BindForNextNote(next);
@@ -81,6 +83,7 @@ namespace ChartEditor
 
             backNote
                 .Subscribe(back => {
+                    SetWarning();
                     ChangeNoteMaterial(back, nextNote.Value);
                 })
                 .AddTo(this.gameObject);
@@ -148,6 +151,25 @@ namespace ChartEditor
             }
 
             nextNoteDisposables = new List<IDisposable>();
+        }
+
+        /// <summary>
+        /// 警告の表示
+        /// </summary>
+        private void SetWarning()
+        {
+            // 独りぼっち
+            if (backNote.Value == null && nextNote.Value == null && !isAlone)
+            {
+                noteObject.OutlineColors.Add(outlineColorOnAlone);
+                isAlone = true;
+            }
+            // 独立でない
+            else if ((backNote.Value != null || nextNote.Value != null) && isAlone) 
+            {
+                noteObject.OutlineColors.Remove(outlineColorOnAlone);
+                isAlone = false;
+            }
         }
 
         /// <summary>
