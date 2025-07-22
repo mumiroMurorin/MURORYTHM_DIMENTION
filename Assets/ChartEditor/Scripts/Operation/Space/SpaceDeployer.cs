@@ -105,6 +105,8 @@ namespace ChartEditor
                 dataGetter.ChartData.Value.RemoveNote(deployedData);
             });
 
+            Debug.Log($"ÅyîzíuÅz:\n{deployedData.Address}");
+
             DestroyNote();
             SpawnNewNote(dataGetter.DeploymentNoteType.Value);
         }

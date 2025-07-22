@@ -12,6 +12,7 @@ namespace ChartEditor
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
 
         INotesDataGetter notesGetter;
+        INotesDataSetter notesSetter;
         IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter dataSetter;
 
@@ -23,9 +24,10 @@ namespace ChartEditor
         bool isRightAnchored;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, INotesDataGetter notesGetter)
+        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, INotesDataGetter notesGetter, INotesDataSetter notesSetter)
         {
             this.notesGetter = notesGetter;
+            this.notesSetter = notesSetter;
             this.dataGetter = dataGetter;
             this.dataSetter = dataSetter;
         }
@@ -170,6 +172,9 @@ namespace ChartEditor
             // ˆÚ“®‚ğI‚¦‚½‚Æ‚«‚Í‚¶‚ß‚Ä“o˜^
             var previousAddressCopy = new List<NoteDataToAddress>(previousAddress);
             RecordNotesMoving(previousAddressCopy, currentAddress);
+
+            // Ä‘I‘ğ
+            notesSetter.ReselectNotes();
 
             Initialize();
         }

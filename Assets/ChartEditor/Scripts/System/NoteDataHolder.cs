@@ -25,6 +25,15 @@ namespace ChartEditor
         {
             return selectingNotes.Remove(data);
         }
+        public void ReselectNotes()
+        {
+            var list = new List<IDeployableNoteData>();
+            foreach (var note in selectingNotes) { list.Add(note); }
+
+            ClearSelectingNotes();
+
+            foreach (var note in list) { TryAddSelectingNotes(note); }
+        }
         public void ClearSelectingNotes()
         {
             for (int i = selectingNotes.Count - 1; i >= 0; i--)
@@ -33,6 +42,10 @@ namespace ChartEditor
             }
         }
 
+
+        // 配置ノーツ幅
+        public int DeployNoteSize { get; set; } = 3;
+        
 
         // ノートデータ → ノートオブジェクト
         ReactiveCollection<DataToNoteObject> dataToNoteObject = new ReactiveCollection<DataToNoteObject>();
@@ -239,6 +252,8 @@ namespace ChartEditor
 
         SortedChainNoteDataList GetChainNoteList(int index);
 
+        int DeployNoteSize { get; }
+
         void AddChainNote(IChainNoteData addNote);
 
         bool RemoveChainNote(IChainNoteData addNote);
@@ -258,6 +273,8 @@ namespace ChartEditor
 
         bool TryRemoveSelectingNotes(IDeployableNoteData data);
 
+        void ReselectNotes();
+
         void ClearSelectingNotes();
 
         void SetEditingVertices(IVerticesControlableNoteData data);
@@ -267,6 +284,8 @@ namespace ChartEditor
         bool RemoveDataToNoteObject(IDeployableNoteData data);
 
         void ClearDataToNoteObjectList();
+
+        int DeployNoteSize { set; }
 
         bool RemoveVertexDataToObject(VertexData data);
 

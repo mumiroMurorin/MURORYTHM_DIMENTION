@@ -45,7 +45,6 @@ namespace ChartEditor
         void IChartEditorOptionSetter.SetChartViewScale(float scale)
         {
             chartViewScale.Value = Mathf.Clamp(scale, MIN_SCALE, MAX_SCALE);
-            Debug.Log(chartViewScale.Value);
         }
 
         #endregion

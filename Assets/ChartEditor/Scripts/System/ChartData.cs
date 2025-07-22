@@ -357,8 +357,6 @@ namespace ChartEditor
             newSubDivision.AddNote(noteData);
 
             OnAddNoteListener?.Invoke(noteData);
-
-            Debug.Log($"ÅyîzíuÅz:\n{address}");
         }
 
         /// <summary>

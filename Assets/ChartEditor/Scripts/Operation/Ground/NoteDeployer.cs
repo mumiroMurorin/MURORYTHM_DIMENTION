@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using UniRx;
-using ChartEditor;
+using System.Linq;
 using static UndoRedo.History;
 
 namespace ChartEditor
@@ -16,15 +16,18 @@ namespace ChartEditor
         [SerializeReference, SubclassSelector] IDeployableNoteData[] noteDataList;
 
         IChartEditorDataGetter dataGetter;
-
+        INotesDataGetter notesGetter;
+        INotesDataSetter notesSetter;
         IDeployableObject deployingNote;
         IDeployableNoteData deployingNoteData;
         bool isDeployedTentative;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter)
+        public void Construct(IChartEditorDataGetter dataGetter, INotesDataGetter notesGetter, INotesDataSetter notesSetter)
         {
             this.dataGetter = dataGetter;
+            this.notesGetter = notesGetter;
+            this.notesSetter = notesSetter;
         }
 
         private void Start()
@@ -54,6 +57,14 @@ namespace ChartEditor
                 {
                     if (dataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
                     DestroyNote();
+                })
+                .AddTo(this.gameObject);
+
+            // ノーツが単選択されたとき、配置サイズを変える
+            notesGetter.SelectingNotes.ObserveCountChanged()
+                .Where(count => count == 1)
+                .Subscribe(_ => {
+                    notesSetter.DeployNoteSize = notesGetter.SelectingNotes[0].Address.Range.Count;
                 })
                 .AddTo(this.gameObject);
         }
@@ -96,7 +107,7 @@ namespace ChartEditor
             if (deployingNoteData == null) { return; }
 
             var address = collider.Address;
-            deployingNoteData.SetAddress(new AddressWithinRange(address, 1));
+            deployingNoteData.SetAddress(new AddressWithinRange(address, notesGetter.DeployNoteSize));
             var deployedData = deployingNoteData;
 
             // データ上の追加
@@ -107,6 +118,8 @@ namespace ChartEditor
             () => {
                 dataGetter.ChartData.Value.RemoveNote(deployedData);
             });
+
+            Debug.Log($"【配置】:\n{deployedData.Address}");
 
             DestroyNote();
             SpawnNewNote(dataGetter.DeploymentNoteType.Value);
@@ -178,7 +191,12 @@ namespace ChartEditor
             {
                 if (data.NoteType == noteType)
                 {
-                    return data.Copy();
+                    var copy = data.Copy();
+                    var address = copy.Address;
+                    var range = Enumerable.Range(0, notesGetter.DeployNoteSize).Select(x => (float)x).ToList();
+
+                    copy.SetAddress(new AddressWithinRange(address.BarIndex, address.SubDivisionIndex, range));
+                    return copy;
                 }
             }
 
