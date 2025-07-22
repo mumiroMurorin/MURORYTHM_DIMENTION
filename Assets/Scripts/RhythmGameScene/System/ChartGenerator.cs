@@ -11,6 +11,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
 {
     [Header("それぞれのNoteFactory")]
     [SerializeField] NoteFactory<NoteData_Touch> touchNoteFactory;
+    [SerializeField] NoteFactory<NoteData_DivineTouch> divineTouchNoteFactory;
     [SerializeField] NoteFactory<NoteData_DynamicGroundUpward> dynamicGroundUpwardNoteFactory;
     [SerializeField] NoteFactory<NoteData_DynamicGroundRightward> dynamicGroundRightwardNoteFactory;
     [SerializeField] NoteFactory<NoteData_DynamicGroundLeftward> dynamicGroundLeftwardNoteFactory;
@@ -71,6 +72,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         };
 
         touchNoteFactory.Initialize(data);
+        divineTouchNoteFactory.Initialize(data);
         dynamicGroundUpwardNoteFactory.Initialize(data);
         dynamicGroundRightwardNoteFactory.Initialize(data);
         dynamicGroundLeftwardNoteFactory.Initialize(data);
@@ -93,6 +95,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
     public void Generate(Action callback = null)
     {
         GenerateTouchNote(chartDataGetter.Chart.GetNoteDataList(NoteType.Touch).OfType<NoteData_Touch>().ToList());
+        GenerateTouchNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DivineTouch).OfType<NoteData_DivineTouch>().ToList());
         GenerateDynamicGroundUpwardNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DynamicGroundUpward).OfType<NoteData_DynamicGroundUpward>().ToList());
         GenerateDynamicGroundRightwardNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DynamicGroundRightward).OfType<NoteData_DynamicGroundRightward>().ToList());
         GenerateDynamicGroundLeftwardNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DynamicGroundLeftward).OfType<NoteData_DynamicGroundLeftward>().ToList());
@@ -121,6 +124,21 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         foreach (NoteData_Touch data in noteDatas)
         {
             touchNoteFactory.Spawn(data);
+        }
+    }
+
+
+    /// <summary>
+    /// 神タッチノーツの生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateTouchNote(List<NoteData_DivineTouch> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (NoteData_DivineTouch data in noteDatas)
+        {
+            divineTouchNoteFactory.Spawn(data);
         }
     }
 

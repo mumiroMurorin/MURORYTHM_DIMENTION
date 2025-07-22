@@ -11,10 +11,10 @@ namespace ChartEditor
     public class CheckStackingCollider : MonoBehaviour, IJudgeStackingCollider
     {
         [SerializeField] List<DeploymentNoteType> warninigNoteTypes;
-        [SerializeField] Color warningOutlineColor;
-        [SerializeField] float blinkDuration = 0.5f;
 
-        [SerializeField] OutlineBehaviour outline;
+        [Tooltip("警告アウトライン色")]
+        [SerializeField] private ColorSetting outlineColorOnStacking;
+
         [SerializeField] NoteObject noteObject;
 
         public DeploymentNoteType NoteType => noteObject.NoteData.NoteType;
@@ -30,74 +30,15 @@ namespace ChartEditor
         private void AddStackList(IJudgeStackingCollider stack)
         {
             stackList.Add(stack);
-            SetOutline(true);
+            if (stackList.Count == 1) { noteObject.OutlineColors.Add(outlineColorOnStacking); }
         }
 
         private void RemoveStackList(IJudgeStackingCollider stack)
         {
             stackList.RemoveAll(s => s == stack);
-            if (stackList.Count == 0) { SetOutline(false); }
+            if (stackList.Count == 0) { noteObject.OutlineColors.Remove(outlineColorOnStacking); }
         }
 
-        private void SetOutline(bool isActive)
-        {
-            outline.enabled = isActive;
-
-            if (cts != null)
-            {
-                cts.Cancel();
-                cts.Dispose();
-            }
-
-            cts = new CancellationTokenSource();
-
-            if (!isActive) { return; }
-
-            OutlineBlinkLoopAsync(cts.Token).Forget();
-        }
-
-        /// <summary>
-        /// アウトラインの明滅を非同期ループで行う
-        /// </summary>
-        /// <param name="token"></param>
-        /// <returns></returns>
-        private async UniTask OutlineBlinkLoopAsync(CancellationToken token)
-        {
-            Color baseColor = outline.OutlineColor;
-            Color transparent = new Color(baseColor.r, baseColor.g, baseColor.b, 0.5f);
-
-            try
-            {
-                while (!token.IsCancellationRequested)
-                {
-                    await Fade(baseColor, transparent, blinkDuration, token);
-                    await Fade(transparent, baseColor, blinkDuration, token);
-                }
-            }
-            catch (OperationCanceledException)
-            {
-
-            }
-            finally
-            {
-                outline.OutlineColor = baseColor; // 最後に元の色に戻す
-            }
-        }
-
-        /// <summary>
-        /// 指定時間かけて色を補間
-        /// </summary>
-        private async UniTask Fade(Color from, Color to, float duration, CancellationToken token)
-        {
-            float t = 0f;
-            while (t < duration)
-            {
-                t += Time.deltaTime;
-                float progress = Mathf.Clamp01(t / duration);
-                outline.OutlineColor = Color.Lerp(from, to, progress);
-                await UniTask.Yield(PlayerLoopTiming.Update, token);
-            }
-        }
 
         private void OnTriggerEnter(Collider other)
         {

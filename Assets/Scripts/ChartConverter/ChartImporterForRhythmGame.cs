@@ -51,6 +51,7 @@ namespace ChartConvert
             unChainConverters = new List<IUnchainDataToRhythmGameConvertable>()
             {
                 new TouchNoteConverter(),
+                new DivineTouchNoteConverter(),
 
                 new DynamicUpwardConverter(),
                 new DynamicDownwardConverter(),

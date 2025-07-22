@@ -12,11 +12,9 @@ namespace ChartConvert
     /// </summary>
     public class TouchNoteConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
     {
-        readonly DeploymentNoteType type = DeploymentNoteType.Touch;
-
         public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
-            if (noteDataInEditor.NoteType != type) { return false; }
+            if (noteDataInEditor.NoteType != DeploymentNoteType.Touch) { return false; }
 
             // 新たにインスタンス化
             if (dataOrigin.TouchNoteData == null)
@@ -71,4 +69,68 @@ namespace ChartConvert
         }
     }
 
+    /// <summary>
+    /// 神タッチノーツ
+    /// </summary>
+    public class DivineTouchNoteConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
+    {
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        {
+            if (noteDataInEditor.NoteType != DeploymentNoteType.DivineTouch) { return false; }
+
+            // 新たにインスタンス化
+            if (dataOrigin.DivineTouchData == null)
+            {
+                dataOrigin.DivineTouchData = new List<NoteDataOrigin_DivineTouch>();
+            }
+
+            // 追加するデータのインスタンス化
+            NoteDataOrigin_DivineTouch data = new NoteDataOrigin_DivineTouch()
+            {
+                Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray()
+            };
+
+            dataOrigin.DivineTouchData.Add(data);
+            return true;
+        }
+
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
+        {
+            if (dataOrigin.DivineTouchData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.DivineTouchData)
+            {
+                NoteData_DivineTouch noteData = new NoteData_DivineTouch
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    Timing = timing
+                };
+
+                onAddNoteData(noteData);
+            }
+
+            return true;
+        }
+
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ISubDivisionDataGetter dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
+        {
+            if (dataOrigin.DivineTouchData == null) { return true; }
+
+            foreach (var noteDataOrigin in dataOrigin.DivineTouchData)
+            {
+                IDeployableNoteData noteData = new ChartEditor.NoteData_Touch();
+
+                if (noteData is not ITypeChangableNoteData typeChangableData) { return false; }
+
+                // データのセット
+                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
+                noteData.SetAddress(address);
+                typeChangableData.SetNoteType(DeploymentNoteType.DivineTouch);
+
+                onAddNoteData(noteData);
+            }
+
+            return true;
+        }
+    }
 }

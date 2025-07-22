@@ -52,6 +52,7 @@ namespace ChartConvert
 
         // タッチノーツ
         public List<NoteDataOrigin_Touch> TouchNoteData { get; set; }
+        public List<NoteDataOrigin_DivineTouch> DivineTouchData { get; set; }
         
         // ダイナミックノーツ 
         public List<NoteDataOrigin_DynamicUpward> DynamicUpwardData { get; set; }
@@ -80,6 +81,14 @@ namespace ChartConvert
     /// タッチノーツデータ
     /// </summary>
     public class NoteDataOrigin_Touch
+    {
+        public int[] Range { get; set; }
+    }
+
+    /// <summary>
+    /// 神タッチノーツデータ
+    /// </summary>
+    public class NoteDataOrigin_DivineTouch
     {
         public int[] Range { get; set; }
     }

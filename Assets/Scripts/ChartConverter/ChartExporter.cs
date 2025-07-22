@@ -30,6 +30,8 @@ namespace ChartConvert
             unchainConverters = new List<IUnchainedNoteConvertable>()
             {
                 new TouchNoteConverter(),
+                new DivineTouchNoteConverter(),
+
                 new DynamicUpwardConverter(),
                 new DynamicDownwardConverter(),
                 new DynamicRightwardConverter(),

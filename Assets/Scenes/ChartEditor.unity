@@ -16467,7 +16467,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1234950371
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16483,10 +16483,10 @@ RectTransform:
   - {fileID: 1972111938}
   m_Father: {fileID: 2094515659}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 60}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 141.5, y: -145}
+  m_SizeDelta: {x: 263, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1234950372
 MonoBehaviour:
@@ -21266,6 +21266,8 @@ MonoBehaviour:
     notePrefabs:
     - noteType: 10
       noteObject: {fileID: 5475620226950634511, guid: a3e1d74dfae71aa458e010bbb30b2e2a, type: 3}
+    - noteType: 11
+      noteObject: {fileID: 5475620226950634511, guid: a3e1d74dfae71aa458e010bbb30b2e2a, type: 3}
     - noteType: 100
       noteObject: {fileID: 5475620226950634511, guid: 3397deb5cc08664408f85453b7a11802, type: 3}
     - noteType: 110
@@ -24529,7 +24531,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 213050429}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.5405405
+  m_Size: 0.5925926
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

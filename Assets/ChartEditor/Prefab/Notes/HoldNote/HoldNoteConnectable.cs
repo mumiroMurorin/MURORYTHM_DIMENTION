@@ -17,6 +17,10 @@ namespace ChartEditor
         [SerializeField] Material relayMaterial;
         [SerializeField] Material endMaterial;
         [SerializeField] Material meshMaterial;
+
+        [Tooltip("警告アウトライン色")]
+        [SerializeField] ColorSetting outlineColorOnStacking;
+
         [Space(40)]
         [SerializeField] float meshHeight = 0.01f;
         [SerializeField] MeshRenderer noteMeshRenderer;
