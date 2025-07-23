@@ -193,13 +193,19 @@ namespace ChartEditor
             var noteObject = notesGetter.GetNoteObject(note);
             if (noteObject == null || !noteObject.TryGetComponent(out IDestroyableObject destroyableObject)) { return; }
 
-            destroyableObject.OnDestroy();
+            // コネクトの解除
+            if(note is IChainNoteData chainData) { notesGetter.RemoveChainNote(chainData); }
 
             // 購読の解除
             notesGetter.GetNoteDisposable(note).Dispose();
 
             // データの削除
             notesSetter.RemoveDataToNoteObject(note);
+
+            // 選択の解除
+            notesSetter.TryRemoveSelectingNotes(note);
+
+            destroyableObject.OnDestroy();
         }
 
         /// <summary>
@@ -224,7 +230,6 @@ namespace ChartEditor
             if (noteData is IChainNoteData chainData)
             {
                 chainData.SetNoteObject(obj.GetComponent<IConnectableObject>());
-                chainData.NoteObject.OnDestroyListner += () => { notesGetter.RemoveChainNote(chainData); };    // 削除時の挙動
                 noteConnecter.ConnectNote(chainData, chainData.ChainIndex.Value);
             }
 

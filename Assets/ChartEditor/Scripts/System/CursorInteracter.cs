@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UniRx;
 using VContainer;
 
@@ -30,6 +31,14 @@ namespace ChartEditor
             EditMode.Connecting,
             EditMode.Explanation,
             EditMode.ChangeType,
+            EditMode.VertexDeploy,
+            EditMode.VertexMove,
+            EditMode.VertexMoving,
+            EditMode.VerticesRotate,
+            EditMode.VerticesRotating,
+            EditMode.VerticesScale,
+            EditMode.VerticesScaling,
+            EditMode.VerticesSelect,
         };
 
         [Inject]
@@ -92,6 +101,10 @@ namespace ChartEditor
 
             // 無視リストに入ってるモード中であれば無効
             if (isCursorIgnoremode) { return; }
+
+            // カーソル下にUIがある場合は無視
+            if (EventSystem.current.IsPointerOverGameObject()) { return; }
+
             // -カーソル下に何もないときは無効-
             // if (raycastEditMode == EditMode.None) { return; }
 

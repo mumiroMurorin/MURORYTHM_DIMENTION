@@ -265,7 +265,7 @@ namespace ChartEditor
     /// </summary>
     public interface IConnectableObject
     {
-        Action OnDestroyListner { get; set; }
+        // Action OnDestroyListner { get; set; }
 
         Transform MeshRightEdge { get; }
 

@@ -55,6 +55,8 @@ namespace ChartEditor
         /// </summary>
         private void CopyNotes()
         {
+            if(notesGetter.SelectingNotes == null || notesGetter.SelectingNotes.Count == 0) { return; }
+
             copiedNotes = new Dictionary<IDeployableNoteData, AddressWithinRange>();
 
             foreach(var note in notesGetter.SelectingNotes)
@@ -74,7 +76,7 @@ namespace ChartEditor
             var spaceCollider = dataGetter.GetInteractableCollider<IFreedomDeployableCollider>();
 
             if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
-            if (copiedNotes == null) { return; }
+            if (copiedNotes == null || copiedNotes.Count == 0) { return; }
             if (groundCollider == null && spaceCollider == null) { return; }
 
             // コピーされたノーツをコピーしたり

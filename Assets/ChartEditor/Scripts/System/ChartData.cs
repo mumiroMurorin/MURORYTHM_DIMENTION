@@ -372,13 +372,13 @@ namespace ChartEditor
 
             if (!subDivision.RemoveNote(noteData))
             {
-                Debug.LogError($"yíœzíœ‚É¸”s‚µ‚Ü‚µ‚½:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
+                Debug.LogError($"yíœzíœ‚É¸”s‚µ‚Ü‚µ‚½:\n{address}");
             }
             else
             {
                 OnRemoveNoteListener?.Invoke(noteData);
 
-                Debug.Log($"yíœz:\n #{address.BarIndex} - {address.SubDivisionIndex} - {address.SliderIndex}");
+                Debug.Log($"yíœz:\n{address}");
             }
         }
 
