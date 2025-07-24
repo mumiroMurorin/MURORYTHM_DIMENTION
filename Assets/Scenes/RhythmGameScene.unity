@@ -458,7 +458,7 @@ MonoBehaviour:
     - 
     - 
     - 
-  chartFilePath: MusicData/sample/sample1.json
+  chartFilePath: MusicData/sample/conflict_dream.json
   noteSpeed: 250
 --- !u!1001 &135123126
 PrefabInstance:

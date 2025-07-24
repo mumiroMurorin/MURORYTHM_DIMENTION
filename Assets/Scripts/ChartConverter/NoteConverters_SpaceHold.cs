@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using ChartEditor;
 using System;
-using static JudgementUtil.SpacaHold.SpaceHoldJudgement;
+using static MeshGenerate.SpaceHoldMeshGenerator;
 
 namespace ChartConvert
 {
@@ -253,6 +253,7 @@ namespace ChartConvert
     /// </summary>
     public class SpaceHoldEndConverter : ISpaceHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
+        const int MESH_DIVISION_NUM = 10;
         readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
 
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing, Dictionary<int, List<TimeToVertices>> holdNumberToVertices)
@@ -268,6 +269,9 @@ namespace ChartConvert
                 }
 
                 timeToVertices.Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
+                VertexCountNormalizer(timeToVertices, MESH_DIVISION_NUM);
+                Debug.Log($"{string.Join(",", timeToVertices.Select(x => x.Vertices.Length))}");
+
 
                 NoteData_SpaceHoldRelay noteData = new NoteData_SpaceHoldRelay
                 {
@@ -559,9 +563,12 @@ namespace ChartConvert
         {
             var noteDatas = new List<NoteData_SpaceHoldRelayHidden>();
 
+            var timeToVertices = timeToDetails.Select(x => x.ToTimeToVertices()).ToList();
             float interval = CalcInterval(timeToDetails[0].Bpm);
             float mergin = interval / 2f;
             int index = 0;
+
+            VertexCountNormalizer(timeToVertices, MESH_DIVISION_NUM);
 
             for (float count = timeToDetails[0].Timing; count < timeToDetails[^1].Timing; count += interval)
             {
@@ -579,13 +586,13 @@ namespace ChartConvert
                 if (IsNearJudgementPoint(timeToDetails, count, mergin)) { continue; }
 
                 // ”»’è“_‚Ì’Ç‰Á
-                noteDatas.Add(ConvertNoteData(timeToDetails, count));
+                noteDatas.Add(ConvertNoteData(timeToDetails, timeToVertices, count));
             }
 
             return noteDatas;
         }
 
-        private NoteData_SpaceHoldRelayHidden ConvertNoteData(List<TimeToDetail> details, float time)
+        private NoteData_SpaceHoldRelayHidden ConvertNoteData(List<TimeToDetail> details, List<TimeToVertices> timeToVertices, float time)
         {
             var noteData = new NoteData_SpaceHoldRelayHidden();
 
@@ -604,6 +611,7 @@ namespace ChartConvert
             }
 
             noteData.Timing = time;
+            noteData.TimeToVertices = timeToVertices;
             noteData.Vertices = InterpolatePoints(backVertices.ToList(), nextVertices.ToList(), t, 10).ToArray();
 
             return noteData;
@@ -640,7 +648,7 @@ namespace ChartConvert
             public Vector2[] Vertices { get; set; }
             public float Bpm { get; set; }
             public bool IsJudgement { get; set; }
-            public TimeToVertices ToTimeToRange()
+            public TimeToVertices ToTimeToVertices()
             {
                 return new TimeToVertices(this.Timing, this.Vertices);
             }
