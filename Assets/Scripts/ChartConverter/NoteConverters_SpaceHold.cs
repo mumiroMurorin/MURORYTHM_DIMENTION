@@ -21,13 +21,13 @@ namespace ChartConvert
 
             foreach (var noteOrigin in dataOrigin.SpaceHoldStartData)
             {
-                if (holdNumberToVertices.TryGetValue(noteOrigin.HoldNumber, out var timeToVertices))
+                if (holdNumberToVertices.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"【Converter】SpaceHoldStartの変換の際、既にHoldNumberが存在しました: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                timeToVertices = new List<TimeToVertices>() { new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()) };
+                var timeToVertices = new List<TimeToVertices>() { new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()) };
                 holdNumberToVertices.Add(noteOrigin.HoldNumber, timeToVertices);
 
                 NoteData_SpaceHoldRelay noteData = new NoteData_SpaceHoldRelay
@@ -108,18 +108,18 @@ namespace ChartConvert
 
             foreach (var noteOrigin in dataOrigin.SpaceHoldRelayData)
             {
-                if (!holdNumberToVertices.TryGetValue(noteOrigin.HoldNumber, out var timeToVertices))
+                if (!holdNumberToVertices.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"【Converter】SpaceHoldRelayの変換の際、ノーツが見つかりませんでした: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                timeToVertices.Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
+                holdNumberToVertices[noteOrigin.HoldNumber].Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
 
                 NoteData_SpaceHoldRelay noteData = new NoteData_SpaceHoldRelay
                 {
                     Vertices = noteOrigin.Vertices.Select(x=> x.ToVector2()).ToArray(),
-                    TimeToVertices = timeToVertices,
+                    TimeToVertices = holdNumberToVertices[noteOrigin.HoldNumber],
                     Timing = timing
                 };
 
@@ -190,7 +190,19 @@ namespace ChartConvert
 
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing, Dictionary<int, List<TimeToVertices>> holdNumberToVertices)
         {
-            // 特に処理なし
+            if (dataOrigin.SpaceHoldMeshRelayData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.SpaceHoldMeshRelayData)
+            {
+                if (!holdNumberToVertices.ContainsKey(noteOrigin.HoldNumber))
+                {
+                    Debug.LogWarning($"【Converter】SpaceHoldMeshRelayの変換の際、ノーツが見つかりませんでした: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                holdNumberToVertices[noteOrigin.HoldNumber].Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
+            }
+
             return true;
         }
 
@@ -262,21 +274,20 @@ namespace ChartConvert
 
             foreach (var noteOrigin in dataOrigin.SpaceHoldEndData)
             {
-                if (!holdNumberToVertices.TryGetValue(noteOrigin.HoldNumber, out var timeToVertices))
+                if (!holdNumberToVertices.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"【Converter】SpaceHoldRelayの変換の際、ノーツが見つかりませんでした: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                timeToVertices.Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
-                VertexCountNormalizer(timeToVertices, MESH_DIVISION_NUM);
-                Debug.Log($"{string.Join(",", timeToVertices.Select(x => x.Vertices.Length))}");
+                holdNumberToVertices[noteOrigin.HoldNumber].Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
 
+                VertexCountNormalizer(holdNumberToVertices[noteOrigin.HoldNumber], MESH_DIVISION_NUM);
 
                 NoteData_SpaceHoldRelay noteData = new NoteData_SpaceHoldRelay
                 {
                     Vertices = noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(),
-                    TimeToVertices = timeToVertices,
+                    TimeToVertices = holdNumberToVertices[noteOrigin.HoldNumber],
                     Timing = timing
                 };
 
@@ -343,6 +354,7 @@ namespace ChartConvert
     /// </summary>
     public class SpaceHoldMeshConverter : IUnchainDataToRhythmGameConvertable
     {
+        const int MESH_DIVISION_NUM = 10;
         Dictionary<int, List<TimeToVertices>> numberToHoldMeshDataOrigin = new Dictionary<int, List<TimeToVertices>>();
 
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
@@ -364,13 +376,13 @@ namespace ChartConvert
             {
                 // 一度ディクショナリーに格納
                 // ディクショナリーに登録されていなければ新規作成
-                if (numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"【Converter】始点データが既に登録されています: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList = new List<TimeToVertices>();
+                var meshList = new List<TimeToVertices>();
                 meshList.Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
                 numberToHoldMeshDataOrigin.Add(noteOrigin.HoldNumber, meshList);
             }
@@ -385,13 +397,13 @@ namespace ChartConvert
             foreach (var noteOrigin in dataOrigin.SpaceHoldRelayData)
             {
                 // ディクショナリーに登録されてたらエラー
-                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList.Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
+                numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
             }
 
             return true;
@@ -404,13 +416,13 @@ namespace ChartConvert
             foreach (var noteOrigin in dataOrigin.SpaceHoldMeshRelayData)
             {
                 // ディクショナリーに登録されてたらエラー
-                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList.Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
+                numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
             }
 
             return true;
@@ -424,14 +436,14 @@ namespace ChartConvert
             foreach (var noteOrigin in dataOrigin.SpaceHoldEndData)
             {
                 // ディクショナリーに登録されていなければ返す
-                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList.Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
-                onAddNoteData(GenerateNoteData_SpaceHoldMesh(meshList));
+                numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
+                onAddNoteData(GenerateNoteData_SpaceHoldMesh(numberToHoldMeshDataOrigin[noteOrigin.HoldNumber]));
             }
 
             return true;
@@ -445,6 +457,7 @@ namespace ChartConvert
         private NoteData_SpaceHoldMesh GenerateNoteData_SpaceHoldMesh(List<TimeToVertices> timeToVertices)
         {
             var noteData = new NoteData_SpaceHoldMesh();
+            VertexCountNormalizer(timeToVertices, MESH_DIVISION_NUM);
 
             noteData.Timing = timeToVertices[0].Timing;
             noteData.TimeToVertices = timeToVertices;
@@ -481,13 +494,13 @@ namespace ChartConvert
             {
                 // 一度ディクショナリーに格納
                 // ディクショナリーに登録されていなければ新規作成
-                if (numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"【Converter】始点データが既に登録されています: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList = new List<TimeToDetail>();
+                var meshList = new List<TimeToDetail>();
                 meshList.Add(new TimeToDetail(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), true, bpm));
                 numberToHoldMeshDataOrigin.Add(noteOrigin.HoldNumber, meshList);
             }
@@ -502,13 +515,13 @@ namespace ChartConvert
             foreach (var noteOrigin in dataOrigin)
             {
                 // ディクショナリーに登録されてたらエラー
-                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList.Add(new TimeToDetail(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), true, bpm));
+                numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToDetail(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), true, bpm));
             }
 
             return true;
@@ -521,13 +534,13 @@ namespace ChartConvert
             foreach (var noteOrigin in dataOrigin)
             {
                 // ディクショナリーに登録されてたらエラー
-                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList.Add(new TimeToDetail(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), false, bpm));
+                numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToDetail(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), false, bpm));
             }
 
             return true;
@@ -541,14 +554,17 @@ namespace ChartConvert
             foreach (var noteOrigin in dataOrigin)
             {
                 // ディクショナリーに登録されていなければ返す
-                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"【Converter】始点データが登録されていません: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList.Add(new TimeToDetail(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), true, bpm));
-                foreach(var note in GenerateNoteData_JudgementPoint(meshList)) { onAddNoteData(note); }
+                numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToDetail(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), true, bpm));
+                foreach(var note in GenerateNoteData_JudgementPoint(numberToHoldMeshDataOrigin[noteOrigin.HoldNumber])) 
+                {
+                    onAddNoteData(note);
+                }
             }
 
             return true;
@@ -568,7 +584,9 @@ namespace ChartConvert
             float mergin = interval / 2f;
             int index = 0;
 
+            Debug.Log($"before: {string.Join(",",timeToVertices.Select(x => x.Vertices.Length))}");
             VertexCountNormalizer(timeToVertices, MESH_DIVISION_NUM);
+            Debug.Log($"after: {string.Join(",", timeToVertices.Select(x => x.Vertices.Length))}");
 
             for (float count = timeToDetails[0].Timing; count < timeToDetails[^1].Timing; count += interval)
             {
@@ -586,13 +604,13 @@ namespace ChartConvert
                 if (IsNearJudgementPoint(timeToDetails, count, mergin)) { continue; }
 
                 // 判定点の追加
-                noteDatas.Add(ConvertNoteData(timeToDetails, timeToVertices, count));
+                noteDatas.Add(ConvertNoteData(timeToVertices, count));
             }
 
             return noteDatas;
         }
 
-        private NoteData_SpaceHoldRelayHidden ConvertNoteData(List<TimeToDetail> details, List<TimeToVertices> timeToVertices, float time)
+        private NoteData_SpaceHoldRelayHidden ConvertNoteData(List<TimeToVertices> timeToVertices, float time)
         {
             var noteData = new NoteData_SpaceHoldRelayHidden();
 
@@ -600,19 +618,20 @@ namespace ChartConvert
             Vector2[] nextVertices = new Vector2[0];
             float t = 0;
 
-            for(int i = 1; i < details.Count; i++)
+            for(int i = 1; i < timeToVertices.Count; i++)
             {
-                if(details[i].Timing < time) { continue; }
+                if(timeToVertices[i].Timing < time) { continue; }
                 
-                backVertices = details[i - 1].Vertices;
-                nextVertices = details[i].Vertices;
+                backVertices = timeToVertices[i - 1].Vertices;
+                nextVertices = timeToVertices[i].Vertices;
 
-                t = (details[i].Timing - details[i - 1].Timing) / (time - details[i - 1].Timing);
+                t = (timeToVertices[i].Timing - timeToVertices[i - 1].Timing) / (time - timeToVertices[i - 1].Timing);
+                break;
             }
 
             noteData.Timing = time;
             noteData.TimeToVertices = timeToVertices;
-            noteData.Vertices = InterpolatePoints(backVertices.ToList(), nextVertices.ToList(), t, 10).ToArray();
+            noteData.Vertices = InterpolatePoints(backVertices.ToList(), nextVertices.ToList(), t, MESH_DIVISION_NUM).ToArray();
 
             return noteData;
         }

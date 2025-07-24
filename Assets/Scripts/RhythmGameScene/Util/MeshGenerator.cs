@@ -199,10 +199,10 @@ namespace MeshGenerate
             int currentMeshIndex = 0;
 
             // 最大頂点数を調べて分割数を更新する
-            foreach (var timeToVertice in timeToVertices)
+            foreach (var t in timeToVertices)
             {
-                if (meshDivisionNum < timeToVertice.Vertices.Length)
-                { meshDivisionNum = timeToVertice.Vertices.Length; }
+                if (meshDivisionNum < t.Vertices.Length)
+                { meshDivisionNum = t.Vertices.Length; }
             }
 
             // 中継点の数だけ繰り返す
@@ -216,28 +216,9 @@ namespace MeshGenerate
 
                 if (verticesCountStart != verticesCountEnd)
                 {
-                    Debug.LogError("listAとlistBの長さが一致していません");
+                    Debug.LogError($"listAとlistBの長さが一致していません: {verticesCountStart} - {verticesCountEnd}");
                     return null;
                 }
-
-                //// 頂点数が違う場合は、長いほうの辺の長さを参照して点を追加する
-                //if (verticesCountStart != verticesCountEnd)
-                //{
-                //    List<float> ratios;    // 各頂点距離の辺全体の長さに対する割合
-
-                //    // 始点終点に同数となるような頂点を打ち、頂点リストを生成
-                //    ratios = Enumerable.Range(0, meshDivisionNum - verticesCountStart).Select(i => i / ((float)meshDivisionNum - verticesCountStart - 1)).ToList();
-                //    verticesStart = GenerateVertices(timeToVertices[i].Vertices.ToList(), ratios, currentStartZ);
-
-                //    ratios = Enumerable.Range(0, meshDivisionNum - verticesCountEnd).Select(i => i / ((float)meshDivisionNum - verticesCountEnd - 1)).ToList();
-                //    verticesEnd = GenerateVertices(timeToVertices[i + 1].Vertices.ToList(), ratios, currentStartZ + depth);
-                //}
-                //// 頂点数が同じときは、そのままつなげる
-                //else
-                //{
-                //    verticesStart = GenerateVertices(timeToVertices[i].Vertices.ToList(), new List<float>(), currentStartZ);
-                //    verticesEnd = GenerateVertices(timeToVertices[i + 1].Vertices.ToList(), new List<float>(), currentStartZ + depth);
-                //}
 
                 verticesStart = GenerateVertices(timeToVertices[i].Vertices.ToList(), new List<float>(), currentStartZ);
                 verticesEnd = GenerateVertices(timeToVertices[i + 1].Vertices.ToList(), new List<float>(), currentStartZ + depth);
@@ -290,8 +271,6 @@ namespace MeshGenerate
 
             for (int i = 0; i < timeToVertices.Count - 1; i++)
             {
-                if(timeToVertices[i].Vertices.Length == minCount) { return; }
-
                 List<float> ratios;    // 各頂点距離の辺全体の長さに対する割合
                 int verticesCountStart = timeToVertices[i].Vertices.Length;    // 始点頂点数
                 int verticesCountEnd = timeToVertices[i + 1].Vertices.Length;  // 終点頂点数
@@ -305,10 +284,12 @@ namespace MeshGenerate
             }
 
             // 代入
-            for(int i= 0; i < timeToVertices.Count; i++)
+            for(int i = 0; i < timeToVertices.Count; i++)
             {
                 timeToVertices[i].Vertices = vertices[i].Select(x => (Vector2)x).ToArray();
             }
+
+            return;
         }
 
         public static List<Vector2> InterpolatePoints(List<Vector2> startVertices, List<Vector2> endVertices, float t, int minCount = 10)

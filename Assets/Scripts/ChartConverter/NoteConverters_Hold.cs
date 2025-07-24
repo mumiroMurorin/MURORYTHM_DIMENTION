@@ -70,7 +70,7 @@ namespace ChartConvert
 
             foreach (var noteOrigin in dataOrigin.HoldStartData)
             {
-                if (holdNumberToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange)) 
+                if (holdNumberToRanges.ContainsKey(noteOrigin.HoldNumber)) 
                 {
                     Debug.LogWarning($"yConverterzHoldStart‚Ì•ÏŠ·‚ÌÛAŠù‚ÉHoldNumber‚ª‘¶İ‚µ‚Ü‚µ‚½: {noteOrigin.HoldNumber}");
                     return false;
@@ -152,18 +152,18 @@ namespace ChartConvert
 
             foreach (var noteOrigin in dataOrigin.HoldRelayData)
             {
-                if (!holdNumberToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
+                if (!holdNumberToRanges.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"yConverterzHoldRelay‚Ì•ÏŠ·‚ÌÛAƒm[ƒc‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                timeToRange.Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
+                holdNumberToRanges[noteOrigin.HoldNumber].Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
 
                 NoteData_HoldRelay noteData = new NoteData_HoldRelay
                 {
                     Range = (int[])noteOrigin.Range.Clone(),
-                    TimeToRanges = timeToRange,
+                    TimeToRanges = holdNumberToRanges[noteOrigin.HoldNumber],
                     Timing = timing
                 };
 
@@ -234,13 +234,13 @@ namespace ChartConvert
 
             foreach (var noteOrigin in dataOrigin.HoldMeshRelayData)
             {
-                if (!holdNumberToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
+                if (!holdNumberToRanges.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"yConverterzHoldMeshRelay‚Ì•ÏŠ·‚ÌÛAƒm[ƒc‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                timeToRange.Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
+                holdNumberToRanges[noteOrigin.HoldNumber].Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
             }
 
             return true;
@@ -308,18 +308,18 @@ namespace ChartConvert
 
             foreach (var noteOrigin in dataOrigin.HoldEndData)
             {
-                if (!holdNumberToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
+                if (!holdNumberToRanges.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"yConverterzHoldEnd‚Ì•ÏŠ·‚ÌÛAƒm[ƒc‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                timeToRange.Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
+                holdNumberToRanges[noteOrigin.HoldNumber].Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
 
                 NoteData_HoldEnd noteData = new NoteData_HoldEnd
                 {
                     Range = (int[])noteOrigin.Range.Clone(),
-                    TimeToRanges = timeToRange,
+                    TimeToRanges = holdNumberToRanges[noteOrigin.HoldNumber],
                     Timing = timing
                 };
 
@@ -392,13 +392,13 @@ namespace ChartConvert
 
             foreach (var noteOrigin in dataOrigin.HoldEndUnjudgeData)
             {
-                if (!holdNumberToRanges.TryGetValue(noteOrigin.HoldNumber, out var timeToRange))
+                if (!holdNumberToRanges.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"yConverterzHoldEndUnjudge‚Ì•ÏŠ·‚ÌÛAƒm[ƒc‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                timeToRange.Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
+                holdNumberToRanges[noteOrigin.HoldNumber].Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
 
                 NoteData_HoldEndUnjudge noteData = new NoteData_HoldEndUnjudge
                 {
@@ -442,7 +442,7 @@ namespace ChartConvert
                 // ˆê“xƒfƒBƒNƒVƒ‡ƒiƒŠ[‚ÉŠi”[
                 List<TimeToRange> meshList;
                 // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎV‹Kì¬
-                if (numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out meshList))
+                if (numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ªŠù‚É“o˜^‚³‚ê‚Ä‚¢‚Ü‚·: {noteOrigin.HoldNumber}");
                     return false;
@@ -463,13 +463,13 @@ namespace ChartConvert
             foreach (var noteOrigin in dataOrigin.HoldRelayData)
             {
                 // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎV‹Kì¬
-                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList.Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
+                numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
             }
 
             return true;
@@ -482,13 +482,13 @@ namespace ChartConvert
             foreach (var noteOrigin in dataOrigin.HoldMeshRelayData)
             {
                 // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎV‹Kì¬
-                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList.Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
+                numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
             }
 
             return true;
@@ -502,14 +502,14 @@ namespace ChartConvert
             foreach (var noteOrigin in dataOrigin.HoldEndData)
             {
                 // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î•Ô‚·
-                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList.Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
-                onAddNoteData(GenerateNoteData_HoldMesh(meshList));
+                numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
+                onAddNoteData(GenerateNoteData_HoldMesh(numberToHoldMeshDataOrigin[noteOrigin.HoldNumber]));
             }
 
             return true;
@@ -523,14 +523,14 @@ namespace ChartConvert
             foreach (var noteOrigin in dataOrigin.HoldEndUnjudgeData)
             {
                 // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î•Ô‚·
-                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList.Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
-                onAddNoteData(GenerateNoteData_HoldMesh(meshList));
+                numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
+                onAddNoteData(GenerateNoteData_HoldMesh(numberToHoldMeshDataOrigin[noteOrigin.HoldNumber]));
             }
 
             return true;
@@ -580,7 +580,7 @@ namespace ChartConvert
                 // ˆê“xƒfƒBƒNƒVƒ‡ƒiƒŠ[‚ÉŠi”[
                 List<TimeToDetail> meshList;
                 // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎV‹Kì¬
-                if (numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out meshList))
+                if (numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ªŠù‚É“o˜^‚³‚ê‚Ä‚¢‚Ü‚·: {noteOrigin.HoldNumber}");
                     return false;
@@ -601,13 +601,13 @@ namespace ChartConvert
             foreach (var noteOrigin in dataOrigin)
             {
                 // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎV‹Kì¬
-                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList.Add(new TimeToDetail(timing, noteOrigin.Range.Select(x => (float)x).ToArray(), true, bpm));
+                numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToDetail(timing, noteOrigin.Range.Select(x => (float)x).ToArray(), true, bpm));
             }
 
             return true;
@@ -620,13 +620,13 @@ namespace ChartConvert
             foreach (var noteOrigin in dataOrigin)
             {
                 // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎV‹Kì¬
-                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList.Add(new TimeToDetail(timing, noteOrigin.Range.Select(x => (float)x).ToArray(), false, bpm));
+                numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToDetail(timing, noteOrigin.Range.Select(x => (float)x).ToArray(), false, bpm));
             }
 
             return true;
@@ -640,15 +640,15 @@ namespace ChartConvert
             foreach (var noteOrigin in dataOrigin)
             {
                 // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î•Ô‚·
-                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList.Add(new TimeToDetail(timing, noteOrigin.Range.Select(x => (float)x).ToArray(), true, bpm));
+                numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToDetail(timing, noteOrigin.Range.Select(x => (float)x).ToArray(), true, bpm));
 
-                foreach(var note in GenerateNoteData_JudgementPoint(meshList))
+                foreach(var note in GenerateNoteData_JudgementPoint(numberToHoldMeshDataOrigin[noteOrigin.HoldNumber]))
                 {
                     onAddNoteData(note);
                 }
@@ -665,15 +665,15 @@ namespace ChartConvert
             foreach (var noteOrigin in dataOrigin)
             {
                 // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î•Ô‚·
-                if (!numberToHoldMeshDataOrigin.TryGetValue(noteOrigin.HoldNumber, out var meshList))
+                if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
                     Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
-                meshList.Add(new TimeToDetail(timing, noteOrigin.Range.Select(x => (float)x).ToArray(), true, bpm));
+                numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToDetail(timing, noteOrigin.Range.Select(x => (float)x).ToArray(), true, bpm));
 
-                foreach (var note in GenerateNoteData_JudgementPoint(meshList))
+                foreach (var note in GenerateNoteData_JudgementPoint(numberToHoldMeshDataOrigin[noteOrigin.HoldNumber]))
                 {
                     onAddNoteData(note);
                 }

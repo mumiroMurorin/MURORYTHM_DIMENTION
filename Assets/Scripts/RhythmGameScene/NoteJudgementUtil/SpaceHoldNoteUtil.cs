@@ -95,7 +95,12 @@ namespace JudgementUtil.SpacaHold
         {
             var timeList = timeToVertices.Select(x => x.Timing).ToList();
             int index = LowerBound(timeList, timing) + 1;
-            float ratio = (timeToVertices[index].Timing - timeToVertices[index - 1].Timing) / (timing - timeToVertices[index - 1].Timing);
+            Debug.Log($"{index} / {timeList.Count}");
+
+            float ratio = 0f;
+            if (index < 0) { ratio = 0f; }
+            else if (index >= timeToVertices.Count) { ratio = 1f; }
+            else { ratio = (timeToVertices[index].Timing - timeToVertices[index - 1].Timing) / (timing - timeToVertices[index - 1].Timing); }
 
             return InterpolatePoints(timeToVertices[index - 1].Vertices, timeToVertices[index].Vertices, ratio);
         }
