@@ -93,16 +93,34 @@ namespace JudgementUtil.SpacaHold
 
         public static Vector2[] InterpolatePoints(List<TimeToVertices> timeToVertices, float timing)
         {
-            var timeList = timeToVertices.Select(x => x.Timing).ToList();
-            int index = LowerBound(timeList, timing) + 1;
-            Debug.Log($"{index} / {timeList.Count}");
-
+            int index = LowerBound(timeToVertices, timing);
             float ratio = 0f;
-            if (index < 0) { ratio = 0f; }
-            else if (index >= timeToVertices.Count) { ratio = 1f; }
-            else { ratio = (timeToVertices[index].Timing - timeToVertices[index - 1].Timing) / (timing - timeToVertices[index - 1].Timing); }
+            Vector2[] fromIndices;
+            Vector2[] toIndices;
 
-            return InterpolatePoints(timeToVertices[index - 1].Vertices, timeToVertices[index].Vertices, ratio);
+            // ノーツ以前
+            if (index <= 0) 
+            {
+                ratio = 0f;
+                fromIndices = timeToVertices[0].Vertices;
+                toIndices = timeToVertices[1].Vertices;
+            }
+            // ノーツ以後
+            else if (index >= timeToVertices.Count) 
+            {
+                ratio = 1f;
+                fromIndices = timeToVertices[^2].Vertices;
+                toIndices = timeToVertices[^1].Vertices;
+            }
+            // ノーツ中
+            else 
+            {
+                ratio = (timeToVertices[index].Timing - timeToVertices[index - 1].Timing) / (timing - timeToVertices[index - 1].Timing);
+                fromIndices = timeToVertices[index - 1].Vertices;
+                toIndices = timeToVertices[index].Vertices;
+            }
+
+            return InterpolatePoints(fromIndices, toIndices, ratio);
         }
 
         /// <summary>
@@ -162,13 +180,13 @@ namespace JudgementUtil.SpacaHold
         /// <param name="list"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        private static int LowerBound(List<float> list, float target)
+        private static int LowerBound(List<TimeToVertices> list, float target)
         {
             int left = 0, right = list.Count;
             while (left < right)
             {
                 int mid = (left + right) / 2;
-                if (list[mid] < target)
+                if (list[mid].Timing < target)
                     left = mid + 1;
                 else
                     right = mid;

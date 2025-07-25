@@ -102,14 +102,20 @@ namespace ChartEditor
             var disposable1 = Observable.IntervalFrame(2)
                 .Select(_ => meshLeftEdge.position)
                 .DistinctUntilChanged()
-                .Subscribe(_ => GenerateMesh(nextNote.Value.MeshRightEdge.position, nextNote.Value.MeshLeftEdge.position))
-                .AddTo(this);
+                .Subscribe(_ =>
+                {
+                    GenerateMesh(nextNote.Value.MeshRightEdge.position, nextNote.Value.MeshLeftEdge.position);
+                })
+                .AddTo(this.gameObject);
 
             var disposable2 = Observable.IntervalFrame(2)
                 .Select(_ => meshRightEdge.position)
                 .DistinctUntilChanged()
-                .Subscribe(_ => GenerateMesh(nextNote.Value.MeshRightEdge.position, nextNote.Value.MeshLeftEdge.position))
-                .AddTo(this);
+                .Subscribe(_ =>
+                {
+                    GenerateMesh(nextNote.Value.MeshRightEdge.position, nextNote.Value.MeshLeftEdge.position);
+                })
+                .AddTo(this.gameObject);
 
             nextNoteDisposables.Add(disposable1);
             nextNoteDisposables.Add(disposable2);
@@ -121,18 +127,26 @@ namespace ChartEditor
         /// <param name="nextNote"></param>
         private void BindForNextNote(IConnectableObject nextNote)
         {
+            if (nextNote == null) { return; }
+
             // 2フレームごとに位置が変わってないかチェック
             var disposable1 = Observable.IntervalFrame(2)
                 .Select(_ => nextNote.MeshLeftEdge.position)
                 .DistinctUntilChanged()
-                .Subscribe(_ => GenerateMesh(nextNote.MeshRightEdge.position, nextNote.MeshLeftEdge.position))
-                .AddTo(this);
+                .Subscribe(_ =>
+                {
+                    GenerateMesh(nextNote.MeshRightEdge.position, nextNote.MeshLeftEdge.position);
+                })
+                .AddTo(this.gameObject);
 
             var disposable2 = Observable.IntervalFrame(2)
                 .Select(_ => nextNote.MeshRightEdge.position)
                 .DistinctUntilChanged()
-                .Subscribe(_ => GenerateMesh(nextNote.MeshRightEdge.position, nextNote.MeshLeftEdge.position))
-                .AddTo(this);
+                .Subscribe(_ =>
+                {
+                    GenerateMesh(nextNote.MeshRightEdge.position, nextNote.MeshLeftEdge.position);
+                })
+                .AddTo(this.gameObject);
 
             nextNoteDisposables.Add(disposable1);
             nextNoteDisposables.Add(disposable2);

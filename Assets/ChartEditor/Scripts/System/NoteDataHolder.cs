@@ -104,7 +104,11 @@ namespace ChartEditor
         {
             // ä‹Ç‹ÇÍÇƒÇ»Ç¢Ç∆Ç´
             if (!indexToChainNoteDataList.TryGetValue(addNote.ChainIndex.Value, out var list)) { return false; }
-            return list.RemoveChainNoteData(addNote);
+            bool b = list.RemoveChainNoteData(addNote);
+
+            // ãÛÇ¡Ç€Ç…Ç»Ç¡ÇΩÇÁè¡Ç∑
+            if(list.ChainNoteList.Count == 0) { indexToChainNoteDataList.Remove(addNote.ChainIndex.Value); }
+            return b;
         }
         public SortedChainNoteDataList GetChainNoteList(int index)
         {
@@ -121,6 +125,16 @@ namespace ChartEditor
             }
             return i;
         }
+        public void ClearIndexToChainNoteDataList()
+        {
+            foreach (var i in indexToChainNoteDataList)
+            {
+                i.Value.Clear();
+            }
+
+            indexToChainNoteDataList.Clear();
+        }
+
 
         #endregion
 
@@ -236,6 +250,11 @@ namespace ChartEditor
         {
             return chainNoteList.IndexOf(targetData);
         }
+
+        public void Clear()
+        {
+            chainNoteList.Clear();
+        }
     }
 
     public interface INotesDataGetter
@@ -259,6 +278,8 @@ namespace ChartEditor
         bool RemoveChainNote(IChainNoteData addNote);
 
         int GetUsableChainNoteIndex();
+
+        void ClearIndexToChainNoteDataList();
 
         IReadOnlyReactiveCollection<DataToVertexObject> DataToVertexObject { get; }
 

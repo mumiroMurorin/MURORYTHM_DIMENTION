@@ -60,6 +60,7 @@ namespace ChartEditor
                 .Subscribe(chart => {
                     // データクリア
                     notesSetter.ClearDataToNoteObjectList();
+                    notesGetter.ClearIndexToChainNoteDataList();
 
                     // 購読
                     BindForChartData(chart);

@@ -92,13 +92,14 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
 
-        //List<TimeToVertices> timeToVertices = new List<TimeToVertices>();
-        //foreach (TimeToVertices t in noteData.TimeToVertices)
-        //{
-        //    timeToVertices.Add(new TimeToVertices(t.Timing, t.Vertices.Select(v => (Vector2)MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToArray()));
-        //}
+        // •œŒ³
+        List<TimeToVertices> timeToVertices = new List<TimeToVertices>();
+        foreach (TimeToVertices t in noteData.TimeToVertices)
+        {
+            timeToVertices.Add(new TimeToVertices(t.Timing, t.Vertices.Select(v => (Vector2)MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToArray()));
+        }
 
-        Mesh mesh = SpaceHoldMeshGenerator.GenerateSpaceHoldEdgeMesh(noteData.TimeToVertices, optionHolder.NoteSpeed.Value, meshDivisionNum, maxTriangleLength, isMeshReverse);
+        Mesh mesh = SpaceHoldMeshGenerator.GenerateSpaceHoldEdgeMesh(timeToVertices, optionHolder.NoteSpeed.Value, meshDivisionNum, maxTriangleLength, isMeshReverse);
         meshFilter.mesh = mesh;
 
         obj.AddComponent<Deformable>().AddDeformer(groundDeformer);

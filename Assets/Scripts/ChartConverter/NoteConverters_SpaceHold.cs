@@ -584,9 +584,7 @@ namespace ChartConvert
             float mergin = interval / 2f;
             int index = 0;
 
-            Debug.Log($"before: {string.Join(",",timeToVertices.Select(x => x.Vertices.Length))}");
             VertexCountNormalizer(timeToVertices, MESH_DIVISION_NUM);
-            Debug.Log($"after: {string.Join(",", timeToVertices.Select(x => x.Vertices.Length))}");
 
             for (float count = timeToDetails[0].Timing; count < timeToDetails[^1].Timing; count += interval)
             {
