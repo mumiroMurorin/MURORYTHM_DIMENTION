@@ -83,7 +83,7 @@ public class NoteObject_SpaceHoldRelayHidden : NoteObject<NoteData_SpaceHoldRela
     private void AutoJudgement()
     {
         // Å‚”»’è‚Ì‚Æ‚«Šm’è
-        if (noteData.Timing < noteData.Timer.Time) { return; }
+        if (noteData.Timing > noteData.Timer.Time) { return; }
 
         bestJudgement = Judgement.Perfect;
         SendJudgementData();

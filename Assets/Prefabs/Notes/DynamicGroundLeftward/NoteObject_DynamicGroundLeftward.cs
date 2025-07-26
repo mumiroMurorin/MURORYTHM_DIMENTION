@@ -87,7 +87,7 @@ public class NoteObject_DynamicGroundLeftward : NoteObject<NoteData_DynamicGroun
         }
 
         // Perfect‚¾‚Á‚½‚Æ‚«‚Í–â“š–³—p‚ÅPerfect
-        if (bestJudgement == Judgement.Perfect) { RecordJudgement(); }
+        if (bestJudgement == Judgement.Perfect && noteData.Timing <= noteData.Timer.Time) { RecordJudgement(); }
 
         // GreatˆÈ‰º‚¾‚Á‚½‚Æ‚«‚ÍMiss”»’è‚Ü‚Å‘Ò‚¿
 

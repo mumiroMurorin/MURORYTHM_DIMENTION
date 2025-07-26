@@ -75,7 +75,9 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
     private void NormalJudge()
     {
         // ”»’è‚ð“¾‚é
-        Judgement judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+        Judgement judgement;
+        if (noteData.OptionGetter.IsAutoMode) { judgement = Judgement.Perfect; }
+        else { judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing); }
 
         NoteJudgementData judgementData = new NoteJudgementData
         {

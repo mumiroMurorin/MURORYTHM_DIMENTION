@@ -73,7 +73,9 @@ public class NoteObject_Touch : NoteObject<NoteData_Touch>
     private void NormalJudge()
     {
         // ”»’è‚ð“¾‚é
-        Judgement judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+        Judgement judgement;
+        if (noteData.OptionGetter.IsAutoMode) { judgement = Judgement.Perfect; }
+        else { judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing); }
 
         float radian = (11.25f * ((noteData.Range[noteData.Range.Length - 1] - noteData.Range[0]) / 2f + 0.5f) - 180f) * Mathf.Deg2Rad;
 
