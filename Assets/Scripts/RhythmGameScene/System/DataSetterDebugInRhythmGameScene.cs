@@ -12,7 +12,7 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
     [SerializeField] MusicData musicData_debug;
     [SerializeField] string chartFilePath;
     [SerializeField] float noteSpeed;
-    //[SerializeField] BodyTrackingSettingsDTO bodyTrackingSettings;
+    [SerializeField] bool isAutoMode;
 
     IMusicDataSetter musicDataSetter;
     IMusicDataGetter musicDataGetter;
@@ -32,7 +32,6 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
     {
 #if UNITY_EDITOR
         if (!isDebugMode) { return; }
-        if (musicDataSetter == null) { return; }
 
         Difficulty difficulty = musicDataGetter.Difficulty.Value;
 
@@ -45,10 +44,9 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
             musicDataSetter.SetMusicData(musicData_debug);
         }
 
-        if (optionSetter == null) { return; }
         optionSetter.SetNoteSpeed(noteSpeed);
-        //optionSetter.TrackingSettings.SetFromDTO(bodyTrackingSettings);
-        
+        optionSetter.SetAutoMode(isAutoMode);
+
 #endif
     }
 }

@@ -48,6 +48,7 @@ public class NoteFactory_HoldEndUnjudge : NoteFactory<NoteData_HoldEndUnjudge>
     {
         // ノーツデータにいろいろ追加
         data.Timer = this.timer;
+        data.OptionGetter = optionHolder;
 
         return data;
     }

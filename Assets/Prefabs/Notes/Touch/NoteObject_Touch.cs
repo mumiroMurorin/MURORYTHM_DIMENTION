@@ -26,6 +26,7 @@ public class NoteObject_Touch : NoteObject<NoteData_Touch>
     private void Bind()
     {
         if (noteData == null) { return; }
+        if (noteData.OptionGetter.IsAutoMode) { return; }
 
         // 成功判定
         foreach (int index in noteData.Range)
@@ -42,17 +43,34 @@ public class NoteObject_Touch : NoteObject<NoteData_Touch>
                 .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
                 .Subscribe(_ =>
                 {
-                    Judge();
+                    NormalJudge();
                     SetDisable();
                 })
                 .AddTo(this.gameObject);
         }
     }
 
+    private void Update()
+    {
+        // オートモード時
+        if (noteData.OptionGetter.IsAutoMode && noteData.Timing <= noteData.Timer.Time)
+        {
+            NormalJudge();
+            SetDisable();
+            return;
+        }
+
+        if (JudgeMiss())
+        {
+            NormalJudge();
+            SetDisable();
+        }
+    }
+
     /// <summary>
     /// 判定
     /// </summary>
-    private void Judge()
+    private void NormalJudge()
     {
         // 判定を得る
         Judgement judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
@@ -79,16 +97,6 @@ public class NoteObject_Touch : NoteObject<NoteData_Touch>
     {
         this.gameObject.SetActive(false);
         // Destroy(this.gameObject);
-    }
-
-    private void Update()
-    {
-        if (JudgeMiss())
-        {
-            Judge();
-            SetDisable();
-        }
-
     }
 
     /// <summary>
@@ -124,5 +132,7 @@ public class NoteData_Touch : INoteData, IClippedJudgableNote
     public ITimeGetter Timer { get; set; }
 
     public IJudgementRecorder JudgementRecorder { get; set; }
+
+    public INoteSpawnDataOptionHolder OptionGetter { get; set; }
 }
 

@@ -460,6 +460,7 @@ MonoBehaviour:
     - 
   chartFilePath: MusicData/sample/conflict_dream.json
   noteSpeed: 250
+  isAutoMode: 0
 --- !u!1001 &135123126
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8131,7 +8132,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
       propertyPath: judgementSEs.Array.size
-      value: 8
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
       propertyPath: judgementSEs.Array.data[0]
@@ -8140,31 +8141,39 @@ PrefabInstance:
     - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
       propertyPath: judgementSEs.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 06a30882e7e99684a821f7a7f35d57ca, type: 2}
+      objectReference: {fileID: 11400000, guid: 50fd7c4dc5808e54394cba875597b8b1, type: 2}
     - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
       propertyPath: judgementSEs.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 33a4b314d2ad7034695dc3d47494aadb, type: 2}
+      objectReference: {fileID: 11400000, guid: 06a30882e7e99684a821f7a7f35d57ca, type: 2}
     - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
       propertyPath: judgementSEs.Array.data[3]
       value: 
-      objectReference: {fileID: 11400000, guid: 9330bafc1afe2334894277b1678b8179, type: 2}
+      objectReference: {fileID: 11400000, guid: 33a4b314d2ad7034695dc3d47494aadb, type: 2}
     - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
       propertyPath: judgementSEs.Array.data[4]
       value: 
-      objectReference: {fileID: 11400000, guid: b4ce2e9dd4219b543ac807ad1db83831, type: 2}
+      objectReference: {fileID: 11400000, guid: 9330bafc1afe2334894277b1678b8179, type: 2}
     - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
       propertyPath: judgementSEs.Array.data[5]
       value: 
-      objectReference: {fileID: 11400000, guid: d96818610e991bb4683306590533e520, type: 2}
+      objectReference: {fileID: 11400000, guid: b4ce2e9dd4219b543ac807ad1db83831, type: 2}
     - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
       propertyPath: judgementSEs.Array.data[6]
       value: 
-      objectReference: {fileID: 11400000, guid: 5a67ffdb1c09db44594e84dd4ceebd23, type: 2}
+      objectReference: {fileID: 11400000, guid: d96818610e991bb4683306590533e520, type: 2}
     - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
       propertyPath: judgementSEs.Array.data[7]
       value: 
+      objectReference: {fileID: 11400000, guid: 5a67ffdb1c09db44594e84dd4ceebd23, type: 2}
+    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
+      propertyPath: judgementSEs.Array.data[8]
+      value: 
       objectReference: {fileID: 11400000, guid: 1dd8bc3ef99d2ab49848e1c834a31353, type: 2}
+    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
+      propertyPath: judgementSEs.Array.data[9]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0c85930e4337b8f4db5675d738403b3c, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8419,7 +8428,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7027494514981776746, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
       propertyPath: configs.Array.data[1].isActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8586,6 +8595,14 @@ PrefabInstance:
     - target: {fileID: 4098954084638750205, guid: 3eac1992f2a9b244fa63254ba3ce6184, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4706816765988394403, guid: 3eac1992f2a9b244fa63254ba3ce6184, type: 3}
+      propertyPath: m_fontSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4706816765988394403, guid: 3eac1992f2a9b244fa63254ba3ce6184, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

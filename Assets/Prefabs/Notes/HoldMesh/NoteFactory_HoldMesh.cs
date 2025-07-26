@@ -55,7 +55,8 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
         // ノーツデータにいろいろ追加
         data.SliderInput = this.sliderInputGetter;
         data.Timer = this.timer;
-
+        data.OptionGetter = optionHolder;
+        
         return data;
     }
 

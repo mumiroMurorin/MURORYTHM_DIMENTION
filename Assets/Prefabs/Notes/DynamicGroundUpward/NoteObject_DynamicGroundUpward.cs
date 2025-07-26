@@ -34,24 +34,34 @@ public class NoteObject_DynamicGroundUpward : NoteObject<NoteData_DynamicGroundU
     {
         if (noteData == null) { return; }
         if (noteData.SpaceInput == null) { return; }
+        if (noteData.OptionGetter.IsAutoMode) { return; }
 
         // 右手
         noteData.SpaceInput?.GetSpaceInputVelocity(SpaceTrackingTag.RightHand)
             .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
             .Where(_ => !isJudged)
-            .Subscribe(Judge)
+            .Subscribe(NormalJudge)
             .AddTo(this.gameObject);
 
         // 左手
         noteData.SpaceInput?.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand)
             .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
             .Where(_ => !isJudged)
-            .Subscribe(Judge)
+            .Subscribe(NormalJudge)
             .AddTo(this.gameObject);
     }
 
     private void Update()
     {
+        // オートモード時
+        if (noteData.OptionGetter.IsAutoMode && noteData.Timing <= noteData.Timer.Time)
+        {
+            bestJudgement = Judgement.Perfect;
+            RecordJudgement();
+            SetDisable();
+            return;
+        }
+
         if (JudgeMiss())
         {
             RecordJudgement();
@@ -62,7 +72,7 @@ public class NoteObject_DynamicGroundUpward : NoteObject<NoteData_DynamicGroundU
     /// <summary>
     /// 判定
     /// </summary>
-    private void Judge(Vector3 velocity)
+    private void NormalJudge(Vector3 velocity)
     {
         //Debug.Log($"【Judge】Upward velocity:{velocity}, {dynamicJudgement.Judge(velocity)}");
 
@@ -77,7 +87,7 @@ public class NoteObject_DynamicGroundUpward : NoteObject<NoteData_DynamicGroundU
         }
 
         // Perfectだったときは問答無用でPerfect
-        if (bestJudgement == Judgement.Perfect) { RecordJudgement(); }
+        if (bestJudgement == Judgement.Perfect && noteData.Timing >= noteData.Timer.Time) { RecordJudgement(); }
 
         // Great以下だったときはMiss判定まで待ち
 
@@ -144,5 +154,7 @@ public class NoteData_DynamicGroundUpward : INoteData, IJudgableNoteData
     public ITimeGetter Timer { get; set; }
 
     public IJudgementRecorder JudgementRecorder { get; set; }
+
+    public INoteSpawnDataOptionHolder OptionGetter { get; set; }
 }
 

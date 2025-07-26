@@ -59,6 +59,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
         data.SpaceInput = this.spaceInputGetter;
         data.Timer = this.timer;
         data.JudgementRecorder = this.judgementRecorder;
+        data.OptionGetter = optionHolder;
 
         return data;
     }

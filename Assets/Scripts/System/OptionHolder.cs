@@ -148,6 +148,11 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
 
     #endregion
 
+    public bool IsAutoMode { get; private set; }
+    public void SetAutoMode(bool isAutoMode)
+    {
+        IsAutoMode = isAutoMode;
+    }
 
     #region ➑̐ݒ�
 
@@ -162,6 +167,8 @@ public interface INoteSpawnDataOptionHolder
     IReadOnlyReactiveProperty<float> NoteSpeed { get; }
 
     IReadOnlyReactiveProperty<float> OffsetMs { get; }
+
+    bool IsAutoMode { get; }
 }
 
 public interface IVolumeGetter
@@ -203,6 +210,8 @@ public interface IOptionSetter
     void SetOption(OptionType optionType, int delta);
 
     void SetNoteSpeed(float speed);
+
+    void SetAutoMode(bool isAutoMode);
 
     BodyTrackingSettings TrackingSettings { get; }
 }

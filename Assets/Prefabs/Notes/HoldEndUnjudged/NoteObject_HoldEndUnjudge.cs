@@ -68,5 +68,7 @@ public class NoteData_HoldEndUnjudge : INoteData
     public int[] Range { get; set; }
 
     public ITimeGetter Timer { get; set; }
+
+    public INoteSpawnDataOptionHolder OptionGetter { get; set; }
 }
 

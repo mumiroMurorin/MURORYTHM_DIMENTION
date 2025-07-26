@@ -54,6 +54,7 @@ public class NoteFactory_DynamicGroundLeftward : NoteFactory<NoteData_DynamicGro
         data.SpaceInput = this.spaceInputGetter;
         data.Timer = this.timer;
         data.JudgementRecorder = this.judgementRecorder;
+        data.OptionGetter = optionHolder;
 
         return data;
     }

@@ -68,7 +68,7 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     void IJudgementRecorder.RecordJudgement(NoteJudgementData judgementData)
     {
         // ƒfƒoƒbƒO—p
-        // Debug.Log($"yJudgementz”»’è {judgementData.Judgement}");
+        //Debug.Log($"yJudgementz”»’è {judgementData.NoteData.NoteType}: {judgementData.Judgement}");
 
         SetComboRank(judgementData.Judgement);
         noteJudgementDatas.Add(judgementData);

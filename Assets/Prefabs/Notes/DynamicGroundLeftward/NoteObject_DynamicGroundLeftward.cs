@@ -34,6 +34,7 @@ public class NoteObject_DynamicGroundLeftward : NoteObject<NoteData_DynamicGroun
     {
         if (noteData == null) { return; }
         if (noteData.SpaceInput == null) { return; }
+        if (noteData.OptionGetter.IsAutoMode) { return; }
 
         // 右手
         noteData.SpaceInput?.GetSpaceInputVelocity(SpaceTrackingTag.RightHand)
@@ -52,6 +53,15 @@ public class NoteObject_DynamicGroundLeftward : NoteObject<NoteData_DynamicGroun
 
     private void Update()
     {
+        // オートモード時
+        if (noteData.OptionGetter.IsAutoMode && noteData.Timing <= noteData.Timer.Time)
+        {
+            bestJudgement = Judgement.Perfect;
+            RecordJudgement();
+            SetDisable();
+            return;
+        }
+
         if (JudgeMiss())
         {
             RecordJudgement();
@@ -144,5 +154,7 @@ public class NoteData_DynamicGroundLeftward : INoteData, IJudgableNoteData
     public ITimeGetter Timer { get; set; }
 
     public IJudgementRecorder JudgementRecorder { get; set; }
+
+    public INoteSpawnDataOptionHolder OptionGetter { get; set; }
 }
 

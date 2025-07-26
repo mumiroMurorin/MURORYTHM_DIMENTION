@@ -37,6 +37,15 @@ public class NoteObject_SpaceHoldRelayHidden : NoteObject<NoteData_SpaceHoldRela
         // 判定時間内でないとき
         if (!IsInJudgementTimeRange()) { return; }
 
+        if (!noteData.OptionGetter.IsAutoMode) { NormalJudgement(); }
+        else { AutoJudgement(); }
+    }
+
+    /// <summary>
+    /// 判定
+    /// </summary>
+    private void NormalJudgement()
+    {
         // 判定範囲の更新
         // 前判定
         if (noteData.Timing >= noteData.Timer.Time)
@@ -60,12 +69,25 @@ public class NoteObject_SpaceHoldRelayHidden : NoteObject<NoteData_SpaceHoldRela
             }
 
             // 最高判定のとき確定
-            if (bestJudgement == Judgement.Perfect)
+            if (bestJudgement == Judgement.Perfect && noteData.Timing <= noteData.Timer.Time)
             {
                 SendJudgementData();
                 SetDisable();
             }
         }
+    }
+
+    /// <summary>
+    /// オート判定
+    /// </summary>
+    private void AutoJudgement()
+    {
+        // 最高判定のとき確定
+        if (noteData.Timing < noteData.Timer.Time) { return; }
+
+        bestJudgement = Judgement.Perfect;
+        SendJudgementData();
+        SetDisable();
     }
 
     /// <summary>
@@ -174,5 +196,7 @@ public class NoteData_SpaceHoldRelayHidden : INoteData, IJudgableNoteData
     public ITimeGetter Timer { get; set; }
 
     public IJudgementRecorder JudgementRecorder { get; set; }
+
+    public INoteSpawnDataOptionHolder OptionGetter { get; set; }
 }
 

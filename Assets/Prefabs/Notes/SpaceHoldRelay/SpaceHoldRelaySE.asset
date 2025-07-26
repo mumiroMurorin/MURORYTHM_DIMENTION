@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d9ccd929c9b8f242b105bdac5d6c81c, type: 3}
-  m_Name: HoldRelaySE
+  m_Name: SpaceHoldRelaySE
   m_EditorClassIdentifier: 
-  noteType: 11
+  noteType: 21
   sounds:
   - judgement: 1000
-    audioClip: {fileID: 8300000, guid: 78e6e7903b272d848875aa8a55b46ce1, type: 3}
+    audioClip: {fileID: 8300000, guid: 096ae01b27c0def4ea84f5a4b9781eb9, type: 3}
   - judgement: 100
-    audioClip: {fileID: 8300000, guid: 78e6e7903b272d848875aa8a55b46ce1, type: 3}
+    audioClip: {fileID: 8300000, guid: 096ae01b27c0def4ea84f5a4b9781eb9, type: 3}
   - judgement: 10
-    audioClip: {fileID: 8300000, guid: 78e6e7903b272d848875aa8a55b46ce1, type: 3}
+    audioClip: {fileID: 8300000, guid: 096ae01b27c0def4ea84f5a4b9781eb9, type: 3}

@@ -3,14 +3,8 @@
     {
       "BeatCount": 4,
       "BeatUnit": 4.0,
-      "DivisionNum": 2,
+      "DivisionNum": 4,
       "SubDivisionDatas": [
-        {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0
-        },
         {
           "Bpm": 256.0,
           "SpaceHoldStartData": [
@@ -41,6 +35,47 @@
           "Bpm": 256.0
         },
         {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpaceHoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Vertices": [
+                {
+                  "x": -0.25,
+                  "y": -0.5
+                },
+                {
+                  "x": -0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": 0.0
+                },
+                {
+                  "x": 0.25,
+                  "y": -0.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
           "Bpm": 256.0,
           "SpaceHoldRelayData": [
             {
@@ -70,8 +105,14 @@
           "Bpm": 256.0
         },
         {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
           "Bpm": 256.0,
-          "SpaceHoldHiddenJudgedRelayData": [
+          "SpaceHoldMeshRelayData": [
             {
               "HoldNumber": 0,
               "Vertices": [
@@ -94,6 +135,12 @@
               ]
             }
           ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
         },
         {
           "Bpm": 256.0
@@ -103,48 +150,10 @@
     {
       "BeatCount": 4,
       "BeatUnit": 4.0,
-      "DivisionNum": 2,
+      "DivisionNum": 4,
       "SubDivisionDatas": [
         {
           "Bpm": 256.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                0,
-                1,
-                2,
-                3
-              ]
-            },
-            {
-              "Range": [
-                12,
-                13,
-                14,
-                15
-              ]
-            }
-          ],
-          "DynamicUpwardData": [
-            {
-              "Range": [
-                12,
-                13,
-                14,
-                15
-              ]
-            }
-          ],
-          "DynamicDownwardData": [
-            {
-              "Range": [
-                0,
-                1,
-                2,
-                3
-              ]
-            }
-          ],
           "SpaceHoldRelayData": [
             {
               "HoldNumber": 0,
@@ -173,8 +182,14 @@
           "Bpm": 256.0
         },
         {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
           "Bpm": 256.0,
-          "SpaceHoldHiddenJudgedRelayData": [
+          "SpaceHoldMeshRelayData": [
             {
               "HoldNumber": 0,
               "Vertices": [
@@ -202,45 +217,13 @@
           "Bpm": 256.0
         },
         {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
           "Bpm": 256.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                0,
-                1,
-                2,
-                3
-              ]
-            },
-            {
-              "Range": [
-                12,
-                13,
-                14,
-                15
-              ]
-            }
-          ],
-          "DynamicUpwardData": [
-            {
-              "Range": [
-                0,
-                1,
-                2,
-                3
-              ]
-            }
-          ],
-          "DynamicDownwardData": [
-            {
-              "Range": [
-                12,
-                13,
-                14,
-                15
-              ]
-            }
-          ],
           "SpaceHoldRelayData": [
             {
               "HoldNumber": 0,
@@ -269,262 +252,13 @@
           "Bpm": 256.0
         },
         {
-          "Bpm": 256.0,
-          "SpaceHoldHiddenJudgedRelayData": [
-            {
-              "HoldNumber": 0,
-              "Vertices": [
-                {
-                  "x": -0.25,
-                  "y": -0.5
-                },
-                {
-                  "x": -0.25,
-                  "y": 0.0
-                },
-                {
-                  "x": 0.25,
-                  "y": 0.0
-                },
-                {
-                  "x": 0.25,
-                  "y": -0.5
-                }
-              ]
-            }
-          ]
-        },
-        {
           "Bpm": 256.0
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 2,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 256.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                0,
-                1,
-                2,
-                3
-              ]
-            },
-            {
-              "Range": [
-                12,
-                13,
-                14,
-                15
-              ]
-            }
-          ],
-          "DynamicUpwardData": [
-            {
-              "Range": [
-                12,
-                13,
-                14,
-                15
-              ]
-            }
-          ],
-          "DynamicDownwardData": [
-            {
-              "Range": [
-                0,
-                1,
-                2,
-                3
-              ]
-            }
-          ],
-          "SpaceHoldRelayData": [
-            {
-              "HoldNumber": 0,
-              "Vertices": [
-                {
-                  "x": -0.25,
-                  "y": -0.5
-                },
-                {
-                  "x": -0.25,
-                  "y": 0.0
-                },
-                {
-                  "x": 0.25,
-                  "y": 0.0
-                },
-                {
-                  "x": 0.25,
-                  "y": -0.5
-                }
-              ]
-            }
-          ]
         },
         {
           "Bpm": 256.0
         },
         {
           "Bpm": 256.0,
-          "SpaceHoldHiddenJudgedRelayData": [
-            {
-              "HoldNumber": 0,
-              "Vertices": [
-                {
-                  "x": -0.25,
-                  "y": -0.5
-                },
-                {
-                  "x": -0.25,
-                  "y": 0.0
-                },
-                {
-                  "x": 0.25,
-                  "y": 0.0
-                },
-                {
-                  "x": 0.25,
-                  "y": -0.5
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                0,
-                1,
-                2,
-                3
-              ]
-            },
-            {
-              "Range": [
-                12,
-                13,
-                14,
-                15
-              ]
-            }
-          ],
-          "DynamicUpwardData": [
-            {
-              "Range": [
-                0,
-                1,
-                2,
-                3
-              ]
-            }
-          ],
-          "DynamicDownwardData": [
-            {
-              "Range": [
-                12,
-                13,
-                14,
-                15
-              ]
-            }
-          ],
-          "SpaceHoldRelayData": [
-            {
-              "HoldNumber": 0,
-              "Vertices": [
-                {
-                  "x": -0.25,
-                  "y": -0.5
-                },
-                {
-                  "x": -0.25,
-                  "y": 0.0
-                },
-                {
-                  "x": 0.25,
-                  "y": 0.0
-                },
-                {
-                  "x": 0.25,
-                  "y": -0.5
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0,
-          "SpaceHoldHiddenJudgedRelayData": [
-            {
-              "HoldNumber": 0,
-              "Vertices": [
-                {
-                  "x": -0.25,
-                  "y": -0.5
-                },
-                {
-                  "x": -0.25,
-                  "y": 0.0
-                },
-                {
-                  "x": 0.25,
-                  "y": 0.0
-                },
-                {
-                  "x": 0.25,
-                  "y": -0.5
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 256.0
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 2,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 256.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ],
-          "DynamicDownwardData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ],
           "SpaceHoldEndData": [
             {
               "HoldNumber": 0,
@@ -548,18 +282,6 @@
               ]
             }
           ]
-        },
-        {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0
-        },
-        {
-          "Bpm": 256.0
         },
         {
           "Bpm": 256.0

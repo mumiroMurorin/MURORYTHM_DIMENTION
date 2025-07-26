@@ -54,6 +54,7 @@ public class NoteFactory_HoldRelayHidden : NoteFactory<NoteData_HoldRelayHidden>
         data.SliderInput = this.sliderInputGetter;
         data.Timer = this.timer;
         data.JudgementRecorder = this.judgementRecorder;
+        data.OptionGetter = optionHolder;
 
         return data;
     }

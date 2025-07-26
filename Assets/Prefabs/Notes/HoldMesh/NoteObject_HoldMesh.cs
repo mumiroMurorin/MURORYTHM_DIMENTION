@@ -64,7 +64,8 @@ public class NoteObject_HoldMesh : NoteObject<NoteData_HoldMesh>
         if (judgeRange == null) { return; }
 
         // 判定範囲内のスライダー入力を調べる
-        SetTouchStatus(GroundJudgement.IsTouchingSlider(noteData.SliderInput, judgeRange.ToArray()));
+        if (!noteData.OptionGetter.IsAutoMode) { SetTouchStatus(GroundJudgement.IsTouchingSlider(noteData.SliderInput, judgeRange.ToArray())); }
+        else { SetTouchStatus(true); }
         return;
     }
 
@@ -108,6 +109,8 @@ public class NoteData_HoldMesh : INoteData
     public ISliderInputGetter SliderInput { get; set; }
 
     public ITimeGetter Timer { get; set; }
+
+    public INoteSpawnDataOptionHolder OptionGetter { get; set; }
 
     public float GroundEndZ { get; set; }
 }
