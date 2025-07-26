@@ -10,8 +10,14 @@ public class TimelinePlayer : MonoBehaviour, ITimelinePlayer
 {
     [Header("演出タイムライン")]
     [SerializeField] PlayableDirector playableDirector;
+    [SerializeField] bool isResetAwake;
 
     CancellationTokenSource cts;
+
+    private void Start()
+    {
+        if (isResetAwake && playableDirector != null) { playableDirector.time = 0; }
+    }
 
     void ITimelinePlayer.PlayAnimation(Action callback)
     {

@@ -9,6 +9,7 @@ namespace TransitionerInRhythmGameScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
         [SerializeField] SerializeInterface<IBodyLoader> bodyLoader;
+        [SerializeField] GameObject loadingBodyUIObj;
         [SerializeField] SerializeInterface<ITimelinePlayer> openLodingBodyUI; 
         [SerializeField] SerializeInterface<ITimelinePlayer> closeLodingBodyUI; 
 
@@ -23,6 +24,7 @@ namespace TransitionerInRhythmGameScene
         {
             Debug.Log("yTransitionzTransition to \"LoadBody\"");
 
+            loadingBodyUIObj.SetActive(true);
             openLodingBodyUI?.Value.PlayAnimation(() => {
                 bodyLoader.Value.WaitForLoadBody(CloseUI);
             });
