@@ -8,7 +8,6 @@ using System;
 
 public class ChartLoaderJson : MonoBehaviour, IChartLoader
 {
-    //[SerializeField] TextAsset jsonData;
     [SerializeField] List<NoteTypeToJudgementWindow> judgementWindows;
 
     IMusicDataGetter musicDataGetter;

@@ -13,6 +13,9 @@ namespace UIInRootScene
         [SerializeField] TextMeshProUGUI cameraNameTMP;
         [SerializeField] TextMeshProUGUI cameraResolutionTMP;
         [SerializeField] TextMeshProUGUI cameraFpsTMP;
+        [SerializeField] TMP_InputField inputFieldWidth;
+        [SerializeField] TMP_InputField inputFieldHeight;
+        [SerializeField] Button applyResolutionButton;
         [SerializeField] Button flipHorizontalButton;
         [SerializeField] Button flipVerticalButton;
         [SerializeField] Button viewImageButton;
@@ -20,12 +23,14 @@ namespace UIInRootScene
         public Action OnPushFlipHorizontalButtonListner { get; set; }
         public Action OnPushFlipVerticalButtonListner { get; set; }
         public Action OnPushViewImageButtonListner { get; set; }
+        public Action<int,int> OnPushApplyResolutionButtonListener { get; set; }
 
         void Start()
         {
             viewImageButton?.onClick.AddListener(OnPushViewImageButton);
             flipHorizontalButton?.onClick.AddListener(OnPushFlipHorizontalButton);
             flipVerticalButton?.onClick.AddListener(OnPushFlipVerticalButton);
+            applyResolutionButton?.onClick.AddListener(OnPushApplyResolutionButton);
         }
 
         public void OnChangeCameraInfo(WebCamTexture webCam)
@@ -45,6 +50,8 @@ namespace UIInRootScene
 
                 // 解像度の更新
                 cameraResolutionTMP.text = $"{webCam.width} × {webCam.height}";
+                inputFieldWidth.text = webCam.width.ToString();
+                inputFieldHeight.text = webCam.height.ToString();
             }
         }
 
@@ -69,6 +76,18 @@ namespace UIInRootScene
         private void OnPushFlipVerticalButton()
         {
             OnPushFlipVerticalButtonListner?.Invoke();
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+
+        private void OnPushApplyResolutionButton()
+        {
+            if (!int.TryParse(inputFieldWidth.text, out int width) || !int.TryParse(inputFieldHeight.text, out int height)) 
+            {
+                Debug.LogWarning($"フィールドに無効な値が入力されています: {inputFieldWidth.text}x{inputFieldHeight.text}");
+                return;
+            }
+
+            OnPushApplyResolutionButtonListener?.Invoke(width, height);
             EventSystem.current.SetSelectedGameObject(null);
         }
     }

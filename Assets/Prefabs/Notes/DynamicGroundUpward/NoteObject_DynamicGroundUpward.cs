@@ -34,12 +34,12 @@ public class NoteObject_DynamicGroundUpward : NoteObject<NoteData_DynamicGroundU
     {
         if (noteData == null) { return; }
         if (noteData.SpaceInput == null) { return; }
-        if (noteData.OptionGetter.IsAutoMode) { return; }
 
         // ‰EŽè
         noteData.SpaceInput?.GetSpaceInputVelocity(SpaceTrackingTag.RightHand)
             .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
             .Where(_ => !isJudged)
+            .Where(_ => !noteData.OptionGetter.IsAutoMode)
             .Subscribe(NormalJudge)
             .AddTo(this.gameObject);
 
@@ -47,6 +47,7 @@ public class NoteObject_DynamicGroundUpward : NoteObject<NoteData_DynamicGroundU
         noteData.SpaceInput?.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand)
             .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
             .Where(_ => !isJudged)
+            .Where(_ => !noteData.OptionGetter.IsAutoMode)
             .Subscribe(NormalJudge)
             .AddTo(this.gameObject);
     }

@@ -139,6 +139,15 @@ namespace UIInRootScene
                 phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
             };
 
+            cameraSettings_view.OnPushApplyResolutionButtonListener += (width, height) =>
+            {
+                optionGetter_model?.TrackingSettings.SetCameraWidth(width);
+                optionGetter_model?.TrackingSettings.SetCameraHeight(height);
+                // リロード
+                phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
+            };
+
+
             // セレクトシーンに戻る
             backMusicSelectSceneButton_view.OnPushButtonListner += () => { phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.TransitionSelectScene); };
 

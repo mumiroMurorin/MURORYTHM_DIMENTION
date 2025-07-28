@@ -57,22 +57,6 @@
                 6,
                 7,
                 8,
-                9,
-                10
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 170.0,
-          "HoldHiddenJudgedRelayData": [
-            {
-              "HoldNumber": 0,
-              "Range": [
-                5,
-                6,
-                7,
-                8,
                 9
               ]
             }
@@ -81,19 +65,6 @@
         {
           "Bpm": 170.0,
           "HoldMeshRelayData": [
-            {
-              "HoldNumber": 0,
-              "Range": [
-                6,
-                7,
-                8
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 170.0,
-          "HoldHiddenJudgedRelayData": [
             {
               "HoldNumber": 0,
               "Range": [
@@ -106,8 +77,36 @@
                 9,
                 10,
                 11,
-                12,
-                13
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
               ]
             }
           ]
@@ -126,7 +125,7 @@
         },
         {
           "Bpm": 170.0,
-          "HoldHiddenJudgedRelayData": [
+          "HoldMeshRelayData": [
             {
               "HoldNumber": 0,
               "Range": [
@@ -135,8 +134,7 @@
                 7,
                 8,
                 9,
-                10,
-                11
+                10
               ]
             }
           ]
@@ -166,10 +164,38 @@
         },
         {
           "Bpm": 170.0,
-          "HoldHiddenJudgedRelayData": [
+          "HoldMeshRelayData": [
             {
               "HoldNumber": 0,
               "Range": [
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 170.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                0,
                 1,
                 2,
                 3,
@@ -183,8 +209,7 @@
                 11,
                 12,
                 13,
-                14,
-                15
+                14
               ]
             }
           ]
@@ -192,44 +217,13 @@
         {
           "Bpm": 170.0,
           "HoldMeshRelayData": [
-            {
-              "HoldNumber": 0,
-              "Range": [
-                5,
-                6,
-                7,
-                8
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 170.0,
-          "HoldHiddenJudgedRelayData": [
             {
               "HoldNumber": 0,
               "Range": [
                 6,
                 7,
                 8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 170.0,
-          "HoldMeshRelayData": [
-            {
-              "HoldNumber": 0,
-              "Range": [
-                4,
-                5,
-                6,
-                7,
-                8
+                9
               ]
             }
           ]
@@ -1054,7 +1048,7 @@
       "SubDivisionDatas": [
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 8,
@@ -1088,7 +1082,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 0,
@@ -1125,7 +1119,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 8,
@@ -1159,7 +1153,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 0,
@@ -1203,7 +1197,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 8,
@@ -1243,7 +1237,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 0,
@@ -1277,7 +1271,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 8,
@@ -1311,7 +1305,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 0,
@@ -1345,7 +1339,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 4,
@@ -1375,7 +1369,7 @@
           ],
           "SpaceHoldStartData": [
             {
-              "HoldNumber": 0,
+              "HoldNumber": 20,
               "Vertices": [
                 {
                   "x": -0.418979645,
@@ -1425,7 +1419,7 @@
           "Bpm": 170.0,
           "SpaceHoldEndData": [
             {
-              "HoldNumber": 0,
+              "HoldNumber": 20,
               "Vertices": [
                 {
                   "x": -0.418979645,
@@ -2007,7 +2001,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 6,
@@ -3257,7 +3251,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 7,
@@ -3866,7 +3860,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 3,
@@ -3900,7 +3894,7 @@
           ],
           "SpaceHoldStartData": [
             {
-              "HoldNumber": 1,
+              "HoldNumber": 21,
               "Vertices": [
                 {
                   "x": -0.418979645,
@@ -3953,7 +3947,7 @@
           "Bpm": 170.0,
           "SpaceHoldEndData": [
             {
-              "HoldNumber": 1,
+              "HoldNumber": 21,
               "Vertices": [
                 {
                   "x": -0.418979645,
@@ -4066,7 +4060,7 @@
               ]
             }
           ],
-          "HoldHiddenJudgedRelayData": [
+          "HoldRelayData": [
             {
               "HoldNumber": 9,
               "Range": [
@@ -4194,7 +4188,7 @@
               ]
             }
           ],
-          "HoldHiddenJudgedRelayData": [
+          "HoldRelayData": [
             {
               "HoldNumber": 10,
               "Range": [
@@ -4334,7 +4328,7 @@
               ]
             }
           ],
-          "HoldHiddenJudgedRelayData": [
+          "HoldRelayData": [
             {
               "HoldNumber": 11,
               "Range": [
@@ -4950,7 +4944,7 @@
       "SubDivisionDatas": [
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 0,
@@ -5037,19 +5031,21 @@
           "TouchNoteData": [
             {
               "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
                 1,
                 2,
                 3,
                 4,
                 5
-              ]
-            },
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
               ]
             },
             {
@@ -5132,17 +5128,19 @@
           "TouchNoteData": [
             {
               "Range": [
+                6,
+                7
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
                 1,
                 2,
                 3,
                 4,
                 5
-              ]
-            },
-            {
-              "Range": [
-                6,
-                7
               ]
             }
           ],
@@ -5197,7 +5195,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 9,
@@ -5275,21 +5273,7 @@
           "Bpm": 170.0
         },
         {
-          "Bpm": 170.0,
-          "HoldHiddenJudgedRelayData": [
-            {
-              "HoldNumber": 13,
-              "Range": [
-                2,
-                3,
-                4,
-                5,
-                6,
-                7,
-                8
-              ]
-            }
-          ]
+          "Bpm": 170.0
         },
         {
           "Bpm": 170.0
@@ -5324,7 +5308,7 @@
               ]
             }
           ],
-          "HoldEndData": [
+          "HoldEndUnjudgeData": [
             {
               "HoldNumber": 13,
               "Range": [
@@ -5349,7 +5333,7 @@
           ],
           "SpaceHoldStartData": [
             {
-              "HoldNumber": 2,
+              "HoldNumber": 22,
               "Vertices": [
                 {
                   "x": -0.663192749,
@@ -5446,7 +5430,7 @@
           "Bpm": 170.0,
           "SpaceHoldEndData": [
             {
-              "HoldNumber": 2,
+              "HoldNumber": 22,
               "Vertices": [
                 {
                   "x": -0.663192749,
@@ -5824,7 +5808,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 4,
@@ -5853,7 +5837,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 8,
@@ -6166,7 +6150,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 5,
@@ -6192,7 +6176,7 @@
           ],
           "SpaceHoldStartData": [
             {
-              "HoldNumber": 3,
+              "HoldNumber": 23,
               "Vertices": [
                 {
                   "x": -0.418979645,
@@ -6242,7 +6226,7 @@
           "Bpm": 170.0,
           "SpaceHoldEndData": [
             {
-              "HoldNumber": 3,
+              "HoldNumber": 23,
               "Vertices": [
                 {
                   "x": -0.418979645,
@@ -6577,7 +6561,7 @@
         },
         {
           "Bpm": 170.0,
-          "HoldHiddenJudgedRelayData": [
+          "HoldMeshRelayData": [
             {
               "HoldNumber": 14,
               "Range": [
@@ -6609,7 +6593,7 @@
         },
         {
           "Bpm": 170.0,
-          "HoldHiddenJudgedRelayData": [
+          "HoldMeshRelayData": [
             {
               "HoldNumber": 14,
               "Range": [
@@ -6641,7 +6625,7 @@
         },
         {
           "Bpm": 170.0,
-          "HoldHiddenJudgedRelayData": [
+          "HoldMeshRelayData": [
             {
               "HoldNumber": 14,
               "Range": [
@@ -6736,7 +6720,7 @@
       "SubDivisionDatas": [
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 5,
@@ -6763,7 +6747,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 5,
@@ -6790,7 +6774,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 5,
@@ -6817,7 +6801,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 5,
@@ -6844,7 +6828,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 5,
@@ -6874,7 +6858,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 5,
@@ -6901,7 +6885,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 5,
@@ -6935,7 +6919,7 @@
       "SubDivisionDatas": [
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 5,
@@ -6965,7 +6949,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 5,
@@ -6995,7 +6979,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 5,
@@ -7425,23 +7409,7 @@
           ]
         },
         {
-          "Bpm": 170.0,
-          "HoldHiddenJudgedRelayData": [
-            {
-              "HoldNumber": 15,
-              "Range": [
-                4,
-                5,
-                6,
-                7,
-                8,
-                9,
-                10,
-                11,
-                12
-              ]
-            }
-          ]
+          "Bpm": 170.0
         },
         {
           "Bpm": 170.0,
@@ -7462,20 +7430,7 @@
           ]
         },
         {
-          "Bpm": 170.0,
-          "HoldHiddenJudgedRelayData": [
-            {
-              "HoldNumber": 15,
-              "Range": [
-                1,
-                2,
-                3,
-                4,
-                5,
-                6
-              ]
-            }
-          ]
+          "Bpm": 170.0
         },
         {
           "Bpm": 170.0,
@@ -7495,7 +7450,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 9,
@@ -7505,19 +7460,6 @@
                 13,
                 14,
                 15
-              ]
-            }
-          ],
-          "HoldHiddenJudgedRelayData": [
-            {
-              "HoldNumber": 15,
-              "Range": [
-                1,
-                2,
-                3,
-                4,
-                5,
-                6
               ]
             }
           ]
@@ -7897,7 +7839,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 1,
@@ -7939,7 +7881,7 @@
           ],
           "SpaceHoldStartData": [
             {
-              "HoldNumber": 4,
+              "HoldNumber": 24,
               "Vertices": [
                 {
                   "x": -0.663192749,
@@ -8036,7 +7978,7 @@
           "Bpm": 170.0,
           "SpaceHoldEndData": [
             {
-              "HoldNumber": 4,
+              "HoldNumber": 24,
               "Vertices": [
                 {
                   "x": -0.663192749,
@@ -9706,7 +9648,7 @@
           ],
           "SpaceHoldStartData": [
             {
-              "HoldNumber": 5,
+              "HoldNumber": 25,
               "Vertices": [
                 {
                   "x": 0.555557251,
@@ -9760,7 +9702,7 @@
           "Bpm": 170.0,
           "SpaceHoldRelayData": [
             {
-              "HoldNumber": 5,
+              "HoldNumber": 25,
               "Vertices": [
                 {
                   "x": 0.221067429,
@@ -9814,7 +9756,7 @@
           "Bpm": 170.0,
           "SpaceHoldRelayData": [
             {
-              "HoldNumber": 5,
+              "HoldNumber": 25,
               "Vertices": [
                 {
                   "x": -0.3379612,
@@ -9864,7 +9806,7 @@
           "Bpm": 170.0,
           "SpaceHoldRelayData": [
             {
-              "HoldNumber": 5,
+              "HoldNumber": 25,
               "Vertices": [
                 {
                   "x": -0.555557251,
@@ -9916,7 +9858,7 @@
         },
         {
           "Bpm": 170.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 1,
@@ -9938,7 +9880,7 @@
           ],
           "SpaceHoldRelayData": [
             {
-              "HoldNumber": 5,
+              "HoldNumber": 25,
               "Vertices": [
                 {
                   "x": -0.9780121,
@@ -9992,7 +9934,7 @@
           "Bpm": 170.0,
           "SpaceHoldRelayData": [
             {
-              "HoldNumber": 5,
+              "HoldNumber": 25,
               "Vertices": [
                 {
                   "x": -0.555557251,
@@ -10046,7 +9988,7 @@
           "Bpm": 170.0,
           "SpaceHoldRelayData": [
             {
-              "HoldNumber": 5,
+              "HoldNumber": 25,
               "Vertices": [
                 {
                   "x": -0.3379612,
@@ -10096,7 +10038,7 @@
           "Bpm": 170.0,
           "SpaceHoldRelayData": [
             {
-              "HoldNumber": 5,
+              "HoldNumber": 25,
               "Vertices": [
                 {
                   "x": 0.221067429,
@@ -10177,7 +10119,7 @@
           ],
           "SpaceHoldEndData": [
             {
-              "HoldNumber": 5,
+              "HoldNumber": 25,
               "Vertices": [
                 {
                   "x": 0.555557251,

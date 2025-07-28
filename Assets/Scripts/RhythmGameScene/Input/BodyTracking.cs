@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using Mediapipe.Unity.CoordinateSystem;
+using static WebCamUtils;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UniRx;
@@ -88,7 +89,20 @@ namespace Mediapipe.Unity.Tutorial
             }
 
             var webCamDevice = WebCamTexture.devices[0];
-            _webCamTexture.Value = new WebCamTexture(webCamDevice.name, _width, _height);
+
+            // 解像度対応チェック
+            var isSurpported = await CheckIfTextureStartedAsync(webCamDevice.name, settings.CameraWidth.Value, settings.CameraHeight.Value, token);
+            // 対応してたらその解像度にする
+            if (isSurpported) 
+            { 
+                _webCamTexture.Value = new WebCamTexture(webCamDevice.name, settings.CameraWidth.Value, settings.CameraHeight.Value);
+            }
+            // 対応してなかったらデフォルト(最高?)解像度にする
+            else 
+            {
+                _webCamTexture.Value = new WebCamTexture(webCamDevice.name, _width, _height);
+            }
+
             _webCamTexture.Value.Play();
             Debug.Log("【MediaPipe】WebCamTexture is playing: " + _webCamTexture.Value.isPlaying);
 
@@ -99,6 +113,7 @@ namespace Mediapipe.Unity.Tutorial
                 // 解像度の動的設定
                 _width = _webCamTexture.Value.width;
                 _height = _webCamTexture.Value.height;
+                Debug.Log($"【MediaPipe】WebCamTexture is set resolution: {_width}x{_height}");
             }
             catch (OperationCanceledException)
             {

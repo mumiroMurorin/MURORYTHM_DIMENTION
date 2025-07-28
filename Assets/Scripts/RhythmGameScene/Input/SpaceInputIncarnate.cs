@@ -13,11 +13,13 @@ public class SpaceInputIncarnate : MonoBehaviour
     [SerializeField] Vector3 judgeFieldSize;
 
     ISpaceInputGetter spaceInputGetter;
+    INoteSpawnDataOptionHolder spawnOptionGetter;
 
     [Inject]
-    public void Constructor(ISpaceInputGetter spaceInputGetter)
+    public void Constructor(ISpaceInputGetter spaceInputGetter, INoteSpawnDataOptionHolder spawnOptionGetter)
     {
         this.spaceInputGetter = spaceInputGetter;
+        this.spawnOptionGetter = spawnOptionGetter;
     }
 
     void Start()
@@ -38,6 +40,10 @@ public class SpaceInputIncarnate : MonoBehaviour
             .ObserveAdd()
             .Subscribe(value => MoveCaptureObject(leftHandCaptureObject.gameObject, value.Value.Pos))
             .AddTo(this.gameObject);
+
+        spawnOptionGetter?.IsAutoModeRP
+            .Subscribe(SetActiveCaputureObject)
+            .AddTo(this.gameObject);
     }
 
     /// <summary>
@@ -56,5 +62,11 @@ public class SpaceInputIncarnate : MonoBehaviour
 
         //Debug.Log($"ÅyCaptureÅz{handObject.name},{position}");
         handObject.transform.position = position;
+    }
+
+    private void SetActiveCaputureObject(bool isAutoMode)
+    {
+        rightHandCaptureObject.gameObject.SetActive(!isAutoMode);
+        leftHandCaptureObject.gameObject.SetActive(!isAutoMode);
     }
 }

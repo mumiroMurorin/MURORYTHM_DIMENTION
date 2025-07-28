@@ -306,32 +306,60 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     {
         // ÉäÉXÉgÇ…Ç†ÇÈÉtÉ@ÉCÉãÇ™ë∂ç›Ç∑ÇÈÇ©ämîF
         string pathInitiate = path + "/" + chartFileNameInitiate;
-        if (File.Exists(pathInitiate))
+        int[] difficulty = new int[4];
+        bool isExistInitiate = musicData.GetDifficulity(Difficulty.Initiate) >= 0;
+        bool isExistSkyclad = musicData.GetDifficulity(Difficulty.Skyclad) >= 0;
+        bool isExistFanatic = musicData.GetDifficulity(Difficulty.Fanatic) >= 0;
+        bool isExistDream = musicData.GetDifficulity(Difficulty.Dream) >= 0;
+
+        if (isExistInitiate && File.Exists(pathInitiate))
         {
             musicData.SetChartPath(Difficulty.Initiate, pathInitiate);
+            difficulty[0] = musicData.GetDifficulity(Difficulty.Initiate);
             Debug.Log($"ÅySystemÅzInitiateïàñ pathì«Ç›çûÇ›: {musicData.MusicName}");
+        }
+        else
+        {
+            difficulty[0] = -1;
         }
 
         string pathFanatic = path + "/" + chartFileNameFanatic;
-        if (File.Exists(pathFanatic))
+        if (isExistSkyclad && File.Exists(pathFanatic))
         {
             musicData.SetChartPath(Difficulty.Fanatic, pathFanatic);
+            difficulty[1] = musicData.GetDifficulity(Difficulty.Fanatic);
             Debug.Log($"ÅySystemÅzFanaticïàñ pathì«Ç›çûÇ›: {musicData.MusicName}");
+        }
+        else
+        {
+            difficulty[1] = -1;
         }
 
         string pathSkyclad = path + "/" + chartFileNameSkyclad;
-        if (File.Exists(pathSkyclad))
+        if (isExistFanatic && File.Exists(pathSkyclad))
         {
             musicData.SetChartPath(Difficulty.Skyclad, pathSkyclad);
+            difficulty[2] = musicData.GetDifficulity(Difficulty.Skyclad);
             Debug.Log($"ÅySystemÅzSkycladïàñ pathì«Ç›çûÇ›: {musicData.MusicName}");
+        }
+        else
+        {
+            difficulty[2] = -1;
         }
 
         string pathDream = path + "/" + chartFileNameDream;
-        if (File.Exists(pathDream))
+        if (isExistDream && File.Exists(pathDream))
         {
             musicData.SetChartPath(Difficulty.Dream, pathDream);
+            difficulty[3] = musicData.GetDifficulity(Difficulty.Dream);
             Debug.Log($"ÅySystemÅzDreamïàñ pathì«Ç›çûÇ›: {musicData.MusicName}");
         }
+        else
+        {
+            difficulty[3] = -1;
+        }
+
+        musicData.SetDifficulty(difficulty);
 
         // ñ≥óùÇ‚ÇË
         await UniTask.Delay(1, cancellationToken: token);

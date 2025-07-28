@@ -148,7 +148,9 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
 
     #endregion
 
-    public bool IsAutoMode { get; private set; }
+    ReactiveProperty<bool> isAutoMode = new ReactiveProperty<bool>();
+    public bool IsAutoMode { get { return isAutoMode.Value; } private set { isAutoMode.Value = value; } }
+    public IReadOnlyReactiveProperty<bool> IsAutoModeRP => isAutoMode;
     public void SetAutoMode(bool isAutoMode)
     {
         IsAutoMode = isAutoMode;
@@ -167,6 +169,8 @@ public interface INoteSpawnDataOptionHolder
     IReadOnlyReactiveProperty<float> NoteSpeed { get; }
 
     IReadOnlyReactiveProperty<float> OffsetMs { get; }
+
+    IReadOnlyReactiveProperty<bool> IsAutoModeRP { get; }
 
     bool IsAutoMode { get; }
 }

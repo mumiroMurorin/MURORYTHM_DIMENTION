@@ -9,6 +9,22 @@ using UniRx;
 [System.Serializable]
 public class BodyTrackingSettings
 {
+    // カメラ解像度
+    ReactiveProperty<int> cameraWidth = new ReactiveProperty<int>(640);
+    public IReadOnlyReactiveProperty<int> CameraWidth => cameraWidth;
+    public void SetCameraWidth(int width)
+    {
+        cameraWidth.Value = width;
+    }
+
+    ReactiveProperty<int> cameraHeight = new ReactiveProperty<int>(480);
+    public IReadOnlyReactiveProperty<int> CameraHeight => cameraHeight;
+    public void SetCameraHeight(int height)
+    {
+        cameraHeight.Value = height;
+    }
+
+
     // トラッキングの左右反転
     ReactiveProperty<bool> isHorizontallyFlipped = new ReactiveProperty<bool>();
     public IReadOnlyReactiveProperty<bool> IsHorizontallyFlipped => isHorizontallyFlipped;

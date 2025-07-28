@@ -26,7 +26,6 @@ public class NoteObject_DivineTouch : NoteObject<NoteData_DivineTouch>
     private void Bind()
     {
         if (noteData == null) { return; }
-        if (noteData.OptionGetter.IsAutoMode) { return; }
 
         // ê¨å˜îªíË
         foreach (int index in noteData.Range)
@@ -35,12 +34,11 @@ public class NoteObject_DivineTouch : NoteObject<NoteData_DivineTouch>
             if (noteData.Timer == null) { break; }
 
             noteData.SliderInput?.GetSliderInputReactiveProperty(index)
-                // É^ÉbÉ`Ç≥ÇÍÇΩÇ∆Ç´äéÇ¬
                 .Where(isTouch => isTouch)
-                // ñ¢îªíËÇÃÇ∆Ç´äéÇ¬
                 .Where(_ => !isJudged)
                 // GoodîªíËéûä‘Ç…ä‹Ç‹ÇÍÇƒÇ¢ÇÈÇ∆Ç´îªíË
                 .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
+                .Where(_ => !noteData.OptionGetter.IsAutoMode)
                 .Subscribe(_ =>
                 {
                     NormalJudge();
