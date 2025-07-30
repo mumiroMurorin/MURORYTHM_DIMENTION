@@ -82,19 +82,17 @@ namespace ChartEditor
                 .Subscribe(_ => { UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0); })
                 .AddTo(this.gameObject);
 
-            // BeatCountの更新 → 位置、数の更新
-            barData.BeatCount
-                .Skip(1)
-                .DelayFrame(1) // 絶対よくない、混乱のもと
-                .Subscribe(_ =>{ UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0); })
-                .AddTo(this.gameObject);
+            //// BeatCountの更新 → 位置、数の更新
+            //barData.BeatCount
+            //    .Skip(1)
+            //    .Subscribe(_ =>{ UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0); })
+            //    .AddTo(this.gameObject);
 
-            // DivisionNumの更新 → 位置、数の更新
-            barData.DivisionNum
-                .Skip(1)
-                .DelayFrame(1) // 絶対よくない、混乱のもと
-                .Subscribe(_ => { UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0); })
-                .AddTo(this.gameObject);
+            //// DivisionNumの更新 → 位置、数の更新
+            //barData.DivisionNum
+            //    .Skip(1)
+            //    .Subscribe(_ => { UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0); })
+            //    .AddTo(this.gameObject);
 
 
             // SubdivisionDatasに購読
@@ -110,6 +108,9 @@ namespace ChartEditor
                 .Subscribe(subData => {
                     OnAddSubdivision(subData.Value);
                     BindForSubdivisionData(subData.Value, Find(subData.Value.BarData.BarIndex, subData.Value.SubDivisionIndex).Item2.Obj.gameObject);
+
+                    // ※ループが多いと重たい
+                    UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0);
                 })
                 .AddTo(this.gameObject);
 
@@ -117,6 +118,9 @@ namespace ChartEditor
             barData?.SubDivisionDatas.ObserveRemove()
                 .Subscribe(subData => {
                     OnRemoveSubdivision(subData.Value);
+
+                    // ※ループが多いと重たい
+                    UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0);
                 })
                 .AddTo(this.gameObject);
         }
@@ -129,7 +133,6 @@ namespace ChartEditor
         {
             // BPMの更新 → 位置の更新
             subData?.Bpm
-                .DelayFrame(1) // 絶対よくない、混乱のもと
                 .Where(_ => lineObj != null)
                 .Subscribe(bpm =>
                 {
@@ -148,7 +151,6 @@ namespace ChartEditor
 
             // BeatUnitの更新 → 表記の更新
             subData.BarData.BeatUnit
-                .DelayFrame(1) // 絶対よくない、混乱のもと
                 .Where(_ => lineObj != null)
                 .Subscribe(unit => OnChangeBeatUnit(subData.BarData.BarIndex, subData.SubDivisionIndex, unit))
                 .AddTo(this.gameObject)
@@ -156,7 +158,6 @@ namespace ChartEditor
 
             // BeatCountの更新 → 表記の更新
             subData.BarData.BeatCount
-                .DelayFrame(1) // 絶対よくない、混乱のもと
                 .Where(_ => lineObj != null)
                 .Subscribe(count => OnChangeBeatCount(subData.BarData.BarIndex, subData.SubDivisionIndex, count))
                 .AddTo(this.gameObject)
@@ -164,7 +165,6 @@ namespace ChartEditor
 
             // DivisionNumの更新 → 表記の更新
             subData.BarData.DivisionNum
-                .DelayFrame(1) // 絶対よくない、混乱のもと
                 .Where(_ => lineObj != null)
                 .Subscribe(divNum => OnChangeDivisionNum(subData.BarData.BarIndex, subData.SubDivisionIndex, divNum))
                 .AddTo(this.gameObject)
@@ -216,6 +216,8 @@ namespace ChartEditor
             }
 
             lines.Insert(insertIndex, addLine);
+            var z = insertIndex != 0 ? lines[insertIndex - 1].Obj.gameObject.transform.position.z : 0;
+            lineObj.SetPosition(z);
         }
 
         /// <summary>
@@ -241,8 +243,9 @@ namespace ChartEditor
             // 表記の更新
             var pair = Find(barIndex, subIndex);
             var index = pair.Item1;
-            var thisObj = pair.Item2.Obj;
+            if(index < 0) { return; }
 
+            var thisObj = pair.Item2.Obj;
             var backCount = pair.Item1 != 0 ? lines[index - 1].Data.BarData.BeatCount.Value : -1;
 
             thisObj.OnChangeBeatCount(beatCount, backCount);
@@ -253,8 +256,9 @@ namespace ChartEditor
             // 表記の更新
             var pair = Find(barIndex, subIndex);
             var index = pair.Item1;
-            var thisObj = pair.Item2.Obj;
+            if (index < 0) { return; }
 
+            var thisObj = pair.Item2.Obj;
             var backUnit = pair.Item1 != 0 ? lines[index - 1].Data.BarData.BeatUnit.Value : -1f;
 
             thisObj.OnChangeBeatUnit(beatUnit, backUnit);
@@ -265,8 +269,9 @@ namespace ChartEditor
             // 表記の更新
             var pair = Find(barIndex, subIndex);
             var index = pair.Item1;
-            var thisObj = pair.Item2.Obj;
+            if (index < 0) { return; }
 
+            var thisObj = pair.Item2.Obj;
             var backDivNum = pair.Item1 != 0 ? lines[index - 1].Data.BarData.DivisionNum.Value : -1;
 
             thisObj.OnChangeDivisionNum(divisionNum, backDivNum);
@@ -277,8 +282,9 @@ namespace ChartEditor
             // 表記の更新
             var pair = Find(barIndex, subIndex);
             var index = pair.Item1;
-            var thisObj = pair.Item2.Obj;
+            if (index < 0) { return; }
 
+            var thisObj = pair.Item2.Obj;
             var backBpm = pair.Item1 != 0 ? lines[index - 1].Data.Bpm.Value : -1f;
 
             thisObj.OnChangeBpm(bpm, backBpm);
@@ -351,14 +357,14 @@ namespace ChartEditor
                 if (line.Data.BarData.BarIndex < barIndex) { continue; }
                 else if(line.Data.BarData.BarIndex > barIndex)
                 {
-                    Debug.Log($"指定された要素が見つかりませんでした: #{barIndex}-{subIndex}");
+                    //Debug.Log($"指定された要素が見つかりませんでした: #{barIndex}-{subIndex}");
                     return (-1, null);
                 }
 
                 if(line.Data.SubDivisionIndex < subIndex) { continue; }
                 else if (line.Data.SubDivisionIndex > subIndex)
                 {
-                    Debug.Log($"指定された要素が見つかりませんでした: #{barIndex}-{subIndex}");
+                    //Debug.Log($"指定された要素が見つかりませんでした: #{barIndex}-{subIndex}");
                     return (-1, null);
                 }
 

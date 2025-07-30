@@ -55,9 +55,12 @@ namespace ChartEditor
         /// <param name="length"></param>
         private void ShortenChart(int length)
         {
+            if (dataGetter.ChartData.Value.BarDatas.Count <= 0) { return; }
+
             // Á‚·ƒm[ƒc‚ð‹L˜^
             int count = dataGetter.ChartData.Value.BarDatas.Count;
             var destroyNoteList = new List<IDeployableNoteData>();
+
             for (int i = 0; i < length; i++)
             {
                 foreach (var sub in dataGetter.ChartData.Value.BarDatas[count - i - 1].SubDivisionDatas)
