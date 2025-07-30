@@ -22,10 +22,4 @@ namespace ChartEditor
             lineInfo_view.SetBPM(bpm);
         }
     }
-
-    public interface ISubdivisionLineData
-    {
-        ISubDivisionDataGetter SubDivisionData { get; }
-    }
-
 }

@@ -48,7 +48,7 @@ namespace ChartEditor
 
             // 拡大率操作
             optionGetter.ChartViewScale
-                .Subscribe(_ => { UpdateLinePos(); })
+                .Subscribe(_ => { UpdateLinePos(0, 0); })
                 .AddTo(this.gameObject);
         }
 
@@ -63,6 +63,7 @@ namespace ChartEditor
             chartData?.BarDatas.ObserveAdd()
                 .Subscribe(barData => {
                     OnAddLane(barData.Value);
+                    BindForBarData(barData.Value);
                 })
                 .AddTo(this.gameObject);
 
@@ -70,6 +71,29 @@ namespace ChartEditor
                 .Subscribe(barData => {
                     OnRemoveLastLane(barData.Value.SubDivisionDatas.Count);
                 })
+                .AddTo(this.gameObject);
+        }
+
+        private void BindForBarData(IBarDataGetter barData)
+        {
+            // BeatUnitの更新
+            barData?.BeatUnit
+                .Skip(1)
+                .Subscribe(_ => { OnChangeBeatUnit(barData.BarIndex); })
+                .AddTo(this.gameObject);
+
+            // SubdivisionDatasに購読
+            barData?.SubDivisionDatas.ObserveAdd()
+                .Subscribe(subData => BindForSubdivisionData(subData.Value))
+                .AddTo(this.gameObject);
+        }
+
+        private void BindForSubdivisionData(ISubDivisionDataGetter subData)
+        {
+            // BPMの更新
+            subData?.Bpm
+                .Skip(1)
+                .Subscribe(_ => OnChangeBPM(subData.BarData.BarIndex, subData.SubDivisionIndex))
                 .AddTo(this.gameObject);
         }
 
@@ -105,7 +129,8 @@ namespace ChartEditor
                 lines.Add(new LineDataToObject(lineObj, subData));
             }
 
-            UpdateLinePos();
+            // 一つ前の分線から位置調整を行う
+            UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0);
         }
 
         /// <summary>
@@ -116,10 +141,25 @@ namespace ChartEditor
         {
             for(int i = 0; i < lineCount; i++)
             {
+                Destroy(lines[lines.Count - 1].Obj.gameObject);
                 lines.RemoveAt(lines.Count - 1);
             }
         }
 
+        private void OnChangeBeatUnit(int barIndex)
+        {
+            UpdateLinePos(Mathf.Max(0, barIndex - 1), 0);
+        }
+
+        private void OnChangeBPM(int barIndex, int subIndex)
+        {
+            UpdateLinePos(Mathf.Max(0, barIndex - 1), 0);
+        }
+
+        /// <summary>
+        /// レイヤーが変更されたとき一括で配置場所の位置を変える
+        /// </summary>
+        /// <param name="editNoteType"></param>
         private void OnChangeLayer(EditNoteType editNoteType)
         {
             foreach(var line in lines)
@@ -128,13 +168,24 @@ namespace ChartEditor
             }
         }
 
-        void UpdateLinePos()
+        /// <summary>
+        /// Lineの場所を変更する
+        /// </summary>
+        /// <param name="barNumber"></param>
+        /// <param name="subIndex"></param>
+        void UpdateLinePos(int barNumber, int subIndex)
         {
             float chartLengthParSecond = optionGetter.ChartViewScale.Value;
-            float currentZ = 0f;
 
-            foreach (var line in lines)
+            var pair = Find(barNumber, subIndex);
+            int startIndex = pair.Item1;
+            if(startIndex < 0) { return; }
+
+            float currentZ = pair.Item2.Obj.gameObject.transform.position.z;
+
+            for (int i = startIndex; i < lines.Count; i++)
             {
+                var line = lines[i];
                 line.Obj.SetPosition(currentZ);
 
                 float bpm = line.Data.Bpm.Value;
@@ -163,6 +214,44 @@ namespace ChartEditor
             lines.Clear();
         }
 
+        private (int,LineDataToObject) Find(int barIndex, int subIndex)
+        {
+            int index = -1;
+            foreach (var line in lines)
+            {
+                index++;
+                if (line.Data.BarData.BarIndex < barIndex) { continue; }
+                else if(line.Data.BarData.BarIndex > barIndex)
+                {
+                    Debug.Log($"指定された要素が見つかりませんでした: #{barIndex}-{subIndex}");
+                    return (-1, null);
+                }
+
+                if(line.Data.SubDivisionIndex < subIndex) { continue; }
+                else if (line.Data.SubDivisionIndex > subIndex)
+                {
+                    Debug.Log($"指定された要素が見つかりませんでした: #{barIndex}-{subIndex}");
+                    return (-1, null);
+                }
+
+                return (index, line);
+            }
+
+            return (-1, null);
+        }
+
+        public ISubDivisionDataGetter GetData(DeployableLineObject lineObj)
+        {
+            foreach(var line in lines) 
+            { 
+                if(line.Obj == lineObj) { return line.Data; }
+            }
+
+            Debug.LogWarning($"【System】データが見つかりませんでした");
+            return null;
+        }
+
+        [System.Serializable]
         class LineDataToObject
         {
             public LineDataToObject(DeployableLineObject obj, ISubDivisionDataGetter data)

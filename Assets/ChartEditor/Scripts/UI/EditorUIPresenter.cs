@@ -133,6 +133,8 @@ namespace ChartEditor
                 .Subscribe(value =>
                 {
                     var config = configEditor_model.BarConfig.Value.BarDataGetter.BarConfig;
+
+
                     rhythmConfigBar_view.SetDataOnUI(config);
                     rhythmConfigBar_view.SetActive(true);
                 })

@@ -6,16 +6,16 @@ namespace ChartEditor
 {
     public class RhythmConfigurableBarCollider : MonoBehaviour, IRhythmConfigurableBarCollider
     {
-        [SerializeField] SerializeInterface<IBarLineData> bar;
+        [SerializeField] DeployableLineObject bar;
 
         public EditMode EditMode => EditMode.EditBarConfig;
 
-        IBarDataGetter IRhythmConfigurableBarCollider.BarDataGetter => bar.Value.BarData;
+        DeployableLineObject IRhythmConfigurableBarCollider.barObj => bar;
     }
 
     public interface IRhythmConfigurableBarCollider : IInteractableCollider
     {
-        IBarDataGetter BarDataGetter { get; }
+        DeployableLineObject barObj { get; }
     }
 
 }

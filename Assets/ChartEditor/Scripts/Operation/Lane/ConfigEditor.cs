@@ -11,6 +11,8 @@ namespace ChartEditor
 {
     public class ConfigEditor : MonoBehaviour
     {
+        [SerializeField] LaneDeployer laneController;
+
         IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter dataSetter;
 
@@ -59,8 +61,12 @@ namespace ChartEditor
 
         public void ChangeBarConfig(BarConfig barConfig)
         {
-            int barIndex = barConfigCollider.Value.BarDataGetter.BarIndex;
-            var previousBarData = barConfigCollider.Value.BarDataGetter;
+            var lineObj = barConfigCollider.Value.barObj;
+            var subData = laneController.GetData(lineObj);
+            int barIndex = subData.BarData.BarIndex;
+
+            if (dataGetter.ChartData.Value.BarDatas.Count <= barIndex) { return; }
+            var previousBarData = dataGetter.ChartData.Value.BarDatas[barIndex];
             var previousBarConfig = previousBarData.BarConfig;
 
             // コンフィグが変更できるか調べる
@@ -151,9 +157,15 @@ namespace ChartEditor
 
         public void ChangeSubDivisionConfig(SubdivisionConfig subConfig)
         {
-            int barIndex = subConfigCollider.Value.SubDivisionDataGetter.BarData.BarIndex;
-            int subIndex = subConfigCollider.Value.SubDivisionDataGetter.SubDivisionIndex;
-            var previousSubConfig = subConfigCollider.Value.SubDivisionDataGetter.SubConfig;
+            var lineObj = subConfigCollider.Value.subdivisionObj;
+            var subData = laneController.GetData(lineObj);
+            int barIndex = subData.BarData.BarIndex;
+            int subIndex = subData.SubDivisionIndex;
+
+            if (dataGetter.ChartData.Value.BarDatas.Count <= barIndex) { return; }
+            if (dataGetter.ChartData.Value.BarDatas[barIndex].SubDivisionDatas.Count <= subIndex) { return; }
+            var previousSubData = dataGetter.ChartData.Value.BarDatas[barIndex].SubDivisionDatas[subIndex];
+            var previousSubConfig = previousSubData.SubConfig;
 
             // 変更
             Record(() => {

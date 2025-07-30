@@ -52,11 +52,6 @@ namespace ChartEditor
         }
     }
 
-    public interface IBarLineData : ISubdivisionLineData
-    {
-        IBarDataGetter BarData { get; }
-    }
-
     public interface ILinePositioner
     {
         GameObject gameObject { get; }
