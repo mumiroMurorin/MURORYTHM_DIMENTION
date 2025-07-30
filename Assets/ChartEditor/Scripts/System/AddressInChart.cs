@@ -10,7 +10,7 @@ namespace ChartEditor
     /// <summary>
     /// 譜面中の「小節番号」「分節番号」「スライダーインデックス」をまとめたクラス
     /// </summary>
-    public class AddressInChart
+    public class AddressInChart : IReadOnlyAddressInChart
     {
         const int BAR_INDEX_DEFAULT = 0;
         const int SUBDIVISION_INDEX_DEFAULT = 0;
@@ -23,7 +23,7 @@ namespace ChartEditor
             this.sliderIndex = new ReactiveProperty<float>(sliderIndex);
         }
 
-        public AddressInChart(AddressInChart address)
+        public AddressInChart(IReadOnlyAddressInChart address)
         {
             if (address == null)
             {
@@ -53,16 +53,6 @@ namespace ChartEditor
                 this.subDivisionIndex = new ReactiveProperty<int>(rangeAddress.SubDivisionIndex);
                 this.sliderIndex = new ReactiveProperty<float>(rangeAddress.Range[0]);
             }
-        }
-
-        public static AddressInChart operator +(AddressInChart z, AddressInChart w)
-        {
-            return new AddressInChart(z.BarIndex + w.BarIndex, z.SubDivisionIndex + w.SubDivisionIndex, z.SliderIndex + w.SliderIndex);
-        }
-
-        public static AddressInChart operator -(AddressInChart z, AddressInChart w)
-        {
-            return new AddressInChart(z.BarIndex - w.BarIndex, z.SubDivisionIndex - w.SubDivisionIndex, z.SliderIndex - w.SliderIndex);
         }
 
         /// <summary>
@@ -281,6 +271,24 @@ namespace ChartEditor
         {
             return $"#{BarIndex + 1} - {SubDivisionIndex} - {Range[0]}~{Range[^1]}";
         }
+    }
+
+    public interface IReadOnlyAddressInChart
+    {
+        int BarIndex { get; }
+        IReadOnlyReactiveProperty<int> BarIndexRP { get; }
+
+        int SubDivisionIndex { get; }
+        IReadOnlyReactiveProperty<int> SubDivisionIndexRP { get; }
+
+        float SliderIndex { get; }
+        IReadOnlyReactiveProperty<float> SliderIndexRP { get; }
+
+        bool IsSameAddress(AddressInChart address);
+
+        bool IsEarlierThan(AddressInChart address);
+
+        string ToString();
     }
 
     public interface IReadOnlyAddressWithinRange

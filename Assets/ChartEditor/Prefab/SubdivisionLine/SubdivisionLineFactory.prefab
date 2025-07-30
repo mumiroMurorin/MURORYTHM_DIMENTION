@@ -44,5 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 400b5bfe95bd3014bb49cc974a6e724a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subdivisionLineParent: {fileID: 0}
-  subdivisionLineObj: {fileID: 4481383044102371496, guid: 7c368f27cf492ca46bd8de0390b5fdb6, type: 3}
+  subdivisionLinePrefab: {fileID: 4481383044102371496, guid: 7c368f27cf492ca46bd8de0390b5fdb6, type: 3}

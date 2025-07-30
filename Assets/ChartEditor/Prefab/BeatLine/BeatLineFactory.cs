@@ -4,35 +4,20 @@ using UnityEngine;
 
 namespace ChartEditor
 {
-    public class BeatLineFactory : MonoBehaviour, ILaneDeployable<SubDivisionDataInBeat>
+    public class BeatLineFactory : MonoBehaviour, ILaneDeployable
     {
-        [SerializeField] GameObject beatLineObj;
+        [SerializeField] GameObject beatLinePrefab;
 
-        List<SubdivisionLine> beatLines = new List<SubdivisionLine>();
-
-        void ILaneDeployable<SubDivisionDataInBeat>.Initialize()
+        DeployableLineObject ILaneDeployable.Deploy(Transform parent)
         {
-            foreach (var beatLine in beatLines)
-            {
-                Destroy(beatLine.gameObject);
-            }
-
-            beatLines = new List<SubdivisionLine>();
-        }
-
-        GameObject ILaneDeployable<SubDivisionDataInBeat>.Deploy(SubDivisionDataInBeat subDivisionData, Vector3 pos, Transform parent)
-        {
-            GameObject obj = Instantiate(beatLineObj);
+            GameObject obj = Instantiate(beatLinePrefab);
             if (parent) { obj.transform.SetParent(parent); }
-            obj.transform.localPosition = pos;
-
-            // 生成したラインをリストに格納
-            if (obj.TryGetComponent(out SubdivisionLine line))
+            if (!obj.TryGetComponent(out DeployableLineObject deployable))
             {
-                beatLines?.Add(line);
+                Debug.Log("【Lane】DeployableLineObjectがアタッチされていません");
             }
 
-            return obj;
+            return deployable;
         }
     }
 }

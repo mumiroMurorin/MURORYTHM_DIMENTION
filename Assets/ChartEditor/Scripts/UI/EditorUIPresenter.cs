@@ -34,20 +34,20 @@ namespace ChartEditor
         [SerializeField] ConfigEditor configEditor_model;
         [SerializeField] LaneExtender laneExtender_model;
 
-        IChartEditorDataSetter editorDataSetter_model;
+        IChartEditorDataSetter dataSetter;
         IChartEditorDataGetter dataGetter_model;
-        IChartEditorOptionSetter optionDataSetter_model;
-        IChartEditorOptionGetter optionDataGetter_model;
+        IChartEditorOptionSetter optionSetter;
+        IChartEditorOptionGetter optionGetter;
 
         CancellationTokenSource soundLoadCts;
 
         [Inject]
         public void Construct(IChartEditorDataSetter chartEditorDataSetter, IChartEditorDataGetter chartEditorDataGetter, IChartEditorOptionSetter optionDataSetter, IChartEditorOptionGetter optionDataGetter)
         {
-            editorDataSetter_model = chartEditorDataSetter;
-            optionDataSetter_model = optionDataSetter;
+            dataSetter = chartEditorDataSetter;
+            optionSetter = optionDataSetter;
             dataGetter_model = chartEditorDataGetter;
-            optionDataGetter_model = optionDataGetter;
+            optionGetter = optionDataGetter;
         }
 
         void Start()
@@ -85,12 +85,12 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // レーン分割数の変更
-            optionDataGetter_model?.LaneDivisionNum
+            optionGetter?.LaneDivisionNum
                 .Subscribe(changeLaneDivNumButton_view.OnLaneDivNumChanged)
                 .AddTo(this.gameObject);
 
             // スクロール感度
-            optionDataGetter_model?.ScrollSensitivity
+            optionGetter?.ScrollSensitivity
                 .Subscribe(scrollSensitivitySlider_view.OnSensitivityChanged)
                 .AddTo(this.gameObject);
 
@@ -110,7 +110,7 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // 解像度の変更
-            dataGetter_model?.Resolution
+            optionGetter?.Resolution
                 .Subscribe(screenSizeDropDown_view.OnChangeResolution)
                 .AddTo(this.gameObject);
 
@@ -178,13 +178,13 @@ namespace ChartEditor
             musicBrowseButton_view.OnClickedListner += BrowseAudioFile;
 
             // オフセットフィールド
-            offsetInputField_view.OnValueChangedListner += editorDataSetter_model.SetOffset;
+            offsetInputField_view.OnValueChangedListner += dataSetter.SetOffset;
 
             // レーン分割数
-            changeLaneDivNumButton_view.OnButtonClickedListener += () => optionDataSetter_model.SetLaneDivisionNum(true);
+            changeLaneDivNumButton_view.OnButtonClickedListener += () => optionSetter.SetLaneDivisionNum(true);
 
             // スクロール感度
-            scrollSensitivitySlider_view.OnSliderChangedListener += optionDataSetter_model.SetScrollSensitivity;
+            scrollSensitivitySlider_view.OnSliderChangedListener += optionSetter.SetScrollSensitivity;
 
             // エクスポートボタン
             exportButton_view.OnClickedListner += chartDataExporter_model.Export;
@@ -199,7 +199,7 @@ namespace ChartEditor
             chartShortenButton_view.OnClickedListner += () => laneExtender_model.ChangeChartLength(-1);
 
             // 解像度変更ボタン
-            screenSizeDropDown_view.OnChangeValueListner += (resolution) => editorDataSetter_model.SetResolution(resolution);
+            screenSizeDropDown_view.OnChangeValueListner += (resolution) => optionSetter.SetResolution(resolution);
 
             // リズムコンフィグ
             rhythmConfigBar_view.OnClickedApplyButtonListner += () => configEditor_model.CloseConfig();
@@ -207,13 +207,13 @@ namespace ChartEditor
 
             // レイヤー変更ボタン
             switchLayerButton_view.OnClickCloseButtonListner += () => {
-                editorDataSetter_model.SwitchEditNoteType();
+                dataSetter.SwitchEditNoteType();
             };
 
-            explanationButton_view.OnClickedListner += () => editorDataSetter_model.SetEditMode(EditMode.Explanation);
+            explanationButton_view.OnClickedListner += () => dataSetter.SetEditMode(EditMode.Explanation);
 
             // 説明書を閉じる
-            explanation_view.OnClickCloseButtonListner += () => editorDataSetter_model.SetEditMode(EditMode.None);
+            explanation_view.OnClickCloseButtonListner += () => dataSetter.SetEditMode(EditMode.None);
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace ChartEditor
             soundLoadCts = new CancellationTokenSource();
 
             AudioClip clip = await AudioFileSelector.SelectAudioFile(soundLoadCts.Token);
-            editorDataSetter_model.SetMusic(clip);
+            dataSetter.SetMusic(clip);
         }
 
         private void OnDestroy()

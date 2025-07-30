@@ -9,26 +9,13 @@ namespace ChartEditor
     /// <summary>
     /// レーンに配置できる
     /// </summary>
-    public interface ILaneDeployable<T>
+    public interface ILaneDeployable
     {
         /// <summary>
         /// 配置
         /// </summary>
         /// <param name="pos"></param>
-        GameObject Deploy(T lineData, Vector3 pos, Transform parent = null);
-
-        /// <summary>
-        /// 初期化
-        /// </summary>
-        void Initialize();
-    }
-
-    /// <summary>
-    /// レーンから削除できる
-    /// </summary>
-    public interface ILaneDestroyable<T>
-    {
-        public void Destroy(T lineData);
+        DeployableLineObject Deploy(Transform parent = null);
     }
 
     /// <summary>
@@ -42,6 +29,11 @@ namespace ChartEditor
     public interface IScaleAffectable
     {
         void OnChangeSize(float z);
+    }
+
+    public interface IAddressSettable
+    {
+        void SetAddress(IReadOnlyAddressInChart address);
     }
 
     /// <summary>

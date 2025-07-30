@@ -8,12 +8,12 @@ namespace ChartEditor
 {
     public class ScreenController : MonoBehaviour
     {
-        IChartEditorDataGetter dataGetter;
+        IChartEditorOptionGetter optionGetter;
 
         [Inject]
-        public void Constructor(IChartEditorDataGetter dataGetter)
+        public void Constructor(IChartEditorOptionGetter optionGetter)
         {
-            this.dataGetter = dataGetter;
+            this.optionGetter = optionGetter;
         }
 
         private void Start()
@@ -23,7 +23,7 @@ namespace ChartEditor
 
         private void Bind()
         {
-            dataGetter?.Resolution.
+            optionGetter?.Resolution.
                 Subscribe(ChangeResolution)
                 .AddTo(this.gameObject);
         }

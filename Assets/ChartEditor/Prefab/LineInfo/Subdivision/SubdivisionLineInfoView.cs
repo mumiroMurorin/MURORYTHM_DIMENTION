@@ -13,17 +13,10 @@ namespace ChartEditor
         [SerializeField] TextMeshPro bpmTmp;
 
         /// <summary>
-        /// UIにデータをセット
+        /// BPM情報をUIにセット
         /// </summary>
-        public void SetDatas(float bpm = -1)
-        {
-            SetBPM(bpm);
-        }
-
-        /// <summary>
-        /// 小節番号の設定
-        /// </summary>
-        public void SetBPM(float bpm)
+        /// <param name="bpm"> -1 : 表示しない </param>
+        public void SetBPM(float bpm = -1)
         {
             if (bpmTmp == null) { return; }
 

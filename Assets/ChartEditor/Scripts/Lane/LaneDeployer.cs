@@ -8,19 +8,21 @@ namespace ChartEditor
 {
     public class LaneDeployer : MonoBehaviour
     {
-        [SerializeField] SerializeInterface<ILaneDeployable<BarDataInChart>> barLineDeplayable;
-        [SerializeField] SerializeInterface<ILaneDestroyable<BarDataInChart>> barLineDestroyable;
+        [SerializeField] SerializeInterface<ILaneDeployable> barLineFactory;
+        [SerializeField] SerializeInterface<ILaneDeployable> beatLineFactory;
+        [SerializeField] SerializeInterface<ILaneDeployable> subDivisionLineFactory;
         [SerializeField] Transform lineParent;
 
-        IChartEditorDataGetter chartEditorDataGetter;
-        IChartEditorOptionGetter chartEditorOptionGetter;
-        int barCount = 0;
+        List<LineDataToObject> lines = new List<LineDataToObject>();
 
+        IChartEditorDataGetter dataGetter;
+        IChartEditorOptionGetter optionGetter;
+        
         [Inject]
-        public void Construct(IChartEditorDataGetter chartEditorDataGetter, IChartEditorOptionGetter chartEditorOptionGetter)
+        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorOptionGetter optionGetter)
         {
-            this.chartEditorDataGetter = chartEditorDataGetter;
-            this.chartEditorOptionGetter = chartEditorOptionGetter;
+            this.dataGetter = dataGetter;
+            this.optionGetter = optionGetter;
         }
 
         void Start()
@@ -31,70 +33,120 @@ namespace ChartEditor
         private void Bind()
         {
             // 譜面生成
-            chartEditorDataGetter?.ChartData
+            dataGetter?.ChartData
                 .Where(data => data != null)
                 .Subscribe(data => {
+                    Initialze();
                     BindForChartData(data);
-                    Initialze(data); 
                 })
+                .AddTo(this.gameObject);
+
+            // レイヤーチェンジ
+            dataGetter.EditNoteType
+                .Subscribe(OnChangeLayer)
+                .AddTo(this.gameObject);
+
+            // 拡大率操作
+            optionGetter.ChartViewScale
+                .Subscribe(_ => { UpdateLinePos(); })
                 .AddTo(this.gameObject);
         }
 
         private void BindForChartData(ChartData chartData)
         {
+            // Collectionの監視は初期化がないので小節線の数だけ繰り返す
+            for (int i = 0; i < chartData.BarDatas.Count; i++)
+            {
+                OnAddLane(chartData.BarDatas[i]);
+            }
+
             chartData?.BarDatas.ObserveAdd()
                 .Subscribe(barData => {
-                    AddLane(barData.Value);
+                    OnAddLane(barData.Value);
                 })
                 .AddTo(this.gameObject);
 
             chartData?.BarDatas.ObserveRemove()
                 .Subscribe(barData => {
-                    RemoveLane(barData.Value);
+                    OnRemoveLastLane(barData.Value.SubDivisionDatas.Count);
                 })
                 .AddTo(this.gameObject);
         }
 
-        /// <summary>
-        /// 楽曲の長さとBPMに基づき譜面レーンの生成
-        /// </summary>
-        /// <param name="musicLength"></param>
-        /// <param name="mainBpm"></param>
-        private void Initialze(ChartData chartData)
+        private void Initialze()
         {
-            // まず初期化
             ClearLane();
-            barCount = 0;
+        }
 
-            // 小節線の数だけ繰り返す
-            for (int i = 0; i < chartData.BarDatas.Count; i++)
+        /// <summary>
+        /// 小節線が追加された時
+        /// </summary>
+        /// <param name="barData"></param>
+        private void OnAddLane(IBarDataGetter barData)
+        {
+            DeployableLineObject lineObj;
+            for (int i = 0; i < barData.SubDivisionDatas.Count; i++)
             {
-                AddLane(chartData.BarDatas[i]);
+                var subData = barData.SubDivisionDatas[i];
+                var address = new AddressInChart(barData.BarIndex, i, 0);
+
+                // 小節線のインスタンス化
+                if (i == 0) { lineObj = barLineFactory.Value.Deploy(lineParent); }
+                // 拍子線のインスタンス化
+                else if (i % barData.BeatCount.Value == 0) { lineObj = beatLineFactory.Value.Deploy(lineParent); }
+                // 分線のインスタンス化
+                else { lineObj = subDivisionLineFactory.Value.Deploy(lineParent); }
+
+                // 初期化
+                lineObj.transform.localPosition = Vector3.zero;
+                lineObj.SetAddress(address);
+                lineObj.SetPlacementLocation(subData.SetPlacementLocation, subData.SetSpaceLocation);
+                lineObj.OnChangeLayer(dataGetter.EditNoteType.Value);
+                lines.Add(new LineDataToObject(lineObj, subData));
+            }
+
+            UpdateLinePos();
+        }
+
+        /// <summary>
+        /// 最後の小節線が削除された時
+        /// </summary>
+        /// <param name="lineCount"></param>
+        private void OnRemoveLastLane(int lineCount)
+        {
+            for(int i = 0; i < lineCount; i++)
+            {
+                lines.RemoveAt(lines.Count - 1);
             }
         }
 
-        private void AddLane(BarDataInChart barData)
+        private void OnChangeLayer(EditNoteType editNoteType)
         {
-            // 小節線追加
-            GenerateBarUnit(barData, lineParent, barCount++);
+            foreach(var line in lines)
+            {
+                line.Obj.OnChangeLayer(editNoteType);
+            }
         }
 
-        private void RemoveLane(BarDataInChart barData)
+        void UpdateLinePos()
         {
-            barLineDestroyable?.Value.Destroy(barData);
-            barCount--;
-        }
+            float chartLengthParSecond = optionGetter.ChartViewScale.Value;
+            float currentZ = 0f;
 
-        /// <summary>
-        /// 1小節の生成
-        /// </summary>
-        /// <param name="barData"></param>
-        /// <param name="currentZ"></param>
-        private void GenerateBarUnit(BarDataInChart barData, Transform parent, int count)
-        {
-            // 小節線のインスタンス化
-            GameObject barObj = barLineDeplayable.Value.Deploy(barData, Vector3.zero, parent);
-            barObj.name = $"Bar_{count + 1}";
+            foreach (var line in lines)
+            {
+                line.Obj.SetPosition(currentZ);
+
+                float bpm = line.Data.Bpm.Value;
+                float beatUnit = line.Data.BarData.BeatUnit.Value;
+                int beatCount = line.Data.BarData.BeatCount.Value;
+                int divNum = line.Data.BarData.DivisionNum.Value;
+                float delta = chartLengthParSecond * (60f / bpm) * (4f / beatUnit) / divNum;
+
+                line.Obj.OnChangeSize(delta);
+
+                currentZ += delta;
+            }
         }
 
         /// <summary>
@@ -102,13 +154,26 @@ namespace ChartEditor
         /// </summary>
         private void ClearLane()
         {
-            barLineDeplayable.Value.Initialize();
-
             // 親オブジェクトの削除
-            foreach(Transform t in lineParent)
+            foreach(var t in lines)
             {
-                Destroy(t.gameObject);
+                Destroy(t.Obj.gameObject);
             }
+
+            lines.Clear();
+        }
+
+        class LineDataToObject
+        {
+            public LineDataToObject(DeployableLineObject obj, ISubDivisionDataGetter data)
+            {
+                this.Obj = obj;
+                this.Data = data;
+            }
+
+            public DeployableLineObject Obj { get; set; }
+
+            public ISubDivisionDataGetter Data { get; set; }
         }
     }
 

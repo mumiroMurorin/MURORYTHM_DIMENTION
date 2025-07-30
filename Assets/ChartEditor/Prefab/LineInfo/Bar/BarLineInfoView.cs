@@ -18,19 +18,8 @@ namespace ChartEditor
         [SerializeField] GameObject divisionObject;
         [SerializeField] TextMeshPro divisionNumTmp;
 
-        /// <summary>
-        /// UIにデータをセット
-        /// </summary>
-        /// <param name="number"></param>
-        /// <param name="bpm"></param>
-        /// <param name="beatCount"></param>
-        /// <param name="beatUnit"></param>
-        public void SetDatas(int barNumber = -1,int beatCount = -1, float beatUnit = -1, int divNum = -1)
-        {
-            SetBarNumber(barNumber);
-            SetBeatCountAndBeatUnit(beatCount, beatUnit);
-            SetDivisionNum(divNum);
-        }
+        bool isChangeBeatCount;
+        bool isChangeBeatUnit;
 
         /// <summary>
         /// 小節番号の設定
@@ -43,25 +32,22 @@ namespace ChartEditor
             else { numberTmp.text = number.ToString(); }
         }
 
-        /// <summary>
-        /// 拍子の設定
-        /// </summary>
-        public void SetBeatCountAndBeatUnit(int beatCount, float beatUnit)
+        public void SetBeatCount(int beatCount)
         {
             if (beatCountTmp == null) { return; }
+
+            isChangeBeatCount = beatCount != -1;
+            beatCountTmp.text = isChangeBeatCount ? beatCount.ToString() : beatCountTmp.text;
+            beatObject.SetActive(isChangeBeatCount || isChangeBeatUnit);
+        }
+
+        public void SetBeatUnit(float beatUnit)
+        {
             if (beatUnitTmp == null) { return; }
 
-            beatObject.SetActive(beatCount != -1 || beatUnit != -1);
-
-            // 非表示
-            if (beatCount == -1 && beatUnit == -1)
-            {
-                beatCountTmp.text = "";
-                beatUnitTmp.text = "";
-            }
-
-            beatCountTmp.text = beatCount != -1 ? beatCount.ToString() : beatCountTmp.text;
-            beatUnitTmp.text = beatUnit != -1 ? beatUnit.ToString() : beatUnitTmp.text;
+            isChangeBeatUnit = beatUnit != -1;
+            beatCountTmp.text = isChangeBeatUnit ? beatUnit.ToString() : beatCountTmp.text;
+            beatObject.SetActive(isChangeBeatCount || isChangeBeatUnit);
         }
 
         /// <summary>

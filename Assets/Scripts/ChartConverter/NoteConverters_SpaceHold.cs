@@ -83,7 +83,7 @@ namespace ChartConvert
                 if (noteData is not IVerticesControlableNoteData verticesData) { return false; }
 
                 // データのセット
-                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
+                var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
 
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
@@ -168,7 +168,7 @@ namespace ChartConvert
                 if (noteData is not IVerticesControlableNoteData verticesData) { return false; }
 
                 // データのセット
-                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
+                var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
 
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
@@ -246,7 +246,7 @@ namespace ChartConvert
                 if (noteData is not IVerticesControlableNoteData verticesData) { return false; }
 
                 // データのセット
-                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
+                var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
 
                 typeChangableData.SetNoteType(DeploymentNoteType.SpaceHoldHidden);
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
@@ -337,7 +337,7 @@ namespace ChartConvert
                 if (noteData is not IVerticesControlableNoteData verticesData) { return false; }
 
                 // データのセット
-                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
+                var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
 
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);

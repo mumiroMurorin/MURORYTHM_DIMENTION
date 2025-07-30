@@ -124,6 +124,32 @@ namespace ChartEditor
             }
         }
 
+        // アドレス → 配置場所
+        //Dictionary<IReadOnlyAddressInChart, Transform> addressToTransform = new Dictionary<IReadOnlyAddressInChart, Transform>();
+        //public bool RegisterAddress(IReadOnlyAddressInChart address,Transform transform)
+        //{
+        //    if(addressToTransform.TryAdd(address, transform)) { return true; }
+
+        //    Debug.LogError($"【System】既に登録されたアドレスです: {address}");
+        //    return false;
+        //}
+        //public bool RemoveAddress(IReadOnlyAddressInChart address)
+        //{
+        //    if (addressToTransform.Remove(address)) { return true; }
+        //    Debug.LogError($"【System】アドレスが登録されていません: {address}");
+        //    return false;
+        //}
+        //public Transform GetDeployableTransform(IReadOnlyAddressInChart address) 
+        //{
+        //    if (addressToTransform.TryGetValue(address, out var transform)) { return transform; }
+        //    Debug.LogError($"【System】指定されたアドレスは見つかりませんでした: {address}");
+        //    return null;
+        //}
+        //public void ClearAddressToTransform()
+        //{
+        //    addressToTransform.Clear();
+        //}
+
         #endregion
 
         #region PlayMode プレイモード関係
@@ -174,17 +200,6 @@ namespace ChartEditor
         }
 
         #endregion
-
-        #region スクリーンサイズ
-
-        ReactiveProperty<Resolution> resolution = new ReactiveProperty<Resolution>(ChartEditor.Resolution.w1920_1080);
-        public IReadOnlyReactiveProperty<Resolution> Resolution => resolution;
-        public void SetResolution(Resolution resolution)
-        {
-            this.resolution.Value = resolution;
-        }
-
-        #endregion
     }
 
     public interface IChartEditorDataGetter
@@ -211,7 +226,7 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<AudioClip> Music { get; }
 
-        IReadOnlyReactiveProperty<Resolution> Resolution { get; }
+        // Transform GetDeployableTransform(IReadOnlyAddressInChart address);
     }
 
     public interface IChartEditorDataSetter
@@ -240,6 +255,10 @@ namespace ChartEditor
 
         void SetMusic(AudioClip clip);
 
-        void SetResolution(Resolution resolution);
+        //bool RegisterAddress(IReadOnlyAddressInChart address, Transform transform);
+
+        //bool RemoveAddress(IReadOnlyAddressInChart address);
+
+        //void ClearAddressToTransform();
     }
 }

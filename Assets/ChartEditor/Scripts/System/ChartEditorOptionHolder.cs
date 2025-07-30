@@ -60,6 +60,17 @@ namespace ChartEditor
         }
 
         #endregion
+
+        #region スクリーンサイズ
+
+        ReactiveProperty<Resolution> resolution = new ReactiveProperty<Resolution>(ChartEditor.Resolution.w1920_1080);
+        public IReadOnlyReactiveProperty<Resolution> Resolution => resolution;
+        public void SetResolution(Resolution resolution)
+        {
+            this.resolution.Value = resolution;
+        }
+
+        #endregion
     }
 
     public interface IChartEditorOptionGetter
@@ -74,6 +85,7 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<float> ScrollSensitivity { get; }
 
+        IReadOnlyReactiveProperty<Resolution> Resolution { get; }
     }
 
     public interface IChartEditorOptionSetter
@@ -84,6 +96,8 @@ namespace ChartEditor
         void SetChartViewScale(float scale);
 
         void SetScrollSensitivity(float sensitivity);
+
+        void SetResolution(Resolution resolution);
     }
 }
 

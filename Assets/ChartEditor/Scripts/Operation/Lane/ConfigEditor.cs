@@ -151,7 +151,7 @@ namespace ChartEditor
 
         public void ChangeSubDivisionConfig(SubdivisionConfig subConfig)
         {
-            int barIndex = subConfigCollider.Value.SubDivisionDataGetter.BarIndex;
+            int barIndex = subConfigCollider.Value.SubDivisionDataGetter.BarData.BarIndex;
             int subIndex = subConfigCollider.Value.SubDivisionDataGetter.SubDivisionIndex;
             var previousSubConfig = subConfigCollider.Value.SubDivisionDataGetter.SubConfig;
 

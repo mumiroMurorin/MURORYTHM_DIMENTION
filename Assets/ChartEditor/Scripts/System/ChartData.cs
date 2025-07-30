@@ -14,14 +14,16 @@ namespace ChartEditor
     {
         const int SPACE_LOCATION_INDEX = 100;
 
-        public SubDivisionDataInBeat(SubdivisionConfig config, int barIndex, int subIndex)
+        public SubDivisionDataInBeat(SubdivisionConfig config, IBarDataGetter barData, int subIndex)
         {
             SetBpm(config.Bpm);
-            BarIndex = barIndex;
+            this.barData = barData;
             SubDivisionIndex = subIndex;
         }
 
-        public int BarIndex { get; }
+        IBarDataGetter barData;
+        public IBarDataGetter BarData { get { return barData; } }
+
         public int SubDivisionIndex { get; }
         public SubdivisionConfig SubConfig { get { return new SubdivisionConfig(this.bpm.Value); } }
 
@@ -150,7 +152,7 @@ namespace ChartEditor
             // ƒJƒEƒ“ƒg” * •ªŠ„”‚ª•ªü‚Ì”
             var subDivisionDatas = new List<SubDivisionDataInBeat>();
             var subConfig = new SubdivisionConfig(bpm);
-            for (int i = 0; i < beatCount * divNum; i++) { subDivisionDatas.Add(new SubDivisionDataInBeat(subConfig, BarIndex, i)); }
+            for (int i = 0; i < beatCount * divNum; i++) { subDivisionDatas.Add(new SubDivisionDataInBeat(subConfig, this, i)); }
             SetSubDivisionDatas(subDivisionDatas);
         }
 
@@ -532,7 +534,7 @@ namespace ChartEditor
 
     public interface ISubDivisionDataGetter
     {
-        int BarIndex { get; }
+        IBarDataGetter BarData { get; }
 
         int SubDivisionIndex { get; }
 

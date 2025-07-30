@@ -19,8 +19,8 @@ namespace ChartEditor
 
         public void ChangeSize(float z)
         {
-            float heigt = Mathf.Lerp(minHeight, maxHeight, 1f - (Mathf.Clamp(z, minZ, maxZ) - minZ) / (maxZ - minZ));
-            boxCollider.size = new Vector3(boxCollider.size.x, heigt, z);
+            float height = Mathf.Lerp(minHeight, maxHeight, 1f - (Mathf.Clamp(z, minZ, maxZ) - minZ) / (maxZ - minZ));
+            boxCollider.size = new Vector3(boxCollider.size.x, height, z);
         }
 
         public void SetAddress(int barIndex, int subIndex)

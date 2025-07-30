@@ -59,7 +59,7 @@ namespace ChartConvert
                 IDeployableNoteData noteData = new ChartEditor.NoteData_Touch();
 
                 // データのセット
-                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
+                var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 noteData.SetAddress(address);
 
                 onAddNoteData(noteData);
@@ -123,7 +123,7 @@ namespace ChartConvert
                 if (noteData is not ITypeChangableNoteData typeChangableData) { return false; }
 
                 // データのセット
-                var address = new AddressWithinRange(dataInChartEditor.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
+                var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 noteData.SetAddress(address);
                 typeChangableData.SetNoteType(DeploymentNoteType.DivineTouch);
 
