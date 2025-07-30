@@ -16,11 +16,12 @@ namespace ChartEditor
         IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter dataSetter;
 
-        ReactiveProperty<IRhythmConfigurableSubDivisionCollider> subConfigCollider = new ReactiveProperty<IRhythmConfigurableSubDivisionCollider>();
-        public IReadOnlyReactiveProperty<IRhythmConfigurableSubDivisionCollider> SubDivisionConfig => subConfigCollider;
+        IRhythmConfigurableSubDivisionCollider subConfigCollider;
+        IRhythmConfigurableBarCollider barConfigCollider;
+        
+        public SubdivisionConfig EditingSubdivisionConfig { get; private set; }
 
-        ReactiveProperty <IRhythmConfigurableBarCollider> barConfigCollider = new ReactiveProperty<IRhythmConfigurableBarCollider>();
-        public IReadOnlyReactiveProperty<IRhythmConfigurableBarCollider> BarConfig => barConfigCollider;
+        public BarConfig EditingBarConfig { get; private set; }
 
         [Inject]
         public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter)
@@ -49,19 +50,41 @@ namespace ChartEditor
             // エディットモードの変更
             if(subDivisionCollider != null)
             {
-                subConfigCollider.Value = subDivisionCollider;
+                subConfigCollider = subDivisionCollider;
+
+                // 編集中コンフィグをセット
+                var lineObj = subConfigCollider.subdivisionObj;
+                var subData = laneController.GetData(lineObj);
+                int barIndex = subData.BarData.BarIndex;
+                int subIndex = subData.SubDivisionIndex;
+
+                if (dataGetter.ChartData.Value.BarDatas.Count <= barIndex) { return; }
+                if (dataGetter.ChartData.Value.BarDatas[barIndex].SubDivisionDatas.Count <= subIndex) { return; }
+                var previousSubData = dataGetter.ChartData.Value.BarDatas[barIndex].SubDivisionDatas[subIndex];
+                EditingSubdivisionConfig = previousSubData.SubConfig;
+
                 dataSetter.SetEditMode(EditMode.EditingSubDivisionConfig);
             }
             else if(barCollider != null)
             {
-                barConfigCollider.Value = barCollider;
+                barConfigCollider = barCollider;
+
+                // 編集中コンフィグをセット
+                var lineObj = barConfigCollider.barObj;
+                var subData = laneController.GetData(lineObj);
+                int barIndex = subData.BarData.BarIndex;
+
+                if (dataGetter.ChartData.Value.BarDatas.Count <= barIndex) { return; }
+                var previousBarData = dataGetter.ChartData.Value.BarDatas[barIndex];
+                EditingBarConfig = previousBarData.BarConfig;
+
                 dataSetter.SetEditMode(EditMode.EditingBarConfig);
             }
         }
 
         public void ChangeBarConfig(BarConfig barConfig)
         {
-            var lineObj = barConfigCollider.Value.barObj;
+            var lineObj = barConfigCollider.barObj;
             var subData = laneController.GetData(lineObj);
             int barIndex = subData.BarData.BarIndex;
 
@@ -157,7 +180,7 @@ namespace ChartEditor
 
         public void ChangeSubDivisionConfig(SubdivisionConfig subConfig)
         {
-            var lineObj = subConfigCollider.Value.subdivisionObj;
+            var lineObj = subConfigCollider.subdivisionObj;
             var subData = laneController.GetData(lineObj);
             int barIndex = subData.BarData.BarIndex;
             int subIndex = subData.SubDivisionIndex;

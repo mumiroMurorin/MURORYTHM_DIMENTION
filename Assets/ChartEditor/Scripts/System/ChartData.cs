@@ -127,11 +127,19 @@ namespace ChartEditor
         public IReadOnlyReactiveCollection<SubDivisionDataInBeat> SubDivisionDatas => subDivisionDatas;
         public void SetSubDivisionDatas(List<SubDivisionDataInBeat> subDivisionDatas)
         {
-            this.subDivisionDatas.Clear();
+            for (int i = this.subDivisionDatas.Count - 1; i >= 0; i--)
+            {
+                this.subDivisionDatas.RemoveAt(this.subDivisionDatas.Count - 1);
+            }
+
             foreach (var sub in subDivisionDatas)
             {
                 this.subDivisionDatas.Add(sub);
             }
+        }
+        public void RemoveSubDivisionData(int index)
+        {
+            subDivisionDatas.RemoveAt(index);
         }
 
         /// <summary>
@@ -325,9 +333,26 @@ namespace ChartEditor
         /// <param name="length"></param>
         public void RemoveBar(int length)
         {
-            for (int i = 0; i < Mathf.Min(length, BarDatas.Count); i++)
+            int barCount = BarDatas.Count;
+            for (int i = barCount - 1; i >= Mathf.Max(barCount - length, 0); i--)
             {
-                barDatas.RemoveAt(barDatas.Count - 1);
+                // 分線を全部消す
+                var barData = barDatas[i];
+                for (int j = barData.SubDivisionDatas.Count - 1; j >= 0 ; j--)
+                {
+                    // ノートも全部消す
+                    var subData = barData.SubDivisionDatas[j];
+                    int noteCount = subData.NoteDatas.Count;
+                    for (int k = 0; k < noteCount; k++)
+                    {
+                        var note = subData.NoteDatas[0];
+                        RemoveNote(note);
+                    }
+
+                    barData.RemoveSubDivisionData(barDatas[i].SubDivisionDatas.Count - 1);
+                }
+             
+                barDatas.RemoveAt(i);
             }
         }
 

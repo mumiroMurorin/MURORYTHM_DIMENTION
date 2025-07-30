@@ -11,14 +11,15 @@ namespace ChartEditor
         [SerializeField] NoteDeployableGroup groundDeployable;
         [SerializeField] SpaceDeployableUnit spaceDeployable;
 
-        public abstract void OnChangeBpm(float bpm, float backBpm);
+        public virtual void SetBarNumber(int barNumber) { }
 
-        public abstract void OnChangeBeatCount(int beatCount, int backCount);
+        public virtual void OnChangeBpm(float bpm, float backBpm) { }
 
-        public abstract void OnChangeBeatUnit(float beatUnit, float backUnit);
+        public virtual void OnChangeBeatCount(int beatCount, int backCount) { }
 
-        public abstract void OnChangeDivisionNum(int divNum, int backNum);
+        public virtual void OnChangeBeatUnit(float beatUnit, float backUnit) { }
 
+        public virtual void OnChangeDivisionNum(int divNum, int backNum) { }
 
         /// <summary>
         /// 配置コライダーに担当アドレスを伝える

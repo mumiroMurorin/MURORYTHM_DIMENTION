@@ -253,6 +253,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5926953431618355336, guid: b4d908eed18a53b43bd2a3e4e67326bd, type: 3}
+      propertyPath: subDivision
+      value: 
+      objectReference: {fileID: 4502022922388785154}
+    - target: {fileID: 5926953431618355336, guid: b4d908eed18a53b43bd2a3e4e67326bd, type: 3}
       propertyPath: subDivision.obj
       value: 
       objectReference: {fileID: 4481383044102371496}

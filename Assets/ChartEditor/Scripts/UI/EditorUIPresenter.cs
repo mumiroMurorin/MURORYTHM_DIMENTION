@@ -132,8 +132,7 @@ namespace ChartEditor
                 .Where(mode => mode == EditMode.EditingBarConfig)
                 .Subscribe(value =>
                 {
-                    var config = configEditor_model.BarConfig.Value.BarDataGetter.BarConfig;
-
+                    var config = configEditor_model.EditingBarConfig;
 
                     rhythmConfigBar_view.SetDataOnUI(config);
                     rhythmConfigBar_view.SetActive(true);
@@ -145,7 +144,8 @@ namespace ChartEditor
                 .Where(mode => mode == EditMode.EditingSubDivisionConfig)
                 .Subscribe(value =>
                 {
-                    var config = configEditor_model.SubDivisionConfig.Value.SubDivisionDataGetter.SubConfig;
+                    var config = configEditor_model.EditingSubdivisionConfig;
+
                     rhythmConfigSubDivision_view.SetDataOnUI(config);
                     rhythmConfigSubDivision_view.SetActive(true);
                 })

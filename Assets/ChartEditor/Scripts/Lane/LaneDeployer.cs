@@ -30,6 +30,7 @@ namespace ChartEditor
             Bind();
         }
 
+
         private void Bind()
         {
             // 譜面生成
@@ -52,49 +53,122 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
         }
 
+        /// <summary>
+        /// 譜面データに対する購読を行う
+        /// </summary>
+        /// <param name="chartData"></param>
         private void BindForChartData(ChartData chartData)
         {
             // Collectionの監視は初期化がないので小節線の数だけ繰り返す
-            for (int i = 0; i < chartData.BarDatas.Count; i++)
+            foreach(var bar in chartData.BarDatas)
             {
-                OnAddLane(chartData.BarDatas[i]);
+                BindForBarData(bar);
             }
 
             chartData?.BarDatas.ObserveAdd()
-                .Subscribe(barData => {
-                    OnAddLane(barData.Value);
-                    BindForBarData(barData.Value);
-                })
-                .AddTo(this.gameObject);
-
-            chartData?.BarDatas.ObserveRemove()
-                .Subscribe(barData => {
-                    OnRemoveLastLane(barData.Value.SubDivisionDatas.Count);
-                })
+                .Subscribe(barData => BindForBarData(barData.Value))
                 .AddTo(this.gameObject);
         }
 
+        /// <summary>
+        /// 小節線に対する購読を行う
+        /// </summary>
+        /// <param name="barData"></param>
         private void BindForBarData(IBarDataGetter barData)
         {
-            // BeatUnitの更新
+            // BeatUnitの更新 → 位置の更新
             barData?.BeatUnit
                 .Skip(1)
-                .Subscribe(_ => { OnChangeBeatUnit(barData.BarIndex); })
+                .Subscribe(_ => { UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0); })
                 .AddTo(this.gameObject);
 
+            // BeatCountの更新 → 位置、数の更新
+            barData.BeatCount
+                .Skip(1)
+                .DelayFrame(1) // 絶対よくない、混乱のもと
+                .Subscribe(_ =>{ UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0); })
+                .AddTo(this.gameObject);
+
+            // DivisionNumの更新 → 位置、数の更新
+            barData.DivisionNum
+                .Skip(1)
+                .DelayFrame(1) // 絶対よくない、混乱のもと
+                .Subscribe(_ => { UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0); })
+                .AddTo(this.gameObject);
+
+
             // SubdivisionDatasに購読
+            // Collectionの監視は初期化がないので線の数だけ繰り返す
+            foreach (var sub in barData.SubDivisionDatas)
+            {
+                OnAddSubdivision(sub);
+                BindForSubdivisionData(sub, Find(sub.BarData.BarIndex, sub.SubDivisionIndex).Item2.Obj.gameObject);
+            }
+
+            // 分線データ追加 → 分線オブジェクトのインスタンス化
             barData?.SubDivisionDatas.ObserveAdd()
-                .Subscribe(subData => BindForSubdivisionData(subData.Value))
+                .Subscribe(subData => {
+                    OnAddSubdivision(subData.Value);
+                    BindForSubdivisionData(subData.Value, Find(subData.Value.BarData.BarIndex, subData.Value.SubDivisionIndex).Item2.Obj.gameObject);
+                })
+                .AddTo(this.gameObject);
+
+            // 分線データ削除 → 分線オブジェクトも削除
+            barData?.SubDivisionDatas.ObserveRemove()
+                .Subscribe(subData => {
+                    OnRemoveSubdivision(subData.Value);
+                })
                 .AddTo(this.gameObject);
         }
 
-        private void BindForSubdivisionData(ISubDivisionDataGetter subData)
+        /// <summary>
+        /// 分線に対する購読を行う
+        /// </summary>
+        /// <param name="subData"></param>
+        private void BindForSubdivisionData(ISubDivisionDataGetter subData, GameObject lineObj)
         {
-            // BPMの更新
+            // BPMの更新 → 位置の更新
             subData?.Bpm
-                .Skip(1)
-                .Subscribe(_ => OnChangeBPM(subData.BarData.BarIndex, subData.SubDivisionIndex))
-                .AddTo(this.gameObject);
+                .DelayFrame(1) // 絶対よくない、混乱のもと
+                .Where(_ => lineObj != null)
+                .Subscribe(bpm =>
+                {
+                    // ※最後の要素なら位置を更新する (いつか部分的にBPMを変える実装をするとき直す)
+                    int lastBarIndex = dataGetter.ChartData.Value.BarDatas.Count - 1;
+                    int lastSubIndex = dataGetter.ChartData.Value.BarDatas[lastBarIndex].SubDivisionDatas.Count - 1;
+                    if (subData.BarData.BarIndex == lastBarIndex && subData.SubDivisionIndex == lastSubIndex)
+                    {
+                        UpdateLinePos(Mathf.Max(0, subData.BarData.BarIndex - 1), 0);
+                    }
+
+                    OnChangeBPM(subData.BarData.BarIndex, subData.SubDivisionIndex, bpm);
+                })
+                .AddTo(this.gameObject)
+                .AddTo(lineObj);
+
+            // BeatUnitの更新 → 表記の更新
+            subData.BarData.BeatUnit
+                .DelayFrame(1) // 絶対よくない、混乱のもと
+                .Where(_ => lineObj != null)
+                .Subscribe(unit => OnChangeBeatUnit(subData.BarData.BarIndex, subData.SubDivisionIndex, unit))
+                .AddTo(this.gameObject)
+                .AddTo(lineObj);
+
+            // BeatCountの更新 → 表記の更新
+            subData.BarData.BeatCount
+                .DelayFrame(1) // 絶対よくない、混乱のもと
+                .Where(_ => lineObj != null)
+                .Subscribe(count => OnChangeBeatCount(subData.BarData.BarIndex, subData.SubDivisionIndex, count))
+                .AddTo(this.gameObject)
+                .AddTo(lineObj);
+
+            // DivisionNumの更新 → 表記の更新
+            subData.BarData.DivisionNum
+                .DelayFrame(1) // 絶対よくない、混乱のもと
+                .Where(_ => lineObj != null)
+                .Subscribe(divNum => OnChangeDivisionNum(subData.BarData.BarIndex, subData.SubDivisionIndex, divNum))
+                .AddTo(this.gameObject)
+                .AddTo(lineObj);
         }
 
         private void Initialze()
@@ -103,57 +177,111 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 小節線が追加された時
+        /// 分線が追加された時
         /// </summary>
-        /// <param name="barData"></param>
-        private void OnAddLane(IBarDataGetter barData)
+        /// <param name="subData"></param>
+        private void OnAddSubdivision(SubDivisionDataInBeat subData)
         {
             DeployableLineObject lineObj;
-            for (int i = 0; i < barData.SubDivisionDatas.Count; i++)
+            var address = new AddressInChart(subData.BarData.BarIndex, subData.SubDivisionIndex, 0);
+
+            // 小節線のインスタンス化
+            if (subData.SubDivisionIndex == 0) { lineObj = barLineFactory.Value.Deploy(lineParent); }
+            // 拍子線のインスタンス化
+            else if (subData.SubDivisionIndex % subData.BarData.DivisionNum.Value == 0) { lineObj = beatLineFactory.Value.Deploy(lineParent); }
+            // 分線のインスタンス化
+            else { lineObj = subDivisionLineFactory.Value.Deploy(lineParent); }
+
+            // 初期化
+            lineObj.transform.localPosition = Vector3.zero;
+            lineObj.SetAddress(address);
+            lineObj.SetBarNumber(subData.BarData.BarIndex + 1);
+            lineObj.SetPlacementLocation(subData.SetPlacementLocation, subData.SetSpaceLocation);
+            lineObj.OnChangeLayer(dataGetter.EditNoteType.Value);
+
+            // 挿入する
+            var addLine = new LineDataToObject(lineObj, subData);
+            int insertIndex;
+            for (insertIndex = 0; insertIndex < lines.Count + 1; insertIndex++)
             {
-                var subData = barData.SubDivisionDatas[i];
-                var address = new AddressInChart(barData.BarIndex, i, 0);
+                if (lines.Count <= insertIndex) { break; }
 
-                // 小節線のインスタンス化
-                if (i == 0) { lineObj = barLineFactory.Value.Deploy(lineParent); }
-                // 拍子線のインスタンス化
-                else if (i % barData.BeatCount.Value == 0) { lineObj = beatLineFactory.Value.Deploy(lineParent); }
-                // 分線のインスタンス化
-                else { lineObj = subDivisionLineFactory.Value.Deploy(lineParent); }
+                var targetLine = lines[insertIndex];
 
-                // 初期化
-                lineObj.transform.localPosition = Vector3.zero;
-                lineObj.SetAddress(address);
-                lineObj.SetPlacementLocation(subData.SetPlacementLocation, subData.SetSpaceLocation);
-                lineObj.OnChangeLayer(dataGetter.EditNoteType.Value);
-                lines.Add(new LineDataToObject(lineObj, subData));
+                if (targetLine.Data.BarData.BarIndex < subData.BarData.BarIndex) { continue; }
+                if (subData.BarData.BarIndex == targetLine.Data.BarData.BarIndex
+                    && targetLine.Data.SubDivisionIndex < subData.SubDivisionIndex) { continue; }
+
+                break;
             }
 
-            // 一つ前の分線から位置調整を行う
-            UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0);
+            lines.Insert(insertIndex, addLine);
         }
 
         /// <summary>
-        /// 最後の小節線が削除された時
+        /// 分線が削除された時
         /// </summary>
-        /// <param name="lineCount"></param>
-        private void OnRemoveLastLane(int lineCount)
+        /// <param name="subData"></param>
+        private void OnRemoveSubdivision(SubDivisionDataInBeat subData)
         {
-            for(int i = 0; i < lineCount; i++)
+            for (int i = lines.Count - 1; i >= 0; i--)
             {
-                Destroy(lines[lines.Count - 1].Obj.gameObject);
-                lines.RemoveAt(lines.Count - 1);
+                var line = lines[i];
+                if (line.Data != subData) { continue; }
+
+                // 削除処理
+                Destroy(lines[i].Obj.gameObject);
+                lines.RemoveAt(i);
+                return;
             }
         }
 
-        private void OnChangeBeatUnit(int barIndex)
+        private void OnChangeBeatCount(int barIndex, int subIndex, int beatCount)
         {
-            UpdateLinePos(Mathf.Max(0, barIndex - 1), 0);
+            // 表記の更新
+            var pair = Find(barIndex, subIndex);
+            var index = pair.Item1;
+            var thisObj = pair.Item2.Obj;
+
+            var backCount = pair.Item1 != 0 ? lines[index - 1].Data.BarData.BeatCount.Value : -1;
+
+            thisObj.OnChangeBeatCount(beatCount, backCount);
         }
 
-        private void OnChangeBPM(int barIndex, int subIndex)
+        private void OnChangeBeatUnit(int barIndex, int subIndex, float beatUnit)
         {
-            UpdateLinePos(Mathf.Max(0, barIndex - 1), 0);
+            // 表記の更新
+            var pair = Find(barIndex, subIndex);
+            var index = pair.Item1;
+            var thisObj = pair.Item2.Obj;
+
+            var backUnit = pair.Item1 != 0 ? lines[index - 1].Data.BarData.BeatUnit.Value : -1f;
+
+            thisObj.OnChangeBeatUnit(beatUnit, backUnit);
+        }
+
+        private void OnChangeDivisionNum(int barIndex, int subIndex, int divisionNum)
+        {
+            // 表記の更新
+            var pair = Find(barIndex, subIndex);
+            var index = pair.Item1;
+            var thisObj = pair.Item2.Obj;
+
+            var backDivNum = pair.Item1 != 0 ? lines[index - 1].Data.BarData.DivisionNum.Value : -1;
+
+            thisObj.OnChangeDivisionNum(divisionNum, backDivNum);
+        }
+
+        private void OnChangeBPM(int barIndex, int subIndex, float bpm)
+        {
+            // 表記の更新
+            var pair = Find(barIndex, subIndex);
+            var index = pair.Item1;
+            var thisObj = pair.Item2.Obj;
+
+            var backBpm = pair.Item1 != 0 ? lines[index - 1].Data.Bpm.Value : -1f;
+
+            thisObj.OnChangeBpm(bpm, backBpm);
         }
 
         /// <summary>
@@ -247,7 +375,7 @@ namespace ChartEditor
                 if(line.Obj == lineObj) { return line.Data; }
             }
 
-            Debug.LogWarning($"【System】データが見つかりませんでした");
+            Debug.LogWarning($"【System】データが見つかりませんでした: {lineObj}");
             return null;
         }
 

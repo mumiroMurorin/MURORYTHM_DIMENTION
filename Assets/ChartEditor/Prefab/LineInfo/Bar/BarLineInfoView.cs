@@ -46,7 +46,7 @@ namespace ChartEditor
             if (beatUnitTmp == null) { return; }
 
             isChangeBeatUnit = beatUnit != -1;
-            beatCountTmp.text = isChangeBeatUnit ? beatUnit.ToString() : beatCountTmp.text;
+            beatUnitTmp.text = isChangeBeatUnit ? beatUnit.ToString() : beatUnitTmp.text;
             beatObject.SetActive(isChangeBeatCount || isChangeBeatUnit);
         }
 

@@ -24781,6 +24781,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80ecf0283dee06c43a1610488d0fe470, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  laneController: {fileID: 1517439684}
 --- !u!1 &1863182002
 GameObject:
   m_ObjectHideFlags: 0
