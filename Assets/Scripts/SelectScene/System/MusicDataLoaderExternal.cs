@@ -324,7 +324,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         }
 
         string pathFanatic = path + "/" + chartFileNameFanatic;
-        if (isExistSkyclad && File.Exists(pathFanatic))
+        if (isExistFanatic && File.Exists(pathFanatic))
         {
             musicData.SetChartPath(Difficulty.Fanatic, pathFanatic);
             difficulty[1] = musicData.GetDifficulity(Difficulty.Fanatic);
@@ -336,7 +336,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         }
 
         string pathSkyclad = path + "/" + chartFileNameSkyclad;
-        if (isExistFanatic && File.Exists(pathSkyclad))
+        if (isExistSkyclad && File.Exists(pathSkyclad))
         {
             musicData.SetChartPath(Difficulty.Skyclad, pathSkyclad);
             difficulty[2] = musicData.GetDifficulity(Difficulty.Skyclad);

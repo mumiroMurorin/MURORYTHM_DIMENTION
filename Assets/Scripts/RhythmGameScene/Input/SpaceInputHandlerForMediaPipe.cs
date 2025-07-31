@@ -39,6 +39,11 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour, ISpaceInputHandler
         SendData();
     }
 
+    public bool IsExistCamera()
+    {
+        return WebCamTexture.devices.Length > 0;
+    }
+
     public void InitializeBodyTracking()
     {
         bodyTracking.Initialize(optionGetter.TrackingSettings);
@@ -164,6 +169,8 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour, ISpaceInputHandler
 
 public interface ISpaceInputHandler
 {
+    bool IsExistCamera();
+
     void InitializeBodyTracking();
 
     void StartTracking();

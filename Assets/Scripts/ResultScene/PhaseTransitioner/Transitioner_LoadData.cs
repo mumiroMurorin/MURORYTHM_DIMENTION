@@ -20,6 +20,8 @@ namespace TransitionerInResultScene
         {
             Debug.Log("ÅyTransitionÅzTransition to \"LoadData\"");
 
+            SoundManager.Instance.PlayBGM(BGM_Type.Result);
+
             TransitionNextPhase();
         }
 

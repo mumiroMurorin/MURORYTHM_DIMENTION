@@ -124,32 +124,53 @@ public class ScoreCalculater
     const float GOOD_RATIO = 0.5f;
     const float MISS_RATIO = 0f;
 
+    const int MAX_THRESHOLD = 1000000;
+    const int SSPlus_THRESHOLD = 995000;
+    const int SS_THRESHOLD = 990000;
+    const int SPlus_THRESHOLD = 985000;
+    const int S_THRESHOLD = 980000;
+    const int APlus_THRESHOLD = 970000;
+    const int A_THRESHOLD = 950000;
+    const int B_THRESHOLD = 900000;
+    const int C_THRESHOLD = 750000;
+    const int D_THRESHOLD = 500000;
+
     float addScoreOnPerfect;
 
     public ScoreCalculater(int maxCombo)
     {
-        addScoreOnPerfect = MAX_SCORE / maxCombo;
+        addScoreOnPerfect = (float)MAX_SCORE / maxCombo;
     }
 
-    public ReactiveProperty<float> Score { get; } = new ReactiveProperty<float>(0);
+    ReactiveProperty<float> score = new ReactiveProperty<float>(0);
+    public IReadOnlyReactiveProperty<float> Score => score;
+
+    public ReactiveProperty<ScoreRank> Rank { get; } = new ReactiveProperty<ScoreRank>(ScoreRank.E);
 
     public void AddJudgement(Judgement judgement)
     {
         switch (judgement)
         {
             case Judgement.Perfect:
-                Score.Value += addScoreOnPerfect;
+                score.Value += addScoreOnPerfect;
                 break;
             case Judgement.Great:
-                Score.Value += addScoreOnPerfect * GREAT_RATIO;
+                score.Value += addScoreOnPerfect * GREAT_RATIO;
                 break;
             case Judgement.Good:
-                Score.Value += addScoreOnPerfect * GOOD_RATIO;
+                score.Value += addScoreOnPerfect * GOOD_RATIO;
                 break;
             case Judgement.Miss:
-                Score.Value += addScoreOnPerfect * MISS_RATIO;
+                score.Value += addScoreOnPerfect * MISS_RATIO;
                 break;
         }
+
+        UpdateScoreRank((int)score.Value);
+    }
+
+    private void UpdateScoreRank(int score)
+    {
+        //if(score )
     }
 
 }

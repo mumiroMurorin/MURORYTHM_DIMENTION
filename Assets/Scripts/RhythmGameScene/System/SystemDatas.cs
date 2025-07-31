@@ -92,9 +92,11 @@ public enum ScoreRank
     C,
     B,
     A,
-    A_plus,
+    APlus,
     S,
-    S_plus,
+    SPlus,
+    SS,
+    SSPlus,
     MAX
 }
 

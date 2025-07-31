@@ -27,6 +27,8 @@ public enum SE_Type
     DesicionMusic = 130,
     BackTopic1 = 140,
     SelectOption = 150,
+
+    BackSelectScene = 810,
 }
 
 /// <summary>

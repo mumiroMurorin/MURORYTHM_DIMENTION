@@ -30,6 +30,12 @@ public class BodyLoader : MonoBehaviour, IBodyLoader
             return;
         }
 #endif
+        // カメラが接続されていない場合
+        if (!spaceInputHandler.Value.IsExistCamera()) 
+        {
+            callback.Invoke();
+            return;
+        }
 
         // トラッキングの初期化
         spaceInputHandler?.Value.InitializeBodyTracking();

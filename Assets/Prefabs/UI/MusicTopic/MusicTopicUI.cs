@@ -51,18 +51,11 @@ public class MusicTopicUI : MonoBehaviour
         // サムネ
         music_image.sprite = data.MusicSprite;
 
-        // レコード
-        score_tmp.text = data.GetMusicRecord(currentSetDifficulty).Score.ToString("N0");
-
-        //TRACK COMPLETE
-        comp_obj.SetActive(data.GetMusicRecord(currentSetDifficulty).ComboRank == ComboRank.TrackComplete);
-        //FULL COMBO
-        fc_obj.SetActive(data.GetMusicRecord(currentSetDifficulty).ComboRank == ComboRank.FullCombo);
-        //ALL PERFECT
-        ap_obj.SetActive(data.GetMusicRecord(currentSetDifficulty).ComboRank == ComboRank.AllPerfect);
-
         // 難易度
         UpdateNumberOfDifficulty(data, currentSetDifficulty);
+
+        // スコア
+        UpdateScore(data, currentSetDifficulty);
     }
 
     /// <summary>
@@ -87,6 +80,7 @@ public class MusicTopicUI : MonoBehaviour
         }
 
         UpdateNumberOfDifficulty(currentSetData, difficulty);
+        UpdateScore(currentSetData, difficulty);
     }
 
     /// <summary>
@@ -104,6 +98,33 @@ public class MusicTopicUI : MonoBehaviour
             level_tmp.text = data.GetDifficulity(difficulty).ToString();
         }
         else { level_tmp.text = "-"; }
+    }
+
+    private void UpdateScore(MusicData data, Difficulty difficulty)
+    {
+        if (data == null) { return; }
+
+        // その難易度がないときは表示を特定のものにする
+        if (data.GetDifficulity(difficulty) == -1)
+        {
+            score_tmp.text = " - ";
+
+            comp_obj.SetActive(false);
+            fc_obj.SetActive(false);
+            ap_obj.SetActive(false);
+        }
+        else
+        {
+            // レコード
+            score_tmp.text = data.GetMusicRecord(difficulty).Score.ToString("N0");
+
+            //TRACK COMPLETE
+            comp_obj.SetActive(data.GetMusicRecord(difficulty).ComboRank == ComboRank.TrackComplete);
+            //FULL COMBO
+            fc_obj.SetActive(data.GetMusicRecord(difficulty).ComboRank == ComboRank.FullCombo);
+            //ALL PERFECT
+            ap_obj.SetActive(data.GetMusicRecord(difficulty).ComboRank == ComboRank.AllPerfect);
+        }
     }
 
     /// <summary>
