@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System.Linq;
 
 public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
 {
@@ -42,8 +43,7 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     public IReadOnlyReactiveProperty<ComboRank> CurrentComboRank { get { return comboRank; } }
 
     // ScoreRank
-    ReactiveProperty<ScoreRank> scoreRank = new ReactiveProperty<ScoreRank>(ScoreRank.E);
-    public IReadOnlyReactiveProperty<ScoreRank> CurrentScoreRank { get { return scoreRank; } }
+    public IReadOnlyReactiveProperty<ScoreRank> CurrentScoreRank { get { return scoreCalculater.Rank; } }
 
     /// <summary>
     /// ”»’è‚ÌƒŠƒZƒbƒg
@@ -58,7 +58,6 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
         combo.Value = 0;
         scoreCalculater = null;
         comboRank.Value = ComboRank.AllPerfect;
-        scoreRank.Value = ScoreRank.E;
     }
 
     /// <summary>
@@ -124,28 +123,33 @@ public class ScoreCalculater
     const float GOOD_RATIO = 0.5f;
     const float MISS_RATIO = 0f;
 
-    const int MAX_THRESHOLD = 1000000;
-    const int SSPlus_THRESHOLD = 995000;
-    const int SS_THRESHOLD = 990000;
-    const int SPlus_THRESHOLD = 985000;
-    const int S_THRESHOLD = 980000;
-    const int APlus_THRESHOLD = 970000;
-    const int A_THRESHOLD = 950000;
-    const int B_THRESHOLD = 900000;
-    const int C_THRESHOLD = 750000;
-    const int D_THRESHOLD = 500000;
+    readonly List<RankToThreshold> rankThreshold = new List<RankToThreshold>
+    {
+        new RankToThreshold(ScoreRank.MAX,1000000),
+        new RankToThreshold(ScoreRank.SSPlus,995000),
+        new RankToThreshold(ScoreRank.SS,990000),
+        new RankToThreshold(ScoreRank.SPlus,985000),
+        new RankToThreshold(ScoreRank.S,980000),
+        new RankToThreshold(ScoreRank.APlus,970000),
+        new RankToThreshold(ScoreRank.A,950000),
+        new RankToThreshold(ScoreRank.B,900000),
+        new RankToThreshold(ScoreRank.C,750000),
+        new RankToThreshold(ScoreRank.D,500000),
+    };
 
     float addScoreOnPerfect;
 
     public ScoreCalculater(int maxCombo)
     {
         addScoreOnPerfect = (float)MAX_SCORE / maxCombo;
+        rankThreshold = rankThreshold.OrderByDescending(x => x.Threshold).ToList();
     }
 
     ReactiveProperty<float> score = new ReactiveProperty<float>(0);
     public IReadOnlyReactiveProperty<float> Score => score;
 
-    public ReactiveProperty<ScoreRank> Rank { get; } = new ReactiveProperty<ScoreRank>(ScoreRank.E);
+    ReactiveProperty<ScoreRank> rank = new ReactiveProperty<ScoreRank>(ScoreRank.E);
+    public IReadOnlyReactiveProperty<ScoreRank> Rank => rank;
 
     public void AddJudgement(Judgement judgement)
     {
@@ -170,7 +174,23 @@ public class ScoreCalculater
 
     private void UpdateScoreRank(int score)
     {
-        //if(score )
+        for(int i = 0; i < rankThreshold.Count; i++)
+        {
+            if (rankThreshold[i].Threshold > score) { continue; }
+            if (rank.Value != rankThreshold[i].Rank) { rank.Value = rankThreshold[i].Rank; Debug.Log($"RankUp => {rank.Value}"); }
+            break;
+        }
     }
 
+    class RankToThreshold
+    {
+        public RankToThreshold(ScoreRank rank, int threshold)
+        {
+            Rank = rank;
+            Threshold = threshold;
+        }
+
+        public ScoreRank Rank { get; set; }
+        public int Threshold { get; set; }
+    }
 }

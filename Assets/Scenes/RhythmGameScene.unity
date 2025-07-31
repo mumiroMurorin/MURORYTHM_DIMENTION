@@ -458,7 +458,7 @@ MonoBehaviour:
     - 
     - 
     - 
-  chartFilePath: "MusicData/1000\u5E74\u751F\u304D\u3066\u308B/chart_fanatic.json"
+  chartFilePath: MusicData/conflict/chart_dream.json
   noteSpeed: 150
   isAutoMode: 0
 --- !u!1001 &135123126
@@ -6850,7 +6850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed07db9c99ac59f4e9da1284ad6c5307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUseSpaceInput: 1
+  isUseSpaceInput: 0
   spaceInputHandler:
     obj: {fileID: 796097596}
 --- !u!1001 &1826391570
@@ -7567,11 +7567,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5601094991250338147, guid: a74f5192244238243a3b051e9e5b70e2, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 99.5157
       objectReference: {fileID: 0}
     - target: {fileID: 6182579293432456172, guid: a74f5192244238243a3b051e9e5b70e2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 150
+      value: -150
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
