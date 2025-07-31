@@ -449,7 +449,7 @@ MonoBehaviour:
     composer_name: "\u524A\u9664"
     music_spr: {fileID: 21300000, guid: 9d4d84fadeb3bef4ba122b422132a3a0, type: 3}
     theme_spr: {fileID: 21300000, guid: 74ae4ef0036bbb9428f47ab31c214c32, type: 3}
-    clip: {fileID: 8300000, guid: 135d7d154c100b64f9ec59dfcf643174, type: 3}
+    clip: {fileID: 8300000, guid: 839fadb48b291a146a6a79be1940907a, type: 3}
     sample_clip: {fileID: 8300000, guid: c6d2b752cdc6bfc4899d25e35728241f, type: 3}
     stageType: 102
     difficulities: 00000000000000000000000000000000
@@ -458,7 +458,7 @@ MonoBehaviour:
     - 
     - 
     - 
-  chartFilePath: MusicData/conflict/conflict_dream.json
+  chartFilePath: "MusicData/1000\u5E74\u751F\u304D\u3066\u308B/chart_fanatic.json"
   noteSpeed: 150
   isAutoMode: 0
 --- !u!1001 &135123126
@@ -6850,7 +6850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed07db9c99ac59f4e9da1284ad6c5307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUseSpaceInput: 1
+  isUseSpaceInput: 0
   spaceInputHandler:
     obj: {fileID: 796097596}
 --- !u!1001 &1826391570
