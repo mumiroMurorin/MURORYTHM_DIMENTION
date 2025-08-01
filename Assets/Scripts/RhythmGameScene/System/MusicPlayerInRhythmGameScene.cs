@@ -71,7 +71,7 @@ public class MusicPlayerInRhythmGameScene : MonoBehaviour, IMusicPlayerInRhythmG
         if (musicDataGetter == null) { Debug.LogWarning("【System】 musicDataGetterがセットされていません"); return; }
         if (musicDataGetter.Music.Value == null) { Debug.LogWarning("【System】 楽曲がセットされていません"); return; }
 
-        SoundManager.Instance.PlayBGM(BGM_Type.MusicTrack);
+        SoundManager.Instance.PlayBGM(BGM_Type.MusicTrack, loopFlg: false, isFadeout: false);
     }
 
     private void OnDestroy()

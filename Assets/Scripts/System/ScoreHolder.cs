@@ -45,6 +45,21 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     // ScoreRank
     public IReadOnlyReactiveProperty<ScoreRank> CurrentScoreRank { get { return scoreCalculater.Rank; } }
 
+    public string GetCurrentScoreRankString()
+    {
+        switch (CurrentScoreRank.Value)
+        {
+            case ScoreRank.APlus:
+                return "A+";
+            case ScoreRank.SPlus:
+                return "S+";
+            case ScoreRank.SSPlus:
+                return "SS+";
+            default:
+                return CurrentScoreRank.Value.ToString();
+        }
+    }
+
     /// <summary>
     /// ”»’è‚ÌƒŠƒZƒbƒg
     /// </summary>

@@ -159,7 +159,7 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
             return;
         }
 
-        PlayBGM(GetBGMClip(bgmType), progress: progress);
+        PlayBGM(GetBGMClip(bgmType), loopFlg, isFadeout, progress);
     }
 
     public void PlayBGM(AudioClip audioClip, bool loopFlg = true, bool isFadeout = true, float progress = 0f)

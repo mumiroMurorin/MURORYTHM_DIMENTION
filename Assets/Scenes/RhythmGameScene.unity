@@ -449,7 +449,7 @@ MonoBehaviour:
     composer_name: "\u524A\u9664"
     music_spr: {fileID: 21300000, guid: 9d4d84fadeb3bef4ba122b422132a3a0, type: 3}
     theme_spr: {fileID: 21300000, guid: 74ae4ef0036bbb9428f47ab31c214c32, type: 3}
-    clip: {fileID: 8300000, guid: 839fadb48b291a146a6a79be1940907a, type: 3}
+    clip: {fileID: 8300000, guid: 7261906ef268103429fc6eed1c170f1a, type: 3}
     sample_clip: {fileID: 8300000, guid: c6d2b752cdc6bfc4899d25e35728241f, type: 3}
     stageType: 102
     difficulities: 00000000000000000000000000000000
@@ -458,7 +458,7 @@ MonoBehaviour:
     - 
     - 
     - 
-  chartFilePath: MusicData/conflict/chart_dream.json
+  chartFilePath: "MusicData/\u304D\u3085\u3046\u304F\u3089\u308A\u3093/chart_fanatic.json"
   noteSpeed: 150
   isAutoMode: 0
 --- !u!1001 &135123126

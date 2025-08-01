@@ -69,6 +69,8 @@ public interface IScoreGetter
     public IReadOnlyReactiveProperty<ComboRank> CurrentComboRank { get; }
 
     public IReadOnlyReactiveProperty<ScoreRank> CurrentScoreRank { get; }
+
+    public string GetCurrentScoreRankString();
 }
 
 /// <summary>

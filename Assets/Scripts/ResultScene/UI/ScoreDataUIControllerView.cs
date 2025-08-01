@@ -25,7 +25,7 @@ namespace UIInResultScene
             if (goodNum_text) { goodNum_text.text = scoreData.GoodNum.ToString(); }
             if (missNum_text) { missNum_text.text = scoreData.MissNum.ToString(); }
 
-            if (rank_text) { rank_text.text = scoreData.CurrentScoreRank.ToString(); }
+            if (rank_text) { rank_text.text = scoreData.GetCurrentScoreRankString(); }
         }
     }
 
