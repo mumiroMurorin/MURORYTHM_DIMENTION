@@ -44,6 +44,19 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour, ISpaceInputHandler
         return WebCamTexture.devices.Length > 0;
     }
 
+    public void SwitchCamera()
+    {
+        var devices = WebCamTexture.devices;
+
+        if (devices.Length == 0)
+        {
+            Debug.Log("yMediaPipezƒJƒƒ‰‚ªÚ‘±‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            return;
+        }
+
+        optionGetter.TrackingSettings.CameraIndex = (optionGetter.TrackingSettings.CameraIndex + 1) % devices.Length;
+    }
+
     public void InitializeBodyTracking()
     {
         bodyTracking.Initialize(optionGetter.TrackingSettings);

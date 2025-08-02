@@ -16,6 +16,7 @@ namespace UIInRootScene
         [SerializeField] TMP_InputField inputFieldWidth;
         [SerializeField] TMP_InputField inputFieldHeight;
         [SerializeField] Button applyResolutionButton;
+        [SerializeField] Button switchCameraButton;
         [SerializeField] Button flipHorizontalButton;
         [SerializeField] Button flipVerticalButton;
         [SerializeField] Button viewImageButton;
@@ -24,6 +25,7 @@ namespace UIInRootScene
         public Action OnPushFlipVerticalButtonListner { get; set; }
         public Action OnPushViewImageButtonListner { get; set; }
         public Action<int,int> OnPushApplyResolutionButtonListener { get; set; }
+        public Action OnPushSwitchCameraButtonListner { get; set; }
 
         void Start()
         {
@@ -31,6 +33,7 @@ namespace UIInRootScene
             flipHorizontalButton?.onClick.AddListener(OnPushFlipHorizontalButton);
             flipVerticalButton?.onClick.AddListener(OnPushFlipVerticalButton);
             applyResolutionButton?.onClick.AddListener(OnPushApplyResolutionButton);
+            switchCameraButton?.onClick.AddListener(OnPushSwitchCameraButton);
         }
 
         public void OnChangeCameraInfo(WebCamTexture webCam)
@@ -88,6 +91,12 @@ namespace UIInRootScene
             }
 
             OnPushApplyResolutionButtonListener?.Invoke(width, height);
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+
+        private void OnPushSwitchCameraButton()
+        {
+            OnPushSwitchCameraButtonListner?.Invoke();
             EventSystem.current.SetSelectedGameObject(null);
         }
     }

@@ -276,10 +276,10 @@ namespace MeshGenerate
                 int verticesCountEnd = timeToVertices[i + 1].Vertices.Length;  // 終点頂点数
 
                 // 始点終点に同数となるような頂点を打ち、頂点リストを生成
-                ratios = Enumerable.Range(0, minCount - verticesCountStart).Select(i => i / ((float)minCount - verticesCountStart - 1)).ToList();
+                ratios = Enumerable.Range(0, minCount - verticesCountStart).Select(i => i / ((float)minCount - verticesCountStart)).ToList();
                 vertices[i] = GenerateVertices(timeToVertices[i].Vertices.ToList(), ratios, 0);
 
-                ratios = Enumerable.Range(0, minCount - verticesCountEnd).Select(i => i / ((float)minCount - verticesCountEnd - 1)).ToList();
+                ratios = Enumerable.Range(0, minCount - verticesCountEnd).Select(i => i / ((float)minCount - verticesCountEnd)).ToList();
                 vertices[i + 1] = GenerateVertices(timeToVertices[i + 1].Vertices.ToList(), ratios, 0);
             }
 
@@ -302,16 +302,17 @@ namespace MeshGenerate
             minCount = Mathf.Max(minCount, verticesCountStart, verticesCountEnd);
 
             // 始点終点に同数となるような頂点を打ち、頂点リストを生成
-            ratios = Enumerable.Range(0, minCount - verticesCountStart).Select(i => i / ((float)minCount - verticesCountStart - 1)).ToList();
+            ratios = Enumerable.Range(0, minCount - verticesCountStart).Select(i => i / ((float)minCount - verticesCountStart)).ToList();
             var verticesStart = GenerateVertices(startVertices, ratios, 0);
 
-            ratios = Enumerable.Range(0, minCount - verticesCountEnd).Select(i => i / ((float)minCount - verticesCountEnd - 1)).ToList();
+            ratios = Enumerable.Range(0, minCount - verticesCountEnd).Select(i => i / ((float)minCount - verticesCountEnd)).ToList();
             var verticesEnd = GenerateVertices(endVertices, ratios, 0);
+
 
             // 中間点を生成
             var result = new List<Vector2>();
 
-            for (int i = 0; i < verticesStart.Count; i++)
+            for (int i = 0; i < verticesStart.Count - 1; i++)
             {
                 Vector2 pointA = verticesStart[i];
                 Vector2 pointB = verticesEnd[i];

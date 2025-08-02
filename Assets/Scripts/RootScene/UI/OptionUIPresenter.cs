@@ -139,6 +139,7 @@ namespace UIInRootScene
                 phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
             };
 
+            // 解像度の変更
             cameraSettings_view.OnPushApplyResolutionButtonListener += (width, height) =>
             {
                 optionGetter_model?.TrackingSettings.SetCameraWidth(width);
@@ -147,6 +148,13 @@ namespace UIInRootScene
                 phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
             };
 
+            // カメラの変更
+            cameraSettings_view.OnPushSwitchCameraButtonListner += () =>
+            {
+                spaceInputHandler_model.SwitchCamera();
+                // リロード
+                phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
+            };
 
             // セレクトシーンに戻る
             backMusicSelectSceneButton_view.OnPushButtonListner += () => { phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.TransitionSelectScene); };

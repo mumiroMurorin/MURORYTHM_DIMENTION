@@ -24,6 +24,9 @@ public class BodyTrackingSettings
         cameraHeight.Value = height;
     }
 
+    // カメラ番号
+    public int CameraIndex { get; set; }
+
 
     // トラッキングの左右反転
     ReactiveProperty<bool> isHorizontallyFlipped = new ReactiveProperty<bool>();
@@ -81,6 +84,9 @@ public class BodyTrackingSettings
     {
         if(dto == null) { return; }
 
+        SetCameraHeight(dto.cameraHeight);
+        SetCameraWidth(dto.cameraHeight);
+        CameraIndex = dto.cameraIndex;
         SetIsHorizontallyFlipped(dto.isHorizontallyFlipped);
         SetIsVerticallyFlipped(dto.isVerticallyFlipped);
         SetIsHandFlipped(dto.isHandFlipped);
@@ -100,6 +106,9 @@ public class BodyTrackingSettingsDTO
 
     public BodyTrackingSettingsDTO(BodyTrackingSettings settings)
     {
+        this.cameraWidth = settings.CameraWidth.Value;
+        this.cameraHeight = settings.CameraHeight.Value;
+        this.cameraIndex = settings.CameraIndex;
         this.isHorizontallyFlipped = settings.IsHorizontallyFlipped.Value;
         this.isHandFlipped = settings.IsHandFlipped.Value;
         this.isVerticallyFlipped = settings.IsVerticallyFlipped.Value;
@@ -107,6 +116,11 @@ public class BodyTrackingSettingsDTO
         this.controllerLeftEdge = new SimpleVector3(settings.ControllerLeftEdge.Value);
         this.controllerRightEdge = new SimpleVector3(settings.ControllerRightEdge.Value);
     }
+
+    public int cameraWidth;
+    public int cameraHeight;
+
+    public int cameraIndex;
 
     // トラッキングの左右反転
     public bool isHorizontallyFlipped;
