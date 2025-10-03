@@ -447,19 +447,19 @@ MonoBehaviour:
   musicData_debug:
     music_name: Altale
     composer_name: "\u524A\u9664"
-    music_spr: {fileID: 21300000, guid: 9d4d84fadeb3bef4ba122b422132a3a0, type: 3}
-    theme_spr: {fileID: 21300000, guid: 74ae4ef0036bbb9428f47ab31c214c32, type: 3}
-    clip: {fileID: 8300000, guid: 074a303835a350540874252c6455fb47, type: 3}
+    music_spr: {fileID: 21300000, guid: 1512ba05fa48cde48858c7f68c23594f, type: 3}
+    theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
+    clip: {fileID: 8300000, guid: 993bb1f8d9375c04da5f17d29a0760de, type: 3}
     sample_clip: {fileID: 8300000, guid: c6d2b752cdc6bfc4899d25e35728241f, type: 3}
-    stageType: 102
+    stageType: 100
     difficulities: 00000000000000000000000000000000
     chartPaths:
     - 
     - 
     - 
     - 
-  chartFilePath: "MusicData/\u30A4\u30AC\u30AF/chart_skyclad.json"
-  noteSpeed: 150
+  chartFilePath: MusicData/Altale/chart_dream.json
+  noteSpeed: 200
   isAutoMode: 0
 --- !u!1001 &135123126
 PrefabInstance:

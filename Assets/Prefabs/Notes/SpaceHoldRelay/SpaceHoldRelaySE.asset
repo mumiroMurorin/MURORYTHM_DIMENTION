@@ -15,8 +15,8 @@ MonoBehaviour:
   noteType: 21
   sounds:
   - judgement: 1000
-    audioClip: {fileID: 8300000, guid: 096ae01b27c0def4ea84f5a4b9781eb9, type: 3}
+    audioClip: {fileID: 8300000, guid: 4699dd98d200640459e4f3069ca24300, type: 3}
   - judgement: 100
-    audioClip: {fileID: 8300000, guid: 096ae01b27c0def4ea84f5a4b9781eb9, type: 3}
+    audioClip: {fileID: 8300000, guid: 4699dd98d200640459e4f3069ca24300, type: 3}
   - judgement: 10
-    audioClip: {fileID: 8300000, guid: 096ae01b27c0def4ea84f5a4b9781eb9, type: 3}
+    audioClip: {fileID: 8300000, guid: 4699dd98d200640459e4f3069ca24300, type: 3}
