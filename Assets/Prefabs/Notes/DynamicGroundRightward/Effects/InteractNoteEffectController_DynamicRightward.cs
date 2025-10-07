@@ -5,6 +5,7 @@ using UnityEngine;
 public class InteractNoteEffectController_DynamicRightward : MonoBehaviour, IInteractNoteEffectController<NoteData_DynamicGroundRightward>
 {
     [SerializeField] List<ParticleSystem> particleSystems;
+    [SerializeField] ParticleEndCallback particleEndCallback;
 
     public void SetEffect(NoteData_DynamicGroundRightward noteData)
     {
@@ -29,6 +30,8 @@ public class InteractNoteEffectController_DynamicRightward : MonoBehaviour, IInt
             emission.SetBursts(bursts);
 
         }
+
+        if(particleEndCallback != null) { particleEndCallback.OnStopParticleListner += () => { Destroy(this.gameObject); }; }
     }
 
     public void Play()

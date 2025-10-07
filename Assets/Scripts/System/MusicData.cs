@@ -62,7 +62,7 @@ public class MusicData
         chartPaths[(int)diff] = chartPath;
     }
 
-
+    // スコア記録
     DifficultyToRecord records = new DifficultyToRecord();
     public MusicRecord GetMusicRecord(Difficulty dif) 
     {

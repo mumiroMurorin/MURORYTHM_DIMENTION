@@ -7,6 +7,7 @@ public class InteractNoteEffectController_HoldStart : MonoBehaviour, IInteractNo
 {
     [SerializeField] List<ParticleSystem> particleSystems;
     [SerializeField] MeshRenderer[] HoldStartLigts;
+    [SerializeField] ParticleEndCallback particleEndCallback;
 
     public void SetEffect(NoteData_HoldStart noteData)
     {
@@ -40,6 +41,9 @@ public class InteractNoteEffectController_HoldStart : MonoBehaviour, IInteractNo
             emission.SetBursts(bursts);
 
         }
+        
+        if (particleEndCallback != null) { particleEndCallback.OnStopParticleListner += () => { Destroy(this.gameObject); }; }
+
     }
 
     public void Play()

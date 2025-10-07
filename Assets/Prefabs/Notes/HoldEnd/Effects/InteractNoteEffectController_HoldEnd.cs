@@ -7,6 +7,7 @@ public class InteractNoteEffectController_HoldEnd : MonoBehaviour, IInteractNote
 {
     [SerializeField] List<ParticleSystem> particleSystems;
     [SerializeField] MeshRenderer[] HoldEndLights;
+    [SerializeField] ParticleEndCallback particleEndCallback;
 
     public void SetEffect(NoteData_HoldEnd noteData)
     {
@@ -40,6 +41,9 @@ public class InteractNoteEffectController_HoldEnd : MonoBehaviour, IInteractNote
             emission.SetBursts(bursts);
 
         }
+
+        if (particleEndCallback != null) { particleEndCallback.OnStopParticleListner += () => { Destroy(this.gameObject); }; }
+
     }
 
     public void Play()

@@ -7,6 +7,7 @@ public class InteractNoteEffectController_HoldRelay : MonoBehaviour, IInteractNo
 {
     [SerializeField] List<ParticleSystem> particleSystems;
     [SerializeField] MeshRenderer[] HoldRelayLights;
+    [SerializeField] ParticleEndCallback particleEndCallback;
 
     public void SetEffect(NoteData_HoldRelay noteData)
     {
@@ -40,6 +41,9 @@ public class InteractNoteEffectController_HoldRelay : MonoBehaviour, IInteractNo
             emission.SetBursts(bursts);
 
         }
+
+        if (particleEndCallback != null) { particleEndCallback.OnStopParticleListner += () => { Destroy(this.gameObject); }; }
+
     }
 
     public void Play()

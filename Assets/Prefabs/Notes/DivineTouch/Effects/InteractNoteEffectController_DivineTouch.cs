@@ -7,6 +7,7 @@ public class InteractNoteEffectController_DivineTouch : MonoBehaviour, IInteract
 {
     [SerializeField] List<ParticleSystem> particleSystems;
     [SerializeField] MeshRenderer[] touchLigts;
+    [SerializeField] ParticleEndCallback particleEndCallback;
 
     public void SetEffect(NoteData_DivineTouch noteData)
     {
@@ -40,6 +41,9 @@ public class InteractNoteEffectController_DivineTouch : MonoBehaviour, IInteract
             emission.SetBursts(bursts);
 
         }
+
+        if (particleEndCallback != null) { particleEndCallback.OnStopParticleListner += () => { Destroy(this.gameObject); }; }
+
     }
 
     public void Play()

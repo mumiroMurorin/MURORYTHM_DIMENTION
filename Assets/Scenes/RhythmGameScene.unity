@@ -452,7 +452,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 993bb1f8d9375c04da5f17d29a0760de, type: 3}
     sample_clip: {fileID: 8300000, guid: c6d2b752cdc6bfc4899d25e35728241f, type: 3}
     stageType: 100
-    difficulities: 00000000000000000000000000000000
+    difficulties: 00000000000000000000000000000000
     chartPaths:
     - 
     - 

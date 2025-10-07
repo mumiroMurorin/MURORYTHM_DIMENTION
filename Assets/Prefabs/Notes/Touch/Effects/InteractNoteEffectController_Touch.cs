@@ -7,6 +7,7 @@ public class InteractNoteEffectController_Touch : MonoBehaviour, IInteractNoteEf
 {
     [SerializeField] List<ParticleSystem> particleSystems;
     [SerializeField] MeshRenderer[] touchLigts;
+    [SerializeField] ParticleEndCallback particleEndCallback;
 
     public void SetEffect(NoteData_Touch noteData)
     {
@@ -40,6 +41,9 @@ public class InteractNoteEffectController_Touch : MonoBehaviour, IInteractNoteEf
             emission.SetBursts(bursts);
 
         }
+        
+        if (particleEndCallback != null) { particleEndCallback.OnStopParticleListner += () => { Destroy(this.gameObject); }; }
+
     }
 
     public void Play()

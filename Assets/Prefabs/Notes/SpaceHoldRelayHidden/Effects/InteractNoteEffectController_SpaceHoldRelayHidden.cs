@@ -7,6 +7,7 @@ public class InteractNoteEffectController_SpaceHoldRelayHidden : MonoBehaviour, 
 {
     [SerializeField] float distanceUnit = 1f;
     [SerializeField] List<ParticleSystem> particleSystems;
+    [SerializeField] ParticleEndCallback particleEndCallback;
 
     public void SetEffect(NoteData_SpaceHoldRelayHidden noteData)
     {
@@ -33,6 +34,8 @@ public class InteractNoteEffectController_SpaceHoldRelayHidden : MonoBehaviour, 
 
             emission.SetBursts(bursts);
         }
+
+        if (particleEndCallback != null) { particleEndCallback.OnStopParticleListner += () => { Destroy(this.gameObject); }; }
     }
 
     public void Play()
