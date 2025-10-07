@@ -35,17 +35,18 @@ public class MusicData
     public StageType StageType { get { return stageType; } set { stageType = value; } }
 
     [Header("“ïˆÕ“x")]
-    [SerializeField] private int[] difficulities = new int[4];
-    public int GetDifficulity(Difficulty name) { return difficulities[(int)name]; }
-    public void SetDifficulty(int[] difficulties) 
-    { 
-        if(difficulities.Length != 4) 
-        { 
-            Debug.LogError($"ySystemz“ïˆÕ“x‚Ì”‚ª4‚Å‚Í‚ ‚è‚Ü‚¹‚ñ: {difficulities.Length}");
-            return; 
+    [SerializeField] private int[] difficulties = new int[4];
+    public int GetDifficulty(Difficulty name) { return difficulties[(int)name]; }
+    public void SetDifficulty(int[] difficulties)
+    {
+        for (int i = 0; i < this.difficulties.Length && i < difficulties.Length; i++)
+        {
+            this.difficulties[i] = difficulties[i];
         }
-
-        this.difficulities = difficulties;
+    }
+    public void SetDifficulty(Difficulty dif, int level)
+    { 
+        this.difficulties[(int)dif] = level;
     }
 
     [Header("•ˆ–Ê")]
@@ -62,7 +63,13 @@ public class MusicData
     }
 
 
-    MusicRecord[] records = new MusicRecord[4];
-    public MusicRecord GetMusicRecord(Difficulty name) { return records[(int)name] != null ? records[(int)name] : new MusicRecord(); }
-    public void SetMusicRecord(Difficulty name, MusicRecord new_record) { records[(int)name] = new_record; }
+    DifficultyToRecord records = new DifficultyToRecord();
+    public MusicRecord GetMusicRecord(Difficulty dif) 
+    {
+        return records.GetRecord(dif);
+    }
+    public void SetMusicRecord(Difficulty dif, MusicRecord newRecord) 
+    {
+        records.GetRecord(dif).HighScoreUpdate(newRecord);
+    }
 }

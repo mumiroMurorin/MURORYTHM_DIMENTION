@@ -93,9 +93,9 @@ public class MusicTopicUI : MonoBehaviour
         if (data == null) { return; }
 
         // 難易度(レベル)
-        if (currentSetData.GetDifficulity(difficulty) != -1)
+        if (currentSetData.GetDifficulty(difficulty) != -1)
         {
-            level_tmp.text = data.GetDifficulity(difficulty).ToString();
+            level_tmp.text = data.GetDifficulty(difficulty).ToString();
         }
         else { level_tmp.text = "-"; }
     }
@@ -105,7 +105,7 @@ public class MusicTopicUI : MonoBehaviour
         if (data == null) { return; }
 
         // その難易度がないときは表示を特定のものにする
-        if (data.GetDifficulity(difficulty) == -1)
+        if (data.GetDifficulty(difficulty) == -1)
         {
             score_tmp.text = " - ";
 

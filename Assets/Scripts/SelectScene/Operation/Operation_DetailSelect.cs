@@ -97,7 +97,7 @@ public class Operation_DetailSelect : MonoBehaviour
     private void UpdateMusicStartTopic(SliderTouchData sliderTouchData)
     {
         Difficulty difficulty = musicDataListGetter.Difficulty.Value;
-        int numOfDifficulty = musicDataListGetter.CurrentMusicData.Value.GetDifficulity(difficulty);
+        int numOfDifficulty = musicDataListGetter.CurrentMusicData.Value.GetDifficulty(difficulty);
 
         // ïàñ Ç™Ç»Ç¢èÍçá
         if(numOfDifficulty == -1)
