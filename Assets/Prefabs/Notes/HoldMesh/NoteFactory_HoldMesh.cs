@@ -90,6 +90,8 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
         MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
         Mesh mesh = GroundHoldMeshGenerator.GenerateGroundHoldMesh(noteData.TimeToRanges, optionHolder.NoteSpeed.Value, meshHorizontalDivisionNum, maxTriangleLength);
+
+        meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         meshFilter.mesh = mesh;
 
         obj.AddComponent<Deformable>().AddDeformer(groundDeformer);

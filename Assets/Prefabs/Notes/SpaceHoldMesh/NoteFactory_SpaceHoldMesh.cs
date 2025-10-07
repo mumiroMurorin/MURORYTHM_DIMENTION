@@ -19,7 +19,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     [SerializeField] float maxTriangleLength = 0.5f;
 
     INoteSpawnDataOptionHolder optionHolder;
-    ISliderInputGetter sliderInputGetter;
+    ISpaceInputGetter spaceInputGetter;
     ITimeGetter timer;
     GameObject groundObject;
     Deformer groundDeformer;
@@ -29,7 +29,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         this.optionHolder = initializingData.OptionHolder;
         this.groundObject = initializingData.GroundObject;
         this.groundDeformer = initializingData.GroundDeformer;
-        this.sliderInputGetter = initializingData.SliderInputGetter;
+        this.spaceInputGetter = initializingData.SpaceInputGetter;
         this.timer = initializingData.Timer;
     }
 
@@ -54,8 +54,9 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     private NoteData_SpaceHoldMesh ConvertNoteData(NoteData_SpaceHoldMesh data)
     {
         // ノーツデータにいろいろ追加
-        data.SliderInput = this.sliderInputGetter;
+        data.SpaceInput = this.spaceInputGetter;
         data.Timer = this.timer;
+        data.OptionGetter = this.optionHolder;
 
         return data;
     }

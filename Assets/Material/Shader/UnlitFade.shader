@@ -1,23 +1,17 @@
-Shader "Custom/MultiColored"
+Shader "Custom/UnlitFade"
 {
     Properties
     {
-        _Color("Color", Color) = (1,1,1,1)
-        _SecondaryColor("Secondary Color", Color) = (1,1,1,1)
         _MainTex("Texture", 2D) = "white" {}
-        _SeparationHeight("Separation Z", Float) = 0.0
+        _Color("Color", Color) = (1,1,1,1)
     }
-
         SubShader
         {
-            Tags
-            {
-                "Queue" = "Transparent"
+            Tags {
                 "RenderType" = "Transparent"
+                "Queue" = "Transparent"
                 "IgnoreProjector" = "True"
             }
-
-            LOD 100
 
             Blend SrcAlpha OneMinusSrcAlpha
             ZWrite Off
@@ -32,11 +26,8 @@ Shader "Custom/MultiColored"
                 #include "UnityCG.cginc"
 
                 sampler2D _MainTex;
-                float4 _MainTex_ST;
-
                 fixed4 _Color;
-                fixed4 _SecondaryColor;
-                float _SeparationHeight;
+                float4 _MainTex_ST;
 
                 struct appdata
                 {
@@ -48,7 +39,6 @@ Shader "Custom/MultiColored"
                 {
                     float2 uv : TEXCOORD0;
                     float4 vertex : SV_POSITION;
-                    float3 worldPos : TEXCOORD1;
                 };
 
                 v2f vert(appdata v)
@@ -56,20 +46,15 @@ Shader "Custom/MultiColored"
                     v2f o;
                     o.vertex = UnityObjectToClipPos(v.vertex);
                     o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                    o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
                     return o;
                 }
 
                 fixed4 frag(v2f i) : SV_Target
                 {
-                    fixed4 texColor = tex2D(_MainTex, i.uv);
-                    fixed4 colorBlend = lerp(_SecondaryColor, _Color, step(_SeparationHeight, i.worldPos.z));
-                    fixed4 finalColor = texColor * colorBlend;
-                    return finalColor;
+                    fixed4 col = tex2D(_MainTex, i.uv) * _Color;
+                    return col;
                 }
                 ENDCG
-            } 
+            }
         }
-
-        FallBack Off
 }

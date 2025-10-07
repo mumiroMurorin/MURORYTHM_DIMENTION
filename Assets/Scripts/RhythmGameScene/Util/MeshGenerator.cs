@@ -193,7 +193,6 @@ namespace MeshGenerate
 
             List<int> triangles = new List<int>();          // 三角形形成順リスト
             List<Vector3> vertices = new List<Vector3>();   // 頂点リスト
-            List<Vector2> uvs = new List<Vector2>();        // UV座標リスト
             float currentStartZ = 0;                        // 計算済みZ
             float maxLength = speed * (timeToVertices[^1].Timing - timeToVertices[0].Timing);    // Mesh全体のZ長
             int currentMeshIndex = 0;
@@ -630,13 +629,28 @@ namespace MeshGenerate
         /// <returns></returns>
         public static Mesh GenerateLineMesh(List<Vector3> points, float width, bool isLoop = false)
         {
-            if (points == null || points.Count < 2) return null;
+            if (points == null || points.Count < 2) { return null; }
 
-            if(isLoop) { points.Add(points[0]); }
+            // ループ処理
+            if (isLoop)
+            {
+                // Add の副作用を避けるためコピーを作る
+                points = new List<Vector3>(points);
+                points.Add(points[0]);
+            }
 
             List<Vector3> vertices = new List<Vector3>();
             List<int> triangles = new List<int>();
             List<Vector2> uvs = new List<Vector2>();
+
+            // 線の全長を計算（UVの比率に使う）
+            float totalLength = 0f;
+            for (int i = 1; i < points.Count; i++)
+            {
+                totalLength += Vector3.Distance(points[i - 1], points[i]);
+            }
+
+            float accumulatedLength = 0f;
 
             for (int i = 0; i < points.Count; i++)
             {
@@ -644,15 +658,21 @@ namespace MeshGenerate
 
                 if (isLoop)
                 {
-                    if (i == 0) { forward = ((points[i + 1] - points[i]).normalized + (points[i] - points[points.Count - 2]).normalized).normalized; }
-                    else if (i == points.Count - 1) { forward = ((points[1] - points[i]).normalized + (points[i] - points[i - 1]).normalized).normalized; }
-                    else { forward = ((points[i + 1] - points[i]).normalized + (points[i] - points[i - 1]).normalized).normalized; }
+                    if (i == 0)
+                        forward = ((points[i + 1] - points[i]).normalized + (points[i] - points[points.Count - 2]).normalized).normalized;
+                    else if (i == points.Count - 1)
+                        forward = ((points[1] - points[i]).normalized + (points[i] - points[i - 1]).normalized).normalized;
+                    else
+                        forward = ((points[i + 1] - points[i]).normalized + (points[i] - points[i - 1]).normalized).normalized;
                 }
                 else
                 {
-                    if (i == 0) { forward = (points[i + 1] - points[i]).normalized; }
-                    else if (i == points.Count - 1) { forward = (points[i] - points[i - 1]).normalized; }
-                    else { forward = ((points[i + 1] - points[i]).normalized + (points[i] - points[i - 1]).normalized).normalized; }
+                    if (i == 0)
+                        forward = (points[i + 1] - points[i]).normalized;
+                    else if (i == points.Count - 1)
+                        forward = (points[i] - points[i - 1]).normalized;
+                    else
+                        forward = ((points[i + 1] - points[i]).normalized + (points[i] - points[i - 1]).normalized).normalized;
                 }
 
                 Vector3 right = Vector3.Cross(forward, Vector3.forward).normalized;
@@ -661,8 +681,17 @@ namespace MeshGenerate
                 vertices.Add(points[i] - offset);
                 vertices.Add(points[i] + offset);
 
-                uvs.Add(new Vector2(i / (float)(points.Count - 1), 0));
-                uvs.Add(new Vector2(i / (float)(points.Count - 1), 1));
+                // ---- UV計算 ----
+                if (i > 0)
+                {
+                    accumulatedLength += Vector3.Distance(points[i - 1], points[i]);
+                }
+                float u = (totalLength > 0f) ? (accumulatedLength / totalLength) : 0f;
+
+                // 下側（左）→ (u, 0)
+                // 上側（右）→ (u, 1)
+                uvs.Add(new Vector2(0, u));
+                uvs.Add(new Vector2(1, u));
             }
 
             for (int i = 0; i < points.Count - 1; i++)
@@ -678,10 +707,11 @@ namespace MeshGenerate
             }
 
             Mesh mesh = new Mesh();
-            mesh.vertices = vertices.ToArray();
-            mesh.triangles = triangles.ToArray();
-            mesh.uv = uvs.ToArray();
+            mesh.SetVertices(vertices);
+            mesh.SetTriangles(triangles, 0);
+            mesh.SetUVs(0, uvs);
             mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
 
             return mesh;
         }

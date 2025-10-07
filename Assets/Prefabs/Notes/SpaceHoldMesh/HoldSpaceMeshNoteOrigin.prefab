@@ -45,5 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshMaterialDefault: {fileID: 2100000, guid: 8de6ef7ea1e5fff4297b6e2b40587367, type: 2}
-  meshMaterialTouching: {fileID: 2100000, guid: 1c576805fedcb464082f205c96d448c9, type: 2}
-  meshMaterialUntouching: {fileID: 2100000, guid: 85810bdc019df3c49b8616aaae6b0603, type: 2}
+  meshMaterialHolding: {fileID: 2100000, guid: 1c576805fedcb464082f205c96d448c9, type: 2}
+  meshMaterialUnholding: {fileID: 2100000, guid: 85810bdc019df3c49b8616aaae6b0603, type: 2}
