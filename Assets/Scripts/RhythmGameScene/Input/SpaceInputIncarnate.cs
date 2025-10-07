@@ -32,13 +32,13 @@ public class SpaceInputIncarnate : MonoBehaviour
         // âEéË
         spaceInputGetter?.GetSpaceInput(SpaceTrackingTag.RightHand)
             .ObserveAdd()
-            .Subscribe(value => MoveCaptureObject(rightHandCaptureObject.gameObject, value.Value.Pos))
+            .Subscribe(value => MoveCaptureObject(rightHandCaptureObject, value.Value.Pos))
             .AddTo(this.gameObject);
 
         // ç∂éË
         spaceInputGetter?.GetSpaceInput(SpaceTrackingTag.LeftHand)
             .ObserveAdd()
-            .Subscribe(value => MoveCaptureObject(leftHandCaptureObject.gameObject, value.Value.Pos))
+            .Subscribe(value => MoveCaptureObject(leftHandCaptureObject, value.Value.Pos))
             .AddTo(this.gameObject);
 
         spawnOptionGetter?.IsAutoModeRP
@@ -51,17 +51,15 @@ public class SpaceInputIncarnate : MonoBehaviour
     /// </summary>
     /// <param name="handObject"></param>
     /// <param name="position"></param>
-    private void MoveCaptureObject(GameObject handObject, Vector3 position)
+    private void MoveCaptureObject(HandCaptureObject handObject, Vector3 position)
     {
         position = new Vector3(
             judgeFieldCenter.x + position.x * (judgeFieldSize.x / 2f),
             judgeFieldCenter.y + position.y * (judgeFieldSize.y / 2f),
-            //judgeFieldCenter.z + position.z * (judgeFieldSize.z / 2f)
             0
         );
 
-        //Debug.Log($"ÅyCaptureÅz{handObject.name},{position}");
-        handObject.transform.position = position;
+        handObject.OnMoveHandPosition(position);
     }
 
     private void SetActiveCaputureObject(bool isAutoMode)

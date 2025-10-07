@@ -1,4 +1,4 @@
-Shader "Custom/Clamp" {
+Shader "Custom/ClampZ" {
 
 	Properties{
 		_Color("Color", Color) = (1,1,1,1)

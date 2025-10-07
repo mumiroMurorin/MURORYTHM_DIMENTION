@@ -688,8 +688,6 @@ namespace MeshGenerate
                 }
                 float u = (totalLength > 0f) ? (accumulatedLength / totalLength) : 0f;
 
-                // 下側（左）→ (u, 0)
-                // 上側（右）→ (u, 1)
                 uvs.Add(new Vector2(0, u));
                 uvs.Add(new Vector2(1, u));
             }
