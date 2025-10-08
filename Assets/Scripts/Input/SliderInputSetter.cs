@@ -23,7 +23,7 @@ public class SliderInputSetter : MonoBehaviour
 
     private void Awake()
     {
-        sliderInputSetter?.Initialize(this.gameObject);
+        sliderInputSetter?.Initialize();
     }
 
     private void Start()

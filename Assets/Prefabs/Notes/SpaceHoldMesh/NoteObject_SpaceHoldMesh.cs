@@ -78,7 +78,7 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
         if (noteData.SpaceInput == null) { return false; }
         if (noteData.Timer == null) { return false; }
 
-        // ‰Eè‚Ì”»’è
+        // ‰Eè‚Ì”»’è (Œğ·‚µ‚Ä‚¢‚½‚ç”ÍˆÍ“à”»’è)
         int rightCount = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand).Count;
         if (rightCount < 2) { return false; }
 
@@ -86,7 +86,7 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
         var rightPos2 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand)[rightCount - 2].Pos;
         bool isRightIn = IsSegmentIntersectingOrInsidePolygon(rightPos1, rightPos2, judgeRange);
 
-        // ¶è‚Ì”»’è
+        // ¶è‚Ì”»’è (Œğ·‚µ‚Ä‚¢‚½‚ç”ÍˆÍ“à”»’è)
         int leftCount = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand).Count;
         if (leftCount < 2) { return false; }
 

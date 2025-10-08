@@ -31,14 +31,14 @@ public interface ISpaceInputGetter
 
 public interface ISliderInputSetter
 {
-    public void Initialize(GameObject disposable);
+    public void Initialize();
 
     public void SetSliderInput(int index, bool isEnable);
 }
 
 public interface ISpaceInputSetter
 {
-    public void Initialize(GameObject disposable);
+    public void Initialize();
 
     public void SetSpaceInput(SpaceTrackingTag tag, Vector3 pos, float time);
 

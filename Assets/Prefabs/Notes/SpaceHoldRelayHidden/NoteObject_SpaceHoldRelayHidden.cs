@@ -132,7 +132,7 @@ public class NoteObject_SpaceHoldRelayHidden : NoteObject<NoteData_SpaceHoldRela
         if (noteData.SpaceInput == null) { return false; }
         if (noteData.Timer == null) { return false; }
 
-        // ‰EŽè‚Ì”»’è
+        // ‰EŽè‚Ì”»’è (Œð·‚µ‚Ä‚¢‚½‚ç”ÍˆÍ“à”»’è)
         int rightCount = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand).Count;
         if(rightCount < 2) { return false; }
 
@@ -140,7 +140,7 @@ public class NoteObject_SpaceHoldRelayHidden : NoteObject<NoteData_SpaceHoldRela
         var rightPos2 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand)[rightCount - 2].Pos;
         bool isRightIn = IsSegmentIntersectingOrInsidePolygon(rightPos1, rightPos2, judgeRange);
 
-        // ¶Žè‚Ì”»’è
+        // ¶Žè‚Ì”»’è (Œð·‚µ‚Ä‚¢‚½‚ç”ÍˆÍ“à”»’è)
         int leftCount = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand).Count;
         if (leftCount < 2) { return false; }
 

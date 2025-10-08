@@ -150,11 +150,11 @@ public class DynamicJudgementHandler
         // Debug.Log($"List: {string.Join(", ", judgeVectors)}");
     }
 
-    public bool Judge(Vector3 diff)
+    public bool Judge(Vector3 velocity)
     {
         foreach (Vector3 threshold in judgeVectors)
         {
-            if (DynamicJudgement.JudgeThreshold(threshold, diff)) { return true; }
+            if (DynamicJudgement.JudgeThreshold(threshold, velocity)) { return true; }
         }
 
         return false;

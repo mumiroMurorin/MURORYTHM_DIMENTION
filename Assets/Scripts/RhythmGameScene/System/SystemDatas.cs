@@ -62,12 +62,13 @@ public enum PhaseStatusInRootScene
 
 public enum OptionType
 {
-    None,
-    NoteSpeed,
-    Offset,
-    MasterVolume,
-    JudgementSEVolume,
-    MusicVolume,
+    None = 0,
+    NoteSpeed = 10,
+    Offset = 20,
+    DivisionNum = 25,
+    MasterVolume = 30,
+    JudgementSEVolume = 40,
+    MusicVolume = 100,
 }
 
 /// <summary>

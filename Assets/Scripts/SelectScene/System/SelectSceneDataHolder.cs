@@ -12,6 +12,7 @@ public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSet
          OptionType.NoteSpeed,
          OptionType.Offset,
          OptionType.JudgementSEVolume,
+         OptionType.DivisionNum,
     };
 
     void ISelectSceneDataSetter.SetOptionList(List<OptionType> optionTypes)

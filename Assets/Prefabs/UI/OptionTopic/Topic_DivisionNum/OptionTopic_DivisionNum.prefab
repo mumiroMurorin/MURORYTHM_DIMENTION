@@ -84,10 +84,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5159658676163869726}
-  - component: {fileID: 5218410943102496994}
-  - component: {fileID: 7414499479348040979}
+  - component: {fileID: 4171702180852526576}
+  - component: {fileID: 5550083781893284413}
   m_Layer: 5
-  m_Name: OptionTopic_NoteSpeed
+  m_Name: OptionTopic_DivisionNum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -115,7 +115,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 450, y: 675}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &5218410943102496994
+--- !u!114 &4171702180852526576
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,11 +124,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 511264936851410521}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3641e4414365544080eaeb9752eb034, type: 3}
+  m_Script: {fileID: 11500000, guid: 420a2b91956dafd4eb877cf01dce8bcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  view: {fileID: 7414499479348040979}
---- !u!114 &7414499479348040979
+  view: {fileID: 5550083781893284413}
+--- !u!114 &5550083781893284413
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -137,10 +137,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 511264936851410521}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8476104cf3b45aa448bacec9e275cf8c, type: 3}
+  m_Script: {fileID: 11500000, guid: 3196bd3594f7080429338c254bd12370, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteSpeedTmp: {fileID: 8602456643293969006}
+  divisionNumTmp: {fileID: 8602456643293969006}
 --- !u!1 &582135612783351540
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,7 +392,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u30CE\u30FC\u30C4\u304C\u964D\u3063\u3066\u304F\u308B\u901F\u5EA6"
+  m_text: "\u30CE\u30FC\u30C4\u304C\u6D41\u308C\u3066\u304F\u308B\u30B0\u30E9\u30A6\u30F3\u30C9\u3092\u7DDA\u3067\u5206\u5272\u3057\u307E\u3059\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
   m_sharedMaterial: {fileID: 8712543720389648820, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
@@ -951,7 +951,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u30CE\u30FC\u30C4\u30B9\u30D4\u30FC\u30C9"
+  m_text: "\u30B0\u30E9\u30A6\u30F3\u30C9\u5206\u5272\u6570"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
   m_sharedMaterial: {fileID: 8712543720389648820, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
@@ -978,7 +978,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55
+  m_fontSize: 48.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

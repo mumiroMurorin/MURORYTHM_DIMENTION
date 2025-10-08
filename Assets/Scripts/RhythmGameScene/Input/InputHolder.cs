@@ -27,30 +27,13 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
     ReactiveProperty<bool> canGetSpaceInput = new ReactiveProperty<bool>();
     public IReadOnlyReactiveProperty<bool> CanGetSpaceInputReactiveProperty { get { return canGetSpaceInput; } }
 
-    public void Initialize(GameObject disposable)
+    public void Initialize()
     {
         sliderInput = new ReactiveProperty<bool>[SLIDER_MAX_COUNT];
         for (int i = 0; i < sliderInput.Length; i++)
         {
             sliderInput[i] = new ReactiveProperty<bool>();
         }
-
-        // 両手の動きをVector化する
-        rightHandInput.ObserveAdd()
-            .Pairwise()
-            .Subscribe(pair => {
-                SetHandVector(pair.Previous.Value, pair.Current.Value, rightHandVelocity);
-                if(rightHandInput.Count > MAX_RECORD_SPACE_INDEX) { rightHandInput.RemoveAt(0); }
-            })
-            .AddTo(disposable);
-
-        leftHandInput.ObserveAdd()
-            .Pairwise()
-            .Subscribe(pair => {
-                SetHandVector(pair.Previous.Value, pair.Current.Value, leftHandVelocity);
-                if (leftHandInput.Count > MAX_RECORD_SPACE_INDEX) { leftHandInput.RemoveAt(0); }
-            })
-            .AddTo(disposable);
     }
 
     /// <summary>
@@ -75,10 +58,32 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
         switch (tag)
         {
             case SpaceTrackingTag.RightHand:
-                rightHandInput.Add(new TimeToPos(time, pos));
+                var previous = rightHandInput.LastOrDefault();
+                var current = new TimeToPos(time, pos);
+
+                // データの追加
+                rightHandInput.Add(current);
+                if (rightHandInput.Count < 2) { break; }
+
+                // ベクトルの算出
+                SetHandVector(previous, current, rightHandVelocity);
+                // 要素数がいっぱいだったら古いやつから消す 
+                if (rightHandInput.Count > MAX_RECORD_SPACE_INDEX) { rightHandInput.RemoveAt(0); }
+                
                 break;
+
             case SpaceTrackingTag.LeftHand:
-                leftHandInput.Add(new TimeToPos(time, pos));
+                var previous_ = leftHandInput.LastOrDefault();
+                var current_ = new TimeToPos(time, pos);
+
+                // データの追加
+                leftHandInput.Add(current_);
+                if (leftHandInput.Count < 2) { break; }
+
+                // ベクトルの算出
+                SetHandVector(previous_, current_, leftHandVelocity);
+                // 要素数がいっぱいだったら古いやつから消す 
+                if (leftHandInput.Count > MAX_RECORD_SPACE_INDEX) { leftHandInput.RemoveAt(0); }
                 break;
             default:
                 Debug.LogWarning($"【Input】設定されていないタグです: {tag}");

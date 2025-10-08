@@ -20,6 +20,9 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
             case OptionType.Offset:
                 AddOffset(delta);
                 break;
+            case OptionType.DivisionNum:
+                AddGroundDivisionNum(delta);
+                break;
                 // ‰¼
             case OptionType.MusicVolume:
                 AddBGMVolume(delta);
@@ -148,6 +151,66 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
 
     #endregion
 
+
+    #region DivisionNum
+
+    ReactiveProperty<int> groundDivisionNum = new ReactiveProperty<int>(4);
+    public IReadOnlyReactiveProperty<int> GroundDivisionNum => groundDivisionNum;
+    public int GroundDivisionNumDisplay => groundDivisionNum.Value;
+    public void AddGroundDivisionNum(int delta)
+    {
+        if(delta > 0)
+        {
+            for (int i = 0; i < delta; i++)
+            {
+                switch (groundDivisionNum.Value)
+                {
+                    case 1:
+                        groundDivisionNum.Value = 2;
+                        break;
+                    case 2:
+                        groundDivisionNum.Value = 4;
+                        break;
+                    case 4:
+                        groundDivisionNum.Value = 8;
+                        break;
+                    case 8:
+                        groundDivisionNum.Value = 16;
+                        break;
+                    case 16:
+                        groundDivisionNum.Value = 1;
+                        break;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < Mathf.Abs(delta); i++)
+            {
+                switch (groundDivisionNum.Value)
+                {
+                    case 1:
+                        groundDivisionNum.Value = 16;
+                        break;
+                    case 2:
+                        groundDivisionNum.Value = 1;
+                        break;
+                    case 4:
+                        groundDivisionNum.Value = 2;
+                        break;
+                    case 8:
+                        groundDivisionNum.Value = 4;
+                        break;
+                    case 16:
+                        groundDivisionNum.Value = 8;
+                        break;
+                }
+            }
+        }
+    }
+
+    #endregion
+
     ReactiveProperty<bool> isAutoMode = new ReactiveProperty<bool>();
     public bool IsAutoMode { get { return isAutoMode.Value; } private set { isAutoMode.Value = value; } }
     public IReadOnlyReactiveProperty<bool> IsAutoModeRP => isAutoMode;
@@ -205,6 +268,9 @@ public interface IOptionGetter
     IReadOnlyReactiveProperty<float> JudgementSEVolume { get; }
 
     int JudgementSEVolumeDisplay { get; }
+
+    IReadOnlyReactiveProperty<int> GroundDivisionNum { get; }
+    int GroundDivisionNumDisplay { get; }
 
     BodyTrackingSettings TrackingSettings { get; }
 }
