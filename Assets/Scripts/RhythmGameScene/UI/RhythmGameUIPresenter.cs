@@ -11,6 +11,7 @@ namespace UIInRhythmGameScene
     {
         [SerializeField] BackGround_View backGround_view;
         [SerializeField] Combo_View combo_view;
+        [SerializeField] ComboRank_View comboRank_view;
         [SerializeField] ReadyToPlayUIControllerView readyToPlayUIControllerView;
 
         IScoreGetter scoreGetter_model;
@@ -33,6 +34,15 @@ namespace UIInRhythmGameScene
             // コンボ数
             scoreGetter_model?.Combo
                 .Subscribe(combo_view.OnChangeCombo)
+                .AddTo(this.gameObject);
+
+            // コンボランク
+            scoreGetter_model?.CurrentComboRank
+                .Subscribe(combo_view.OnChangeComboRank)
+                .AddTo(this.gameObject);
+
+            scoreGetter_model?.CurrentComboRank
+                .Subscribe(comboRank_view.OnChangeComboRank)
                 .AddTo(this.gameObject);
 
             // 楽曲データに関連するUI

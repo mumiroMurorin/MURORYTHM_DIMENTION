@@ -27,16 +27,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3108254555908651468}
-  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 0, z: -1.38}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -5.27}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &7742664797573881575
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f509c9e177832db4bb11f46f43e69acc, type: 2}
+  - {fileID: 2100000, guid: be1f58d45313fa94ba3b69dbe02d011d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -101,10 +101,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1234
+  m_text: 2222
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0b9d1700bdc79b548977c4f544641dcf, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: f509c9e177832db4bb11f46f43e69acc, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: be1f58d45313fa94ba3b69dbe02d011d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -112,13 +112,13 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
+  m_enableVertexGradient: 1
   m_colorMode: 3
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
     topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 0.98307335, g: 1, b: 0.5529412, a: 1}
+    bottomRight: {r: 0.9843137, g: 1, b: 0.5529412, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
@@ -128,10 +128,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
-  m_fontSizeBase: 25
+  m_fontSize: 45.2
+  m_fontSizeBase: 35
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 0
   m_fontSizeMax: 50
   m_fontStyle: 1
@@ -207,5 +207,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   comboThreshold: 1
+  presetAllPerfect:
+    fontMaterial: {fileID: 2100000, guid: f509c9e177832db4bb11f46f43e69acc, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 0.9882353, b: 0.64705884, a: 1}
+      topRight: {r: 1, g: 0.9254902, b: 0.45882353, a: 1}
+      bottomLeft: {r: 1, g: 0.5529412, b: 0.8352941, a: 1}
+      bottomRight: {r: 1, g: 0, b: 0.32156864, a: 1}
+  presetFullCombo:
+    fontMaterial: {fileID: 2100000, guid: be1f58d45313fa94ba3b69dbe02d011d, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 1, b: 1, a: 1}
+      topRight: {r: 1, g: 1, b: 1, a: 1}
+      bottomLeft: {r: 0.9843137, g: 1, b: 0.5529412, a: 1}
+      bottomRight: {r: 0.9843137, g: 1, b: 0.5529412, a: 1}
+  presetDefault:
+    fontMaterial: {fileID: 2100000, guid: e9a01419febd3394abe871b88071554f, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 1, b: 1, a: 1}
+      topRight: {r: 1, g: 1, b: 1, a: 1}
+      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+      bottomRight: {r: 1, g: 1, b: 1, a: 1}
   textMeshPro: {fileID: 4706816765988394403}
   animator: {fileID: 6868129437827593598}
