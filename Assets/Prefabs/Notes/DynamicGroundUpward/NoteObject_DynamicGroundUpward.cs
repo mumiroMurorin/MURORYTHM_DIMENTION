@@ -26,93 +26,90 @@ public class NoteObject_DynamicGroundUpward : NoteObject<NoteData_DynamicGroundU
         noteData = data;
 
         dynamicJudgement = new DynamicJudgementHandler(noteData.Range, JudgeVector, judgeMagnitude);
-
-        Bind();
-    }
-
-    private void Bind()
-    {
-        if (noteData == null) { return; }
-        if (noteData.SpaceInput == null) { return; }
-
-        // 右手
-        noteData.SpaceInput?.GetSpaceInputVelocity(SpaceTrackingTag.RightHand)
-            .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
-            .Where(_ => !isJudged)
-            .Where(_ => !noteData.OptionGetter.IsAutoMode)
-            .Subscribe(NormalJudge)
-            .AddTo(this.gameObject);
-
-        // 左手
-        noteData.SpaceInput?.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand)
-            .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
-            .Where(_ => !isJudged)
-            .Where(_ => !noteData.OptionGetter.IsAutoMode)
-            .Subscribe(NormalJudge)
-            .AddTo(this.gameObject);
     }
 
     private void Update()
     {
-        // オートモード時
-        if (noteData.OptionGetter.IsAutoMode && noteData.Timing <= noteData.Timer.Time)
+        if (noteData == null) { return; }
+        if (isJudged) { return; }
+
+        // 判定時間過ぎてるとき
+        if (noteData.JudgementWindow.IsPassJudgementRange(noteData.Timer.Time, noteData.Timing))
         {
-            bestJudgement = Judgement.Perfect;
-            RecordJudgement();
+            SendJudgementData();
             SetDisable();
             return;
         }
 
-        if (JudgeMiss())
+        // 判定時間内でないとき
+        if (!IsInJudgementTimeRange()) { return; }
+
+        // 通常時判定
+        if (!noteData.OptionGetter.IsAutoMode)
         {
-            RecordJudgement();
-            SetDisable();
+            NormalJudgement();
+        }
+        // オートモード時判定
+        else
+        {
+            AutoJudgement();
         }
     }
 
     /// <summary>
     /// 判定
     /// </summary>
-    private void NormalJudge(Vector3 velocity)
+    private void NormalJudgement()
     {
-        //Debug.Log($"【Judge】Upward velocity:{velocity}, {dynamicJudgement.Judge(velocity)}");
+        // 判定時間外なら返す
+        if (!IsInJudgementTimeRange()) { return; }
 
-        // 閾値から出てるか判定
-        if (!dynamicJudgement.Judge(velocity)) { return; }
-
-        // 判定を更新
-        Judgement currentJudgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
-        if ((int)bestJudgement < (int)currentJudgement)
+        // 最高判定且つノーツが過ぎたとき判定送信
+        if (bestJudgement == Judgement.Perfect && noteData.Timing <= noteData.Timer.Time)
         {
-            bestJudgement = currentJudgement;
+            SendJudgementData();
+            SetDisable();
+            return;
         }
 
-        // Perfectだったときは問答無用でPerfect
-        if (bestJudgement == Judgement.Perfect && noteData.Timing <= noteData.Timer.Time) { RecordJudgement(); }
+        // 判定時間内かつ閾値を超えているとき
+        bool isOverThresholdRight = dynamicJudgement.Judge(noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.RightHand).Value);
+        bool isOverThresholdLeft = dynamicJudgement.Judge(noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand).Value);
+        if (!isOverThresholdRight && !isOverThresholdLeft) { return; }
 
-        // Great以下だったときはMiss判定まで待ち
+        var jae = noteData.JudgementWindow.GetJudgementAndError(noteData.Timer.Time, noteData.Timing);
 
-        return;
+        // 最高判定の更新
+        if ((int)bestJudgement < (int)jae.Judgement)
+        {
+            bestJudgement = jae.Judgement;
+        }
+
+        // 遅めだった時、即時判定
+        if (jae.Error > 0)
+        {
+            SendJudgementData();
+            SetDisable();
+        }
     }
 
     /// <summary>
-    /// ミス判定
+    /// オート判定
     /// </summary>
-    /// <returns></returns>
-    private bool JudgeMiss()
+    private void AutoJudgement()
     {
-        if (noteData == null) { return false; }
-        if (noteData.Timer == null) { return false; }
-        if (noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.Miss) { return false; }
-        if (isJudged) { return false; }
+        // 最高判定のとき確定
+        if (noteData.Timing > noteData.Timer.Time) { return; }
 
-        return true;
+        bestJudgement = Judgement.Perfect;
+        SendJudgementData();
+        SetDisable();
     }
 
     /// <summary>
     /// 判定の記録
     /// </summary>
-    private void RecordJudgement()
+    private void SendJudgementData()
     {
         NoteJudgementData judgementData = new NoteJudgementData
         {
@@ -124,6 +121,21 @@ public class NoteObject_DynamicGroundUpward : NoteObject<NoteData_DynamicGroundU
         noteData.JudgementRecorder?.RecordJudgement(judgementData);
         SoundManager.Instance.PlaySE(noteData.NoteType, bestJudgement);
         isJudged = true;
+    }
+
+    /// <summary>
+    /// 判定範囲内か調べる
+    /// </summary>
+    /// <returns></returns>
+    private bool IsInJudgementTimeRange()
+    {
+        if (noteData == null) { return false; }
+        if (noteData.Timer == null) { return false; }
+
+        Judgement judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
+        if (judgement == Judgement.Miss || judgement == Judgement.None) { return false; }
+
+        return true;
     }
 
     /// <summary>

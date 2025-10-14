@@ -1,0 +1,1355 @@
+{
+  "BarDatas": [
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "DynamicDownwardData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        },
+        {
+          "Bpm": 256.0
+        }
+      ]
+    }
+  ],
+  "OffsetMs": 0.0
+}

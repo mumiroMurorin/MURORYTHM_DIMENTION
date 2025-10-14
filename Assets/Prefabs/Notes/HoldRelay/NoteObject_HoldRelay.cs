@@ -31,7 +31,7 @@ public class NoteObject_HoldRelay : NoteObject<NoteData_HoldRelay>
         if (noteData == null) { return; }
 
         // 判定時間過ぎてるとき
-        if (IsPassJudgementRange())
+        if (noteData.JudgementWindow.IsPassJudgementRange(noteData.Timer.Time, noteData.Timing))
         {
             SendJudgementData();
             SetDisable();
@@ -132,20 +132,6 @@ public class NoteObject_HoldRelay : NoteObject<NoteData_HoldRelay>
 
         Judgement judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
         if (judgement == Judgement.Miss || judgement == Judgement.None) { return false; }
-
-        return true;
-    }
-
-    /// <summary>
-    /// ノーツ判定範囲外？
-    /// </summary>
-    /// <returns></returns>
-    private bool IsPassJudgementRange()
-    {
-        if (noteData == null) { return false; }
-        if (noteData.Timer == null) { return false; }
-        if (noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.Miss) { return false; }
-        if (isJudged) { return false; }
 
         return true;
     }

@@ -27,9 +27,10 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     private void Update()
     {
         if (noteData == null) { return; }
+        if (isJudged) { return; }
 
         // 判定時間過ぎてるとき
-        if (IsPassJudgementRange())
+        if (noteData.JudgementWindow.IsPassJudgementRange(noteData.Timer.Time, noteData.Timing))
         {
             SendJudgementData();
             SetDisable();
@@ -39,8 +40,15 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
         // 判定時間内でないとき
         if (!IsInJudgementTimeRange()) { return; }
 
-        if (!noteData.OptionGetter.IsAutoMode) { NormalJudgement(); }
-        else { AutoJudgement(); }
+        if (!noteData.OptionGetter.IsAutoMode) 
+        {
+            UpdateJudgementRange();
+            NormalJudgement();
+        }
+        else 
+        { 
+            AutoJudgement();
+        }
     }
 
     /// <summary>
@@ -48,34 +56,34 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     /// </summary>
     private void NormalJudgement()
     {
-        // 判定範囲の更新
-        // 前判定
-        if (noteData.Timing >= noteData.Timer.Time)
+        // 判定時間外なら返す
+        if (!IsInJudgementTimeRange()) { return; }
+
+        // 最高判定且つノーツが過ぎたとき判定送信
+        if (bestJudgement == Judgement.Perfect && noteData.Timing <= noteData.Timer.Time)
         {
-            judgeRange = InterpolatePoints(noteData.TimeToVertices, noteData.Timer.Time);
-        }
-        // 後ろ判定、判定時間時のレンジをキープ
-        else
-        {
-            judgeRange = noteData.Vertices;
+            SendJudgementData();
+            SetDisable();
+            return;
         }
 
         // 判定時間内かつ枠内に手があるとき
-        if (IsInJudgementTimeRange() && noteData.SpaceInput.IsInSpaceRange(judgeRange, judgementMarginRadius))
-        {
-            // 記録した判定よりいい判定だったとき判定の更新
-            Judgement currentJudgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
-            if ((int)bestJudgement < (int)currentJudgement)
-            {
-                bestJudgement = currentJudgement;
-            }
+        bool isInRange = noteData.SpaceInput.IsInSpaceRange(judgeRange, judgementMarginRadius);
+        if (!isInRange) { return; }
 
-            // 最高判定のとき確定
-            if (bestJudgement == Judgement.Perfect && noteData.Timing <= noteData.Timer.Time)
-            {
-                SendJudgementData();
-                SetDisable();
-            }
+        var jae = noteData.JudgementWindow.GetJudgementAndError(noteData.Timer.Time, noteData.Timing);
+        
+        // 最高判定の更新
+        if ((int)bestJudgement < (int)jae.Judgement)
+        {
+            bestJudgement = jae.Judgement;
+        }
+
+        // 遅めだった時、即時判定
+        if (jae.Error > 0)
+        {
+            SendJudgementData();
+            SetDisable();
         }
     }
 
@@ -111,6 +119,23 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     }
 
     /// <summary>
+    /// 判定範囲の更新
+    /// </summary>
+    private void UpdateJudgementRange()
+    {
+        // 前判定
+        if (noteData.Timing >= noteData.Timer.Time)
+        {
+            judgeRange = InterpolatePoints(noteData.TimeToVertices, noteData.Timer.Time);
+        }
+        // 後ろ判定、判定時間時のレンジをキープ
+        else
+        {
+            judgeRange = noteData.Vertices;
+        }
+    }
+
+    /// <summary>
     /// 判定範囲内か調べる
     /// </summary>
     /// <returns></returns>
@@ -118,24 +143,9 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     {
         if (noteData == null) { return false; }
         if (noteData.Timer == null) { return false; }
-        if (isJudged) { return false; }
 
         Judgement judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
         if (judgement == Judgement.Miss || judgement == Judgement.None) { return false; }
-
-        return true;
-    }
-
-    /// <summary>
-    /// ノーツ判定範囲外？
-    /// </summary>
-    /// <returns></returns>
-    private bool IsPassJudgementRange()
-    {
-        if (noteData == null) { return false; }
-        if (noteData.Timer == null) { return false; }
-        if (noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.Miss) { return false; }
-        if (isJudged) { return false; }
 
         return true;
     }

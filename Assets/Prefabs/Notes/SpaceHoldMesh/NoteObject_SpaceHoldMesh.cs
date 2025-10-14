@@ -86,7 +86,6 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
         { 
             SetHoldStatus(true);
         }
-        return;
     }
 
     /// <summary>

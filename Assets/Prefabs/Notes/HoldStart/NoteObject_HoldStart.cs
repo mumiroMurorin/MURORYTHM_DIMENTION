@@ -60,7 +60,7 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
         }
 
         // ミスった時
-        if (JudgeMiss())
+        if (noteData.JudgementWindow.IsPassJudgementRange(noteData.Timer.Time, noteData.Timing))
         {
             NormalJudge();
             SetDisable();
@@ -97,20 +97,6 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
     {
         this.gameObject.SetActive(false);
         // Destroy(this.gameObject);
-    }
-
-    /// <summary>
-    /// ミス判定
-    /// </summary>
-    /// <returns></returns>
-    private bool JudgeMiss()
-    {
-        if (noteData == null) { return false; }
-        if (noteData.Timer == null) { return false; }
-        if (noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.Miss) { return false; }
-        if (isJudged) { return false; }
-
-        return true;
     }
 }
 

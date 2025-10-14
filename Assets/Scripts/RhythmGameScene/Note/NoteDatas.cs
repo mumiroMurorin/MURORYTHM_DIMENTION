@@ -52,6 +52,12 @@ public class JudgementWindow
         return GetJudgementAndError(currentTime, judgeTime).Judgement;
     }
 
+    /// <summary>
+    /// ”»’èŒë· ‘‚¯‚ê‚Î- ’x‚¯‚ê‚Î+
+    /// </summary>
+    /// <param name="currentTime"></param>
+    /// <param name="correctTiming"></param>
+    /// <returns></returns>
     public JudgementAndErrorTime GetJudgementAndError(float currentTime, float correctTiming)
     {
         // ”»’èŒë· ‘‚¯‚ê‚Î- ’x‚¯‚ê‚Î+
@@ -67,6 +73,11 @@ public class JudgementWindow
         else if (-goodWindow_faster < error && error <= goodWindow_latter) { return new JudgementAndErrorTime { Judgement = Judgement.Good, Error = error }; }
 
         return new JudgementAndErrorTime { Judgement = Judgement.None };
+    }
+
+    public bool IsPassJudgementRange(float currentTime, float judgeTime)
+    {
+        return GetJudgement(currentTime, judgeTime) == Judgement.Miss;
     }
 
     public void ClipWindow(float clipDuration, bool isFaster)
