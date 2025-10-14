@@ -7,6 +7,8 @@ using static JudgementUtil.SpacaHold.SpaceHoldJudgement;
 
 public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
 {
+    [SerializeField] float judgementMarginRadius = 0.25f;
+
     NoteData_SpaceHoldRelay noteData;
 
     Judgement bestJudgement = Judgement.Miss;
@@ -59,7 +61,7 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
         }
 
         // 判定時間内かつ枠内に手があるとき
-        if (IsInJudgementTimeRange() && IsInSpaceRange())
+        if (IsInJudgementTimeRange() && noteData.SpaceInput.IsInSpaceRange(judgeRange, judgementMarginRadius))
         {
             // 記録した判定よりいい判定だったとき判定の更新
             Judgement currentJudgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
@@ -122,34 +124,6 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
         if (judgement == Judgement.Miss || judgement == Judgement.None) { return false; }
 
         return true;
-    }
-
-    /// <summary>
-    /// ノーツ範囲内に手があるか判定
-    /// </summary>
-    /// <returns></returns>
-    private bool IsInSpaceRange()
-    {
-        if (noteData.SpaceInput == null) { return false; }
-        if (noteData.Timer == null) { return false; }
-
-        // 右手の判定 (交差していたら範囲内判定)
-        int rightCount = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand).Count;
-        if (rightCount < 2) { return false; }
-
-        var rightPos1 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand)[rightCount - 1].Pos;
-        var rightPos2 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand)[rightCount - 2].Pos;
-        bool isRightIn = IsSegmentIntersectingOrInsidePolygon(rightPos1, rightPos2, judgeRange);
-
-        // 左手の判定 (交差していたら範囲内判定)
-        int leftCount = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.RightHand).Count;
-        if (leftCount < 2) { return false; }
-
-        var leftPos1 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.LeftHand)[leftCount - 1].Pos;
-        var leftPos2 = noteData.SpaceInput.GetSpaceInput(SpaceTrackingTag.LeftHand)[leftCount - 2].Pos;
-        bool isLeftIn = IsSegmentIntersectingOrInsidePolygon(leftPos1, leftPos2, judgeRange);
-
-        return isRightIn || isLeftIn;
     }
 
     /// <summary>

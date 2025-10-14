@@ -27,8 +27,8 @@ namespace UIInRootScene
         [Space(10)]
         [Header("Model")]
         [SerializeField] SerializeInterface<IPhaseTransitionableInRootScene> phaseTransitioner_model;
-        [SerializeField] SpaceInputHandlerForMediaPipe spaceInputHandler_model;
-        [SerializeField] Mediapipe.Unity.Tutorial.BodyTracking cameraInfo_model;
+        [SerializeField] SerializeInterface<ISpaceInputHandler> spaceInputHandler_model;
+        [SerializeField] SerializeInterface<ICameraInfoHolder> cameraInfo_model;
 
         IOptionGetter optionGetter_model;
         ISpaceInputGetter spaceInputGetter_model;
@@ -50,11 +50,11 @@ namespace UIInRootScene
         private void Bind()
         {
             // 正規化前の手の座標
-            spaceInputHandler_model?.RightHandPos
+            spaceInputHandler_model?.Value?.RightHandPos
                 .Subscribe(handInfo_view.OnChangeRightHandOriginPosition)
                 .AddTo(this.gameObject);
 
-            spaceInputHandler_model?.LeftHandPos
+            spaceInputHandler_model?.Value?.LeftHandPos
                 .Subscribe(handInfo_view.OnChangeLeftHandOriginPosition)
                 .AddTo(this.gameObject);
 
@@ -92,11 +92,11 @@ namespace UIInRootScene
                 .AddTo(this.gameObject);
 
             // カメラ情報
-            cameraInfo_model?.WebCamInfo
+            cameraInfo_model?.Value?.WebCamInfo
                 .Subscribe(cameraSettings_view.OnChangeCameraInfo)
                 .AddTo(this.gameObject);
 
-            cameraInfo_model?.CameraFps
+            cameraInfo_model?.Value?.CameraFps
                 .Subscribe(cameraSettings_view.OnChangeFPS)
                 .AddTo(this.gameObject);
         }
@@ -108,18 +108,18 @@ namespace UIInRootScene
 
             // コントローラ左端
             controllerLeftEdgeSetting_view.OnChangeValueListner += (pos) => { optionGetter_model?.TrackingSettings.SetControllerLeftEdge(pos); };
-            controllerLeftEdgeSetting_view.OnPushSetRightPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerLeftEdge(spaceInputHandler_model.RightHandPos.Value); };
-            controllerLeftEdgeSetting_view.OnPushSetLeftPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerLeftEdge(spaceInputHandler_model.LeftHandPos.Value); };
+            controllerLeftEdgeSetting_view.OnPushSetRightPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerLeftEdge(spaceInputHandler_model.Value.RightHandPos.Value); };
+            controllerLeftEdgeSetting_view.OnPushSetLeftPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerLeftEdge(spaceInputHandler_model.Value.LeftHandPos.Value); };
 
             // コントローラ右端
             controllerRightEdgeSetting_view.OnChangeValueListner += (pos) => { optionGetter_model?.TrackingSettings.SetControllerRightEdge(pos); };
-            controllerRightEdgeSetting_view.OnPushSetRightPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerRightEdge(spaceInputHandler_model.RightHandPos.Value); };
-            controllerRightEdgeSetting_view.OnPushSetLeftPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerRightEdge(spaceInputHandler_model.LeftHandPos.Value); };
+            controllerRightEdgeSetting_view.OnPushSetRightPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerRightEdge(spaceInputHandler_model.Value.RightHandPos.Value); };
+            controllerRightEdgeSetting_view.OnPushSetLeftPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerRightEdge(spaceInputHandler_model.Value.LeftHandPos.Value); };
 
             // コントローラ下
             controllerLowerCenterSetting_view.OnChangeValueListner += (pos) => { optionGetter_model?.TrackingSettings.SetControllerLowerCenter(pos); };
-            controllerLowerCenterSetting_view.OnPushSetRightPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerLowerCenter(spaceInputHandler_model.RightHandPos.Value); };
-            controllerLowerCenterSetting_view.OnPushSetLeftPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerLowerCenter(spaceInputHandler_model.LeftHandPos.Value); };
+            controllerLowerCenterSetting_view.OnPushSetRightPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerLowerCenter(spaceInputHandler_model.Value.RightHandPos.Value); };
+            controllerLowerCenterSetting_view.OnPushSetLeftPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerLowerCenter(spaceInputHandler_model.Value.LeftHandPos.Value); };
 
             // 入力映像の確認
             cameraSettings_view.OnPushViewImageButtonListner += () => { cameraImage_view.SetActive(!cameraImage_view.activeSelf); };
@@ -151,7 +151,7 @@ namespace UIInRootScene
             // カメラの変更
             cameraSettings_view.OnPushSwitchCameraButtonListner += () =>
             {
-                spaceInputHandler_model.SwitchCamera();
+                spaceInputHandler_model.Value.SwitchCamera();
                 // リロード
                 phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
             };

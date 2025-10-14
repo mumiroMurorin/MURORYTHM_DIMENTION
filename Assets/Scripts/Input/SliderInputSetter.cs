@@ -15,6 +15,8 @@ public class SliderInputSetter : MonoBehaviour
     // スライダー(キーボード) → ゲーム内入力
     List<Dictionary<KeyCode, int>> keyCodeToSliderIndexList = new List<Dictionary<KeyCode, int>>();
 
+    bool[] sliderSwitchies = new bool[16];
+
     [Inject]
     public void Inject(ISliderInputSetter inputSetter)
     {
@@ -34,12 +36,20 @@ public class SliderInputSetter : MonoBehaviour
     void Update()
     {
         // 全てのキー入力を監視
-        foreach(var keyCodeToSliderIndex in keyCodeToSliderIndexList)
+        sliderSwitchies = new bool[16];
+        foreach (var keyCodeToSliderIndex in keyCodeToSliderIndexList)
         {
+            if (keyCodeToSliderIndex.Count != 16) { continue; }
+
             foreach (var pair in keyCodeToSliderIndex)
             {
-                sliderInputSetter?.SetSliderInput(pair.Value, Input.GetKey(pair.Key));
+                sliderSwitchies[pair.Value] |= Input.GetKey(pair.Key);
             }
+        }
+
+        for (int i = 0; i < sliderSwitchies.Length; i++)
+        {
+            sliderInputSetter?.SetSliderInput(i, sliderSwitchies[i]);
         }
     }
 

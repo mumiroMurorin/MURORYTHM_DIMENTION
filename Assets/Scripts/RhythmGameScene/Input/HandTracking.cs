@@ -12,14 +12,16 @@ using Stopwatch = System.Diagnostics.Stopwatch; // for Timestamp
 
 namespace Mediapipe.Unity.Tutorial
 {
-    public class BodyTracking : MonoBehaviour, ICameraInfoHolder
+    public class HandTracking : MonoBehaviour, ICameraInfoHolder
     {
+        const int HAND_NUM = 2;
+
         [SerializeField] private RawImage _screen;
 
-        // --- Pose(ボディ)トラッキング用 ---
+        // --- Handトラッキング用 ---
 
-        private enum ModelComplexity { Lite = 0, Full = 1,Heavy = 2 }
-        [SerializeField] ModelComplexity _modelComplexity = ModelComplexity.Full;
+        private enum ModelComplexity { Lite = 0, Full = 1, }
+        [SerializeField] ModelComplexity _modelComplexity = ModelComplexity.Lite;
         [SerializeField] private TextAsset _configAsset;
 
         [Header("横幅(確認用)")]
@@ -45,9 +47,9 @@ namespace Mediapipe.Unity.Tutorial
 
         bool isReadyTracking;
 
-        NormalizedLandmarkList landmarkList;
-        public NormalizedLandmarkList LandmarkList { get { return landmarkList; } }
-        OutputStream<NormalizedLandmarkListPacket, NormalizedLandmarkList> poseLandmarksStream;
+        List<NormalizedLandmarkList> landmarkList;
+        public List<NormalizedLandmarkList> LandmarkList { get { return landmarkList; } }
+        OutputStream<NormalizedLandmarkListVectorPacket, List<NormalizedLandmarkList>> handLandmarksStream;
 
         CancellationTokenSource initializeCts = new CancellationTokenSource();
         CancellationTokenSource trackingCts = new CancellationTokenSource();
@@ -143,18 +145,17 @@ namespace Mediapipe.Unity.Tutorial
             {
                 case ModelComplexity.Lite:
                     Debug.Log("【MediaPipe】Loading Lite Pose model...");
-                    await LoadModelAssets("pose_landmark_lite.bytes");
-                    await LoadModelAssets("pose_detection.bytes");
+                    await LoadModelAssets("hand_landmark_lite.bytes");
+                    await LoadModelAssets("hand_recrop.bytes");
+                    await LoadModelAssets("handedness.txt");
+                    await LoadModelAssets("palm_detection_lite.bytes");
                     break;
                 case ModelComplexity.Full:
                     Debug.Log("【MediaPipe】Loading Full Pose model...");
-                    await LoadModelAssets("pose_landmark_full.bytes");
-                    await LoadModelAssets("pose_detection.bytes");
-                    break;
-                case ModelComplexity.Heavy:
-                    Debug.Log("【MediaPipe】Loading Heavy Pose model...");
-                    await LoadModelAssets("pose_landmark_heavy.bytes");
-                    await LoadModelAssets("pose_detection.bytes");
+                    await LoadModelAssets("hand_landmark_full.bytes");
+                    await LoadModelAssets("hand_recrop.bytes");
+                    await LoadModelAssets("handedness.txt");
+                    await LoadModelAssets("palm_detection_full.bytes");
                     break;
             }
 
@@ -171,20 +172,15 @@ namespace Mediapipe.Unity.Tutorial
                 return;
             }
 
-            poseLandmarksStream = new OutputStream<NormalizedLandmarkListPacket, NormalizedLandmarkList>(_graph, "pose_landmarks");
-            poseLandmarksStream.StartPolling().AssertOk();
+            handLandmarksStream = new OutputStream<NormalizedLandmarkListVectorPacket, List<NormalizedLandmarkList>>(_graph, "hand_landmarks");
+            handLandmarksStream.StartPolling().AssertOk();
 
             var sidePacket = new SidePacket();
             sidePacket.Emplace("model_complexity", new IntPacket((int)_modelComplexity));
+            sidePacket.Emplace("num_hands", new IntPacket(HAND_NUM));
             sidePacket.Emplace("input_rotation", new IntPacket(0));
             sidePacket.Emplace("input_horizontally_flipped", new BoolPacket(settings.IsHorizontallyFlipped.Value));
             sidePacket.Emplace("input_vertically_flipped", new BoolPacket(settings.IsVerticallyFlipped.Value));
-            sidePacket.Emplace("smooth_landmarks", new BoolPacket(true));
-            sidePacket.Emplace("enable_segmentation", new BoolPacket(true));
-            sidePacket.Emplace("smooth_segmentation", new BoolPacket(true));
-            sidePacket.Emplace("output_rotation", new IntPacket(0));
-            sidePacket.Emplace("output_horizontally_flipped", new BoolPacket(false));
-            sidePacket.Emplace("output_vertically_flipped", new BoolPacket(false));
 
             _graph.StartRun(sidePacket).AssertOk();
 
@@ -219,7 +215,7 @@ namespace Mediapipe.Unity.Tutorial
                 _fps = (int)(1f / deltaTime);
                 fps.Value = _fps;
 
-                if (poseLandmarksStream.TryGetNext(out var LandMarks))
+                if (handLandmarksStream.TryGetNext(out var LandMarks))
                 {
                     if (LandMarks == null) { continue; }
 

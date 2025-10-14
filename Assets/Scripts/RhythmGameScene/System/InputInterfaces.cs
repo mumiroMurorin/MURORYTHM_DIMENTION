@@ -27,7 +27,34 @@ public interface ISpaceInputGetter
     IReadOnlyReactiveProperty<Vector3> GetSpaceInputVelocity(SpaceTrackingTag spaceTrackingTag);
 
     IReadOnlyReactiveProperty<bool> CanGetSpaceInputReactiveProperty { get; }
+
+    bool IsInSpaceRange(Vector2[] vertices, float radius = 0);
 }
+
+/// <summary>
+/// スペース入力の情報を保持する
+/// </summary>
+public interface ISpaceInputHandler
+{
+    IReadOnlyReactiveProperty<Vector3> RightHandPos { get; }
+    IReadOnlyReactiveProperty<Vector3> LeftHandPos { get; }
+
+    bool IsExistCamera();
+
+    void InitializeBodyTracking();
+
+    void StartTracking();
+
+    void SwitchCamera();
+}
+
+public interface ICameraInfoHolder
+{
+    IReadOnlyReactiveProperty<WebCamTexture> WebCamInfo { get; }
+
+    IReadOnlyReactiveProperty<int> CameraFps { get; }
+}
+
 
 public interface ISliderInputSetter
 {

@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using JudgementUtil.Dynamic;
 using System.Linq;
+using static JudgementUtil.SpacaHold.SpaceHoldJudgement;
 
 public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGetter, ISpaceInputGetter
 {
@@ -26,6 +27,12 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
     // 空間入力中？
     ReactiveProperty<bool> canGetSpaceInput = new ReactiveProperty<bool>();
     public IReadOnlyReactiveProperty<bool> CanGetSpaceInputReactiveProperty { get { return canGetSpaceInput; } }
+    public void SetCanGetSpaceInput(bool isGet)
+    {
+        if (canGetSpaceInput.Value == isGet) { return; }
+
+        canGetSpaceInput.Value = isGet;
+    }
 
     public void Initialize()
     {
@@ -92,17 +99,6 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
     }
 
     /// <summary>
-    /// 体のトラッキングが出来ているかセット
-    /// </summary>
-    /// <param name="isGet"></param>
-    public void SetCanGetSpaceInput(bool isGet)
-    {
-        if (canGetSpaceInput.Value == isGet) { return; }
-
-        canGetSpaceInput.Value = isGet;
-    }
-
-    /// <summary>
     /// スライダー入力(ReactiveProperty)を返す
     /// </summary>
     /// <param name="index"></param>
@@ -160,5 +156,38 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
         }
 
         recorder.Value = DynamicJudgement.CalculateVelocity(previous, current);
+    }
+
+    /// <summary>
+    /// 引数の範囲に手が入っているかどうか
+    /// </summary>
+    /// <param name="vertices"></param>
+    /// <returns></returns>
+    public bool IsInSpaceRange(Vector2[] vertices, float radius = 0)
+    {
+        bool isRightIn = false;
+        bool isLeftIn = false;
+
+        // 右手の判定 (交差していたら範囲内判定)
+        int rightCount = GetSpaceInput(SpaceTrackingTag.RightHand).Count;
+        if (rightCount >= 2) 
+        {
+            var rightPos1 = GetSpaceInput(SpaceTrackingTag.RightHand)[rightCount - 1].Pos;
+            var rightPos2 = GetSpaceInput(SpaceTrackingTag.RightHand)[rightCount - 2].Pos;
+            isRightIn = IsSegmentIntersectingOrInsidePolygon(rightPos1, rightPos2, vertices)
+                || IsCircleIntersectingPolygon(vertices, rightPos1, radius);
+        }
+
+        // 左手の判定 (交差していたら範囲内判定)
+        int leftCount = GetSpaceInput(SpaceTrackingTag.RightHand).Count;
+        if (leftCount >= 2)
+        {
+            var leftPos1 = GetSpaceInput(SpaceTrackingTag.LeftHand)[leftCount - 1].Pos;
+            var leftPos2 = GetSpaceInput(SpaceTrackingTag.LeftHand)[leftCount - 2].Pos;
+            isLeftIn = IsSegmentIntersectingOrInsidePolygon(leftPos1, leftPos2, vertices)
+                || IsCircleIntersectingPolygon(vertices, leftPos1, radius);
+        }
+
+        return isRightIn || isLeftIn;
     }
 }

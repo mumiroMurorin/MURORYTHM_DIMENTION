@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using VContainer;
+using System.Linq;
 
-public class SpaceInputHandlerForMediaPipe : MonoBehaviour, ISpaceInputHandler
+public class SpaceInputHandlerForHandTracking : MonoBehaviour, ISpaceInputHandler
 {
-    const int RIGHT_HAND_INDEX = 19;
-    const int LEFT_HAND_INDEX = 20;
+    const int CAPTURE_INDEX = 0;
 
     [SerializeField] SerializeInterface<ITimeGetter> timer;
+    [SerializeField] Mediapipe.Unity.Tutorial.HandTracking handTracking;
+    [SerializeField] HandRigDriver hand;
 
-    [SerializeField] Mediapipe.Unity.Tutorial.BodyTracking bodyTracking;
 
     ReactiveProperty<Vector3> rightHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
     public IReadOnlyReactiveProperty<Vector3> RightHandPos => rightHandPos;
@@ -59,13 +60,13 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour, ISpaceInputHandler
 
     public void InitializeBodyTracking()
     {
-        bodyTracking.Initialize(optionGetter.TrackingSettings);
+        handTracking.Initialize(optionGetter.TrackingSettings);
     }
 
     [System.Obsolete]
     public void StartTracking()
     {
-        bodyTracking.StartTracking();
+        handTracking.StartTracking();
     }
 
     /// <summary>
@@ -73,40 +74,30 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour, ISpaceInputHandler
     /// </summary>
     private void ReadData()
     {
-        if (bodyTracking.LandmarkList == null) { isTracking = false; return; }
+        if (handTracking.LandmarkList == null) { isTracking = false; return; }
 
-        // í èÌ
-        if(optionGetter == null || !optionGetter.TrackingSettings.IsHandFlipped.Value)
+        if (handTracking.LandmarkList.Count > 0)
         {
             rightHandPos.Value = new Vector3(
-                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].X,
-                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].Y,
-                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].Z
-                );
-
-            leftHandPos.Value = new Vector3(
-                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].X,
-                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].Y,
-                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].Z
+                handTracking.LandmarkList[0].Landmark[CAPTURE_INDEX].X,
+                handTracking.LandmarkList[0].Landmark[CAPTURE_INDEX].Y,
+                handTracking.LandmarkList[0].Landmark[CAPTURE_INDEX].Z
                 );
         }
-        // îΩì]
-        else
+        
+        if(handTracking.LandmarkList.Count > 1)
         {
             leftHandPos.Value = new Vector3(
-                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].X,
-                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].Y,
-                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].Z
-              );
-
-            rightHandPos.Value = new Vector3(
-                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].X,
-                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].Y,
-                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].Z
+                handTracking.LandmarkList[1].Landmark[CAPTURE_INDEX].X,
+                handTracking.LandmarkList[1].Landmark[CAPTURE_INDEX].Y,
+                handTracking.LandmarkList[1].Landmark[CAPTURE_INDEX].Z
                 );
         }
 
         isTracking = true;
+
+        // hand.MediapipeWorldPoints = handTracking.LandmarkList[0];
+
         //Debug.Log($"ÅyMediaPipeÅzRight: {rightHandPos} left: {leftHandPos}");
     }
 
@@ -178,13 +169,4 @@ public class SpaceInputHandlerForMediaPipe : MonoBehaviour, ISpaceInputHandler
 
         spaceInputSetter.SetCanGetSpaceInput(isTracking);
     }
-}
-
-public interface ISpaceInputHandler
-{
-    bool IsExistCamera();
-
-    void InitializeBodyTracking();
-
-    void StartTracking();
 }

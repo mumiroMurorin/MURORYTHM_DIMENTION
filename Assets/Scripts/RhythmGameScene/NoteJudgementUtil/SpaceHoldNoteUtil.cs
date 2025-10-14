@@ -73,6 +73,71 @@ namespace JudgementUtil.SpacaHold
         }
 
         /// <summary>
+        /// ポリゴン内に円が被っているかどうか返す
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <param name="point"></param>
+        /// <param name="radius"></param>
+        /// <returns></returns>
+        public static bool IsCircleIntersectingPolygon(Vector2[] vertices, Vector2 point, float radius)
+        {
+            // 円の中心がポリゴンの内部にあるかどうか
+            if (IsPointInPolygon(vertices, point)) { return true; }
+
+            // 各辺と円が交差しているか確認
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                Vector2 a = vertices[i];
+                Vector2 b = vertices[(i + 1) % vertices.Length]; // ループ対応
+
+                if (DistancePointToLineSegment(point, a, b) <= radius)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 射影距離で点と線分の最短距離を求める
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static float DistancePointToLineSegment(Vector2 point, Vector2 a, Vector2 b)
+        {
+            Vector2 ab = b - a;
+            Vector2 ap = point - a;
+            float t = Vector2.Dot(ap, ab) / ab.sqrMagnitude;
+            t = Mathf.Clamp01(t); // 線分上にクランプ
+            Vector2 closestPoint = a + ab * t;
+            return Vector2.Distance(point, closestPoint);
+        }
+
+        /// <summary>
+        /// ポリゴン内に点が含まれるか（クロス数法 / Ray-casting）
+        /// </summary>
+        /// <param name="poly"></param>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public static bool IsPointInPolygon(Vector2[] poly, Vector2 point)
+        {
+            bool inside = false;
+            for (int i = 0, j = poly.Length - 1; i < poly.Length; j = i++)
+            {
+                bool intersect = ((poly[i].y > point.y) != (poly[j].y > point.y)) &&
+                                 (point.x < (poly[j].x - poly[i].x) * (point.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x);
+                if (intersect)
+                {
+                    inside = !inside;
+                }
+            }
+            return inside;
+        }
+
+        /// <summary>
         /// 線分同士が交差するかを判定する
         /// </summary>
         /// <param name="p1"></param>
