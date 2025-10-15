@@ -30,20 +30,27 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     ReactiveProperty<int> combo = new ReactiveProperty<int>(0);
     public IReadOnlyReactiveProperty<int> Combo { get { return combo; } }
 
-    // Score
+    // Score計算機
     ScoreCalculater scoreCalculater = new ScoreCalculater(1);
-    public IReadOnlyReactiveProperty<float> Score { get { return scoreCalculater.Score; } }
     public void SetScoreCalculater(ScoreCalculater scoreCalculater)
     {
         this.scoreCalculater = scoreCalculater;
+
+        score.Value = scoreCalculater.Score;
+        scoreRank.Value = scoreCalculater.Rank;
     }
+
+    // Score
+    ReactiveProperty<float> score = new ReactiveProperty<float>();
+    public IReadOnlyReactiveProperty<float> Score { get { return score; } }
 
     // ComboRank
     ReactiveProperty<ComboRank> comboRank = new ReactiveProperty<ComboRank>(ComboRank.AllPerfect);
     public IReadOnlyReactiveProperty<ComboRank> CurrentComboRank { get { return comboRank; } }
 
     // ScoreRank
-    public IReadOnlyReactiveProperty<ScoreRank> CurrentScoreRank { get { return scoreCalculater.Rank; } }
+    ReactiveProperty<ScoreRank> scoreRank = new ReactiveProperty<ScoreRank>();
+    public IReadOnlyReactiveProperty<ScoreRank> CurrentScoreRank { get { return scoreRank; } }
 
     public string GetCurrentScoreRankString()
     {
@@ -86,7 +93,11 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
 
         SetComboRank(judgementData.Judgement);
         noteJudgementDatas.Add(judgementData);
+
+        // スコアの更新
         scoreCalculater?.AddJudgement(judgementData.Judgement);
+        score.Value = scoreCalculater.Score;
+        scoreRank.Value = scoreCalculater.Rank;
 
         switch (judgementData.Judgement)
         {
@@ -172,11 +183,12 @@ public class ScoreCalculater
     }
 
     double scoreOrigin = 0;
-    ReactiveProperty<float> score = new ReactiveProperty<float>(0);
-    public IReadOnlyReactiveProperty<float> Score => score;
 
-    ReactiveProperty<ScoreRank> rank = new ReactiveProperty<ScoreRank>(ScoreRank.E);
-    public IReadOnlyReactiveProperty<ScoreRank> Rank => rank;
+    float score = 0;
+    public float Score { get { return score; } }
+
+    ScoreRank rank = ScoreRank.E;
+    public ScoreRank Rank { get { return rank; } } 
 
     public void AddJudgement(Judgement judgement)
     {
@@ -196,9 +208,9 @@ public class ScoreCalculater
                 break;
         }
 
-        score.Value = (float)scoreOrigin;
+        score = (float)scoreOrigin;
 
-        UpdateScoreRank((int)score.Value);
+        UpdateScoreRank((int)score);
     }
 
     private void UpdateScoreRank(int score)
@@ -206,7 +218,7 @@ public class ScoreCalculater
         for(int i = 0; i < rankThreshold.Count; i++)
         {
             if (rankThreshold[i].Threshold > score) { continue; }
-            if (rank.Value != rankThreshold[i].Rank) { rank.Value = rankThreshold[i].Rank; Debug.Log($"RankUp => {rank.Value}"); }
+            if (rank != rankThreshold[i].Rank) { rank = rankThreshold[i].Rank; Debug.Log($"RankUp => {rank}"); }
             break;
         }
     }

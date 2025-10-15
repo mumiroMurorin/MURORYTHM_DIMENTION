@@ -13,6 +13,7 @@ namespace UIInRhythmGameScene
         [SerializeField] Combo_View combo_view;
         [SerializeField] ComboRank_View comboRank_view;
         [SerializeField] ScoreRank_View scoreRank_view;
+        [SerializeField] Score_View score_view;
         [SerializeField] ReadyToPlayUIControllerView readyToPlayUIControllerView;
 
         IScoreGetter scoreGetter_model;
@@ -44,6 +45,15 @@ namespace UIInRhythmGameScene
 
             scoreGetter_model?.CurrentComboRank
                 .Subscribe(comboRank_view.OnChangeComboRank)
+                .AddTo(this.gameObject);
+
+            // スコア
+            scoreGetter_model?.Score
+                .Subscribe(score_view.OnChangeScore)
+                .AddTo(this.gameObject);
+
+            scoreGetter_model?.CurrentScoreRank
+                .Subscribe(score_view.OnChangeScoreRank)
                 .AddTo(this.gameObject);
 
             // スコアランク

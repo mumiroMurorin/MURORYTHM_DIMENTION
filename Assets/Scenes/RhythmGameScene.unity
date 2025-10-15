@@ -1616,6 +1616,7 @@ MonoBehaviour:
   combo_view: {fileID: 2611243809331325045}
   comboRank_view: {fileID: 2611243809331325043}
   scoreRank_view: {fileID: 1624703257}
+  score_view: {fileID: 2064141122}
   readyToPlayUIControllerView: {fileID: 1075409794}
 --- !u!4 &441545990 stripped
 Transform:
@@ -6698,7 +6699,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players:
   - obj: {fileID: 1313437738}
-  - obj: {fileID: 0}
   - obj: {fileID: 1677006595}
   - obj: {fileID: 481946115}
 --- !u!114 &1624703257 stripped
@@ -8459,6 +8459,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95a1acc2bd0219548b717d9364f3334b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2064141122 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4302953176347523156, guid: 02e9bcaa19f20f84ead8f0b710616509, type: 3}
+  m_PrefabInstance: {fileID: 2611243809331325042}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a14a98e9f30bd7448a11d398515d83c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2066955865 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5396200840852522410, guid: 53c49bb77473c2945afe03f560fee9c7, type: 3}
@@ -8903,6 +8914,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScoreInfo
       objectReference: {fileID: 0}
+    - target: {fileID: 6460439456261556480, guid: 02e9bcaa19f20f84ead8f0b710616509, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7371109542462568336, guid: 02e9bcaa19f20f84ead8f0b710616509, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -8950,7 +8965,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4136660972493263475, guid: 02e9bcaa19f20f84ead8f0b710616509, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 6460439456261556480, guid: 02e9bcaa19f20f84ead8f0b710616509, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 27045005840600856, guid: 02e9bcaa19f20f84ead8f0b710616509, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 02e9bcaa19f20f84ead8f0b710616509, type: 3}
