@@ -11,13 +11,14 @@ GameObject:
   - component: {fileID: 919388279056652336}
   - component: {fileID: 6868907925394633514}
   - component: {fileID: 8462759752408266862}
+  - component: {fileID: 5277125340485481277}
   m_Layer: 0
   m_Name: Rank_sub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &919388279056652336
 RectTransform:
   m_ObjectHideFlags: 0
@@ -57,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -6676979622335111179, guid: 8d140098eeb60674597367bde9b931e8, type: 2}
+  - {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -102,7 +103,7 @@ MonoBehaviour:
   m_text: SS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8d140098eeb60674597367bde9b931e8, type: 2}
-  m_sharedMaterial: {fileID: -6676979622335111179, guid: 8d140098eeb60674597367bde9b931e8, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -126,7 +127,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35.8
+  m_fontSize: 10.75
   m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -171,3 +172,113 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 6868907925394633514}
   m_maskType: 0
+--- !u!114 &5277125340485481277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2234496584286966785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aabb2409bde66664997cc6c5687ad934, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  presetRank:
+  - scoreRank: 1
+    text: E
+    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 1, b: 1, a: 1}
+      topRight: {r: 1, g: 1, b: 1, a: 1}
+      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  - scoreRank: 2
+    text: D
+    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 1, b: 1, a: 1}
+      topRight: {r: 1, g: 1, b: 1, a: 1}
+      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  - scoreRank: 3
+    text: C
+    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 1, b: 1, a: 1}
+      topRight: {r: 1, g: 1, b: 1, a: 1}
+      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  - scoreRank: 4
+    text: B
+    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 1, b: 1, a: 1}
+      topRight: {r: 1, g: 1, b: 1, a: 1}
+      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  - scoreRank: 5
+    text: A
+    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 1, b: 1, a: 1}
+      topRight: {r: 1, g: 1, b: 1, a: 1}
+      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  - scoreRank: 6
+    text: A+
+    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 1, b: 1, a: 1}
+      topRight: {r: 1, g: 1, b: 1, a: 1}
+      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  - scoreRank: 7
+    text: S
+    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 1, b: 1, a: 1}
+      topRight: {r: 1, g: 1, b: 1, a: 1}
+      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  - scoreRank: 8
+    text: S+
+    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 1, b: 1, a: 1}
+      topRight: {r: 1, g: 1, b: 1, a: 1}
+      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  - scoreRank: 9
+    text: SS
+    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 1, b: 1, a: 1}
+      topRight: {r: 1, g: 1, b: 1, a: 1}
+      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  - scoreRank: 10
+    text: SS+
+    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 1, b: 1, a: 1}
+      topRight: {r: 1, g: 1, b: 1, a: 1}
+      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  - scoreRank: 11
+    text: SSS
+    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 1, b: 1, a: 1}
+      topRight: {r: 1, g: 1, b: 1, a: 1}
+      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  - scoreRank: 12
+    text: MAX
+    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
+    colorGradient:
+      topLeft: {r: 1, g: 1, b: 1, a: 1}
+      topRight: {r: 1, g: 1, b: 1, a: 1}
+      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  textMeshPro: {fileID: 8462759752408266862}

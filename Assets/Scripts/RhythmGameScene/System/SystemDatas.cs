@@ -98,6 +98,7 @@ public enum ScoreRank
     SPlus,
     SS,
     SSPlus,
+    SSS,
     MAX
 }
 
@@ -110,7 +111,7 @@ public enum ComboRank
     TrackFailed = 1,
     TrackComplete = 2,
     FullCombo = 3,
-    GreatCombo = 4,
+    //GreatCombo = 4,
     AllPerfect = 5
 }
 

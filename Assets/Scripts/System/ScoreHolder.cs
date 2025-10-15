@@ -118,9 +118,9 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
         switch (judgement)
         {
             // Great判定のとき、AllPerfectでなくす
-            case Judgement.Great:
-                comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.GreatCombo);
-                break;
+            //case Judgement.Great:
+            //    comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.GreatCombo);
+            //    break;
             case Judgement.Good:
                 comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.FullCombo);
                 break;
@@ -133,14 +133,11 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
 
 public class ScoreCalculater
 {
-    const int MAX_SCORE = 1000000;
-    const float GREAT_RATIO = 0.9f;
-    const float GOOD_RATIO = 0.5f;
-    const float MISS_RATIO = 0f;
+    const int BASE_SCORE = 1000000;
 
     readonly List<RankToThreshold> rankThreshold = new List<RankToThreshold>
     {
-        new RankToThreshold(ScoreRank.MAX,1000000),
+        new RankToThreshold(ScoreRank.SSS,1000000),
         new RankToThreshold(ScoreRank.SSPlus,995000),
         new RankToThreshold(ScoreRank.SS,990000),
         new RankToThreshold(ScoreRank.SPlus,985000),
@@ -152,14 +149,29 @@ public class ScoreCalculater
         new RankToThreshold(ScoreRank.D,500000),
     };
 
-    float addScoreOnPerfect;
+    int maxScore;
+    double addScoreOnPerfect;
+    double addScoreOnGreat;
+    double addScoreOnGood;
+    double addScoreOnMiss;
 
     public ScoreCalculater(int maxCombo)
     {
-        addScoreOnPerfect = (float)MAX_SCORE / maxCombo;
+        // 理論値の設定
+        maxScore = BASE_SCORE + maxCombo;
+        
+        // 追加スコアの設定
+        addScoreOnPerfect = (double)maxScore / maxCombo;
+        addScoreOnGreat = addScoreOnPerfect - 10f;
+        addScoreOnGood = addScoreOnPerfect * 0.5f;
+        addScoreOnMiss = 0;
+
+        // スコアランクの閾値を更新
+        rankThreshold.Add(new RankToThreshold(ScoreRank.MAX, maxScore));
         rankThreshold = rankThreshold.OrderByDescending(x => x.Threshold).ToList();
     }
 
+    double scoreOrigin = 0;
     ReactiveProperty<float> score = new ReactiveProperty<float>(0);
     public IReadOnlyReactiveProperty<float> Score => score;
 
@@ -171,18 +183,20 @@ public class ScoreCalculater
         switch (judgement)
         {
             case Judgement.Perfect:
-                score.Value += addScoreOnPerfect;
+                scoreOrigin += addScoreOnPerfect;
                 break;
             case Judgement.Great:
-                score.Value += addScoreOnPerfect * GREAT_RATIO;
+                scoreOrigin += addScoreOnGreat;
                 break;
             case Judgement.Good:
-                score.Value += addScoreOnPerfect * GOOD_RATIO;
+                scoreOrigin += addScoreOnGood;
                 break;
             case Judgement.Miss:
-                score.Value += addScoreOnPerfect * MISS_RATIO;
+                scoreOrigin += addScoreOnMiss;
                 break;
         }
+
+        score.Value = (float)scoreOrigin;
 
         UpdateScoreRank((int)score.Value);
     }
