@@ -25,6 +25,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
     [SerializeField] NoteFactory<NoteData_SpaceHoldMesh> spaceHoldMeshNoteFactory;
     [SerializeField] NoteFactory<NoteData_SpaceHoldRelay> spaceHoldRelayNoteFactory;
     [SerializeField] NoteFactory<NoteData_SpaceHoldRelayHidden> spaceHoldRelayHiddenNoteFactory;
+    [SerializeField] NoteFactory<NoteData_SpaceBreak> spaceBreakNoteFactory;
 
     [Header("Factoryの初期化に必要なデータ")]
     [SerializeField] GameObject groundObject;
@@ -86,6 +87,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         spaceHoldMeshNoteFactory.Initialize(data);
         spaceHoldRelayNoteFactory.Initialize(data);
         spaceHoldRelayHiddenNoteFactory.Initialize(data);
+        spaceBreakNoteFactory.Initialize(data);
     }
 
     /// <summary>
@@ -109,6 +111,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         GenerateSpaceHoldMeshNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceHoldMesh).OfType<NoteData_SpaceHoldMesh>().ToList());
         GenerateSpaceHoldRelayNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceHoldRelay).OfType<NoteData_SpaceHoldRelay>().ToList());
         GenerateSpaceHoldRelayHiddenNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceHoldRelayHidden).OfType<NoteData_SpaceHoldRelayHidden>().ToList());
+        GenerateSpaceBreakNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceBreak).OfType<NoteData_SpaceBreak>().ToList());
 
         callback?.Invoke();
     }
@@ -322,6 +325,20 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         foreach (NoteData_SpaceHoldRelayHidden data in noteDatas)
         {
             spaceHoldRelayHiddenNoteFactory.Spawn(data);
+        }
+    }
+
+    /// <summary>
+    /// スペースブレイクの生成
+    /// </summary>
+    /// <param name="noteData_Touches"></param>
+    private void GenerateSpaceBreakNote(List<NoteData_SpaceBreak> noteDatas)
+    {
+        if (noteDatas == null) { return; }
+
+        foreach (var data in noteDatas)
+        {
+            spaceBreakNoteFactory.Spawn(data);
         }
     }
 }

@@ -73,6 +73,8 @@ namespace ChartConvert
         public List<NoteDataOrigin_SpaceHoldMeshRelay> SpaceHoldMeshRelayData { get; set; }
         public List<NoteDataOrigin_SpaceHoldEnd> SpaceHoldEndData { get; set; }
 
+        // スペースブレイク
+        public List<NoteDataOrigin_SpaceBreak> SpaceBreakData { get; set; }
     }
 
     #region NoteDataOriginClass ノーツデータクラス
@@ -212,6 +214,14 @@ namespace ChartConvert
     {
         public int HoldNumber { get; set; }
 
+        public SimpleVector2[] Vertices { get; set; }
+    }
+
+    /// <summary>
+    /// スペースブレイクデータ
+    /// </summary>
+    public class NoteDataOrigin_SpaceBreak
+    {
         public SimpleVector2[] Vertices { get; set; }
     }
 

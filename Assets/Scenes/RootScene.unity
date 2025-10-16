@@ -3378,7 +3378,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &342326250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6844,7 +6844,7 @@ MonoBehaviour:
         timeController:
           obj: {fileID: 169492386}
         spaceInputHandler:
-          obj: {fileID: 342326249}
+          obj: {fileID: 1858772567}
         trackingSettingsLoader: {fileID: 1683062510}
     - rid: 4868282893601341441
       type: {class: Transitioner_Reload, ns: TransitionerInRootScene, asm: Assembly-CSharp}
@@ -9132,9 +9132,9 @@ MonoBehaviour:
   phaseTransitioner_model:
     obj: {fileID: 664878659}
   spaceInputHandler_model:
-    obj: {fileID: 342326249}
+    obj: {fileID: 1858772567}
   cameraInfo_model:
-    obj: {fileID: 342326249}
+    obj: {fileID: 1858772567}
 --- !u!1 &933479908
 GameObject:
   m_ObjectHideFlags: 0
@@ -19242,7 +19242,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1858772568
 Transform:
   m_ObjectHideFlags: 0

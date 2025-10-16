@@ -671,4 +671,59 @@ namespace ChartConvert
             }
         }
     }
+
+    /// <summary>
+    /// スペースブレイク
+    /// </summary>
+    public class SpaceBreakConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
+    {
+        readonly List<float> RANGE_DEFAULT = new List<float>() { 100 };
+
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
+        {
+            if (dataOrigin.SpaceBreakData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.SpaceBreakData)
+            {
+                var noteData = new NoteData_SpaceBreak
+                {
+                    Vertices = noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(),
+                    Timing = timing
+                };
+
+                onAddNoteData(noteData);
+            }
+
+            return true;
+        }
+
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        {
+            if (noteDataInEditor.NoteType != DeploymentNoteType.SpaceBreak) { return false; }
+            if (noteDataInEditor is not IVerticesControlableNoteData verticesData) { return false; }
+
+            // 新たにインスタンス化
+            if (dataOrigin.SpaceBreakData == null)
+            {
+                dataOrigin.SpaceBreakData = new List<NoteDataOrigin_SpaceBreak>();
+            }
+
+            // 追加するデータのインスタンス化
+            var data = new NoteDataOrigin_SpaceBreak()
+            {
+                Vertices = verticesData.SpaceHoldVertices.GetVertexArray(),
+            };
+
+            dataOrigin.SpaceBreakData.Add(data);
+            return true;
+        }
+
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ISubDivisionDataGetter dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
+        {
+            // ※未実装
+            return true;
+        }
+
+    }
+
 }

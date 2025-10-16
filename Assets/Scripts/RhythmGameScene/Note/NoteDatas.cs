@@ -237,6 +237,21 @@ public class TimeToVertices
 }
 
 /// <summary>
+/// 奥行→頂点リスト
+/// </summary>
+public class DepthToVertices
+{
+    public DepthToVertices(float depth, Vector2[] vertices)
+    {
+        this.Depth = depth;
+        this.Vertices = vertices;
+    }
+
+    public float Depth { get; set; }
+    public Vector2[] Vertices { get; set; }
+}
+
+/// <summary>
 /// 判定一覧
 /// </summary>
 public enum Judgement
@@ -264,6 +279,7 @@ public enum NoteType
     SpaceHoldMesh = 20,
     SpaceHoldRelay = 21,
     SpaceHoldRelayHidden = 22,
+    SpaceBreak = 25,
     DynamicGroundUpward = 30,
     DynamicGroundDownward = 31,
     DynamicGroundRightward = 32,

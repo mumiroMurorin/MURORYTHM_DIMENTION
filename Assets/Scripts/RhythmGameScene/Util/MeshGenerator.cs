@@ -188,30 +188,46 @@ namespace MeshGenerate
         /// <returns></returns>
         public static Mesh GenerateSpaceHoldEdgeMesh(List<TimeToVertices> timeToVertices, float speed, int meshDivisionNum, float lerpThresholdDepth, bool isMeshReverse)
         {
+            if (timeToVertices == null) { return new Mesh(); }
+            if (timeToVertices.Count == 0) { return new Mesh(); }
+
+            var depthToVerticesList = new List<DepthToVertices>();
+
+            foreach (var t in timeToVertices)
+            {
+                var depth = speed * t.Timing;
+                var vertices = t.Vertices;
+                depthToVerticesList.Add(new DepthToVertices(depth, vertices));
+            }
+
+            return GenerateSpaceHoldEdgeMesh(depthToVerticesList, meshDivisionNum, lerpThresholdDepth, isMeshReverse);
+        }
+
+        public static Mesh GenerateSpaceHoldEdgeMesh(List<DepthToVertices> depthToVertices, int meshDivisionNum, float lerpThresholdDepth, bool isMeshReverse)
+        {
             Mesh mesh = new Mesh();
             mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;    // ドデカイメッシュに対応
 
             List<int> triangles = new List<int>();          // 三角形形成順リスト
             List<Vector3> vertices = new List<Vector3>();   // 頂点リスト
             float currentStartZ = 0;                        // 計算済みZ
-            float maxLength = speed * (timeToVertices[^1].Timing - timeToVertices[0].Timing);    // Mesh全体のZ長
             int currentMeshIndex = 0;
 
             // 最大頂点数を調べて分割数を更新する
-            foreach (var t in timeToVertices)
+            foreach (var t in depthToVertices)
             {
                 if (meshDivisionNum < t.Vertices.Length)
                 { meshDivisionNum = t.Vertices.Length; }
             }
 
             // 中継点の数だけ繰り返す
-            for (int i = 0; i < timeToVertices.Count - 1; i++)
+            for (int i = 0; i < depthToVertices.Count - 1; i++)
             {
-                float depth = speed * (timeToVertices[i + 1].Timing - timeToVertices[i].Timing);    // 奥行
-                int verticesCountStart = timeToVertices[i].Vertices.Length;    // 始点頂点数
-                int verticesCountEnd = timeToVertices[i + 1].Vertices.Length;  // 終点頂点数
-                List<Vector3> verticesStart = new List<Vector3>();              // 始点頂点リスト
-                List<Vector3> verticesEnd = new List<Vector3>();                // 終点頂点リスト
+                float depth = depthToVertices[i + 1].Depth - depthToVertices[i].Depth;    // 奥行
+                int verticesCountStart = depthToVertices[i].Vertices.Length;    // 始点頂点数
+                int verticesCountEnd = depthToVertices[i + 1].Vertices.Length;  // 終点頂点数
+                var verticesStart = new List<Vector3>();              // 始点頂点リスト
+                var verticesEnd = new List<Vector3>();                // 終点頂点リスト
 
                 if (verticesCountStart != verticesCountEnd)
                 {
@@ -219,8 +235,8 @@ namespace MeshGenerate
                     return null;
                 }
 
-                verticesStart = GenerateVertices(timeToVertices[i].Vertices.ToList(), new List<float>(), currentStartZ);
-                verticesEnd = GenerateVertices(timeToVertices[i + 1].Vertices.ToList(), new List<float>(), currentStartZ + depth);
+                verticesStart = GenerateVertices(depthToVertices[i].Vertices.ToList(), new List<float>(), currentStartZ);
+                verticesEnd = GenerateVertices(depthToVertices[i + 1].Vertices.ToList(), new List<float>(), currentStartZ + depth);
 
                 // メッシュを線形補間
                 var interpolationVerticesList = LinearInterpolationVertices(verticesStart, verticesEnd, Mathf.CeilToInt(depth / lerpThresholdDepth));
@@ -514,7 +530,7 @@ namespace MeshGenerate
         {
             if (vertices == null || vertices.Count < 3)
             {
-                Debug.LogWarning("【Note】頂点リストが無効です（3点以上必要）");
+                Debug.LogWarning("【Mesh】頂点リストが無効です（3点以上必要）");
                 return null;
             }
 
@@ -582,6 +598,119 @@ namespace MeshGenerate
                 new Vector2(0f, 1f)  // d
             };
 
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+
+            return mesh;
+        }
+
+        /// <summary>
+        /// 頂点リストを奥にずらした分の箱型メッシュを生成する
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <param name="depth"></param>
+        /// <returns></returns>
+        public static Mesh GenerateMeshWithDepth(List<Vector2> vertices, float depth)
+        {
+            if (vertices == null || vertices.Count < 3)
+            {
+                Debug.LogWarning("【Mesh】頂点リストが無効です（3点以上必要）");
+                return null;
+            }
+
+            Tess tess = new Tess();
+            ContourVertex[] contour = new ContourVertex[vertices.Count];
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                contour[i] = new ContourVertex()
+                {
+                    Position = new Vec3(vertices[i].x, vertices[i].y, 0)
+                };
+            }
+
+            tess.AddContour(contour, ContourOrientation.Original);
+            tess.Tessellate(WindingRule.EvenOdd, ElementType.Polygons, 3);
+
+            // --- 頂点を組み立て ---
+            List<Vector3> meshVerts = new List<Vector3>();
+            List<int> meshTris = new List<int>();
+
+            float half = depth * 0.5f;
+
+            // 前面(Z=+half)
+            int frontStart = 0;
+            for (int i = 0; i < tess.Vertices.Length; i++)
+            {
+                meshVerts.Add(new Vector3(tess.Vertices[i].Position.X, tess.Vertices[i].Position.Y, -half));
+            }
+
+            // 背面(Z=-half)
+            int backStart = meshVerts.Count;
+            for (int i = 0; i < tess.Vertices.Length; i++)
+            {
+                meshVerts.Add(new Vector3(tess.Vertices[i].Position.X, tess.Vertices[i].Position.Y, half));
+            }
+
+            // --- 前面ポリゴン ---
+            for (int i = 0; i < tess.ElementCount; i++)
+            {
+                int i0 = tess.Elements[i * 3 + 0];
+                int i1 = tess.Elements[i * 3 + 1];
+                int i2 = tess.Elements[i * 3 + 2];
+
+                if (i0 == -1 || i1 == -1 || i2 == -1) continue;
+
+                meshTris.Add(frontStart + i0);
+                meshTris.Add(frontStart + i1);
+                meshTris.Add(frontStart + i2);
+            }
+
+            // --- 背面ポリゴン（反転）---
+            for (int i = 0; i < tess.ElementCount; i++)
+            {
+                int i0 = tess.Elements[i * 3 + 0];
+                int i1 = tess.Elements[i * 3 + 1];
+                int i2 = tess.Elements[i * 3 + 2];
+
+                if (i0 == -1 || i1 == -1 || i2 == -1) continue;
+
+                // 逆順にして裏向きに
+                meshTris.Add(backStart + i2);
+                meshTris.Add(backStart + i1);
+                meshTris.Add(backStart + i0);
+            }
+
+            // --- 側面 ---
+            int sideStart = meshVerts.Count;
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                int next = (i + 1) % vertices.Count;
+
+                Vector3 v0 = new Vector3(vertices[i].x, vertices[i].y, -half);
+                Vector3 v1 = new Vector3(vertices[next].x, vertices[next].y, -half);
+                Vector3 v2 = new Vector3(vertices[next].x, vertices[next].y, +half);
+                Vector3 v3 = new Vector3(vertices[i].x, vertices[i].y, +half);
+
+                int baseIndex = meshVerts.Count;
+                meshVerts.Add(v0); // 0 下奥
+                meshVerts.Add(v1); // 1 下次奥
+                meshVerts.Add(v2); // 2 上次手前
+                meshVerts.Add(v3); // 3 上手前
+
+                meshTris.Add(baseIndex + 0);
+                meshTris.Add(baseIndex + 2);
+                meshTris.Add(baseIndex + 1);
+
+                meshTris.Add(baseIndex + 0);
+                meshTris.Add(baseIndex + 3);
+                meshTris.Add(baseIndex + 2);
+            }
+
+            // --- Mesh生成 ---
+            Mesh mesh = new Mesh();
+            mesh.SetVertices(meshVerts);
+            mesh.SetTriangles(meshTris, 0);
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 

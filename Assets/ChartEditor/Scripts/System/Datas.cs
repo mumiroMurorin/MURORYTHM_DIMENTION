@@ -383,5 +383,6 @@ namespace ChartEditor
 
         SpaceHold = 800,
         SpaceHoldHidden = 810,
+        SpaceBreak = 900,
     }
 }

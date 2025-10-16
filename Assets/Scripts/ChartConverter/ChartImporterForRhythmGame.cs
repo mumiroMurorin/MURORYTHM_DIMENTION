@@ -63,6 +63,7 @@ namespace ChartConvert
 
                 new SpaceHoldMeshConverter(),
                 new SpaceHoldJudgementPointConverter(),
+                new SpaceBreakConverter(),
             };
 
             holdConverters = new List<IHoldDataToRhythmGameConvertable>()
