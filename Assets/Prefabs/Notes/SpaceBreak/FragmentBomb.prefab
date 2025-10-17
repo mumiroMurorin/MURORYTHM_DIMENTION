@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8581259717299761544
+--- !u!1 &8802166155806146273
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2064485049643204070}
-  - component: {fileID: -9016481894752387304}
+  - component: {fileID: 3411588686872927782}
+  - component: {fileID: 2213433522981698126}
   m_Layer: 0
-  m_Name: NoteFactory_SpaceBreak
+  m_Name: FragmentBomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2064485049643204070
+--- !u!4 &3411588686872927782
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8581259717299761544}
+  m_GameObject: {fileID: 8802166155806146273}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -32,21 +32,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-9016481894752387304
+--- !u!114 &2213433522981698126
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8581259717299761544}
+  m_GameObject: {fileID: 8802166155806146273}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7646eb43485ea1443bddfede43268fa4, type: 3}
+  m_Script: {fileID: 11500000, guid: 548ca7513233f6141bd0023cbdf51c83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteObjectOriginPrefab: {fileID: 8224908405846241423, guid: a92461db52e0dc54085858fd36b96c4a, type: 3}
-  noteMeshPrefab: {fileID: 2776397303821155744, guid: d36ccc5adaa64c44a8f3b8dc451a606a, type: 3}
-  frangmentParentPrefab: {fileID: 8802166155806146273, guid: 52ad3084545c75346a7b4c6aee994849, type: 3}
-  noteDepth: 1
-  fragmentAmount: 25
-  mainMaterial: {fileID: 2100000, guid: 5e1ac61d7a7378b48903ef9390d8d112, type: 2}
+  force: 25
+  center: {x: 0, y: 0, z: 0}
+  radius: 15
+  upwards: 2
+  lifeTime: 0.2

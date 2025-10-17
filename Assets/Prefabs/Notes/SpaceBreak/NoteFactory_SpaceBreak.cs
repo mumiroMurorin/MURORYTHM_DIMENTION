@@ -12,8 +12,12 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     readonly float RADIUS = 10f;
 
     [SerializeField] GameObject noteObjectOriginPrefab;
-    [Header("【強調線】厚さ")]
+    [SerializeField] GameObject noteMeshPrefab;
+    [SerializeField] GameObject frangmentParentPrefab;
+    [Header("厚さ")]
     [SerializeField] float noteDepth = 0.1f;
+    [Header("欠片分割数")]
+    [SerializeField] int fragmentAmount = 20;
     [Header("メインメッシュのマテリアル")]
     [SerializeField] Material mainMaterial;
 
@@ -87,45 +91,67 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     /// </summary>
     private GameObject GenerateMeshObject(NoteData_SpaceBreak noteData)
     {
-        var obj = new GameObject("Mesh");
-        var meshFilter = obj.AddComponent<MeshFilter>();
-        var meshRenderer = obj.AddComponent<MeshRenderer>();
+        var obj = Instantiate(noteMeshPrefab);
+
+        if (!obj.TryGetComponent(out MeshFilter meshFilter)) { meshFilter = obj.AddComponent<MeshFilter>(); }
+        if (!obj.TryGetComponent(out MeshRenderer meshRenderer)) { meshRenderer = obj.AddComponent<MeshRenderer>(); }
+
         var points = noteData.Vertices.Select(v => (Vector2)MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToList();
         var mesh = MeshGenerator.GenerateMeshWithDepth(points, noteDepth);
-
         meshFilter.mesh = mesh;
+
+        if(mesh != null)
+        {
+            meshRenderer.material = mainMaterial;
+
+            if (!obj.TryGetComponent(out Deformable d)) { obj.AddComponent<Deformable>().AddDeformer(groundDeformer); }
+            else { d.AddDeformer(groundDeformer); }
+        }
 
         // 成功演出のためにMeshを保存
         noteData.Mesh = mesh;
 
         GenerateFlagments(obj, noteData);
 
-        if (mesh == null) { return obj; }
-
-        meshRenderer.material = mainMaterial;
-
-        obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
         return obj;
     }
 
-    private void GenerateFlagments(GameObject origin, NoteData_SpaceBreak noteData)
+    private void GenerateFlagments(GameObject meshObj, NoteData_SpaceBreak noteData)
     {
-        var shatter = origin.AddComponent<RayfireShatter>();
-        shatter.Fragment();
+        if (!meshObj.TryGetComponent(out RayfireRigid rf)) { rf = meshObj.AddComponent<RayfireRigid>(); }
+
+        // 色々設定
+        rf.meshDemolition.am = fragmentAmount;  // フラグメント数
+        rf.meshDemolition.prp.col = RFColliderType.None;    // コライダーを消す
+        rf.reset.destroyDelay = float.MaxValue;    // 自動でプールされるのを防ぐ 
+        //rf.simulationType = SimType.Inactive;
+        //rf.demolitionType = DemolitionType.AwakePrefragment;    
+
+        rf.demolitionEvent.LocalEvent += (rf) => OnDemolished(rf, noteData, meshObj);
+        rf.Initialize();
+        rf.Demolish();
+
+        if (meshObj.TryGetComponent(out Rigidbody rb)) { Destroy(rb); }
     }
 
     private void OnDemolished(RayfireRigid rigid, NoteData_SpaceBreak noteData, GameObject origin)
     {
-        var parent = new GameObject("Fragments").transform;
+        // 欠片たちを一つの親オブジェクトにまとめる
+        var parent = Instantiate(frangmentParentPrefab).transform;
         parent.SetParent(origin.transform);
         parent.localPosition = Vector3.zero;
         parent.gameObject.SetActive(false);
-        noteData.Flagment = parent.gameObject;
 
         foreach (RayfireRigid frag in rigid.fragments)
         {
             frag.gameObject.transform.SetParent(parent);
         }
+
+        // 爆発の準備
+        if (!parent.TryGetComponent(out FragmentsBomb bomb)) { bomb = parent.gameObject.AddComponent<FragmentsBomb>(); }
+
+        bomb.Initialize();
+        noteData.FlagmentBomb = bomb;
     }
 
     /// <summary>

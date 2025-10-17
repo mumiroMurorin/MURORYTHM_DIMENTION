@@ -53,6 +53,19 @@ public static class Vector2Extensions
         return sum / vertices.Length;
     }
 
+    public static Vector3 Center(this Vector3[] vertices)
+    {
+        if (vertices == null || vertices.Length == 0) { return Vector2.zero; }
+
+        var sum = new Vector3();
+        foreach (var v in vertices)
+        {
+            sum += v;
+        }
+
+        return sum / vertices.Length;
+    }
+
     public static float AngleBetweenVectors(Vector2 a, Vector2 b, Vector2 center)
     {
         Vector2 dirA = a - center;

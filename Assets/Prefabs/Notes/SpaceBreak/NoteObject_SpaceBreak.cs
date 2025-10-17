@@ -61,6 +61,7 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
         if (bestJudgement == Judgement.Perfect && noteData.Timing <= noteData.Timer.Time)
         {
             SendJudgementData();
+            StartDestroyAnimation();
             SetDisable();
             return;
         }
@@ -81,6 +82,7 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
         if (jae.Error > 0)
         {
             SendJudgementData();
+            StartDestroyAnimation();
             SetDisable();
         }
     }
@@ -95,6 +97,7 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
 
         bestJudgement = Judgement.Perfect;
         SendJudgementData();
+        StartDestroyAnimation();
         SetDisable();
     }
 
@@ -131,6 +134,17 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
         return true;
     }
 
+    private void StartDestroyAnimation()
+    {
+        var bombObj = noteData.FlagmentBomb.gameObject;
+        bombObj.transform.SetParent(null);
+        bombObj.transform.position = new Vector3(bombObj.transform.position.x, bombObj.transform.position.y, 0f);
+
+        var center = new Vector3(noteData.Mesh.vertices.Center().x, noteData.Mesh.vertices.Center().y, bombObj.transform.position.z);
+
+        noteData.FlagmentBomb.Explosion(center);
+    }
+
     /// <summary>
     /// ÉmÅ[ÉcÇã@î\í‚é~Ç∑ÇÈ
     /// </summary>
@@ -155,7 +169,7 @@ public class NoteData_SpaceBreak : INoteData, IJudgableNoteData
 
     public Mesh Mesh { get; set; }
 
-    public GameObject Flagment { get; set; }
+    public FragmentsBomb FlagmentBomb { get; set; }
 
     public ISpaceInputGetter SpaceInput { get; set; }
 
