@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using MeshGenerate;
 using Deform;
+using RayFire;
 
 public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
 {
@@ -103,6 +104,24 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
 
         obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
         return obj;
+    }
+
+    private void GenerateFlagments(GameObject origin, NoteData_SpaceBreak noteData)
+    {
+        var rf = origin.AddComponent<RayfireRigid>();
+        rf.demolitionEvent.LocalEvent += OnDemolished;
+    }
+
+    private void OnDemolished(RayfireRigid rigid)
+    {
+        var fragments = new List<GameObject>();
+
+        foreach (RayfireRigid fragRigid in rigid.fragments)
+        {
+            fragments.Add(fragRigid.gameObject);
+        }
+
+        Debug.Log($"”j‰óƒCƒxƒ“ƒg‚ÅŽæ“¾: {fragments.Count}ŒÂ‚Ì”j•Ð");
     }
 
     /// <summary>

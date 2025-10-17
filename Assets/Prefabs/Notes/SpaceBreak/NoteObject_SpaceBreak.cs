@@ -155,6 +155,8 @@ public class NoteData_SpaceBreak : INoteData, IJudgableNoteData
 
     public Mesh Mesh { get; set; }
 
+    public GameObject Flagment { get; set; }
+
     public ISpaceInputGetter SpaceInput { get; set; }
 
     public ITimeGetter Timer { get; set; }
