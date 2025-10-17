@@ -98,6 +98,8 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
         // 成功演出のためにMeshを保存
         noteData.Mesh = mesh;
 
+        GenerateFlagments(obj, noteData);
+
         if (mesh == null) { return obj; }
 
         meshRenderer.material = mainMaterial;
@@ -108,20 +110,22 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
 
     private void GenerateFlagments(GameObject origin, NoteData_SpaceBreak noteData)
     {
-        var rf = origin.AddComponent<RayfireRigid>();
-        rf.demolitionEvent.LocalEvent += OnDemolished;
+        var shatter = origin.AddComponent<RayfireShatter>();
+        shatter.Fragment();
     }
 
-    private void OnDemolished(RayfireRigid rigid)
+    private void OnDemolished(RayfireRigid rigid, NoteData_SpaceBreak noteData, GameObject origin)
     {
-        var fragments = new List<GameObject>();
+        var parent = new GameObject("Fragments").transform;
+        parent.SetParent(origin.transform);
+        parent.localPosition = Vector3.zero;
+        parent.gameObject.SetActive(false);
+        noteData.Flagment = parent.gameObject;
 
-        foreach (RayfireRigid fragRigid in rigid.fragments)
+        foreach (RayfireRigid frag in rigid.fragments)
         {
-            fragments.Add(fragRigid.gameObject);
+            frag.gameObject.transform.SetParent(parent);
         }
-
-        Debug.Log($"破壊イベントで取得: {fragments.Count}個の破片");
     }
 
     /// <summary>
