@@ -6,7 +6,8 @@ using DG.Tweening;
 public class FragmentsBomb : MonoBehaviour
 {
     [Header("”š”­ŠÖŒW")]
-    [SerializeField] float force;
+    [SerializeField] float minForce;
+    [SerializeField] float maxForce;
     [SerializeField] Vector3 center;
     [SerializeField] float radius;
     [SerializeField] float upwards;
@@ -35,6 +36,7 @@ public class FragmentsBomb : MonoBehaviour
 
         foreach (var rb in childrenRb)
         {
+            var force = Random.Range(minForce, maxForce);
             rb.AddExplosionForce(force, center, radius, upwards, ForceMode.Impulse);
 
             rb.transform.DOScale(Vector3.zero, lifeTime)

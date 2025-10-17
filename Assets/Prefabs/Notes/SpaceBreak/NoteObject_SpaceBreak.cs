@@ -8,6 +8,7 @@ using static JudgementUtil.SpacaHold.SpaceHoldJudgement;
 public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
 {
     [SerializeField] float judgementMarginRadius = 0.25f;
+    [SerializeField] float judgeMagnitude;
 
     NoteData_SpaceBreak noteData;
 
@@ -66,9 +67,13 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
             return;
         }
 
-        // ”»’èŠÔ“à‚©‚Â˜g“à‚Éè‚ª‚ ‚é‚Æ‚«
-        bool isInRange = noteData.SpaceInput.IsInSpaceRange(noteData.Vertices, judgementMarginRadius);
-        if (!isInRange) { return; }
+        // ”»’èŠÔ“à‚©‚Â˜g“à‚Éè‚ª‚ ‚èAè‡’l‚ğ‰z‚¦‚Ä‚¢‚éê‡
+        bool isInRangeRight = noteData.SpaceInput.IsInSpaceRange(noteData.Vertices, SpaceTrackingTag.RightHand, judgementMarginRadius);
+        bool isInRangeLeft = noteData.SpaceInput.IsInSpaceRange(noteData.Vertices, SpaceTrackingTag.LeftHand, judgementMarginRadius);
+        bool isOverThresholdRight = judgeMagnitude <= noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.RightHand).Value.magnitude;
+        bool isOverThresholdLeft = judgeMagnitude <= noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand).Value.magnitude;
+        
+        if ((!isInRangeRight || !isOverThresholdRight) && (!isInRangeLeft || !isOverThresholdLeft)) { return; }
 
         var jae = noteData.JudgementWindow.GetJudgementAndError(noteData.Timer.Time, noteData.Timing);
         

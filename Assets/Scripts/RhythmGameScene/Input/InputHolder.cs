@@ -165,29 +165,22 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
     /// <returns></returns>
     public bool IsInSpaceRange(Vector2[] vertices, float radius = 0)
     {
-        bool isRightIn = false;
-        bool isLeftIn = false;
+        return IsInSpaceRange(vertices, SpaceTrackingTag.LeftHand, radius) || IsInSpaceRange(vertices, SpaceTrackingTag.RightHand, radius);
+    }
 
-        // ‰EŽè‚Ì”»’è (Œð·‚µ‚Ä‚¢‚½‚ç”ÍˆÍ“à”»’è)
-        int rightCount = GetSpaceInput(SpaceTrackingTag.RightHand).Count;
-        if (rightCount >= 2) 
-        {
-            var rightPos1 = GetSpaceInput(SpaceTrackingTag.RightHand)[rightCount - 1].Pos;
-            var rightPos2 = GetSpaceInput(SpaceTrackingTag.RightHand)[rightCount - 2].Pos;
-            isRightIn = IsSegmentIntersectingOrInsidePolygon(rightPos1, rightPos2, vertices)
-                || IsCircleIntersectingPolygon(vertices, rightPos1, radius);
-        }
+    public bool IsInSpaceRange(Vector2[] vertices, SpaceTrackingTag spaceTrackingTag, float radius = 0)
+    {
+        // Žè‚Ì”»’è (Œð·‚µ‚Ä‚¢‚½‚ç”ÍˆÍ“à”»’è)
+        var handVectorList = GetSpaceInput(spaceTrackingTag);
+        int count = handVectorList.Count;
 
-        // ¶Žè‚Ì”»’è (Œð·‚µ‚Ä‚¢‚½‚ç”ÍˆÍ“à”»’è)
-        int leftCount = GetSpaceInput(SpaceTrackingTag.RightHand).Count;
-        if (leftCount >= 2)
-        {
-            var leftPos1 = GetSpaceInput(SpaceTrackingTag.LeftHand)[leftCount - 1].Pos;
-            var leftPos2 = GetSpaceInput(SpaceTrackingTag.LeftHand)[leftCount - 2].Pos;
-            isLeftIn = IsSegmentIntersectingOrInsidePolygon(leftPos1, leftPos2, vertices)
-                || IsCircleIntersectingPolygon(vertices, leftPos1, radius);
-        }
+        if (count < 2) { return false; }
 
-        return isRightIn || isLeftIn;
+        var pos1 = handVectorList[count - 1].Pos;
+        var pos2 = handVectorList[count - 2].Pos;
+
+        // ƒŒƒ“ƒW“à‚É“ü‚Á‚Ä‚¢‚é‚©Œð·‚µ‚Ä‚¢‚½‚çtrue‚ð•Ô‚·
+        return IsSegmentIntersectingOrInsidePolygon(pos1, pos2, vertices)
+            || IsCircleIntersectingPolygon(vertices, pos1, radius);
     }
 }

@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   judgementMarginRadius: 0.25
+  judgeMagnitude: 1
 --- !u!65 &8401025477538775888
 BoxCollider:
   m_ObjectHideFlags: 0

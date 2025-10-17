@@ -29,6 +29,8 @@ public interface ISpaceInputGetter
     IReadOnlyReactiveProperty<bool> CanGetSpaceInputReactiveProperty { get; }
 
     bool IsInSpaceRange(Vector2[] vertices, float radius = 0);
+
+    bool IsInSpaceRange(Vector2[] vertices, SpaceTrackingTag spaceTrackingTag, float radius = 0);
 }
 
 /// <summary>

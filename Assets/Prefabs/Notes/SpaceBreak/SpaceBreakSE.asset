@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d9ccd929c9b8f242b105bdac5d6c81c, type: 3}
   m_Name: SpaceBreakSE
   m_EditorClassIdentifier: 
-  noteType: 21
+  noteType: 25
   sounds:
   - judgement: 1000
-    audioClip: {fileID: 8300000, guid: 4699dd98d200640459e4f3069ca24300, type: 3}
+    audioClip: {fileID: 8300000, guid: 061d1e8e02428e84f8d2c09f1a70ab36, type: 3}
   - judgement: 100
-    audioClip: {fileID: 8300000, guid: 4699dd98d200640459e4f3069ca24300, type: 3}
+    audioClip: {fileID: 8300000, guid: 061d1e8e02428e84f8d2c09f1a70ab36, type: 3}
   - judgement: 10
-    audioClip: {fileID: 8300000, guid: 4699dd98d200640459e4f3069ca24300, type: 3}
+    audioClip: {fileID: 8300000, guid: 061d1e8e02428e84f8d2c09f1a70ab36, type: 3}
