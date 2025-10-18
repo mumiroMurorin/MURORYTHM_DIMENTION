@@ -492,7 +492,7 @@ MonoBehaviour:
     - 
     - 
     - 
-  chartFilePath: MusicData/sample/onlySpaceBreak.json
+  chartFilePath: MusicData/Altale/chart_dream.json
   noteSpeed: 100
   isAutoMode: 0
 --- !u!1001 &135123126
