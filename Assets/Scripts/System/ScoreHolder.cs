@@ -23,9 +23,6 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     ReactiveProperty<int> missNum = new ReactiveProperty<int>(0);
     public IReadOnlyReactiveProperty<int> MissNum { get { return missNum; } }
 
-    ReactiveCollection<NoteJudgementData> noteJudgementDatas = new ReactiveCollection<NoteJudgementData>();
-    public IReadOnlyReactiveCollection<NoteJudgementData> NoteJudgementDatas { get { return noteJudgementDatas; } }
-
     // Combo
     ReactiveProperty<int> combo = new ReactiveProperty<int>(0);
     public IReadOnlyReactiveProperty<int> Combo { get { return combo; } }
@@ -47,6 +44,22 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     // ComboRank
     ReactiveProperty<ComboRank> comboRank = new ReactiveProperty<ComboRank>(ComboRank.AllPerfect);
     public IReadOnlyReactiveProperty<ComboRank> CurrentComboRank { get { return comboRank; } }
+    private void SetComboRank(Judgement judgement)
+    {
+        switch (judgement)
+        {
+            // Great判定のとき、AllPerfectでなくす
+            //case Judgement.Great:
+            //    comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.GreatCombo);
+            //    break;
+            case Judgement.Good:
+                comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.FullCombo);
+                break;
+            case Judgement.Miss:
+                comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.TrackComplete);
+                break;
+        }
+    }
 
     // ScoreRank
     ReactiveProperty<ScoreRank> scoreRank = new ReactiveProperty<ScoreRank>();
@@ -82,6 +95,10 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
         comboRank.Value = ComboRank.AllPerfect;
     }
 
+    // 判定データ
+    ReactiveCollection<NoteJudgementData> noteJudgementDatas = new ReactiveCollection<NoteJudgementData>();
+    public IReadOnlyReactiveCollection<NoteJudgementData> NoteJudgementDatas { get { return noteJudgementDatas; } }
+
     /// <summary>
     /// 判定の記録
     /// </summary>
@@ -116,27 +133,6 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
             case Judgement.Miss:
                 missNum.Value++;
                 combo.Value = 0;
-                break;
-        }
-    }
-
-    /// <summary>
-    /// コンボランクのセット
-    /// </summary>
-    /// <param name="judge"></param>
-    private void SetComboRank(Judgement judgement)
-    {
-        switch (judgement)
-        {
-            // Great判定のとき、AllPerfectでなくす
-            //case Judgement.Great:
-            //    comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.GreatCombo);
-            //    break;
-            case Judgement.Good:
-                comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.FullCombo);
-                break;
-            case Judgement.Miss:
-                comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.TrackComplete);
                 break;
         }
     }

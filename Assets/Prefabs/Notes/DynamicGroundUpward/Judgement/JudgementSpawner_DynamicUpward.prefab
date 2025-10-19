@@ -45,8 +45,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 3115310235136475715}
-  radius: 6
+  radius: 4
   perfectEffect: {fileID: 2094157378961250412, guid: f78bbbc0d2745624f99dfd1a8d121500, type: 3}
   greatEffect: {fileID: 2094157378961250412, guid: e4ae50cf874d78c4397b180246887743, type: 3}
+  greatEffect_late: {fileID: 2094157378961250412, guid: 8296bb6a85aff174ab1b9fa82d5783d0, type: 3}
+  greatEffect_fast: {fileID: 2094157378961250412, guid: d2138af1f9084cb4dbc7ff3fb717df40, type: 3}
   goodEffect: {fileID: 2094157378961250412, guid: 94b0e46ab6a86da44a91511a57c36ba3, type: 3}
+  goodEffect_late: {fileID: 2094157378961250412, guid: 4e1f9dab15990a146841f91497ae0c1f, type: 3}
+  goodEffect_fast: {fileID: 2094157378961250412, guid: b1a4d8b62d58cc24c85f71c3869d453d, type: 3}
   missEffect: {fileID: 2094157378961250412, guid: 4545a399d6d27d8459395336eae90866, type: 3}

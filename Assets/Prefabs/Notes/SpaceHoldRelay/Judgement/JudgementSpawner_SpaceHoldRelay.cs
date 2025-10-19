@@ -19,7 +19,7 @@ public class JudgementSpawner_SpaceHoldRelay : JudgementEffectSpawner
         NoteData_SpaceHoldRelay noteData = judgementData.NoteData as NoteData_SpaceHoldRelay;
 
         Vector2 ave = noteData.Vertices.Average();
-        Vector3 pos = new Vector3(ave.x, ave.y, 0);
+        Vector3 pos = new Vector3(ave.x * 10f, ave.y * 10f, 0);
 
         switch (judgementData.Judgement)
         {

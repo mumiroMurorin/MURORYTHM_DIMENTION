@@ -211,6 +211,25 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
 
     #endregion
 
+
+    #region FastLate
+
+    ReactiveProperty<bool> isEnabledFastLate = new ReactiveProperty<bool>(false);
+    public IReadOnlyReactiveProperty<bool> IsEnabledFastLate => isEnabledFastLate;
+    public void SetIsEnabledFastLate(bool isEnabled)
+    {
+        isEnabledFastLate.Value = isEnabled;
+    }
+    public string EnabledFastLateDisplay 
+    {
+        get { return isEnabledFastLate.Value ? "ï\é¶Ç∑ÇÈ" : "ï\é¶ÇµÇ»Ç¢"; }
+    }
+
+    #endregion
+
+
+    #region Cheat
+
     ReactiveProperty<bool> isAutoMode = new ReactiveProperty<bool>();
     public bool IsAutoMode { get { return isAutoMode.Value; } private set { isAutoMode.Value = value; } }
     public IReadOnlyReactiveProperty<bool> IsAutoModeRP => isAutoMode;
@@ -218,6 +237,9 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     {
         IsAutoMode = isAutoMode;
     }
+
+    #endregion
+
 
     #region ‚ûëÃê›íË
 
@@ -269,6 +291,9 @@ public interface IOptionGetter
 
     int JudgementSEVolumeDisplay { get; }
 
+    IReadOnlyReactiveProperty<bool> IsEnabledFastLate { get; }
+    string EnabledFastLateDisplay { get; }
+
     IReadOnlyReactiveProperty<int> GroundDivisionNum { get; }
     int GroundDivisionNumDisplay { get; }
 
@@ -280,6 +305,8 @@ public interface IOptionSetter
     void SetOption(OptionType optionType, int delta);
 
     void SetNoteSpeed(float speed);
+
+    void SetIsEnabledFastLate(bool isEnabled);
 
     void SetAutoMode(bool isAutoMode);
 

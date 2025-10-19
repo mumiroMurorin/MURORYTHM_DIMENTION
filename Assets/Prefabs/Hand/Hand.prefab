@@ -175,7 +175,6 @@ Transform:
   m_Children:
   - {fileID: 5825469706212030120}
   - {fileID: 1395946244073147169}
-  - {fileID: 911246442252000294}
   - {fileID: 8685918143906527095}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5206,12 +5205,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8211946912624388281}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.24184473, y: -0.66446304, z: 0.24184473, w: 0.66446304}
+  m_LocalPosition: {x: -0.061269186, y: -0.024214959, z: 0}
+  m_LocalScale: {x: 0.083333336, y: 0.083333336, z: 0.083333336}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3735164653262455000}
+  m_Father: {fileID: 1395946244073147169}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!96 &7595237900260334420
 TrailRenderer:
@@ -5340,15 +5339,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1979604362249461228, guid: 9d37db5a30dcd434696583a8fa011f5b, type: 3}
       propertyPath: m_LocalScale.x
-      value: 10
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 1979604362249461228, guid: 9d37db5a30dcd434696583a8fa011f5b, type: 3}
       propertyPath: m_LocalScale.y
-      value: 10
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 1979604362249461228, guid: 9d37db5a30dcd434696583a8fa011f5b, type: 3}
       propertyPath: m_LocalScale.z
-      value: 10
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 1979604362249461228, guid: 9d37db5a30dcd434696583a8fa011f5b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5400,7 +5399,10 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 0afe8d22f7466594cb50492c7e1267b8, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1979604362249461228, guid: 9d37db5a30dcd434696583a8fa011f5b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 911246442252000294}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d37db5a30dcd434696583a8fa011f5b, type: 3}
 --- !u!4 &1395946244073147169 stripped

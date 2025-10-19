@@ -9,11 +9,13 @@ public class JudgementEffectController : MonoBehaviour
     [SerializeField] List<JudgementEffectSpawner> spawners;
 
     IScoreGetter scoreGetter;
+    IOptionGetter optionGetter;
 
     [Inject]
-    public void Constructor(IScoreGetter scoreGetter)
+    public void Constructor(IScoreGetter scoreGetter, IOptionGetter optionGetter)
     {
         this.scoreGetter = scoreGetter;
+        this.optionGetter = optionGetter;
     }
 
     private void Start()
@@ -32,6 +34,8 @@ public class JudgementEffectController : MonoBehaviour
 
     private void SpawnEffect(NoteJudgementData judgementData)
     {
+        judgementData.IsEnabledFastLate = optionGetter.IsEnabledFastLate.Value;
+
         foreach (JudgementEffectSpawner spawner in spawners)
         {
             if (spawner.ConditionChecker(judgementData))

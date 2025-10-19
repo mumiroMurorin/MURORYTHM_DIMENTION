@@ -191,6 +191,8 @@ public class NoteJudgementData
     public float TimingError { get; set; }
 
     public Vector3 PositionJudged { get; set; }
+
+    public bool IsEnabledFastLate { get; set; }
 }
 
 public class TimeToPos

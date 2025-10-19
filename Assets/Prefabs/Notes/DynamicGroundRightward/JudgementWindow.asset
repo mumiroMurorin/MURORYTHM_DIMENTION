@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: JudgementWindow
   m_EditorClassIdentifier: 
   judgementWindow:
-    perfectWindow_faster: 0.1
+    perfectWindow_faster: 0.1333333
     perfectWindow_latter: 0.1333333
-    greatWindow_faster: 0.1333333
+    greatWindow_faster: 0.25
     greatWindow_latter: 0.25
-    goodWindow_faster: 0.25
+    goodWindow_faster: 0.3333333
     goodWindow_latter: 0.3333333

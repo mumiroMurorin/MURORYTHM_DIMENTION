@@ -13,6 +13,7 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
     [SerializeField] string chartFilePath;
     [SerializeField] float noteSpeed;
     [SerializeField] bool isAutoMode;
+    [SerializeField] bool isFastLateEnabled;
 
     IMusicDataSetter musicDataSetter;
     IMusicDataGetter musicDataGetter;
@@ -46,7 +47,7 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
 
         optionSetter.SetNoteSpeed(noteSpeed);
         optionSetter.SetAutoMode(isAutoMode);
-
+        optionSetter.SetIsEnabledFastLate(isFastLateEnabled);
 #endif
     }
 }

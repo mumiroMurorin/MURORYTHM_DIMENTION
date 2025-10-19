@@ -47,5 +47,9 @@ MonoBehaviour:
   parent: {fileID: 3115310235136475715}
   perfectEffect: {fileID: 2094157378961250412, guid: f78bbbc0d2745624f99dfd1a8d121500, type: 3}
   greatEffect: {fileID: 2094157378961250412, guid: e4ae50cf874d78c4397b180246887743, type: 3}
+  greatEffect_late: {fileID: 2094157378961250412, guid: 95c1cfe21f515d64f9089abdcba229d3, type: 3}
+  greatEffect_fast: {fileID: 2094157378961250412, guid: a8096dd79abe9d646b92eafd9e24b5b9, type: 3}
   goodEffect: {fileID: 2094157378961250412, guid: 94b0e46ab6a86da44a91511a57c36ba3, type: 3}
+  goodEffect_late: {fileID: 2094157378961250412, guid: 052ed797aefee87438bd56511140ca0e, type: 3}
+  goodEffect_fast: {fileID: 2094157378961250412, guid: fc8fd552cc98346439034f92afe0f2c5, type: 3}
   missEffect: {fileID: 2094157378961250412, guid: 4545a399d6d27d8459395336eae90866, type: 3}
