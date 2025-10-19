@@ -38,10 +38,10 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
 
         if (musicDataGetter.Music.Value == null || musicDataGetter.Music.Value.GetChartPath(difficulty) == null || musicDataGetter.Music.Value.GetChartPath(difficulty) == "")
         {
-            musicData_debug.SetChartPath(Difficulty.Initiate, Application.dataPath + "/" + chartFilePath);
-            musicData_debug.SetChartPath(Difficulty.Fanatic, Application.dataPath + "/" + chartFilePath);
-            musicData_debug.SetChartPath(Difficulty.Skyclad, Application.dataPath + "/" + chartFilePath);
-            musicData_debug.SetChartPath(Difficulty.Dream, Application.dataPath + "/" + chartFilePath);
+            musicData_debug.SetChartPath(Difficulty.Easy, Application.dataPath + "/" + chartFilePath);
+            musicData_debug.SetChartPath(Difficulty.Normal, Application.dataPath + "/" + chartFilePath);
+            musicData_debug.SetChartPath(Difficulty.Hard, Application.dataPath + "/" + chartFilePath);
+            musicData_debug.SetChartPath(Difficulty.Master, Application.dataPath + "/" + chartFilePath);
             musicDataSetter.SetMusicData(musicData_debug);
         }
 

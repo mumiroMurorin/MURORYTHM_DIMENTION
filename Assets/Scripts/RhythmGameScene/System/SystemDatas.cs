@@ -76,10 +76,10 @@ public enum OptionType
 /// </summary>
 public enum Difficulty
 {
-    Initiate = 0,
-    Fanatic = 1,
-    Skyclad = 2,
-    Dream = 3
+    Easy = 0,
+    Normal = 1,
+    Hard = 2,
+    Master = 3,
 }
 
 /// <summary>

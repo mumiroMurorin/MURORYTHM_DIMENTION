@@ -54,7 +54,7 @@ public class MusicDataListHolder : IMusicDataListGetter, IMusicDataListSetter
 
 
     // ‘I‘ð“ïˆÕ“x
-    ReactiveProperty<Difficulty> difficulty = new ReactiveProperty<Difficulty>(Difficulty.Initiate);
+    ReactiveProperty<Difficulty> difficulty = new ReactiveProperty<Difficulty>(Difficulty.Easy);
     IReadOnlyReactiveProperty<Difficulty> IMusicDataListGetter.Difficulty { get { return difficulty; } }
     void IMusicDataListSetter.SetDifficulty(Difficulty difficulty)
     {
