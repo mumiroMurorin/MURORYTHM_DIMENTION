@@ -30,6 +30,10 @@ public class MusicData
     [SerializeField] private AudioClip sample_clip;
     public AudioClip SampleClip { get { return sample_clip; } set { sample_clip = value; } }
 
+    [Header("シンフォニータイプ")]
+    [SerializeField] SymphonyType symphonyType = SymphonyType.None;
+    public SymphonyType SymphonyType { get { return symphonyType; } set { symphonyType = value; } }
+
     [Header("ステージ")]
     [SerializeField] StageType stageType = StageType.CreationNoon;
     public StageType StageType { get { return stageType; } set { stageType = value; } }
@@ -63,13 +67,30 @@ public class MusicData
     }
 
     // スコア記録
-    DifficultyToRecord records = new DifficultyToRecord();
+    DifficultyToRecord records;
     public MusicRecord GetMusicRecord(Difficulty dif) 
     {
+        if (records == null) { return MusicRecord.zero; }
+
         return records.GetRecord(dif);
     }
     public void SetMusicRecord(Difficulty dif, MusicRecord newRecord) 
     {
-        records.GetRecord(dif).HighScoreUpdate(newRecord);
+        // 初プレイなら結果をインスタンス化
+        if (records == null)
+        {
+            records = new DifficultyToRecord();
+        }
+
+        // 初プレイなら結果をインスタンス化
+        if (records.GetRecord(dif) == MusicRecord.zero)
+        {
+            records.SetRecord(dif, newRecord);
+        }
+        // スコア更新
+        else
+        {
+            records.GetRecord(dif).UpdateHighScore(newRecord);
+        }
     }
 }

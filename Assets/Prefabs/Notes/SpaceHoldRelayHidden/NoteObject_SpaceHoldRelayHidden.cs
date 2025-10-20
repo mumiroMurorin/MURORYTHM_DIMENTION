@@ -104,14 +104,7 @@ public class NoteObject_SpaceHoldRelayHidden : NoteObject<NoteData_SpaceHoldRela
     /// </summary>
     private void SendJudgementData()
     {
-        NoteJudgementData judgementData = new NoteJudgementData
-        {
-            Judgement = bestJudgement,
-            NoteData = this.noteData,
-            PositionJudged = noteData.Vertices.First(),
-            TimingError = noteData.Timing - noteData.Timer.Time
-        };
-
+        var judgementData = new NoteJudgementData(this.noteData, bestJudgement, noteData.Timer.Time - noteData.Timing);
         noteData.JudgementRecorder?.RecordJudgement(judgementData);
         isJudged = true;
     }

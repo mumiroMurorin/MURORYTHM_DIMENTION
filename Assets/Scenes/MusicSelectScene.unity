@@ -584,8 +584,9 @@ MonoBehaviour:
       theme_spr: {fileID: 21300000, guid: 368fd16fad745de46b034b5244388a9f, type: 3}
       clip: {fileID: 8300000, guid: a0832b65e104cf646b5ea8dad5744df2, type: 3}
       sample_clip: {fileID: 8300000, guid: a0832b65e104cf646b5ea8dad5744df2, type: 3}
+      symphonyType: 0
       stageType: 100
-      difficulities: 00000000000000000000000000000000
+      difficulties: 00000000000000000000000000000000
       chartPaths:
       - 
       - 
@@ -2844,10 +2845,10 @@ MonoBehaviour:
   - sample.wav
   - sample.mp3
   - sample.ogg
-  chartFileNameInitiate: chart_initiate.json
-  chartFileNameFanatic: chart_fanatic.json
-  chartFileNameSkyclad: chart_skyclad.json
-  chartFileNameDream: chart_dream.json
+  chartFileNameEasy: chart_easy.json
+  chartFileNameNormal: chart_normal.json
+  chartFileNameHard: chart_hard.json
+  chartFileNameMaster: chart_master.json
   kariTmp: {fileID: 0}
 --- !u!1 &1959534641
 GameObject:

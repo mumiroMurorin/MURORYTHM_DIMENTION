@@ -78,14 +78,9 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
         if (noteData.OptionGetter.IsAutoMode) { judgement = Judgement.Perfect; }
         else { judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing); }
 
-        NoteJudgementData judgementData = new NoteJudgementData
-        {
-            Judgement = judgement,
-            NoteData = this.noteData,
-            TimingError = noteData.Timing - noteData.Timer.Time
-        };
-
+        var judgementData = new NoteJudgementData(this.noteData, judgement, noteData.Timer.Time - noteData.Timing);
         noteData.JudgementRecorder?.RecordJudgement(judgementData);
+
         SoundManager.Instance.PlaySE(noteData.NoteType, judgement);
         isJudged = true;
     }

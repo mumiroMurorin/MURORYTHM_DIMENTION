@@ -105,13 +105,7 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     /// </summary>
     private void SendJudgementData()
     {
-        NoteJudgementData judgementData = new NoteJudgementData
-        {
-            Judgement = bestJudgement,
-            NoteData = this.noteData,
-            PositionJudged = noteData.Vertices.First(),
-            TimingError = noteData.Timing - noteData.Timer.Time
-        };
+        var judgementData = new NoteJudgementData(this.noteData, bestJudgement, noteData.Timer.Time - noteData.Timing);
 
         SoundManager.Instance.PlaySE(noteData.NoteType, bestJudgement);
         noteData.JudgementRecorder?.RecordJudgement(judgementData);

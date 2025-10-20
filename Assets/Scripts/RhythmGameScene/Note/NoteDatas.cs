@@ -184,13 +184,18 @@ public struct JudgementAndErrorTime
 /// </summary>
 public class NoteJudgementData
 {
-    public INoteData NoteData { get; set; }
+    public NoteJudgementData(INoteData noteData, Judgement judgement, float timingError)
+    {
+        this.NoteData = noteData;
+        this.Judgement = judgement;
+        this.TimingError = timingError;
+    }
 
-    public Judgement Judgement { get; set; }
+    public INoteData NoteData { get; }
 
-    public float TimingError { get; set; }
+    public Judgement Judgement { get; }
 
-    public Vector3 PositionJudged { get; set; }
+    public float TimingError { get; }
 
     public bool IsEnabledFastLate { get; set; }
 }

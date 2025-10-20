@@ -47,7 +47,7 @@ namespace UIInSelectScene
             for (int i = 0; i < musicTopicUIs.Length; i++) 
             {
                 int indexLocal = index - musicTopicUIs.Length / 2 + i;
-                MusicData data = dataGetter.GetMusicData(indexLocal);
+                var data = dataGetter.GetMusicData(indexLocal);
 
                 if (data == null)
                 {

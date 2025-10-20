@@ -76,17 +76,9 @@ public class NoteObject_DivineTouch : NoteObject<NoteData_DivineTouch>
         if (noteData.OptionGetter.IsAutoMode) { judgement = Judgement.Perfect; }
         else { judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing); }
 
-        float radian = (11.25f * ((noteData.Range[noteData.Range.Length - 1] - noteData.Range[0]) / 2f + 0.5f) - 180f) * Mathf.Deg2Rad;
-
-        NoteJudgementData judgementData = new NoteJudgementData
-        {
-            Judgement = judgement,
-            NoteData = this.noteData,
-            TimingError = noteData.Timing - noteData.Timer.Time,
-            PositionJudged = new Vector3(10 * Mathf.Cos(radian), 10 * Mathf.Sin(radian), 0)
-        };
-
+        var judgementData = new NoteJudgementData(this.noteData, judgement, noteData.Timer.Time - noteData.Timing);
         noteData.JudgementRecorder?.RecordJudgement(judgementData);
+
         SoundManager.Instance.PlaySE(noteData.NoteType, judgement);
         isJudged = true;
     }

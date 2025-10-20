@@ -30,6 +30,10 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
             case OptionType.JudgementSEVolume:
                 AddJudgementSeVolume(delta);
                 break;
+            case OptionType.IsEnabledFastLate:
+                SetIsEnabledFastLate(!IsEnabledFastLate.Value);
+                break;
+
         }
     }
 

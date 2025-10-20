@@ -27,8 +27,8 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     [SerializeField] string[] sampleClipFileNames = new string[] { "sample.wav", "sample.mp3", "sample.ogg" };
     [Tooltip("譜面データ名")]
     [SerializeField] string chartFileNameEasy = "chart_easy.json";
-    [SerializeField] string chartFileNameHard = "chart_normal.json";
-    [SerializeField] string chartFileNameNormal = "chart_hard.json";
+    [SerializeField] string chartFileNameNormal = "chart_normal.json";
+    [SerializeField] string chartFileNameHard = "chart_hard.json";
     [SerializeField] string chartFileNameMaster = "chart_master.json";
 
     [SerializeField] TMPro.TextMeshProUGUI kariTmp;
@@ -166,13 +166,15 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
 
         // ステージ
         if(info.StageType == null || !Enum.TryParse<StageType>(info.StageType, ignoreCase: true, out var stageType))
-        {
-            Debug.LogWarning($"【System】ステージ情報がありません: {path}");
-        }
+        { Debug.LogWarning($"【System】ステージ情報がありません: {path}"); }
         else
-        {
-            musicData.StageType = stageType;
-        }
+        { musicData.StageType = stageType; }
+
+        // タイプ
+        if (info.SymphonyType == null || !Enum.TryParse<SymphonyType>(info.SymphonyType, ignoreCase: true, out var symphonyType))
+        { Debug.LogWarning($"【System】タイプ情報がありません: {path}"); }
+        else
+        { musicData.SymphonyType = symphonyType; }
 
         return true;
     }
@@ -304,6 +306,8 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     /// <returns></returns>
     private async UniTask<bool> SetChartFileAsync(MusicData musicData, string path, CancellationToken token)
     {
+        Debug.Log($"{musicData.MusicName} => {musicData.GetDifficulty(Difficulty.Easy)},{musicData.GetDifficulty(Difficulty.Normal)},{musicData.GetDifficulty(Difficulty.Hard)},{musicData.GetDifficulty(Difficulty.Master)}");
+
         // リストにあるファイルが存在するか確認
         string pathEasy = path + "/" + chartFileNameEasy;
         bool isExistEasy = musicData.GetDifficulty(Difficulty.Easy) >= 0;
@@ -321,17 +325,6 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
             musicData.SetDifficulty(Difficulty.Easy, -1);
         }
 
-        string pathHard = path + "/" + chartFileNameHard;
-        if (isExistHard && File.Exists(pathHard))
-        {
-            musicData.SetChartPath(Difficulty.Hard, pathHard);
-            Debug.Log($"【System】Hard譜面path読み込み: {musicData.MusicName}");
-        }
-        else
-        {
-            musicData.SetDifficulty(Difficulty.Hard, -1);
-        }
-
         string pathNormal = path + "/" + chartFileNameNormal;
         if (isExistNormal && File.Exists(pathNormal))
         {
@@ -341,6 +334,17 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         else
         {
             musicData.SetDifficulty(Difficulty.Normal, -1);
+        }
+
+        string pathHard = path + "/" + chartFileNameHard;
+        if (isExistHard && File.Exists(pathHard))
+        {
+            musicData.SetChartPath(Difficulty.Hard, pathHard);
+            Debug.Log($"【System】Hard譜面path読み込み: {musicData.MusicName}");
+        }
+        else
+        {
+            musicData.SetDifficulty(Difficulty.Hard, -1);
         }
 
         string pathMaster = path + "/" + chartFileNameMaster;
@@ -394,6 +398,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         public string MusicName { get; set; }
         public string ComposerName { get; set; }
         public string ChartDesigner { get; set; }
+        public string SymphonyType { get; set; }
         public string StageType { get; set; }
         public int[] Difficulties { get; set; }
     }

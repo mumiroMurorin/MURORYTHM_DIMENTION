@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 3115310235136475715}
-  radius: 8
+  radius: 7
   perfectEffect: {fileID: 2094157378961250412, guid: 56e130b634c7af844a0389fe44c2af35, type: 3}
   greatEffect: {fileID: 2094157378961250412, guid: d2c030e4e0613a74eae26fcc90d178b4, type: 3}
   greatEffect_late: {fileID: 2094157378961250412, guid: 95c1cfe21f515d64f9089abdcba229d3, type: 3}

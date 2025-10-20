@@ -69,6 +69,14 @@ public enum OptionType
     MasterVolume = 30,
     JudgementSEVolume = 40,
     MusicVolume = 100,
+    IsEnabledFastLate = 200,
+}
+
+public enum SymphonyType
+{
+    None = 0,
+    Creation = 10,    // ‘n‘¢
+    Destruction = 20, // ”j‰ó
 }
 
 /// <summary>
@@ -135,7 +143,7 @@ public class MusicRecord
         JudgementCount = judgementCount;
     }
 
-    public void HighScoreUpdate(MusicRecord newRecord)
+    public void UpdateHighScore(MusicRecord newRecord)
     {
         if (Score < newRecord.Score) { Score = newRecord.Score; }
         if (ComboRank < newRecord.ComboRank) { ComboRank = newRecord.ComboRank; }

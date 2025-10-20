@@ -99,12 +99,7 @@ public class NoteObject_HoldRelayHidden : NoteObject<NoteData_HoldRelayHidden>
     /// </summary>
     private void SendJudgementData()
     {
-        NoteJudgementData judgementData = new NoteJudgementData
-        {
-            Judgement = bestJudgement,
-            NoteData = this.noteData,
-            TimingError = noteData.Timing - noteData.Timer.Time
-        };
+        var judgementData = new NoteJudgementData(this.noteData, bestJudgement, noteData.Timer.Time - noteData.Timing);
 
         noteData.JudgementRecorder?.RecordJudgement(judgementData);
         isJudged = true;
