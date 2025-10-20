@@ -10,7 +10,7 @@ namespace UIInSelectScene
 {
     public class SelectUIPresenter : MonoBehaviour
     {
-        [SerializeField] MusicTopicControllerView musicTopicController_view;
+        [SerializeField] MusicTopicsControllerView musicTopicsController_view;
         [SerializeField] SliderUnitsControllerView sliderUnitsController_view;
         [SerializeField] SliderTopicTextsControllerView topicTextsController_view;
         [SerializeField] BackGroundControllerView backGroundController_view;
@@ -40,7 +40,7 @@ namespace UIInSelectScene
             if(musicDataListGetter_model?.MusicDatasSorted.Count > 0)
             {
                 int index = musicDataListGetter_model.CurrentMusicIndex.Value;
-                musicTopicController_view.SetMusicDatas(index, musicDataListGetter_model);
+                musicTopicsController_view.SetMusicDatas(index, musicDataListGetter_model);
             }
 
             // 楽曲リストの更新
@@ -48,7 +48,7 @@ namespace UIInSelectScene
                 .Subscribe(_ => {
                     // トピックの更新
                     int index = musicDataListGetter_model.CurrentMusicIndex.Value;
-                    musicTopicController_view.SetMusicDatas(index, musicDataListGetter_model);
+                    musicTopicsController_view.SetMusicDatas(index, musicDataListGetter_model);
                 })
                 .AddTo(this.gameObject);
 
@@ -57,7 +57,7 @@ namespace UIInSelectScene
                 .Pairwise()
                 .Subscribe(pair => { 
                     // トピックの更新
-                    _ = musicTopicController_view.OnChangeSelectedMusic(pair.Current, pair.Previous, musicDataListGetter_model);
+                    _ = musicTopicsController_view.OnChangeSelectedMusic(pair.Current, pair.Previous, musicDataListGetter_model);
                 })
                 .AddTo(this.gameObject);
 
@@ -65,25 +65,25 @@ namespace UIInSelectScene
             phaseStatusGetter_model?.Value.PhaseStatus
                 .Pairwise()
                 .Where(pair => pair.Current == PhaseStatusInSelectScene.DetailSelect && pair.Previous == PhaseStatusInSelectScene.MusicSelect)
-                .Subscribe(_ => musicTopicController_view.OnSelectMusic())
+                .Subscribe(_ => musicTopicsController_view.OnSelectMusic())
                 .AddTo(this.gameObject);
 
             // 楽曲選択に戻る
             phaseStatusGetter_model?.Value.PhaseStatus
                 .Where(status => status == PhaseStatusInSelectScene.MusicSelect)
-                .Subscribe(_ => musicTopicController_view.OnBackSelectPhase())
+                .Subscribe(_ => musicTopicsController_view.OnBackSelectPhase())
                 .AddTo(this.gameObject);
 
             // 難易度の変更
             musicDataListGetter_model?.Difficulty
-                .Subscribe(musicTopicController_view.OnChangeDifficulty)
+                .Subscribe(musicTopicsController_view.OnChangeDifficulty)
                 .AddTo(this.gameObject);
 
             // オプションの選択
             phaseStatusGetter_model?.Value.PhaseStatus
                 .Where(status => status == PhaseStatusInSelectScene.MusicOption)
                 .Subscribe(_ => { 
-                    musicTopicController_view.OnSelectOption(); 
+                    musicTopicsController_view.OnSelectOption(); 
                 })
                 .AddTo(this.gameObject);
 
@@ -92,7 +92,7 @@ namespace UIInSelectScene
                 .Pairwise()
                 .Where(pair => pair.Previous == PhaseStatusInSelectScene.MusicOption && pair.Current == PhaseStatusInSelectScene.DetailSelect)
                 .Subscribe(_ => { 
-                    musicTopicController_view.OnBackDetailSelectPhase(); 
+                    musicTopicsController_view.OnBackDetailSelectPhase(); 
                 })
                 .AddTo(this.gameObject);
         }

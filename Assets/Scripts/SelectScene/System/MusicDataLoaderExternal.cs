@@ -306,8 +306,6 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     /// <returns></returns>
     private async UniTask<bool> SetChartFileAsync(MusicData musicData, string path, CancellationToken token)
     {
-        Debug.Log($"{musicData.MusicName} => {musicData.GetDifficulty(Difficulty.Easy)},{musicData.GetDifficulty(Difficulty.Normal)},{musicData.GetDifficulty(Difficulty.Hard)},{musicData.GetDifficulty(Difficulty.Master)}");
-
         // リストにあるファイルが存在するか確認
         string pathEasy = path + "/" + chartFileNameEasy;
         bool isExistEasy = musicData.GetDifficulty(Difficulty.Easy) >= 0;

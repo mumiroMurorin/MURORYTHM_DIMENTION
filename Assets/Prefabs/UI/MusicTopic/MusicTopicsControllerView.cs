@@ -6,10 +6,10 @@ using System.Threading;
 
 namespace UIInSelectScene
 {
-    public class MusicTopicControllerView : MonoBehaviour
+    public class MusicTopicsControllerView : MonoBehaviour
     {
         [SerializeField] Animator animator;
-        [SerializeField] MusicTopicUI[] musicTopicUIs;
+        [SerializeField] MusicTopicController[] musicTopicUIs;
 
         bool isMoving;
 
