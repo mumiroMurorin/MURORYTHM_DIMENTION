@@ -72,7 +72,7 @@ public abstract class MusicTopic : MonoBehaviour
     /// 引数から背景を変更
     /// </summary>
     /// <param name="data"></param>
-    private void UpdateBackGround(Difficulty difficulty)
+    protected void UpdateBackGround(Difficulty difficulty)
     {
         foreach (var back in difficultyToBackGround)
         {
@@ -88,7 +88,7 @@ public abstract class MusicTopic : MonoBehaviour
     /// 難易度(レベル)の更新
     /// </summary>
     /// <param name="level"></param>
-    private void UpdateLevel(int level)
+    protected void UpdateLevel(int level)
     {
         if (level != -1) { level_tmp.text = level.ToString(); }
         else { level_tmp.text = "-"; }
@@ -101,16 +101,5 @@ public abstract class MusicTopic : MonoBehaviour
     public void SetObjActive(bool isActive)
     {
         this.gameObject.SetActive(isActive);
-    }
-
-    [System.Serializable]
-    class DifficultyToSprite
-    {
-        [SerializeField] Difficulty difficulty;
-        [SerializeField] Sprite sprite;
-
-        public bool CheckCondition(Difficulty difficulty) { return this.difficulty == difficulty; }
-
-        public Sprite Sprite { get { return sprite; } }
     }
 }

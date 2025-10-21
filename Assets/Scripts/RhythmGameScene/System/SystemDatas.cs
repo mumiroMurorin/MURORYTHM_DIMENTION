@@ -175,6 +175,34 @@ public class DifficultyToRecord
     }
 }
 
+
+[System.Serializable]
+public class DifficultyToSprite
+{
+    [SerializeField] Difficulty difficulty;
+    [SerializeField] Sprite sprite;
+
+    public bool CheckCondition(Difficulty difficulty) { return this.difficulty == difficulty; }
+
+    public Sprite Sprite { get { return sprite; } }
+}
+
+[System.Serializable]
+public class DifficultyToTMPColorGradient
+{
+    [SerializeField] Difficulty difficulty;
+    [SerializeField] TMPro.TMP_ColorGradient gradientAsset;
+
+    public bool CheckCondition(Difficulty difficulty) { return this.difficulty == difficulty; }
+
+    public TMPro.TMP_ColorGradient GradientAsset { get { return gradientAsset; } }
+
+    public void SetGradient(TMPro.TMP_Text tmp)
+    {
+        tmp.colorGradientPreset = gradientAsset;
+    }
+}
+
 public class JudgementToCount
 {
     public JudgementToCount(JudgementToCount judgementToCount)
