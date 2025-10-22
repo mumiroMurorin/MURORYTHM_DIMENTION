@@ -70,6 +70,33 @@ public enum OptionType
     JudgementSEVolume = 40,
     MusicVolume = 100,
     IsEnabledFastLate = 200,
+    MainInfo = 300,
+    SubInfo = 310,
+}
+
+/// <summary>
+/// プレイ中に目の前表示される情報
+/// </summary>
+public enum InfoTypeMain
+{
+    None = 0,
+    Combo = 1,
+    ComboFC = 2,
+    ComboAP = 3,
+    ScoreRank = 10,
+    ScoreRankSubtraction = 11,
+}
+
+/// <summary>
+/// メインインフォのそばに小さく表示される情報
+/// </summary>
+public enum InfoTypeSub
+{
+    None = 0,
+    ScoreAddition = 1,
+    ScoreSubtraction = 2,
+    ComboRank = 10,
+    Breakdown = 20,
 }
 
 public enum SymphonyType
@@ -116,10 +143,9 @@ public enum ScoreRank
 public enum ComboRank
 {
     None = 0,
-    TrackFailed = 1,
+    // TrackFailed = 1,
     TrackComplete = 2,
     FullCombo = 3,
-    //GreatCombo = 4,
     AllPerfect = 5
 }
 

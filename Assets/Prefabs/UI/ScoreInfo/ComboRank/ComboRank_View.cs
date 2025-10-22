@@ -6,39 +6,41 @@ using TMPro;
 public class ComboRank_View : MonoBehaviour
 {
     [Header("コンボランク別マテリアル")]
-    [SerializeField] TextMaterialPreset presetAllPerfect;
-    [SerializeField] TextMaterialPreset presetFullCombo;
-    [SerializeField] TextMaterialPreset presetDefault;
+    [SerializeField] TextMaterialPreset[] presets;
     [SerializeField] TextMeshPro textMeshPro;
 
     public void OnChangeComboRank(ComboRank comboRank)
     {
-        switch (comboRank)
+        if (presets != null)
         {
-            case ComboRank.AllPerfect:
-                presetAllPerfect.ApplyPreset(textMeshPro);
-                break;
-            case ComboRank.FullCombo:
-                presetFullCombo.ApplyPreset(textMeshPro);
-                break;
-            case ComboRank.TrackComplete:
-                presetDefault.ApplyPreset(textMeshPro);
-                break;
+            foreach (var preset in presets)
+            {
+                if (preset.CheckCondition(comboRank))
+                {
+                    preset.ApplyPreset(textMeshPro);
+                }
+            }
         }
     }
 
     [System.Serializable]
     private class TextMaterialPreset
     {
+        [SerializeField] ComboRank comboRank;
         [SerializeField] string text;
         [SerializeField] Material fontMaterial;
-        [SerializeField] VertexGradient colorGradient;
+        [SerializeField] TMP_ColorGradient colorGradient;
 
-        public void ApplyPreset(TextMeshPro tmp)
+        public bool CheckCondition(ComboRank comboRank)
+        {
+            return this.comboRank == comboRank;
+        }
+
+        public void ApplyPreset(TMP_Text tmp)
         {
             tmp.text = text;
             tmp.fontMaterial = fontMaterial;
-            tmp.colorGradient = colorGradient;
+            tmp.colorGradientPreset = colorGradient;
         }
     }
 }

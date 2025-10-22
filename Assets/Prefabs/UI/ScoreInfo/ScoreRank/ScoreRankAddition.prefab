@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8462759752408266862}
   - component: {fileID: 5277125340485481277}
   m_Layer: 0
-  m_Name: Rank_sub
+  m_Name: ScoreRankAddition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &8462759752408266862
 MonoBehaviour:
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SS
+  m_text: SSS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8d140098eeb60674597367bde9b931e8, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 10.75
+  m_fontSize: 35.8
   m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 1

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 using VContainer;
 
 public class GroundOptionSetter : MonoBehaviour
@@ -11,10 +12,17 @@ public class GroundOptionSetter : MonoBehaviour
 
     private void Start()
     {
-        SetDivisionLines();
+        Bind();
     }
 
-    private void SetDivisionLines()
+    private void Bind()
+    {
+        optionGetter?.GroundDivisionNum
+            .Subscribe(SetDivisionLines)
+            .AddTo(this.gameObject);
+    }
+
+    private void SetDivisionLines(int divNum)
     {
         if(divisionLines.Length != 17) { return; }
 
@@ -24,7 +32,7 @@ public class GroundOptionSetter : MonoBehaviour
             {
                 divisionLines[i].SetActive(true);
             }
-            else if(i % (16 / optionGetter.GroundDivisionNum.Value) == 0)
+            else if(i % (16 / divNum) == 0)
             {
                 divisionLines[i].SetActive(true);
             }

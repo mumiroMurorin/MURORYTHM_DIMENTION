@@ -78,7 +78,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7981939501820573806
 MonoBehaviour:
@@ -184,28 +184,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc287d91ff03ce64b8261bc0dc7af79f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  presetAllPerfect:
-    text: ALL PERFECT
-    fontMaterial: {fileID: 2100000, guid: d9ce38bdceb4d644cbbcf4b8a16b2263, type: 2}
-    colorGradient:
-      topLeft: {r: 1, g: 0.9882353, b: 0.64705884, a: 1}
-      topRight: {r: 1, g: 0.9254902, b: 0.45882353, a: 1}
-      bottomLeft: {r: 1, g: 0.5529412, b: 0.8352941, a: 1}
-      bottomRight: {r: 1, g: 0, b: 0.32156864, a: 1}
-  presetFullCombo:
+  presets:
+  - comboRank: 2
+    text: 
+    fontMaterial: {fileID: 0}
+    colorGradient: {fileID: 11400000, guid: 28d906c1cd34cf544972df7534fdfa31, type: 2}
+  - comboRank: 3
     text: FULL COMBO
     fontMaterial: {fileID: 2100000, guid: d0a3f463ea64ada4fab60f3d6a49096d, type: 2}
-    colorGradient:
-      topLeft: {r: 1, g: 1, b: 1, a: 1}
-      topRight: {r: 1, g: 1, b: 1, a: 1}
-      bottomLeft: {r: 0.9843137, g: 1, b: 0.5529412, a: 1}
-      bottomRight: {r: 0.9843137, g: 1, b: 0.5529412, a: 1}
-  presetDefault:
-    text: 
-    fontMaterial: {fileID: 2100000, guid: d0a3f463ea64ada4fab60f3d6a49096d, type: 2}
-    colorGradient:
-      topLeft: {r: 0, g: 0, b: 0, a: 0}
-      topRight: {r: 0, g: 0, b: 0, a: 0}
-      bottomLeft: {r: 0, g: 0, b: 0, a: 0}
-      bottomRight: {r: 0, g: 0, b: 0, a: 0}
+    colorGradient: {fileID: 11400000, guid: b90f5f361bbc3e3459a6abdddb1059d9, type: 2}
+  - comboRank: 5
+    text: ALL PERFECT
+    fontMaterial: {fileID: 2100000, guid: d9ce38bdceb4d644cbbcf4b8a16b2263, type: 2}
+    colorGradient: {fileID: 11400000, guid: 8a9dbf52d8d92984a839b19283289436, type: 2}
   textMeshPro: {fileID: 7981939501820573806}

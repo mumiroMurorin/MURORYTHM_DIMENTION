@@ -12,7 +12,7 @@ namespace UIInSelectScene
 
         public void OnChangeDivisionNum(int divNum)
         {
-            divisionNumTmp.text = divNum.ToString("0•ªŠ„");
+            divisionNumTmp.text = divNum.ToString()+ "<size=50%>•ªŠ„";
         }
     }
 }

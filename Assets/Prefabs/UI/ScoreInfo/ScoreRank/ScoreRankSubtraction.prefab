@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 919388279056652336}
   - component: {fileID: 6868907925394633514}
   - component: {fileID: 8462759752408266862}
-  - component: {fileID: 2654232727090979661}
+  - component: {fileID: 5277125340485481277}
   m_Layer: 0
-  m_Name: Score_sub
+  m_Name: ScoreRankSubtraction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &8462759752408266862
 MonoBehaviour:
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1,000,000
+  m_text: SSS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8d140098eeb60674597367bde9b931e8, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 10.75
+  m_fontSize: 35.8
   m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 6868907925394633514}
   m_maskType: 0
---- !u!114 &2654232727090979661
+--- !u!114 &5277125340485481277
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2234496584286966785}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a14a98e9f30bd7448a11d398515d83c9, type: 3}
+  m_Script: {fileID: 11500000, guid: aabb2409bde66664997cc6c5687ad934, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   presetRank:

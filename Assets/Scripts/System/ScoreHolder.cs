@@ -34,12 +34,18 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
         this.scoreCalculater = scoreCalculater;
 
         score.Value = scoreCalculater.Score;
+        scoreSubtraction.Value = scoreCalculater.ScoreSubtraction;
         scoreRank.Value = scoreCalculater.Rank;
+        scoreRankSubtraction.Value = scoreCalculater.RankSubtraction;
     }
 
     // Score
     ReactiveProperty<float> score = new ReactiveProperty<float>();
     public IReadOnlyReactiveProperty<float> Score { get { return score; } }
+
+    // Score (減算方式)
+    ReactiveProperty<float> scoreSubtraction = new ReactiveProperty<float>();
+    public IReadOnlyReactiveProperty<float> ScoreSubtraction { get { return scoreSubtraction; } }
 
     // ComboRank
     ReactiveProperty<ComboRank> comboRank = new ReactiveProperty<ComboRank>(ComboRank.AllPerfect);
@@ -48,10 +54,6 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     {
         switch (judgement)
         {
-            // Great判定のとき、AllPerfectでなくす
-            //case Judgement.Great:
-            //    comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.GreatCombo);
-            //    break;
             case Judgement.Good:
                 comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.FullCombo);
                 break;
@@ -64,6 +66,10 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     // ScoreRank
     ReactiveProperty<ScoreRank> scoreRank = new ReactiveProperty<ScoreRank>();
     public IReadOnlyReactiveProperty<ScoreRank> CurrentScoreRank { get { return scoreRank; } }
+
+    // ScoreRank (減算方式)
+    ReactiveProperty<ScoreRank> scoreRankSubtraction = new ReactiveProperty<ScoreRank>();
+    public IReadOnlyReactiveProperty<ScoreRank> CurrentScoreRankSubtraction { get { return scoreRankSubtraction; } }
 
     public string GetCurrentScoreRankString()
     {
@@ -113,8 +119,11 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
 
         // スコアの更新
         scoreCalculater?.AddJudgement(judgementData.Judgement);
+
         score.Value = scoreCalculater.Score;
+        scoreSubtraction.Value = scoreCalculater.ScoreSubtraction;
         scoreRank.Value = scoreCalculater.Rank;
+        scoreRankSubtraction.Value = scoreCalculater.RankSubtraction;
 
         switch (judgementData.Judgement)
         {
@@ -166,7 +175,7 @@ public class ScoreCalculater
     {
         // 理論値の設定
         maxScore = BASE_SCORE + maxCombo;
-        
+
         // 追加スコアの設定
         addScoreOnPerfect = (double)maxScore / maxCombo;
         addScoreOnGreat = addScoreOnPerfect - 10f;
@@ -176,15 +185,24 @@ public class ScoreCalculater
         // スコアランクの閾値を更新
         rankThreshold.Add(new RankToThreshold(ScoreRank.MAX, maxScore));
         rankThreshold = rankThreshold.OrderByDescending(x => x.Threshold).ToList();
+
+        // その他初期化
+        scoreSubtraction = maxScore;
+        rankSubtraction = ScoreRank.MAX;
     }
 
     double scoreOrigin = 0;
+    double scoreIfMax = 0; // 理論値時の現スコア
 
     float score = 0;
+    float scoreSubtraction = 0;
     public float Score { get { return score; } }
+    public float ScoreSubtraction { get { return scoreSubtraction; } }
 
     ScoreRank rank = ScoreRank.E;
+    ScoreRank rankSubtraction = ScoreRank.MAX;
     public ScoreRank Rank { get { return rank; } } 
+    public ScoreRank RankSubtraction { get { return rankSubtraction; } } 
 
     public void AddJudgement(Judgement judgement)
     {
@@ -204,9 +222,12 @@ public class ScoreCalculater
                 break;
         }
 
+        scoreIfMax += addScoreOnPerfect;
         score = (float)scoreOrigin;
+        scoreSubtraction = maxScore - (float)(scoreIfMax - scoreOrigin);
 
         UpdateScoreRank((int)score);
+        UpdateScoreRankSubtraction((int)scoreSubtraction);
     }
 
     private void UpdateScoreRank(int score)
@@ -215,6 +236,16 @@ public class ScoreCalculater
         {
             if (rankThreshold[i].Threshold > score) { continue; }
             if (rank != rankThreshold[i].Rank) { rank = rankThreshold[i].Rank; Debug.Log($"RankUp => {rank}"); }
+            break;
+        }
+    }
+
+    private void UpdateScoreRankSubtraction(int scoreSubtraction)
+    {
+        for (int i = 0; i < rankThreshold.Count; i++)
+        {
+            if (rankThreshold[i].Threshold > scoreSubtraction) { continue; }
+            if (rankSubtraction != rankThreshold[i].Rank) { rankSubtraction = rankThreshold[i].Rank; }
             break;
         }
     }

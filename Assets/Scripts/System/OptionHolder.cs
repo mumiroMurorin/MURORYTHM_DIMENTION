@@ -33,7 +33,12 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
             case OptionType.IsEnabledFastLate:
                 SetIsEnabledFastLate(!IsEnabledFastLate.Value);
                 break;
-
+            case OptionType.MainInfo:
+                ChangeMainInfo();
+                break;
+            case OptionType.SubInfo:
+                ChangeSubInfo();
+                break;
         }
     }
 
@@ -232,6 +237,108 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     #endregion
 
 
+    #region Info
+
+    // メイン情報
+    ReactiveProperty<InfoTypeMain> mainInfo = new ReactiveProperty<InfoTypeMain>(InfoTypeMain.Combo);
+    public IReadOnlyReactiveProperty<InfoTypeMain> MainInfo => mainInfo;
+    public void ChangeMainInfo()
+    {
+        switch (mainInfo.Value)
+        {
+            case InfoTypeMain.None:
+                mainInfo.Value = InfoTypeMain.Combo;
+                break;
+            case InfoTypeMain.Combo:
+                mainInfo.Value = InfoTypeMain.ComboFC;
+                break;
+            case InfoTypeMain.ComboFC:
+                mainInfo.Value = InfoTypeMain.ComboAP;
+                break;
+            case InfoTypeMain.ComboAP:
+                mainInfo.Value = InfoTypeMain.ScoreRank;
+                break;
+            case InfoTypeMain.ScoreRank:
+                mainInfo.Value = InfoTypeMain.ScoreRankSubtraction;
+                break;
+            case InfoTypeMain.ScoreRankSubtraction:
+                mainInfo.Value = InfoTypeMain.None;
+                break;
+        }
+    }
+    public string MainInfoDisplay { 
+        get 
+        {
+            switch (mainInfo.Value)
+            {
+                case InfoTypeMain.None:
+                    return "表示しない";
+                case InfoTypeMain.Combo:
+                    return "コンボ";
+                case InfoTypeMain.ComboFC:
+                    return "コンボ\n<size=50%>(FC表示あり)";
+                case InfoTypeMain.ComboAP:
+                    return "コンボ\n<size=50%>(AP表示あり)";
+                case InfoTypeMain.ScoreRank:
+                    return "スコアランク\n<size=50%>(加算方式)";
+                case InfoTypeMain.ScoreRankSubtraction:
+                    return "スコアランク\n<size=50%>(減算方式)";
+            }
+
+            return $"{mainInfo.Value}";
+        } 
+    }
+
+    // サブ情報
+    ReactiveProperty<InfoTypeSub> subInfo = new ReactiveProperty<InfoTypeSub>(InfoTypeSub.None);
+    public IReadOnlyReactiveProperty<InfoTypeSub> SubInfo => subInfo;
+    public void ChangeSubInfo()
+    {
+        switch (subInfo.Value)
+        {
+            case InfoTypeSub.None:
+                subInfo.Value = InfoTypeSub.ScoreAddition;
+                break;
+            case InfoTypeSub.ScoreAddition:
+                subInfo.Value = InfoTypeSub.ScoreSubtraction;
+                break;
+            case InfoTypeSub.ScoreSubtraction:
+                subInfo.Value = InfoTypeSub.ComboRank;
+                break;
+            case InfoTypeSub.ComboRank:
+                subInfo.Value = InfoTypeSub.Breakdown;
+                break;
+            case InfoTypeSub.Breakdown:
+                subInfo.Value = InfoTypeSub.None;
+                break;
+        }
+    }
+    public string SubInfoDisplay
+    {
+        get
+        {
+            switch (subInfo.Value)
+            {
+                case InfoTypeSub.None:
+                    return "表示しない";
+                case InfoTypeSub.ScoreAddition:
+                    return "スコア\n<size=50%>(加算方式)";
+                case InfoTypeSub.ScoreSubtraction:
+                    return "スコア\n<size=50%>(減算方式)";
+                case InfoTypeSub.ComboRank:
+                    return "AP / FC";
+                case InfoTypeSub.Breakdown:
+                    return "判定内訳";
+            }
+
+            return $"{subInfo.Value}";
+        }
+    }
+
+
+    #endregion
+
+
     #region Cheat
 
     ReactiveProperty<bool> isAutoMode = new ReactiveProperty<bool>();
@@ -300,6 +407,12 @@ public interface IOptionGetter
 
     IReadOnlyReactiveProperty<int> GroundDivisionNum { get; }
     int GroundDivisionNumDisplay { get; }
+
+    IReadOnlyReactiveProperty<InfoTypeMain> MainInfo { get; }
+    string MainInfoDisplay { get; }
+
+    IReadOnlyReactiveProperty<InfoTypeSub> SubInfo { get; }
+    string SubInfoDisplay { get; }
 
     BodyTrackingSettings TrackingSettings { get; }
 }

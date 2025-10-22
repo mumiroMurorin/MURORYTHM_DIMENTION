@@ -14,6 +14,8 @@ public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSet
          OptionType.DivisionNum,
          OptionType.IsEnabledFastLate,
          OptionType.JudgementSEVolume,
+         OptionType.MainInfo,
+         OptionType.SubInfo,
     };
 
     void ISelectSceneDataSetter.SetOptionList(List<OptionType> optionTypes)

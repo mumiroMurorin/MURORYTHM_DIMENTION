@@ -79,6 +79,8 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
 
     IVolumeGetter volumeGetter;
 
+    public AudioSource[] BGMSources { get { return bgmSources; } }
+
     [Inject]
     public void Constructor(IVolumeGetter volumeGetter)
     {

@@ -66,9 +66,13 @@ public interface IScoreGetter
 
     public IReadOnlyReactiveProperty<float> Score { get; }
 
+    public IReadOnlyReactiveProperty<float> ScoreSubtraction { get; }
+
     public IReadOnlyReactiveProperty<ComboRank> CurrentComboRank { get; }
 
     public IReadOnlyReactiveProperty<ScoreRank> CurrentScoreRank { get; }
+
+    public IReadOnlyReactiveProperty<ScoreRank> CurrentScoreRankSubtraction { get; }
 
     public string GetCurrentScoreRankString();
 }

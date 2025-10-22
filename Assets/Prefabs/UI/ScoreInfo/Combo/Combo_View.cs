@@ -8,53 +8,48 @@ public class Combo_View : MonoBehaviour
     [Header("何コンボから表示するか")]
     [SerializeField] int comboThreshold = 5;
     [Header("コンボ別マテリアル")]
-    [SerializeField] TextMaterialPreset presetAllPerfect;
-    [SerializeField] TextMaterialPreset presetFullCombo;
-    [SerializeField] TextMaterialPreset presetDefault;
+    [SerializeField] TextMaterialPreset[] presets;
     [SerializeField] TextMeshPro textMeshPro;
     [SerializeField] Animator animator;
 
     public void OnChangeCombo(int comboNum)
     {
         textMeshPro.text = comboNum.ToString();
+        textMeshPro.enabled = comboThreshold < comboNum;
 
-        if (comboThreshold > comboNum)
-        {
-            textMeshPro.gameObject.SetActive(false);
-        }
-        else
-        {
-            textMeshPro.gameObject.SetActive(true);
-            animator.SetTrigger("combo");
-        }
+        animator.SetTrigger("combo");
     }
 
     public void OnChangeComboRank(ComboRank comboRank)
     {
-        switch (comboRank)
+        if (presets != null)
         {
-            case ComboRank.AllPerfect:
-                presetAllPerfect.ApplyPreset(textMeshPro);
-                break;
-            case ComboRank.FullCombo:
-                presetFullCombo.ApplyPreset(textMeshPro);
-                break;
-            case ComboRank.TrackComplete:
-                presetDefault.ApplyPreset(textMeshPro);
-                break;
+            foreach (var preset in presets)
+            {
+                if (preset.CheckCondition(comboRank))
+                {
+                    preset.ApplyPreset(textMeshPro);
+                }
+            }
         }
     }
 
     [System.Serializable]
     private class TextMaterialPreset
     {
+        [SerializeField] ComboRank comboRank;
         [SerializeField] Material fontMaterial;
-        [SerializeField] VertexGradient colorGradient;
+        [SerializeField] TMP_ColorGradient colorGradient;
 
-        public void ApplyPreset(TextMeshPro tmp)
+        public bool CheckCondition(ComboRank comboRank)
+        {
+            return this.comboRank == comboRank;
+        }
+
+        public void ApplyPreset(TMP_Text tmp)
         {
             tmp.fontMaterial = fontMaterial;
-            tmp.colorGradient = colorGradient;
+            tmp.colorGradientPreset = colorGradient;
         }
     }
 }
