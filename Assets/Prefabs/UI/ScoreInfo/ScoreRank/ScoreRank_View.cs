@@ -27,7 +27,7 @@ public class ScoreRank_View : MonoBehaviour
         [SerializeField] ScoreRank scoreRank;
         [SerializeField] string text;
         [SerializeField] Material fontMaterial;
-        [SerializeField] VertexGradient colorGradient;
+        [SerializeField] TMP_ColorGradient colorGradient;
 
         public ScoreRank ScoreRank { get { return scoreRank; } }
 
@@ -35,7 +35,7 @@ public class ScoreRank_View : MonoBehaviour
         {
             tmp.text = text;
             tmp.fontMaterial = fontMaterial;
-            tmp.colorGradient = colorGradient;
+            tmp.colorGradientPreset = colorGradient;
         }
     }
 }

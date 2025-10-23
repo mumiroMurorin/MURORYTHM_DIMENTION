@@ -31,14 +31,14 @@ public class Score_View : MonoBehaviour
     {
         [SerializeField] ScoreRank scoreRank;
         [SerializeField] Material fontMaterial;
-        [SerializeField] VertexGradient colorGradient;
+        [SerializeField] TMP_ColorGradient colorGradient;
 
         public ScoreRank ScoreRank { get { return scoreRank; } }
 
         public void ApplyPreset(TextMeshPro tmp)
         {
             tmp.fontMaterial = fontMaterial;
-            tmp.colorGradient = colorGradient;
+            tmp.colorGradientPreset = colorGradient;
         }
     }
 }

@@ -163,6 +163,7 @@ public class ScoreCalculater
         new RankToThreshold(ScoreRank.B,900000),
         new RankToThreshold(ScoreRank.C,750000),
         new RankToThreshold(ScoreRank.D,500000),
+        new RankToThreshold(ScoreRank.E,0),
     };
 
     int maxScore;

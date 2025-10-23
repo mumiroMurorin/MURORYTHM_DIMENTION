@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
+  - {fileID: 2100000, guid: 1697d0028c68bf740a92bed472689ae4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_text: 1,000,000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8d140098eeb60674597367bde9b931e8, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 1697d0028c68bf740a92bed472689ae4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -118,7 +118,7 @@ MonoBehaviour:
     topRight: {r: 1, g: 1, b: 1, a: 1}
     bottomLeft: {r: 0.98307335, g: 1, b: 0.5529412, a: 1}
     bottomRight: {r: 0.9843137, g: 1, b: 0.5529412, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
+  m_fontColorGradientPreset: {fileID: 11400000, guid: 4f83e059a5ab25f4cb454ed38382f4a1, type: 2}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 10.75
+  m_fontSize: 17.1
   m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -186,87 +186,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   presetRank:
   - scoreRank: 1
-    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
-    colorGradient:
-      topLeft: {r: 1, g: 1, b: 1, a: 1}
-      topRight: {r: 1, g: 1, b: 1, a: 1}
-      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    fontMaterial: {fileID: 2100000, guid: 05b216c002f5eaf41b726caa7e8df71c, type: 2}
+    colorGradient: {fileID: 11400000, guid: 19a835d3db6d0fd46bfee6a76a15b3da, type: 2}
   - scoreRank: 2
-    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
-    colorGradient:
-      topLeft: {r: 1, g: 1, b: 1, a: 1}
-      topRight: {r: 1, g: 1, b: 1, a: 1}
-      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    fontMaterial: {fileID: 2100000, guid: 97edaa25e4c2c1a4499ee3b5665aed69, type: 2}
+    colorGradient: {fileID: 11400000, guid: c0582ad0a3cc97643b4d40b046853a00, type: 2}
   - scoreRank: 3
-    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
-    colorGradient:
-      topLeft: {r: 1, g: 1, b: 1, a: 1}
-      topRight: {r: 1, g: 1, b: 1, a: 1}
-      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    fontMaterial: {fileID: 2100000, guid: 9b699e1a22e95db43a1c9e7d66b701d3, type: 2}
+    colorGradient: {fileID: 11400000, guid: 5d395c69906ab9448bdc86a0139287b7, type: 2}
   - scoreRank: 4
-    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
-    colorGradient:
-      topLeft: {r: 1, g: 1, b: 1, a: 1}
-      topRight: {r: 1, g: 1, b: 1, a: 1}
-      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    fontMaterial: {fileID: 2100000, guid: 0eecf835d610b1746874dca7c2de1188, type: 2}
+    colorGradient: {fileID: 11400000, guid: a87c19b5206b6fb4883a045b025902e8, type: 2}
   - scoreRank: 5
-    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
-    colorGradient:
-      topLeft: {r: 1, g: 1, b: 1, a: 1}
-      topRight: {r: 1, g: 1, b: 1, a: 1}
-      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    fontMaterial: {fileID: 2100000, guid: 56740f3d3cfa5e74baacf9b97c6db4cf, type: 2}
+    colorGradient: {fileID: 11400000, guid: 6c31eb87602d90c4f803cd9da9b594c6, type: 2}
   - scoreRank: 6
-    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
-    colorGradient:
-      topLeft: {r: 1, g: 1, b: 1, a: 1}
-      topRight: {r: 1, g: 1, b: 1, a: 1}
-      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    fontMaterial: {fileID: 2100000, guid: 78b779e7f15045a49b02cc4f9bc9f1f6, type: 2}
+    colorGradient: {fileID: 11400000, guid: 3dd5f0338afb02242ac559519550f47a, type: 2}
   - scoreRank: 7
-    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
-    colorGradient:
-      topLeft: {r: 1, g: 1, b: 1, a: 1}
-      topRight: {r: 1, g: 1, b: 1, a: 1}
-      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    fontMaterial: {fileID: 2100000, guid: 891140c7ae97e674490a1bd473ae65f1, type: 2}
+    colorGradient: {fileID: 11400000, guid: 9adc392dbedb4674da2ada942e898e74, type: 2}
   - scoreRank: 8
-    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
-    colorGradient:
-      topLeft: {r: 1, g: 1, b: 1, a: 1}
-      topRight: {r: 1, g: 1, b: 1, a: 1}
-      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    fontMaterial: {fileID: 2100000, guid: 0be32cb919d743941a893525d5a35b38, type: 2}
+    colorGradient: {fileID: 11400000, guid: ac52a9e8a76b4fc4abc283c27c5916b2, type: 2}
   - scoreRank: 9
-    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
-    colorGradient:
-      topLeft: {r: 1, g: 1, b: 1, a: 1}
-      topRight: {r: 1, g: 1, b: 1, a: 1}
-      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    fontMaterial: {fileID: 2100000, guid: b5d2b2fa2d3048741b0a61a6b441640a, type: 2}
+    colorGradient: {fileID: 11400000, guid: 5501fe4d93a35494da5154b6a43b8784, type: 2}
   - scoreRank: 10
-    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
-    colorGradient:
-      topLeft: {r: 1, g: 1, b: 1, a: 1}
-      topRight: {r: 1, g: 1, b: 1, a: 1}
-      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    fontMaterial: {fileID: 2100000, guid: 35318e7367c14d54b8768182926faac9, type: 2}
+    colorGradient: {fileID: 11400000, guid: 69fe1a129fb33c3419ce2bf18e9934ed, type: 2}
   - scoreRank: 11
-    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
-    colorGradient:
-      topLeft: {r: 1, g: 1, b: 1, a: 1}
-      topRight: {r: 1, g: 1, b: 1, a: 1}
-      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    fontMaterial: {fileID: 2100000, guid: 1697d0028c68bf740a92bed472689ae4, type: 2}
+    colorGradient: {fileID: 11400000, guid: 4f83e059a5ab25f4cb454ed38382f4a1, type: 2}
   - scoreRank: 12
-    fontMaterial: {fileID: 2100000, guid: 22751838be1877548a2e85000169f663, type: 2}
-    colorGradient:
-      topLeft: {r: 1, g: 1, b: 1, a: 1}
-      topRight: {r: 1, g: 1, b: 1, a: 1}
-      bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-      bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    fontMaterial: {fileID: 2100000, guid: 4d70ff191eb67644e812f8e728b1f1ea, type: 2}
+    colorGradient: {fileID: 11400000, guid: 5478899d93f12d04fa242d604546dfa8, type: 2}
   textMeshPro: {fileID: 8462759752408266862}
