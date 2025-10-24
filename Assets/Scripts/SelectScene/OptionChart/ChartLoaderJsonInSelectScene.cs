@@ -6,13 +6,11 @@ using ChartConvert;
 using VContainer;
 using System;
 
-public class ChartLoaderJson : MonoBehaviour, IChartLoader
+public class ChartLoaderJsonInSelectScene : MonoBehaviour, IChartLoader
 {
     [SerializeField] List<NoteTypeToJudgementWindow> judgementWindows;
 
-    [Inject] IMusicDataGetter musicDataGetter;
     [Inject] INoteSpawnDataOptionHolder optionGetter;
-    [Inject] IChartDataSetter chartDataSetter;
 
     private void Start()
     {
@@ -26,10 +24,6 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
 
     void IChartLoader.LoadChart(Action callback)
     {
-        Difficulty difficulty = musicDataGetter.Difficulty.Value;
-        ChartData chartData = LoadChartData(musicDataGetter.Music.Value.GetChartPath(difficulty));
-
-        chartDataSetter.SetChartData(chartData);
         callback.Invoke();
     }
 

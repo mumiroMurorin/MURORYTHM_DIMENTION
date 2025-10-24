@@ -13,6 +13,8 @@ public interface IChartLoader
     public void LoadChart(Action callback = null);
 
     public ChartData LoadChartData(string path);
+
+    public ChartData LoadChartData(TextAsset jsonFile);
 }
 
 /// <summary>
@@ -34,6 +36,8 @@ public interface IChartDataConverter
 public interface IJudgementRecorder
 {
     void RecordJudgement(NoteJudgementData judgementData);
+
+    void AddJudgement(Judgement judgement, bool isUpdateScore = true);
 }
 
 /// <summary>

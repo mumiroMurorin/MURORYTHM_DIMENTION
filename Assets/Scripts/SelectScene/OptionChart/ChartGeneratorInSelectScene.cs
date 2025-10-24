@@ -9,9 +9,7 @@ using UniRx;
 
 public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 {
-    [Header("オプション用譜面パス")]
-    [SerializeField] string chartPath;
-    [SerializeField] SerializeInterface<IChartLoader> chartLoader;
+    [SerializeField] ChartControllerInSelectScene chartController;
 
     [Header("それぞれのNoteFactory")]
     [SerializeField] NoteFactory<NoteData_Touch> touchNoteFactory;
@@ -41,8 +39,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
     [Inject] ISpaceInputGetter spaceInputGetter;
     [Inject] IJudgementRecorder judgementRecorder;
 
-
-    ChartData chartData;
+    List<GameObject> noteObjects;
 
     private void Awake()
     {
@@ -82,32 +79,37 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
         spaceHoldRelayNoteFactory.Initialize(data);
         spaceHoldRelayHiddenNoteFactory.Initialize(data);
         spaceBreakNoteFactory.Initialize(data);
-
-        chartData = chartLoader.Value.LoadChartData(chartPath);
     }
 
     /// <summary>
     /// ノーツ全体の生成
     /// </summary>
-    /// <param name="chartData"></param>
+    /// <param name="ChartData"></param>
     public void Generate(Action callback = null)
     {
-        GenerateTouchNote(chartData.GetNoteDataList(NoteType.Touch).OfType<NoteData_Touch>().ToList());
-        GenerateDevineTouchNote(chartData.GetNoteDataList(NoteType.DivineTouch).OfType<NoteData_DivineTouch>().ToList());
-        GenerateDynamicGroundUpwardNote(chartData.GetNoteDataList(NoteType.DynamicGroundUpward).OfType<NoteData_DynamicGroundUpward>().ToList());
-        GenerateDynamicGroundRightwardNote(chartData.GetNoteDataList(NoteType.DynamicGroundRightward).OfType<NoteData_DynamicGroundRightward>().ToList());
-        GenerateDynamicGroundLeftwardNote(chartData.GetNoteDataList(NoteType.DynamicGroundLeftward).OfType<NoteData_DynamicGroundLeftward>().ToList());
-        GenerateDynamicGroundDownwardNote(chartData.GetNoteDataList(NoteType.DynamicGroundDownward).OfType<NoteData_DynamicGroundDownward>().ToList());
-        GenerateHoldStartNote(chartData.GetNoteDataList(NoteType.HoldStart).OfType<NoteData_HoldStart>().ToList());
-        GenerateHoldRelayNote(chartData.GetNoteDataList(NoteType.HoldRelay).OfType<NoteData_HoldRelay>().ToList());
-        GenerateHoldRelayHiddenNote(chartData.GetNoteDataList(NoteType.HoldRelayHidden).OfType<NoteData_HoldRelayHidden>().ToList());
-        GenerateHoldEndNote(chartData.GetNoteDataList(NoteType.HoldEnd).OfType<NoteData_HoldEnd>().ToList());
-        GenerateHoldEndUnjudgeNote(chartData.GetNoteDataList(NoteType.HoldEndUnjudge).OfType<NoteData_HoldEndUnjudge>().ToList());
-        GenerateHoldMeshNote(chartData.GetNoteDataList(NoteType.HoldMesh).OfType<NoteData_HoldMesh>().ToList());
-        GenerateSpaceHoldMeshNote(chartData.GetNoteDataList(NoteType.SpaceHoldMesh).OfType<NoteData_SpaceHoldMesh>().ToList());
-        GenerateSpaceHoldRelayNote(chartData.GetNoteDataList(NoteType.SpaceHoldRelay).OfType<NoteData_SpaceHoldRelay>().ToList());
-        GenerateSpaceHoldRelayHiddenNote(chartData.GetNoteDataList(NoteType.SpaceHoldRelayHidden).OfType<NoteData_SpaceHoldRelayHidden>().ToList());
-        GenerateSpaceBreakNote(chartData.GetNoteDataList(NoteType.SpaceBreak).OfType<NoteData_SpaceBreak>().ToList());
+        // リセット
+        if (noteObjects == null) { noteObjects = new List<GameObject>(); }
+        foreach(var obj in noteObjects)
+        {
+            Destroy(obj);
+        }
+
+        GenerateTouchNote(chartController.ChartData.GetNoteDataList(NoteType.Touch).OfType<NoteData_Touch>().ToList());
+        GenerateDevineTouchNote(chartController.ChartData.GetNoteDataList(NoteType.DivineTouch).OfType<NoteData_DivineTouch>().ToList());
+        GenerateDynamicGroundUpwardNote(chartController.ChartData.GetNoteDataList(NoteType.DynamicGroundUpward).OfType<NoteData_DynamicGroundUpward>().ToList());
+        GenerateDynamicGroundRightwardNote(chartController.ChartData.GetNoteDataList(NoteType.DynamicGroundRightward).OfType<NoteData_DynamicGroundRightward>().ToList());
+        GenerateDynamicGroundLeftwardNote(chartController.ChartData.GetNoteDataList(NoteType.DynamicGroundLeftward).OfType<NoteData_DynamicGroundLeftward>().ToList());
+        GenerateDynamicGroundDownwardNote(chartController.ChartData.GetNoteDataList(NoteType.DynamicGroundDownward).OfType<NoteData_DynamicGroundDownward>().ToList());
+        GenerateHoldStartNote(chartController.ChartData.GetNoteDataList(NoteType.HoldStart).OfType<NoteData_HoldStart>().ToList());
+        GenerateHoldRelayNote(chartController.ChartData.GetNoteDataList(NoteType.HoldRelay).OfType<NoteData_HoldRelay>().ToList());
+        GenerateHoldRelayHiddenNote(chartController.ChartData.GetNoteDataList(NoteType.HoldRelayHidden).OfType<NoteData_HoldRelayHidden>().ToList());
+        GenerateHoldEndNote(chartController.ChartData.GetNoteDataList(NoteType.HoldEnd).OfType<NoteData_HoldEnd>().ToList());
+        GenerateHoldEndUnjudgeNote(chartController.ChartData.GetNoteDataList(NoteType.HoldEndUnjudge).OfType<NoteData_HoldEndUnjudge>().ToList());
+        GenerateHoldMeshNote(chartController.ChartData.GetNoteDataList(NoteType.HoldMesh).OfType<NoteData_HoldMesh>().ToList());
+        GenerateSpaceHoldMeshNote(chartController.ChartData.GetNoteDataList(NoteType.SpaceHoldMesh).OfType<NoteData_SpaceHoldMesh>().ToList());
+        GenerateSpaceHoldRelayNote(chartController.ChartData.GetNoteDataList(NoteType.SpaceHoldRelay).OfType<NoteData_SpaceHoldRelay>().ToList());
+        GenerateSpaceHoldRelayHiddenNote(chartController.ChartData.GetNoteDataList(NoteType.SpaceHoldRelayHidden).OfType<NoteData_SpaceHoldRelayHidden>().ToList());
+        GenerateSpaceBreakNote(chartController.ChartData.GetNoteDataList(NoteType.SpaceBreak).OfType<NoteData_SpaceBreak>().ToList());
 
         callback?.Invoke();
     }
@@ -122,7 +124,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_Touch data in noteDatas)
         {
-            touchNoteFactory.Spawn(data);
+            noteObjects.Add(touchNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -137,7 +139,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_DivineTouch data in noteDatas)
         {
-            divineTouchNoteFactory.Spawn(data);
+            noteObjects.Add(divineTouchNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -151,7 +153,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_DynamicGroundUpward data in noteDatas)
         {
-            dynamicGroundUpwardNoteFactory.Spawn(data);
+            noteObjects.Add(dynamicGroundUpwardNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -165,7 +167,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_DynamicGroundRightward data in noteDatas)
         {
-            dynamicGroundRightwardNoteFactory.Spawn(data);
+            noteObjects.Add(dynamicGroundRightwardNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -179,7 +181,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_DynamicGroundLeftward data in noteDatas)
         {
-            dynamicGroundLeftwardNoteFactory.Spawn(data);
+            noteObjects.Add(dynamicGroundLeftwardNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -193,7 +195,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_DynamicGroundDownward data in noteDatas)
         {
-            dynamicGroundDownwardNoteFactory.Spawn(data);
+            noteObjects.Add(dynamicGroundDownwardNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -207,7 +209,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_HoldStart data in noteDatas)
         {
-            holdStartNoteFactory.Spawn(data);
+            noteObjects.Add(holdStartNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -221,7 +223,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_HoldRelay data in noteDatas)
         {
-            holdRelayNoteFactory.Spawn(data);
+            noteObjects.Add(holdRelayNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -235,7 +237,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_HoldRelayHidden data in noteDatas)
         {
-            holdRelayHiddenNoteFactory.Spawn(data);
+            noteObjects.Add(holdRelayHiddenNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -249,7 +251,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_HoldEnd data in noteDatas)
         {
-            holdEndNoteFactory.Spawn(data);
+            noteObjects.Add(holdEndNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -263,7 +265,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_HoldEndUnjudge data in noteDatas)
         {
-            holdEndUnjudgeNoteFactory.Spawn(data);
+            noteObjects.Add(holdEndUnjudgeNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -277,7 +279,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_HoldMesh data in noteDatas)
         {
-            holdMeshNoteFactory.Spawn(data);
+            noteObjects.Add(holdMeshNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -291,7 +293,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_SpaceHoldMesh data in noteDatas)
         {
-            spaceHoldMeshNoteFactory.Spawn(data);
+            noteObjects.Add(spaceHoldMeshNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -306,7 +308,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_SpaceHoldRelay data in noteDatas)
         {
-            spaceHoldRelayNoteFactory.Spawn(data);
+            noteObjects.Add(spaceHoldRelayNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -320,7 +322,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_SpaceHoldRelayHidden data in noteDatas)
         {
-            spaceHoldRelayHiddenNoteFactory.Spawn(data);
+            noteObjects.Add(spaceHoldRelayHiddenNoteFactory.Spawn(data).gameObject);
         }
     }
 
@@ -334,7 +336,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (var data in noteDatas)
         {
-            spaceBreakNoteFactory.Spawn(data);
+            noteObjects.Add(spaceBreakNoteFactory.Spawn(data).gameObject);
         }
     }
 }

@@ -50,17 +50,10 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     // ComboRank
     ReactiveProperty<ComboRank> comboRank = new ReactiveProperty<ComboRank>(ComboRank.AllPerfect);
     public IReadOnlyReactiveProperty<ComboRank> CurrentComboRank { get { return comboRank; } }
-    private void SetComboRank(Judgement judgement)
+    private void UpdateComboRank()
     {
-        switch (judgement)
-        {
-            case Judgement.Good:
-                comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.FullCombo);
-                break;
-            case Judgement.Miss:
-                comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.TrackComplete);
-                break;
-        }
+        if (missNum.Value > 0) { comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.TrackComplete); }
+        if (goodNum.Value > 0) { comboRank.Value = (ComboRank)Mathf.Min((int)comboRank.Value, (int)ComboRank.FullCombo); }
     }
 
     // ScoreRank
@@ -114,18 +107,28 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
         // デバッグ用
         //Debug.Log($"【Judgement】判定 {judgementData.NoteData.NoteType}: {judgementData.Judgement}");
 
-        SetComboRank(judgementData.Judgement);
+        UpdateComboRank();
         noteJudgementDatas.Add(judgementData);
 
+        // スコアの更新・判定数の更新
+        AddJudgement(judgementData.Judgement, true);
+    }
+
+    public void AddJudgement(Judgement judgement, bool isUpdateScore = true)
+    {
+        // 現スコアの計算
+        scoreCalculater?.AddJudgement(judgement);
+
         // スコアの更新
-        scoreCalculater?.AddJudgement(judgementData.Judgement);
+        if (isUpdateScore)
+        {
+            score.Value = scoreCalculater.Score;
+            scoreSubtraction.Value = scoreCalculater.ScoreSubtraction;
+            scoreRank.Value = scoreCalculater.Rank;
+            scoreRankSubtraction.Value = scoreCalculater.RankSubtraction;
+        }
 
-        score.Value = scoreCalculater.Score;
-        scoreSubtraction.Value = scoreCalculater.ScoreSubtraction;
-        scoreRank.Value = scoreCalculater.Rank;
-        scoreRankSubtraction.Value = scoreCalculater.RankSubtraction;
-
-        switch (judgementData.Judgement)
+        switch (judgement)
         {
             case Judgement.Perfect:
                 perfectNum.Value++;

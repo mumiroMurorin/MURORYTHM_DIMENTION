@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using UniRx;
 
 public class GroundContoroller : MonoBehaviour
 {
@@ -15,18 +16,26 @@ public class GroundContoroller : MonoBehaviour
         this.optionHolder = optionHolder;
     }
 
-    private void Update()
+    private void Start()
     {
-        MoveGround();
+        Bind();
+    }
+
+    private void Bind()
+    {
+        if(timer == null) { return; }
+        if(timer.Value == null) { return; }
+
+        timer.Value.TimeRP
+            .Subscribe(MoveGround)
+            .AddTo(this.gameObject);
     }
 
     /// <summary>
     /// グラウンドを動かす
     /// </summary>
-    private void MoveGround()
+    private void MoveGround(float time)
     {
-        // 譜面を進める
-        if (timer == null || timer.Value == null) { return; }
-        this.gameObject.transform.position = Vector3.back * optionHolder.NoteSpeed.Value * timer.Value.Time;
+        this.gameObject.transform.position = Vector3.back * optionHolder.NoteSpeed.Value * time;
     }
 }
