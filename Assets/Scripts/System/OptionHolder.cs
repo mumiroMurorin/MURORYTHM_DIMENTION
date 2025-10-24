@@ -94,7 +94,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     // ”»’è‰¹ŠÖŒW
     ReactiveProperty<float> judgementSeVolume = new ReactiveProperty<float>(0.8f);
     public IReadOnlyReactiveProperty<float> JudgementSEVolume => judgementSeVolume;
-    public int JudgementSEVolumeDisplay => (int)(judgementSeVolume.Value * 10f);
+    public int JudgementSEVolumeDisplay => Mathf.RoundToInt(judgementSeVolume.Value * 10);
     void SetJudgementSeVolume(float value)
     {
         judgementSeVolume.Value = Mathf.Clamp01(value);

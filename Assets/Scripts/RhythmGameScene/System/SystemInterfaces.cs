@@ -11,6 +11,8 @@ using UniRx;
 public interface IChartLoader
 {
     public void LoadChart(Action callback = null);
+
+    public ChartData LoadChartData(string path);
 }
 
 /// <summary>

@@ -10,17 +10,9 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
 {
     [SerializeField] List<NoteTypeToJudgementWindow> judgementWindows;
 
-    IMusicDataGetter musicDataGetter;
-    INoteSpawnDataOptionHolder optionGetter;
-    IChartDataSetter chartDataSetter;
-
-    [Inject]
-    public void Constructor(IMusicDataGetter musicDataGetter, IChartDataSetter chartDataSetter, INoteSpawnDataOptionHolder optionGetter)
-    {
-        this.musicDataGetter = musicDataGetter;
-        this.chartDataSetter = chartDataSetter;
-        this.optionGetter = optionGetter;
-    }
+    [Inject] IMusicDataGetter musicDataGetter;
+    [Inject] INoteSpawnDataOptionHolder optionGetter;
+    [Inject] IChartDataSetter chartDataSetter;
 
     private void Start()
     {
@@ -41,39 +33,7 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
         callback.Invoke();
     }
 
-    ///// <summary>
-    ///// データを読み込む
-    ///// </summary>
-    ///// <param name="textAsset"></param>
-    ///// <param name="callback"></param>
-    ///// <returns></returns>
-    //private ChartData LoadChartData(TextAsset textAsset)
-    //{
-    //    if (jsonData == null && textAsset == null)
-    //    {
-    //        Debug.LogError("【System】Jsonファイルが参照されていません。");
-    //        return null;
-    //    }
-
-    //    // Jsonデータの変換
-    //    if(!JsonLoader.TryLoadFromTextAsset(textAsset != null ? textAsset : jsonData, out ChartDataOrigin chartDataOrigin))
-    //    {
-    //        // 失敗
-    //        return null;
-    //    }
-
-    //    // 譜面データの変換
-    //    ChartImporterForRhythmGame chartImporter = new ChartImporterForRhythmGame();
-    //    ChartData chart = chartImporter.Import(chartDataOrigin, optionGetter);
-
-    //    // 判定枠の調整
-    //    JudgementWindowAdjuster judgementWindowAdjuster = new JudgementWindowAdjuster();
-    //    judgementWindowAdjuster.AdjustJudgementWindow(chart, judgementWindows);
-
-    //    return chart;
-    //}
-
-    private ChartData LoadChartData(string path)
+    public ChartData LoadChartData(string path)
     {
         if (path == null || path == "")
         {

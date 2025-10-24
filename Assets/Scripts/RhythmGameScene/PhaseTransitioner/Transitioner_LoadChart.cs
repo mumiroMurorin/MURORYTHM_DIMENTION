@@ -23,7 +23,7 @@ namespace TransitionerInRhythmGameScene
         {
             Debug.Log("yTransitionzTransition to \"LoadChart\"");
 
-            chartEnder.Value.BindOnEndChart();
+            chartEnder.Value.BindOnEndChart(() => phaseTransitionable.Value.TransitionPhase(PhaseStatusInRhythmGame.EndAnimation));
             chartGenerator.Value.Generate(() => 
             { 
                 scoreCalculaterSetter.Value.SetScoreCalculater();

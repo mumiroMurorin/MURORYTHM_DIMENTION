@@ -7,8 +7,12 @@ using System;
 using System.Linq;
 using UniRx;
 
-public class ChartGenerator : MonoBehaviour, IChartGenerator
+public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 {
+    [Header("オプション用譜面パス")]
+    [SerializeField] string chartPath;
+    [SerializeField] SerializeInterface<IChartLoader> chartLoader;
+
     [Header("それぞれのNoteFactory")]
     [SerializeField] NoteFactory<NoteData_Touch> touchNoteFactory;
     [SerializeField] NoteFactory<NoteData_DivineTouch> divineTouchNoteFactory;
@@ -32,11 +36,13 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
     [SerializeField] Deformer groundDeformer;
     [SerializeField] SerializeInterface<ITimeGetter> timer;
 
-    [Inject] IChartDataGetter chartDataGetter;
     [Inject] INoteSpawnDataOptionHolder spawnDataOptionHolder;
     [Inject] ISliderInputGetter sliderInputGetter;
     [Inject] ISpaceInputGetter spaceInputGetter;
     [Inject] IJudgementRecorder judgementRecorder;
+
+
+    ChartData chartData;
 
     private void Awake()
     {
@@ -76,6 +82,8 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         spaceHoldRelayNoteFactory.Initialize(data);
         spaceHoldRelayHiddenNoteFactory.Initialize(data);
         spaceBreakNoteFactory.Initialize(data);
+
+        chartData = chartLoader.Value.LoadChartData(chartPath);
     }
 
     /// <summary>
@@ -84,22 +92,22 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
     /// <param name="chartData"></param>
     public void Generate(Action callback = null)
     {
-        GenerateTouchNote(chartDataGetter.Chart.GetNoteDataList(NoteType.Touch).OfType<NoteData_Touch>().ToList());
-        GenerateDevineTouchNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DivineTouch).OfType<NoteData_DivineTouch>().ToList());
-        GenerateDynamicGroundUpwardNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DynamicGroundUpward).OfType<NoteData_DynamicGroundUpward>().ToList());
-        GenerateDynamicGroundRightwardNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DynamicGroundRightward).OfType<NoteData_DynamicGroundRightward>().ToList());
-        GenerateDynamicGroundLeftwardNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DynamicGroundLeftward).OfType<NoteData_DynamicGroundLeftward>().ToList());
-        GenerateDynamicGroundDownwardNote(chartDataGetter.Chart.GetNoteDataList(NoteType.DynamicGroundDownward).OfType<NoteData_DynamicGroundDownward>().ToList());
-        GenerateHoldStartNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldStart).OfType<NoteData_HoldStart>().ToList());
-        GenerateHoldRelayNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldRelay).OfType<NoteData_HoldRelay>().ToList());
-        GenerateHoldRelayHiddenNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldRelayHidden).OfType<NoteData_HoldRelayHidden>().ToList());
-        GenerateHoldEndNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldEnd).OfType<NoteData_HoldEnd>().ToList());
-        GenerateHoldEndUnjudgeNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldEndUnjudge).OfType<NoteData_HoldEndUnjudge>().ToList());
-        GenerateHoldMeshNote(chartDataGetter.Chart.GetNoteDataList(NoteType.HoldMesh).OfType<NoteData_HoldMesh>().ToList());
-        GenerateSpaceHoldMeshNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceHoldMesh).OfType<NoteData_SpaceHoldMesh>().ToList());
-        GenerateSpaceHoldRelayNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceHoldRelay).OfType<NoteData_SpaceHoldRelay>().ToList());
-        GenerateSpaceHoldRelayHiddenNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceHoldRelayHidden).OfType<NoteData_SpaceHoldRelayHidden>().ToList());
-        GenerateSpaceBreakNote(chartDataGetter.Chart.GetNoteDataList(NoteType.SpaceBreak).OfType<NoteData_SpaceBreak>().ToList());
+        GenerateTouchNote(chartData.GetNoteDataList(NoteType.Touch).OfType<NoteData_Touch>().ToList());
+        GenerateDevineTouchNote(chartData.GetNoteDataList(NoteType.DivineTouch).OfType<NoteData_DivineTouch>().ToList());
+        GenerateDynamicGroundUpwardNote(chartData.GetNoteDataList(NoteType.DynamicGroundUpward).OfType<NoteData_DynamicGroundUpward>().ToList());
+        GenerateDynamicGroundRightwardNote(chartData.GetNoteDataList(NoteType.DynamicGroundRightward).OfType<NoteData_DynamicGroundRightward>().ToList());
+        GenerateDynamicGroundLeftwardNote(chartData.GetNoteDataList(NoteType.DynamicGroundLeftward).OfType<NoteData_DynamicGroundLeftward>().ToList());
+        GenerateDynamicGroundDownwardNote(chartData.GetNoteDataList(NoteType.DynamicGroundDownward).OfType<NoteData_DynamicGroundDownward>().ToList());
+        GenerateHoldStartNote(chartData.GetNoteDataList(NoteType.HoldStart).OfType<NoteData_HoldStart>().ToList());
+        GenerateHoldRelayNote(chartData.GetNoteDataList(NoteType.HoldRelay).OfType<NoteData_HoldRelay>().ToList());
+        GenerateHoldRelayHiddenNote(chartData.GetNoteDataList(NoteType.HoldRelayHidden).OfType<NoteData_HoldRelayHidden>().ToList());
+        GenerateHoldEndNote(chartData.GetNoteDataList(NoteType.HoldEnd).OfType<NoteData_HoldEnd>().ToList());
+        GenerateHoldEndUnjudgeNote(chartData.GetNoteDataList(NoteType.HoldEndUnjudge).OfType<NoteData_HoldEndUnjudge>().ToList());
+        GenerateHoldMeshNote(chartData.GetNoteDataList(NoteType.HoldMesh).OfType<NoteData_HoldMesh>().ToList());
+        GenerateSpaceHoldMeshNote(chartData.GetNoteDataList(NoteType.SpaceHoldMesh).OfType<NoteData_SpaceHoldMesh>().ToList());
+        GenerateSpaceHoldRelayNote(chartData.GetNoteDataList(NoteType.SpaceHoldRelay).OfType<NoteData_SpaceHoldRelay>().ToList());
+        GenerateSpaceHoldRelayHiddenNote(chartData.GetNoteDataList(NoteType.SpaceHoldRelayHidden).OfType<NoteData_SpaceHoldRelayHidden>().ToList());
+        GenerateSpaceBreakNote(chartData.GetNoteDataList(NoteType.SpaceBreak).OfType<NoteData_SpaceBreak>().ToList());
 
         callback?.Invoke();
     }

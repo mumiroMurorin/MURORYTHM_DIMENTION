@@ -30,13 +30,7 @@ public class ChartEnder : MonoBehaviour, IChartEnder
             .Subscribe(count =>
             {
                 callback?.Invoke();
-                OnEndChart();
             })
             .AddTo(this.gameObject);
-    }
-
-    private void OnEndChart()
-    {
-        phaseTransitionable.Value.TransitionPhase(PhaseStatusInRhythmGame.EndAnimation);
     }
 }

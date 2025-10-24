@@ -21,7 +21,6 @@ public class TimeCounter : MonoBehaviour, ITimeGetter, ITimeController
 
     public void StartTimer()
     {
-        //time = -firstIntervalSeconds;
         isCounting = true;
     }
 

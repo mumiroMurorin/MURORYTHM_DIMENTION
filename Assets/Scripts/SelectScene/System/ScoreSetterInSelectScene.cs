@@ -11,12 +11,7 @@ public class ScoreSetterInSelectScene : MonoBehaviour
     [Inject] IScoreSetter scoreSetter;
     [Inject] IJudgementRecorder judgementRecorder;
 
-    void Start()
-    {
-        Initialize();
-    }
-
-    private void Initialize()
+    public void Initialize()
     {
         if (scoreSetter == null) { return; }
         if (judgementRecorder == null) { return; }
