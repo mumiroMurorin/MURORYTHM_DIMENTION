@@ -1385,7 +1385,7 @@ GameObject:
   - component: {fileID: 8635590735641912714}
   - component: {fileID: 2958388105188607332}
   m_Layer: 5
-  m_Name: Score
+  m_Name: "\u3010Score\u3011"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1438,10 +1438,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1,000,000
+  m_text: 1,008,888
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
-  m_sharedMaterial: {fileID: 8712543720389648820, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8d140098eeb60674597367bde9b931e8, type: 2}
+  m_sharedMaterial: {fileID: -6676979622335111179, guid: 8d140098eeb60674597367bde9b931e8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1519,7 +1519,7 @@ GameObject:
   - component: {fileID: 3171824405420960602}
   - component: {fileID: 8809036081732059021}
   m_Layer: 5
-  m_Name: '[Score]'
+  m_Name: Score
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

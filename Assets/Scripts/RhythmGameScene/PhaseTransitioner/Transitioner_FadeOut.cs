@@ -10,7 +10,7 @@ namespace TransitionerInRhythmGameScene
     public class Transitioner_FadeOut : IPhaseTransitionerInRhythmGameScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
-        [SerializeField] SerializeInterface<ITimelinePlayer> timelinePlayer;
+        [SerializeField] FadeController fadeController;
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.FadeOut;
 
@@ -24,7 +24,7 @@ namespace TransitionerInRhythmGameScene
             Debug.Log("【Transition】Transition to \"FadeOut\"");
 
             // アニメーションの再生
-            timelinePlayer.Value.PlayAnimation(TransitionNextPhase);
+            fadeController?.FadeOut(TransitionNextPhase);
         }
 
         /// <summary>
