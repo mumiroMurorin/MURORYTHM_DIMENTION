@@ -259,7 +259,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f0092c22bcd0bdf4c8c933449ff7755b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3b585d88773c2ce42abdc140cb35a02a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -366,6 +366,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4459d0fb5a0963a4e89333424a13bbfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dataToBackSprites:
+  - difficulty: 0
+    symphonyType: 10
+    sprite: {fileID: 21300000, guid: 91605706be1796a47a4c021e5847076d, type: 3}
+  - difficulty: 1
+    symphonyType: 10
+    sprite: {fileID: 21300000, guid: ba10b4928298b2a40979bd3083c2304e, type: 3}
+  - difficulty: 2
+    symphonyType: 10
+    sprite: {fileID: 21300000, guid: 3b585d88773c2ce42abdc140cb35a02a, type: 3}
+  - difficulty: 3
+    symphonyType: 10
+    sprite: {fileID: 21300000, guid: 5547e787466c678479ff165ed7cc1fa9, type: 3}
+  - difficulty: 0
+    symphonyType: 20
+    sprite: {fileID: 21300000, guid: eb6e79fe3fdd5e3479549d280c128ddc, type: 3}
+  - difficulty: 1
+    symphonyType: 20
+    sprite: {fileID: 21300000, guid: 023b9957005a4d2489e725c3bf1b4dd0, type: 3}
+  - difficulty: 2
+    symphonyType: 20
+    sprite: {fileID: 21300000, guid: be208b8587eb4764e816faaf7c3dcb4b, type: 3}
+  - difficulty: 3
+    symphonyType: 20
+    sprite: {fileID: 21300000, guid: 8ac1958a7616f4442ba6614e90b18a20, type: 3}
+  - difficulty: 0
+    symphonyType: 0
+    sprite: {fileID: 21300000, guid: fa1c5f839b9f88e4eaf5e625efa2a730, type: 3}
+  - difficulty: 1
+    symphonyType: 0
+    sprite: {fileID: 21300000, guid: 8eb54ce43eff13b4ba3347deadc8ede3, type: 3}
+  - difficulty: 2
+    symphonyType: 0
+    sprite: {fileID: 21300000, guid: f0092c22bcd0bdf4c8c933449ff7755b, type: 3}
+  - difficulty: 3
+    symphonyType: 0
+    sprite: {fileID: 21300000, guid: b7fc574db6e9d3b479509759ec576b48, type: 3}
   titleTmp: {fileID: 4342514843321676114}
   composerTmp: {fileID: 7291364173804043151}
   musicImage: {fileID: 4413212174711656479}
@@ -531,8 +568,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u7948 - \u6211\u3089\u795E\u7956\u3068\u5171\u306B\u6B69\u3080\u8005\u306A\u308A
-    -"
+  m_text: "\u30BF\u30A4\u30C8\u30EB"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
   m_sharedMaterial: {fileID: 8712543720389648820, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}

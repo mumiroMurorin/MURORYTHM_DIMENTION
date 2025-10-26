@@ -9,7 +9,6 @@ namespace UIInRhythmGameScene
 {
     public class RhythmGameUIPresenter : MonoBehaviour
     {
-        [SerializeField] BackGround_View backGround_view;
         [SerializeField] ReadyToPlayUIControllerView readyToPlayUIControllerView;
 
         IScoreGetter scoreGetter_model;
@@ -32,18 +31,12 @@ namespace UIInRhythmGameScene
             // 楽曲データに関連するUI
             musicDataGetter_model?.Music
                 .Where(data => data != null)
-                .Subscribe(OnSetMusicData)
+                .Subscribe(readyToPlayUIControllerView.SetMusicData)
                 .AddTo(this.gameObject);
-        }
 
-        /// <summary>
-        /// 楽曲データに関するUI情報をセット
-        /// </summary>
-        /// <param name="musicData"></param>
-        private void OnSetMusicData(MusicData musicData)
-        {
-            readyToPlayUIControllerView.SetMusicData(musicData);
-            backGround_view.OnSetMusicData(musicData);
+            musicDataGetter_model?.Difficulty
+                .Subscribe(readyToPlayUIControllerView.SetDifficulty)
+                .AddTo(this.gameObject);
         }
     }
 
