@@ -128,15 +128,15 @@ public class NoteFactory_DynamicGroundUpward : NoteFactory<NoteData_DynamicGroun
     /// </summary>
     private void SetTransform(NoteObject<NoteData_DynamicGroundUpward> note, NoteData_DynamicGroundUpward data)
     {
+        // ìÆÇ≠ínñ Çêeìoò^
+        note.transform.SetParent(groundObject.transform);
+
         // à íuÇÃí≤êÆ
-        note.transform.position = new Vector3(
+        note.transform.localPosition = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
             optionHolder.NoteSpeed.Value * data.Timing
             );
-
-        // ìÆÇ≠ínñ Çêeìoò^
-        note.transform.SetParent(groundObject.transform);
     }
 }
 

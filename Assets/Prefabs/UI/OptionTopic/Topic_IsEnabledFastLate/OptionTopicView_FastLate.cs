@@ -9,10 +9,18 @@ namespace UIInSelectScene
     public class OptionTopicView_FastLate : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI tmp;
+        [SerializeField] GameObject normalSample;
+        [SerializeField] GameObject fastLateSample;
 
         public void OnChangeEnabledFastLate(string display)
         {
             tmp.text = display;
+        }
+
+        public void OnChangeEnabledFastLate(bool isEnabled)
+        {
+            normalSample.SetActive(!isEnabled);
+            fastLateSample.SetActive(isEnabled);
         }
     }
 }

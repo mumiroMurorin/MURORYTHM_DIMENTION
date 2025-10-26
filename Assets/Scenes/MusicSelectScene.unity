@@ -1613,74 +1613,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: BGMFadeOutDuration
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.size
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: BGMCrossFadeDuration
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.data[0].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 3e5c0f7fdda3d1847a09bc3dc6564999, type: 3}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.data[0].type
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.data[1].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 2236d8b3c41bc5448b0d5d8d5c8c5d61, type: 3}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.data[1].type
-      value: 110
-      objectReference: {fileID: 0}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.data[2].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 2236d8b3c41bc5448b0d5d8d5c8c5d61, type: 3}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.data[2].type
-      value: 111
-      objectReference: {fileID: 0}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.data[3].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 77a0b5bb22755f6478a32f3ee9d3973b, type: 3}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.data[3].type
-      value: 120
-      objectReference: {fileID: 0}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.data[4].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 441bc174734325644aaa50c3d23972a0, type: 3}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.data[4].type
-      value: 130
-      objectReference: {fileID: 0}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.data[5].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 77a0b5bb22755f6478a32f3ee9d3973b, type: 3}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.data[5].type
-      value: 140
-      objectReference: {fileID: 0}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.data[6].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 77a0b5bb22755f6478a32f3ee9d3973b, type: 3}
-    - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
-      propertyPath: seClips.Array.data[6].type
-      value: 150
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3962,6 +3894,8 @@ MonoBehaviour:
   chartLoader:
     obj: {fileID: 874170451}
   scoreSetter: {fileID: 874170453}
+  statusGetter:
+    obj: {fileID: 1012713960}
   timeController:
     obj: {fileID: 996988513}
   chartGenerator:
@@ -5695,8 +5629,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 996988515}
   - {fileID: 874170452}
+  - {fileID: 996988515}
   - {fileID: 341579576}
   - {fileID: 1177344078}
   - {fileID: 2129207706}

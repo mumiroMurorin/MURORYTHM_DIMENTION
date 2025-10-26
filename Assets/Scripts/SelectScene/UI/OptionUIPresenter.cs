@@ -16,13 +16,7 @@ namespace UIInSelectScene
         [SerializeField] SerializeInterface<IOperationGetter> operationGetter_model;
         [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseStatusGetter_model;
 
-        ISelectSceneDataGetter selectSceneDataGetter_model;
-
-        [Inject]
-        public void Construct(ISelectSceneDataGetter selectSceneDataGetter)
-        {
-            selectSceneDataGetter_model = selectSceneDataGetter;
-        }
+        [Inject] ISelectSceneDataGetter selectSceneDataGetter_model;
 
         void Start()
         {

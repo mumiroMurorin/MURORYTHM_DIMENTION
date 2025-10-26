@@ -12,7 +12,10 @@ namespace UIInSelectScene
         public void Bind(IOptionGetter optionGetter)
         {
             optionGetter.IsEnabledFastLate
-                .Subscribe(_ => view.OnChangeEnabledFastLate(optionGetter.EnabledFastLateDisplay))
+                .Subscribe(enabled => { 
+                    view.OnChangeEnabledFastLate(optionGetter.EnabledFastLateDisplay);
+                    view.OnChangeEnabledFastLate(enabled);
+                })
                 .AddTo(this.gameObject);
         }
 

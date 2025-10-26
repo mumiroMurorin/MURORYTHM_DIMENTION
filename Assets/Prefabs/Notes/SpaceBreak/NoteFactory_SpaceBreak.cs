@@ -159,14 +159,14 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     /// </summary>
     private void SetTransform(NoteObject<NoteData_SpaceBreak> note, NoteData_SpaceBreak data)
     {
+        // ìÆÇ≠ínñ Çêeìoò^
+        note.transform.SetParent(groundObject.transform);
+
         // à íuÇÃí≤êÆ
-        note.transform.position = new Vector3(
+        note.transform.localPosition = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
             optionHolder.NoteSpeed.Value * data.Timing
             );
-
-        // ìÆÇ≠ínñ Çêeìoò^
-        note.transform.SetParent(groundObject.transform);
     }
 }

@@ -128,15 +128,15 @@ public class NoteFactory_HoldEnd : NoteFactory<NoteData_HoldEnd>
     /// </summary>
     private void SetTransform(NoteObject<NoteData_HoldEnd> note, NoteData_HoldEnd data)
     {
+        // ìÆÇ≠ínñ Çêeìoò^
+        note.transform.SetParent(groundObject.transform);
+
         // à íuÇÃí≤êÆ
-        note.transform.position = new Vector3(
+        note.transform.localPosition = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
             optionHolder.NoteSpeed.Value * data.Timing
             );
-
-        // ìÆÇ≠ínñ Çêeìoò^
-        note.transform.SetParent(groundObject.transform);
     }
 }
 

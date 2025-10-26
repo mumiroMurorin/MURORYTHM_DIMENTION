@@ -93,7 +93,9 @@ public class Operation_Option : MonoBehaviour
     private void ChangeTopicValue(int delta)
     {
         OptionType currentType = selectSceneDataGetter.GetOptionType(selectSceneDataGetter.CurrentOptionIndex.Value);
-        optionSetter.SetOption(currentType, delta);
+
+        // ’l‚ª•ÏX‚³‚ê‚½ê‡‚Í‰¹‚ğÄ¶
+        if (optionSetter.SetOption(currentType, delta)) { SoundManager.Instance.PlaySE(SE_Type.ChangeOptionValue); }
     }
 
     /// <summary>

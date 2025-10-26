@@ -15,6 +15,7 @@ public class ChartControllerInSelectScene : MonoBehaviour
     [Inject] IOptionSetter optionSetter;
 
     [SerializeField] ScoreSetterInSelectScene scoreSetter;
+    [SerializeField] SerializeInterface<TransitionerInSelectScene.IPhaseStatusGetterInSelectScene> statusGetter;
     [SerializeField] SerializeInterface<ITimeController> timeController;
     [SerializeField] SerializeInterface<IChartGenerator> chartGenerator;
     [SerializeField] SerializeInterface<IChartEnder> chartEnder;
@@ -30,6 +31,17 @@ public class ChartControllerInSelectScene : MonoBehaviour
 
     private void Bind()
     {
+        // ステータスがオプションのときのみ譜面を動かす
+        statusGetter?.Value?.PhaseStatus
+            .Where(status => status == PhaseStatusInSelectScene.MusicOption)
+            .Subscribe(_ => { timeController?.Value?.StartTimer(); })
+            .AddTo(this.gameObject);
+
+        statusGetter?.Value?.PhaseStatus
+            .Where(status => status != PhaseStatusInSelectScene.MusicOption)
+            .Subscribe(_ => { timeController?.Value?.StopTimer(); })
+            .AddTo(this.gameObject);
+
         // オフセットが変わった際はリセット
         optionGetter?.OffsetMs
             .Subscribe(_ => ReloadChart())

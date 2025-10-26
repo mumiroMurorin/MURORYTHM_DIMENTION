@@ -128,15 +128,15 @@ public class NoteFactory_HoldRelayHidden : NoteFactory<NoteData_HoldRelayHidden>
     /// </summary>
     private void SetTransform(NoteObject<NoteData_HoldRelayHidden> note, NoteData_HoldRelayHidden data)
     {
+        // ìÆÇ≠ínñ Çêeìoò^
+        note.transform.SetParent(groundObject.transform);
+
         // à íuÇÃí≤êÆ
-        note.transform.position = new Vector3(
+        note.transform.localPosition = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
             optionHolder.NoteSpeed.Value * data.Timing
             );
-
-        // ìÆÇ≠ínñ Çêeìoò^
-        note.transform.SetParent(groundObject.transform);
     }
 }
 

@@ -122,15 +122,15 @@ public class NoteFactory_HoldEndUnjudge : NoteFactory<NoteData_HoldEndUnjudge>
     /// </summary>
     private void SetTransform(NoteObject<NoteData_HoldEndUnjudge> note, NoteData_HoldEndUnjudge data)
     {
+        // ìÆÇ≠ínñ Çêeìoò^
+        note.transform.SetParent(groundObject.transform);
+
         // à íuÇÃí≤êÆ
-        note.transform.position = new Vector3(
+        note.transform.localPosition = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
             optionHolder.NoteSpeed.Value * data.Timing
             );
-
-        // ìÆÇ≠ínñ Çêeìoò^
-        note.transform.SetParent(groundObject.transform);
     }
 }
 

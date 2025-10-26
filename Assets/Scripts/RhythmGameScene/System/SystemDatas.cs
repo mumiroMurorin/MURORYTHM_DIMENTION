@@ -201,6 +201,27 @@ public class DifficultyToRecord
     }
 }
 
+[System.Serializable]
+public class ScoreRankToSprite
+{
+    [SerializeField] ScoreRank rank;
+    [SerializeField] Sprite sprite;
+
+    public bool CheckCondition(ScoreRank rank) { return this.rank == rank; }
+
+    public Sprite Sprite { get { return sprite; } }
+}
+
+[System.Serializable]
+public class ComboRankToSprite
+{
+    [SerializeField] ComboRank rank;
+    [SerializeField] Sprite sprite;
+
+    public bool CheckCondition(ComboRank rank) { return this.rank == rank; }
+
+    public Sprite Sprite { get { return sprite; } }
+}
 
 [System.Serializable]
 public class DifficultyToSprite

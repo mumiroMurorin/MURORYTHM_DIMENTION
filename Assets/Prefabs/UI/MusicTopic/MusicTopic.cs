@@ -14,12 +14,15 @@ public abstract class MusicTopic : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI score_tmp;
     [SerializeField] protected Image back_image;
     [SerializeField] protected Image music_image;
-    [SerializeField] protected GameObject comp_obj;
-    [SerializeField] protected GameObject fc_obj;
-    [SerializeField] protected GameObject ap_obj;
+    [SerializeField] protected Image scoreLamp_image;
+    [SerializeField] protected Image comboLamp_image;
 
     [Header("難易度別背景")]
     [SerializeField] DifficultyToSprite[] difficultyToBackGround;
+    [Header("スコアランク別ランプ")]
+    [SerializeField] ScoreRankToSprite[] rankToLampSprite;
+    [Header("コンボランク別ランプ")]
+    [SerializeField] ComboRankToSprite[] comboRankToLampSprite;
 
     /// <summary>
     /// 楽曲データのセット
@@ -60,12 +63,27 @@ public abstract class MusicTopic : MonoBehaviour
         // レコード
         score_tmp.text = record.Score.ToString("N0");
 
-        //TRACK COMPLETE
-        comp_obj.SetActive(record.ComboRank == ComboRank.TrackComplete);
-        //FULL COMBO
-        fc_obj.SetActive(record.ComboRank == ComboRank.FullCombo);
-        //ALL PERFECT
-        ap_obj.SetActive(record.ComboRank == ComboRank.AllPerfect);
+        // スコアランプ
+        scoreLamp_image.gameObject.SetActive(record.ScoreRank != ScoreRank.None);
+        foreach (var spr in rankToLampSprite)
+        {
+            if (spr.CheckCondition(record.ScoreRank))
+            {
+                scoreLamp_image.sprite = spr.Sprite;
+                break;
+            }
+        }
+
+        // コンボランプ
+        comboLamp_image.gameObject.SetActive(record.ComboRank != ComboRank.None);
+        foreach (var spr in comboRankToLampSprite)
+        {
+            if (spr.CheckCondition(record.ComboRank))
+            {
+                comboLamp_image.sprite = spr.Sprite;
+                break;
+            }
+        }
     }
 
     /// <summary>

@@ -46,11 +46,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BGMFadeInDuration: 1
   BGMFadeOutDuration: 3
-  BGMCrossFadeDuration: 2
+  BGMCrossFadeDuration: 0.2
   Mute: 0
   bgmClips: []
-  seClips: []
-  judgementSEs: []
+  seClips:
+  - type: 100
+    clip: {fileID: 8300000, guid: 3e5c0f7fdda3d1847a09bc3dc6564999, type: 3}
+  - type: 110
+    clip: {fileID: 8300000, guid: 2236d8b3c41bc5448b0d5d8d5c8c5d61, type: 3}
+  - type: 111
+    clip: {fileID: 8300000, guid: 2236d8b3c41bc5448b0d5d8d5c8c5d61, type: 3}
+  - type: 120
+    clip: {fileID: 8300000, guid: 77a0b5bb22755f6478a32f3ee9d3973b, type: 3}
+  - type: 130
+    clip: {fileID: 8300000, guid: 441bc174734325644aaa50c3d23972a0, type: 3}
+  - type: 140
+    clip: {fileID: 8300000, guid: 77a0b5bb22755f6478a32f3ee9d3973b, type: 3}
+  - type: 150
+    clip: {fileID: 8300000, guid: 77a0b5bb22755f6478a32f3ee9d3973b, type: 3}
+  - type: 160
+    clip: {fileID: 8300000, guid: 2236d8b3c41bc5448b0d5d8d5c8c5d61, type: 3}
+  judgementSEs:
+  - {fileID: 11400000, guid: a643cb651d507e84da9b38b124522d15, type: 2}
+  - {fileID: 11400000, guid: 50fd7c4dc5808e54394cba875597b8b1, type: 2}
+  - {fileID: 11400000, guid: 06a30882e7e99684a821f7a7f35d57ca, type: 2}
+  - {fileID: 11400000, guid: 33a4b314d2ad7034695dc3d47494aadb, type: 2}
+  - {fileID: 11400000, guid: 9330bafc1afe2334894277b1678b8179, type: 2}
+  - {fileID: 11400000, guid: b4ce2e9dd4219b543ac807ad1db83831, type: 2}
+  - {fileID: 11400000, guid: d96818610e991bb4683306590533e520, type: 2}
+  - {fileID: 11400000, guid: 5a67ffdb1c09db44594e84dd4ceebd23, type: 2}
+  - {fileID: 11400000, guid: 1dd8bc3ef99d2ab49848e1c834a31353, type: 2}
+  - {fileID: 11400000, guid: 0c85930e4337b8f4db5675d738403b3c, type: 2}
+  - {fileID: 11400000, guid: b2994cfc0c031ed4b9659715f566b4c9, type: 2}
   audioMixerGroupSE: {fileID: -353128144009607815, guid: 18dc00cef6493e84aa0ccee3f1e17fdf, type: 2}
   audioMixerGroupJudgementSE: {fileID: -2767609628589665510, guid: 18dc00cef6493e84aa0ccee3f1e17fdf, type: 2}
   audioMixerGroupBGM: {fileID: 7211132152348954227, guid: 18dc00cef6493e84aa0ccee3f1e17fdf, type: 2}

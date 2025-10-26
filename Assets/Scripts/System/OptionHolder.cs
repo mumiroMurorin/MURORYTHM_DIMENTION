@@ -10,36 +10,27 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     /// </summary>
     /// <param name="optionType"></param>
     /// <param name="delta"></param>
-    public void SetOption(OptionType optionType, int delta)
+    public bool SetOption(OptionType optionType, int delta)
     {
         switch (optionType)
         {
             case OptionType.NoteSpeed:
-                AddNoteSpeed(delta);
-                break;
+                return AddNoteSpeed(delta);
             case OptionType.Offset:
-                AddOffset(delta);
-                break;
+                return AddOffset(delta);
             case OptionType.DivisionNum:
-                AddGroundDivisionNum(delta);
-                break;
-                // 仮
-            case OptionType.MusicVolume:
-                AddBGMVolume(delta);
-                break;
+                return AddGroundDivisionNum(delta);
             case OptionType.JudgementSEVolume:
-                AddJudgementSeVolume(delta);
-                break;
+                return AddJudgementSeVolume(delta);
             case OptionType.IsEnabledFastLate:
-                SetIsEnabledFastLate(!IsEnabledFastLate.Value);
-                break;
+                return SetIsEnabledFastLate(!IsEnabledFastLate.Value);
             case OptionType.MainInfo:
-                ChangeMainInfo();
-                break;
+                return ChangeMainInfo();
             case OptionType.SubInfo:
-                ChangeSubInfo();
-                break;
+                return ChangeSubInfo();
         }
+
+        return false;
     }
 
 
@@ -63,9 +54,14 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     /// += delta * 20f
     /// </summary>
     /// <param name="delta"></param>
-    void AddNoteSpeed(int delta)
+    bool AddNoteSpeed(int delta)
     {
+        if (noteSpeed.Value >= MAX_NOTESPEED && delta > 0) { return false; }
+        if (noteSpeed.Value <= MIN_NOTESPEED && delta < 0) { return false; }
+
         noteSpeed.Value = Mathf.Clamp(noteSpeed.Value + delta * 10f, MIN_NOTESPEED, MAX_NOTESPEED);
+
+        return true;
     }
 
     #endregion
@@ -86,9 +82,13 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     /// += delta * 0.1f
     /// </summary>
     /// <param name="delta"></param>
-    void AddSEVolume(int delta)
+    bool AddSEVolume(int delta)
     {
+        if (seVolume.Value <= 0f && delta < 0) { return false; }
+        if (seVolume.Value >= 1f && delta > 0) { return false; }
+
         seVolume.Value = Mathf.Clamp01(seVolume.Value + delta * 0.1f);
+        return true;
     }
 
     // 判定音関係
@@ -104,9 +104,14 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     /// += delta * 0.1f
     /// </summary>
     /// <param name="delta"></param>
-    void AddJudgementSeVolume(int delta)
+    bool AddJudgementSeVolume(int delta)
     {
+        if (judgementSeVolume.Value <= 0f && delta < 0) { return false; }
+        if (judgementSeVolume.Value >= 1f && delta > 0) { return false; }
+
         judgementSeVolume.Value = Mathf.Clamp01(judgementSeVolume.Value + delta * 0.1f);
+
+        return true;
     }
 
     #endregion
@@ -153,9 +158,13 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     /// += delta * 10f
     /// </summary>
     /// <param name="delta"></param>
-    void AddOffset(int delta)
+    bool AddOffset(int delta)
     {
+        if (offset.Value <= MIN_OFFSET && delta < 0) { return false; }
+        if (offset.Value >= MAX_OFFSET && delta > 0) { return false; }
+
         offset.Value = Mathf.Clamp(offset.Value + delta * 10f, MIN_OFFSET, MAX_OFFSET);
+        return true;
     }
 
     #endregion
@@ -166,7 +175,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     ReactiveProperty<int> groundDivisionNum = new ReactiveProperty<int>(4);
     public IReadOnlyReactiveProperty<int> GroundDivisionNum => groundDivisionNum;
     public int GroundDivisionNumDisplay => groundDivisionNum.Value;
-    public void AddGroundDivisionNum(int delta)
+    public bool AddGroundDivisionNum(int delta)
     {
         if(delta > 0)
         {
@@ -216,6 +225,8 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
                 }
             }
         }
+
+        return true;
     }
 
     #endregion
@@ -225,9 +236,10 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
 
     ReactiveProperty<bool> isEnabledFastLate = new ReactiveProperty<bool>(false);
     public IReadOnlyReactiveProperty<bool> IsEnabledFastLate => isEnabledFastLate;
-    public void SetIsEnabledFastLate(bool isEnabled)
+    public bool SetIsEnabledFastLate(bool isEnabled)
     {
         isEnabledFastLate.Value = isEnabled;
+        return true;
     }
     public string EnabledFastLateDisplay 
     {
@@ -242,7 +254,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     // メイン情報
     ReactiveProperty<InfoTypeMain> mainInfo = new ReactiveProperty<InfoTypeMain>(InfoTypeMain.ScoreRank);
     public IReadOnlyReactiveProperty<InfoTypeMain> MainInfo => mainInfo;
-    public void ChangeMainInfo()
+    public bool ChangeMainInfo()
     {
         switch (mainInfo.Value)
         {
@@ -265,6 +277,8 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
                 mainInfo.Value = InfoTypeMain.None;
                 break;
         }
+
+        return true;
     }
     public string MainInfoDisplay { 
         get 
@@ -292,7 +306,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     // サブ情報
     ReactiveProperty<InfoTypeSub> subInfo = new ReactiveProperty<InfoTypeSub>(InfoTypeSub.Breakdown);
     public IReadOnlyReactiveProperty<InfoTypeSub> SubInfo => subInfo;
-    public void ChangeSubInfo()
+    public bool ChangeSubInfo()
     {
         switch (subInfo.Value)
         {
@@ -312,6 +326,8 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
                 subInfo.Value = InfoTypeSub.None;
                 break;
         }
+
+        return true;
     }
     public string SubInfoDisplay
     {
@@ -326,7 +342,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
                 case InfoTypeSub.ScoreSubtraction:
                     return "スコア\n<size=50%>(減算方式)";
                 case InfoTypeSub.ComboRank:
-                    return "AP / FC";
+                    return "AP/FC";
                 case InfoTypeSub.Breakdown:
                     return "判定内訳";
             }
@@ -419,11 +435,17 @@ public interface IOptionGetter
 
 public interface IOptionSetter
 {
-    void SetOption(OptionType optionType, int delta);
+    /// <summary>
+    /// オプションの値を次の値に
+    /// </summary>
+    /// <param name="optionType"></param>
+    /// <param name="delta"></param>
+    /// <returns>値の変更に成功？</returns>
+    bool SetOption(OptionType optionType, int delta);
 
     void SetNoteSpeed(float speed);
 
-    void SetIsEnabledFastLate(bool isEnabled);
+    bool SetIsEnabledFastLate(bool isEnabled);
 
     void SetAutoMode(bool isAutoMode);
 

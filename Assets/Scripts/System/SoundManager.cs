@@ -27,6 +27,7 @@ public enum SE_Type
     DesicionMusic = 130,
     BackTopic1 = 140,
     SelectOption = 150,
+    ChangeOptionValue = 160,
 
     BackSelectScene = 810,
 }
@@ -265,7 +266,7 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
     /// <param name="seType"></param>
     public void PlaySE(SE_Type seType)
     {
-        PlaySE(GetSEClip(seType));
+        PlaySE(GetSEClip(seType), audioMixerGroupSE);
     }
 
     /// <summary>

@@ -134,14 +134,14 @@ public class NoteFactory_SpaceHoldRelayHidden : NoteFactory<NoteData_SpaceHoldRe
     /// </summary>
     private void SetTransform(NoteObject<NoteData_SpaceHoldRelayHidden> note, NoteData_SpaceHoldRelayHidden data)
     {
+        // ìÆÇ≠ínñ Çêeìoò^
+        note.transform.SetParent(groundObject.transform);
+
         // à íuÇÃí≤êÆ
-        note.transform.position = new Vector3(
+        note.transform.localPosition = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
             optionHolder.NoteSpeed.Value * data.Timing
             );
-
-        // ìÆÇ≠ínñ Çêeìoò^
-        note.transform.SetParent(groundObject.transform);
     }
 }
