@@ -20,9 +20,11 @@ namespace UIInResultScene
                 if (spr.CheckCondition(comboRank))
                 {
                     comboLamp_image.sprite = spr.Sprite;
-                    break;
+                    return;
                 }
             }
+
+            comboLamp_image.gameObject.SetActive(false);
         }
 
         public void OnChangeScoreRank(ScoreRank scoreRank)
@@ -32,9 +34,11 @@ namespace UIInResultScene
                 if (spr.CheckCondition(scoreRank))
                 {
                     scoreLamp_image.sprite = spr.Sprite;
-                    break;
+                    return;
                 }
             }
+
+            scoreLamp_image.gameObject.SetActive(false);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using VContainer;
 using UniRx;
 
@@ -8,9 +9,11 @@ namespace UIInResultScene
 {
     public class ResultUIPresenter : MonoBehaviour
     {
+        [SerializeField] Image backGround;
         [SerializeField] MusicInfoView musicInfo_view;
         [SerializeField] ScoreView score_view;
         [SerializeField] ScoreRankView scoreRank_view;
+        [SerializeField] DifficultyViewController difficulty_view;
         [SerializeField] BreakdownView breakdown_view;
         [SerializeField] AchievementView achievement_view;
 
@@ -31,8 +34,14 @@ namespace UIInResultScene
 
         private void Start()
         {
+            Initialize();
             Bind();
             SetEvent();
+        }
+
+        private void Initialize()
+        {
+            backGround.sprite = musicDataGetter_model.Music.Value.ThemeSprite;
         }
 
         private void Bind()
@@ -40,6 +49,19 @@ namespace UIInResultScene
             // 楽曲データ
             musicDataGetter_model?.Music
                 .Subscribe(musicInfo_view.OnChangeMusicData)
+                .AddTo(this.gameObject);
+
+            musicDataGetter_model?.Difficulty
+                .Subscribe(musicInfo_view.OnChangeDifficulty)
+                .AddTo(this.gameObject);
+
+            // 難易度データ
+            musicDataGetter_model?.Music
+                .Subscribe(difficulty_view.OnChangeMusicData)
+                .AddTo(this.gameObject);
+
+            musicDataGetter_model.Difficulty
+                .Subscribe(difficulty_view.OnChangeDifficulty)
                 .AddTo(this.gameObject);
 
             // スコアデータ

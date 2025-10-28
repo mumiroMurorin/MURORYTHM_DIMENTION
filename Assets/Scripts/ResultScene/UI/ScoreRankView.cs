@@ -18,7 +18,7 @@ namespace UIInResultScene
             {
                 if (preset.ScoreRank != scoreRank) { continue; }
 
-                preset.ApplyPreset(tmp);
+                preset.ApplyPreset(tmp, true);
             }
         }
     }

@@ -226,26 +226,29 @@ public class ComboRankToSprite
 [System.Serializable]
 public class ScoreRankTextMaterialPreset
 {
+    [SerializeField] string text;
     [SerializeField] ScoreRank scoreRank;
     [SerializeField] Material fontMaterial;
     [SerializeField] TMP_ColorGradient colorGradient;
 
     public ScoreRank ScoreRank { get { return scoreRank; } }
 
-    public void ApplyPreset(TextMeshPro tmp)
+    public void ApplyPreset(TextMeshPro tmp, bool isApplyText = false)
     {
         if (tmp == null) { return; }
 
         tmp.fontMaterial = fontMaterial;
         tmp.colorGradientPreset = colorGradient;
+        if (isApplyText) { tmp.text = this.text; }
     }
 
-    public void ApplyPreset(TextMeshProUGUI tmp)
+    public void ApplyPreset(TextMeshProUGUI tmp, bool isApplyText = false)
     {
         if (tmp == null) { return; }
 
         tmp.fontMaterial = fontMaterial;
         tmp.colorGradientPreset = colorGradient;
+        if (isApplyText) { tmp.text = this.text; }
     }
 }
 
