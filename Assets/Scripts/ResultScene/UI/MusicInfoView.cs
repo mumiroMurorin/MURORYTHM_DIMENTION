@@ -6,25 +6,19 @@ using TMPro;
 
 namespace UIInResultScene
 {
-    public class MusicDataUIControllerView : MonoBehaviour
+    public class MusicInfoView : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI musicTitle_text;
         [SerializeField] TextMeshProUGUI composer_text;
-        [SerializeField] TextMeshProUGUI difficulty_text;
-        [SerializeField] Image thumbnail_image;
+        [SerializeField] Image jacket_image;
 
-        public void SetMusicData(MusicData musicData)
+        public void OnChangeMusicData(MusicData musicData)
         {
             if (musicData == null) { return; }
 
             if (musicTitle_text && musicData.MusicName != null) { musicTitle_text.text = musicData.MusicName; }
             if (composer_text && musicData.ComposerName != null) { composer_text.text = musicData.ComposerName; }
-            if (thumbnail_image && musicData.MusicSprite != null) { thumbnail_image.sprite = musicData.MusicSprite; }
-        }
-
-        public void SetDifficulty(Difficulty difficulty)
-        {
-            if (difficulty_text) { difficulty_text.text = difficulty.ToString().ToUpper(); }
+            if (jacket_image && musicData.MusicSprite != null) { jacket_image.sprite = musicData.MusicSprite; }
         }
     }
 

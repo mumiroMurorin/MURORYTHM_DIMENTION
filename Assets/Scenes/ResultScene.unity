@@ -377,14 +377,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicData_debug:
-    music_name: 
-    composer_name: 
-    music_spr: {fileID: 0}
-    theme_spr: {fileID: 0}
+    music_name: Armageddon
+    composer_name: Leaf
+    music_spr: {fileID: 21300000, guid: c20a5d106028bbc45ba16da3bc4a4a67, type: 3}
+    theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
     clip: {fileID: 0}
     sample_clip: {fileID: 0}
-    symphonyType: 0
-    stageType: 100
+    symphonyType: 20
+    stageType: 200
     difficulties: 00000000000000000000000000000000
     chartPaths:
     - 
@@ -402,6 +402,7 @@ GameObject:
   - component: {fileID: 104637678}
   - component: {fileID: 104637680}
   - component: {fileID: 104637679}
+  - component: {fileID: 104637681}
   m_Layer: 5
   m_Name: Score
   m_TagString: Untagged
@@ -469,6 +470,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 104637677}
   m_CullTransparentMesh: 1
+--- !u!114 &104637681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104637677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a80021051a86564cbde1525f1502408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  presets:
+  - scoreRank: 1
+    fontMaterial: {fileID: 2100000, guid: 05b216c002f5eaf41b726caa7e8df71c, type: 2}
+    colorGradient: {fileID: 11400000, guid: 19a835d3db6d0fd46bfee6a76a15b3da, type: 2}
+  - scoreRank: 2
+    fontMaterial: {fileID: 2100000, guid: 97edaa25e4c2c1a4499ee3b5665aed69, type: 2}
+    colorGradient: {fileID: 11400000, guid: c0582ad0a3cc97643b4d40b046853a00, type: 2}
+  - scoreRank: 3
+    fontMaterial: {fileID: 2100000, guid: 9b699e1a22e95db43a1c9e7d66b701d3, type: 2}
+    colorGradient: {fileID: 11400000, guid: 5d395c69906ab9448bdc86a0139287b7, type: 2}
+  - scoreRank: 4
+    fontMaterial: {fileID: 2100000, guid: 0eecf835d610b1746874dca7c2de1188, type: 2}
+    colorGradient: {fileID: 11400000, guid: a87c19b5206b6fb4883a045b025902e8, type: 2}
+  - scoreRank: 5
+    fontMaterial: {fileID: 2100000, guid: 56740f3d3cfa5e74baacf9b97c6db4cf, type: 2}
+    colorGradient: {fileID: 11400000, guid: 6c31eb87602d90c4f803cd9da9b594c6, type: 2}
+  - scoreRank: 6
+    fontMaterial: {fileID: 2100000, guid: 78b779e7f15045a49b02cc4f9bc9f1f6, type: 2}
+    colorGradient: {fileID: 11400000, guid: 3dd5f0338afb02242ac559519550f47a, type: 2}
+  - scoreRank: 7
+    fontMaterial: {fileID: 2100000, guid: 891140c7ae97e674490a1bd473ae65f1, type: 2}
+    colorGradient: {fileID: 11400000, guid: 9adc392dbedb4674da2ada942e898e74, type: 2}
+  - scoreRank: 8
+    fontMaterial: {fileID: 2100000, guid: 0be32cb919d743941a893525d5a35b38, type: 2}
+    colorGradient: {fileID: 11400000, guid: ac52a9e8a76b4fc4abc283c27c5916b2, type: 2}
+  - scoreRank: 9
+    fontMaterial: {fileID: 2100000, guid: b5d2b2fa2d3048741b0a61a6b441640a, type: 2}
+    colorGradient: {fileID: 11400000, guid: 5501fe4d93a35494da5154b6a43b8784, type: 2}
+  - scoreRank: 10
+    fontMaterial: {fileID: 2100000, guid: 35318e7367c14d54b8768182926faac9, type: 2}
+    colorGradient: {fileID: 11400000, guid: 69fe1a129fb33c3419ce2bf18e9934ed, type: 2}
+  - scoreRank: 11
+    fontMaterial: {fileID: 2100000, guid: 1697d0028c68bf740a92bed472689ae4, type: 2}
+    colorGradient: {fileID: 11400000, guid: 4f83e059a5ab25f4cb454ed38382f4a1, type: 2}
+  - scoreRank: 12
+    fontMaterial: {fileID: 2100000, guid: 4d70ff191eb67644e812f8e728b1f1ea, type: 2}
+    colorGradient: {fileID: 11400000, guid: 5478899d93f12d04fa242d604546dfa8, type: 2}
+  tmp: {fileID: 1792303226}
 --- !u!1 &115802741
 GameObject:
   m_ObjectHideFlags: 0
@@ -608,6 +659,7 @@ GameObject:
   - component: {fileID: 202905414}
   - component: {fileID: 202905416}
   - component: {fileID: 202905415}
+  - component: {fileID: 202905417}
   m_Layer: 5
   m_Name: Achievement
   m_TagString: Untagged
@@ -675,6 +727,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 202905413}
   m_CullTransparentMesh: 1
+--- !u!114 &202905417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 202905413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e462c014a255d8047958d7764c91f375, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  comboRankToSprites:
+  - rank: 2
+    sprite: {fileID: 0}
+  - rank: 3
+    sprite: {fileID: 21300000, guid: fdbceea26f55fee4286145eca1cf137e, type: 3}
+  - rank: 5
+    sprite: {fileID: 21300000, guid: fc1a1d8e37fcfa34da8d23699a6eda53, type: 3}
+  scoreRankToSprites:
+  - rank: 12
+    sprite: {fileID: 21300000, guid: b30832935b5dfc742a7e148155c4c735, type: 3}
+  - rank: 11
+    sprite: {fileID: 21300000, guid: 6fd55622092bc374ebad9a0dd84edb32, type: 3}
+  - rank: 10
+    sprite: {fileID: 21300000, guid: 4970700695014bb40ab8057b6b5537e5, type: 3}
+  - rank: 9
+    sprite: {fileID: 21300000, guid: d4760b663eec6e7498450c97b625297d, type: 3}
+  - rank: 8
+    sprite: {fileID: 21300000, guid: 97368432c2df922438474fd010e3d224, type: 3}
+  - rank: 7
+    sprite: {fileID: 21300000, guid: d897ebd8b1c5efb43b3cb5dd5b5f5c40, type: 3}
+  - rank: 6
+    sprite: {fileID: 21300000, guid: 65f6f3fa70e66b74c825b68797e46e3e, type: 3}
+  - rank: 5
+    sprite: {fileID: 21300000, guid: 26233400bddeaf746be8a59d5cc2d8ca, type: 3}
+  - rank: 4
+    sprite: {fileID: 21300000, guid: 51b673131de10d64ab531a9361750991, type: 3}
+  - rank: 3
+    sprite: {fileID: 21300000, guid: f34459e0cc964e345aecbe17cf53d242, type: 3}
+  - rank: 2
+    sprite: {fileID: 21300000, guid: 39690e05c391e6240b23a36e2687f01e, type: 3}
+  - rank: 1
+    sprite: {fileID: 21300000, guid: b1bb4e5923d22c04e98afdd063caec32, type: 3}
+  comboLamp_image: {fileID: 471411701}
+  scoreLamp_image: {fileID: 291527418}
 --- !u!1 &205437913
 GameObject:
   m_ObjectHideFlags: 0
@@ -1033,6 +1131,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4542734487803165421, guid: 07004636998638f49ba51ff38eda93c6, type: 3}
   m_PrefabInstance: {fileID: 257585912}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &257585914 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1110323118519651709, guid: 07004636998638f49ba51ff38eda93c6, type: 3}
+  m_PrefabInstance: {fileID: 257585912}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &263610230
 GameObject:
   m_ObjectHideFlags: 0
@@ -1765,6 +1874,7 @@ GameObject:
   - component: {fileID: 454947450}
   - component: {fileID: 454947452}
   - component: {fileID: 454947451}
+  - component: {fileID: 454947453}
   m_Layer: 5
   m_Name: Breakdown
   m_TagString: Untagged
@@ -1832,6 +1942,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 454947449}
   m_CullTransparentMesh: 1
+--- !u!114 &454947453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454947449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c95c71a972c8af41bf611a907599ac3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  perfectCountText: {fileID: 1200209709}
+  greatCountText: {fileID: 2140403097}
+  goodCountText: {fileID: 257585914}
+  missCountText: {fileID: 1985033276}
 --- !u!1 &471411699
 GameObject:
   m_ObjectHideFlags: 0
@@ -1988,7 +2114,7 @@ GameObject:
   - component: {fileID: 568602522}
   - component: {fileID: 568602524}
   m_Layer: 5
-  m_Name: SeparateBar
+  m_Name: SeparateLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2409,8 +2535,9 @@ GameObject:
   - component: {fileID: 835631764}
   - component: {fileID: 835631766}
   - component: {fileID: 835631765}
+  - component: {fileID: 835631767}
   m_Layer: 5
-  m_Name: MusicTitle
+  m_Name: MusicInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2430,8 +2557,8 @@ RectTransform:
   m_Children:
   - {fileID: 1406642009}
   - {fileID: 648176797}
-  - {fileID: 2081612107}
   - {fileID: 205437914}
+  - {fileID: 2081612107}
   - {fileID: 1231090989}
   m_Father: {fileID: 879537741}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2478,6 +2605,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 835631763}
   m_CullTransparentMesh: 1
+--- !u!114 &835631767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835631763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb663ca1e6c0e944e93ccdae7a6853c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicTitle_text: {fileID: 2081612108}
+  composer_text: {fileID: 1231090990}
+  jacket_image: {fileID: 193411330}
 --- !u!1 &876771428
 GameObject:
   m_ObjectHideFlags: 0
@@ -2531,8 +2673,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 879537741}
-  - component: {fileID: 879537743}
-  - component: {fileID: 879537742}
   m_Layer: 5
   m_Name: ResultUI
   m_TagString: Untagged
@@ -2566,42 +2706,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &879537742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 879537740}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb663ca1e6c0e944e93ccdae7a6853c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  musicTitle_text: {fileID: 2081612108}
-  composer_text: {fileID: 1231090990}
-  difficulty_text: {fileID: 56861622}
-  thumbnail_image: {fileID: 0}
---- !u!114 &879537743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 879537740}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a13001e1ab6aa2e459d9b0b6ad2cf208, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  score_text: {fileID: 1792303226}
-  perfectNum_text: {fileID: 1200209709}
-  greatNum_text: {fileID: 0}
-  goodNum_text: {fileID: 0}
-  missNum_text: {fileID: 0}
-  rank_text: {fileID: 1430593600}
-  complete_obj: {fileID: 0}
-  comboRank_obj: {fileID: 0}
 --- !u!1 &883577286
 GameObject:
   m_ObjectHideFlags: 0
@@ -2646,8 +2750,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e3847f3016e901458d6f489aee00f23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicDataUIController_view: {fileID: 879537742}
-  scoreDataUIController_view: {fileID: 879537743}
+  musicInfo_view: {fileID: 835631767}
+  score_view: {fileID: 104637681}
+  scoreRank_view: {fileID: 1005090833}
+  breakdown_view: {fileID: 454947453}
+  achievement_view: {fileID: 202905417}
   sliderUnitsController_view: {fileID: 1855606732}
   topicTextsController_view: {fileID: 1855606733}
   operationGetter_model:
@@ -2872,6 +2979,7 @@ GameObject:
   - component: {fileID: 1005090830}
   - component: {fileID: 1005090832}
   - component: {fileID: 1005090831}
+  - component: {fileID: 1005090833}
   m_Layer: 5
   m_Name: Rank
   m_TagString: Untagged
@@ -2939,6 +3047,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1005090829}
   m_CullTransparentMesh: 1
+--- !u!114 &1005090833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1005090829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a13b2f1f9882004881e4513bf3ec02b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  presets:
+  - scoreRank: 1
+    fontMaterial: {fileID: 2100000, guid: 05b216c002f5eaf41b726caa7e8df71c, type: 2}
+    colorGradient: {fileID: 11400000, guid: 19a835d3db6d0fd46bfee6a76a15b3da, type: 2}
+  - scoreRank: 2
+    fontMaterial: {fileID: 2100000, guid: 97edaa25e4c2c1a4499ee3b5665aed69, type: 2}
+    colorGradient: {fileID: 11400000, guid: c0582ad0a3cc97643b4d40b046853a00, type: 2}
+  - scoreRank: 3
+    fontMaterial: {fileID: 2100000, guid: 9b699e1a22e95db43a1c9e7d66b701d3, type: 2}
+    colorGradient: {fileID: 11400000, guid: 5d395c69906ab9448bdc86a0139287b7, type: 2}
+  - scoreRank: 4
+    fontMaterial: {fileID: 2100000, guid: 0eecf835d610b1746874dca7c2de1188, type: 2}
+    colorGradient: {fileID: 11400000, guid: a87c19b5206b6fb4883a045b025902e8, type: 2}
+  - scoreRank: 5
+    fontMaterial: {fileID: 2100000, guid: 56740f3d3cfa5e74baacf9b97c6db4cf, type: 2}
+    colorGradient: {fileID: 11400000, guid: 6c31eb87602d90c4f803cd9da9b594c6, type: 2}
+  - scoreRank: 6
+    fontMaterial: {fileID: 2100000, guid: 78b779e7f15045a49b02cc4f9bc9f1f6, type: 2}
+    colorGradient: {fileID: 11400000, guid: 3dd5f0338afb02242ac559519550f47a, type: 2}
+  - scoreRank: 7
+    fontMaterial: {fileID: 2100000, guid: 891140c7ae97e674490a1bd473ae65f1, type: 2}
+    colorGradient: {fileID: 11400000, guid: 9adc392dbedb4674da2ada942e898e74, type: 2}
+  - scoreRank: 8
+    fontMaterial: {fileID: 2100000, guid: 0be32cb919d743941a893525d5a35b38, type: 2}
+    colorGradient: {fileID: 11400000, guid: ac52a9e8a76b4fc4abc283c27c5916b2, type: 2}
+  - scoreRank: 9
+    fontMaterial: {fileID: 2100000, guid: b5d2b2fa2d3048741b0a61a6b441640a, type: 2}
+    colorGradient: {fileID: 11400000, guid: 5501fe4d93a35494da5154b6a43b8784, type: 2}
+  - scoreRank: 10
+    fontMaterial: {fileID: 2100000, guid: 35318e7367c14d54b8768182926faac9, type: 2}
+    colorGradient: {fileID: 11400000, guid: 69fe1a129fb33c3419ce2bf18e9934ed, type: 2}
+  - scoreRank: 11
+    fontMaterial: {fileID: 2100000, guid: 1697d0028c68bf740a92bed472689ae4, type: 2}
+    colorGradient: {fileID: 11400000, guid: 4f83e059a5ab25f4cb454ed38382f4a1, type: 2}
+  - scoreRank: 12
+    fontMaterial: {fileID: 2100000, guid: 4d70ff191eb67644e812f8e728b1f1ea, type: 2}
+    colorGradient: {fileID: 11400000, guid: 5478899d93f12d04fa242d604546dfa8, type: 2}
+  tmp: {fileID: 1430593600}
 --- !u!1 &1030825148
 GameObject:
   m_ObjectHideFlags: 0
@@ -3170,7 +3328,7 @@ GameObject:
   - component: {fileID: 1231090991}
   - component: {fileID: 1231090990}
   m_Layer: 5
-  m_Name: Composer
+  m_Name: "\u3010Composer\u3011"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4685,6 +4843,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4542734487803165421, guid: 07004636998638f49ba51ff38eda93c6, type: 3}
   m_PrefabInstance: {fileID: 1985033274}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1985033276 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1110323118519651709, guid: 07004636998638f49ba51ff38eda93c6, type: 3}
+  m_PrefabInstance: {fileID: 1985033274}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2017722887
 GameObject:
   m_ObjectHideFlags: 0
@@ -5100,7 +5269,7 @@ GameObject:
   - component: {fileID: 2081612109}
   - component: {fileID: 2081612108}
   m_Layer: 5
-  m_Name: Title
+  m_Name: "\u3010Title\u3011"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5340,6 +5509,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4542734487803165421, guid: 07004636998638f49ba51ff38eda93c6, type: 3}
   m_PrefabInstance: {fileID: 2140403095}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2140403097 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1110323118519651709, guid: 07004636998638f49ba51ff38eda93c6, type: 3}
+  m_PrefabInstance: {fileID: 2140403095}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &911009200310009039
 GameObject:
   m_ObjectHideFlags: 0

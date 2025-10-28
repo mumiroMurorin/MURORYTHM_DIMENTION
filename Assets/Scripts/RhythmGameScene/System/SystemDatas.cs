@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TMPro;
 
 /// <summary>
 /// インゲーム部の内部ステータスの列挙型
@@ -143,7 +144,6 @@ public enum ScoreRank
 public enum ComboRank
 {
     None = 0,
-    // TrackFailed = 1,
     TrackComplete = 2,
     FullCombo = 3,
     AllPerfect = 5
@@ -221,6 +221,32 @@ public class ComboRankToSprite
     public bool CheckCondition(ComboRank rank) { return this.rank == rank; }
 
     public Sprite Sprite { get { return sprite; } }
+}
+
+[System.Serializable]
+public class ScoreRankTextMaterialPreset
+{
+    [SerializeField] ScoreRank scoreRank;
+    [SerializeField] Material fontMaterial;
+    [SerializeField] TMP_ColorGradient colorGradient;
+
+    public ScoreRank ScoreRank { get { return scoreRank; } }
+
+    public void ApplyPreset(TextMeshPro tmp)
+    {
+        if (tmp == null) { return; }
+
+        tmp.fontMaterial = fontMaterial;
+        tmp.colorGradientPreset = colorGradient;
+    }
+
+    public void ApplyPreset(TextMeshProUGUI tmp)
+    {
+        if (tmp == null) { return; }
+
+        tmp.fontMaterial = fontMaterial;
+        tmp.colorGradientPreset = colorGradient;
+    }
 }
 
 [System.Serializable]

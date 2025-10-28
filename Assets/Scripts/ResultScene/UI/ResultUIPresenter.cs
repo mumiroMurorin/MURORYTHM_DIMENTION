@@ -8,8 +8,12 @@ namespace UIInResultScene
 {
     public class ResultUIPresenter : MonoBehaviour
     {
-        [SerializeField] MusicDataUIControllerView musicDataUIController_view;
-        [SerializeField] ScoreDataUIControllerView scoreDataUIController_view;
+        [SerializeField] MusicInfoView musicInfo_view;
+        [SerializeField] ScoreView score_view;
+        [SerializeField] ScoreRankView scoreRank_view;
+        [SerializeField] BreakdownView breakdown_view;
+        [SerializeField] AchievementView achievement_view;
+
         [SerializeField] SliderUnitsControllerView sliderUnitsController_view;
         [SerializeField] SliderTopicTextsControllerView topicTextsController_view;
 
@@ -34,11 +38,50 @@ namespace UIInResultScene
         private void Bind()
         {
             // 楽曲データ
-            if (musicDataGetter_model.Music != null) { musicDataUIController_view.SetMusicData(musicDataGetter_model.Music.Value); }
-            musicDataUIController_view.SetDifficulty(musicDataGetter_model.Difficulty.Value);
+            musicDataGetter_model?.Music
+                .Subscribe(musicInfo_view.OnChangeMusicData)
+                .AddTo(this.gameObject);
 
             // スコアデータ
-            scoreDataUIController_view.SetScoreData(scoreGetter_model);
+            scoreGetter_model?.Score
+                .Subscribe(score_view.OnChangeScore)
+                .AddTo(this.gameObject);
+
+            // スコアランクデータ
+            scoreGetter_model?.CurrentScoreRank
+                .Subscribe(score_view.OnChangeScoreRank)
+                .AddTo(this.gameObject);
+
+            scoreGetter_model?.CurrentScoreRank
+                .Subscribe(scoreRank_view.OnChangeScoreRank)
+                .AddTo(this.gameObject);
+
+            // 内訳データ
+            scoreGetter_model?.PerfectNum
+                .Subscribe(breakdown_view.OnChangePerfectCount)
+                .AddTo(this.gameObject);
+
+            scoreGetter_model?.GreatNum
+                .Subscribe(breakdown_view.OnChangeGreatCount)
+                .AddTo(this.gameObject);
+
+            scoreGetter_model?.GoodNum
+                .Subscribe(breakdown_view.OnChangeGoodCount)
+                .AddTo(this.gameObject);
+
+            scoreGetter_model?.MissNum
+                .Subscribe(breakdown_view.OnChangeMissCount)
+                .AddTo(this.gameObject);
+
+            // 達成
+            scoreGetter_model?.CurrentComboRank
+                .Subscribe(achievement_view.OnChangeComboRank)
+                .AddTo(this.gameObject);
+
+            scoreGetter_model?.CurrentScoreRank
+                .Subscribe(achievement_view.OnChangeScoreRank)
+                .AddTo(this.gameObject);
+
 
             // スライダーUI
             // 操作の追加

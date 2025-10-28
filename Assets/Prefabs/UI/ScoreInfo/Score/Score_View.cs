@@ -6,7 +6,7 @@ using TMPro;
 public class Score_View : MonoBehaviour
 {
     [Header("ランク別マテリアル")]
-    [SerializeField] TextMaterialPreset[] presetRank;
+    [SerializeField] ScoreRankTextMaterialPreset[] presetRank;
     [SerializeField] TextMeshPro textMeshPro;
 
     public void OnChangeScoreRank(ScoreRank scoreRank)
@@ -24,21 +24,5 @@ public class Score_View : MonoBehaviour
     public void OnChangeScore(float score)
     {
         textMeshPro.text = score.ToString("N0");
-    }
-
-    [System.Serializable]
-    private class TextMaterialPreset
-    {
-        [SerializeField] ScoreRank scoreRank;
-        [SerializeField] Material fontMaterial;
-        [SerializeField] TMP_ColorGradient colorGradient;
-
-        public ScoreRank ScoreRank { get { return scoreRank; } }
-
-        public void ApplyPreset(TextMeshPro tmp)
-        {
-            tmp.fontMaterial = fontMaterial;
-            tmp.colorGradientPreset = colorGradient;
-        }
     }
 }

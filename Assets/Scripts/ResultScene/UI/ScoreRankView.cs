@@ -5,7 +5,7 @@ using TMPro;
 
 namespace UIInResultScene
 {
-    public class ScoreView : MonoBehaviour
+    public class ScoreRankView : MonoBehaviour
     {
         [SerializeField] ScoreRankTextMaterialPreset[] presets;
         [SerializeField] TextMeshProUGUI tmp;
@@ -20,11 +20,6 @@ namespace UIInResultScene
 
                 preset.ApplyPreset(tmp);
             }
-        }
-
-        public void OnChangeScore(float score)
-        {
-            tmp.text = score.ToString("N0");
         }
     }
 
