@@ -9,18 +9,22 @@ namespace UIInResultScene
 {
     public class ResultUIPresenter : MonoBehaviour
     {
-        [SerializeField] Image backGround;
+        [SerializeField] Image[] jacketImages;
+        [SerializeField] Image[] themeImages;
+        [SerializeField] GameObject[] hideUIs;
         [SerializeField] MusicInfoView musicInfo_view;
         [SerializeField] ScoreView score_view;
         [SerializeField] ScoreRankView scoreRank_view;
         [SerializeField] DifficultyViewController difficulty_view;
         [SerializeField] BreakdownView breakdown_view;
         [SerializeField] AchievementView achievement_view;
-        [SerializeField] GameObject[] hideUIs;
+        [SerializeField] CircleController circleController_view;
 
+        [Space(20)]
         [SerializeField] SliderUnitsControllerView sliderUnitsController_view;
         [SerializeField] SliderTopicTextsControllerView topicTextsController_view;
 
+        [Space(20)]
         [SerializeField] SerializeInterface<IOperationGetter> operationGetter_model;
 
         IScoreGetter scoreGetter_model;
@@ -43,9 +47,25 @@ namespace UIInResultScene
 
         private void Initialize()
         {
-            backGround.sprite = musicDataGetter_model.Music.Value.ThemeSprite;
-        
-            foreach(var obj in hideUIs)
+            // ジャケット画像
+            if (jacketImages != null)
+            {
+                foreach (var image in jacketImages)
+                {
+                    image.sprite = musicDataGetter_model.Music.Value.MusicSprite;
+                }
+            }
+
+            // テーマ画像
+            if (themeImages != null)
+            {
+                foreach (var image in themeImages)
+                {
+                    image.sprite = musicDataGetter_model.Music.Value.ThemeSprite;
+                }
+            }
+
+            foreach (var obj in hideUIs)
             {
                 obj.SetActive(false);
             }
@@ -109,6 +129,11 @@ namespace UIInResultScene
 
             scoreGetter_model?.CurrentScoreRank
                 .Subscribe(achievement_view.OnChangeScoreRank)
+                .AddTo(this.gameObject);
+
+            // 背景
+            musicDataGetter_model?.Music
+                .Subscribe(data => circleController_view.OnChangeSymphonyType(data.SymphonyType))
                 .AddTo(this.gameObject);
         }
 
