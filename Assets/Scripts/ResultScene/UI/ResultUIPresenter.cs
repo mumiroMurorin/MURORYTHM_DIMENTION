@@ -16,6 +16,7 @@ namespace UIInResultScene
         [SerializeField] DifficultyViewController difficulty_view;
         [SerializeField] BreakdownView breakdown_view;
         [SerializeField] AchievementView achievement_view;
+        [SerializeField] GameObject[] hideUIs;
 
         [SerializeField] SliderUnitsControllerView sliderUnitsController_view;
         [SerializeField] SliderTopicTextsControllerView topicTextsController_view;
@@ -36,12 +37,18 @@ namespace UIInResultScene
         {
             Initialize();
             Bind();
+            BindForSliderUI();
             SetEvent();
         }
 
         private void Initialize()
         {
             backGround.sprite = musicDataGetter_model.Music.Value.ThemeSprite;
+        
+            foreach(var obj in hideUIs)
+            {
+                obj.SetActive(false);
+            }
         }
 
         private void Bind()
@@ -103,9 +110,10 @@ namespace UIInResultScene
             scoreGetter_model?.CurrentScoreRank
                 .Subscribe(achievement_view.OnChangeScoreRank)
                 .AddTo(this.gameObject);
+        }
 
-
-            // スライダーUI
+        private void BindForSliderUI()
+        {
             // 操作の追加
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveAdd()
@@ -119,7 +127,7 @@ namespace UIInResultScene
             // 操作の一新
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveReset()
-                .Subscribe(_ => { 
+                .Subscribe(_ => {
                     sliderUnitsController_view.OnClearSliderData();
                     topicTextsController_view?.OnClearSliderData();
                 })
@@ -128,7 +136,7 @@ namespace UIInResultScene
 
         private void SetEvent()
         {
-
+           
         }
 
         private void SetInteractionSliderEvent(SliderTouchData sliderTouchData)

@@ -10,6 +10,7 @@ namespace TransitionerInResultScene
         [SerializeField] SerializeInterface<IPhaseTransitionableInResultScene> phaseTransitionable;
         [SerializeField] SerializeInterface<IInputHandler> inputHandler;
 
+
         readonly PhaseStatusInResultScene status = PhaseStatusInResultScene.Result;
 
         bool IPhaseTransitionerInResultScene.ConditionChecker(PhaseStatusInResultScene status)

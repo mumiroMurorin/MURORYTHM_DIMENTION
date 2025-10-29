@@ -8,7 +8,8 @@ using TransitionerInResultScene;
 public class Operation_Result : MonoBehaviour
 {
     [Header("各項目に対応するスライダーUIの表示色")]
-    [SerializeField] Color skipResultColor;
+    [SerializeField] Color finishResultColor;
+    [SerializeField] string finishResultText = "楽曲選択へ戻る";
 
     [SerializeField] SerializeInterface<IOperationSetter> operationSetter;
     [SerializeField] SerializeInterface<IPhaseTransitionableInResultScene> phaseTransitionable;
@@ -40,7 +41,7 @@ public class Operation_Result : MonoBehaviour
 
     private void SetOperation()
     {
-        operationSetter.Value.SetOperate(new SliderTouchData(RESULT_SKIP_INDICES, TransitionNextPhase, skipResultColor));
+        operationSetter.Value.SetOperate(new SliderTouchData(RESULT_SKIP_INDICES, TransitionNextPhase, finishResultColor, finishResultText));
     }
 
     /// <summary>
