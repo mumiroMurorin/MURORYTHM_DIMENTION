@@ -234,6 +234,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7158449014006009990, guid: ac80652a7c94bdc4d9272aa4afd06258, type: 3}
   m_PrefabInstance: {fileID: 38026378}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &38026381 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8030144479356794200, guid: ac80652a7c94bdc4d9272aa4afd06258, type: 3}
+  m_PrefabInstance: {fileID: 38026378}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &76786509
 GameObject:
   m_ObjectHideFlags: 0
@@ -1081,6 +1092,7 @@ GameObject:
   - component: {fileID: 879537741}
   - component: {fileID: 879537743}
   - component: {fileID: 879537742}
+  - component: {fileID: 879537744}
   m_Layer: 5
   m_Name: ResultUI
   m_TagString: Untagged
@@ -1152,6 +1164,18 @@ PlayableDirector:
     value: {fileID: 202905413}
   - key: {fileID: -4993852780216329066, guid: 0c56b5a340df5be449cd819a4502051a, type: 2}
     value: {fileID: 6323544230033956380}
+  - key: {fileID: -7582489956368886001, guid: 0c56b5a340df5be449cd819a4502051a, type: 2}
+    value: {fileID: 879537744}
+  - key: {fileID: -2942316060003989499, guid: 0c56b5a340df5be449cd819a4502051a, type: 2}
+    value: {fileID: 879537744}
+  - key: {fileID: 2051193232893379446, guid: 0c56b5a340df5be449cd819a4502051a, type: 2}
+    value: {fileID: 879537744}
+  - key: {fileID: 6196382424153804020, guid: 0c56b5a340df5be449cd819a4502051a, type: 2}
+    value: {fileID: 879537744}
+  - key: {fileID: -1070522081770669310, guid: 0c56b5a340df5be449cd819a4502051a, type: 2}
+    value: {fileID: 879537744}
+  - key: {fileID: -4047783055137345159, guid: 0c56b5a340df5be449cd819a4502051a, type: 2}
+    value: {fileID: 879537744}
   m_ExposedReferences:
     m_References: []
 --- !u!114 &879537743
@@ -1168,6 +1192,102 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playableDirector: {fileID: 879537742}
   isResetAwake: 1
+--- !u!82 &879537744
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 879537740}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -353128144009607815, guid: 18dc00cef6493e84aa0ccee3f1e17fdf, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &883577286
 GameObject:
   m_ObjectHideFlags: 0
@@ -1214,6 +1334,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jacketImages:
   - {fileID: 1685380374}
+  - {fileID: 1992236738}
+  - {fileID: 38026381}
   themeImages:
   - {fileID: 1144002465}
   hideUIs:
@@ -1836,6 +1958,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7158449014006009990, guid: 827377e4789f309429b8363cd8581945, type: 3}
   m_PrefabInstance: {fileID: 1992236735}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1992236738 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8030144479356794200, guid: 827377e4789f309429b8363cd8581945, type: 3}
+  m_PrefabInstance: {fileID: 1992236735}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2017722887
 GameObject:
   m_ObjectHideFlags: 0
@@ -2400,6 +2533,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6184475582878268069, guid: b90129fc606b402499c53c884f20ef6e, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 6640940948602331181, guid: b90129fc606b402499c53c884f20ef6e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2790,6 +2927,10 @@ PrefabInstance:
     - target: {fileID: 734347632461200644, guid: d56b402aaf41c674aba0f830a2944ccd, type: 3}
       propertyPath: m_Name
       value: Rank
+      objectReference: {fileID: 0}
+    - target: {fileID: 2978465226325537652, guid: d56b402aaf41c674aba0f830a2944ccd, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 3212051301914146228, guid: d56b402aaf41c674aba0f830a2944ccd, type: 3}
       propertyPath: m_Pivot.x
