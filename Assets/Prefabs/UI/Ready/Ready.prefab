@@ -252,14 +252,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3b585d88773c2ce42abdc140cb35a02a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c3b059128efa40d4fae432de15817f52, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -369,40 +369,40 @@ MonoBehaviour:
   dataToBackSprites:
   - difficulty: 0
     symphonyType: 10
-    sprite: {fileID: 21300000, guid: 91605706be1796a47a4c021e5847076d, type: 3}
+    sprite: {fileID: 21300000, guid: 25e4079379b276d4d81df95ac8e683df, type: 3}
   - difficulty: 1
     symphonyType: 10
-    sprite: {fileID: 21300000, guid: ba10b4928298b2a40979bd3083c2304e, type: 3}
+    sprite: {fileID: 21300000, guid: fb1709aebc11c9642a877929e023a8ca, type: 3}
   - difficulty: 2
     symphonyType: 10
-    sprite: {fileID: 21300000, guid: 3b585d88773c2ce42abdc140cb35a02a, type: 3}
+    sprite: {fileID: 21300000, guid: f16d5df0df1f00c4f98143905ad45114, type: 3}
   - difficulty: 3
     symphonyType: 10
-    sprite: {fileID: 21300000, guid: 5547e787466c678479ff165ed7cc1fa9, type: 3}
+    sprite: {fileID: 21300000, guid: c3b059128efa40d4fae432de15817f52, type: 3}
   - difficulty: 0
     symphonyType: 20
-    sprite: {fileID: 21300000, guid: eb6e79fe3fdd5e3479549d280c128ddc, type: 3}
+    sprite: {fileID: 21300000, guid: 25e4079379b276d4d81df95ac8e683df, type: 3}
   - difficulty: 1
     symphonyType: 20
-    sprite: {fileID: 21300000, guid: 023b9957005a4d2489e725c3bf1b4dd0, type: 3}
+    sprite: {fileID: 21300000, guid: fb1709aebc11c9642a877929e023a8ca, type: 3}
   - difficulty: 2
     symphonyType: 20
-    sprite: {fileID: 21300000, guid: be208b8587eb4764e816faaf7c3dcb4b, type: 3}
+    sprite: {fileID: 21300000, guid: f16d5df0df1f00c4f98143905ad45114, type: 3}
   - difficulty: 3
     symphonyType: 20
-    sprite: {fileID: 21300000, guid: 8ac1958a7616f4442ba6614e90b18a20, type: 3}
+    sprite: {fileID: 21300000, guid: 9426bc68655f7bb44b1c55abb77bc271, type: 3}
   - difficulty: 0
     symphonyType: 0
-    sprite: {fileID: 21300000, guid: fa1c5f839b9f88e4eaf5e625efa2a730, type: 3}
+    sprite: {fileID: 21300000, guid: 25e4079379b276d4d81df95ac8e683df, type: 3}
   - difficulty: 1
     symphonyType: 0
-    sprite: {fileID: 21300000, guid: 8eb54ce43eff13b4ba3347deadc8ede3, type: 3}
+    sprite: {fileID: 21300000, guid: fb1709aebc11c9642a877929e023a8ca, type: 3}
   - difficulty: 2
     symphonyType: 0
-    sprite: {fileID: 21300000, guid: f0092c22bcd0bdf4c8c933449ff7755b, type: 3}
+    sprite: {fileID: 21300000, guid: f16d5df0df1f00c4f98143905ad45114, type: 3}
   - difficulty: 3
     symphonyType: 0
-    sprite: {fileID: 21300000, guid: b7fc574db6e9d3b479509759ec576b48, type: 3}
+    sprite: {fileID: 21300000, guid: ecc5c154286e464409eb5e7e71857c99, type: 3}
   titleTmp: {fileID: 4342514843321676114}
   composerTmp: {fileID: 7291364173804043151}
   musicImage: {fileID: 4413212174711656479}
@@ -515,7 +515,7 @@ GameObject:
   - component: {fileID: 2561271519827976159}
   - component: {fileID: 4342514843321676114}
   m_Layer: 5
-  m_Name: Title
+  m_Name: "\u3010Title\u3011"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -571,7 +571,7 @@ MonoBehaviour:
   m_text: "\u30BF\u30A4\u30C8\u30EB"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
-  m_sharedMaterial: {fileID: 8712543720389648820, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 98fd24f7b4d1228469fb4d67577ea498, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -579,13 +579,13 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
+  m_enableVertexGradient: 1
+  m_colorMode: 2
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
     topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
+    bottomRight: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
@@ -601,7 +601,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 0
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -945,7 +945,7 @@ GameObject:
   - component: {fileID: 6475688959977067365}
   - component: {fileID: 7291364173804043151}
   m_Layer: 5
-  m_Name: Composer
+  m_Name: "\u3010Composer\u3011"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1001,7 +1001,7 @@ MonoBehaviour:
   m_text: "\u304B\u3081\u308A\u3042"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
-  m_sharedMaterial: {fileID: 8712543720389648820, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 98fd24f7b4d1228469fb4d67577ea498, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1009,13 +1009,13 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
+  m_enableVertexGradient: 1
+  m_colorMode: 2
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
     topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 0.9019608, g: 0.9019608, b: 0.9019608, a: 1}
+    bottomRight: {r: 0.9019608, g: 0.9019608, b: 0.9019608, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0

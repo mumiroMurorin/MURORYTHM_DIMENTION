@@ -55,12 +55,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   perfectItem: {fileID: 1173692054204928468}
   perfectCount_tmp: {fileID: 8568978587652945846}
+  scalePulseBuilderPerfect:
+    scaleMultiplier: 1.15
+    duration: 0.2
   greatItem: {fileID: 2351667653313616720}
   greatCount_tmp: {fileID: 5044074811700477234}
+  scalePulseBuilderGreat:
+    scaleMultiplier: 1.15
+    duration: 0.2
   goodItem: {fileID: 1974528520261113872}
   goodCount_tmp: {fileID: 9062374045896719986}
+  scalePulseBuilderGood:
+    scaleMultiplier: 1.15
+    duration: 0.2
   missItem: {fileID: 6618305821914594823}
   missCount_tmp: {fileID: 4429879571758733413}
+  scalePulseBuilderMiss:
+    scaleMultiplier: 1.15
+    duration: 0.2
 --- !u!114 &2142638590372840456
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 884771547079784003}
   - component: {fileID: 6905784669162659161}
   - component: {fileID: 8499637080131900957}
-  - component: {fileID: 7779195780443322048}
   - component: {fileID: 2314589821963848822}
   m_Layer: 0
   m_Name: ComboFC
@@ -173,27 +172,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 6905784669162659161}
   m_maskType: 0
---- !u!95 &7779195780443322048
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2271928581560728178}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c081e9a0eb3cc09499a5be424dc97583, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &2314589821963848822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,4 +196,6 @@ MonoBehaviour:
     fontMaterial: {fileID: 2100000, guid: be1f58d45313fa94ba3b69dbe02d011d, type: 2}
     colorGradient: {fileID: 11400000, guid: b90f5f361bbc3e3459a6abdddb1059d9, type: 2}
   textMeshPro: {fileID: 8499637080131900957}
-  animator: {fileID: 7779195780443322048}
+  scalePulseBuilder:
+    scaleMultiplier: 1.05
+    duration: 0.2

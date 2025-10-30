@@ -8,6 +8,7 @@ public class ScoreRank_View : MonoBehaviour
     [Header("コンボランク別マテリアル")]
     [SerializeField] ScoreRankTextMaterialPreset[] presetRank;
     [SerializeField] TextMeshPro textMeshPro;
+    [SerializeField] DoScalePulseBuilder scalePulseBuilder;
 
     public void OnChangeScoreRank(ScoreRank scoreRank)
     {
@@ -19,5 +20,7 @@ public class ScoreRank_View : MonoBehaviour
 
             preset.ApplyPreset(textMeshPro, true);
         }
+
+        scalePulseBuilder?.ApplyScalePulse(textMeshPro.transform);
     }
 }

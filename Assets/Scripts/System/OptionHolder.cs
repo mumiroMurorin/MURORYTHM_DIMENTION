@@ -252,7 +252,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     #region Info
 
     // ÉÅÉCÉìèÓïÒ
-    ReactiveProperty<InfoTypeMain> mainInfo = new ReactiveProperty<InfoTypeMain>(InfoTypeMain.ScoreRank);
+    ReactiveProperty<InfoTypeMain> mainInfo = new ReactiveProperty<InfoTypeMain>(InfoTypeMain.ScoreRankSubtraction);
     public IReadOnlyReactiveProperty<InfoTypeMain> MainInfo => mainInfo;
     public bool ChangeMainInfo()
     {
@@ -304,7 +304,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     }
 
     // ÉTÉuèÓïÒ
-    ReactiveProperty<InfoTypeSub> subInfo = new ReactiveProperty<InfoTypeSub>(InfoTypeSub.Breakdown);
+    ReactiveProperty<InfoTypeSub> subInfo = new ReactiveProperty<InfoTypeSub>(InfoTypeSub.ScoreAddition);
     public IReadOnlyReactiveProperty<InfoTypeSub> SubInfo => subInfo;
     public bool ChangeSubInfo()
     {

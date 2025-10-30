@@ -8,6 +8,7 @@ public class ComboRank_View : MonoBehaviour
     [Header("コンボランク別マテリアル")]
     [SerializeField] TextMaterialPreset[] presets;
     [SerializeField] TextMeshPro textMeshPro;
+    [SerializeField] DoScalePulseBuilder scalePulseBuilder;
 
     public void OnChangeComboRank(ComboRank comboRank)
     {
@@ -21,6 +22,8 @@ public class ComboRank_View : MonoBehaviour
                 }
             }
         }
+
+        scalePulseBuilder?.ApplyScalePulse(textMeshPro.transform);
     }
 
     [System.Serializable]

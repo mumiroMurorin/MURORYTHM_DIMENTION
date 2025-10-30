@@ -10,14 +10,14 @@ public class Combo_View : MonoBehaviour
     [Header("コンボ別マテリアル")]
     [SerializeField] TextMaterialPreset[] presets;
     [SerializeField] TextMeshPro textMeshPro;
-    [SerializeField] Animator animator;
+    [SerializeField] DoScalePulseBuilder scalePulseBuilder;
 
     public void OnChangeCombo(int comboNum)
     {
         textMeshPro.text = comboNum.ToString();
         textMeshPro.enabled = comboThreshold < comboNum;
 
-        animator.SetTrigger("combo");
+        scalePulseBuilder.ApplyScalePulse(textMeshPro.transform);
     }
 
     public void OnChangeComboRank(ComboRank comboRank)
