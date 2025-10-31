@@ -254,6 +254,17 @@ public class ScoreRankTextMaterialPreset
 }
 
 [System.Serializable]
+public class DifficultyToColor
+{
+    [SerializeField] Difficulty difficulty;
+    [SerializeField] Color color;
+
+    public bool CheckCondition(Difficulty difficulty) { return this.difficulty == difficulty; }
+
+    public Color Color { get { return color; } }
+}
+
+[System.Serializable]
 public class DifficultyToSprite
 {
     [SerializeField] Difficulty difficulty;
