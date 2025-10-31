@@ -2527,7 +2527,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5344308489783075046, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7003494081260383716, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
       propertyPath: m_IsActive
@@ -5049,7 +5049,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed07db9c99ac59f4e9da1284ad6c5307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUseSpaceInput: 1
+  isUseSpaceInput: 0
   spaceInputHandler:
     obj: {fileID: 796097596}
 --- !u!114 &1821151699 stripped
