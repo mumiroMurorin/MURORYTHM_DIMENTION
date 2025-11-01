@@ -2509,37 +2509,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2181729766463566020, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3557880811985844621, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
       propertyPath: m_Name
       value: LoadingBody
-      objectReference: {fileID: 0}
-    - target: {fileID: 3557880811985844621, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4071428474003185102, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344308489783075046, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7003494081260383716, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7589622187073858461, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
-      propertyPath: isResetAwake
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8536403788621686622, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
-      propertyPath: isResetAwake
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

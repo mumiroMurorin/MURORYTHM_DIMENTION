@@ -252,14 +252,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
+  m_Color: {r: 0.9339623, g: 0.9339623, b: 0.9339623, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c3b059128efa40d4fae432de15817f52, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fb1709aebc11c9642a877929e023a8ca, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -571,7 +571,7 @@ MonoBehaviour:
   m_text: "\u30BF\u30A4\u30C8\u30EB"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 98fd24f7b4d1228469fb4d67577ea498, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: f1e717da140c5794eaf6ba41a8b80bbf, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1001,7 +1001,7 @@ MonoBehaviour:
   m_text: "\u304B\u3081\u308A\u3042"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 98fd24f7b4d1228469fb4d67577ea498, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: f1e717da140c5794eaf6ba41a8b80bbf, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
