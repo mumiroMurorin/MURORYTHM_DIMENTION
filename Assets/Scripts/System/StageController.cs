@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class StageController : MonoBehaviour, IStageController
 {
-    [SerializeField] SkyBoxChanger skyBoxChanger;
     [SerializeField] CharacterSpawner characterSpawner;
 
     [Header("タイトルオブジェクト設定")]
@@ -19,9 +18,6 @@ public class StageController : MonoBehaviour, IStageController
 
     public void Initialize(IMusicDataGetter musicDataGetter)
     {
-        // 背景(SkyBox)の変更
-        skyBoxChanger.ChangeSkyBoxTrigger();
-
         // タイトルオブジェクトのスポーン
         var titleObj = characterSpawner.SpawnCharacter(musicDataGetter.Music.Value.MusicName, titleSettings);
         titleObj.transform.SetParent(titleParent);

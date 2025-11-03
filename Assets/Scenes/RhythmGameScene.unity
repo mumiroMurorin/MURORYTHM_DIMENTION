@@ -298,18 +298,18 @@ MonoBehaviour:
     composer_name: "\u524A\u9664"
     music_spr: {fileID: 21300000, guid: 1512ba05fa48cde48858c7f68c23594f, type: 3}
     theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
-    clip: {fileID: 8300000, guid: 135d7d154c100b64f9ec59dfcf643174, type: 3}
+    clip: {fileID: 8300000, guid: 993bb1f8d9375c04da5f17d29a0760de, type: 3}
     sample_clip: {fileID: 8300000, guid: 135d7d154c100b64f9ec59dfcf643174, type: 3}
-    symphonyType: 20
-    stageType: 102
+    symphonyType: 10
+    stageType: 100
     difficulties: 00000000000000000000000000000000
     chartPaths:
     - 
     - 
     - 
     - 
-  chartFilePath: MusicData/Conflict/chart_master.json
-  noteSpeed: 50
+  chartFilePath: MusicData/Altale/chart_master.json
+  noteSpeed: 200
   isAutoMode: 0
   isFastLateEnabled: 1
 --- !u!1001 &141622566
@@ -622,7 +622,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &234263432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1034,7 +1034,7 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1592,9 +1592,9 @@ MonoBehaviour:
   - stageType: 100
     prefab: {fileID: 5040811245919378688, guid: 2d4e8f42898cd694f843906369c6291e, type: 3}
   - stageType: 101
-    prefab: {fileID: 5040811245919378688, guid: e428b5cd533e2004d8ff571fc293c88c, type: 3}
+    prefab: {fileID: 5040811245919378688, guid: a98fc033bd8a87f4689d6415cc9225c4, type: 3}
   - stageType: 102
-    prefab: {fileID: 5040811245919378688, guid: f86714fcd0d0ad64583da1d3ff6c1222, type: 3}
+    prefab: {fileID: 5040811245919378688, guid: 953c51eb2f8459e4791e377e9164d5ae, type: 3}
   - stageType: 200
     prefab: {fileID: 5040811245919378688, guid: cc1ff57546ba1d944a915e39a55fb06d, type: 3}
 --- !u!114 &484755823
@@ -6112,6 +6112,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: -643376796560498950, guid: 796ea846c9ce48c4da82af3fc0c7e72e, type: 3}
+    - target: {fileID: 8259239214574859370, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8983098810822641885, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Mesh
       value: 

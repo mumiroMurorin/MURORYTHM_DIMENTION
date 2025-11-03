@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityFx.Outline;
 
 public class OutlineSetter : MonoBehaviour
@@ -21,6 +22,7 @@ public class OutlineSettings
     [SerializeField] OutlineResources resources;
     [SerializeField] OutlineRenderFlags flags;
     [SerializeField] LayerMask ignoreRayerMask = -1;
+    [SerializeField] CameraEvent renderEvent;
 
     public void ApplyOutline(GameObject obj)
     {
@@ -31,5 +33,6 @@ public class OutlineSettings
         outline.OutlineRenderMode = flags;
         outline.Camera = Camera.main;
         outline.IgnoreLayerMask = ignoreRayerMask;
+        outline.RenderEvent = renderEvent;
     }
 }
