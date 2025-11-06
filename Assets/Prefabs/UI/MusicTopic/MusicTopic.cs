@@ -75,7 +75,7 @@ public abstract class MusicTopic : MonoBehaviour
         }
 
         // ƒRƒ“ƒ{ƒ‰ƒ“ƒv
-        comboLamp_image.gameObject.SetActive(record.ComboRank != ComboRank.None);
+        comboLamp_image.gameObject.SetActive(record.ComboRank != ComboRank.None && record.ComboRank != ComboRank.TrackComplete);
         foreach (var spr in comboRankToLampSprite)
         {
             if (spr.CheckCondition(record.ComboRank))

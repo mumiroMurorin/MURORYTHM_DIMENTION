@@ -6,15 +6,11 @@ using UniRx;
 
 public class InteractNoteEffectController : MonoBehaviour
 {
+    [SerializeField] SymphonyType symphonyType;
     [SerializeField] List<InteractNoteEffectSpawner> spawners;
 
-    IScoreGetter scoreGetter;
-
-    [Inject]
-    public void Constructor(IScoreGetter scoreGetter)
-    {
-        this.scoreGetter = scoreGetter;
-    }
+    [Inject] IScoreGetter scoreGetter;
+    [Inject] IMusicDataGetter musicDataGetter;
 
     private void Start()
     {
@@ -23,6 +19,8 @@ public class InteractNoteEffectController : MonoBehaviour
 
     private void Bind()
     {
+        if (this.symphonyType != musicDataGetter.Music.Value.SymphonyType) { return; }
+
         // 記録を監視、増え次第エフェクトを発生させる
         scoreGetter.NoteJudgementDatas
             .ObserveAdd()
@@ -37,7 +35,6 @@ public class InteractNoteEffectController : MonoBehaviour
             if (spawner.ConditionChecker(judgementData))
             {
                 spawner.Spawn(judgementData);
-                return;
             }
         }
 

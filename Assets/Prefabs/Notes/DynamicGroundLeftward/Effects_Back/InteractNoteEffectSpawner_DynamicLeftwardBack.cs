@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractNoteEffectSpawner_DynamicLeftward : InteractNoteEffectSpawner
+public class InteractNoteEffectSpawner_DynamicLeftwardBack : InteractNoteEffectSpawner
 {
-    [SerializeField] GameObject perfectEffect;
-    [SerializeField] GameObject greatEffect;
-    [SerializeField] GameObject goodEffect;
+    [SerializeField] GameObject backGroundEffect;
 
     public override bool ConditionChecker(NoteJudgementData judgementData)
     {
@@ -15,23 +13,8 @@ public class InteractNoteEffectSpawner_DynamicLeftward : InteractNoteEffectSpawn
 
     public override GameObject Spawn(NoteJudgementData judgementData)
     {
-        Vector3 pos = Vector3.zero;
-        GameObject obj;
-
-        switch (judgementData.Judgement)
-        {
-            case Judgement.Perfect:
-                obj = Instantiate(perfectEffect, pos, Quaternion.identity, parent);
-                break;
-            case Judgement.Great:
-                obj = Instantiate(greatEffect, pos, Quaternion.identity, parent);
-                break;
-            case Judgement.Good:
-                obj = Instantiate(goodEffect, pos, Quaternion.identity, parent);
-                break;
-            default:
-                return null;
-        }
+        var pos = Vector3.zero;
+        var obj = Instantiate(backGroundEffect, pos, Quaternion.identity, parent);
 
         SetDataForEffect(obj, judgementData.NoteData as NoteData_DynamicGroundLeftward);
 
