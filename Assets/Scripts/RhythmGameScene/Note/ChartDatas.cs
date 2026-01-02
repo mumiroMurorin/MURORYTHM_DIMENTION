@@ -16,7 +16,14 @@ public class ChartData
     /// <summary>
     /// 全てのノーツ(リスト)を纏めたプロパティ
     /// </summary>
-    public List<List<INoteData>> AllNoteDataLists { get; private set; } = new List<List<INoteData>>();
+    List<List<INoteData>> allNoteDataLists = new List<List<INoteData>>();
+
+    public IEnumerable<IEnumerable<INoteData>> AllNoteDataLists { get { return allNoteDataLists; } }
+
+    /// <summary>
+    /// ソフランデータ
+    /// </summary>
+    public PositionGraph PositionGraph = new();
 
     /// <summary>
     /// ノーツデータの追加
@@ -30,7 +37,7 @@ public class ChartData
         NoteNum++;
 
         // 引数のデータのノーツリストが存在するか確認
-        foreach(var noteList in AllNoteDataLists)
+        foreach(var noteList in allNoteDataLists)
         {
             // 存在する場合は追加して終了
             if (noteList.Count > 0 && noteList[0].NoteType == noteData.NoteType)
@@ -41,7 +48,16 @@ public class ChartData
         }
 
         // 存在しない場合は新しくListを作って追加
-        AllNoteDataLists.Add(new List<INoteData>() { noteData });
+        allNoteDataLists.Add(new List<INoteData>() { noteData });
+    }
+
+    /// <summary>
+    /// スピード倍率データの追加
+    /// </summary>
+    /// <param name="speedRatioData"></param>
+    public void AddSpeedRatioData(SpeedRatioData speedRatioData)
+    {
+        PositionGraph.AddSegment(speedRatioData.Timing, speedRatioData.Ratio);
     }
 
     /// <summary>
@@ -49,10 +65,10 @@ public class ChartData
     /// </summary>
     /// <param name="noteType"></param>
     /// <returns></returns>
-    public List<INoteData> GetNoteDataList(NoteType noteType)
+    public IEnumerable<INoteData> GetNoteDataList(NoteType noteType)
     {
         // 引数のデータのノーツリストが存在するか確認
-        foreach (var noteList in AllNoteDataLists)
+        foreach (var noteList in allNoteDataLists)
         {
             // 存在する場合は追加して終了
             if (noteList.Count > 0 && noteList[0].NoteType == noteType)
@@ -65,10 +81,10 @@ public class ChartData
         return new List<INoteData>();
     }
 
-    public List<T> GetNoteDataList<T>(T noteData) where T : INoteData
+    public IEnumerable<T> GetNoteDataList<T>(T noteData) where T : INoteData
     {
         // 引数のデータのノーツリストが存在するか確認
-        foreach (var noteList in AllNoteDataLists)
+        foreach (var noteList in allNoteDataLists)
         {
             // 存在する場合は追加して終了
             if (noteList.Count > 0 && noteList[0].GetType() == noteData.GetType())
@@ -80,5 +96,4 @@ public class ChartData
         // 存在しない場合は空のリストを返す
         return null;
     }
-
 }

@@ -32,13 +32,13 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
         this.timer = initializingData.Timer;
     }
 
-    public override NoteObject<NoteData_HoldMesh> Spawn(NoteData_HoldMesh data)
+    public override NoteObject<NoteData_HoldMesh> Spawn(NoteData_HoldMesh data, INotePositionCalculator positionCalculator)
     {
         // 生成
-        NoteObject<NoteData_HoldMesh> note = GenerateNoteInstance(ConvertNoteData(data));
+        NoteObject<NoteData_HoldMesh> note = GenerateNoteInstance(ConvertNoteData(data), positionCalculator);
 
         // 位置調整
-        SetTransform(note, data);
+        SetTransform(note, positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value);
 
         // 初期化
         note.Initialize(data);
@@ -65,12 +65,12 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    private NoteObject<NoteData_HoldMesh> GenerateNoteInstance(NoteData_HoldMesh data)
+    private NoteObject<NoteData_HoldMesh> GenerateNoteInstance(NoteData_HoldMesh data, INotePositionCalculator positionCalculator)
     {
         GameObject origin = Instantiate(noteObjectOriginPrefab);
 
         // ノーツオブジェクトを生成
-        GameObject noteObj = GenerateMeshObject(data);
+        GameObject noteObj = GenerateMeshObject(data, positionCalculator);
 
         // originにくっつける
         noteObj.transform.SetParent(origin.transform);
@@ -84,12 +84,12 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
     /// <summary>
     /// ホールドのメッシュ部分の生成
     /// </summary>
-    private GameObject GenerateMeshObject(NoteData_HoldMesh noteData)
+    private GameObject GenerateMeshObject(NoteData_HoldMesh noteData, INotePositionCalculator positionCalculator)
     {
         GameObject obj = new GameObject("Mesh");
         MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
-        Mesh mesh = GroundHoldMeshGenerator.GenerateGroundHoldMesh(noteData.TimeToRanges, optionHolder.NoteSpeed.Value, meshHorizontalDivisionNum, maxTriangleLength);
+        Mesh mesh = GroundHoldMeshGenerator.GenerateGroundHoldMesh(noteData.TimeToRanges, positionCalculator, optionHolder.NoteSpeed.Value, meshHorizontalDivisionNum, maxTriangleLength);
 
         meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         meshFilter.mesh = mesh;
@@ -101,7 +101,7 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
     /// <summary>
     /// 位置調整など
     /// </summary>
-    private void SetTransform(NoteObject<NoteData_HoldMesh> note, NoteData_HoldMesh data)
+    private void SetTransform(NoteObject<NoteData_HoldMesh> note, float spawnZ)
     {
         // 動く地面を親登録
         note.transform.SetParent(groundObject.transform);
@@ -110,7 +110,7 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
         note.transform.localPosition = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
-            optionHolder.NoteSpeed.Value * data.Timing
+            spawnZ
             );
     }
 }

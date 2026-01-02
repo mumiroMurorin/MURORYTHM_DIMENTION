@@ -13,6 +13,9 @@ public class InteractNoteEffectSpawner_DynamicLeftwardBack : InteractNoteEffectS
 
     public override GameObject Spawn(NoteJudgementData judgementData)
     {
+        if (judgementData.Judgement == Judgement.Miss) { return null; }
+        if (judgementData.Judgement == Judgement.None) { return null; }
+
         var pos = Vector3.zero;
         var obj = Instantiate(backGroundEffect, pos, Quaternion.identity, parent);
 

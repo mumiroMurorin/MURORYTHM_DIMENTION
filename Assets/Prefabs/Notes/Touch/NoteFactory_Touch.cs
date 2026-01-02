@@ -30,13 +30,13 @@ public class NoteFactory_Touch : NoteFactory<NoteData_Touch>
         this.timer = initializingData.Timer;
     }
 
-    public override NoteObject<NoteData_Touch> Spawn(NoteData_Touch data)
+    public override NoteObject<NoteData_Touch> Spawn(NoteData_Touch data, INotePositionCalculator positionCalculator)
     {
         // 生成
         NoteObject<NoteData_Touch> note = GenerateNoteInstance(ConvertNoteData(data));
 
         // 位置調整
-        SetTransform(note, data);
+        SetTransform(note, positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value);
 
         // 初期化
         note.Initialize(data);
@@ -125,7 +125,7 @@ public class NoteFactory_Touch : NoteFactory<NoteData_Touch>
     /// <summary>
     /// 位置調整など
     /// </summary>
-    private void SetTransform(NoteObject<NoteData_Touch> note, NoteData_Touch data)
+    private void SetTransform(NoteObject<NoteData_Touch> note, float spawnZ)
     {
         // 動く地面を親登録
         note.transform.SetParent(groundObject.transform);
@@ -134,7 +134,7 @@ public class NoteFactory_Touch : NoteFactory<NoteData_Touch>
         note.transform.localPosition = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
-            optionHolder.NoteSpeed.Value * data.Timing
+            spawnZ
             );
     }
 }

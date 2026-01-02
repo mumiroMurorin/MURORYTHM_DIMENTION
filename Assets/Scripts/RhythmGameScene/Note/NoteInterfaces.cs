@@ -52,7 +52,7 @@ public interface INoteFactory<T> where T : INoteData
 {
     void Initialize(NoteFactoryInitializingData initializingData);
 
-    NoteObject<T> Spawn(T data);
+    NoteObject<T> Spawn(T data, INotePositionCalculator positionCalculator);
 }
 
 /// <summary>
@@ -63,9 +63,7 @@ public abstract class NoteFactory<T> : MonoBehaviour, INoteFactory<T> where T : 
 {
     public abstract void Initialize(NoteFactoryInitializingData initializingData);
 
-    public abstract NoteObject<T> Spawn(T data);
-
-    public Type DataType => typeof(T);
+    public abstract NoteObject<T> Spawn(T data, INotePositionCalculator positionCalculator);
 }
 
 /// <summary>

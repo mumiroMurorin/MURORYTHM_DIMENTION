@@ -114,4 +114,3 @@ public class NoteData_Touch : INoteData, IClippedJudgableNote
 
     public INoteSpawnDataOptionHolder OptionGetter { get; set; }
 }
-

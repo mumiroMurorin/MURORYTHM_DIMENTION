@@ -20,24 +20,21 @@ namespace ChartConvert
         Dictionary<int, List<TimeToVertices>> chainNumberToVertices = new Dictionary<int, List<TimeToVertices>>();
 
 
-        public ChartData Import(ChartDataOrigin dataOrigin, INoteSpawnDataOptionHolder optionHolder)
+        public ChartData Import(ChartDataOrigin originData, INoteSpawnDataOptionHolder optionHolder)
         {
             Initialize();
 
             bool isSucceed = true;
 
-            ChartData chartData = new ChartData();
-            CalcTimingClass calcTiming = new CalcTimingClass(dataOrigin.OffsetMs, optionHolder.OffsetMs.Value);
+            var chartData = new ChartData();
 
+            // ノートデータのセット
+            isSucceed &= SetNoteData(originData, chartData.AddNoteData, 
+                new CalcTimingClass(originData.OffsetMs, optionHolder.OffsetMs.Value));
 
-            // 分線を一つずつ取り出す
-            foreach (var bar in dataOrigin.BarDatas)
-            {
-                if (!SetdataFromBarData(bar, chartData.AddNoteData, calcTiming))
-                {
-                    isSucceed = false;
-                }
-            }
+            // 譜面倍速データのセット
+            isSucceed &= SetSpeedRatioData(originData, chartData.AddSpeedRatioData, 
+                new CalcTimingClass(originData.OffsetMs, optionHolder.OffsetMs.Value));
 
             if (isSucceed) { Debug.Log("【Converter】譜面データの変換成功"); }
             else { Debug.LogWarning("【Converter】譜面データの変換失敗。ログを確かめてください"); }
@@ -85,12 +82,32 @@ namespace ChartConvert
         }
 
         /// <summary>
+        /// ノーツデータのセット
+        /// </summary>
+        /// <param name="originData"></param>
+        /// <param name="onAddNoteData"></param>
+        /// <param name="calcTiming"></param>
+        /// <returns></returns>
+        private bool SetNoteData(ChartDataOrigin originData, Action<INoteData> onAddNoteData, CalcTimingClass calcTiming)
+        {
+            bool isSucceed = true;
+
+            // 分線を一つずつ取り出す
+            foreach (var bar in originData.BarDatas)
+            {
+                isSucceed &= SetDataFromBarData(bar, onAddNoteData, calcTiming);
+            }
+
+            return isSucceed;
+        }
+
+        /// <summary>
         /// 小節データから分節データを抽出してノーツデータに変換
         /// </summary>
         /// <param name="barDataOrigin"></param>
         /// <param name="chartData"></param>
         /// <returns></returns>
-        private bool SetdataFromBarData(BarDataOrigin barDataOrigin, Action<INoteData> onAddNoteData, CalcTimingClass calcTiming)
+        private bool SetDataFromBarData(BarDataOrigin barDataOrigin, Action<INoteData> onAddNoteData, CalcTimingClass calcTiming)
         {
             bool isSucceed = true;
 
@@ -158,6 +175,39 @@ namespace ChartConvert
             return isSucceed;
         }
 
+        /// <summary>
+        /// スピード倍率の変換
+        /// </summary>
+        /// <param name="barDataOrigin"></param>
+        /// <param name="onSpeedRatioDataListner"></param>
+        /// <returns></returns>
+        private bool SetSpeedRatioData(ChartDataOrigin originData, Action<SpeedRatioData> onAddSpeedRatioData, CalcTimingClass calcTiming)
+        {
+            float previousRatio = int.MinValue;
+
+            foreach (var bar in originData.BarDatas)
+            {
+                // 拍子、分割数の取得
+                int beatCount = bar.BeatCount;
+                float beatUnit = bar.BeatUnit;
+                int divNum = bar.DivisionNum;
+
+                foreach (var sub in bar.SubDivisionDatas)
+                {
+                    float bpm = sub.Bpm;
+                    float timing = calcTiming.CurrentTiming;
+
+                    if (sub.SpeedRatio == 0f) { sub.SpeedRatio = 1f; }
+                    onAddSpeedRatioData(new SpeedRatioData(sub.SpeedRatio, timing));
+                    calcTiming.AddTiming(beatUnit, divNum, bpm);
+
+                    // 前の倍率を保存
+                    previousRatio = sub.SpeedRatio;
+                }
+            }
+
+            return true;
+        }
     }
 
     /// <summary>

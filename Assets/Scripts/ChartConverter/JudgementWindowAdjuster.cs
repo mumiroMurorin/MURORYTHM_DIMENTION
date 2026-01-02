@@ -25,16 +25,13 @@ namespace ChartConvert
             // ノーツデータの中から判定持ちを取り出す
             foreach (var noteDataList in chartData.AllNoteDataLists)
             {
-                // 判定持ちノーツだったら取り出す
-                if (noteDataList.Count > 0 && noteDataList[0] is IJudgableNoteData)
+                foreach (var note in noteDataList)
                 {
-                    judgableList.AddRange(noteDataList.OfType<IJudgableNoteData>().ToList());
-                }
-
-                // 削り判定持ちノーツだったら取り出す
-                else if (noteDataList.Count > 0 && noteDataList[0] is IClippedJudgableNote)
-                {
-                    clippedJudgableList.AddRange(noteDataList.OfType<IClippedJudgableNote>().ToList());
+                    // 判定持ちノーツだったら取り出す
+                    if (note is IJudgableNoteData) { judgableList.AddRange(noteDataList.OfType<IJudgableNoteData>().ToList()); }
+                    // 削り判定持ちノーツだったら取り出す
+                    else if(note is IClippedJudgableNote) { clippedJudgableList.AddRange(noteDataList.OfType<IClippedJudgableNote>().ToList()); }
+                    break;
                 }
             }
 

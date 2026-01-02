@@ -48,6 +48,9 @@ namespace ChartConvert
         // おなじみBPM
         public float Bpm { get; set; }
 
+        // スピード倍率(ソフラン)
+        public float SpeedRatio { get; set; }
+
         // -------------- この分節に配置されているノーツリスト ------------------
 
         // タッチノーツ

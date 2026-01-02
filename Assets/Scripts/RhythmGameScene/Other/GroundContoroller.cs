@@ -9,22 +9,24 @@ public class GroundContoroller : MonoBehaviour
     [SerializeField] SerializeInterface<ITimeGetter> timer;
 
     INoteSpawnDataOptionHolder optionHolder;
+    IChartDataGetter chartDataGetter;
 
     [Inject]
-    public void Constructor(INoteSpawnDataOptionHolder optionHolder)
+    public void Constructor(INoteSpawnDataOptionHolder optionHolder, IChartDataGetter chartDataGetter)
     {
         this.optionHolder = optionHolder;
+        this.chartDataGetter = chartDataGetter;
     }
 
-    private void Start()
+    public void Initialize()
     {
         Bind();
     }
 
     private void Bind()
     {
-        if(timer == null) { return; }
-        if(timer.Value == null) { return; }
+        if (timer == null) { return; }
+        if (timer.Value == null) { return; }
 
         timer.Value.TimeRP
             .Subscribe(MoveGround)
@@ -36,6 +38,8 @@ public class GroundContoroller : MonoBehaviour
     /// </summary>
     private void MoveGround(float time)
     {
-        this.gameObject.transform.position = Vector3.back * optionHolder.NoteSpeed.Value * time;
+        float pos = chartDataGetter.Chart.PositionGraph.GetPosition(time);
+
+        this.gameObject.transform.position = Vector3.back * optionHolder.NoteSpeed.Value * pos;
     }
 }

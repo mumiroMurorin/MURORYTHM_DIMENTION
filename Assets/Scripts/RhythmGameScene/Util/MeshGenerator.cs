@@ -15,7 +15,7 @@ namespace MeshGenerate
         /// グラウンド沿いのメッシュを生成する
         /// </summary>
         /// <returns></returns>
-        public static Mesh GenerateGroundHoldMesh(List<TimeToRange> timeToRanges, float speed, int horizontalDivisionNum, float limitLength, float radius = 10f)
+        public static Mesh GenerateGroundHoldMesh(List<TimeToRange> timeToRanges, INotePositionCalculator posCalc, float speed, int horizontalDivisionNum, float limitLength, float radius = 10f)
         {
             Mesh mesh = new Mesh();
 
@@ -26,12 +26,12 @@ namespace MeshGenerate
             List<Vector3> vertices = new List<Vector3>();
             List<Vector2> uvs = new List<Vector2>();
             float currentStartZ = 0;
-            float maxLength = speed * (timeToRanges[^1].Timing - timeToRanges[0].Timing);
+            float maxLength = speed * (posCalc.GetPosition(timeToRanges[^1].Timing) - posCalc.GetPosition(timeToRanges[0].Timing));
             int currentMeshIndex = 0;
 
             for (int i = 0; i < timeToRanges.Count - 1; i++)
             {
-                float length = speed * (timeToRanges[i + 1].Timing - timeToRanges[i].Timing);
+                float length = speed * (posCalc.GetPosition(timeToRanges[i + 1].Timing) - posCalc.GetPosition(timeToRanges[i].Timing));
 
                 // それぞれの端のインデックスを代入
                 float startLeft = timeToRanges[i].Range[0];
@@ -186,7 +186,7 @@ namespace MeshGenerate
         /// <param name="meshDivisionNum"></param>
         /// <param name="isMeshReverse"></param>
         /// <returns></returns>
-        public static Mesh GenerateSpaceHoldEdgeMesh(List<TimeToVertices> timeToVertices, float speed, int meshDivisionNum, float lerpThresholdDepth, bool isMeshReverse)
+        public static Mesh GenerateSpaceHoldEdgeMesh(List<TimeToVertices> timeToVertices, INotePositionCalculator posCalc, float speed, int meshDivisionNum, float lerpThresholdDepth, bool isMeshReverse)
         {
             if (timeToVertices == null) { return new Mesh(); }
             if (timeToVertices.Count == 0) { return new Mesh(); }
@@ -195,7 +195,7 @@ namespace MeshGenerate
 
             foreach (var t in timeToVertices)
             {
-                var depth = speed * t.Timing;
+                var depth = speed * posCalc.GetPosition(t.Timing);
                 var vertices = t.Vertices;
                 depthToVerticesList.Add(new DepthToVertices(depth, vertices));
             }
@@ -203,7 +203,7 @@ namespace MeshGenerate
             return GenerateSpaceHoldEdgeMesh(depthToVerticesList, meshDivisionNum, lerpThresholdDepth, isMeshReverse);
         }
 
-        public static Mesh GenerateSpaceHoldEdgeMesh(List<DepthToVertices> depthToVertices, int meshDivisionNum, float lerpThresholdDepth, bool isMeshReverse)
+        private static Mesh GenerateSpaceHoldEdgeMesh(List<DepthToVertices> depthToVertices, int meshDivisionNum, float lerpThresholdDepth, bool isMeshReverse)
         {
             Mesh mesh = new Mesh();
             mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;    // ドデカイメッシュに対応

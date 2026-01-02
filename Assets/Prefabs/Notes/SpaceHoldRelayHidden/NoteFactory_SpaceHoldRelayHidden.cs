@@ -35,13 +35,13 @@ public class NoteFactory_SpaceHoldRelayHidden : NoteFactory<NoteData_SpaceHoldRe
         this.timer = initializingData.Timer;
     }
 
-    public override NoteObject<NoteData_SpaceHoldRelayHidden> Spawn(NoteData_SpaceHoldRelayHidden data)
+    public override NoteObject<NoteData_SpaceHoldRelayHidden> Spawn(NoteData_SpaceHoldRelayHidden data, INotePositionCalculator positionCalculator)
     {
         // 生成
         NoteObject<NoteData_SpaceHoldRelayHidden> note = GenerateNoteInstance(ConvertNoteData(data));
 
         // 位置調整
-        SetTransform(note, data);
+        SetTransform(note, positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value);
 
         // 初期化
         note.Initialize(data);
@@ -132,7 +132,7 @@ public class NoteFactory_SpaceHoldRelayHidden : NoteFactory<NoteData_SpaceHoldRe
     /// <summary>
     /// 位置調整など
     /// </summary>
-    private void SetTransform(NoteObject<NoteData_SpaceHoldRelayHidden> note, NoteData_SpaceHoldRelayHidden data)
+    private void SetTransform(NoteObject<NoteData_SpaceHoldRelayHidden> note, float spawnZ)
     {
         // 動く地面を親登録
         note.transform.SetParent(groundObject.transform);
@@ -141,7 +141,7 @@ public class NoteFactory_SpaceHoldRelayHidden : NoteFactory<NoteData_SpaceHoldRe
         note.transform.localPosition = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
-            optionHolder.NoteSpeed.Value * data.Timing
+            spawnZ
             );
     }
 }

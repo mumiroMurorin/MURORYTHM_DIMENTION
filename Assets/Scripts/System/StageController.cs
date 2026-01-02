@@ -26,7 +26,12 @@ public class StageController : MonoBehaviour, IStageController
         titleOutline.ApplyOutline(titleObj);
 
         // 難易度オブジェクトのスポーン
-        var diffObj = characterSpawner.SpawnCharacter(musicDataGetter.Difficulty.Value.ToString().ToUpper(), difficultySettings);
+        string difString = "";
+        if (musicDataGetter.Difficulty.Value != Difficulty.Master) { difString = musicDataGetter.Difficulty.Value.ToString().ToUpper(); }
+        else if (musicDataGetter.Music.Value.SymphonyType == SymphonyType.Creation) { difString = "GENESIS"; }
+        else if (musicDataGetter.Music.Value.SymphonyType == SymphonyType.Destruction) { difString = "APOCALYPSE"; }
+
+        var diffObj = characterSpawner.SpawnCharacter(difString, difficultySettings);
         diffObj.transform.SetParent(difficultyParent);
         diffObj.transform.localPosition = Vector3.zero;
         diffObj.transform.localEulerAngles = Vector3.zero;

@@ -6,49 +6,64 @@
       "DivisionNum": 6,
       "SubDivisionDatas": [
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": -0.1
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": -0.1
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": -0.1
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": -0.1
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": -8
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": -0.1
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": -0.1
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": -8
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": -0.1
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": -0.1
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": -8
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
@@ -396,6 +411,7 @@
         },
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1,
           "TouchNoteData": [
             {
               "Range": [
@@ -417,13 +433,16 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+          "SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 1,
@@ -436,13 +455,16 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+          "SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 2,
@@ -455,10 +477,12 @@
           ]
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         }
       ]
     },
@@ -469,6 +493,7 @@
       "SubDivisionDatas": [
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 3,
@@ -508,6 +533,7 @@
         },
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 3,
@@ -528,10 +554,12 @@
           ]
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 3,
@@ -552,16 +580,20 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+          "SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+          "SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 3,
@@ -582,13 +614,16 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+          "SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 2,
@@ -609,19 +644,24 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+          "SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+          "SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+          "SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 3,
@@ -642,13 +682,16 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+          "SpeedRatio": 1,
           "DynamicUpwardData": [
             {
               "Range": [
@@ -1352,6 +1395,7 @@
       "SubDivisionDatas": [
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1,
           "DynamicRightwardData": [
             {
               "Range": [
@@ -1465,22 +1509,28 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+          "SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+          "SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+          "SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+          "SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 6,
@@ -1566,13 +1616,16 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+          "SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 6,
@@ -1587,10 +1640,12 @@
           ]
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+          "SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 6,
@@ -1606,6 +1661,7 @@
         },
         {
           "Bpm": 90.0,
+          "SpeedRatio": 1,
           "DivineTouchData": [
             {
               "Range": [
@@ -1797,22 +1853,28 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 7,
@@ -1898,13 +1960,16 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 7,
@@ -1919,10 +1984,12 @@
           ]
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 7,
@@ -1938,6 +2005,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "DivineTouchData": [
             {
               "Range": [
@@ -2129,22 +2197,28 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 8,
@@ -2230,13 +2304,16 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 8,
@@ -2251,10 +2328,12 @@
           ]
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 8,
@@ -2277,6 +2356,7 @@
       "SubDivisionDatas": [
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "DivineTouchData": [
             {
               "Range": [
@@ -2468,22 +2548,28 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 9,
@@ -2569,13 +2655,16 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 9,
@@ -2590,10 +2679,12 @@
           ]
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 9,
@@ -2609,6 +2700,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "DivineTouchData": [
             {
               "Range": [
@@ -2800,22 +2892,28 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 11,
@@ -2901,13 +2999,16 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 11,
@@ -2922,10 +3023,12 @@
           ]
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 11,
@@ -2941,6 +3044,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "DivineTouchData": [
             {
               "Range": [
@@ -3132,22 +3236,28 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 10,
@@ -3233,13 +3343,16 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 10,
@@ -3254,10 +3367,12 @@
           ]
         },
         {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 10,
@@ -3280,6 +3395,7 @@
       "SubDivisionDatas": [
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "DivineTouchData": [
             {
               "Range": [
@@ -3479,22 +3595,28 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 12,
@@ -3581,24 +3703,7 @@
         },
         {
           "Bpm": 90.0,
-          "HoldMeshRelayData": [
-            {
-              "HoldNumber": 12,
-              "Range": [
-                5,
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 12,
@@ -3614,6 +3719,27 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 12,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 12,
@@ -3629,6 +3755,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 12,
@@ -3644,6 +3771,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "DivineTouchData": [
             {
               "Range": [
@@ -3843,22 +3971,28 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 13,
@@ -3945,24 +4079,7 @@
         },
         {
           "Bpm": 90.0,
-          "HoldMeshRelayData": [
-            {
-              "HoldNumber": 13,
-              "Range": [
-                6,
-                7,
-                8,
-                9,
-                10
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 13,
@@ -3978,6 +4095,27 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 13,
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 13,
@@ -3993,6 +4131,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 13,
@@ -4008,6 +4147,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "DivineTouchData": [
             {
               "Range": [
@@ -4207,22 +4347,28 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 14,
@@ -4309,24 +4455,7 @@
         },
         {
           "Bpm": 90.0,
-          "HoldMeshRelayData": [
-            {
-              "HoldNumber": 14,
-              "Range": [
-                5,
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 14,
@@ -4342,6 +4471,27 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 14,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 14,
@@ -4357,6 +4507,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 14,
@@ -4379,6 +4530,7 @@
       "SubDivisionDatas": [
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "DivineTouchData": [
             {
               "Range": [
@@ -4578,22 +4730,28 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 15,
@@ -4680,6 +4838,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 15,
@@ -4695,6 +4854,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 15,
@@ -4710,6 +4870,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 15,
@@ -4725,6 +4886,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 15,
@@ -4740,6 +4902,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 15,
@@ -4755,6 +4918,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "DivineTouchData": [
             {
               "Range": [
@@ -4954,22 +5118,28 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 16,
@@ -5056,6 +5226,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 16,
@@ -5071,6 +5242,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 16,
@@ -5086,6 +5258,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 16,
@@ -5101,6 +5274,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 16,
@@ -5116,6 +5290,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 16,
@@ -5131,6 +5306,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "DivineTouchData": [
             {
               "Range": [
@@ -5330,22 +5506,28 @@
           ]
         },
         {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
-        },
-        {
-          "Bpm": 90.0
+          "Bpm": 90.0,
+"SpeedRatio": 1
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1
+        },
+        {
+          "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldStartData": [
             {
               "HoldNumber": 17,
@@ -5432,6 +5614,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 17,
@@ -5447,6 +5630,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 17,
@@ -5462,6 +5646,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 17,
@@ -5477,6 +5662,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 17,
@@ -5492,6 +5678,7 @@
         },
         {
           "Bpm": 90.0,
+"SpeedRatio": 1,
           "HoldMeshRelayData": [
             {
               "HoldNumber": 17,

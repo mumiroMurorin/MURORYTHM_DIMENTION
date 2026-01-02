@@ -49,8 +49,8 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
         }
 
         // •ˆ–Êƒf[ƒ^‚Ì•ÏŠ·
-        ChartImporterForRhythmGame chartImporter = new ChartImporterForRhythmGame();
-        ChartData chart = chartImporter.Import(chartDataOrigin, optionGetter);
+        var chartImporter = new ChartImporterForRhythmGame();
+        var chart = chartImporter.Import(chartDataOrigin, optionGetter);
 
         // ”»’è˜g‚Ì’²®
         JudgementWindowAdjuster judgementWindowAdjuster = new JudgementWindowAdjuster();

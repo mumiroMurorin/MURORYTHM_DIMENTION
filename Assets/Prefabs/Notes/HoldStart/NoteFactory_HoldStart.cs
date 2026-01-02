@@ -30,13 +30,13 @@ public class NoteFactory_HoldStart : NoteFactory<NoteData_HoldStart>
         this.timer = initializingData.Timer;
     }
 
-    public override NoteObject<NoteData_HoldStart> Spawn(NoteData_HoldStart data)
+    public override NoteObject<NoteData_HoldStart> Spawn(NoteData_HoldStart data, INotePositionCalculator positionCalculator)
     {
         // 生成
         NoteObject<NoteData_HoldStart> note = GenerateNoteInstance(ConvertNoteData(data));
 
         // 位置調整
-        SetTransform(note, data);
+        SetTransform(note, positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value);
 
         // 初期化
         note.Initialize(data);
@@ -126,7 +126,7 @@ public class NoteFactory_HoldStart : NoteFactory<NoteData_HoldStart>
     /// <summary>
     /// 位置調整など
     /// </summary>
-    private void SetTransform(NoteObject<NoteData_HoldStart> note, NoteData_HoldStart data)
+    private void SetTransform(NoteObject<NoteData_HoldStart> note, float spawnZ)
     {
         // 動く地面を親登録
         note.transform.SetParent(groundObject.transform);
@@ -135,7 +135,7 @@ public class NoteFactory_HoldStart : NoteFactory<NoteData_HoldStart>
         note.transform.localPosition = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
-            optionHolder.NoteSpeed.Value * data.Timing
+            spawnZ
             );
     }
 }

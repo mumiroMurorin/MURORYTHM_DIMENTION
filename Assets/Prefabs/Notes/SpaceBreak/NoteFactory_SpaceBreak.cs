@@ -38,13 +38,13 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
         this.timer = initializingData.Timer;
     }
 
-    public override NoteObject<NoteData_SpaceBreak> Spawn(NoteData_SpaceBreak data)
+    public override NoteObject<NoteData_SpaceBreak> Spawn(NoteData_SpaceBreak data, INotePositionCalculator positionCalculator)
     {
         // 生成
         NoteObject<NoteData_SpaceBreak> note = GenerateNoteInstance(ConvertNoteData(data));
 
         // 位置調整
-        SetTransform(note, data);
+        SetTransform(note, positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value);
 
         // 初期化
         note.Initialize(data);
@@ -157,7 +157,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     /// <summary>
     /// 位置調整など
     /// </summary>
-    private void SetTransform(NoteObject<NoteData_SpaceBreak> note, NoteData_SpaceBreak data)
+    private void SetTransform(NoteObject<NoteData_SpaceBreak> note, float spawnZ)
     {
         // 動く地面を親登録
         note.transform.SetParent(groundObject.transform);
@@ -166,7 +166,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
         note.transform.localPosition = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
-            optionHolder.NoteSpeed.Value * data.Timing
+            spawnZ
             );
     }
 }

@@ -10,6 +10,7 @@ namespace TransitionerInRhythmGameScene
         [SerializeField] SerializeInterface<IChartGenerator> chartGenerator;
         [SerializeField] SerializeInterface<IChartEnder> chartEnder;
         [SerializeField] SerializeInterface<IScoreCalculaterSetter> scoreCalculaterSetter;
+        [SerializeField] GroundContoroller groundController;
         [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.LoadChart;
@@ -27,6 +28,7 @@ namespace TransitionerInRhythmGameScene
             chartGenerator.Value.Generate(() => 
             { 
                 scoreCalculaterSetter.Value.SetScoreCalculater();
+                groundController.Initialize();
                 TransitionNextPhase(); 
             });
         }

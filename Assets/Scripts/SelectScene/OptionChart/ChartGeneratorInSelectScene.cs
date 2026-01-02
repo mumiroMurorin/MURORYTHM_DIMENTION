@@ -34,12 +34,23 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
     [SerializeField] Deformer groundDeformer;
     [SerializeField] SerializeInterface<ITimeGetter> timer;
 
-    [Inject] INoteSpawnDataOptionHolder spawnDataOptionHolder;
-    [Inject] ISliderInputGetter sliderInputGetter;
-    [Inject] ISpaceInputGetter spaceInputGetter;
-    [Inject] IJudgementRecorder judgementRecorder;
+    INoteSpawnDataOptionHolder spawnDataOptionHolder;
+    ISliderInputGetter sliderInputGetter;
+    ISpaceInputGetter spaceInputGetter;
+    IJudgementRecorder judgementRecorder;
+    IOptionGetter optionGetter;
 
     List<GameObject> noteObjects;
+
+    [Inject]
+    public void Constructor(INoteSpawnDataOptionHolder spawnDataOptionHolder, ISliderInputGetter sliderInputGetter, ISpaceInputGetter spaceInputGetter, IJudgementRecorder judgementRecorder, IOptionGetter optionGetter)
+    {
+        this.spawnDataOptionHolder = spawnDataOptionHolder;
+        this.sliderInputGetter = sliderInputGetter;
+        this.spaceInputGetter = spaceInputGetter;
+        this.judgementRecorder = judgementRecorder;
+        this.optionGetter = optionGetter;
+    }
 
     private void Awake()
     {
@@ -124,7 +135,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_Touch data in noteDatas)
         {
-            noteObjects.Add(touchNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(touchNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -139,7 +150,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_DivineTouch data in noteDatas)
         {
-            noteObjects.Add(divineTouchNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(divineTouchNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -153,7 +164,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_DynamicGroundUpward data in noteDatas)
         {
-            noteObjects.Add(dynamicGroundUpwardNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(dynamicGroundUpwardNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -167,7 +178,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_DynamicGroundRightward data in noteDatas)
         {
-            noteObjects.Add(dynamicGroundRightwardNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(dynamicGroundRightwardNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -181,7 +192,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_DynamicGroundLeftward data in noteDatas)
         {
-            noteObjects.Add(dynamicGroundLeftwardNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(dynamicGroundLeftwardNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -195,7 +206,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_DynamicGroundDownward data in noteDatas)
         {
-            noteObjects.Add(dynamicGroundDownwardNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(dynamicGroundDownwardNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -209,7 +220,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_HoldStart data in noteDatas)
         {
-            noteObjects.Add(holdStartNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(holdStartNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -223,7 +234,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_HoldRelay data in noteDatas)
         {
-            noteObjects.Add(holdRelayNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(holdRelayNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -237,7 +248,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_HoldRelayHidden data in noteDatas)
         {
-            noteObjects.Add(holdRelayHiddenNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(holdRelayHiddenNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -251,7 +262,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_HoldEnd data in noteDatas)
         {
-            noteObjects.Add(holdEndNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(holdEndNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -265,7 +276,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_HoldEndUnjudge data in noteDatas)
         {
-            noteObjects.Add(holdEndUnjudgeNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(holdEndUnjudgeNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -279,7 +290,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_HoldMesh data in noteDatas)
         {
-            noteObjects.Add(holdMeshNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(holdMeshNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -293,7 +304,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_SpaceHoldMesh data in noteDatas)
         {
-            noteObjects.Add(spaceHoldMeshNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(spaceHoldMeshNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -308,7 +319,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_SpaceHoldRelay data in noteDatas)
         {
-            noteObjects.Add(spaceHoldRelayNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(spaceHoldRelayNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -322,7 +333,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (NoteData_SpaceHoldRelayHidden data in noteDatas)
         {
-            noteObjects.Add(spaceHoldRelayHiddenNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(spaceHoldRelayHiddenNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 
@@ -336,7 +347,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
         foreach (var data in noteDatas)
         {
-            noteObjects.Add(spaceBreakNoteFactory.Spawn(data).gameObject);
+            noteObjects.Add(spaceBreakNoteFactory.Spawn(data, new PositionGraphOption()).gameObject);
         }
     }
 }

@@ -33,13 +33,13 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         this.timer = initializingData.Timer;
     }
 
-    public override NoteObject<NoteData_SpaceHoldMesh> Spawn(NoteData_SpaceHoldMesh data)
+    public override NoteObject<NoteData_SpaceHoldMesh> Spawn(NoteData_SpaceHoldMesh data, INotePositionCalculator positionCalculator)
     {
         // 生成
-        NoteObject<NoteData_SpaceHoldMesh> note = GenerateNoteInstance(ConvertNoteData(data));
+        NoteObject<NoteData_SpaceHoldMesh> note = GenerateNoteInstance(ConvertNoteData(data), positionCalculator);
 
         // 位置調整
-        SetTransform(note, data);
+        SetTransform(note, positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value);
 
         // 初期化
         note.Initialize(data);
@@ -66,16 +66,16 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    private NoteObject<NoteData_SpaceHoldMesh> GenerateNoteInstance(NoteData_SpaceHoldMesh data)
+    private NoteObject<NoteData_SpaceHoldMesh> GenerateNoteInstance(NoteData_SpaceHoldMesh data, INotePositionCalculator positionCalculator)
     {
         GameObject origin = Instantiate(noteObjectOriginPrefab);
 
         // ノーツオブジェクト(表)を生成
-        GameObject noteObj = GenerateMeshObject(data, false);
+        GameObject noteObj = GenerateMeshObject(data, false, positionCalculator);
         noteObj.transform.SetParent(origin.transform);
 
         // ノーツオブジェクト(裏)を生成
-        GameObject noteObj_ = GenerateMeshObject(data, true);
+        GameObject noteObj_ = GenerateMeshObject(data, true, positionCalculator);
         noteObj_.transform.SetParent(origin.transform);
 
         // コンポーネントを取得
@@ -87,7 +87,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     /// <summary>
     /// ホールドのメッシュ部分の生成
     /// </summary>
-    private GameObject GenerateMeshObject(NoteData_SpaceHoldMesh noteData, bool isMeshReverse)
+    private GameObject GenerateMeshObject(NoteData_SpaceHoldMesh noteData, bool isMeshReverse, INotePositionCalculator positionCalculator)
     {
         GameObject obj = new GameObject("Mesh");
         MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
@@ -100,7 +100,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
             timeToVertices.Add(new TimeToVertices(t.Timing, t.Vertices.Select(v => (Vector2)MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToArray()));
         }
 
-        Mesh mesh = SpaceHoldMeshGenerator.GenerateSpaceHoldEdgeMesh(timeToVertices, optionHolder.NoteSpeed.Value, meshDivisionNum, maxTriangleLength, isMeshReverse);
+        Mesh mesh = SpaceHoldMeshGenerator.GenerateSpaceHoldEdgeMesh(timeToVertices, positionCalculator, optionHolder.NoteSpeed.Value, meshDivisionNum, maxTriangleLength, isMeshReverse);
         meshFilter.mesh = mesh;
 
         obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
@@ -110,7 +110,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     /// <summary>
     /// 位置調整など
     /// </summary>
-    private void SetTransform(NoteObject<NoteData_SpaceHoldMesh> note, NoteData_SpaceHoldMesh data)
+    private void SetTransform(NoteObject<NoteData_SpaceHoldMesh> note, float spawnZ)
     {
         // 動く地面を親登録
         note.transform.SetParent(groundObject.transform);
@@ -119,7 +119,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         note.transform.localPosition = new Vector3(
             note.transform.position.x,
             note.transform.position.y,
-            optionHolder.NoteSpeed.Value * data.Timing
+            spawnZ
             );
     }
 }

@@ -10,6 +10,8 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
     [SerializeField] bool isDebugMode;
 
     [SerializeField] MusicData musicData_debug;
+    [Space(20)]
+    [SerializeField] Difficulty difficulty;
     [SerializeField] string chartFilePath;
     [SerializeField] float noteSpeed;
     [SerializeField] bool isAutoMode;
@@ -34,9 +36,8 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
 #if UNITY_EDITOR
         if (!isDebugMode) { return; }
 
-        Difficulty difficulty = musicDataGetter.Difficulty.Value;
-
-        if (musicDataGetter.Music.Value == null || musicDataGetter.Music.Value.GetChartPath(difficulty) == null || musicDataGetter.Music.Value.GetChartPath(difficulty) == "")
+        var dif = musicDataGetter.Difficulty.Value;
+        if (musicDataGetter.Music.Value == null || musicDataGetter.Music.Value.GetChartPath(dif) == null || musicDataGetter.Music.Value.GetChartPath(dif) == "")
         {
             musicData_debug.SetChartPath(Difficulty.Easy, Application.dataPath + "/" + chartFilePath);
             musicData_debug.SetChartPath(Difficulty.Normal, Application.dataPath + "/" + chartFilePath);
@@ -48,6 +49,7 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
         optionSetter.SetNoteSpeed(noteSpeed);
         optionSetter.SetAutoMode(isAutoMode);
         optionSetter.SetIsEnabledFastLate(isFastLateEnabled);
+        musicDataSetter.SetDifficulty(difficulty);
 #endif
     }
 }
