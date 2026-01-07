@@ -27,6 +27,11 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
     void IChartLoader.LoadChart(Action callback)
     {
         Difficulty difficulty = musicDataGetter.Difficulty.Value;
+        Debug.Log(difficulty);
+        Debug.Log(musicDataGetter.Music.Value.GetChartPath(Difficulty.Easy));
+        Debug.Log(musicDataGetter.Music.Value.GetChartPath(Difficulty.Normal));
+        Debug.Log(musicDataGetter.Music.Value.GetChartPath(Difficulty.Hard));
+        Debug.Log(musicDataGetter.Music.Value.GetChartPath(Difficulty.Master));
         ChartData chartData = LoadChartData(musicDataGetter.Music.Value.GetChartPath(difficulty));
 
         chartDataSetter.SetChartData(chartData);

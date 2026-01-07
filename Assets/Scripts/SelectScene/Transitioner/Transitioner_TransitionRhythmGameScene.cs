@@ -10,8 +10,7 @@ namespace TransitionerInSelectScene
 {
     public class Transitioner_TransitionRhythmGameScene : IPhaseTransitionerInSelectScene
     {
-        const string NEXT_SCENE_NAME = "RhythmGameScene";
-
+        [SerializeField] string nextSceneName = "RhythmGameScene";
         [SerializeField] SerializeInterface<IPhaseTransitionableInSelectScene> phaseTransitionable;
         [SerializeField] float waitTime = 0.5f;
 
@@ -31,7 +30,7 @@ namespace TransitionerInSelectScene
 
         private async UniTaskVoid LoadSceneAsync(CancellationToken token)
         {
-            var async = SceneManager.LoadSceneAsync(NEXT_SCENE_NAME);
+            var async = SceneManager.LoadSceneAsync(nextSceneName);
 
             async.allowSceneActivation = false;
             await UniTask.WaitForSeconds(waitTime, cancellationToken: token);

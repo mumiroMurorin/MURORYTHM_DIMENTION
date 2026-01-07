@@ -4355,6 +4355,7 @@ MonoBehaviour:
     - rid: 4868282907093106688
       type: {class: Transitioner_TransitionRhythmGameScene, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
       data:
+        nextSceneName: RhythmGameScene_Grad
         phaseTransitionable:
           obj: {fileID: 1012713960}
         waitTime: 0.5
@@ -8127,6 +8128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2afcab0a5f0411444835c181107cd06f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  symphonyType: 0
   spawners:
   - {fileID: 1586409691}
   - {fileID: 508957349}

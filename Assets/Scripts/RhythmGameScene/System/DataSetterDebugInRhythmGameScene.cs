@@ -44,12 +44,13 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
             musicData_debug.SetChartPath(Difficulty.Hard, Application.dataPath + "/" + chartFilePath);
             musicData_debug.SetChartPath(Difficulty.Master, Application.dataPath + "/" + chartFilePath);
             musicDataSetter.SetMusicData(musicData_debug);
+            musicDataSetter.SetDifficulty(difficulty);
         }
 
         optionSetter.SetNoteSpeed(noteSpeed);
         optionSetter.SetAutoMode(isAutoMode);
         optionSetter.SetIsEnabledFastLate(isFastLateEnabled);
-        musicDataSetter.SetDifficulty(difficulty);
+        
 #endif
     }
 }
