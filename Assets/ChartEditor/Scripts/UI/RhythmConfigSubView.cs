@@ -10,6 +10,7 @@ namespace ChartEditor
     public class RhythmConfigSubView : MonoBehaviour
     {
         [SerializeField] TMP_InputField bpmField;
+        [SerializeField] TMP_InputField speedRatioField;
 
         public Action OnClickedApplyButtonListner { get; set; }
 
@@ -29,6 +30,7 @@ namespace ChartEditor
 
             // 数値のセット
             bpmField.text = subConfig.Bpm == -1 ? "" : subConfig.Bpm.ToString();
+            speedRatioField.text = subConfig.SpeedRatio.ToString();
         }
 
         /// <summary>
@@ -42,6 +44,12 @@ namespace ChartEditor
             {
                 subDivisionData.SetBpm(bpm);
             }
+
+            // SpeedRatioのセット
+            if (!string.IsNullOrWhiteSpace(speedRatioField.text) && float.TryParse(speedRatioField.text, out float speedRatio))
+            {
+                subDivisionData.SetSpeedRatio(speedRatio);
+            }
         }
 
         /// <summary>
@@ -51,15 +59,23 @@ namespace ChartEditor
         public void SetData(Action<SubdivisionConfig> setSubdivisionConfig)
         {
             float bpm = 1;
+            float speedRatio = 1;
 
             // BPMのセット
             if (string.IsNullOrWhiteSpace(bpmField.text) || !float.TryParse(bpmField.text, out bpm))
             {
-                Debug.Log($"DivisionNumに有効な数字を入力してください: {bpmField.text}");
+                Debug.Log($"BPMに有効な数字を入力してください: {bpmField.text}");
                 return;
             }
 
-            var subdivConfig = new SubdivisionConfig(bpm);
+            // SpeedRatioのセット
+            if (string.IsNullOrWhiteSpace(speedRatioField.text) || !float.TryParse(speedRatioField.text, out speedRatio))
+            {
+                Debug.Log($"スピード倍率に有効な数字を入力してください: {speedRatioField.text}");
+                return;
+            }
+
+            var subdivConfig = new SubdivisionConfig(bpm, speedRatio);
             setSubdivisionConfig.Invoke(subdivConfig);
         }
 

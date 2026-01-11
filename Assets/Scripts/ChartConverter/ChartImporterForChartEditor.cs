@@ -104,6 +104,7 @@ namespace ChartConvert
 
             // bpmのセット
             dataInChartEditor.SetBpm(dataOrigin.Bpm);
+            dataInChartEditor.SetSpeedRatio(dataOrigin.SpeedRatio);
 
             // 一つずつ取り出して変換
             foreach (var converter in unchainConverters)

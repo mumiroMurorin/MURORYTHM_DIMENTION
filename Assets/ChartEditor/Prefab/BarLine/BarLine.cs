@@ -27,6 +27,11 @@ namespace ChartEditor
             subInfo_view.SetBPM(bpm);
         }
 
+        public override void OnChangeSpeedRatio(float speedRatio, float backSpeedRatio)
+        {
+            subInfo_view.SetSpeedRatio(speedRatio, !Mathf.Approximately(speedRatio, backSpeedRatio));
+        }
+
         public override void OnChangeBeatCount(int beatCount, int backCount)
         {
             //// 前データと同じbeatCountの時は表示しない

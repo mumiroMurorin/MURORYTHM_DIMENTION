@@ -149,6 +149,13 @@ namespace ChartEditor
                 .AddTo(this.gameObject)
                 .AddTo(lineObj);
 
+            // スピード倍率の更新 → 表記の更新
+            subData.SpeedRatio
+                .Where(_ => lineObj != null)
+                .Subscribe(ratio => OnChangeSpeedRatio(subData.BarData.BarIndex, subData.SubDivisionIndex,ratio))
+                .AddTo(this.gameObject)
+                .AddTo(lineObj);
+
             // BeatUnitの更新 → 表記の更新
             subData.BarData.BeatUnit
                 .Where(_ => lineObj != null)
@@ -288,6 +295,19 @@ namespace ChartEditor
             var backBpm = pair.Item1 != 0 ? lines[index - 1].Data.Bpm.Value : -1f;
 
             thisObj.OnChangeBpm(bpm, backBpm);
+        }
+
+        private void OnChangeSpeedRatio(int barIndex, int subIndex, float speedRatio)
+        {
+            // 表記の更新
+            var pair = Find(barIndex, subIndex);
+            var index = pair.Item1;
+            if (index < 0) { return; }
+
+            var thisObj = pair.Item2.Obj;
+            var backSpeedRatio = pair.Item1 != 0 ? lines[index - 1].Data.SpeedRatio.Value : float.MinValue;
+
+            thisObj.OnChangeSpeedRatio(speedRatio, backSpeedRatio);
         }
 
         /// <summary>

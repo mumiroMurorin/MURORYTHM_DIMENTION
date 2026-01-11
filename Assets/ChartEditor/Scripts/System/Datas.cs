@@ -279,12 +279,23 @@ namespace ChartEditor
 
     public class SubdivisionConfig
     {
-        public SubdivisionConfig(float bpm)
+        public SubdivisionConfig(float bpm, float speedRatio)
         {
             this.Bpm = bpm;
+            this.SpeedRatio = speedRatio;
+        }
+
+        public SubdivisionConfig(SubdivisionConfig config)
+        {
+            if(config == null) { return; }
+
+            this.Bpm = config.Bpm;
+            this.SpeedRatio = config.SpeedRatio;
         }
 
         public float Bpm { get; set; }
+
+        public float SpeedRatio { get; set; }
     }
 
     [System.Serializable]

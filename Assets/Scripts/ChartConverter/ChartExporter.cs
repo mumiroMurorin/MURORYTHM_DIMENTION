@@ -127,8 +127,9 @@ namespace ChartConvert
         /// <param name="dataOrigin"></param>
         private bool SetSubDivisionData(ISubDivisionDataGetter dataInEditor, SubDivisionDataOrigin dataOrigin)
         {
-            // BPMのセット
+            // BPM、スピード倍率のセット
             dataOrigin.Bpm = dataInEditor.Bpm.Value;
+            dataOrigin.SpeedRatio = dataInEditor.SpeedRatio.Value;
 
             // 変換に成功したかの判定
             bool isSucceed = true;

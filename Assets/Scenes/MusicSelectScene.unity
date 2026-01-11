@@ -4355,7 +4355,7 @@ MonoBehaviour:
     - rid: 4868282907093106688
       type: {class: Transitioner_TransitionRhythmGameScene, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
       data:
-        nextSceneName: RhythmGameScene_Grad
+        nextSceneName: RhythmGameScene
         phaseTransitionable:
           obj: {fileID: 1012713960}
         waitTime: 0.5

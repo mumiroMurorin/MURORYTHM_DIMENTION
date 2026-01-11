@@ -17,6 +17,7 @@ namespace ChartEditor
         public SubDivisionDataInBeat(SubdivisionConfig config, IBarDataGetter barData, int subIndex)
         {
             SetBpm(config.Bpm);
+            SetSpeedRatio(config.SpeedRatio);
             this.barData = barData;
             SubDivisionIndex = subIndex;
         }
@@ -25,7 +26,7 @@ namespace ChartEditor
         public IBarDataGetter BarData { get { return barData; } }
 
         public int SubDivisionIndex { get; }
-        public SubdivisionConfig SubConfig { get { return new SubdivisionConfig(this.bpm.Value); } }
+        public SubdivisionConfig SubConfig { get { return new SubdivisionConfig(this.bpm.Value, this.speedRatio.Value); } }
 
         // Ground配置場所
         Transform[] placementLocation;
@@ -98,6 +99,24 @@ namespace ChartEditor
         }
 
         #endregion
+
+
+        #region SpeedRatio
+
+        const float SPEEDRATIO_MIN = -100f;
+        const float SPEEDRATIO_MAX = 100f;
+
+        /// <summary>
+        /// スピード倍率変化
+        /// </summary>
+        ReactiveProperty<float> speedRatio = new ReactiveProperty<float>();
+        public IReadOnlyReactiveProperty<float> SpeedRatio => speedRatio;
+        public void SetSpeedRatio(float speedRatio)
+        {
+            this.speedRatio.Value = Mathf.Clamp(speedRatio, SPEEDRATIO_MIN, SPEEDRATIO_MAX);
+        }
+
+        #endregion
     }
 
     /// <summary>
@@ -112,7 +131,7 @@ namespace ChartEditor
             this.divisionNum.Value = barConfig.DivisionNum;
             this.BarIndex = barIndex;
 
-            UpdateSubDivisionData(barConfig.BeatCount, barConfig.DivisionNum, subConfig.Bpm);
+            UpdateSubDivisionData(barConfig.BeatCount, barConfig.DivisionNum, subConfig);
         }
 
         public int BarIndex { get; set; }
@@ -147,20 +166,23 @@ namespace ChartEditor
         /// </summary>
         /// <param name="beatCount">n分の</param>
         /// <param name="beatUnit">m拍子</param>
-        private void UpdateSubDivisionData(int beatCount, int divNum, float bpm = -1)
+        private void UpdateSubDivisionData(int beatCount, int divNum, SubdivisionConfig subConfigOrigin = null)
         {
             if (beatCount <= 0) { return; }
             if (divNum <= 0) { return; }
-            if (bpm == -1 && this.subDivisionDatas.Count == 0) { return; }
+            if (subConfigOrigin == null && this.subDivisionDatas.Count == 0) { return; }
 
-            // bpmは以前のやつを使う
-            if (bpm == -1) { bpm = this.subDivisionDatas[0].Bpm.Value; }
+            // 分線設定は最初のコンフィグを使う
+            if (subConfigOrigin == null) { subConfigOrigin = this.subDivisionDatas[0].SubConfig; }
 
             // 新規セット
             // カウント数 * 分割数が分線の数
             var subDivisionDatas = new List<SubDivisionDataInBeat>();
-            var subConfig = new SubdivisionConfig(bpm);
-            for (int i = 0; i < beatCount * divNum; i++) { subDivisionDatas.Add(new SubDivisionDataInBeat(subConfig, this, i)); }
+            for (int i = 0; i < beatCount * divNum; i++) 
+            {
+                var subConfig = new SubdivisionConfig(subConfigOrigin);
+                subDivisionDatas.Add(new SubDivisionDataInBeat(subConfig, this, i));
+            }
             SetSubDivisionDatas(subDivisionDatas);
         }
 
@@ -231,6 +253,7 @@ namespace ChartEditor
         const float DEFAULT_BEAT_UNIT = 4;
         const int DEFAULT_DIVISION_NUM = 4;
         const float DEFAULT_BPM = 256;
+        const float DEFAULT_SPEEDRATIO = 1f;
 
         public Action<IDeployableNoteData> OnAddNoteListener { get; set; }
         public Action<IDeployableNoteData> OnRemoveNoteListener { get; set; }
@@ -240,7 +263,7 @@ namespace ChartEditor
             for (int i = 0; i < barNum; i++)
             {
                 var barConfig = new BarConfig(DEFAULT_BEAT_COUNT, DEFAULT_BEAT_UNIT, DEFAULT_DIVISION_NUM);
-                var subConfig = new SubdivisionConfig(DEFAULT_BPM);
+                var subConfig = new SubdivisionConfig(DEFAULT_BPM, DEFAULT_SPEEDRATIO);
                 BarDataInChart barData = new BarDataInChart(barConfig, subConfig, i);
                 barDatas.Add(barData);
             }
@@ -270,6 +293,7 @@ namespace ChartEditor
 
                     var subData = barData.SubDivisionDatas[j];
                     subData.SetBpm(subConfig.Bpm);
+                    subData.SetSpeedRatio(subConfig.SpeedRatio);
                 }
             }
         }
@@ -314,14 +338,20 @@ namespace ChartEditor
         public void AddBar(int length)
         {
             float bpm = DEFAULT_BPM;
+            float speedRatio = DEFAULT_SPEEDRATIO;
             int barDataCount = BarDatas.Count;
 
-            if (BarDatas.Count > 0) { bpm = BarDatas.Last().SubDivisionDatas.Last().Bpm.Value; }
+            // 初期値の上書き
+            if (BarDatas.Count > 0) 
+            { 
+                bpm = BarDatas.Last().SubDivisionDatas.Last().Bpm.Value; 
+                speedRatio = BarDatas.Last().SubDivisionDatas.Last().SpeedRatio.Value;
+            }
 
             for (int i = 0; i < length; i++)
             {
                 var barConfig = new BarConfig(DEFAULT_BEAT_COUNT, DEFAULT_BEAT_UNIT, DEFAULT_DIVISION_NUM);
-                var subConfig = new SubdivisionConfig(bpm);
+                var subConfig = new SubdivisionConfig(bpm, speedRatio);
                 BarDataInChart barData = new BarDataInChart(barConfig, subConfig, barDataCount + i);
                 barDatas.Add(barData);
             }
@@ -568,6 +598,8 @@ namespace ChartEditor
         IReadOnlyReactiveCollection<IDeployableNoteData> NoteDatas { get; }
 
         IReadOnlyReactiveProperty<float> Bpm { get; }
+
+        IReadOnlyReactiveProperty<float> SpeedRatio { get; }
     }
 
     public interface IBarDataGetter

@@ -15,5 +15,12 @@ namespace ChartEditor
             //bpm = !Mathf.Approximately(bpm, backBpm) ? bpm : -1;
             lineInfo_view.SetBPM(bpm);
         }
+
+        public override void OnChangeSpeedRatio(float speedRatio, float backSpeedRatio)
+        {
+            //// 前データと同じbpmの時は表示しない
+            //bpm = !Mathf.Approximately(bpm, backBpm) ? bpm : -1;
+            lineInfo_view.SetSpeedRatio(speedRatio, !Mathf.Approximately(speedRatio, backSpeedRatio));
+        }
     }
 }

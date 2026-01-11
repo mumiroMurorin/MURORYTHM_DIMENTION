@@ -15,6 +15,8 @@ namespace ChartEditor
 
         public virtual void OnChangeBpm(float bpm, float backBpm) { }
 
+        public virtual void OnChangeSpeedRatio(float speedRatio, float backSpeedRatio) { }
+
         public virtual void OnChangeBeatCount(int beatCount, int backCount) { }
 
         public virtual void OnChangeBeatUnit(float beatUnit, float backUnit) { }
