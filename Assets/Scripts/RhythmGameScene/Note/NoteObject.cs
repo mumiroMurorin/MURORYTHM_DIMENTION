@@ -6,7 +6,7 @@ public abstract class NoteObject<T> : MonoBehaviour, INoteVisibleSettable where 
 {
     public void Start()
     {
-        SetVisible(false);
+        //SetVisible(false);
     }
 
     abstract public void Initialize(T data);

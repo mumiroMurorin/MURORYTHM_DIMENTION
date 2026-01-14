@@ -7685,9 +7685,10 @@ MonoBehaviour:
   - {fileID: 1300290619}
   - {fileID: 606931431}
   - {fileID: 606931430}
-  - {fileID: 1214745454}
-  - {fileID: 1423946251}
   - {fileID: 1080446848224499448}
+  - {fileID: 1423946251}
+  - {fileID: 1214745454}
+  - {fileID: 2129207705}
 --- !u!224 &1974952398 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 511619848835754143, guid: 590205180e157b143a7db215d41875fd, type: 3}

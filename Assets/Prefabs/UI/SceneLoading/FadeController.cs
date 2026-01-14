@@ -5,10 +5,16 @@ using VContainer;
 
 public class FadeController : MonoBehaviour
 {
-    [Inject] IMusicDataGetter dataGetter;
+    IMusicDataGetter dataGetter;
 
     [SerializeField] SymponyTypeToFade[] symponyTypeToFadeIns;
     [SerializeField] SymponyTypeToFade[] symponyTypeToFadeOuts;
+
+    [Inject]
+    public void Constructor(IMusicDataGetter musicDataGetter)
+    {
+        this.dataGetter = musicDataGetter;
+    }
 
     public void FadeIn(System.Action callBack = null)
     {

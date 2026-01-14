@@ -9,8 +9,15 @@ public class InteractNoteEffectController : MonoBehaviour
     [SerializeField] SymphonyType symphonyType;
     [SerializeField] List<InteractNoteEffectSpawner> spawners;
 
-    [Inject] IScoreGetter scoreGetter;
-    [Inject] IMusicDataGetter musicDataGetter;
+    IScoreGetter scoreGetter;
+    IMusicDataGetter musicDataGetter;
+
+    [Inject]
+    public void Constructor(IScoreGetter scoreGetter, IMusicDataGetter musicDataGetter)
+    {
+        this.scoreGetter = scoreGetter;
+        this.musicDataGetter = musicDataGetter;
+    }
 
     private void Start()
     {
