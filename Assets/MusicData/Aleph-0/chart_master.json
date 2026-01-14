@@ -6173,10 +6173,10 @@
           "TouchNoteData": [
             {
               "Range": [
-                8,
                 9,
                 10,
-                11
+                11,
+                12
               ]
             }
           ]
@@ -6224,10 +6224,10 @@
           "TouchNoteData": [
             {
               "Range": [
+                3,
                 4,
                 5,
-                6,
-                7
+                6
               ]
             }
           ]
@@ -6760,72 +6760,9 @@
           "TouchNoteData": [
             {
               "Range": [
-                5,
-                6,
-                7
-              ]
-            },
-            {
-              "Range": [
-                8,
                 9,
-                10
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 275.5,
-          "SpeedRatio": 1.05
-        },
-        {
-          "Bpm": 275.5,
-          "SpeedRatio": 1.05,
-          "TouchNoteData": [
-            {
-              "Range": [
-                7,
-                8,
-                9
-              ]
-            },
-            {
-              "Range": [
                 10,
-                11,
-                12
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 275.5,
-          "SpeedRatio": 1.05
-        },
-        {
-          "Bpm": 275.5,
-          "SpeedRatio": 1.05
-        },
-        {
-          "Bpm": 275.5,
-          "SpeedRatio": 1.05
-        },
-        {
-          "Bpm": 275.5,
-          "SpeedRatio": 1.05,
-          "TouchNoteData": [
-            {
-              "Range": [
-                3,
-                4,
-                5
-              ]
-            },
-            {
-              "Range": [
-                6,
-                7,
-                8
+                11
               ]
             }
           ]
@@ -6840,16 +6777,51 @@
           "TouchNoteData": [
             {
               "Range": [
-                5,
-                6,
-                7
-              ]
-            },
-            {
-              "Range": [
-                8,
                 9,
-                10
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 275.5,
+          "SpeedRatio": 1.05
+        },
+        {
+          "Bpm": 275.5,
+          "SpeedRatio": 1.05
+        },
+        {
+          "Bpm": 275.5,
+          "SpeedRatio": 1.05
+        },
+        {
+          "Bpm": 275.5,
+          "SpeedRatio": 1.05,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 275.5,
+          "SpeedRatio": 1.05
+        },
+        {
+          "Bpm": 275.5,
+          "SpeedRatio": 1.05,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6
               ]
             }
           ]
@@ -9245,13 +9217,11 @@
               "Range": [
                 4,
                 5,
-                6,
-                7
+                6
               ]
             },
             {
               "Range": [
-                8,
                 9,
                 10,
                 11
@@ -10646,12 +10616,12 @@
           "TouchNoteData": [
             {
               "Range": [
-                5,
-                6,
-                7,
                 8,
                 9,
-                10
+                10,
+                11,
+                12,
+                13
               ]
             }
           ]
@@ -10666,12 +10636,12 @@
           "TouchNoteData": [
             {
               "Range": [
+                3,
+                4,
                 5,
                 6,
                 7,
-                8,
-                9,
-                10
+                8
               ]
             }
           ]
@@ -10686,12 +10656,12 @@
           "TouchNoteData": [
             {
               "Range": [
-                5,
-                6,
                 7,
                 8,
                 9,
-                10
+                10,
+                11,
+                12
               ]
             }
           ]
@@ -10714,12 +10684,12 @@
           "TouchNoteData": [
             {
               "Range": [
+                1,
+                2,
+                3,
+                4,
                 5,
-                6,
-                7,
-                8,
-                9,
-                10
+                6
               ]
             }
           ]
@@ -10873,22 +10843,22 @@
           "TouchNoteData": [
             {
               "Range": [
+                1,
                 2,
                 3,
                 4,
                 5,
-                6,
-                7
+                6
               ]
             },
             {
               "Range": [
-                8,
                 9,
                 10,
                 11,
                 12,
-                13
+                13,
+                14
               ]
             }
           ]
@@ -10919,15 +10889,17 @@
             {
               "Range": [
                 8,
-                9
+                9,
+                10,
+                11
               ]
             },
             {
               "Range": [
-                10,
-                11,
                 12,
-                13
+                13,
+                14,
+                15
               ]
             }
           ]
@@ -10942,16 +10914,18 @@
           "TouchNoteData": [
             {
               "Range": [
+                4,
+                5,
                 6,
                 7
               ]
             },
             {
               "Range": [
+                0,
+                1,
                 2,
-                3,
-                4,
-                5
+                3
               ]
             }
           ]
@@ -10967,15 +10941,17 @@
             {
               "Range": [
                 8,
-                9
+                9,
+                10,
+                11
               ]
             },
             {
               "Range": [
-                10,
-                11,
                 12,
-                13
+                13,
+                14,
+                15
               ]
             }
           ]
@@ -10990,14 +10966,16 @@
           "TouchNoteData": [
             {
               "Range": [
+                0,
+                1,
                 2,
-                3,
-                4,
-                5
+                3
               ]
             },
             {
               "Range": [
+                4,
+                5,
                 6,
                 7
               ]
@@ -11015,15 +10993,17 @@
             {
               "Range": [
                 8,
-                9
+                9,
+                10,
+                11
               ]
             },
             {
               "Range": [
-                10,
-                11,
                 12,
-                13
+                13,
+                14,
+                15
               ]
             }
           ]
@@ -16807,87 +16787,21 @@
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
-                9,
                 10,
                 11,
-                12
+                12,
+                13
               ]
-            }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                3,
-                4,
-                5,
-                6
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
+            },
             {
               "Range": [
                 2,
                 3,
                 4,
                 5
-              ]
-            }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                5,
-                6,
-                7,
-                8
               ]
             }
           ]
@@ -16908,16 +16822,6 @@
                 10
               ]
             }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                1,
-                2,
-                3,
-                4
-              ]
-            }
           ]
         },
         {
@@ -16927,13 +16831,13 @@
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
-          "DivineTouchData": [
+          "TouchNoteData": [
             {
               "Range": [
+                3,
                 4,
                 5,
-                6,
-                7
+                6
               ]
             }
           ]
@@ -16948,20 +16852,10 @@
           "TouchNoteData": [
             {
               "Range": [
-                2,
-                3,
-                4,
-                5
-              ]
-            }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
+                6,
+                7,
                 8,
-                9,
-                10,
-                11
+                9
               ]
             }
           ]
@@ -16974,6 +16868,68 @@
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
           "DivineTouchData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13
+              ]
+            },
+            {
+              "Range": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
             {
               "Range": [
                 6,
@@ -16998,17 +16954,51 @@
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
           "TouchNoteData": [
             {
               "Range": [
+                7,
+                8,
                 9,
-                10,
-                11,
-                12
+                10
               ]
             }
-          ],
-          "DivineTouchData": [
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
             {
               "Range": [
                 3,
@@ -17026,7 +17016,327 @@
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
           "DivineTouchData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13
+              ]
+            },
+            {
+              "Range": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13
+              ]
+            },
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
             {
               "Range": [
                 7,
@@ -17053,96 +17363,29 @@
                 7
               ]
             }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                10,
-                11,
-                12,
-                13
-              ]
-            }
           ]
         },
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
           "TouchNoteData": [
             {
               "Range": [
-                11,
-                12,
-                13,
-                14
-              ]
-            }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                5,
-                6,
-                7,
-                8
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                9,
-                10,
-                11,
-                12
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
+                1,
+                2,
+                3,
+                4
               ]
             }
           ],
@@ -17164,13 +17407,13 @@
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
-          "DivineTouchData": [
+          "TouchNoteData": [
             {
               "Range": [
-                8,
-                9,
-                10,
-                11
+                2,
+                3,
+                4,
+                5
               ]
             }
           ]
@@ -17178,28 +17421,11 @@
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
+        },
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
           "TouchNoteData": [
-            {
-              "Range": [
-                11,
-                12,
-                13,
-                14
-              ]
-            }
-          ],
-          "DivineTouchData": [
             {
               "Range": [
                 5,
@@ -17216,7 +17442,17 @@
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 1.0
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
         },
         {
           "Bpm": 250.0,
@@ -17224,59 +17460,32 @@
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 1.0
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
         },
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0
         },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
@@ -17289,16 +17498,6 @@
                 7
               ]
             }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                10,
-                11,
-                12,
-                13
-              ]
-            }
           ]
         },
         {
@@ -17308,7 +17507,7 @@
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
-          "DivineTouchData": [
+          "TouchNoteData": [
             {
               "Range": [
                 7,
@@ -17335,8 +17534,31 @@
                 12
               ]
             }
-          ],
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
           "DivineTouchData": [
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14
+              ]
+            },
             {
               "Range": [
                 3,
@@ -17354,7 +17576,264 @@
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
           "DivineTouchData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "Range": [
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
             {
               "Range": [
                 6,
@@ -17375,10 +17854,2036 @@
           "TouchNoteData": [
             {
               "Range": [
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13
+              ]
+            },
+            {
+              "Range": [
                 2,
                 3,
                 4,
                 5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "HoldStartData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 31,
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "HoldStartData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 32,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "HoldStartData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "HoldMeshRelayData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "DivineTouchData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 34,
+              "Range": [
+                0
+              ]
+            },
+            {
+              "HoldNumber": 33,
+              "Range": [
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                12,
+                13,
+                14,
+                15
               ]
             }
           ],
@@ -17400,53 +19905,7 @@
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                5,
-                6,
-                7,
-                8
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
           "TouchNoteData": [
-            {
-              "Range": [
-                7,
-                8,
-                9,
-                10
-              ]
-            }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                1,
-                2,
-                3,
-                4
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
             {
               "Range": [
                 4,
@@ -17455,19 +19914,22 @@
                 7
               ]
             }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
           ]
         },
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
+        },
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
@@ -17484,166 +19946,10 @@
           "DivineTouchData": [
             {
               "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
                 4,
                 5,
                 6,
                 7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                1,
-                2,
-                3,
-                4
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                5,
-                6,
-                7,
-                8
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                2,
-                3,
-                4,
-                5
-              ]
-            }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                9,
-                10,
-                11,
-                12
-              ]
-            }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                3,
-                4,
-                5,
-                6
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                7,
-                8,
-                9,
-                10
               ]
             }
           ]
@@ -17665,102 +19971,10 @@
           "TouchNoteData": [
             {
               "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                10,
-                11,
-                12,
-                13
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
                 8,
                 9,
                 10,
                 11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                11,
-                12,
-                13,
-                14
-              ]
-            }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                5,
-                6,
-                7,
-                8
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                9,
-                10,
-                11,
-                12
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
               ]
             }
           ],
@@ -17782,176 +19996,13 @@
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                9,
-                10,
-                11,
-                12
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
           "TouchNoteData": [
             {
               "Range": [
-                11,
                 12,
                 13,
-                14
-              ]
-            }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                5,
-                6,
-                7,
-                8
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                7,
-                8,
-                9,
-                10
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                10,
-                11,
-                12,
-                13
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                9,
-                10,
-                11,
-                12
-              ]
-            }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                3,
-                4,
-                5,
-                6
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                5,
-                6,
-                7,
-                8
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                2,
-                3,
-                4,
-                5
+                14,
+                15
               ]
             }
           ],
@@ -17970,77 +20021,6 @@
           "Bpm": 250.0,
           "SpeedRatio": 1.0
         },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                7,
-                8,
-                9,
-                10
-              ]
-            }
-          ],
-          "DivineTouchData": [
-            {
-              "Range": [
-                1,
-                2,
-                3,
-                4
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                3,
-                4,
-                5,
-                6
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
         {
           "Bpm": 250.0,
           "SpeedRatio": 1.0,
@@ -18057,37 +20037,13 @@
           "DivineTouchData": [
             {
               "Range": [
+                4,
+                5,
                 6,
-                7,
-                8,
-                9
+                7
               ]
             }
           ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
         },
         {
           "Bpm": 250.0,
@@ -18099,1167 +20055,27 @@
           "TouchNoteData": [
             {
               "Range": [
+                4,
+                5,
                 6,
-                7,
-                8,
-                9
+                7
               ]
             }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
+          ],
           "DivineTouchData": [
             {
               "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                2,
-                3,
-                4,
-                5
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                2,
-                3,
-                4,
-                5
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                2,
-                3,
-                4,
-                5
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                2,
-                3,
-                4,
-                5
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                2,
-                3,
-                4,
-                5
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                2,
-                3,
-                4,
-                5
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                2,
-                3,
-                4,
-                5
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                2,
-                3,
-                4,
-                5
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                10,
-                11,
-                12,
-                13
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                10,
-                11,
-                12,
-                13
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                10,
-                11,
-                12,
-                13
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                10,
-                11,
-                12,
-                13
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                10,
-                11,
-                12,
-                13
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                10,
-                11,
-                12,
-                13
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                10,
-                11,
-                12,
-                13
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                10,
-                11,
-                12,
-                13
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                6,
-                7,
-                8,
-                9
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                8,
-                9,
-                10
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "DivineTouchData": [
-            {
-              "Range": [
-                8,
-                9,
-                10
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                3,
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11,
-                12
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                2,
-                3,
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11,
-                12,
-                13
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
+                0,
                 1,
                 2,
-                3,
-                4,
-                5,
-                6,
-                7
+                3
               ]
             }
           ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
         },
         {
           "Bpm": 250.0,
@@ -19267,9 +20083,16 @@
           "TouchNoteData": [
             {
               "Range": [
+                7,
                 8,
                 9,
-                10,
+                10
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
                 11,
                 12,
                 13,
@@ -19280,21 +20103,7 @@
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                0,
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
+          "SpeedRatio": 1.0
         },
         {
           "Bpm": 250.0,
@@ -19302,287 +20111,14 @@
           "TouchNoteData": [
             {
               "Range": [
-                8,
-                9,
-                10,
-                11,
-                12,
-                13,
-                14,
-                15
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                0,
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11,
-                12,
-                13,
-                14,
-                15
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
                 11,
                 12,
                 13,
                 14
               ]
             }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                2,
-                3,
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
+          ],
           "DivineTouchData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11,
-                12,
-                13
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                2,
-                3,
-                4,
-                5,
-                6
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                9,
-                10,
-                11,
-                12,
-                13
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                3,
-                4,
-                5,
-                6
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                9,
-                10,
-                11,
-                12
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                4,
-                5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                10,
-                11,
-                12,
-                13
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                3,
-                4,
-                5,
-                6
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                2,
-                3,
-                4,
-                5
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
             {
               "Range": [
                 7,
@@ -19595,44 +20131,63 @@
         },
         {
           "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
           "SpeedRatio": 1.0,
           "TouchNoteData": [
             {
               "Range": [
-                4,
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
                 5,
-                6,
-                7
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
-                8,
-                9,
-                10,
-                11
-              ]
-            }
-          ]
-        },
-        {
-          "Bpm": 250.0,
-          "SpeedRatio": 1.0,
-          "TouchNoteData": [
-            {
-              "Range": [
                 6,
                 7,
                 8
               ]
             }
           ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                5,
+                6,
+                7,
+                8
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
+                1,
+                2,
+                3,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
         }
       ]
     },
@@ -19647,9 +20202,251 @@
           "TouchNoteData": [
             {
               "Range": [
+                6,
                 7,
                 8,
                 9
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                10,
+                11,
+                12,
+                13
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 250.0,
+          "SpeedRatio": 1.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "DivineTouchData": [
+            {
+              "Range": [
+                8,
+                9,
+                10,
+                11
               ]
             }
           ]
@@ -19737,7 +20534,7 @@
       "SubDivisionDatas": [
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015,
+          "SpeedRatio": 0.0125,
           "TouchNoteData": [
             {
               "Range": [
@@ -19749,63 +20546,63 @@
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         }
       ]
     },
@@ -19816,67 +20613,67 @@
       "SubDivisionDatas": [
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         }
       ]
     },
@@ -19887,67 +20684,67 @@
       "SubDivisionDatas": [
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         }
       ]
     },
@@ -19958,67 +20755,67 @@
       "SubDivisionDatas": [
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         }
       ]
     },
@@ -20029,67 +20826,67 @@
       "SubDivisionDatas": [
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         }
       ]
     },
@@ -20100,67 +20897,67 @@
       "SubDivisionDatas": [
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         }
       ]
     },
@@ -20171,67 +20968,67 @@
       "SubDivisionDatas": [
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         }
       ]
     },
@@ -20242,67 +21039,67 @@
       "SubDivisionDatas": [
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         }
       ]
     },
@@ -20313,7 +21110,7 @@
       "SubDivisionDatas": [
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015,
+          "SpeedRatio": 0.0125,
           "TouchNoteData": [
             {
               "Range": [
@@ -20326,63 +21123,63 @@
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         }
       ]
     },
@@ -20393,67 +21190,67 @@
       "SubDivisionDatas": [
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         }
       ]
     },
@@ -20464,67 +21261,67 @@
       "SubDivisionDatas": [
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         }
       ]
     },
@@ -20535,67 +21332,67 @@
       "SubDivisionDatas": [
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         }
       ]
     },
@@ -20606,67 +21403,67 @@
       "SubDivisionDatas": [
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         },
         {
           "Bpm": 250.0,
-          "SpeedRatio": 0.015
+          "SpeedRatio": 0.0125
         }
       ]
     }
