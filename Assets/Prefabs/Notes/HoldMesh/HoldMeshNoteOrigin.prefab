@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4212254938933315147}
   - component: {fileID: -5707855524373049870}
-  - component: {fileID: 1721200693252035536}
   m_Layer: 0
   m_Name: HoldMeshNoteOrigin
   m_TagString: Untagged
@@ -48,24 +47,3 @@ MonoBehaviour:
   meshMaterialDefault: {fileID: 2100000, guid: 1efbb91671345b94390094cae6ac565e, type: 2}
   meshMaterialTouching: {fileID: 2100000, guid: 9a2d98baddf489a4883710104c5d9f7d, type: 2}
   meshMaterialUntouching: {fileID: 2100000, guid: c8d0e1dd7776f114098eda7ad7ae3c2d, type: 2}
---- !u!65 &1721200693252035536
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8224908405846241423}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.1, y: 0.1, z: 0.1}
-  m_Center: {x: 0, y: 0, z: 0}

@@ -81,11 +81,6 @@ public class NoteObject_HoldMesh : NoteObject<NoteData_HoldMesh>
         }
     }
 
-    public override void SetVisible(bool isVisible)
-    {
-
-    }
-
     /// <summary>
     /// ノーツを機能停止する
     /// </summary>

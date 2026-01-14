@@ -623,7 +623,7 @@ namespace ChartConvert
                 backVertices = timeToVertices[i - 1].Vertices;
                 nextVertices = timeToVertices[i].Vertices;
 
-                t = (timeToVertices[i].Timing - timeToVertices[i - 1].Timing) / (time - timeToVertices[i - 1].Timing);
+                t = (time - timeToVertices[i - 1].Timing) / (timeToVertices[i].Timing - timeToVertices[i - 1].Timing);
                 break;
             }
 

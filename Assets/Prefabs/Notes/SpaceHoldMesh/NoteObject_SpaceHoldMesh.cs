@@ -99,11 +99,6 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
             meshRenderer.material = isHolding ? meshMaterialHolding : meshMaterialUnholding;
         }
     }
-
-    public override void SetVisible(bool isVisible)
-    {
-
-    }
 }
 
 /// <summary>

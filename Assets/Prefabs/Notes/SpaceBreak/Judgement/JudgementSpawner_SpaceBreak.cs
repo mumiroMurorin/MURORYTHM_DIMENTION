@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class JudgementSpawner_SpaceBreak : JudgementEffectSpawner
 {
+    [SerializeField] float addY = 1.5f;
+
     [SerializeField] GameObject perfectEffect;
     [SerializeField] GameObject greatEffect;
     [SerializeField] GameObject greatEffect_late;
@@ -23,7 +25,7 @@ public class JudgementSpawner_SpaceBreak : JudgementEffectSpawner
         NoteData_SpaceBreak noteData = judgementData.NoteData as NoteData_SpaceBreak;
 
         Vector2 ave = noteData.Vertices.Average();
-        Vector3 pos = new Vector3(ave.x, ave.y, 0);
+        Vector3 pos = new Vector3(ave.x * 10f, ave.y * 10f + addY, 0);
 
         switch (judgementData.Judgement)
         {

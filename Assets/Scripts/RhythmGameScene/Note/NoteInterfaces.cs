@@ -76,8 +76,3 @@ public interface IInteractNoteEffectController<T> where T : INoteData
 
     void Play();
 }
-
-public interface INoteVisibleSettable
-{
-    void SetVisible(bool isVisible);
-}

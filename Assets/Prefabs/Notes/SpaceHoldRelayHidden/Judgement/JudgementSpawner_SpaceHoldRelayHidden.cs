@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class JudgementSpawner_SpaceHoldRelayHidden : JudgementEffectSpawner
 {
+    [SerializeField] float addY = 1.5f;
+
     [SerializeField] GameObject perfectEffect;
     [SerializeField] GameObject greatEffect;
     [SerializeField] GameObject goodEffect;
@@ -19,7 +21,7 @@ public class JudgementSpawner_SpaceHoldRelayHidden : JudgementEffectSpawner
         NoteData_SpaceHoldRelayHidden noteData = judgementData.NoteData as NoteData_SpaceHoldRelayHidden;
 
         Vector2 ave = noteData.Vertices.Average();
-        Vector3 pos = new Vector3(ave.x * 10f, ave.y * 10f, 0);
+        Vector3 pos = new Vector3(ave.x * 10f, ave.y * 10f + addY, 0);
 
         switch (judgementData.Judgement)
         {
