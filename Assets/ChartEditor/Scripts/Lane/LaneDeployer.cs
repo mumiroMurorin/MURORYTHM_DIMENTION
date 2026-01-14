@@ -68,6 +68,16 @@ namespace ChartEditor
             chartData?.BarDatas.ObserveAdd()
                 .Subscribe(barData => BindForBarData(barData.Value))
                 .AddTo(this.gameObject);
+
+            // 小節線追加時
+            chartData?.OnAddBarDataListener
+                .Subscribe(barIndex => { UpdateLinePos(Mathf.Max(0, barIndex - 1), 0); })
+                .AddTo(this.gameObject);
+
+            // BPM変更時
+            chartData?.OnChangeBPMListener
+                .Subscribe(pair => { UpdateLinePos(pair.Item1, pair.Item2); })
+                .AddTo(this.gameObject);
         }
 
         /// <summary>
@@ -81,18 +91,6 @@ namespace ChartEditor
                 .Skip(1)
                 .Subscribe(_ => { UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0); })
                 .AddTo(this.gameObject);
-
-            //// BeatCountの更新 → 位置、数の更新
-            //barData.BeatCount
-            //    .Skip(1)
-            //    .Subscribe(_ =>{ UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0); })
-            //    .AddTo(this.gameObject);
-
-            //// DivisionNumの更新 → 位置、数の更新
-            //barData.DivisionNum
-            //    .Skip(1)
-            //    .Subscribe(_ => { UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0); })
-            //    .AddTo(this.gameObject);
 
 
             // SubdivisionDatasに購読
@@ -131,21 +129,10 @@ namespace ChartEditor
         /// <param name="subData"></param>
         private void BindForSubdivisionData(ISubDivisionDataGetter subData, GameObject lineObj)
         {
-            // BPMの更新 → 位置の更新
-            subData?.Bpm
+            // BPMの更新 → 表記の更新
+            subData.Bpm
                 .Where(_ => lineObj != null)
-                .Subscribe(bpm =>
-                {
-                    // ※最後の要素なら位置を更新する (いつか部分的にBPMを変える実装をするとき直す)
-                    int lastBarIndex = dataGetter.ChartData.Value.BarDatas.Count - 1;
-                    int lastSubIndex = dataGetter.ChartData.Value.BarDatas[lastBarIndex].SubDivisionDatas.Count - 1;
-                    if (subData.BarData.BarIndex == lastBarIndex && subData.SubDivisionIndex == lastSubIndex)
-                    {
-                        UpdateLinePos(Mathf.Max(0, subData.BarData.BarIndex - 1), 0);
-                    }
-
-                    OnChangeBPM(subData.BarData.BarIndex, subData.SubDivisionIndex, bpm);
-                })
+                .Subscribe(bpm => OnChangeBPM(subData.BarData.BarIndex, subData.SubDivisionIndex, bpm))
                 .AddTo(this.gameObject)
                 .AddTo(lineObj);
 

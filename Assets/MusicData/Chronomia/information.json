@@ -2,7 +2,7 @@
   "MusicName": "Chronomia",
   "ComposerName": "Lime",
   "ChartDesigner": "MuroMuro",
-  "Difficulties": [1, -1, -1, -1],
+  "Difficulties": [1, -1, -1, 10],
   "SymphonyType": "Creation",
   "StageType": "Creation_Noon"
 }

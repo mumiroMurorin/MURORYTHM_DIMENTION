@@ -272,28 +272,84 @@ namespace ChartEditor
         ReactiveCollection<BarDataInChart> barDatas = new ReactiveCollection<BarDataInChart>();
 
         /// <summary>
+        /// BPMが変更された時 (引数は小節Indexと分線Index)
+        /// </summary>
+        Subject<(int,int)> OnChangeBPM = new Subject<(int, int)>();
+        public IObservable<(int, int)> OnChangeBPMListener => OnChangeBPM;
+
+        /// <summary>
+        /// 小節データが追加された時
+        /// </summary>
+        Subject<int> OnAddBarData = new Subject<int>();
+        public IObservable<int> OnAddBarDataListener => OnAddBarData;
+
+
+        /// <summary>
         /// 譜面内の全小節データ
         /// </summary>
         public IReadOnlyReactiveCollection<BarDataInChart> BarDatas => barDatas;
+
+        public void SetSubDivisionConfig(int barIndex, int subIndex, SubdivisionConfig subConfig)
+        {
+            if (barDatas == null) { return; }
+
+            SetBpm(barIndex, subIndex, subConfig.Bpm);
+            SetSpeedRatio(barIndex, subIndex, subConfig.SpeedRatio);
+        }
 
         /// <summary>
         /// 特定の分線から後のBPMを一括で変更する
         /// </summary>
         /// <param name="subDivisionData"></param>
-        public void SetSubDivisionConfig(int barIndex, int subIndex, SubdivisionConfig subConfig, bool isBpmChangeCascading = true)
+        private void SetBpm(int barIndex, int subIndex, float bpm)
         {
             if (barDatas == null) { return; }
 
-            for(int i = barIndex; i < barDatas.Count; i++)
+            float previousBpm = barDatas[barIndex].SubDivisionDatas[subIndex].Bpm.Value;
+            bool isBreak = false;
+            for (int i = barIndex; i < barDatas.Count; i++)
             {
                 var barData = barDatas[i];
                 for (int j = 0; j < barData.SubDivisionDatas.Count; j++)
                 {
-                    if(i == barIndex && j < subIndex) { continue; }
+                    if (i == barIndex && j < subIndex) { continue; }
 
                     var subData = barData.SubDivisionDatas[j];
-                    subData.SetBpm(subConfig.Bpm);
-                    subData.SetSpeedRatio(subConfig.SpeedRatio);
+
+                    // 違うBPMになったら切る
+                    if (previousBpm != subData.Bpm.Value) { isBreak = true; break; }
+
+                    subData.SetBpm(bpm);
+                }
+
+                if (isBreak) { break; }
+            }
+
+            OnChangeBPM.OnNext((barIndex, subIndex));
+        }
+
+        /// <summary>
+        /// 特定の分線から後のスピード倍率を一括で変更する
+        /// </summary>
+        /// <param name="subDivisionData"></param>
+        private void SetSpeedRatio(int barIndex, int subIndex, float speedRatio)
+        {
+            if (barDatas == null) { return; }
+
+            float previousRatio = barDatas[barIndex].SubDivisionDatas[subIndex].SpeedRatio.Value;
+            for (int i = barIndex; i < barDatas.Count; i++)
+            {
+                var barData = barDatas[i];
+                for (int j = 0; j < barData.SubDivisionDatas.Count; j++)
+                {
+                    if (i == barIndex && j < subIndex) { continue; }
+
+                    var subData = barData.SubDivisionDatas[j];
+
+                    // 違うスピード倍率になったら切る
+                    if (previousRatio != subData.SpeedRatio.Value) { return; }
+
+                    subData.SetSpeedRatio(speedRatio);
                 }
             }
         }
@@ -355,6 +411,8 @@ namespace ChartEditor
                 BarDataInChart barData = new BarDataInChart(barConfig, subConfig, barDataCount + i);
                 barDatas.Add(barData);
             }
+
+            OnAddBarData.OnNext(BarDatas.Count - length);
         }
 
         /// <summary>
