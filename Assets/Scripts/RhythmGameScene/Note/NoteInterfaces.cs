@@ -76,3 +76,11 @@ public interface IInteractNoteEffectController<T> where T : INoteData
 
     void Play();
 }
+
+/// <summary>
+/// ノーツのアクティブ化ができる
+/// </summary>
+public interface INoteActivable
+{
+    void SetActive(bool isVisible);
+}

@@ -43,6 +43,12 @@ public class NoteObject_HoldMesh : NoteObject<NoteData_HoldMesh>
         }
     }
 
+    /// <summary>
+    /// ホールドメッシュはアクティブ化の影響を受けない
+    /// </summary>
+    /// <param name="isVisible"></param>
+    public override void SetActive(bool isVisible) { }
+
     private void Update()
     {
         if (noteData == null) { return; }
