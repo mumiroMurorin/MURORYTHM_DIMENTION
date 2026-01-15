@@ -25,10 +25,17 @@ namespace TransitionerInSelectScene
             bool[] isCompletedTask = new bool[1];
 
             // 楽曲データリストの読み込みとセット
-            musicDataListLoader.Value.LoadMusicDataList(() => { 
-                isCompletedTask[0] = true; 
-                CheckAndTransition(isCompletedTask);
-            });
+            if (!musicDataListLoader.Value.CheckLoadedMusicDatas()) 
+            {
+                musicDataListLoader.Value.LoadMusicDataList(() => {
+                    isCompletedTask[0] = true;
+                    CheckAndTransition(isCompletedTask);
+                });
+            }
+            else
+            {
+                TransitionNextPhase();
+            }
         }
 
         private void CheckAndTransition(bool[] isCompletedTask)

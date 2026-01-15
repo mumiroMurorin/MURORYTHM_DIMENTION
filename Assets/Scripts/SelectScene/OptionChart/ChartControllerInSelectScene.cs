@@ -15,6 +15,7 @@ public class ChartControllerInSelectScene : MonoBehaviour
     [Inject] IOptionSetter optionSetter;
 
     [SerializeField] ScoreSetterInSelectScene scoreSetter;
+    [SerializeField] GroundControllerLinear groundController; 
     [SerializeField] SerializeInterface<TransitionerInSelectScene.IPhaseStatusGetterInSelectScene> statusGetter;
     [SerializeField] SerializeInterface<ITimeController> timeController;
     [SerializeField] SerializeInterface<IChartGenerator> chartGenerator;
@@ -25,6 +26,7 @@ public class ChartControllerInSelectScene : MonoBehaviour
     void Start()
     {
         optionSetter?.SetAutoMode(true);
+        groundController.Initialize();
 
         Bind();
     }

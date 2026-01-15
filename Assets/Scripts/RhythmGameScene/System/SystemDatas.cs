@@ -52,6 +52,17 @@ public enum PhaseStatusInSelectScene
 }
 
 /// <summary>
+/// タイトルシーンの内部ステータス
+/// </summary>
+public enum PhaseStatusInTitleScene
+{
+    LoadData,
+    WaitingForPlayer,
+    FadeOut,
+    TransitionSelectScene,
+}
+
+/// <summary>
 /// 管理者シーンの内部ステータス
 /// </summary>
 public enum PhaseStatusInRootScene

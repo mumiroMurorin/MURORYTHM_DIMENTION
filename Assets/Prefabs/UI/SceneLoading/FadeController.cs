@@ -27,6 +27,8 @@ public class FadeController : MonoBehaviour
 
     public void FadeIn(SymphonyType symphonyType, System.Action callBack = null)
     {
+        Debug.Log("‚«‚Á‚¿‚á");
+
         bool isPlayed = false;
         foreach(var player in symponyTypeToFadeIns)
         {

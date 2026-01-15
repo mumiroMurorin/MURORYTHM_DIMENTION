@@ -36,7 +36,6 @@ public class StageController : MonoBehaviour, IStageController
         diffObj.transform.localPosition = Vector3.zero;
         diffObj.transform.localEulerAngles = Vector3.zero;
         difficultyOutline.ApplyOutline(diffObj);
-
     }
 }
 

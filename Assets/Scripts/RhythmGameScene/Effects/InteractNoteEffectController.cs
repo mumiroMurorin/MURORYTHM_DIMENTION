@@ -26,6 +26,9 @@ public class InteractNoteEffectController : MonoBehaviour
 
     private void Bind()
     {
+        if (musicDataGetter == null) { return; }
+        if (musicDataGetter.Music == null) { return; }
+        if (musicDataGetter.Music.Value == null) { return; }
         if (this.symphonyType != musicDataGetter.Music.Value.SymphonyType) { return; }
 
         // 記録を監視、増え次第エフェクトを発生させる

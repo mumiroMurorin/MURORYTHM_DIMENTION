@@ -10,13 +10,21 @@ public class MusicDataListLoaderDebug : MonoBehaviour, IMusicDataListLoader
 {
     [SerializeField] MusicDataList musicDataList;
 
+    bool isLoaded;
     IMusicDataListSetter musicDataListSetter;
+    IMusicDataListGetter musicDataListGetter;
     CancellationTokenSource cts;
 
     [Inject]
-    public void Construct(IMusicDataListSetter musicDataListSetter)
+    public void Construct(IMusicDataListSetter musicDataListSetter, IMusicDataListGetter musicDataListGetter)
     {
         this.musicDataListSetter = musicDataListSetter;
+        this.musicDataListGetter = musicDataListGetter;
+    }
+
+    bool IMusicDataListLoader.CheckLoadedMusicDatas()
+    {
+        return musicDataListGetter.MusicDatasSorted != null && musicDataListGetter.MusicDatasSorted.Count > 0;
     }
 
     void IMusicDataListLoader.LoadMusicDataList(Action onFinishAction)
@@ -31,7 +39,10 @@ public class MusicDataListLoaderDebug : MonoBehaviour, IMusicDataListLoader
 
         cts = new CancellationTokenSource();
 
-        LoadAudioDatasAsync(onFinishAction, cts.Token).Forget();
+        LoadAudioDatasAsync(() => { 
+            onFinishAction.Invoke(); 
+            isLoaded = true;
+        }, cts.Token).Forget();
     }
 
     /// <summary>
@@ -66,5 +77,7 @@ public class MusicDataListLoaderDebug : MonoBehaviour, IMusicDataListLoader
 
 public interface IMusicDataListLoader
 {
+    bool CheckLoadedMusicDatas();
+
     void LoadMusicDataList(Action onFinishAction);
 }

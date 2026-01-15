@@ -31,9 +31,8 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     [SerializeField] string chartFileNameHard = "chart_hard.json";
     [SerializeField] string chartFileNameMaster = "chart_master.json";
 
-    [SerializeField] TMPro.TextMeshProUGUI kariTmp;
-
-    private string dataPath;
+    string dataPath;
+    bool isLoaded;
     CancellationTokenSource cts;
     IMusicDataListSetter dataSetter;
     IMusicDataListGetter dataGetter;
@@ -45,20 +44,21 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         this.dataGetter = dataGetter;
     }
 
+    public bool CheckLoadedMusicDatas()
+    {
+        return dataGetter.MusicDatasSorted != null && dataGetter.MusicDatasSorted.Count > 0;
+    }
+
     public void LoadMusicDataList(Action onFinishedAction)
     {
         // Šù‚É“Ç‚Ýž‚Ü‚ê‚Ä‚¢‚éê‡(‘¼‚ÌƒV[ƒ“‚©‚ç—ˆ‚½Žž)‚Í“Ç‚Ýž‚Ýˆ—‚ð”ò‚Î‚·
-        if(dataGetter.MusicDatasSorted != null && dataGetter.MusicDatasSorted.Count > 0) 
-        {
-            onFinishedAction.Invoke();
-            return;
-        }
+        //if(dataGetter.MusicDatasSorted != null && dataGetter.MusicDatasSorted.Count > 0) 
+        //{
+        //    onFinishedAction.Invoke();
+        //    return;
+        // }
 
-        if (cts != null)
-        {
-            cts.Cancel();
-            cts.Dispose();
-        }
+        cts?.CancelAndDispose();
         cts = new CancellationTokenSource();
 
         LoadMusicDataListAsync(cts.Token, onFinishedAction).Forget();

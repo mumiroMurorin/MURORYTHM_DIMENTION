@@ -2986,9 +2986,13 @@ PrefabInstance:
       objectReference: {fileID: 4300000, guid: 08953e67e03de9d4589c923839dca719, type: 3}
     m_RemovedComponents:
     - {fileID: 226916301018850236, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+    - {fileID: 3372415423836619191, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4254772969911991885, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 606931438}
     - targetCorrespondingSourceObject: {fileID: 6418962431761483700, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
@@ -3045,6 +3049,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596018e53e94bfb4d9de7a811cb67477, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &606931438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606931433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f50386fe1bc99429ab31ddc1e03484, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer:
+    obj: {fileID: 996988513}
 --- !u!4 &621894849 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3302472204600621028, guid: be4124fd2dc3f74499037e2a30df98de, type: 3}
@@ -3895,6 +3913,7 @@ MonoBehaviour:
   chartLoader:
     obj: {fileID: 874170451}
   scoreSetter: {fileID: 874170453}
+  groundController: {fileID: 606931438}
   statusGetter:
     obj: {fileID: 1012713960}
   timeController:
@@ -8126,10 +8145,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2129207705}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2afcab0a5f0411444835c181107cd06f, type: 3}
+  m_Script: {fileID: 11500000, guid: cbf703e0efb06c449b95ba55afd437b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  symphonyType: 0
   spawners:
   - {fileID: 1586409691}
   - {fileID: 508957349}

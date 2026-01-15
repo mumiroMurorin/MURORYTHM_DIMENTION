@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/ChartEditor.unity
     guid: f64b26b25fe80fe43bd80bf3b59baaa3
   - enabled: 1
+    path: Assets/Scenes/TitleScene.unity
+    guid: dabeb40157065d447ad04e2393309355
+  - enabled: 1
     path: Assets/Scenes/MusicSelectScene.unity
     guid: 48b60a8f945d12547be9d2b11f192390
   - enabled: 1

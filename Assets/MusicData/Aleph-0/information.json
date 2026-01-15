@@ -3,6 +3,6 @@
   "ComposerName": "LeaF",
   "ChartDesigner": "MuroMuro",
   "Difficulties": [1, -1, -1, 10],
-  "SymphonyType": "Destruction",
-  "StageType": "Destruction"
+  "SymphonyType": "Creation",
+  "StageType": "Creation_Night"
 }
