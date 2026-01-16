@@ -18986,7 +18986,15 @@
                 7
               ]
             }
-          ],
+          ]
+        },
+        {
+          "Bpm": 227.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 227.0,
+          "SpeedRatio": 1.0,
           "HoldStartData": [
             {
               "HoldNumber": 100,
@@ -19007,14 +19015,6 @@
               ]
             }
           ]
-        },
-        {
-          "Bpm": 227.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 227.0,
-          "SpeedRatio": 1.0
         },
         {
           "Bpm": 227.0,

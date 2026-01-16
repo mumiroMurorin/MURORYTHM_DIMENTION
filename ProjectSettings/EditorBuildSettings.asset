@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/ChartEditor.unity
     guid: f64b26b25fe80fe43bd80bf3b59baaa3
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TitleScene.unity
     guid: dabeb40157065d447ad04e2393309355
   - enabled: 1
