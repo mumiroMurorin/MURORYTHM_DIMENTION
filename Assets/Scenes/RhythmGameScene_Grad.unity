@@ -298,8 +298,8 @@ MonoBehaviour:
     composer_name: "\u524A\u9664"
     music_spr: {fileID: 21300000, guid: 1512ba05fa48cde48858c7f68c23594f, type: 3}
     theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
-    clip: {fileID: 8300000, guid: 993bb1f8d9375c04da5f17d29a0760de, type: 3}
-    sample_clip: {fileID: 8300000, guid: 135d7d154c100b64f9ec59dfcf643174, type: 3}
+    clip: {fileID: 8300000, guid: 5c4b98083213143479a2e0177fd016fa, type: 3}
+    sample_clip: {fileID: 8300000, guid: 5c4b98083213143479a2e0177fd016fa, type: 3}
     symphonyType: 10
     stageType: 101
     difficulties: 00000000000000000000000000000000
@@ -309,7 +309,7 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: MusicData/Altale/chart_master.json
+  chartFilePath: MusicData/Chronomia/chart_master.json
   noteSpeed: 200
   isAutoMode: 0
   isFastLateEnabled: 1
