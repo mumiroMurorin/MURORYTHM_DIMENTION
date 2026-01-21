@@ -9,13 +9,13 @@ using NaughtyAttributes;
 
 namespace TransitionerInTitleScene
 {
-    public class Transitioner_TransitionSelectScene : IPhaseTransitionerInTitleScene
+    public class Transitioner_TransitionLobbyScene : IPhaseTransitionerInTitleScene
     {
         [SerializeField] [Scene] string nextSceneName;
         [SerializeField] SerializeInterface<IPhaseTransitionableInTitleScene> phaseTransitionable;
         [SerializeField] float waitTime = 0.5f;
 
-        readonly PhaseStatusInTitleScene status = PhaseStatusInTitleScene.TransitionSelectScene;
+        readonly PhaseStatusInTitleScene status = PhaseStatusInTitleScene.TransitionLobbyScene;
         CancellationTokenSource cts;
 
         bool IPhaseTransitionerInTitleScene.ConditionChecker(PhaseStatusInTitleScene status)
@@ -25,7 +25,7 @@ namespace TransitionerInTitleScene
 
         void IPhaseTransitionerInTitleScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"TransitionSelectScene\"");
+            Debug.Log("ÅyTransitionÅzTransition to \"TransitionLobbyScene\"");
 
             cts?.CancelAndDispose();
             cts = new CancellationTokenSource();

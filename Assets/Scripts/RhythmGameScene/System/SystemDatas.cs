@@ -61,7 +61,20 @@ public enum PhaseStatusInTitleScene
     WaitingForPlayer,
     GameStart,
     FadeOut,
+    TransitionLobbyScene,
+}
+
+/// <summary>
+/// ロビーシーンの内部ステータス
+/// </summary>
+public enum PhaseStatusInLobbyScene
+{
+    LoadData,
+    FadeIn,
+    ConfirmTutorial,
+    FadeOut,
     TransitionSelectScene,
+    TransitionTutorialScene,
 }
 
 /// <summary>

@@ -10,6 +10,7 @@ namespace TransitionerInTitleScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInTitleScene> phaseTransitionable;
         [SerializeField] SerializeInterface<IMusicDataListLoader> musicDataListLoader;
+        [SerializeField] VideoLoader videoLoader;
 
         readonly PhaseStatusInTitleScene status = PhaseStatusInTitleScene.LoadData;
 
@@ -22,7 +23,7 @@ namespace TransitionerInTitleScene
         {
             Debug.Log("【Transition】Transition to \"LoadData\"");
 
-            bool[] isCompletedTask = new bool[1];
+            bool[] isCompletedTask = new bool[2];
 
             // 楽曲データリストの読み込みとセット
             if (!musicDataListLoader.Value.CheckLoadedMusicDatas())
@@ -32,6 +33,17 @@ namespace TransitionerInTitleScene
                     CheckAndTransition(isCompletedTask);
                 });
             }
+            else
+            {
+                isCompletedTask[0] = true;
+            }
+
+            // タイトル動画の読み込み
+            videoLoader.LoadVideo(() =>
+            {
+                isCompletedTask[1] = true;
+                CheckAndTransition(isCompletedTask);
+            });
 
         }
 
