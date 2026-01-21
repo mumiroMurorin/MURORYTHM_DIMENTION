@@ -309,8 +309,8 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: MusicData/Chronomia/chart_master.json
-  noteSpeed: 200
+  chartFilePath: MusicData/Chronomia/chart_easy.json
+  noteSpeed: 170
   isAutoMode: 0
   isFastLateEnabled: 1
 --- !u!1001 &141622566
@@ -720,6 +720,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2144204444}
     m_Modifications:
+    - target: {fileID: -387314536893781834, guid: 06b366ea465273b4dbdf4851f91b3730, type: 3}
+      propertyPath: addY
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3115310235136475715, guid: 06b366ea465273b4dbdf4851f91b3730, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2398,6 +2402,10 @@ PrefabInstance:
     - target: {fileID: 3115310235136475715, guid: 7565b9c6c2f3a6e4aa655934ce8d2cf6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6116023787833162514, guid: 7565b9c6c2f3a6e4aa655934ce8d2cf6, type: 3}
+      propertyPath: addY
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 8780701483383266383, guid: 7565b9c6c2f3a6e4aa655934ce8d2cf6, type: 3}
       propertyPath: m_Name
@@ -4572,6 +4580,10 @@ PrefabInstance:
     - target: {fileID: 3115310235136475715, guid: bcc9b8f91e9f3cb49bdcffdf35bf2da4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6976539829426513157, guid: bcc9b8f91e9f3cb49bdcffdf35bf2da4, type: 3}
+      propertyPath: addY
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 8780701483383266383, guid: bcc9b8f91e9f3cb49bdcffdf35bf2da4, type: 3}
       propertyPath: m_Name

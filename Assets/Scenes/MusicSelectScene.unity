@@ -4352,6 +4352,7 @@ MonoBehaviour:
       data:
         phaseTransitionable:
           obj: {fileID: 1012713960}
+        musicDataGetter: {fileID: 1321402548}
         fadeController: {fileID: 1080446848224499449}
     - rid: 4334588895060557841
       type: {class: Transitioner_MusicSelect, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
@@ -4370,6 +4371,7 @@ MonoBehaviour:
       data:
         phaseTransitionable:
           obj: {fileID: 1012713960}
+        musicDataGetter: {fileID: 1321402548}
         fadeController: {fileID: 1080446848224499449}
     - rid: 4868282907093106688
       type: {class: Transitioner_TransitionRhythmGameScene, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
@@ -4380,7 +4382,8 @@ MonoBehaviour:
         waitTime: 0.5
     - rid: 4868282907093106689
       type: {class: Transitioner_TransitionRootScene, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
-      data: 
+      data:
+        nextSceneName: RootScene
 --- !u!4 &1013463691 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3302472204600621028, guid: ef0b92024c56585488e66f8ac84cd495, type: 3}
@@ -5363,6 +5366,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1318847980}
   m_CullTransparentMesh: 1
+--- !u!1 &1321402546
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1321402547}
+  - component: {fileID: 1321402548}
+  m_Layer: 0
+  m_Name: MusicDataGetter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1321402547
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1321402546}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1528082574}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1321402548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1321402546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ce4c0a19c0ff7d4a9fbd79e589bfc37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1352048267
 GameObject:
   m_ObjectHideFlags: 0
@@ -5996,6 +6043,7 @@ Transform:
   m_Children:
   - {fileID: 1959534642}
   - {fileID: 1012713961}
+  - {fileID: 1321402547}
   - {fileID: 69001550}
   - {fileID: 332814019}
   - {fileID: 1926686071}
@@ -7646,7 +7694,6 @@ MonoBehaviour:
   chartFileNameNormal: chart_normal.json
   chartFileNameHard: chart_hard.json
   chartFileNameMaster: chart_master.json
-  kariTmp: {fileID: 0}
 --- !u!1 &1959534641
 GameObject:
   m_ObjectHideFlags: 0
@@ -7708,6 +7755,7 @@ MonoBehaviour:
   - {fileID: 1423946251}
   - {fileID: 1214745454}
   - {fileID: 2129207705}
+  - {fileID: 1321402546}
 --- !u!224 &1974952398 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 511619848835754143, guid: 590205180e157b143a7db215d41875fd, type: 3}

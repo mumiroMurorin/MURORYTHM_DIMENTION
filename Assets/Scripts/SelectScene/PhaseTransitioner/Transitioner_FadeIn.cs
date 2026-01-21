@@ -1,0 +1,40 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Cysharp.Threading.Tasks;
+using System.Threading;
+using System;
+
+namespace TransitionerInSelectScene
+{
+    public class Transitioner_FadeIn : IPhaseTransitionerInSelectScene
+    {
+        [SerializeField] SerializeInterface<IPhaseTransitionableInSelectScene> phaseTransitionable;
+        [SerializeField] MusicDataGetter musicDataGetter;
+        [SerializeField] FadeController fadeController;
+
+        readonly PhaseStatusInSelectScene status = PhaseStatusInSelectScene.FadeIn;
+
+        bool IPhaseTransitionerInSelectScene.ConditionChecker(PhaseStatusInSelectScene status)
+        {
+            return this.status == status;
+        }
+
+        void IPhaseTransitionerInSelectScene.Transition()
+        {
+            Debug.Log("【Transition】Transition to \"FadeIn\"");
+
+            // アニメーションの再生
+            fadeController?.FadeIn(musicDataGetter.DataGetter, TransitionNextPhase);
+        }
+
+        /// <summary>
+        /// 次のフェーズへの移動
+        /// </summary>
+        private void TransitionNextPhase()
+        {
+            phaseTransitionable.Value.TransitionPhase(PhaseStatusInSelectScene.MusicSelect);
+        }
+    }
+
+}

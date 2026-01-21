@@ -42,7 +42,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     /// <summary>
     /// ノーツが1秒間に動く(unity単位)速度
     /// </summary>
-    ReactiveProperty<float> noteSpeed = new ReactiveProperty<float>(100f);
+    ReactiveProperty<float> noteSpeed = new ReactiveProperty<float>(170f);
     public IReadOnlyReactiveProperty<float> NoteSpeed => noteSpeed;
     public float NoteSpeedDisplay => noteSpeed.Value / 20f;
     public void SetNoteSpeed(float speed)
@@ -304,7 +304,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     }
 
     // サブ情報
-    ReactiveProperty<InfoTypeSub> subInfo = new ReactiveProperty<InfoTypeSub>(InfoTypeSub.ScoreAddition);
+    ReactiveProperty<InfoTypeSub> subInfo = new ReactiveProperty<InfoTypeSub>(InfoTypeSub.Breakdown);
     public IReadOnlyReactiveProperty<InfoTypeSub> SubInfo => subInfo;
     public bool ChangeSubInfo()
     {

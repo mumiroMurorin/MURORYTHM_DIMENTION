@@ -10,6 +10,7 @@ namespace TransitionerInResultScene
     public class Transitioner_FadeOut : IPhaseTransitionerInResultScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInResultScene> phaseTransitionable;
+        [SerializeField] MusicDataGetter musicDataGetter;
         [SerializeField] FadeController fadeController;
 
         readonly PhaseStatusInResultScene status = PhaseStatusInResultScene.FadeOut;
@@ -24,7 +25,7 @@ namespace TransitionerInResultScene
             Debug.Log("【Transition】Transition to \"FadeOut\"");
 
             // アニメーションの再生
-            fadeController?.FadeOut(TransitionNextPhase);
+            fadeController?.FadeOut(musicDataGetter.DataGetter, TransitionNextPhase);
         }
 
         /// <summary>

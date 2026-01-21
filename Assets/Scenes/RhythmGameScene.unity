@@ -298,7 +298,7 @@ MonoBehaviour:
     composer_name: "\u524A\u9664"
     music_spr: {fileID: 21300000, guid: 1512ba05fa48cde48858c7f68c23594f, type: 3}
     theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
-    clip: {fileID: 8300000, guid: 015896b2af4a8a04a95905417f694d54, type: 3}
+    clip: {fileID: 8300000, guid: 14fca47ec4675dc4ba7afc1dc4bc724e, type: 3}
     sample_clip: {fileID: 8300000, guid: 0d1068dc9a46ed641b6c5e4506563fbc, type: 3}
     symphonyType: 10
     stageType: 102
@@ -309,7 +309,7 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: MusicData/Aleph-0/chart_master.json
+  chartFilePath: MusicData/Destr0yer/chart_master.json
   noteSpeed: 200
   isAutoMode: 0
   isFastLateEnabled: 1
@@ -842,6 +842,50 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eda757d568a52cf46a8343cc43ee202b, type: 3}
+--- !u!1 &284363236
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 284363238}
+  - component: {fileID: 284363237}
+  m_Layer: 0
+  m_Name: MusicDataGetter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &284363237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284363236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ce4c0a19c0ff7d4a9fbd79e589bfc37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &284363238
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284363236}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1514032049}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &293647186
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4778,6 +4822,7 @@ Transform:
   m_Children:
   - {fileID: 2013225887}
   - {fileID: 1853263904}
+  - {fileID: 284363238}
   - {fileID: 484755817}
   - {fileID: 1803299204}
   - {fileID: 960448844}
@@ -5812,6 +5857,7 @@ MonoBehaviour:
       data:
         phaseTransitionable:
           obj: {fileID: 1853263903}
+        musicDataGetter: {fileID: 284363237}
         fadeController: {fileID: 425744634}
     - rid: 4334588895060557827
       type: {class: Transitioner_LoadBody, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
@@ -5852,6 +5898,7 @@ MonoBehaviour:
       data:
         phaseTransitionable:
           obj: {fileID: 1853263903}
+        musicDataGetter: {fileID: 284363237}
         fadeController: {fileID: 425744634}
     - rid: 4334588895060557833
       type: {class: Transitioner_TransitionResultScene, ns: TransitionerInRhythmGameScene, asm: Assembly-CSharp}
@@ -6132,6 +6179,7 @@ MonoBehaviour:
   - {fileID: 445581688}
   - {fileID: 1148642517}
   - {fileID: 425744633}
+  - {fileID: 284363236}
 --- !u!4 &2013225887
 Transform:
   m_ObjectHideFlags: 0
@@ -6483,6 +6531,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: -643376796560498950, guid: 796ea846c9ce48c4da82af3fc0c7e72e, type: 3}
+    - target: {fileID: 984429595974194117, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1019410027254325006, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -6495,6 +6547,14 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 4300000, guid: 08953e67e03de9d4589c923839dca719, type: 3}
+    - target: {fileID: 1801068732255112817, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1956804418211534213, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2554562566446997966, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -6507,6 +6567,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 4300000, guid: 08953e67e03de9d4589c923839dca719, type: 3}
+    - target: {fileID: 3339430128778364906, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3372415423836619191, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: timer.obj
       value: 
@@ -6535,18 +6599,38 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 4300000, guid: 08953e67e03de9d4589c923839dca719, type: 3}
+    - target: {fileID: 3740364001409110747, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3898875545106903909, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: -643376796560498950, guid: 796ea846c9ce48c4da82af3fc0c7e72e, type: 3}
+    - target: {fileID: 4018967930587955798, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4373081531102060787, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 4300000, guid: 08953e67e03de9d4589c923839dca719, type: 3}
+    - target: {fileID: 4431565038147712476, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4435983483357554394, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: -643376796560498950, guid: 796ea846c9ce48c4da82af3fc0c7e72e, type: 3}
+    - target: {fileID: 4484966394877464737, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4622215514628436810, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4648168409500632898, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -6563,6 +6647,14 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: -643376796560498950, guid: 796ea846c9ce48c4da82af3fc0c7e72e, type: 3}
+    - target: {fileID: 5922193917385042673, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6024220007423686811, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6092981027258155666, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -6586,6 +6678,14 @@ PrefabInstance:
     - target: {fileID: 6117121690577090241, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Name
       value: Stage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6180287760185772174, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6203503223711032350, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6387229053482288308, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Mesh
@@ -6635,6 +6735,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6954469714557239027, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7016476070557820538, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -6679,6 +6783,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 4300000, guid: 08953e67e03de9d4589c923839dca719, type: 3}
+    - target: {fileID: 7928508571336987730, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8014122682483409277, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -6707,6 +6815,18 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: -643376796560498950, guid: 796ea846c9ce48c4da82af3fc0c7e72e, type: 3}
+    - target: {fileID: 8197773896528942447, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8259239214574859370, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8382956314958948087, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8983098810822641885, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Mesh
       value: 
