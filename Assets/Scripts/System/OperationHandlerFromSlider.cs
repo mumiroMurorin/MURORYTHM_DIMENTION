@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using System;
 using System.Linq;
+using NaughtyAttributes;
 
 /// <summary>
 /// ‘€ìŠÖŒW‚Ì“Š‡ƒNƒ‰ƒX
@@ -45,6 +46,15 @@ public interface IOperationGetter
 /// </summary>
 public class SliderTouchData
 {
+    public SliderTouchData(OperationAsset asset, Action callback, SliderCoolDownHandler coolDownHandler = default)
+    {
+        SetSliderIndices(asset.SliderIndices);
+        AddCallback(callback);
+        SetImageColor(asset.ThemeColor);
+        SetText(asset.Text);
+        this.coolDownHandler = coolDownHandler;
+    }
+
     public SliderTouchData(int[] sliderIndices, Action callback, Color imageColor = default, string text = default, SliderCoolDownHandler coolDownHandler = default)
     {
         SetSliderIndices(sliderIndices);

@@ -1,14 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 namespace TransitionerInRhythmGameScene
 {
-    public class PhaseTransitionerInRhythmGameScene : MonoBehaviour, IPhaseTransitionableInRhythmGameScene
+    public class PhaseTransitionerInRhythmGameScene : MonoBehaviour, IPhaseTransitionableInRhythmGameScene, IPhaseStatusGetterInRhythmGameScene
     {
         const PhaseStatusInRhythmGame FIRST_STATUS = PhaseStatusInRhythmGame.LoadData;
 
         [SerializeReference,SubclassSelector] List<IPhaseTransitionerInRhythmGameScene> transitioners;
+
+        ReactiveProperty<PhaseStatusInRhythmGame> phaseStatus = new ReactiveProperty<PhaseStatusInRhythmGame>(FIRST_STATUS);
+        IReadOnlyReactiveProperty<PhaseStatusInRhythmGame> IPhaseStatusGetterInRhythmGameScene.PhaseStatus => phaseStatus;
 
         void Start()
         {
@@ -23,6 +27,7 @@ namespace TransitionerInRhythmGameScene
 
         public void TransitionPhase(PhaseStatusInRhythmGame phase)
         {
+            phaseStatus.Value = phase;
             Transition(phase);
         }
 
@@ -51,6 +56,11 @@ namespace TransitionerInRhythmGameScene
     public interface IPhaseTransitionableInRhythmGameScene
     {
         public void TransitionPhase(PhaseStatusInRhythmGame phase);
+    }
+
+    public interface IPhaseStatusGetterInRhythmGameScene
+    {
+        IReadOnlyReactiveProperty<PhaseStatusInRhythmGame> PhaseStatus { get; }
     }
 
     /// <summary>
