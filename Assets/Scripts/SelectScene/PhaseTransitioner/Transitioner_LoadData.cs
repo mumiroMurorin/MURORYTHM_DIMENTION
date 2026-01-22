@@ -9,9 +9,12 @@ namespace TransitionerInSelectScene
     public class Transitioner_LoadData : IPhaseTransitionerInSelectScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInSelectScene> phaseTransitionable;
+        [SerializeField] SerializeInterface<IPhaseStatusGetterInSelectScene> phaseGetter;
         [SerializeField] SerializeInterface<IMusicDataListLoader> musicDataListLoader;
         [SerializeField] OperationDictionary operationDictionary;
         [SerializeField] MusicDataListController musicDataListController;
+        [SerializeField] OptionDataListController optionDataListController;
+        [SerializeField] MusicDataSetter musicDataSetter;
 
         readonly PhaseStatusInSelectScene status = PhaseStatusInSelectScene.LoadData;
 
@@ -51,17 +54,56 @@ namespace TransitionerInSelectScene
         private void RegisterOperation()
         {
             // 楽曲選択
-            operationDictionary.RegisterOperation(OperationTag.Select_SelectMusic, () => { phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.DetailSelect); });
+            operationDictionary.RegisterOperation(OperationTag.Select_SelectMusic, () => { TransitionDetailSelect(); });
             operationDictionary.RegisterOperation(OperationTag.Select_MoveLeft, () => { musicDataListController?.MoveMusicTopic(-1); });
             operationDictionary.RegisterOperation(OperationTag.Select_MoveRight, () => { musicDataListController?.MoveMusicTopic(+1); });
-            operationDictionary.RegisterOperation(OperationTag.Select_UpDifficulty, () => { musicDataListController?.ChangeDifficulty(+1); });
-            operationDictionary.RegisterOperation(OperationTag.Select_DownDifficulty, () => { musicDataListController?.ChangeDifficulty(-1); });
+            operationDictionary.RegisterOperation(OperationTag.Select_UpDifficulty, () => { ChangeDifficulty(+1); });
+            operationDictionary.RegisterOperation(OperationTag.Select_DownDifficulty, () => { ChangeDifficulty(-1); });
 
             // 詳細確認
             operationDictionary.RegisterOperation(OperationTag.Select_Detail_BackSelectMusic, () => { phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.MusicSelect); });
-            operationDictionary.RegisterOperation(OperationTag.Select_Detail_StartMusic, () => { });
+            operationDictionary.RegisterOperation(OperationTag.Select_Detail_StartMusic, () => { StartMusic(); });
+            operationDictionary.RegisterOperation(OperationTag.Select_Detail_OpenOption, () => { phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.MusicOption); });
 
             // オプション
+            operationDictionary.RegisterOperation(OperationTag.Select_Option_BackMusicDetail, () => { TransitionDetailSelect(); });
+            operationDictionary.RegisterOperation(OperationTag.Select_Option_PlusValue, () => { optionDataListController?.ChangeTopicValue(+1); });
+            operationDictionary.RegisterOperation(OperationTag.Select_Option_MinusValue, () => { optionDataListController?.ChangeTopicValue(-1); });
+            operationDictionary.RegisterOperation(OperationTag.Select_Option_MoveRight, () => { optionDataListController?.MoveOptionTopic(+1); });
+            operationDictionary.RegisterOperation(OperationTag.Select_Option_MoveLeft, () => { optionDataListController?.MoveOptionTopic(-1); });
+        }
+
+        private void TransitionDetailSelect()
+        {
+            if (musicDataListController.IsPlayableMusicOnCurrentSelecting()) { phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.DetailSelect); }
+            else { phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.DetailSelect_UnStartable); }
+        }
+
+        /// <summary>
+        /// 難易度変更
+        /// </summary>
+        /// <param name="delta"></param>
+        private void ChangeDifficulty(int delta)
+        {
+            musicDataListController?.ChangeDifficulty(delta);
+
+            bool isChangePhase = false;
+
+            if (phaseGetter.Value.PhaseStatus.Value == PhaseStatusInSelectScene.DetailSelect && !musicDataListController.IsPlayableMusicOnCurrentSelecting()) { isChangePhase = true; }
+            if (phaseGetter.Value.PhaseStatus.Value == PhaseStatusInSelectScene.DetailSelect_UnStartable && musicDataListController.IsPlayableMusicOnCurrentSelecting()) { isChangePhase = true; }
+
+            if (isChangePhase) { TransitionDetailSelect(); }
+        }
+
+        /// <summary>
+        /// プレイ楽曲のセットとフェーズ移動
+        /// </summary>
+        private void StartMusic()
+        {
+            musicDataSetter.DataSetter.SetDifficulty(musicDataListController.Getter.Difficulty.Value);
+            musicDataSetter.DataSetter.SetMusicData(musicDataListController.Getter.CurrentMusicData.Value);
+
+            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.FadeOut);
         }
     }
 }

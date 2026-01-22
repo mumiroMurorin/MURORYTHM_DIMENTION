@@ -5,9 +5,9 @@ using VContainer;
 
 namespace TransitionerInSelectScene
 {
-    public class Transitioner_DetailSelect : IPhaseTransitionerInSelectScene
+    public class Transitioner_DetailSelectUnstartable : IPhaseTransitionerInSelectScene
     {
-        readonly PhaseStatusInSelectScene status = PhaseStatusInSelectScene.DetailSelect;
+        readonly PhaseStatusInSelectScene status = PhaseStatusInSelectScene.DetailSelect_UnStartable;
 
         bool IPhaseTransitionerInSelectScene.ConditionChecker(PhaseStatusInSelectScene status)
         {
@@ -16,7 +16,7 @@ namespace TransitionerInSelectScene
 
         void IPhaseTransitionerInSelectScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"DetailSelect\"");
+            Debug.Log("ÅyTransitionÅzTransition to \"DetailSelectUnstartable\"");
 
 
         }

@@ -15,7 +15,7 @@ MonoBehaviour:
   scene: 10
   phaseStatusTitleScene: 0
   phaseStatusLobbyScene: 0
-  phaseStatusSelectScene: 4
+  phaseStatusSelectScene: 5
   phaseStatusRhythmGameScene: 0
   phaseStatusResultScene: 0
   operationAssetGroups:

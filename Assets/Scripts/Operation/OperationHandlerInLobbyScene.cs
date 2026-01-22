@@ -11,7 +11,6 @@ public class OperationHandlerInLobbyScene : MonoBehaviour
     [Label("操作アセットリスト")]
     [SerializeField] OperationListInScene operations;
 
-    [SerializeField] float delaySeconds = 0.5f;
     [SerializeField] OperationDictionary operationDictionary;
     [SerializeField] SerializeInterface<IOperationSetter> operationSetter;
     [SerializeField] SerializeInterface<TransitionerInLobbyScene.IPhaseStatusGetterInLobbyScene> phaseStatusGetter;
@@ -28,12 +27,6 @@ public class OperationHandlerInLobbyScene : MonoBehaviour
         phaseStatusGetter?.Value?.PhaseStatus
             .Subscribe(OnChangePhase)
             .AddTo(this.gameObject);
-
-        // フェードアウトしたら操作を破棄
-        phaseStatusGetter?.Value?.PhaseStatus
-                .Where(value => value == PhaseStatusInLobbyScene.FadeOut)
-                .Subscribe(_ => operationSetter.Value.Dispose())
-                .AddTo(this.gameObject);
     }
 
     /// <summary>
@@ -47,12 +40,18 @@ public class OperationHandlerInLobbyScene : MonoBehaviour
             // シーンとフェーズが該当？
             if (assets.CheckCondition(phase))
             {
-                cts?.CancelAndDispose();
-                cts = DelayUtility.Run(delaySeconds, () => { SetOperation(assets); });
+                // 操作の破棄
+                operationSetter.Value.Dispose();
 
-                break;
+                cts?.CancelAndDispose();
+                cts = DelayUtility.Run(assets.DelaySeconds, () => { SetOperation(assets); });
+
+                return;
             }
         }
+
+        // 操作の破棄
+        operationSetter.Value.Dispose();
     }
 
     /// <summary>

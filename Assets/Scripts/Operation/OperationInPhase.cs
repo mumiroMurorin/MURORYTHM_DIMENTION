@@ -67,9 +67,12 @@ public class OperationInPhase : ScriptableObject
     #endregion
 
 
+    [SerializeField] float delaySeconds = 0.5f;
     [SerializeField] OperationAssetGroup[] operationAssetGroups;
 
     public IEnumerable<OperationAssetGroup> AssetGroups { get { return operationAssetGroups; } }
+
+    public float DelaySeconds { get { return delaySeconds; } }
 }
 
 [System.Serializable]
@@ -134,6 +137,8 @@ public enum OperationTag
     Select_Option_PlusValue = 320,
     Select_Option_MinusValue = 321,
 
+    // Result...500Å`
+    Result_ResultConfirm = 510,
 }
 
 public enum SceneTag

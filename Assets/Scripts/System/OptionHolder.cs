@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System;
 
 public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGetter, IOptionSetter
 {
@@ -12,26 +13,46 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     /// <param name="delta"></param>
     public bool SetOption(OptionType optionType, int delta)
     {
+        bool isChangable = false;
+
         switch (optionType)
         {
             case OptionType.NoteSpeed:
-                return AddNoteSpeed(delta);
+                isChangable = AddNoteSpeed(delta);
+                break;
             case OptionType.Offset:
-                return AddOffset(delta);
+                isChangable = AddOffset(delta);
+                break;
             case OptionType.DivisionNum:
-                return AddGroundDivisionNum(delta);
+                isChangable = AddGroundDivisionNum(delta);
+                break;
             case OptionType.JudgementSEVolume:
-                return AddJudgementSeVolume(delta);
+                isChangable = AddJudgementSeVolume(delta);
+                break;
             case OptionType.IsEnabledFastLate:
-                return SetIsEnabledFastLate(!IsEnabledFastLate.Value);
+                isChangable = SetIsEnabledFastLate(!IsEnabledFastLate.Value);
+                break;
             case OptionType.MainInfo:
-                return ChangeMainInfo();
+                isChangable = ChangeMainInfo();
+                break;
             case OptionType.SubInfo:
-                return ChangeSubInfo();
+                isChangable = ChangeSubInfo();
+                break;
+            default:
+                isChangable = false;
+                break;
         }
 
-        return false;
+        if (isChangable && delta != 0) { OnChangeOptionValueListnener.OnNext(delta > 0 ? 1 : -1); }
+
+        return isChangable;
     }
+
+    /// <summary>
+    /// オプションに変更があった際発火する
+    /// </summary>
+    Subject<int> OnChangeOptionValueListnener = new Subject<int>();
+    public IObservable<int> OnChangeOptionValue => OnChangeOptionValueListnener;
 
 
     #region NoteSpeed
@@ -398,6 +419,8 @@ public interface IVolumeGetter
 
 public interface IOptionGetter
 {
+    IObservable<int> OnChangeOptionValue { get; }
+
     IReadOnlyReactiveProperty<float> NoteSpeed { get; }
 
     float NoteSpeedDisplay { get; }

@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   operations: {fileID: 0}
-  delaySeconds: 0.5
   operationDictionary: {fileID: 7623715493339319837}
   operationSetter:
     obj: {fileID: 826874747931657081}
@@ -95,8 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa65dfcfcc62add4e91199bb976d4dfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  operations: {fileID: 0}
-  delaySeconds: 0.5
+  operations: {fileID: 11400000, guid: a56501d2b6c48a64d8a528f5e5226545, type: 2}
   operationDictionary: {fileID: 7623715493339319837}
   operationSetter:
     obj: {fileID: 826874747931657081}
@@ -211,7 +209,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   operations: {fileID: 11400000, guid: 12d72f816eb656742897756c3c87bf2e, type: 2}
-  delaySeconds: 0.5
   operationDictionary: {fileID: 7623715493339319837}
   operationSetter:
     obj: {fileID: 826874747931657081}
@@ -262,7 +259,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   operations: {fileID: 11400000, guid: d8dec3fcd36cc4c4bb77019c3ab0a09d, type: 2}
-  delaySeconds: 0.5
   operationDictionary: {fileID: 7623715493339319837}
   operationSetter:
     obj: {fileID: 826874747931657081}
@@ -313,7 +309,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   operations: {fileID: 11400000, guid: 95663231a7a44a5458be0bc61eb8bd4e, type: 2}
-  delaySeconds: 0.5
   operationDictionary: {fileID: 7623715493339319837}
   operationSetter:
     obj: {fileID: 826874747931657081}

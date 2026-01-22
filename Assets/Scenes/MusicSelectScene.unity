@@ -1444,7 +1444,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   optionTopicController_view: {fileID: 830100399}
   operationGetter_model:
-    obj: {fileID: 0}
+    obj: {fileID: 406225700}
   phaseStatusGetter_model:
     obj: {fileID: 1012713960}
 --- !u!1001 &358834342
@@ -1741,6 +1741,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce71e6cedf1aacd4b8c082020c77185f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &406225700 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 826874747931657081, guid: 717a189f9e3484f4482966c224c98fc4, type: 3}
+  m_PrefabInstance: {fileID: 824812364}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &455999870
 GameObject:
   m_ObjectHideFlags: 0
@@ -1950,7 +1955,7 @@ MonoBehaviour:
   topicTextsController_view: {fileID: 1974952400}
   backGroundController_view: {fileID: 213433464}
   operationGetter_model:
-    obj: {fileID: 0}
+    obj: {fileID: 406225700}
   phaseStatusGetter_model:
     obj: {fileID: 1012713960}
 --- !u!1001 &482081885
@@ -2026,6 +2031,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8507dc5aa9a97f428f8722d9868a0f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &537263605
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 537263606}
+  m_Layer: 0
+  m_Name: RelatedToData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &537263606
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537263605}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1321402547}
+  - {fileID: 1909588245}
+  - {fileID: 666478965}
+  - {fileID: 1003501551}
+  m_Father: {fileID: 1528082574}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &551868749
 GameObject:
   m_ObjectHideFlags: 0
@@ -2927,6 +2967,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a5a6ff7546bb704ca2301490c204363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &666478964
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 666478965}
+  - component: {fileID: 666478966}
+  m_Layer: 0
+  m_Name: OptionDataListController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &666478965
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 666478964}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 537263606}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &666478966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 666478964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09120d32ed2ad4f46b469a89379941a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &670584710
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3517,6 +3601,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: OperationHandler
       objectReference: {fileID: 0}
+    - target: {fileID: 4136450031809560061, guid: 717a189f9e3484f4482966c224c98fc4, type: 3}
+      propertyPath: inputHandler.obj
+      value: 
+      objectReference: {fileID: 69001549}
     - target: {fileID: 6655363228616157986, guid: 717a189f9e3484f4482966c224c98fc4, type: 3}
       propertyPath: phaseStatusGetter.obj
       value: 
@@ -3571,6 +3659,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7983707598914975379, guid: 717a189f9e3484f4482966c224c98fc4, type: 3}
   m_PrefabInstance: {fileID: 824812364}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &824812366 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7623715493339319837, guid: 717a189f9e3484f4482966c224c98fc4, type: 3}
+  m_PrefabInstance: {fileID: 824812364}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406225700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acab6e929b4329646acc5efca97d2352, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &830100397
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4041,6 +4140,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1423946252}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1003501550
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1003501551}
+  - component: {fileID: 1003501552}
+  m_Layer: 0
+  m_Name: MusicDataListController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1003501551
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1003501550}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 537263606}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1003501552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1003501550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cd5b07eefd43074f946d4a29760eebc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transitioner:
+    obj: {fileID: 1012713960}
+  phaseGetter:
+    obj: {fileID: 1012713960}
 --- !u!4 &1011963340 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3302472204600621028, guid: ed10fd712a701d54a96450c1fa81c07e, type: 3}
@@ -4106,6 +4253,7 @@ MonoBehaviour:
   - rid: 4334588895060557840
   - rid: 4334588895060557841
   - rid: 4334588895060557842
+  - rid: 4817692134259032064
   - rid: 4334588895060557843
   - rid: 4868282907093106688
   - rid: 2463229670824869888
@@ -4123,10 +4271,14 @@ MonoBehaviour:
       data:
         phaseTransitionable:
           obj: {fileID: 1012713960}
+        phaseGetter:
+          obj: {fileID: 1012713960}
         musicDataListLoader:
           obj: {fileID: 1926686070}
-        operationDictionary: {fileID: 0}
-        musicDataListController: {fileID: 0}
+        operationDictionary: {fileID: 824812366}
+        musicDataListController: {fileID: 1003501552}
+        optionDataListController: {fileID: 666478966}
+        musicDataSetter: {fileID: 1909588246}
     - rid: 4334588895060557840
       type: {class: Transitioner_FadeIn, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
       data:
@@ -4141,11 +4293,7 @@ MonoBehaviour:
           obj: {fileID: 1012713960}
     - rid: 4334588895060557842
       type: {class: Transitioner_DetailSelect, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
-      data:
-        phaseTransitionable:
-          obj: {fileID: 1012713960}
-        inputHandler:
-          obj: {fileID: 69001549}
+      data: 
     - rid: 4334588895060557843
       type: {class: Transitioner_FadeOut, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
       data:
@@ -4153,13 +4301,16 @@ MonoBehaviour:
           obj: {fileID: 1012713960}
         musicDataGetter: {fileID: 1321402548}
         fadeController: {fileID: 1080446848224499449}
+    - rid: 4817692134259032064
+      type: {class: Transitioner_DetailSelectUnstartable, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
+      data: 
     - rid: 4868282907093106688
       type: {class: Transitioner_TransitionRhythmGameScene, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
       data:
         nextSceneName: RhythmGameScene
         phaseTransitionable:
           obj: {fileID: 1012713960}
-        waitTime: 0.5
+        waitTime: 0
     - rid: 4868282907093106689
       type: {class: Transitioner_TransitionRootScene, ns: TransitionerInSelectScene, asm: Assembly-CSharp}
       data:
@@ -5176,7 +5327,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1528082574}
+  m_Father: {fileID: 537263606}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1321402548
 MonoBehaviour:
@@ -5823,7 +5974,7 @@ Transform:
   m_Children:
   - {fileID: 1959534642}
   - {fileID: 1012713961}
-  - {fileID: 1321402547}
+  - {fileID: 537263606}
   - {fileID: 69001550}
   - {fileID: 824812365}
   - {fileID: 1926686071}
@@ -7205,6 +7356,50 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed10fd712a701d54a96450c1fa81c07e, type: 3}
+--- !u!1 &1909588244
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1909588245}
+  - component: {fileID: 1909588246}
+  m_Layer: 0
+  m_Name: MusicDataSetter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1909588245
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909588244}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 537263606}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1909588246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909588244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2ddc61ee042b884dbe08d906b751c6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1909615127 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 549861122209026785, guid: 40d96574e37d08a4d92212b459308947, type: 3}
@@ -7524,7 +7719,7 @@ MonoBehaviour:
   autoInjectGameObjects:
   - {fileID: 69001549}
   - {fileID: 2136412673}
-  - {fileID: 0}
+  - {fileID: 537263605}
   - {fileID: 1926686070}
   - {fileID: 1468933148}
   - {fileID: 300857401}

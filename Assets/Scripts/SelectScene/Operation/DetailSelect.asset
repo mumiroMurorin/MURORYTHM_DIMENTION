@@ -18,6 +18,7 @@ MonoBehaviour:
   phaseStatusSelectScene: 3
   phaseStatusRhythmGameScene: 0
   phaseStatusResultScene: 0
+  delaySeconds: 0.1
   operationAssetGroups:
   - coolTime: 0
     operations:
@@ -26,13 +27,6 @@ MonoBehaviour:
       rightEdge: 10
       themeColor: {r: 1, g: 0.8117647, b: 0, a: 1}
       text: "\u697D\u66F2\u30B9\u30BF\u30FC\u30C8\uFF01"
-  - coolTime: 0
-    operations:
-    - tag: 251
-      leftEdge: 5
-      rightEdge: 10
-      themeColor: {r: 0.6509804, g: 0.6509804, b: 0.6509804, a: 1}
-      text: 
   - coolTime: 0.1
     operations:
     - tag: 230

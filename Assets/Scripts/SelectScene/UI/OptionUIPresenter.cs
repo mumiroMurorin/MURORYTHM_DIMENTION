@@ -39,7 +39,7 @@ namespace UIInSelectScene
             // ƒIƒvƒVƒ‡ƒ“‚©‚ç–ß‚é
             phaseStatusGetter_model?.Value.PhaseStatus
                 .Pairwise()
-                .Where(pair => pair.Previous == PhaseStatusInSelectScene.MusicOption && pair.Current == PhaseStatusInSelectScene.DetailSelect)
+                .Where(pair => pair.Previous == PhaseStatusInSelectScene.MusicOption && (pair.Current == PhaseStatusInSelectScene.DetailSelect || pair.Current == PhaseStatusInSelectScene.DetailSelect_UnStartable))
                 .Subscribe(_ => {
                     optionTopicController_view.OnBackDetailSelectPhase();
                 })

@@ -8,7 +8,8 @@ namespace TransitionerInResultScene
     public class Transitioner_LoadData : IPhaseTransitionerInResultScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInResultScene> phaseTransitionable;
-        
+        [SerializeField] OperationDictionary operationDictionary;
+
         readonly PhaseStatusInResultScene status = PhaseStatusInResultScene.LoadData;
 
         bool IPhaseTransitionerInResultScene.ConditionChecker(PhaseStatusInResultScene status)
@@ -21,16 +22,15 @@ namespace TransitionerInResultScene
             Debug.Log("【Transition】Transition to \"LoadData\"");
 
             SoundManager.Instance.PlayBGM(BGM_Type.Result);
+            RegisterOperation();
 
-            TransitionNextPhase();
+            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInResultScene.FadeIn);
+
         }
 
-        /// <summary>
-        /// 次のフェーズへの移動
-        /// </summary>
-        private void TransitionNextPhase()
+        private void RegisterOperation()
         {
-            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInResultScene.FadeIn);
+            operationDictionary.RegisterOperation(OperationTag.Result_ResultConfirm, () => { phaseTransitionable?.Value.TransitionPhase(PhaseStatusInResultScene.FadeOut); });
         }
     }
 

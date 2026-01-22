@@ -10,35 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 48533b201f7c9cb4c962852c06aecd43, type: 3}
-  m_Name: MusicSelect
+  m_Name: DetailSelect_UnStartable
   m_EditorClassIdentifier: 
   scene: 10
   phaseStatusTitleScene: 0
   phaseStatusLobbyScene: 0
-  phaseStatusSelectScene: 2
+  phaseStatusSelectScene: 4
   phaseStatusRhythmGameScene: 0
   phaseStatusResultScene: 0
-  delaySeconds: 0.5
+  delaySeconds: 0.1
   operationAssetGroups:
-  - coolTime: 0
-    operations:
-    - tag: 210
-      leftEdge: 5
-      rightEdge: 10
-      themeColor: {r: 1, g: 0.8117647, b: 0, a: 1}
-      text: "\u697D\u66F2\u9078\u629E"
-  - coolTime: 0.175
-    operations:
-    - tag: 220
-      leftEdge: 14
-      rightEdge: 15
-      themeColor: {r: 0, g: 0.8666667, b: 0.8117647, a: 1}
-      text: "\u53F3\u2192"
-    - tag: 221
-      leftEdge: 0
-      rightEdge: 1
-      themeColor: {r: 0, g: 0.8666667, b: 0.8117647, a: 1}
-      text: "\u2190\u5DE6"
   - coolTime: 0.1
     operations:
     - tag: 230
@@ -51,3 +32,17 @@ MonoBehaviour:
       rightEdge: 4
       themeColor: {r: 0.8156863, g: 0.03529412, b: 0.83137256, a: 1}
       text: "\u96E3\u6613\u5EA6DOWN"
+  - coolTime: 0
+    operations:
+    - tag: 260
+      leftEdge: 0
+      rightEdge: 1
+      themeColor: {r: 0, g: 0.47843137, b: 1, a: 1}
+      text: "\u697D\u66F2\u9078\u629E\u306B\u623B\u308B"
+  - coolTime: 0
+    operations:
+    - tag: 270
+      leftEdge: 14
+      rightEdge: 15
+      themeColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+      text: "\u8A2D\u5B9A"

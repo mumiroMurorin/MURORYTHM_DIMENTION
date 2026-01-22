@@ -10,10 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80d4ba904be692d408bbd8b039ce996a, type: 3}
-  m_Name: _Operations_SelectScene
+  m_Name: _OperationInResult
   m_EditorClassIdentifier: 
   assetsList:
-  - {fileID: 11400000, guid: e810bbda99eced44cb438a9771125b13, type: 2}
-  - {fileID: 11400000, guid: b4de79e40b1a7f54893254e7af6051cb, type: 2}
-  - {fileID: 11400000, guid: e88595b373934904588f9a2d02a34757, type: 2}
-  - {fileID: 11400000, guid: d802ced420135744e92c6fc0b8284178, type: 2}
+  - {fileID: 11400000, guid: 981df0e5f09c75c45b7139451b319f51, type: 2}

@@ -64,7 +64,7 @@ namespace UIInSelectScene
             // 楽曲の選択(決定)
             phaseStatusGetter_model?.Value.PhaseStatus
                 .Pairwise()
-                .Where(pair => pair.Current == PhaseStatusInSelectScene.DetailSelect && pair.Previous == PhaseStatusInSelectScene.MusicSelect)
+                .Where(pair => (pair.Current == PhaseStatusInSelectScene.DetailSelect || pair.Current == PhaseStatusInSelectScene.DetailSelect_UnStartable) && pair.Previous == PhaseStatusInSelectScene.MusicSelect)
                 .Subscribe(_ => musicTopicsController_view.OnSelectMusic())
                 .AddTo(this.gameObject);
 
@@ -90,10 +90,8 @@ namespace UIInSelectScene
             // オプションから戻る
             phaseStatusGetter_model?.Value.PhaseStatus
                 .Pairwise()
-                .Where(pair => pair.Previous == PhaseStatusInSelectScene.MusicOption && pair.Current == PhaseStatusInSelectScene.DetailSelect)
-                .Subscribe(_ => { 
-                    musicTopicsController_view.OnBackDetailSelectPhase(); 
-                })
+                .Where(pair => pair.Previous == PhaseStatusInSelectScene.MusicOption && (pair.Current == PhaseStatusInSelectScene.DetailSelect || pair.Current == PhaseStatusInSelectScene.DetailSelect_UnStartable))
+                .Subscribe(_ => { musicTopicsController_view.OnBackDetailSelectPhase(); })
                 .AddTo(this.gameObject);
         }
 

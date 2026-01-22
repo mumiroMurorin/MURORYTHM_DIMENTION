@@ -11,13 +11,15 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
 
     IMusicDataListGetter musicDataListGetter;
     ISelectSceneDataGetter selectSceneDataGetter;
+    IOptionGetter optionGetter;
     SoundManager soundManager;
 
     [Inject]
-    public void Construct(IMusicDataListGetter musicDataListGetter, ISelectSceneDataGetter selectSceneDataGetter)
+    public void Construct(IMusicDataListGetter musicDataListGetter, ISelectSceneDataGetter selectSceneDataGetter,IOptionGetter optionGetter)
     {
         this.musicDataListGetter = musicDataListGetter;
         this.selectSceneDataGetter = selectSceneDataGetter;
+        this.optionGetter = optionGetter;
     }
 
     void Start()
@@ -64,10 +66,9 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
         // 楽曲トピックの選択
         phaseStatusGetter?.Value.PhaseStatus
             .Pairwise()
-            .Where(pair => pair.Current == PhaseStatusInSelectScene.DetailSelect && pair.Previous == PhaseStatusInSelectScene.MusicSelect)
+            .Where(pair => (pair.Current == PhaseStatusInSelectScene.DetailSelect || pair.Current == PhaseStatusInSelectScene.DetailSelect_UnStartable) && pair.Previous == PhaseStatusInSelectScene.MusicSelect)
             .Subscribe(_ => soundManager.PlaySE(SE_Type.SelectMusic))
             .AddTo(this.gameObject);
-
     }
 
     private void BindInMusicDetailSelectPhase()
@@ -75,21 +76,21 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
         // 楽曲の決定
         phaseStatusGetter?.Value.PhaseStatus
             .Pairwise()
-            .Where(pair => pair.Current == PhaseStatusInSelectScene.FadeOut && pair.Previous == PhaseStatusInSelectScene.DetailSelect)
+            .Where(pair => pair.Current == PhaseStatusInSelectScene.FadeOut && (pair.Previous == PhaseStatusInSelectScene.DetailSelect || pair.Previous == PhaseStatusInSelectScene.DetailSelect_UnStartable))
             .Subscribe(_ => soundManager.PlaySE(SE_Type.DesicionMusic))
             .AddTo(this.gameObject);
 
         // 楽曲トピック選択に戻る
         phaseStatusGetter?.Value.PhaseStatus
             .Pairwise()
-            .Where(pair => pair.Current == PhaseStatusInSelectScene.MusicSelect && pair.Previous == PhaseStatusInSelectScene.DetailSelect)
+            .Where(pair => pair.Current == PhaseStatusInSelectScene.MusicSelect && (pair.Previous == PhaseStatusInSelectScene.DetailSelect || pair.Previous == PhaseStatusInSelectScene.DetailSelect_UnStartable))
             .Subscribe(_ => soundManager.PlaySE(SE_Type.BackTopic1))
             .AddTo(this.gameObject);
 
         // オプションの選択
         phaseStatusGetter?.Value.PhaseStatus
             .Pairwise()
-            .Where(pair => pair.Current == PhaseStatusInSelectScene.MusicOption && pair.Previous == PhaseStatusInSelectScene.DetailSelect)
+            .Where(pair => pair.Current == PhaseStatusInSelectScene.MusicOption && (pair.Previous == PhaseStatusInSelectScene.DetailSelect || pair.Previous == PhaseStatusInSelectScene.DetailSelect_UnStartable))
             .Subscribe(_ => soundManager.PlaySE(SE_Type.SelectOption))
             .AddTo(this.gameObject);
     }
@@ -102,6 +103,11 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
             .Subscribe(_ => {
                 soundManager.PlaySE(SE_Type.MoveTopic);
             })
+            .AddTo(this.gameObject);
+
+        // オプション値の変更
+        optionGetter?.OnChangeOptionValue
+            .Subscribe(_ => soundManager.PlaySE(SE_Type.ChangeOptionValue))
             .AddTo(this.gameObject);
 
         // 楽曲確認に戻る
