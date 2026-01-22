@@ -23,6 +23,8 @@ namespace TransitionerInLobbyScene
         {
             Debug.Log("ÅyTransitionÅzTransition to \"LoadData\"");
 
+            SoundManager.Instance.PlayBGM(BGM_Type.Lobby);
+
             RegisterOperation();
 
             TransitionNextPhase();
