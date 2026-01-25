@@ -79,6 +79,20 @@ public enum PhaseStatusInLobbyScene
 }
 
 /// <summary>
+/// チュートリアルシーンの内部ステータス
+/// </summary>
+public enum PhaseStatusInTutorialScene
+{
+    LoadData,
+    LoadChart,
+    FadeIn,
+    LoadBody,
+    Play,
+    FadeOut,
+    TransitionSelectScene,
+}
+
+/// <summary>
 /// 管理者シーンの内部ステータス
 /// </summary>
 public enum PhaseStatusInRootScene

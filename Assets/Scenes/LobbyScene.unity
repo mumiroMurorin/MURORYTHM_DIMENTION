@@ -528,7 +528,7 @@ MonoBehaviour:
     - rid: 4817692108418187270
       type: {class: Transitioner_TransitionTutorialScene, ns: TransitionerInLobbyScene, asm: Assembly-CSharp}
       data:
-        nextSceneName: TitleScene
+        nextSceneName: TutorialScene
         phaseTransitionable:
           obj: {fileID: 568503308}
         waitTime: 0.5

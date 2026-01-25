@@ -3913,7 +3913,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6514b57cdc72cc74eaf2517646921828, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delaySeconds: 1
+  delaySeconds: 0.5
   scoreSetter: {fileID: 874170453}
 --- !u!1001 &892707801
 PrefabInstance:

@@ -12,6 +12,8 @@ public interface IChartLoader
 {
     public void LoadChart(Action callback = null);
 
+    public void LoadChart(TextAsset jsonFile, Action callback = null);
+
     public ChartData LoadChartData(string path);
 
     public ChartData LoadChartData(TextAsset jsonFile);

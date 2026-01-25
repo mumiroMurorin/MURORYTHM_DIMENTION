@@ -49,11 +49,26 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     }
 
     /// <summary>
+    /// オプションアセットの値を反映
+    /// </summary>
+    /// <param name="asset"></param>
+    public void SetOption(OptionAsset asset)
+    {
+        SetNoteSpeed(asset.NoteSpeed);
+        SetOffset(asset.Offset);
+        SetSEVolume(asset.SeVolume);
+        SetBGMVolume(asset.BgmVolume);
+        SetDivisionNum(asset.DivisionNum);
+        SetIsEnabledFastLate(asset.IsEnabledFastLate);
+        SetMainInfo(asset.MainInfo);
+        SetSubInfo(asset.SubInfo);
+    }
+
+    /// <summary>
     /// オプションに変更があった際発火する
     /// </summary>
     Subject<int> OnChangeOptionValueListnener = new Subject<int>();
     public IObservable<int> OnChangeOptionValue => OnChangeOptionValueListnener;
-
 
     #region NoteSpeed
 
@@ -205,19 +220,19 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
                 switch (groundDivisionNum.Value)
                 {
                     case 1:
-                        groundDivisionNum.Value = 2;
+                        SetDivisionNum(2);
                         break;
                     case 2:
-                        groundDivisionNum.Value = 4;
+                        SetDivisionNum(4);
                         break;
                     case 4:
-                        groundDivisionNum.Value = 8;
+                        SetDivisionNum(8);
                         break;
                     case 8:
-                        groundDivisionNum.Value = 16;
+                        SetDivisionNum(16);
                         break;
                     case 16:
-                        groundDivisionNum.Value = 1;
+                        SetDivisionNum(1);
                         break;
                 }
             }
@@ -229,25 +244,33 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
                 switch (groundDivisionNum.Value)
                 {
                     case 1:
-                        groundDivisionNum.Value = 16;
+                        SetDivisionNum(16);
                         break;
                     case 2:
-                        groundDivisionNum.Value = 1;
+                        SetDivisionNum(1);
                         break;
                     case 4:
-                        groundDivisionNum.Value = 2;
+                        SetDivisionNum(2);
                         break;
                     case 8:
-                        groundDivisionNum.Value = 4;
+                        SetDivisionNum(4);
                         break;
                     case 16:
-                        groundDivisionNum.Value = 8;
+                        SetDivisionNum(8);
                         break;
                 }
             }
         }
 
         return true;
+    }
+    void SetDivisionNum(int num)
+    {
+        if (num > 16) { return; }
+        if (num < 1) { return; }
+        if (num % 2 != 0) { return; }
+
+        groundDivisionNum.Value = num;
     }
 
     #endregion
@@ -301,6 +324,10 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
 
         return true;
     }
+    public void SetMainInfo(InfoTypeMain type)
+    {
+        mainInfo.Value = type;
+    }
     public string MainInfoDisplay { 
         get 
         {
@@ -350,6 +377,11 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
 
         return true;
     }
+    public void SetSubInfo(InfoTypeSub type)
+    {
+        subInfo.Value = type;
+    }
+
     public string SubInfoDisplay
     {
         get
@@ -465,6 +497,8 @@ public interface IOptionSetter
     /// <param name="delta"></param>
     /// <returns>値の変更に成功？</returns>
     bool SetOption(OptionType optionType, int delta);
+
+    void SetOption(OptionAsset asset);
 
     void SetNoteSpeed(float speed);
 

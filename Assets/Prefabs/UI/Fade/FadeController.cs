@@ -89,10 +89,6 @@ public class FadeController : MonoBehaviour
 
     public void FadeOut(IMusicDataGetter dataGetter, System.Action callBack = null)
     {
-        Debug.Log(dataGetter);
-        Debug.Log(dataGetter?.Music);
-        Debug.Log(dataGetter?.Music?.Value);
-
         if (dataGetter == null) { FadeOut(callBack); return; }
         if (dataGetter.Music == null) { FadeOut(callBack); return; }
         if (dataGetter.Music.Value == null) { FadeOut(callBack); return; }

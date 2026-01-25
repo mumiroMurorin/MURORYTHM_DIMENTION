@@ -181,10 +181,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Touch the slider to start Conductus!
+  m_text: "\u30B9\u30E9\u30A4\u30C0\u30FC\u3092\u30BF\u30C3\u30C1\u3067\u30B2\u30FC\u30E0\u30B9\u30BF\u30FC\u30C8\uFF01"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8d140098eeb60674597367bde9b931e8, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 573d129dab75d8e4fbd9c93537c57a0b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: f1e717da140c5794eaf6ba41a8b80bbf, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

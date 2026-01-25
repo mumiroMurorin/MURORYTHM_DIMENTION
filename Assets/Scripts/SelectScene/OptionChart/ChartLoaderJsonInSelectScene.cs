@@ -27,6 +27,11 @@ public class ChartLoaderJsonInSelectScene : MonoBehaviour, IChartLoader
         callback.Invoke();
     }
 
+    void IChartLoader.LoadChart(TextAsset jsonFile, Action callback)
+    {
+        callback.Invoke();
+    }
+
     public ChartData LoadChartData(string path)
     {
         if (path == null || path == "")

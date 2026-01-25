@@ -33,6 +33,14 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
         callback.Invoke();
     }
 
+    void IChartLoader.LoadChart(TextAsset jsonFile, Action callback)
+    {
+        ChartData chartData = LoadChartData(jsonFile);
+
+        chartDataSetter.SetChartData(chartData);
+        callback.Invoke();
+    }
+
     public ChartData LoadChartData(string path)
     {
         if (path == null || path == "")

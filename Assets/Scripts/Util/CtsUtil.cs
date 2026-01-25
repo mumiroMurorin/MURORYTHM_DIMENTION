@@ -6,7 +6,8 @@ public static class CTSUtil
 {
     public static void CancelAndDispose(this CancellationTokenSource cts)
     {
-        if(cts == null) { return; }
+        if (cts == null) { return; }
+        if (cts.IsCancellationRequested) { return; }
         cts.Cancel();
         cts.Dispose();
         cts = null;

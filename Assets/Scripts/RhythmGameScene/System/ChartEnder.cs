@@ -8,6 +8,7 @@ using TransitionerInRhythmGameScene;
 
 public class ChartEnder : MonoBehaviour, IChartEnder
 {
+    [SerializeField] float delaySeconds = 0f;
     [Header("フェーズ遷移管理")]
     [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
 
@@ -26,6 +27,7 @@ public class ChartEnder : MonoBehaviour, IChartEnder
         // 譜面終了処理を購読
         scoreGetter.NoteJudgementDatas
             .ObserveCountChanged()
+            .Delay(System.TimeSpan.FromSeconds(delaySeconds))
             .Where(count => count >= chartDataGetter.Chart.MaxCombo)
             .Subscribe(count =>
             {
