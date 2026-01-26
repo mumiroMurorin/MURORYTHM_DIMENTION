@@ -5,12 +5,14 @@ using VContainer;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using UnityEngine.SceneManagement;
+using NaughtyAttributes;
 
 namespace TransitionerInResultScene
 {
     public class Transitioner_TransitionSelectScene : IPhaseTransitionerInResultScene
     {
-        const string NEXT_SCENE_NAME = "MusicSelectScene";
+        [Scene]
+        [SerializeField] string nextSceneName;
 
         [SerializeField] SerializeInterface<IPhaseTransitionableInResultScene> phaseTransitionable;
         [SerializeField] float waitTime = 0.5f;
@@ -31,7 +33,7 @@ namespace TransitionerInResultScene
 
         private async UniTaskVoid LoadSceneAsync(CancellationToken token)
         {
-            var async = SceneManager.LoadSceneAsync(NEXT_SCENE_NAME);
+            var async = SceneManager.LoadSceneAsync(nextSceneName);
 
             async.allowSceneActivation = false;
             await UniTask.WaitForSeconds(waitTime, cancellationToken: token);

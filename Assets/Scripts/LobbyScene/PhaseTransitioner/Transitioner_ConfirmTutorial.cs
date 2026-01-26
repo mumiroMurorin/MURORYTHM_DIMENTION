@@ -10,6 +10,7 @@ namespace TransitionerInLobbyScene
     public class Transitioner_ConfirmTutorial : IPhaseTransitionerInLobbyScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInLobbyScene> phaseTransitionable;
+        [SerializeField] TextBoxController textBoxController;
 
         readonly PhaseStatusInLobbyScene status = PhaseStatusInLobbyScene.ConfirmTutorial;
 
@@ -22,6 +23,7 @@ namespace TransitionerInLobbyScene
         {
             Debug.Log("ÅyTransitionÅzTransition to \"ConfirmTutorial\"");
 
+            textBoxController?.Open(TransitionNextPhase);
         }
 
         /// <summary>
@@ -29,7 +31,7 @@ namespace TransitionerInLobbyScene
         /// </summary>
         private void TransitionNextPhase()
         {
-            phaseTransitionable.Value.TransitionPhase(PhaseStatusInLobbyScene.FadeOut);
+            phaseTransitionable.Value.TransitionPhase(PhaseStatusInLobbyScene.ConfirmTutorial_Operation);
         }
     }
 

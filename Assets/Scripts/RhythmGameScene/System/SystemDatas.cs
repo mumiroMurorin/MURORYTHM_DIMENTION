@@ -33,6 +33,7 @@ public enum PhaseStatusInResultScene
     Result,
     FadeOut,
     TransitionSelectScene,
+    TransitionGameOverScene,
     Retry,
 }
 
@@ -73,6 +74,7 @@ public enum PhaseStatusInLobbyScene
     LoadData,
     FadeIn,
     ConfirmTutorial,
+    ConfirmTutorial_Operation,
     FadeOut,
     TransitionSelectScene,
     TransitionTutorialScene,
@@ -89,6 +91,20 @@ public enum PhaseStatusInTutorialScene
     LoadBody,
     Play,
     FadeOut,
+    TransitionSelectScene,
+}
+
+/// <summary>
+/// ゲーム終了シーンの内部ステータス
+/// </summary>
+public enum PhaseStatusInGameOverScene
+{
+    LoadData,
+    FadeIn,
+    ConfirmContinue,
+    ConfirmContinue_Operation,
+    FadeOut,
+    TransitionTitleScene,
     TransitionSelectScene,
 }
 

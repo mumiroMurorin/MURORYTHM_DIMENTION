@@ -1005,6 +1005,7 @@ MonoBehaviour:
   - rid: 4334588895060557836
   - rid: 4334588895060557837
   - rid: 4334588895060557838
+  - rid: 8701273931916509192
   - rid: 1637505392830316546
   references:
     version: 2
@@ -1050,6 +1051,14 @@ MonoBehaviour:
     - rid: 4334588895060557838
       type: {class: Transitioner_TransitionSelectScene, ns: TransitionerInResultScene, asm: Assembly-CSharp}
       data:
+        nextSceneName: MusicSelectScene
+        phaseTransitionable:
+          obj: {fileID: 709638090}
+        waitTime: 0.25
+    - rid: 8701273931916509192
+      type: {class: Transitioner_TransitionGameOverScene, ns: TransitionerInResultScene, asm: Assembly-CSharp}
+      data:
+        nextSceneName: GameOverScene
         phaseTransitionable:
           obj: {fileID: 709638090}
         waitTime: 0.25

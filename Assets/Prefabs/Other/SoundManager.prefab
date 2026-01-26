@@ -66,6 +66,12 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 77a0b5bb22755f6478a32f3ee9d3973b, type: 3}
   - type: 160
     clip: {fileID: 8300000, guid: 1e1cc4a6609803c4fb2d986f9d19542d, type: 3}
+  - type: 1100
+    clip: {fileID: 8300000, guid: 1e1cc4a6609803c4fb2d986f9d19542d, type: 3}
+  - type: 1101
+    clip: {fileID: 8300000, guid: 1e1cc4a6609803c4fb2d986f9d19542d, type: 3}
+  - type: 1101
+    clip: {fileID: 8300000, guid: 1e1cc4a6609803c4fb2d986f9d19542d, type: 3}
   judgementSEs:
   - {fileID: 11400000, guid: a643cb651d507e84da9b38b124522d15, type: 2}
   - {fileID: 11400000, guid: 50fd7c4dc5808e54394cba875597b8b1, type: 2}

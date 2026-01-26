@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scene: 5
   phaseStatusTitleScene: 0
-  phaseStatusLobbyScene: 2
+  phaseStatusLobbyScene: 3
   phaseStatusSelectScene: 0
   phaseStatusRhythmGameScene: 0
   phaseStatusResultScene: 0
+  delaySeconds: 0.5
   operationAssetGroups:
   - coolTime: 0
     operations:

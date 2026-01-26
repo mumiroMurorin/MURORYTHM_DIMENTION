@@ -65,6 +65,18 @@ public class OperationInPhase : ScriptableObject
     }
 
     #endregion
+    #region =================== GameOver ===================
+
+    [ShowIf("scene", SceneTag.GameOverScene)]
+    [Label("対応フェーズ")]
+    [SerializeField] PhaseStatusInGameOverScene phaseStatusGameOverScene;
+
+    public bool CheckCondition(PhaseStatusInGameOverScene phase)
+    {
+        return scene == SceneTag.GameOverScene && phase == phaseStatusGameOverScene;
+    }
+
+    #endregion
 
 
     [SerializeField] float delaySeconds = 0.5f;
@@ -139,6 +151,10 @@ public enum OperationTag
 
     // Result...500～
     Result_ResultConfirm = 510,
+
+    // GameOver...900～
+    GameOver_Continue = 990,
+    GameOver_FinishGame = 991,
 }
 
 public enum SceneTag
@@ -149,4 +165,5 @@ public enum SceneTag
     TutorialScene = 15,
     RhythmGameScene = 20,
     ResultScene = 25,
+    GameOverScene = 30,
 }

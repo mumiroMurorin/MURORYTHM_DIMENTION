@@ -15,6 +15,7 @@ public enum BGM_Type
     Lobby = 20,
     MusicTrack = 500,
     Result = 800,
+    GameOver = 900,
     SILENCE = 999, // ñ≥âπèÛë‘
 }
 
@@ -31,6 +32,12 @@ public enum SE_Type
     ChangeOptionValue = 160,
 
     BackSelectScene = 810,
+
+    OpenTextBox = 1100,
+    CloseTextBox = 1101,
+
+    AnyDecision = 1110,
+    AnyCancel = 1110,
 }
 
 /// <summary>
@@ -220,6 +227,7 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
     private async UniTaskVoid FadeIn(AudioClip clip, bool loopFlg, CancellationToken token, float progress = 0f)
     {
         if(progress >= 1f) { return; }
+        if(clip == null) { return; }
 
         bgmSources[0].volume = 0;
         bgmSources[0].loop = loopFlg;

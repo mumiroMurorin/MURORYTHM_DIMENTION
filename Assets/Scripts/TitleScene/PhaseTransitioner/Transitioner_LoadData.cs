@@ -8,8 +8,10 @@ namespace TransitionerInTitleScene
 {
     public class Transitioner_LoadData : IPhaseTransitionerInTitleScene
     {
+        [SerializeField] OptionAsset initializingOption;
         [SerializeField] SerializeInterface<IPhaseTransitionableInTitleScene> phaseTransitionable;
         [SerializeField] SerializeInterface<IMusicDataListLoader> musicDataListLoader;
+        [SerializeField] OptionDataSetter optionDataSetter;
         [SerializeField] VideoLoader videoLoader;
 
         readonly PhaseStatusInTitleScene status = PhaseStatusInTitleScene.LoadData;
@@ -24,6 +26,8 @@ namespace TransitionerInTitleScene
             Debug.Log("【Transition】Transition to \"LoadData\"");
 
             bool[] isCompletedTask = new bool[2];
+
+            optionDataSetter?.SetOption(initializingOption);
 
             // 楽曲データリストの読み込みとセット
             if (!musicDataListLoader.Value.CheckLoadedMusicDatas())

@@ -9,6 +9,7 @@ namespace TransitionerInResultScene
 {
     public class Transitioner_FadeOut : IPhaseTransitionerInResultScene
     {
+        [SerializeField] bool isTransitionSelectScene;
         [SerializeField] SerializeInterface<IPhaseTransitionableInResultScene> phaseTransitionable;
         [SerializeField] MusicDataGetter musicDataGetter;
         [SerializeField] FadeController fadeController;
@@ -33,7 +34,14 @@ namespace TransitionerInResultScene
         /// </summary>
         private void TransitionNextPhase()
         {
-            phaseTransitionable.Value.TransitionPhase(PhaseStatusInResultScene.TransitionSelectScene);
+            if (isTransitionSelectScene)
+            {
+                phaseTransitionable.Value.TransitionPhase(PhaseStatusInResultScene.TransitionSelectScene);
+            }
+            else
+            {
+                phaseTransitionable.Value.TransitionPhase(PhaseStatusInResultScene.TransitionGameOverScene);
+            }
         }
     }
 
