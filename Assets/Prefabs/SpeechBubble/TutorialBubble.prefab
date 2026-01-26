@@ -148,8 +148,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3425579581745898889}
   - {fileID: 7174788932084142484}
+  - {fileID: 3425579581745898889}
   - {fileID: 8999253890989507614}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -209,7 +209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 120
+    m_Left: 200
     m_Right: 50
     m_Top: 20
     m_Bottom: 20
@@ -239,6 +239,9 @@ MonoBehaviour:
     fontSize: 48
     fontColor: {r: 1, g: 1, b: 1, a: 1}
     characterRevealSpeed: 10
+    emotion: 1
+  faceImage: {fileID: 4282307173989032551}
+  emotionAsset: {fileID: 11400000, guid: 2d9a19a1c67f3f04aab4557242a47bf2, type: 2}
 --- !u!114 &7774218605072543271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -339,8 +342,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 11.951172, y: -2.7934}
-  m_SizeDelta: {x: 96.3485, y: 116.7657}
+  m_AnchoredPosition: {x: -51, y: -2.7934}
+  m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &3772583451896856576
 CanvasRenderer:
@@ -370,7 +373,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 73d72adec1aa6e3499716279da708f44, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6be5f598a48178e4f8450b58c5568602, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

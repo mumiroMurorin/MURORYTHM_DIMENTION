@@ -103,6 +103,7 @@ public enum PhaseStatusInGameOverScene
     FadeIn,
     ConfirmContinue,
     ConfirmContinue_Operation,
+    Animation,
     FadeOut,
     TransitionTitleScene,
     TransitionSelectScene,

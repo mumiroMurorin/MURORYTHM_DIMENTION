@@ -7057,6 +7057,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692162781609984
@@ -7069,6 +7070,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692162781609986
@@ -7081,6 +7083,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692162781609987
@@ -7099,6 +7102,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897665
@@ -7111,6 +7115,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897666
@@ -7123,6 +7128,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897667
@@ -7135,6 +7141,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 11
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897668
@@ -7147,6 +7154,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 10
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897669
@@ -7165,6 +7173,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897672
@@ -7177,6 +7186,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897673
@@ -7189,6 +7199,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897674
@@ -7201,6 +7212,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 10
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897675
@@ -7219,6 +7231,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897678
@@ -7231,6 +7244,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897679
@@ -7243,6 +7257,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897683
@@ -7255,6 +7270,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 40
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897684
@@ -7267,6 +7283,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897685
@@ -7285,6 +7302,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 10
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897688
@@ -7297,6 +7315,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 40
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897689
@@ -7309,6 +7328,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897690
@@ -7321,6 +7341,7 @@ MonoBehaviour:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           characterRevealSpeed: 10
+          emotion: 10
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897691

@@ -33,11 +33,14 @@ public enum SE_Type
 
     BackSelectScene = 810,
 
+    ContinueGame = 950,
+    FinishGame = 951,
+
     OpenTextBox = 1100,
     CloseTextBox = 1101,
 
     AnyDecision = 1110,
-    AnyCancel = 1110,
+    AnyCancel = 1111,
 }
 
 /// <summary>

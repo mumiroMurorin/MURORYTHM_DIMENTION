@@ -16,8 +16,8 @@ public class SoundEventSubscriberInGameOverScene : MonoBehaviour
 
     private void Bind()
     {
-        operationDictionary?.RegisterOperation(OperationTag.GameOver_Continue, () => { SoundManager.Instance.PlaySE(SE_Type.AnyDecision); });
-        operationDictionary?.RegisterOperation(OperationTag.GameOver_FinishGame, () => { SoundManager.Instance.PlaySE(SE_Type.AnyCancel); });
+        operationDictionary?.RegisterOperation(OperationTag.GameOver_Continue, () => { SoundManager.Instance.PlaySE(SE_Type.ContinueGame); });
+        operationDictionary?.RegisterOperation(OperationTag.GameOver_FinishGame, () => { SoundManager.Instance.PlaySE(SE_Type.FinishGame); });
     }
 }
 

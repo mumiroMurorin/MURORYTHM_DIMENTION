@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using VContainer;
+using System.Threading;
 
 namespace TransitionerInGameOverScene
 {
@@ -26,7 +26,6 @@ namespace TransitionerInGameOverScene
             SoundManager.Instance.PlayBGM(BGM_Type.GameOver);
 
             RegisterOperation();
-
             TransitionNextPhase();
         }
 
@@ -40,14 +39,19 @@ namespace TransitionerInGameOverScene
 
         private void RegisterOperation() 
         {
-            operationDictionary.RegisterOperation(OperationTag.GameOver_Continue, () => { TransitionFadeOutPhase(true); });
-            operationDictionary.RegisterOperation(OperationTag.GameOver_FinishGame, () => { TransitionFadeOutPhase(false); });
+            operationDictionary.RegisterOperation(OperationTag.GameOver_Continue, () => { 
+                TransitionFadeOutPhase(true);
+            });
+
+            operationDictionary.RegisterOperation(OperationTag.GameOver_FinishGame, () => { 
+                TransitionFadeOutPhase(false);
+            });
         }
 
         private void TransitionFadeOutPhase(bool isContinue)
         {
             dataController?.DataSetter?.SetContinue(isContinue);
-            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInGameOverScene.FadeOut);
+            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInGameOverScene.Animation);
         }
     }
 }

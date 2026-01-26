@@ -1,14 +1,19 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 using System.Threading;
 
 public class SpeechBubbleTutorial : SpeechBubbleAnimation
 {
+    [SerializeField] Image faceImage;
+    [SerializeField] EmotionAsset emotionAsset;
+
     public System.Action OnFinishAnimationListner;
 
     protected override void SetText(string text, SpeechBubbleConfig config)
     {
         tmp.text = text;
+        emotionAsset?.ApplySprite(config.Emotion, faceImage);
 
         // プレイ中、順番に表示
         // (TimeLine状では一気に表示)

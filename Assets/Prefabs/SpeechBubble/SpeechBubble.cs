@@ -36,10 +36,14 @@ public class SpeechBubbleConfig
     [SerializeField] Color fontColor = Color.white;
     [Tooltip("文字出現スピード[char/sec]")]
     [SerializeField] float characterRevealSpeed = 10f;
+    [Tooltip("感情")]
+    [SerializeField] FaceEmotion emotion = FaceEmotion.Normal;
 
     public float FontSize { get { return fontSize; } set { fontSize = value; } }
 
     public Color FontColor { get { return fontColor; } set { fontColor = value; } }
 
     public float CharacterRevealSpeed { get { return characterRevealSpeed; } set { characterRevealSpeed = value; } }
+
+    public FaceEmotion Emotion { get { return emotion; } }
 }
