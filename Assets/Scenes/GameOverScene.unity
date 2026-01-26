@@ -380,7 +380,7 @@ PrefabInstance:
     - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
       propertyPath: bgmClips.Array.data[0].clip
       value: 
-      objectReference: {fileID: 8300000, guid: 54a3aa913aab28948aa7ad9a0cbc5ef5, type: 3}
+      objectReference: {fileID: 8300000, guid: 6c8b5bf5c8054324d93f8bb5bb70ff2c, type: 3}
     - target: {fileID: 7376403681269459811, guid: 9d30040e593636f4dbad99c5aa9d2602, type: 3}
       propertyPath: bgmClips.Array.data[0].type
       value: 900
