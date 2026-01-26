@@ -504,6 +504,7 @@ MonoBehaviour:
         phaseTransitionable:
           obj: {fileID: 568503308}
         dataController: {fileID: 219146896}
+        textBoxController: {fileID: 2442630959528489228}
         sikibooController: {fileID: 850372710}
     - rid: 8701273931916509185
       type: {class: Transitioner_LoadData, ns: TransitionerInGameOverScene, asm: Assembly-CSharp}

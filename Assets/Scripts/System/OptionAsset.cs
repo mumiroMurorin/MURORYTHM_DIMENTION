@@ -17,7 +17,7 @@ public class OptionAsset : ScriptableObject
     public float NoteSpeed { get { return noteSpeed; } }
     public float SeVolume { get { return seVolume; } }
     public float BgmVolume { get { return bgmVolume; } }
-    public float Offset { get { return noteSpeed; } }
+    public float Offset { get { return offset; } }
     public int DivisionNum { get { return divisionNum; } }
     public bool IsEnabledFastLate { get { return isEnabledFastLate; } }
     public InfoTypeMain MainInfo { get { return mainInfo; } }

@@ -13,6 +13,7 @@ namespace TransitionerInGameOverScene
         [SerializeField] float afterFinishDelaySeconds = 3f;
         [SerializeField] SerializeInterface<IPhaseTransitionableInGameOverScene> phaseTransitionable;
         [SerializeField] GameOverSceneDataController dataController;
+        [SerializeField] TextBoxController textBoxController;
         [SerializeField] SikibooController sikibooController;
 
         readonly PhaseStatusInGameOverScene status = PhaseStatusInGameOverScene.Animation;
@@ -29,6 +30,7 @@ namespace TransitionerInGameOverScene
             Debug.Log("【Transition】Transition to \"Animation\"");
 
             phaseTransitionable?.Value?.RegisterCts(cts);
+            textBoxController?.Close();
 
             // コンティニュー
             if (dataController.DataGetter.IsContinue.Value) 
