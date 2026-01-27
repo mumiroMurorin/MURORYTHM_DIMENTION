@@ -5668,7 +5668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed07db9c99ac59f4e9da1284ad6c5307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUseSpaceInput: 0
+  isUseSpaceInput: 1
   spaceInputHandler:
     obj: {fileID: 796097596}
 --- !u!114 &1821151699 stripped
