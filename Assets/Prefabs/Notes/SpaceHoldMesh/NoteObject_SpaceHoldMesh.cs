@@ -12,6 +12,7 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
 {
     [SerializeField] float judgementMarginRadius = 0.25f;
     [SerializeField] float judgementMarginTime = 0.1f;
+    [SerializeField] float firstMarginTime = 0.1f;
     [Header("meshのマテリアル(未判定時)")]
     [SerializeField] Material meshMaterialDefault;
     [Header("meshのマテリアル(ホールド時)")]
@@ -32,6 +33,7 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
     public override void Initialize(NoteData_SpaceHoldMesh data)
     {
         noteData = data;
+        holdingMarginCount = firstMarginTime;
 
         // マテリアルの設定
         meshRenderers = new List<MeshRenderer>();

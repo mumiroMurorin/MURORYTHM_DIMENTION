@@ -2588,6 +2588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2fe1d8811e6b0c44a92726c9972fdb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delaySeconds: 0
   phaseTransitionable:
     obj: {fileID: 1853263903}
 --- !u!1001 &808997309
