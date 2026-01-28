@@ -750,6 +750,20 @@ namespace MeshGenerate
             return new Vector3((vector.x - center.x) * radius, (vector.y - center.y) * radius, vector.z);
         }
 
+        public static Vector3 GetEularAngle(Vector3 pos, Vector3 target)
+        {
+            // 点Aへの方向を計算
+            Vector2 direction = target - pos;
+
+            // Atan2で角度を計算 (ラジアン)
+            float angleRad = Mathf.Atan2(direction.y, direction.x);
+
+            // ラジアンを度数法に変換
+            float angleDeg = angleRad * Mathf.Rad2Deg;
+
+            return new Vector3(0, 0, angleDeg);
+        }
+
         /// <summary>
         /// 線を描く
         /// </summary>

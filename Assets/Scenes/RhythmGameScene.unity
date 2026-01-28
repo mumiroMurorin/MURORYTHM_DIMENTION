@@ -1230,6 +1230,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 234263435}
     m_Modifications:
+    - target: {fileID: 1335417649768587079, guid: 40931f9d382f5c840afeac2c1231011f, type: 3}
+      propertyPath: m_FillAmount
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1564121614395103124, guid: 40931f9d382f5c840afeac2c1231011f, type: 3}
+      propertyPath: m_FillAmount
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1949497603759196082, guid: 40931f9d382f5c840afeac2c1231011f, type: 3}
+      propertyPath: m_FillAmount
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2449371120942042423, guid: 40931f9d382f5c840afeac2c1231011f, type: 3}
+      propertyPath: m_FillAmount
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2822819058599201789, guid: 40931f9d382f5c840afeac2c1231011f, type: 3}
       propertyPath: m_Name
       value: Fade
@@ -1346,9 +1362,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6741235839808329036, guid: 40931f9d382f5c840afeac2c1231011f, type: 3}
+      propertyPath: m_FillAmount
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7420801192169301572, guid: 40931f9d382f5c840afeac2c1231011f, type: 3}
       propertyPath: m_FillAmount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8197995169444348610, guid: 40931f9d382f5c840afeac2c1231011f, type: 3}
+      propertyPath: m_FillAmount
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8582298253714438918, guid: 40931f9d382f5c840afeac2c1231011f, type: 3}
+      propertyPath: m_FillAmount
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2678,6 +2706,14 @@ PrefabInstance:
     - target: {fileID: 3557880811985844621, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
       propertyPath: m_Name
       value: LoadingBody
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344308489783075046, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7003494081260383716, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6606,6 +6642,10 @@ PrefabInstance:
       objectReference: {fileID: -643376796560498950, guid: 796ea846c9ce48c4da82af3fc0c7e72e, type: 3}
     - target: {fileID: 4018967930587955798, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4278711359682608241, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4373081531102060787, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}

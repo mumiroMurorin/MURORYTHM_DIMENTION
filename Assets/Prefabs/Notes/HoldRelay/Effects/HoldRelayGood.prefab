@@ -45,8 +45,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 218c01b283596fa449dee35dfe5912ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleSystems:
-  - {fileID: 1104552505036848998}
+  particleEndCallback:
+  - {fileID: 4081331762148652589}
+  particles:
+  - particle: {fileID: 1104552505036848998}
+    emissionConstantCount: 7
+    distanceUnit: 0
   HoldRelayLights:
   - {fileID: 6823542280905326013}
   - {fileID: 1986520553743067306}
@@ -64,7 +68,6 @@ MonoBehaviour:
   - {fileID: 659722067353906857}
   - {fileID: 8193068109741276892}
   - {fileID: 8446462351318326897}
-  particleEndCallback: {fileID: 4081331762148652589}
 --- !u!1 &757875938798949615
 GameObject:
   m_ObjectHideFlags: 0

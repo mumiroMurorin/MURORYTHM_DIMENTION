@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 2483935840268213223}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -10, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -4910,10 +4910,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9016152438705764cbcfd35df23b9a99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleSystems:
-  - {fileID: 7060758363666212585}
-  - {fileID: 5510485076178774563}
-  particleEndCallback: {fileID: 4336383035818683031}
+  particleEndCallback:
+  - {fileID: 4336383035818683031}
+  particles:
+  - particle: {fileID: 7060758363666212585}
+    emissionConstantCount: 25
+    distanceUnit: 0
+  - particle: {fileID: 5510485076178774563}
+    emissionConstantCount: 20
+    distanceUnit: 0
 --- !u!114 &4336383035818683031
 MonoBehaviour:
   m_ObjectHideFlags: 0

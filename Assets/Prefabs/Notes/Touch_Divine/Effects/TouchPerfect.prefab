@@ -46,11 +46,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9647d3264a9885946a87c47cec14d7c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleSystems:
-  - {fileID: 1104552505036848998}
-  - {fileID: 5636159699562262929}
-  - {fileID: 4905052707585139459}
-  - {fileID: 979737587250577046}
+  particleEndCallback:
+  - {fileID: 8699623716234111518}
+  particles:
+  - particle: {fileID: 1104552505036848998}
+    emissionConstantCount: 15
+    distanceUnit: 0
+  - particle: {fileID: 5636159699562262929}
+    emissionConstantCount: 15
+    distanceUnit: 0
+  - particle: {fileID: 4905052707585139459}
+    emissionConstantCount: 10
+    distanceUnit: 0
+  - particle: {fileID: 979737587250577046}
+    emissionConstantCount: 1
+    distanceUnit: 0
   touchLigts:
   - {fileID: 6823542280905326013}
   - {fileID: 1986520553743067306}
@@ -68,7 +78,6 @@ MonoBehaviour:
   - {fileID: 659722067353906857}
   - {fileID: 8193068109741276892}
   - {fileID: 8446462351318326897}
-  particleEndCallback: {fileID: 8699623716234111518}
 --- !u!1 &757875938798949615
 GameObject:
   m_ObjectHideFlags: 0

@@ -72,7 +72,20 @@ public abstract class NoteFactory<T> : MonoBehaviour, INoteFactory<T> where T : 
 /// <typeparam name="T"></typeparam>
 public interface IInteractNoteEffectController
 {
-    void SetEffect(INoteData noteData, Action<IInteractNoteEffectController> returnToPool);
+    void SetEffect(INoteData noteData, Judgement judgement, Action<IInteractNoteEffectController> returnToPool);
+
+    void SetTransform(Vector3 pos, Quaternion rotation);
+
+    void Play();
+}
+
+/// <summary>
+/// ノーツ判定エフェクトの初期化など
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public interface IJudgementEffectController
+{
+    void SetEffect(Judgement judgement, Action<IJudgementEffectController> returnToPool, float error = 0f);
 
     void SetTransform(Vector3 pos, Quaternion rotation);
 

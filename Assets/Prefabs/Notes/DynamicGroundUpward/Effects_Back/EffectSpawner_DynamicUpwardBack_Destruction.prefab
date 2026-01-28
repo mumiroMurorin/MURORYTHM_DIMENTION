@@ -45,5 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolSize: 20
-  effectPrefab: {fileID: 1884298956938331962, guid: 1a90e50ad5c53cc4f845c65e865f7a4e, type: 3}
+  effectPrefab: {fileID: 856756839974420395, guid: 2d6a393a7c4256349b19a6db72dcfc25, type: 3}
   parent: {fileID: 8972111511213723807}

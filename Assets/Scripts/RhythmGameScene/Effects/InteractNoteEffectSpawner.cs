@@ -50,13 +50,13 @@ public abstract class InteractNoteEffectSpawner : MonoBehaviour
 
     public IInteractNoteEffectController Spawn(NoteJudgementData judgementData)
     {
-        var effect = effectPool.Pop();
-
         // ˆê’U–³‚©‚Á‚½‚ç•Ô‚·
-        if (effect == null) { return null; }
+        if (effectPool.Count <= 0) { return null; }
+
+        var effect = effectPool.Pop();
         
         effect.SetTransform(CalcSpawnPos(judgementData), CalcSpawnRotate(judgementData));
-        effect.SetEffect(judgementData.NoteData, ReturnToPool);
+        effect.SetEffect(judgementData.NoteData, judgementData.Judgement, ReturnToPool);
         effect.Play();
 
         return effect;

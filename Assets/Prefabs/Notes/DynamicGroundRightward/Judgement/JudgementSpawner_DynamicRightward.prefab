@@ -44,13 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72bcb2fe7d32e7b4cbf884883ec64cb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolSize: 20
   parent: {fileID: 3115310235136475715}
+  effectPrefab: {fileID: 1500984401244750326, guid: 4ff6e69ef76ba234e84c1d517f7dd3dc, type: 3}
   radius: 4
-  perfectEffect: {fileID: 2094157378961250412, guid: f78bbbc0d2745624f99dfd1a8d121500, type: 3}
-  greatEffect: {fileID: 2094157378961250412, guid: e4ae50cf874d78c4397b180246887743, type: 3}
-  greatEffect_late: {fileID: 2094157378961250412, guid: 8296bb6a85aff174ab1b9fa82d5783d0, type: 3}
-  greatEffect_fast: {fileID: 2094157378961250412, guid: d2138af1f9084cb4dbc7ff3fb717df40, type: 3}
-  goodEffect: {fileID: 2094157378961250412, guid: 94b0e46ab6a86da44a91511a57c36ba3, type: 3}
-  goodEffect_late: {fileID: 2094157378961250412, guid: 4e1f9dab15990a146841f91497ae0c1f, type: 3}
-  goodEffect_fast: {fileID: 2094157378961250412, guid: b1a4d8b62d58cc24c85f71c3869d453d, type: 3}
-  missEffect: {fileID: 2094157378961250412, guid: 4545a399d6d27d8459395336eae90866, type: 3}

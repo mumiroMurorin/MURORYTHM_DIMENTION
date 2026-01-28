@@ -3,27 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class InteractNoteEffectController : MonoBehaviour, IInteractNoteEffectController
+public class InteractNoteEffectController : MonoBehaviour, IInteractNoteEffectController
 {
-    [SerializeField] ParticleEndCallback particleEndCallback;
-    [SerializeField] protected List<ParticleSystem> particleSystems;
-    [SerializeField] protected ParticleSystemToSetting[] particles;
+    [SerializeField] JudgementToEffect[] effects;
 
-    public void SetEffect(INoteData noteData, Action<IInteractNoteEffectController> returnToPool)
+    private void Start()
     {
-        if (particleEndCallback != null)
-        {
-            particleEndCallback.OnStopParticleListner += () =>
-            {
-                this.gameObject.SetActive(false);
-                returnToPool(this);
-            };
-        }
-
-        SetEffect(noteData);
+        this.gameObject.SetActive(false);
     }
 
-    protected abstract void SetEffect(INoteData noteDataOrigin);
+    public void SetEffect(INoteData noteData, Judgement judgement, Action<IInteractNoteEffectController> returnToPool)
+    {
+        bool isExist = false;
+        foreach (var effect in effects)
+        {
+            bool applicable = effect.CheckCondition(judgement);
+            isExist |= applicable;
+
+            effect.Effect.gameObject.SetActive(applicable);
+
+            if (applicable) 
+            { 
+                effect.Effect.SetEffect(noteData, () => {
+                    this.gameObject.SetActive(false);
+                    returnToPool(this);
+                });
+            }
+        }
+
+        // 判定に伴うエフェクトが存在しなかった場合
+        if (!isExist)
+        {
+            this.gameObject.SetActive(false);
+            returnToPool(this);
+        }
+    }
 
   　public void SetTransform(Vector3 pos, Quaternion rotation)
     {
@@ -34,9 +48,9 @@ public abstract class InteractNoteEffectController : MonoBehaviour, IInteractNot
     public void Play()
     {
         this.gameObject.SetActive(true);
-        foreach (ParticleSystem particleSystem in particleSystems)
+        foreach (var effect in effects)
         {
-            particleSystem.Play();
+            effect.Effect.Play();
         }
 
         AfterPlay();
@@ -45,44 +59,16 @@ public abstract class InteractNoteEffectController : MonoBehaviour, IInteractNot
     protected virtual void AfterPlay() { }
 
     [System.Serializable]
-    public class ParticleSystemToSetting 
+    class JudgementToEffect
     {
-        const float ANGLE_UNIT = 11.25f;
-
-        [SerializeField] ParticleSystem particle;
-        [SerializeField] float emissionConstantCount;
-
-        /// <summary>
-        /// グラウンドノーツに対してのエフェクト設定 (emission)
-        /// </summary>
-        /// <param name="laneLength"></param>
-        public void ApplyGroundEmissionSetting(int laneLength)
+        [SerializeField] Judgement judgement;
+        [SerializeField] InteractNoteEffect effect;
+        
+        public bool CheckCondition(Judgement judgement)
         {
-            var emission = particle.emission;
-            ParticleSystem.Burst[] bursts = new ParticleSystem.Burst[emission.burstCount];
-            emission.GetBursts(bursts);
-
-            for (int i = 0; i < bursts.Length; i++)
-            {
-                bursts[i].count = new ParticleSystem.MinMaxCurve(emissionConstantCount * laneLength);
-            }
-
-            emission.SetBursts(bursts);
+            return this.judgement == judgement;
         }
 
-        /// <summary>
-        /// グラウンドノーツに対してのエフェクト設定 (shape)
-        /// </summary>
-        /// <param name="laneLength"></param>
-
-        public void ApplyGroundShapeSetting(int startIndex, int laneLength)
-        {
-            // Shapeモジュール
-            var shape = particle.shape;
-            shape.shapeType = ParticleSystemShapeType.Cone;
-            shape.rotation = new Vector3(0, 0, 180f + startIndex * ANGLE_UNIT);   // 角度の変更
-            shape.arc = laneLength * 11.25f; // 長さの変更
-        }
+        public InteractNoteEffect Effect { get { return effect; } }
     }
-
 }

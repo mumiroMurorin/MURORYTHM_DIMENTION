@@ -45,10 +45,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 015f9d7f6c2a03f41aa1f181f18fc698, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceUnit: 1
-  particleSystems:
-  - {fileID: 1104552505036848998}
-  particleEndCallback: {fileID: 8432263172172933666}
+  particleEndCallback:
+  - {fileID: 8432263172172933666}
+  particles:
+  - particle: {fileID: 1104552505036848998}
+    emissionConstantCount: 3
+    distanceUnit: 10
 --- !u!1 &2707127052456546872
 GameObject:
   m_ObjectHideFlags: 0

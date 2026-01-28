@@ -4910,13 +4910,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bb4130411420544dbb65807ddea434d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleEndCallback: {fileID: 5359126420898359736}
-  particleSystems: []
+  particleEndCallback:
+  - {fileID: 5359126420898359736}
   particles:
   - particle: {fileID: 7060758363666212585}
     emissionConstantCount: 25
+    distanceUnit: 1
   - particle: {fileID: 5510485076178774563}
     emissionConstantCount: 20
+    distanceUnit: 1
 --- !u!114 &5359126420898359736
 MonoBehaviour:
   m_ObjectHideFlags: 0
