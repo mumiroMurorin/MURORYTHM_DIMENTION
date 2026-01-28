@@ -44,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95a1acc2bd0219548b717d9364f3334b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolSize: 20
+  effectPrefab: {fileID: 2483935840268213223, guid: b8569738850da3642bdf3e6efdb18495, type: 3}
   parent: {fileID: 3302472204600621028}
-  perfectEffect: {fileID: 2483935840268213223, guid: b8569738850da3642bdf3e6efdb18495, type: 3}
-  greatEffect: {fileID: 2483935840268213223, guid: 32a2aa6b4512bb54ab03c202f35b4ca1, type: 3}
-  goodEffect: {fileID: 2483935840268213223, guid: ca087a31af43786489d657344576be05, type: 3}

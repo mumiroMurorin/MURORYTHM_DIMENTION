@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e1d13f3598dc734686f27c719758d29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poolSize: 20
+  effectPrefab: {fileID: 1884298956938331962, guid: a82e7989c27e02b47a2f8ec0399fa69d, type: 3}
   parent: {fileID: 8972111511213723807}
-  backGroundEffect: {fileID: 1884298956938331962, guid: a82e7989c27e02b47a2f8ec0399fa69d, type: 3}

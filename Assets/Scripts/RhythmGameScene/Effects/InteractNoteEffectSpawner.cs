@@ -15,7 +15,7 @@ public abstract class InteractNoteEffectSpawner : MonoBehaviour
         // ƒv[ƒ‹‚Ì‰Šú‰»
         effectPool = new Stack<IInteractNoteEffectController>(poolSize);
 
-        for(int i = 0; i < effectPool.Count; i++)
+        for(int i = 0; i < poolSize; i++)
         {
             effectPool.Push(Instantiate());
         }
@@ -29,7 +29,7 @@ public abstract class InteractNoteEffectSpawner : MonoBehaviour
     {
         var obj = Instantiate(effectPrefab, parent);
 
-        if (obj.TryGetComponent(out IInteractNoteEffectController effect)) { return null; }
+        if (!obj.TryGetComponent(out IInteractNoteEffectController effect)) { return null; }
         return effect;
     }
 
