@@ -2,22 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractNoteEffectController_DynamicDownwardBack : MonoBehaviour, IInteractNoteEffectController<NoteData_DynamicGroundDownward>
+public class InteractNoteEffectController_DynamicDownwardBack : InteractNoteEffectController
 {
-    [SerializeField] List<ParticleSystem> particleSystems;
-    [SerializeField] ParticleEndCallback particleEndCallback;
-
-    public void SetEffect(NoteData_DynamicGroundDownward noteData)
+    protected override void SetEffect(INoteData noteDataOrigin)
     {
 
-    }
-
-    public void Play()
-    {
-        foreach (ParticleSystem particleSystem in particleSystems)
-        {
-            particleSystem.Play();
-        }
     }
 }
 

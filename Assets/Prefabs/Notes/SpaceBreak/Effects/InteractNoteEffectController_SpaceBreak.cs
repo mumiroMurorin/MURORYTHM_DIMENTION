@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class InteractNoteEffectController_SpaceBreak : MonoBehaviour, IInteractNoteEffectController<NoteData_SpaceBreak>
+public class InteractNoteEffectController_SpaceBreak : InteractNoteEffectController
 {
     [SerializeField] float distanceUnit = 1f;
-    [SerializeField] List<ParticleSystem> particleSystems;
-    [SerializeField] ParticleEndCallback particleEndCallback;
 
-    public void SetEffect(NoteData_SpaceBreak noteData)
+    protected override void SetEffect(INoteData noteDataOrigin)
     {
+        if (noteDataOrigin is not NoteData_SpaceBreak noteData) { return; }
+
         // パーティクルのセット
         foreach (ParticleSystem particle in particleSystems)
         {
@@ -33,17 +33,6 @@ public class InteractNoteEffectController_SpaceBreak : MonoBehaviour, IInteractN
             }
 
             emission.SetBursts(bursts);
-        }
-
-        if (particleEndCallback != null) { particleEndCallback.OnStopParticleListner += () => { Destroy(this.gameObject); }; }
-
-    }
-
-    public void Play()
-    {
-        foreach (ParticleSystem particleSystem in particleSystems)
-        {
-            particleSystem.Play();
         }
     }
 }

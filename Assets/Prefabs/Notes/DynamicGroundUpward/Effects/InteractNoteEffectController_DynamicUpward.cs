@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractNoteEffectController_DynamicUpward : MonoBehaviour, IInteractNoteEffectController<NoteData_DynamicGroundUpward>
+public class InteractNoteEffectController_DynamicUpward : InteractNoteEffectController
 {
-    [SerializeField] List<ParticleSystem> particleSystems;
-    [SerializeField] ParticleEndCallback particleEndCallback;
-
-    public void SetEffect(NoteData_DynamicGroundUpward noteData)
+    protected override void SetEffect(INoteData noteDataOrigin)
     {
+        if (noteDataOrigin is not NoteData_DynamicGroundUpward noteData) { return; }
+
         foreach (ParticleSystem particle in particleSystems)
         {
             // Shapeƒ‚ƒWƒ…[ƒ‹
@@ -29,17 +28,6 @@ public class InteractNoteEffectController_DynamicUpward : MonoBehaviour, IIntera
 
             emission.SetBursts(bursts);
 
-        }
-
-        if (particleEndCallback != null) { particleEndCallback.OnStopParticleListner += () => { Destroy(this.gameObject); }; }
-
-    }
-
-    public void Play()
-    {
-        foreach (ParticleSystem particleSystem in particleSystems)
-        {
-            particleSystem.Play();
         }
     }
 }

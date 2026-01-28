@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System;
 
-public class InteractNoteEffectController_Touch : MonoBehaviour, IInteractNoteEffectController<NoteData_Touch>
+public class InteractNoteEffectController_Touch : InteractNoteEffectController
 {
-    [SerializeField] List<ParticleSystem> particleSystems;
     [SerializeField] MeshRenderer[] touchLigts;
-    [SerializeField] ParticleEndCallback particleEndCallback;
 
-    public void SetEffect(NoteData_Touch noteData)
+    protected override void SetEffect(INoteData noteDataOrigin)
     {
+        if (noteDataOrigin is not NoteData_Touch noteData) { return; }
+
         // ŒõÊ‚ÌƒZƒbƒg
         foreach (int index in noteData.Range)
         {
@@ -39,19 +40,8 @@ public class InteractNoteEffectController_Touch : MonoBehaviour, IInteractNoteEf
             }
 
             emission.SetBursts(bursts);
-
         }
-        
-        if (particleEndCallback != null) { particleEndCallback.OnStopParticleListner += () => { Destroy(this.gameObject); }; }
-
-    }
-
-    public void Play()
-    {
-        foreach (ParticleSystem particleSystem in particleSystems)
-        {
-            particleSystem.Play();
-        }
+       
     }
 }
 

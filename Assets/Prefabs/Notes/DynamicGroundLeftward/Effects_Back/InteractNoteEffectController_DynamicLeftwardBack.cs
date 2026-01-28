@@ -2,16 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractNoteEffectController_DynamicLeftwardBack : MonoBehaviour, IInteractNoteEffectController<NoteData_DynamicGroundLeftward>
+public class InteractNoteEffectController_DynamicLeftwardBack : InteractNoteEffectController
 {
     [SerializeField] GameObject rightObj;
     [SerializeField] GameObject leftObj;
-    [SerializeField] List<ParticleSystem> particleSystems;
-    [SerializeField] ParticleEndCallback rightParticleEndCallback;
-    [SerializeField] ParticleEndCallback leftParticleEndCallback;
 
-    public void SetEffect(NoteData_DynamicGroundLeftward noteData)
+    protected override void SetEffect(INoteData noteDataOrigin)
     {
+        if (noteDataOrigin is not NoteData_DynamicGroundLeftward noteData) { return; }
+
         bool isRight = false;
         bool isLeft = false;
 
@@ -23,17 +22,6 @@ public class InteractNoteEffectController_DynamicLeftwardBack : MonoBehaviour, I
 
         rightObj.SetActive(isRight);
         leftObj.SetActive(isLeft);
-
-        if (isRight && rightParticleEndCallback != null) { rightParticleEndCallback.OnStopParticleListner += () => { Destroy(this.gameObject); }; }
-        if (isLeft && leftParticleEndCallback != null) { leftParticleEndCallback.OnStopParticleListner += () => { Destroy(this.gameObject); }; }
-    }
-
-    public void Play()
-    {
-        foreach (ParticleSystem particleSystem in particleSystems)
-        {
-            particleSystem.Play();
-        }
     }
 }
 

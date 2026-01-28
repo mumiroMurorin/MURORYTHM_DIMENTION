@@ -70,9 +70,11 @@ public abstract class NoteFactory<T> : MonoBehaviour, INoteFactory<T> where T : 
 /// ノーツインタラクトエフェクトの初期化など
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface IInteractNoteEffectController<T> where T : INoteData
+public interface IInteractNoteEffectController
 {
-    void SetEffect(T noteData);
+    void SetEffect(INoteData noteData, Action<IInteractNoteEffectController> returnToPool);
+
+    void SetTransform(Vector3 pos, Quaternion rotation);
 
     void Play();
 }

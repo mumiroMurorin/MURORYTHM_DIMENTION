@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class InteractNoteEffectController_DivineTouch : MonoBehaviour, IInteractNoteEffectController<NoteData_DivineTouch>
+public class InteractNoteEffectController_DivineTouch : InteractNoteEffectController
 {
-    [SerializeField] List<ParticleSystem> particleSystems;
     [SerializeField] MeshRenderer[] touchLigts;
-    [SerializeField] ParticleEndCallback particleEndCallback;
 
-    public void SetEffect(NoteData_DivineTouch noteData)
+    protected override void SetEffect(INoteData noteDataOrigin)
     {
+        if (noteDataOrigin is not NoteData_DivineTouch noteData) { return; }
+
         // ŒõÊ‚ÌƒZƒbƒg
         foreach (int index in noteData.Range)
         {
@@ -40,17 +40,6 @@ public class InteractNoteEffectController_DivineTouch : MonoBehaviour, IInteract
 
             emission.SetBursts(bursts);
 
-        }
-
-        if (particleEndCallback != null) { particleEndCallback.OnStopParticleListner += () => { Destroy(this.gameObject); }; }
-
-    }
-
-    public void Play()
-    {
-        foreach (ParticleSystem particleSystem in particleSystems)
-        {
-            particleSystem.Play();
         }
     }
 }

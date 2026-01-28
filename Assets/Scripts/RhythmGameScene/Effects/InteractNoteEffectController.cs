@@ -1,53 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
-using VContainer;
 using UnityEngine;
-using UniRx;
+using System;
 
-public class InteractNoteEffectController : MonoBehaviour
+public abstract class InteractNoteEffectController : MonoBehaviour, IInteractNoteEffectController
 {
-    [SerializeField] SymphonyType symphonyType;
-    [SerializeField] List<InteractNoteEffectSpawner> spawners;
+    [SerializeField] ParticleEndCallback particleEndCallback;
+    [SerializeField] protected List<ParticleSystem> particleSystems;
 
-    IScoreGetter scoreGetter;
-    IMusicDataGetter musicDataGetter;
-
-    [Inject]
-    public void Constructor(IScoreGetter scoreGetter, IMusicDataGetter musicDataGetter)
+    public void SetEffect(INoteData noteData, Action<IInteractNoteEffectController> returnToPool)
     {
-        this.scoreGetter = scoreGetter;
-        this.musicDataGetter = musicDataGetter;
-    }
-
-    private void Start()
-    {
-        Bind();
-    }
-
-    private void Bind()
-    {
-        if (musicDataGetter == null) { return; }
-        if (musicDataGetter.Music == null) { return; }
-        if (musicDataGetter.Music.Value == null) { return; }
-        if (this.symphonyType != musicDataGetter.Music.Value.SymphonyType) { return; }
-
-        // 記録を監視、増え次第エフェクトを発生させる
-        scoreGetter.NoteJudgementDatas
-            .ObserveAdd()
-            .Subscribe(value => SpawnEffect(value.Value))
-            .AddTo(this.gameObject);
-    }
-
-    private void SpawnEffect(NoteJudgementData judgementData)
-    {
-        foreach (InteractNoteEffectSpawner spawner in spawners)
+        if (particleEndCallback != null)
         {
-            if (spawner.ConditionChecker(judgementData))
+            particleEndCallback.OnStopParticleListner += () =>
             {
-                spawner.Spawn(judgementData);
-            }
+                this.gameObject.SetActive(false);
+                returnToPool(this);
+            };
         }
 
+        SetEffect(noteData);
     }
-}
 
+    protected abstract void SetEffect(INoteData noteDataOrigin);
+
+  　public void SetTransform(Vector3 pos, Quaternion rotation)
+    {
+        this.gameObject.transform.position = pos;
+        this.gameObject.transform.rotation = rotation;
+    }
+
+    public void Play()
+    {
+        this.gameObject.SetActive(true);
+        foreach (ParticleSystem particleSystem in particleSystems)
+        {
+            particleSystem.Play();
+        }
+
+        AfterPlay();
+    }
+
+    protected virtual void AfterPlay() { }
+}

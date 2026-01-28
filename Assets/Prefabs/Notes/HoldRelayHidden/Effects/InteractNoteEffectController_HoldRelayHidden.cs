@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class InteractNoteEffectController_HoldRelayHidden : MonoBehaviour, IInteractNoteEffectController<NoteData_HoldRelayHidden>
+public class InteractNoteEffectController_HoldRelayHidden : InteractNoteEffectController
 {
-    [SerializeField] List<ParticleSystem> particleSystems;
     [SerializeField] MeshRenderer[] HoldRelayHiddenLights;
-    [SerializeField] ParticleEndCallback particleEndCallback;
 
-    public void SetEffect(NoteData_HoldRelayHidden noteData)
+    protected override void SetEffect(INoteData noteDataOrigin)
     {
+        if (noteDataOrigin is not NoteData_HoldRelayHidden noteData) { return; }
+
         // ŒõÊ‚ÌƒZƒbƒg
         foreach (int index in noteData.Range)
         {
@@ -40,17 +40,6 @@ public class InteractNoteEffectController_HoldRelayHidden : MonoBehaviour, IInte
 
             emission.SetBursts(bursts);
 
-        }
-
-        if (particleEndCallback != null) { particleEndCallback.OnStopParticleListner += () => { Destroy(this.gameObject); }; }
-
-    }
-
-    public void Play()
-    {
-        foreach (ParticleSystem particleSystem in particleSystems)
-        {
-            particleSystem.Play();
         }
     }
 }
