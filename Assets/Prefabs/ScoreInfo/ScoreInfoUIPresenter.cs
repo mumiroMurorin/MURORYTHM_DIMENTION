@@ -32,6 +32,9 @@ public class ScoreInfoUIPresenter : MonoBehaviour
 
     private void Bind()
     {
+        if (optionGetter_model == null) { return; }
+        if (scoreGetter_model == null) { return; }
+
         // ========== •\Ž¦î•ñ ==========
         optionGetter_model.MainInfo
             .Subscribe(type => { 

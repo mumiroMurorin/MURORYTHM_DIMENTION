@@ -17,21 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: d7a288ce86e3b5846b0cc5bc68cbecbc
   m_SerializeEntries:
-  - m_GUID: 5df337c6c1e89384c91577f1b32c32d9
-    m_Address: Score_tmp2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2cc378145ae428d4082ce5cd95e73bee
-    m_Address: Score_tmp1
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 87ce86c87fc042c44a13899e2fe5fcf4
-    m_Address: Score_hiasobi_skyclad
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5a891565f77ad4c499f061132787e961
     m_Address: Music_hiasobi
     m_ReadOnly: 0
@@ -82,21 +67,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4f28ed882e954e74492cf13b94e0319e
-    m_Address: Score_armageddon_dream
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 42880846bd5dcac4db4c117fd5d4fc38
-    m_Address: Score_echo_fanatic
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 27a5ac7ee458a69429d95623c7465bc9
-    m_Address: Score_catlife_initiate
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b6c36bc84b8ee8640b622cafea3e20dd
     m_Address: Music_catlife
     m_ReadOnly: 0
@@ -107,11 +77,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 655f8b6c718e8da42aa6fe7e3e8e312c
-    m_Address: Score_catlife_dream
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f89421c69e7b7a14f8409d8745a6e852
     m_Address: Music_runpika
     m_ReadOnly: 0
@@ -119,11 +84,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0caffeaef44a7fb4a8b0330a6eefa318
     m_Address: Image_runpika
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7ec6503c649c6bb4abb7d739a8ed2c4d
-    m_Address: Score_runpika_fanatic
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

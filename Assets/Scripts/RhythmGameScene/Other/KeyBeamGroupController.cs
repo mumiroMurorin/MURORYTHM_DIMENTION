@@ -29,7 +29,7 @@ public class KeyBeamGroupController : MonoBehaviour
             // i‚ğ’¼Ú‘ã“ü‚·‚é‚Ì‚Å‚Í‚È‚­index‚ğ‰î‚·
             int index = i;
 
-            inputGetter.GetSliderInputReactiveProperty(index)
+            inputGetter?.GetSliderInputReactiveProperty(index)
                 .Subscribe(keyBeams[index].SetActive)
                 .AddTo(this.gameObject);
         }

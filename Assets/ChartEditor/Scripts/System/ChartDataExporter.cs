@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using ChartConvert;
@@ -20,11 +18,31 @@ namespace ChartEditor
         public void Export()
         {
             ChartExporter chartExporter = new ChartExporter();
-
             ChartDataOrigin chartDataOrigin = chartExporter.Export(editorDataGetter.ChartData.Value, editorDataGetter.Offset.Value);
 
-            TrySaveToJsonFileDialog(chartDataOrigin);
+            // Overwrite the current chart file when a save target is already known.
+            if (!string.IsNullOrWhiteSpace(ChartFilePathCache.CurrentChartFilePath))
+            {
+                bool isSaved = TrySaveToJsonPath(chartDataOrigin, ChartFilePathCache.CurrentChartFilePath);
+                if (isSaved) { return; }
+            }
+
+            // Fall back to Save As dialog when no target path exists or overwrite failed.
+            if (TrySaveToJsonFileDialog(chartDataOrigin, out string savedPath))
+            {
+                ChartFilePathCache.CurrentChartFilePath = savedPath;
+            }
+        }
+
+        public void ExportNewFile()
+        {
+            ChartExporter chartExporter = new ChartExporter();
+            ChartDataOrigin chartDataOrigin = chartExporter.Export(editorDataGetter.ChartData.Value, editorDataGetter.Offset.Value);
+
+            if (TrySaveToJsonFileDialog(chartDataOrigin, out string savedPath))
+            {
+                ChartFilePathCache.CurrentChartFilePath = savedPath;
+            }
         }
     }
-
 }

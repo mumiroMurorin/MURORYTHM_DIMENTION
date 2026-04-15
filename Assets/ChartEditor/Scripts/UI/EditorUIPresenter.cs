@@ -189,7 +189,7 @@ namespace ChartEditor
             scrollSensitivitySlider_view.OnSliderChangedListener += optionSetter.SetScrollSensitivity;
 
             // エクスポートボタン
-            exportButton_view.OnClickedListner += chartDataExporter_model.Export;
+            exportButton_view.OnClickedListner += chartDataExporter_model.ExportNewFile;
 
             // インポートボタン
             importButton_view.OnClickedListner += chartDataImporter_model.Import;

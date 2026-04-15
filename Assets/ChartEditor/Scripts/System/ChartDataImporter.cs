@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using JsonUtil;
@@ -22,18 +20,18 @@ namespace ChartEditor
 
         public void Import()
         {
-            // ダイアログから選択
-            if(!JsonLoader.TryLoadFromJsonFileDialog(out ChartDataOrigin chartDataOrigin)) { return; }
+            // Load from file dialog and keep the path for subsequent Ctrl+S overwrite.
+            if (!JsonLoader.TryLoadFromJsonFileDialog(out ChartDataOrigin chartDataOrigin, out string loadedPath)) { return; }
 
             ChartImporterForChartEditor chartImporter = new ChartImporterForChartEditor();
 
             ChartData chartData = new ChartData(0);
             editorDataSetter.SetChartData(chartData);
             chartImporter.Import(chartDataOrigin, ref chartData, editorDataSetter);
+            ChartFilePathCache.CurrentChartFilePath = loadedPath;
 
-            // RedoUndoリセット
+            // Reset undo/redo history after import.
             ResetStates();
         }
     }
-
 }
