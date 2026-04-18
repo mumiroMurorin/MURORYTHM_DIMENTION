@@ -6,7 +6,7 @@ using System;
 using UniRx;
 
 /// <summary>
-/// •ˆ–Êƒf[ƒ^‚Ì“Ç‚İ‚İ‚ğs‚¤
+/// è­œé¢ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿ã‚’è¡Œã†
 /// </summary>
 public interface IChartLoader
 {
@@ -20,12 +20,12 @@ public interface IChartLoader
 }
 
 /// <summary>
-/// •ˆ–Êƒf[ƒ^‚É•ÏŠ·
+/// è­œé¢ãƒ‡ãƒ¼ã‚¿ã«å¤‰æ›
 /// </summary>
 public interface IChartDataConverter
 {
     /// <summary>
-    /// string‚ğ•ˆ–Êƒf[ƒ^‚É•ÏŠ·
+    /// stringã‚’è­œé¢ãƒ‡ãƒ¼ã‚¿ã«å¤‰æ›
     /// </summary>
     /// <param name="datas"></param>
     /// <returns></returns>
@@ -33,7 +33,7 @@ public interface IChartDataConverter
 }
 
 /// <summary>
-/// ”»’è‚ğ‹L˜^‚·‚é
+/// åˆ¤å®šã‚’è¨˜éŒ²ã™ã‚‹
 /// </summary>
 public interface IJudgementRecorder
 {
@@ -43,12 +43,12 @@ public interface IJudgementRecorder
 }
 
 /// <summary>
-/// ƒXƒRƒA‚ÌƒZƒbƒg
+/// ã‚¹ã‚³ã‚¢ã®ã‚»ãƒƒãƒˆ
 /// </summary>
 public interface IScoreSetter
 {
     /// <summary>
-    /// ƒXƒRƒA‚ÌƒŠƒZƒbƒg
+    /// ã‚¹ã‚³ã‚¢ã®ãƒªã‚»ãƒƒãƒˆ
     /// </summary>
     void ResetScore();
 
@@ -56,7 +56,7 @@ public interface IScoreSetter
 }
 
 /// <summary>
-/// ƒXƒRƒA‚Ìæ“¾
+/// ã‚¹ã‚³ã‚¢ã®å–å¾—
 /// </summary>
 public interface IScoreGetter
 {
@@ -86,15 +86,22 @@ public interface IScoreGetter
 }
 
 /// <summary>
-/// ƒf[ƒ^‚ğŠî‚É•ˆ–Ê‚Ì¶¬‚ğs‚¤
+/// ãƒ‡ãƒ¼ã‚¿ã‚’åŸºã«è­œé¢ã®ç”Ÿæˆã‚’è¡Œã†
 /// </summary>
 public interface IChartGenerator
 {
     public void Generate(Action callback = null);
 }
+/// <summary>
+/// ç”Ÿæˆæ¸ˆã¿ã®è­œé¢ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç ´æ£„ã™ã‚‹
+/// </summary>
+public interface IChartDestroyer
+{
+    public void DestroyChart();
+}
 
 /// <summary>
-/// Šy‹Èƒf[ƒ^‚ÌƒZƒbƒg‚ªs‚¦‚é
+/// æ¥½æ›²ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆãŒè¡Œãˆã‚‹
 /// </summary>
 public interface IMusicDataSetter
 {
@@ -104,7 +111,7 @@ public interface IMusicDataSetter
 }
 
 /// <summary>
-/// Šy‹Èƒf[ƒ^‚Ìæ“¾‚ªo—ˆ‚é
+/// æ¥½æ›²ãƒ‡ãƒ¼ã‚¿ã®å–å¾—ãŒå‡ºæ¥ã‚‹
 /// </summary>
 public interface IMusicDataGetter
 {
@@ -114,7 +121,7 @@ public interface IMusicDataGetter
 }
 
 /// <summary>
-/// •ˆ–Êƒf[ƒ^‚ÌƒZƒbƒg‚ª‚Å‚«‚é
+/// è­œé¢ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆãŒã§ãã‚‹
 /// </summary>
 public interface IChartDataSetter
 {
@@ -122,7 +129,7 @@ public interface IChartDataSetter
 }
 
 /// <summary>
-/// •ˆ–Êƒf[ƒ^‚Ìæ“¾‚ª‚Å‚«‚é
+/// è­œé¢ãƒ‡ãƒ¼ã‚¿ã®å–å¾—ãŒã§ãã‚‹
 /// </summary>
 public interface IChartDataGetter
 {
@@ -130,14 +137,14 @@ public interface IChartDataGetter
 }
 
 /// <summary>
-/// •]‰¿ƒAƒjƒ‚ÌÄ¶‚ğs‚¦‚é
+/// è©•ä¾¡ã‚¢ãƒ‹ãƒ¡ã®å†ç”Ÿã‚’è¡Œãˆã‚‹
 /// </summary>
 public interface IAssessmentPlayer
 {
     public void PlayAnimation(Action callback = null);
 
     /// <summary>
-    /// ƒAƒjƒ[ƒVƒ‡ƒ“ğŒ‚Ìƒ`ƒFƒbƒN
+    /// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æ¡ä»¶ã®ãƒã‚§ãƒƒã‚¯
     /// </summary>
     /// <param name="rank"></param>
     /// <returns></returns>
@@ -145,7 +152,7 @@ public interface IAssessmentPlayer
 }
 
 /// <summary>
-/// •]‰¿ƒAƒjƒ‚ÌƒRƒ“ƒgƒ[ƒ‹‚ğs‚¤
+/// è©•ä¾¡ã‚¢ãƒ‹ãƒ¡ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚’è¡Œã†
 /// </summary>
 public interface IAssessmentController
 {
@@ -153,7 +160,7 @@ public interface IAssessmentController
 }
 
 /// <summary>
-/// ƒ^ƒCƒ€ƒ‰ƒCƒ“‚ÌÄ¶‚ğs‚¤
+/// ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³ã®å†ç”Ÿã‚’è¡Œã†
 /// </summary>
 public interface ITimelinePlayer
 {
@@ -161,7 +168,7 @@ public interface ITimelinePlayer
 }
 
 /// <summary>
-/// •ˆ–Ê‚ÌI—¹ˆ—‚ğw“Ç‚·‚é
+/// è­œé¢ã®çµ‚äº†å‡¦ç†ã‚’è³¼èª­ã™ã‚‹
 /// </summary>
 public interface IChartEnder
 {
@@ -169,7 +176,7 @@ public interface IChartEnder
 }
 
 /// <summary>
-/// ‘Ì‚Ìƒf[ƒ^æ“¾‚ğs‚¤
+/// ä½“ã®ãƒ‡ãƒ¼ã‚¿å–å¾—ã‚’è¡Œã†
 /// </summary>
 public interface IBodyLoader
 {

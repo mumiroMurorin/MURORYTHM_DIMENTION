@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using VContainer;
 using ChartConvert;
@@ -8,6 +9,7 @@ namespace ChartEditor
     public class ChartDataExporter : MonoBehaviour
     {
         IChartEditorDataGetter editorDataGetter;
+        public event Action<ChartDataOrigin, string> OnChartSaved;
 
         [Inject]
         public void Construct(IChartEditorDataGetter editorDataGetter)
@@ -24,13 +26,18 @@ namespace ChartEditor
             if (!string.IsNullOrWhiteSpace(ChartFilePathCache.CurrentChartFilePath))
             {
                 bool isSaved = TrySaveToJsonPath(chartDataOrigin, ChartFilePathCache.CurrentChartFilePath);
-                if (isSaved) { return; }
+                if (isSaved)
+                {
+                    NotifyChartSaved(chartDataOrigin, ChartFilePathCache.CurrentChartFilePath);
+                    return;
+                }
             }
 
             // Fall back to Save As dialog when no target path exists or overwrite failed.
             if (TrySaveToJsonFileDialog(chartDataOrigin, out string savedPath))
             {
                 ChartFilePathCache.CurrentChartFilePath = savedPath;
+                NotifyChartSaved(chartDataOrigin, savedPath);
             }
         }
 
@@ -42,7 +49,13 @@ namespace ChartEditor
             if (TrySaveToJsonFileDialog(chartDataOrigin, out string savedPath))
             {
                 ChartFilePathCache.CurrentChartFilePath = savedPath;
+                NotifyChartSaved(chartDataOrigin, savedPath);
             }
+        }
+
+        private void NotifyChartSaved(ChartDataOrigin chartDataOrigin, string savedPath)
+        {
+            OnChartSaved?.Invoke(chartDataOrigin, savedPath);
         }
     }
 }

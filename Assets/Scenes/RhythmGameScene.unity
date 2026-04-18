@@ -5700,7 +5700,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed07db9c99ac59f4e9da1284ad6c5307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUseSpaceInput: 1
+  isUseSpaceInput: 0
   spaceInputHandler:
     obj: {fileID: 796097596}
 --- !u!114 &1821151699 stripped
@@ -6361,22 +6361,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2408c48d4c03e7349aa0fa3ba558f309, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchNoteFactory: {fileID: 1261792716}
-  divineTouchNoteFactory: {fileID: 141622568}
-  dynamicGroundUpwardNoteFactory: {fileID: 3262171307820684294}
-  dynamicGroundRightwardNoteFactory: {fileID: 993692313}
-  dynamicGroundLeftwardNoteFactory: {fileID: 1648205172}
-  dynamicGroundDownwardNoteFactory: {fileID: 585996859}
-  holdStartNoteFactory: {fileID: 886378436}
-  holdRelayNoteFactory: {fileID: 1022076317}
-  holdRelayHiddenNoteFactory: {fileID: 890475557}
-  holdEndNoteFactory: {fileID: 874663620}
-  holdEndUnjudgeNoteFactory: {fileID: 202639770}
-  holdMeshNoteFactory: {fileID: 1757311145}
-  spaceHoldMeshNoteFactory: {fileID: 1938462402}
-  spaceHoldRelayNoteFactory: {fileID: 1281802750}
-  spaceHoldRelayHiddenNoteFactory: {fileID: 1467009741}
-  spaceBreakNoteFactory: {fileID: 1821151699}
+  noteFactories:
+  - noteType: 1
+    factory: {fileID: 1261792716}
+  - noteType: 2
+    factory: {fileID: 141622568}
+  - noteType: 10
+    factory: {fileID: 886378436}
+  - noteType: 11
+    factory: {fileID: 1022076317}
+  - noteType: 12
+    factory: {fileID: 890475557}
+  - noteType: 13
+    factory: {fileID: 874663620}
+  - noteType: 15
+    factory: {fileID: 202639770}
+  - noteType: 14
+    factory: {fileID: 1757311145}
+  - noteType: 20
+    factory: {fileID: 1938462402}
+  - noteType: 21
+    factory: {fileID: 1281802750}
+  - noteType: 22
+    factory: {fileID: 1467009741}
+  - noteType: 25
+    factory: {fileID: 1821151699}
+  - noteType: 30
+    factory: {fileID: 3262171307820684294}
+  - noteType: 31
+    factory: {fileID: 585996859}
+  - noteType: 32
+    factory: {fileID: 993692313}
+  - noteType: 33
+    factory: {fileID: 1648205172}
   groundObject: {fileID: 1010482523}
   groundDeformer: {fileID: 79835141}
   timer:

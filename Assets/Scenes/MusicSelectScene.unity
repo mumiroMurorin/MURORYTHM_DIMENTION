@@ -1316,22 +1316,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chartController: {fileID: 874170454}
-  touchNoteFactory: {fileID: 1282206518}
-  divineTouchNoteFactory: {fileID: 731081218}
-  dynamicGroundUpwardNoteFactory: {fileID: 1768240333}
-  dynamicGroundRightwardNoteFactory: {fileID: 892707803}
-  dynamicGroundLeftwardNoteFactory: {fileID: 360598748}
-  dynamicGroundDownwardNoteFactory: {fileID: 629991170}
-  holdStartNoteFactory: {fileID: 1923470635}
-  holdRelayNoteFactory: {fileID: 1994053164}
-  holdRelayHiddenNoteFactory: {fileID: 1646943496}
-  holdEndNoteFactory: {fileID: 716159553}
-  holdEndUnjudgeNoteFactory: {fileID: 1414141504}
-  holdMeshNoteFactory: {fileID: 1375253388}
-  spaceHoldMeshNoteFactory: {fileID: 1903638341}
-  spaceHoldRelayNoteFactory: {fileID: 1781695783}
-  spaceHoldRelayHiddenNoteFactory: {fileID: 1027014677}
-  spaceBreakNoteFactory: {fileID: 151332180}
+  noteFactories:
+  - noteType: 1
+    factory: {fileID: 1282206518}
+  - noteType: 2
+    factory: {fileID: 731081218}
+  - noteType: 10
+    factory: {fileID: 1923470635}
+  - noteType: 11
+    factory: {fileID: 1994053164}
+  - noteType: 12
+    factory: {fileID: 1646943496}
+  - noteType: 13
+    factory: {fileID: 716159553}
+  - noteType: 15
+    factory: {fileID: 1414141504}
+  - noteType: 14
+    factory: {fileID: 1375253388}
+  - noteType: 20
+    factory: {fileID: 1903638341}
+  - noteType: 21
+    factory: {fileID: 1781695783}
+  - noteType: 22
+    factory: {fileID: 1027014677}
+  - noteType: 25
+    factory: {fileID: 151332180}
+  - noteType: 30
+    factory: {fileID: 1768240333}
+  - noteType: 31
+    factory: {fileID: 629991170}
+  - noteType: 32
+    factory: {fileID: 892707803}
+  - noteType: 33
+    factory: {fileID: 360598748}
   groundObject: {fileID: 606931433}
   groundDeformer: {fileID: 606931434}
   timer:
