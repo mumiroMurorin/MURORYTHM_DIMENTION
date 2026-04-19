@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using Deform;
 using UnityEngine;
+using VContainer;
 
 namespace ChartEditor
 {
@@ -17,21 +18,22 @@ namespace ChartEditor
             public MonoBehaviour Factory => factory;
         }
 
-        [Header("Spawn/Destroy Target")]
-        [SerializeField] private Transform previewRoot;
-
         [Header("Note Factories")]
         [SerializeField] private NoteFactoryBinding[] noteFactories;
 
         [Header("Factory Initialization")]
-        [SerializeField] private GameObject groundObject;
+        [SerializeField] private Transform noteParent;
         [SerializeField] private Deformer groundDeformer;
-        [SerializeField] private SerializeInterface<INoteSpawnDataOptionHolder> spawnDataOptionHolder;
-        [SerializeField] private SerializeInterface<ISliderInputGetter> sliderInputGetter;
-        [SerializeField] private SerializeInterface<ISpaceInputGetter> spaceInputGetter;
         [SerializeField] private SerializeInterface<ITimeGetter> timer;
 
         private global::ChartData chartData;
+        INoteSpawnDataOptionHolder optionHolder;
+
+        [Inject]
+        public void Constructor(INoteSpawnDataOptionHolder optionHolder)
+        {
+            this.optionHolder = optionHolder;
+        }
 
         private void Awake()
         {
@@ -51,7 +53,6 @@ namespace ChartEditor
                 return;
             }
 
-            INotePositionCalculator positionCalculator = new PositionGraphOption();
             if (noteFactories == null)
             {
                 callback?.Invoke();
@@ -60,7 +61,7 @@ namespace ChartEditor
 
             foreach (var binding in noteFactories)
             {
-                SpawnEachType(binding, chartData, positionCalculator, OnSpawned);
+                SpawnEachType(binding, chartData, chartData.PositionGraph, OnSpawned);
             }
 
             callback?.Invoke();
@@ -68,29 +69,21 @@ namespace ChartEditor
 
         public void DestroyChart()
         {
-            if (previewRoot == null) { return; }
+            if (noteParent == null) { return; }
 
-            for (int i = previewRoot.childCount - 1; i >= 0; i--)
+            for (int i = noteParent.childCount - 1; i >= 0; i--)
             {
-                Destroy(previewRoot.GetChild(i).gameObject);
+                Destroy(noteParent.GetChild(i).gameObject);
             }
         }
 
         private void InitializeFactories()
         {
-            if (spawnDataOptionHolder == null || timer == null || timer.Value == null)
-            {
-                Debug.LogWarning("[ChartPreviewGenerator] Factory initialization skipped due to missing references.");
-                return;
-            }
-
             NoteFactoryInitializingData data = new NoteFactoryInitializingData
             {
-                GroundObject = groundObject,
+                NoteParent = noteParent,
                 GroundDeformer = groundDeformer,
-                OptionHolder = spawnDataOptionHolder.Value,
-                SliderInputGetter = sliderInputGetter != null ? sliderInputGetter.Value : null,
-                SpaceInputGetter = spaceInputGetter != null ? spaceInputGetter.Value : null,
+                OptionHolder = optionHolder ?? null,
                 Timer = timer.Value,
                 JudgementRecorder = null
             };
@@ -104,8 +97,8 @@ namespace ChartEditor
 
         private void OnSpawned(GameObject noteObject)
         {
-            if (noteObject == null || previewRoot == null) { return; }
-            noteObject.transform.SetParent(previewRoot, true);
+            if (noteObject == null || noteParent == null) { return; }
+            noteObject.transform.SetParent(noteParent, true);
         }
 
         private static void InitializeFactory(NoteFactoryBinding binding, NoteFactoryInitializingData data)

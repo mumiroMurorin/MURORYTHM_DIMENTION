@@ -205,10 +205,11 @@ namespace Mediapipe.Unity.Tutorial
             while (true)
             {
                 _inputTexture.SetPixels32(_webCamTexture.Value.GetPixels32(_pixelData));
-                var imageFrame = new ImageFrame(ImageFormat.Types.Format.Srgba, _width, _height, _width * 4, _inputTexture.GetRawTextureData<byte>());
+                using var imageFrame = new ImageFrame(ImageFormat.Types.Format.Srgba, _width, _height, _width * 4, _inputTexture.GetRawTextureData<byte>());
                 var currentTimestamp = stopwatch.ElapsedTicks / (System.TimeSpan.TicksPerMillisecond / 1000);
+                using var imageFramePacket = new ImageFramePacket(imageFrame, new Timestamp(currentTimestamp));
 
-                _graph.AddPacketToInputStream("input_video", new ImageFramePacket(imageFrame, new Timestamp(currentTimestamp))).AssertOk();
+                _graph.AddPacketToInputStream("input_video", imageFramePacket).AssertOk();
                 float start = Time.realtimeSinceStartup;
 
                 await UniTask.WaitForEndOfFrame(token);

@@ -1349,7 +1349,7 @@ MonoBehaviour:
     factory: {fileID: 892707803}
   - noteType: 33
     factory: {fileID: 360598748}
-  groundObject: {fileID: 606931433}
+  noteParent: {fileID: 906122093}
   groundDeformer: {fileID: 606931434}
   timer:
     obj: {fileID: 996988513}
@@ -4005,6 +4005,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a2fa3bc0b335a4daa44ac51d2dab02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &906122093 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8274364278501930480, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+  m_PrefabInstance: {fileID: 606931429}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &934344480 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3115310235136475715, guid: e91418e00b6fdf146b2db8e985f42ab8, type: 3}

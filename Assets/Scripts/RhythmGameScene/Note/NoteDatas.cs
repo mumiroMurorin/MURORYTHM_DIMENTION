@@ -21,7 +21,7 @@ public class NoteFactoryInitializingData
 
     public IJudgementRecorder JudgementRecorder { get; set; }
 
-    public GameObject GroundObject { get; set; }
+    public Transform NoteParent { get; set; }
 
     public Deformer GroundDeformer { get; set; }
 }

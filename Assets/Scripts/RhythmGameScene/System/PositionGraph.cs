@@ -37,6 +37,8 @@ public class PositionGraph : INotePositionCalculator
     /// <summary>
     /// 時間区間と傾きを登録（呼び出し順不問）
     /// </summary>
+    /// <param name="startTime">スタート秒</param>
+    /// <param name="slope">傾き</param>
     public void AddSegment(float startTime, float slope)
     {
         segments.Add(new TimeSegment(startTime, slope));
@@ -64,7 +66,7 @@ public class PositionGraph : INotePositionCalculator
     }
 
     /// <summary>
-    /// 時刻tの距離を返す
+    /// 時刻tの位置(z)を返す
     /// </summary>
     public float GetPosition(float t)
     {

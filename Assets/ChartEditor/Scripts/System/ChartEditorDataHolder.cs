@@ -177,6 +177,18 @@ namespace ChartEditor
 
         #endregion
 
+        #region NoteSpeed ノーツ速度
+
+        ReactiveProperty<float> noteSpeed = new ReactiveProperty<float>(200f);
+        IReadOnlyReactiveProperty<float> IChartEditorDataGetter.NoteSpeed => noteSpeed;
+
+        void IChartEditorDataSetter.SetNoteSpeed(float speed)
+        {
+            noteSpeed.Value = Mathf.Max(0f, speed);
+        }
+
+        #endregion
+
         #region Music 再生音楽
 
         ReactiveProperty<AudioClip> music = new ReactiveProperty<AudioClip>();
@@ -222,6 +234,8 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<float> PlaybackProgress { get; }
 
+        IReadOnlyReactiveProperty<float> NoteSpeed { get; }
+
         IReadOnlyReactiveProperty<float> Offset { get; }
 
         IReadOnlyReactiveProperty<AudioClip> Music { get; }
@@ -250,6 +264,8 @@ namespace ChartEditor
         void SetPlayMode(PlayMode playMode);
 
         void SetPlaybackProgress(float value);
+
+        void SetNoteSpeed(float speed);
 
         void SetOffset(float offset);
 

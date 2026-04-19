@@ -7028,7 +7028,7 @@ MonoBehaviour:
     factory: {fileID: 993692313}
   - noteType: 33
     factory: {fileID: 1648205172}
-  groundObject: {fileID: 1010482523}
+  noteParent: {fileID: 2472307707742378118}
   groundDeformer: {fileID: 79835141}
   timer:
     obj: {fileID: 1605477129}
@@ -8015,6 +8015,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+--- !u!4 &2472307707742378118 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8274364278501930480, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+  m_PrefabInstance: {fileID: 2472307707742378117}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3262171307820684292
 PrefabInstance:
   m_ObjectHideFlags: 0

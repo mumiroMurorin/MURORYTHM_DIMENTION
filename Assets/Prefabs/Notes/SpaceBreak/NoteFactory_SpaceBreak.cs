@@ -25,13 +25,13 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     ISpaceInputGetter spaceInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
-    GameObject groundObject;
+    Transform noteParent;
     Deformer groundDeformer;
 
     public override void Initialize(NoteFactoryInitializingData initializingData)
     {
         this.optionHolder = initializingData.OptionHolder;
-        this.groundObject = initializingData.GroundObject;
+        this.noteParent = initializingData.NoteParent;
         this.groundDeformer = initializingData.GroundDeformer;
         this.spaceInputGetter = initializingData.SpaceInputGetter;
         this.judgementRecorder = initializingData.JudgementRecorder;
@@ -160,7 +160,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     private void SetTransform(NoteObject<NoteData_SpaceBreak> note, float spawnZ)
     {
         // ìÆÇ≠ínñ Çêeìoò^
-        note.transform.SetParent(groundObject.transform);
+        note.transform.SetParent(noteParent);
 
         // à íuÇÃí≤êÆ
         note.transform.localPosition = new Vector3(

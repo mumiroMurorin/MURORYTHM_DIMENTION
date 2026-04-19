@@ -17,13 +17,13 @@ public class NoteFactory_DynamicGroundDownward : NoteFactory<NoteData_DynamicGro
     ISpaceInputGetter spaceInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
-    GameObject groundObject;
+    Transform noteParent;
     Deformer groundDeformer;
 
     public override void Initialize(NoteFactoryInitializingData initializingData)
     {
         this.optionHolder = initializingData.OptionHolder;
-        this.groundObject = initializingData.GroundObject;
+        this.noteParent = initializingData.NoteParent;
         this.groundDeformer = initializingData.GroundDeformer;
         this.spaceInputGetter = initializingData.SpaceInputGetter;
         this.judgementRecorder = initializingData.JudgementRecorder;
@@ -129,7 +129,7 @@ public class NoteFactory_DynamicGroundDownward : NoteFactory<NoteData_DynamicGro
     private void SetTransform(NoteObject<NoteData_DynamicGroundDownward> note, float spawnZ)
     {
         // “®‚­’n–Ê‚ğe“o˜^
-        note.transform.SetParent(groundObject.transform);
+        note.transform.SetParent(noteParent);
 
         // ˆÊ’u‚Ì’²®
         note.transform.localPosition = new Vector3(

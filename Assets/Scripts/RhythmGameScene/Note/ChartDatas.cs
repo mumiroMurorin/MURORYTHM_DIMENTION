@@ -23,7 +23,7 @@ public class ChartData
     /// <summary>
     /// ソフランデータ
     /// </summary>
-    public PositionGraph PositionGraph = new();
+    public PositionGraph PositionGraph { get; } = new();
 
     /// <summary>
     /// ノーツデータの追加

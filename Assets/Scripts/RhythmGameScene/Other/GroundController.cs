@@ -38,8 +38,8 @@ public class GroundController : MonoBehaviour
     /// </summary>
     private void MoveGround(float time)
     {
-        float pos = chartDataGetter.Chart.PositionGraph.GetPosition(time);
+        float z = chartDataGetter.Chart.PositionGraph.GetPosition(time);
 
-        this.gameObject.transform.position = Vector3.back * optionHolder.NoteSpeed.Value * pos;
+        this.gameObject.transform.position = Vector3.back * optionHolder.NoteSpeed.Value * z;
     }
 }
