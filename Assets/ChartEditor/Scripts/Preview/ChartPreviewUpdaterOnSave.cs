@@ -5,6 +5,7 @@ namespace ChartEditor
 {
     public class ChartPreviewUpdaterOnSave : MonoBehaviour
     {
+        [SerializeField] bool refreshOnSave;
         [SerializeField] ChartDataExporter chartDataExporter;
         [SerializeField] MonoBehaviour previewRefreshTarget;
 
@@ -21,6 +22,8 @@ namespace ChartEditor
 
         private void OnEnable()
         {
+            if (!refreshOnSave) { return; }
+
             if (chartDataExporter != null)
             {
                 chartDataExporter.OnChartSaved += OnChartSaved;
@@ -29,6 +32,8 @@ namespace ChartEditor
 
         private void OnDisable()
         {
+            if (!refreshOnSave) { return; }
+
             if (chartDataExporter != null)
             {
                 chartDataExporter.OnChartSaved -= OnChartSaved;

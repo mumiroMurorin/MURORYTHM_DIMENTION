@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -21,6 +21,7 @@ namespace ChartEditor
             EditMode.Moving,
             EditMode.Scaling,
             EditMode.SpaceMoving,
+            EditMode.Preview,
         };
 
         [Inject]
@@ -38,26 +39,26 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // ‘I‘ğ’†ƒm[ƒc‚Éƒf[ƒ^‚ª’Ç‰Á‚³‚ê‚½‚Ì‹““®
+            // é¸æŠä¸­ãƒãƒ¼ãƒ„ã«ãƒ‡ãƒ¼ã‚¿ãŒè¿½åŠ ã•ã‚ŒãŸæ™‚ã®æŒ™å‹•
             notesGetter.SelectingNotes.ObserveAdd()
                 .Subscribe(data => {
                     var obj = notesGetter.GetNoteObject(data.Value);
                     if (obj == null) { return; }
                     if (!obj.TryGetComponent(out ISelectableNoteObject selectable)) { return; }
 
-                    // ‘I‘ğ
+                    // é¸æŠ
                     selectable.OnSelect();
                 })
                 .AddTo(this.gameObject);
 
-            // ‘I‘ğ’†ƒm[ƒc‚©‚çƒf[ƒ^‚ªíœ‚³‚ê‚½‚Ì‹““®
+            // é¸æŠä¸­ãƒãƒ¼ãƒ„ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ãŒå‰Šé™¤ã•ã‚ŒãŸæ™‚ã®æŒ™å‹•
             notesGetter.SelectingNotes.ObserveRemove()
                 .Subscribe(data => {
                     var obj = notesGetter.GetNoteObject(data.Value);
                     if (obj == null) { return; }
                     if (!obj.TryGetComponent(out ISelectableNoteObject selectable)) { return; }
 
-                    // ‘I‘ğ‰ğœ
+                    // é¸æŠè§£é™¤
                     selectable.OnDeselect();
                 })
                 .AddTo(this.gameObject);
@@ -67,7 +68,7 @@ namespace ChartEditor
         {
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
 
-            // Ctrl+¶ƒNƒŠƒbƒN‚Å•¡”‘I‘ğ
+            // Ctrl+å·¦ã‚¯ãƒªãƒƒã‚¯ã§è¤‡æ•°é¸æŠ
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0))
             {
                 var collider = dataGetter.GetInteractableCollider<ISelectableNoteCollider>();
@@ -75,19 +76,19 @@ namespace ChartEditor
 
                 SelectMulti(collider.SelectableObject);
             }
-            // Ctrl‚ª‰Ÿ‚³‚ê‚¸¶ƒNƒŠƒbƒN‚³‚ê‚½ê‡
+            // CtrlãŒæŠ¼ã•ã‚Œãšå·¦ã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸå ´åˆ
             else if (Input.GetMouseButtonDown(0))
             {
-                // ƒJ[ƒ\ƒ‹‚ªUIã‚É‚ ‚é‚Æ‚«‚Í•Ô‚·
+                // ã‚«ãƒ¼ã‚½ãƒ«ãŒUIä¸Šã«ã‚ã‚‹ã¨ãã¯è¿”ã™
                 if (EventSystem.current.IsPointerOverGameObject()) { return; }
 
-                // ƒJ[ƒ\ƒ‹æ‚ªƒm[ƒgƒIƒuƒWƒFƒNƒg‚Å‚È‚¢‚È‚ç‘I‘ğ‘S‰ğœ‚·‚é
+                // ã‚«ãƒ¼ã‚½ãƒ«å…ˆãŒãƒãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã„ãªã‚‰é¸æŠå…¨è§£é™¤ã™ã‚‹
                 var collider = dataGetter.GetInteractableCollider<ISelectableNoteCollider>();
                 if (collider == null) 
                 {
                     notesSetter.ClearSelectingNotes();
                 }
-                // ƒm[ƒg‚Å‚ ‚ê‚Î’P‘I‘ğ‚·‚é
+                // ãƒãƒ¼ãƒˆã§ã‚ã‚Œã°å˜é¸æŠã™ã‚‹
                 else
                 {
                     var obj = collider.SelectableObject;
@@ -98,24 +99,24 @@ namespace ChartEditor
 
         private void SelectSingle(ISelectableNoteObject obj)
         {
-            // Šù‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚éê‡‚Í‰½‚à‚µ‚È‚¢
+            // æ—¢ã«å«ã¾ã‚Œã¦ã„ã‚‹å ´åˆã¯ä½•ã‚‚ã—ãªã„
             foreach(var n in notesGetter.SelectingNotes) { if (n == obj.NoteObject.NoteData) { return; }; }
 
-            // Šù‚É‘I‘ğ‚³‚ê‚Ä‚¢‚éƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‰ğœ‚·‚é
+            // æ—¢ã«é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠè§£é™¤ã™ã‚‹
             notesSetter.ClearSelectingNotes();
 
-            // ŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢ê‡‚ÍƒŠƒXƒg‚É’Ç‰Á
+            // å«ã¾ã‚Œã¦ã„ãªã„å ´åˆã¯ãƒªã‚¹ãƒˆã«è¿½åŠ 
             notesSetter.TryAddSelectingNotes(obj.NoteObject.NoteData);
         }
 
         /// <summary>
-        /// ‘I‘ğƒŠƒXƒg‚É’Ç‰Á
+        /// é¸æŠãƒªã‚¹ãƒˆã«è¿½åŠ 
         /// </summary>
         public void SelectMulti(ISelectableNoteObject obj)
         {
-            // ’Ç‰Á
+            // è¿½åŠ 
             if (notesSetter.TryAddSelectingNotes(obj.NoteObject.NoteData)) { return; }
-            // íœ
+            // å‰Šé™¤
             notesSetter.TryRemoveSelectingNotes(obj.NoteObject.NoteData);
         }
     }

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -17,6 +17,7 @@ namespace ChartEditor
             EditMode.SpaceMoving,
             EditMode.Connecting,
             EditMode.ChangeType,
+            EditMode.Preview,
         };
 
         float count = 0f;
@@ -34,17 +35,17 @@ namespace ChartEditor
             if (dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
 
-            // ƒJƒEƒ“ƒgƒ_ƒEƒ“
+            // ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³
             if(count > 0) { count -= Time.deltaTime; }
             if(count < 0) { count = 0f; }
 
-            // ƒJ[ƒ\ƒ‹‰º‚É•ÒW‰Â”\ƒIƒuƒWƒFƒNƒg‚ª‚ ‚é‚Æ‚«‚Ì‚Ý’Ê‚·
+            // ã‚«ãƒ¼ã‚½ãƒ«ä¸‹ã«ç·¨é›†å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚ã‚‹ã¨ãã®ã¿é€šã™
             var collider = dataGetter.GetInteractableCollider<ISpaceEditableCollider>();
             if (collider == null) { return; }
 
-            // ƒ_ƒuƒ‹ƒNƒŠƒbƒNƒJƒEƒ“ƒgƒ_ƒEƒ“ŠJŽn
+            // ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³é–‹å§‹
             if (count <= 0f && Input.GetMouseButtonDown(0)) { count = doubleClickInterval; }
-            // ƒ_ƒuƒ‹ƒNƒŠƒbƒN”»’è
+            // ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯åˆ¤å®š
             else if (count > 0f && Input.GetMouseButtonDown(0)) { StartEditNote(); }
         }
 
@@ -61,3 +62,4 @@ namespace ChartEditor
         }
     }
 }
+

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -17,7 +17,8 @@ namespace ChartEditor
         EditMode[] ignoreEditModes = new EditMode[] {
              EditMode.VertexMoving,
              EditMode.VerticesRotating,
-             EditMode.VerticesScaling
+             EditMode.VerticesScaling,
+             EditMode.Preview,
         };
 
         [Inject]
@@ -31,14 +32,14 @@ namespace ChartEditor
         {
             if(dataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
 
-            // ’¸“_ƒŠƒXƒg‚ÌƒRƒs[
+            // é ‚ç‚¹ãƒªã‚¹ãƒˆã®ã‚³ãƒ”ãƒ¼
             if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C)) { CopyVertices(); }
-            // ’¸“_ƒŠƒXƒg‚Ì“\‚è•t‚¯
+            // é ‚ç‚¹ãƒªã‚¹ãƒˆã®è²¼ã‚Šä»˜ã‘
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V)) { PasteVertices(); }
         }
 
         /// <summary>
-        /// ’¸“_ƒŠƒXƒg‚ÌƒRƒs[
+        /// é ‚ç‚¹ãƒªã‚¹ãƒˆã®ã‚³ãƒ”ãƒ¼
         /// </summary>
         private void CopyVertices()
         {
@@ -46,11 +47,11 @@ namespace ChartEditor
             if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
 
             copiedVertices = notesGetter.EditingVertices.Value.SpaceHoldVertices.Vertices.Select(v => new VertexData(v)).ToList();
-            Debug.Log("yVerticesz’¸“_ƒŠƒXƒg‚ğƒRƒs[");
+            Debug.Log("ã€Verticesã€‘é ‚ç‚¹ãƒªã‚¹ãƒˆã‚’ã‚³ãƒ”ãƒ¼");
         }
 
         /// <summary>
-        /// ’¸“_ƒŠƒXƒg‚Ì’£‚è•t‚¯
+        /// é ‚ç‚¹ãƒªã‚¹ãƒˆã®å¼µã‚Šä»˜ã‘
         /// </summary>
         private void PasteVertices()
         {
@@ -58,22 +59,22 @@ namespace ChartEditor
             if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
             if (copiedVertices == null) { return; }
 
-            // Œ»İ•ÒW’†‚Ì’¸“_ƒf[ƒ^‚ğ‘S‚ÄÁ‚µ‚ÄV‚½‚É‘ã“ü‚·‚é
+            // ç¾åœ¨ç·¨é›†ä¸­ã®é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ã‚’å…¨ã¦æ¶ˆã—ã¦æ–°ãŸã«ä»£å…¥ã™ã‚‹
             var currentEdit = notesGetter.EditingVertices.Value.SpaceHoldVertices;
             var copiedVerticesCopy = copiedVertices.Select(v => new VertexData(v)).ToList();
             var originVertices = notesGetter.EditingVertices.Value.SpaceHoldVertices.Vertices.Select(v => new VertexData(v)).ToList();
 
             Record(() =>
-            // ’£‚è•t‚¯
+            // å¼µã‚Šä»˜ã‘
             {
                 currentEdit.SetVertices(copiedVerticesCopy);
             }, () =>
-            // Œ³‚É–ß‚·
+            // å…ƒã«æˆ»ã™
             {
                 currentEdit.SetVertices(originVertices);
             });
            
-            Debug.Log("yVerticesz’¸“_ƒŠƒXƒg‚ğ’£‚è•t‚¯");
+            Debug.Log("ã€Verticesã€‘é ‚ç‚¹ãƒªã‚¹ãƒˆã‚’å¼µã‚Šä»˜ã‘");
         }
     }
 

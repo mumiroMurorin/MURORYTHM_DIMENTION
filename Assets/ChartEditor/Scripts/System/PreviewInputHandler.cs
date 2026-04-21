@@ -8,7 +8,7 @@ using static UndoRedo.History;
 
 namespace ChartEditor
 {
-    public class InputHandler : MonoBehaviour
+    public class PreviewInputHandler : MonoBehaviour
     {
         [SerializeField] KeyCode playKey = KeyCode.Space;
 
@@ -93,7 +93,7 @@ namespace ChartEditor
             if (dataGetter.PlayMode.Value == PlayMode.Play) { return; }
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(playIgnoreModes)) { return; }
             // カーソルがUI上にあるときは返す
-            if (EventSystem.current.IsPointerOverGameObject() && dataGetter.CurrentEditMode.Value != EditMode.Preview) { return; }
+            if (EventSystem.current.IsPointerOverGameObject()) { return; }
 
             // スクロール感度と譜面長さによって変える
             float chartSeconds = dataGetter.ChartSeconds.Value;

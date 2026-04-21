@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -8,7 +8,7 @@ using UniRx;
 namespace ChartEditor
 {
     /// <summary>
-    /// ó‹µ‚É‰‚¶‚ÄƒJ[ƒ\ƒ‹‚ÌƒAƒCƒRƒ“‚ğ•ÏX‚·‚é 
+    /// çŠ¶æ³ã«å¿œã˜ã¦ã‚«ãƒ¼ã‚½ãƒ«ã®ã‚¢ã‚¤ã‚³ãƒ³ã‚’å¤‰æ›´ã™ã‚‹ 
     /// </summary>
     public class CursorTextureChanger : MonoBehaviour
     {
@@ -29,6 +29,7 @@ namespace ChartEditor
 
         EditMode[] ignoreEditModes = new EditMode[] {
             EditMode.ChangeType,
+            EditMode.Preview,
         };
 
 
@@ -46,7 +47,7 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // ƒGƒfƒBƒbƒgƒ‚[ƒh‚Ì•Û‘¶
+            // ã‚¨ãƒ‡ã‚£ãƒƒãƒˆãƒ¢ãƒ¼ãƒ‰ã®ä¿å­˜
             dataGetter_model?.CurrentEditMode
                 .Subscribe(value =>
                 {
@@ -57,13 +58,13 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
 
-            // ƒNƒŠƒA‚³‚ê‚½‚Æ‚«
+            // ã‚¯ãƒªã‚¢ã•ã‚ŒãŸã¨ã
             dataGetter_model?.InteractableColliders.ObserveReset()
                 .Subscribe(_ => {
                     SetCursorTexture(currentEditMode, true);
                 }).AddTo(this.gameObject);
 
-            // ƒRƒ‰ƒCƒ_[‚ª’Ç‰Á‚³‚ê‚½‚Æ‚«ƒJ[ƒ\ƒ‹‚ğ•ÏX‚·‚é
+            // ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ãŒè¿½åŠ ã•ã‚ŒãŸã¨ãã‚«ãƒ¼ã‚½ãƒ«ã‚’å¤‰æ›´ã™ã‚‹
             dataGetter_model?.InteractableColliders.ObserveAdd()
                 .Subscribe(col => { 
                     foreach(var type in dependenceObjectType)
@@ -77,7 +78,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒJ[ƒ\ƒ‹‚ÌƒeƒNƒXƒ`ƒƒ‚ğ•ÏX‚·‚é
+        /// ã‚«ãƒ¼ã‚½ãƒ«ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’å¤‰æ›´ã™ã‚‹
         /// </summary>
         public void SetCursorTexture(EditMode editMode, bool isDisable = false)
         {
@@ -102,7 +103,7 @@ namespace ChartEditor
             Cursor.SetCursor(texture, hotspot, CursorMode.Auto);
         }
 
-        #region ‚»‚Ì‘¼GƒNƒ‰ƒX
+        #region ãã®ä»–é›‘ã‚¯ãƒ©ã‚¹
 
         [System.Serializable]
         public class EditModeToTexture
@@ -121,3 +122,4 @@ namespace ChartEditor
     }
 
 }
+

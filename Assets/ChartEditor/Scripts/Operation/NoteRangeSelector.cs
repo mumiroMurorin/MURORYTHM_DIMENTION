@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine;
@@ -30,6 +30,7 @@ namespace ChartEditor
             EditMode.Moving,
             EditMode.Scaling,
             EditMode.SpaceMoving,
+            EditMode.Preview,
         };
 
         [Inject]
@@ -44,21 +45,21 @@ namespace ChartEditor
             if (dataGetter.EditNoteType.Value != EditNoteType.Ground && dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
 
-            // ƒJ[ƒ\ƒ‹æ‚ÉƒIƒuƒWƒFƒNƒg‚ª‚ ‚éê‡‚Í•Ô‚·
+            // ã‚«ãƒ¼ã‚½ãƒ«å…ˆã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚ã‚‹å ´åˆã¯è¿”ã™
             var collider = dataGetter.GetInteractableCollider<ISelectableNoteCollider>();
             if (!isSelecting && collider != null) { return; }
 
-            // ”ÍˆÍ‘I‘ğŠJn
+            // ç¯„å›²é¸æŠé–‹å§‹
             if (Input.GetMouseButtonDown(0))
             {
-                // ƒJ[ƒ\ƒ‹‚ªUIã‚É‚ ‚é‚Æ‚«‚Í•Ô‚·
+                // ã‚«ãƒ¼ã‚½ãƒ«ãŒUIä¸Šã«ã‚ã‚‹ã¨ãã¯è¿”ã™
                 if (EventSystem.current.IsPointerOverGameObject()) { return; }
 
                 startPos = Input.mousePosition;
                 isSelecting = true;
             }
             
-            // ”ÍˆÍ‘I‘ğI—¹
+            // ç¯„å›²é¸æŠçµ‚äº†
             if (Input.GetMouseButtonUp(0) && isSelecting)
             {
                 endPos = Input.mousePosition;
@@ -85,7 +86,7 @@ namespace ChartEditor
                 var obj = dtn.Object;
                 Vector3 screenPos = mainCamera.WorldToScreenPoint(obj.transform.position);
 
-                // ƒJƒƒ‰‚Ì‘O•û‚É‚ ‚é‚©
+                // ã‚«ãƒ¡ãƒ©ã®å‰æ–¹ã«ã‚ã‚‹ã‹
                 if (screenPos.z < 0f) { continue; }
                 if (obj.transform.position.y < minY || maxY < obj.transform.position.y) { continue; }
 
@@ -96,7 +97,7 @@ namespace ChartEditor
             }
         }
 
-        // GUI•`‰æ—p
+        // GUIæç”»ç”¨
         public static void DrawScreenRect(Rect rect, Color color)
         {
             GUI.color = color;
@@ -105,7 +106,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ¯•Ê—pFScreenPoint ”»’è‚Ég‚¤ Rect i¶‰ºŒ´“_j
+        /// è­˜åˆ¥ç”¨ï¼šScreenPoint åˆ¤å®šã«ä½¿ã† Rect ï¼ˆå·¦ä¸‹åŸç‚¹ï¼‰
         /// </summary>
         public static Rect GetScreenRectForContains(Vector2 screenPosition1, Vector2 screenPosition2)
         {
@@ -115,11 +116,11 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// •`‰æ—pFOnGUI ‚Åg‚¤ Rect i¶ãŒ´“_j
+        /// æç”»ç”¨ï¼šOnGUI ã§ä½¿ã† Rect ï¼ˆå·¦ä¸ŠåŸç‚¹ï¼‰
         /// </summary>
         public static Rect GetScreenRectForGUI(Vector2 screenPosition1, Vector2 screenPosition2)
         {
-            // Y ‚ğ”½“]
+            // Y ã‚’åè»¢
             screenPosition1.y = Screen.height - screenPosition1.y;
             screenPosition2.y = Screen.height - screenPosition2.y;
             Vector2 min = Vector2.Min(screenPosition1, screenPosition2);
@@ -129,7 +130,7 @@ namespace ChartEditor
 
         public static void DrawScreenRectBorder(Rect rect, float thickness, Color color)
         {
-            // ãA‰ºA¶A‰E‚Ì˜gü
+            // ä¸Šã€ä¸‹ã€å·¦ã€å³ã®æ ç·š
             DrawScreenRect(new Rect(rect.xMin, rect.yMin, rect.width, thickness), color);
             DrawScreenRect(new Rect(rect.xMin, rect.yMax - thickness, rect.width, thickness), color);
             DrawScreenRect(new Rect(rect.xMin, rect.yMin, thickness, rect.height), color);
@@ -137,3 +138,4 @@ namespace ChartEditor
         }
     }
 }
+

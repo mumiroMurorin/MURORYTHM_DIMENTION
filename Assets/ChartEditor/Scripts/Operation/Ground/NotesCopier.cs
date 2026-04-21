@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -25,7 +25,8 @@ namespace ChartEditor
              EditMode.EditingSubDivisionConfig,
              EditMode.Moving,
              EditMode.Scaling,
-             EditMode.SpaceMoving
+             EditMode.SpaceMoving,
+             EditMode.Preview,
         };
 
         [Inject]
@@ -44,14 +45,14 @@ namespace ChartEditor
             if (dataGetter.EditNoteType.Value != EditNoteType.Ground && dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
             if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
 
-            // ƒm[ƒc‚ÌƒRƒs[
+            // ãƒãƒ¼ãƒ„ã®ã‚³ãƒ”ãƒ¼
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C)) { CopyNotes(); }
-            // ƒm[ƒc‚Ì“\‚è•t‚¯
+            // ãƒãƒ¼ãƒ„ã®è²¼ã‚Šä»˜ã‘
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V)) { PasteNotes(); }
         }
 
         /// <summary>
-        /// ƒm[ƒc‚ÌƒRƒs[
+        /// ãƒãƒ¼ãƒ„ã®ã‚³ãƒ”ãƒ¼
         /// </summary>
         private void CopyNotes()
         {
@@ -63,11 +64,11 @@ namespace ChartEditor
             {
                 copiedNotes.Add(note, new AddressWithinRange(note.Address));
             }
-            Debug.Log("yNoteszƒm[ƒc‚ğƒRƒs[");
+            Debug.Log("ã€Notesã€‘ãƒãƒ¼ãƒ„ã‚’ã‚³ãƒ”ãƒ¼");
         }
 
         /// <summary>
-        /// ƒm[ƒc‚Ì’£‚è•t‚¯
+        /// ãƒãƒ¼ãƒ„ã®å¼µã‚Šä»˜ã‘
         /// </summary>
         private void PasteNotes()
         {
@@ -79,7 +80,7 @@ namespace ChartEditor
             if (copiedNotes == null || copiedNotes.Count == 0) { return; }
             if (groundCollider == null && spaceCollider == null) { return; }
 
-            // ƒRƒs[‚³‚ê‚½ƒm[ƒc‚ğƒRƒs[‚µ‚½‚è
+            // ã‚³ãƒ”ãƒ¼ã•ã‚ŒãŸãƒãƒ¼ãƒ„ã‚’ã‚³ãƒ”ãƒ¼ã—ãŸã‚Š
             var copiedNotesCopy = copiedNotes.ToDictionary(
                     pair => pair.Key.Copy(),     
                     pair => pair.Value 
@@ -88,17 +89,17 @@ namespace ChartEditor
             var cursorAddress = groundCollider != null ? groundCollider.Address : spaceCollider.Address;
             var subdivisionDelta = dataGetter.ChartData.Value.GetSubdivisionDelta(cursorAddress, new AddressInChart(firstNoteAddress));
 
-            // ƒy[ƒXƒg
+            // ãƒšãƒ¼ã‚¹ãƒˆ
             Record(() => {
-                notesSetter.ClearSelectingNotes();    // ‘S‘I‘ğ‰ğœ
+                notesSetter.ClearSelectingNotes();    // å…¨é¸æŠè§£é™¤
                 foreach (var pair in copiedNotesCopy) { PasetNote(pair.Key, pair.Value, subdivisionDelta); }
             }, 
-            // íœ
+            // å‰Šé™¤
             () => {
                 foreach (var pair in copiedNotesCopy) { DeleteNote(pair.Key); }
             });
 
-            Debug.Log("yNoteszƒm[ƒc‚ğ’£‚è•t‚¯");
+            Debug.Log("ã€Notesã€‘ãƒãƒ¼ãƒ„ã‚’å¼µã‚Šä»˜ã‘");
 
         }
 
@@ -107,10 +108,10 @@ namespace ChartEditor
             var address = dataGetter.ChartData.Value.AddressAddition(new AddressInChart(originAddress), subdivisionDelta);
             data.SetAddress(new AddressWithinRange(address, data.Address.Range.Count));
 
-            // ”z’u
+            // é…ç½®
             dataGetter.ChartData.Value.AddNote(data);
 
-            // ‘I‘ğ‚·‚é
+            // é¸æŠã™ã‚‹
             if (notesGetter.GetNoteObject(data).TryGetComponent(out ISelectableNoteObject selectable)) 
             {
                 notesSetter.TryAddSelectingNotes(selectable.NoteObject.NoteData);

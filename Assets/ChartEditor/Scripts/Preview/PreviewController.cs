@@ -6,9 +6,9 @@ using VContainer;
 
 namespace ChartEditor
 {
-    public class VerticesCameraController : MonoBehaviour
+    public class PreviewController : MonoBehaviour
     {
-        [SerializeField] GameObject viewCameraParent;
+        [SerializeField] GameObject previewCameraParent;
 
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorOptionGetter optionGetter;
@@ -30,7 +30,7 @@ namespace ChartEditor
             // エディタノーツモード変更の際カメラオンオフ切り替え
             chartEditorDataGetter?.EditNoteType
                 .Subscribe(mode => {
-                    viewCameraParent.SetActive(mode == EditNoteType.Vertices);
+                    previewCameraParent.SetActive(mode == EditNoteType.Preview);
                 })
                 .AddTo(this.gameObject);
         }

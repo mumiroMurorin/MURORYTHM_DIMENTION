@@ -9,7 +9,7 @@ public class ButtonView : MonoBehaviour
 {
     [SerializeField] Button button;
 
-    public Action OnPushButtonListner { get; set; }
+    public event Action OnPushButtonListner;
 
     void Start()
     {

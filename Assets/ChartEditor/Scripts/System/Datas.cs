@@ -344,6 +344,7 @@ namespace ChartEditor
         EditingSubDivisionConfig = 511,
 
         Explanation = 1000,
+        Preview = 2000
     }
 
     /// <summary>
@@ -354,6 +355,7 @@ namespace ChartEditor
         Ground = 1,
         Space = 2,
         Vertices = 3,
+        Preview = 100
     }
 
     /// <summary>

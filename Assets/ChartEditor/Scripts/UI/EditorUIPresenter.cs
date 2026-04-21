@@ -11,6 +11,10 @@ namespace ChartEditor
 {
     public class EditorUIPresenter : MonoBehaviour
     {
+        [Header("Canvas")]
+        [SerializeField] Canvas editorCanvas;
+        [SerializeField] Canvas previewCanvas;
+
         [Header("Views")]
         [SerializeField] ChartExtendButtonView chartExtendButton_view;
         [SerializeField] ChartShortenButtonView chartShortenButton_view;
@@ -123,6 +127,11 @@ namespace ChartEditor
             dataGetter_model?.EditNoteType
                 .Subscribe(switchLayerButton_view.OnChangeEditNoteType)
                 .AddTo(this.gameObject);
+
+            // キャンバスの更新
+            dataGetter_model?.EditNoteType
+                .Subscribe(ActivateCanvas)
+                .AddTo(this.gameObject);
         }
 
         private void BindForRhythmConfig()
@@ -193,7 +202,6 @@ namespace ChartEditor
 
             // インポートボタン
             importButton_view.OnClickedListner += chartDataImporter_model.Import;
-
             // 譜面延長ボタン
             chartExtendButton_view.OnClickedListner += () => laneExtender_model.ChangeChartLength(1);
 
@@ -234,6 +242,12 @@ namespace ChartEditor
             AudioClip clip = await AudioFileSelector.SelectAudioFile(soundLoadCts.Token);
             dataSetter.SetMusic(clip);
         }
+
+        private void ActivateCanvas(EditNoteType noteType)
+        {
+            previewCanvas.enabled = noteType == EditNoteType.Preview;
+            editorCanvas.enabled = noteType != EditNoteType.Preview;
+        } 
 
         private void OnDestroy()
         {

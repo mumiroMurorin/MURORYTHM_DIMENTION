@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine;
@@ -18,7 +18,8 @@ namespace ChartEditor
         EditMode[] ignoreEditModes = new EditMode[] {
              EditMode.VertexMoving,
              EditMode.VerticesRotating,
-             EditMode.VerticesScaling
+             EditMode.VerticesScaling,
+             EditMode.Preview,
         };
 
         [Inject]
@@ -32,7 +33,7 @@ namespace ChartEditor
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
             if (dataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
 
-            // Ctrl+¶ƒNƒŠƒbƒN‚Å•¡”‘I‘ğ
+            // Ctrl+å·¦ã‚¯ãƒªãƒƒã‚¯ã§è¤‡æ•°é¸æŠ
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0))
             {
                 var collider = dataGetter.GetInteractableCollider<ISelectableVertexCollider>();
@@ -40,19 +41,19 @@ namespace ChartEditor
 
                 SelectMulti(collider.SelectableObject);
             }
-            // Ctrl‚ª‰Ÿ‚³‚ê‚¸¶ƒNƒŠƒbƒN‚³‚ê‚½ê‡
+            // CtrlãŒæŠ¼ã•ã‚Œãšå·¦ã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸå ´åˆ
             else if (Input.GetMouseButtonDown(0))
             {
-                // ƒJ[ƒ\ƒ‹‚ªUIã‚É‚ ‚é‚Æ‚«‚Í•Ô‚·
+                // ã‚«ãƒ¼ã‚½ãƒ«ãŒUIä¸Šã«ã‚ã‚‹ã¨ãã¯è¿”ã™
                 if (EventSystem.current.IsPointerOverGameObject()) { return; }
 
-                // ƒJ[ƒ\ƒ‹æ‚ª’¸“_ƒIƒuƒWƒFƒNƒg‚Å‚È‚¢‚È‚ç‘I‘ğ‰ğœ‚·‚é
+                // ã‚«ãƒ¼ã‚½ãƒ«å…ˆãŒé ‚ç‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã„ãªã‚‰é¸æŠè§£é™¤ã™ã‚‹
                 var collider = dataGetter.GetInteractableCollider<ISelectableVertexCollider>();
                 if (collider == null) 
                 {
                     DeselectAll();
                 }
-                // ’¸“_ƒIƒuƒWƒFƒNƒg‚Å‚ ‚ê‚Î’P‘I‘ğ‚·‚é
+                // é ‚ç‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ã‚ã‚Œã°å˜é¸æŠã™ã‚‹
                 else
                 {
                     var obj = collider.SelectableObject;
@@ -63,31 +64,31 @@ namespace ChartEditor
 
         private void SelectSingle(ISelectableVertexObject obj)
         {
-            // Šù‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚éê‡‚Í‰½‚à‚µ‚È‚¢
+            // æ—¢ã«å«ã¾ã‚Œã¦ã„ã‚‹å ´åˆã¯ä½•ã‚‚ã—ãªã„
             if (selectingObjects.Contains(obj)) { return; }
 
-            // Šù‚É‘I‘ğ‚³‚ê‚Ä‚¢‚éƒIƒuƒWƒFƒNƒg‚ğ‘I‘ğ‰ğœ‚·‚é
+            // æ—¢ã«é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é¸æŠè§£é™¤ã™ã‚‹
             DeselectAll();
 
-            // ŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢ê‡‚ÍƒŠƒXƒg‚É’Ç‰Á
+            // å«ã¾ã‚Œã¦ã„ãªã„å ´åˆã¯ãƒªã‚¹ãƒˆã«è¿½åŠ 
             selectingObjects.Add(obj);
             SelectingVertices.Add(obj.VertexObject.VertexData);
             obj.OnSelect();
         }
 
         /// <summary>
-        /// ‘I‘ğƒŠƒXƒg‚É’Ç‰Á
+        /// é¸æŠãƒªã‚¹ãƒˆã«è¿½åŠ 
         /// </summary>
         public void SelectMulti(ISelectableVertexObject obj)
         {
-            // Šù‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚éê‡‚Í‚»‚ÌƒIƒuƒWƒFƒNƒg‚ğƒŠƒXƒg‚©‚çíœ
+            // æ—¢ã«å«ã¾ã‚Œã¦ã„ã‚‹å ´åˆã¯ãã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤
             if (selectingObjects.Contains(obj)) 
             {
                 selectingObjects.Remove(obj);
                 SelectingVertices.Remove(obj.VertexObject.VertexData);
                 obj.OnDeselect();
             }
-            // ŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢ê‡‚ÍƒŠƒXƒg‚É’Ç‰Á
+            // å«ã¾ã‚Œã¦ã„ãªã„å ´åˆã¯ãƒªã‚¹ãƒˆã«è¿½åŠ 
             else
             {
                 selectingObjects.Add(obj);
@@ -97,7 +98,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// •¡”‘I‘ğ‰ğœ
+        /// è¤‡æ•°é¸æŠè§£é™¤
         /// </summary>
         public void DeselectAll()
         {

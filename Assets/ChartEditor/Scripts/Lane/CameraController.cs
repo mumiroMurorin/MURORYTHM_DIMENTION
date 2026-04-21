@@ -59,9 +59,7 @@ namespace ChartEditor
             // エディタノーツモード変更の際カメラオンオフ切り替え
             chartEditorDataGetter?.EditNoteType
                 .Subscribe(mode => {
-                    if (mode == EditNoteType.Ground) { setActiveObject.SetActive(true); }
-                    else if (mode == EditNoteType.Space) { setActiveObject.SetActive(true); }
-                    else if (mode == EditNoteType.Vertices) { setActiveObject.SetActive(false); }
+                    setActiveObject.SetActive(mode == EditNoteType.Ground || mode == EditNoteType.Space);
                 })
                 .AddTo(this.gameObject);
         }

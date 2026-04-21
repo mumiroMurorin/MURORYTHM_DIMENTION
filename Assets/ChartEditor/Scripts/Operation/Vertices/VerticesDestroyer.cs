@@ -19,7 +19,8 @@ namespace ChartEditor
         EditMode[] ignoreEditModes = new EditMode[] {
              EditMode.VertexMoving,
              EditMode.VerticesRotating,
-             EditMode.VerticesScaling
+             EditMode.VerticesScaling,
+             EditMode.Preview,
         };
 
         [Inject]
@@ -34,7 +35,7 @@ namespace ChartEditor
             if (dataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
 
             // Deleteキーで消す
-            if (Input.GetKeyDown(KeyCode.Delete)) 
+            if (Input.GetKeyDown(KeyCode.Delete))
             {
                 // 除外エディットモード中は返す
                 if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
@@ -47,19 +48,19 @@ namespace ChartEditor
         {
             var currentEditVertices = notesGetter.EditingVertices.Value.SpaceHoldVertices;
 
-            // 3点以下だった場合消さない
+            // 削除後に3頂点未満になる場合は削除しない
             if (currentEditVertices.Vertices.Count - vertexSelector.SelectingVertices.Count < 3)
             {
-                Debug.Log("【Vertices】これ以上頂点を消すことはできません。メッシュの生成には3点以上必要です");
+                Debug.Log("【Vertices】これ以上頂点を削除できません。メッシュの生成には3頂点以上必要です。");
                 return;
             }
 
-            // 逆index順(大きいほうから削除するため)
+            // indexの大きい順で削除するため
             var verticesReverse = new List<VertexData>(vertexSelector.SelectingVertices.OrderByDescending(x => x.VertexIndex));
-            // index順(小さいほうから追加するため)
+            // indexの小さい順で復元するため
             var verticesSorted = new List<VertexData>(vertexSelector.SelectingVertices.OrderBy(x => x.VertexIndex));
 
-            // RedoUndoに対応
+            // Redo / Undo対応
             Record(() =>
             // 削除
             {
@@ -76,9 +77,8 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 引数の頂点データをオブジェクトごと消す
+        /// 指定した頂点データをオブジェクトごと削除する
         /// </summary>
-        /// <param name="data"></param>
         public void DestroyVertex(SpaceHoldVertices vertices, VertexData data)
         {
             // データの削除

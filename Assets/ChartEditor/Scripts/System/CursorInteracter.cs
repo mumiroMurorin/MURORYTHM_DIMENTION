@@ -21,7 +21,7 @@ namespace ChartEditor
         GameObject currentHitObject;
         Camera currentViewCamera;
 
-        EditMode[] cursorIgnoreModes = new EditMode[] 
+        EditMode[] cursorIgnoreModes = new EditMode[]
         {
             EditMode.NoteSelect,
             EditMode.EditingBarConfig,
@@ -39,6 +39,7 @@ namespace ChartEditor
             EditMode.VerticesScale,
             EditMode.VerticesScaling,
             EditMode.VerticesSelect,
+            EditMode.Preview,
         };
 
         [Inject]

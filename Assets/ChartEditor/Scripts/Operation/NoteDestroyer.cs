@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -21,6 +21,7 @@ namespace ChartEditor
              EditMode.EditingSubDivisionConfig,
              EditMode.Moving,
              EditMode.Scaling,
+            EditMode.Preview,
         };
 
         [Inject]
@@ -36,10 +37,10 @@ namespace ChartEditor
             if(dataGetter.EditNoteType.Value != EditNoteType.Ground &&
                 dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
 
-            // DeleteƒL[‚ÅÁ‚·
+            // Deleteã‚­ãƒ¼ã§æ¶ˆã™
             if (Input.GetKeyDown(KeyCode.Delete))
             {
-                // œŠOƒGƒfƒBƒbƒgƒ‚[ƒh’†‚Í•Ô‚·
+                // é™¤å¤–ã‚¨ãƒ‡ã‚£ãƒƒãƒˆãƒ¢ãƒ¼ãƒ‰ä¸­ã¯è¿”ã™
                 if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
 
                 DestroyNotes();
@@ -51,18 +52,18 @@ namespace ChartEditor
             var datasCopy = notesGetter.SelectingNotes.ToList();
             notesSetter.ClearSelectingNotes();
 
-            // íœ
+            // å‰Šé™¤
             Record(() => { 
                 foreach(var data in datasCopy) { DestroyNote(data); }
             }, 
-            // ”z’u
+            // é…ç½®
             () => {
                 foreach (var data in datasCopy) { DeployNote(data); }
             });
         }
 
         /// <summary>
-        /// ƒf[ƒ^‚Ìíœ
+        /// ãƒ‡ãƒ¼ã‚¿ã®å‰Šé™¤
         /// </summary>
         /// <param name="noteData"></param>
         private void DestroyNote(IDeployableNoteData noteData)
@@ -71,7 +72,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒf[ƒ^‚Ì’Ç‰Á
+        /// ãƒ‡ãƒ¼ã‚¿ã®è¿½åŠ 
         /// </summary>
         /// <param name="noteData"></param>
         private void DeployNote(IDeployableNoteData noteData)
@@ -82,3 +83,4 @@ namespace ChartEditor
     }
 
 }
+
