@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public class ButtonView : MonoBehaviour
 {
-    [SerializeField] Button button;
+    [SerializeField] protected Button button;
 
     public event Action OnPushButtonListner;
 
@@ -16,7 +16,7 @@ public class ButtonView : MonoBehaviour
         button?.onClick.AddListener(OnPushButton);
     }
 
-    private void OnPushButton()
+    protected virtual void OnPushButton()
     {
         OnPushButtonListner?.Invoke();
         EventSystem.current.SetSelectedGameObject(null);

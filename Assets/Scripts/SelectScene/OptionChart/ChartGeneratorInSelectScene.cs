@@ -27,7 +27,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
     [SerializeField] private Deformer groundDeformer;
     [SerializeField] private SerializeInterface<ITimeGetter> timer;
 
-    private INoteSpawnDataOptionHolder spawnDataOptionHolder;
+    private INoteSpawnDataOptionGetter spawnDataOptionHolder;
     private ISliderInputGetter sliderInputGetter;
     private ISpaceInputGetter spaceInputGetter;
     private IJudgementRecorder judgementRecorder;
@@ -36,7 +36,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
     [Inject]
     public void Constructor(
-        INoteSpawnDataOptionHolder spawnDataOptionHolder,
+        INoteSpawnDataOptionGetter spawnDataOptionHolder,
         ISliderInputGetter sliderInputGetter,
         ISpaceInputGetter spaceInputGetter,
         IJudgementRecorder judgementRecorder,

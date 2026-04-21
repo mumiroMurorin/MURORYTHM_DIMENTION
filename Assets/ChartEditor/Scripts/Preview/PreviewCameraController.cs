@@ -6,7 +6,7 @@ using VContainer;
 
 namespace ChartEditor
 {
-    public class PreviewController : MonoBehaviour
+    public class PreviewCameraController : MonoBehaviour
     {
         [SerializeField] GameObject previewCameraParent;
 

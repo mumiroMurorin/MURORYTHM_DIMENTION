@@ -4,7 +4,7 @@ using UnityEngine;
 using UniRx;
 using System;
 
-public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGetter, IOptionSetter
+public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSetter, IVolumeGetter, IOptionGetter, IOptionSetter
 {
     /// <summary>
     /// オプションに値を加減算
@@ -55,7 +55,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     public void SetOption(OptionAsset asset)
     {
         SetNoteSpeed(asset.NoteSpeed);
-        SetOffset(asset.Offset);
+        SetOffsetMs(asset.Offset);
         SetSEVolume(asset.SeVolume);
         SetBGMVolume(asset.BgmVolume);
         SetDivisionNum(asset.DivisionNum);
@@ -185,7 +185,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     ReactiveProperty<float> offset = new ReactiveProperty<float>(0);
     public IReadOnlyReactiveProperty<float> OffsetMs => offset;
     public int OffsetDisplay => (int)offset.Value;
-    void SetOffset(float value)
+    public void SetOffsetMs(float value)
     {
         offset.Value = Mathf.Clamp(value, MIN_OFFSET, MAX_OFFSET);
     }
@@ -429,7 +429,7 @@ public class OptionHolder : INoteSpawnDataOptionHolder, IVolumeGetter, IOptionGe
     #endregion
 }
 
-public interface INoteSpawnDataOptionHolder
+public interface INoteSpawnDataOptionGetter
 {
     IReadOnlyReactiveProperty<float> NoteSpeed { get; }
 
@@ -438,6 +438,15 @@ public interface INoteSpawnDataOptionHolder
     IReadOnlyReactiveProperty<bool> IsAutoModeRP { get; }
 
     bool IsAutoMode { get; }
+}
+
+public interface INoteSpawnDataOptionSetter
+{
+    void SetNoteSpeed(float speed);
+
+    void SetOffsetMs(float offset);
+
+    void SetAutoMode(bool isAutoMode);
 }
 
 public interface IVolumeGetter
@@ -500,11 +509,7 @@ public interface IOptionSetter
 
     void SetOption(OptionAsset asset);
 
-    void SetNoteSpeed(float speed);
-
     bool SetIsEnabledFastLate(bool isEnabled);
-
-    void SetAutoMode(bool isAutoMode);
 
     BodyTrackingSettings TrackingSettings { get; }
 }

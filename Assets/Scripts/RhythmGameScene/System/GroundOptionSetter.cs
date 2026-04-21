@@ -8,7 +8,13 @@ public class GroundOptionSetter : MonoBehaviour
 {
     [SerializeField] GameObject[] divisionLines;
 
-    [Inject] IOptionGetter optionGetter;
+    IOptionGetter optionGetter;
+
+    [Inject]
+    public void Construct(IOptionGetter optionGetter)
+    {
+        this.optionGetter = optionGetter;
+    }
 
     private void Start()
     {

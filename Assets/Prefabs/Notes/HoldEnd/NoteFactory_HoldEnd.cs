@@ -13,7 +13,7 @@ public class NoteFactory_HoldEnd : NoteFactory<NoteData_HoldEnd>
     [SerializeField] GameObject centerTilePrefab;
     [SerializeField] GameObject leftEdgeTilePrefab;
 
-    INoteSpawnDataOptionHolder optionHolder;
+    INoteSpawnDataOptionGetter optionHolder;
     ISliderInputGetter sliderInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;

@@ -8,11 +8,11 @@ public class GroundController : MonoBehaviour
 {
     [SerializeField] SerializeInterface<ITimeGetter> timer;
 
-    INoteSpawnDataOptionHolder optionHolder;
+    INoteSpawnDataOptionGetter optionHolder;
     IChartDataGetter chartDataGetter;
 
     [Inject]
-    public void Constructor(INoteSpawnDataOptionHolder optionHolder, IChartDataGetter chartDataGetter)
+    public void Constructor(INoteSpawnDataOptionGetter optionHolder, IChartDataGetter chartDataGetter)
     {
         this.optionHolder = optionHolder;
         this.chartDataGetter = chartDataGetter;

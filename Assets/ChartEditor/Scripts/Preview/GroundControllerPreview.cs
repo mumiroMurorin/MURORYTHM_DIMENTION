@@ -8,12 +8,12 @@ public class GroundControllerPreview : MonoBehaviour
 {
     [SerializeField] SerializeInterface<ITimeGetter> timer;
     
-    INoteSpawnDataOptionHolder optionHolder;
+    INoteSpawnDataOptionGetter optionGetter;
 
     [Inject]
-    public void Constructor(INoteSpawnDataOptionHolder optionHolder)
+    public void Constructor(INoteSpawnDataOptionGetter optionGetter)
     {
-        this.optionHolder = optionHolder;
+        this.optionGetter = optionGetter;
     }
 
     ChartData chartData;
@@ -50,6 +50,6 @@ public class GroundControllerPreview : MonoBehaviour
         this.gameObject.transform.position = new Vector3(
             this.transform.position.x, 
             this.transform.position.y,
-            -optionHolder.NoteSpeed.Value * z);
+            -optionGetter.NoteSpeed.Value * z);
     }
 }

@@ -69,6 +69,6 @@ public class NoteData_HoldEndUnjudge : INoteData
 
     public ITimeGetter Timer { get; set; }
 
-    public INoteSpawnDataOptionHolder OptionGetter { get; set; }
+    public INoteSpawnDataOptionGetter OptionGetter { get; set; }
 }
 

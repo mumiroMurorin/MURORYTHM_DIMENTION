@@ -111,7 +111,7 @@ public class NoteData_HoldMesh : INoteData
 
     public ITimeGetter Timer { get; set; }
 
-    public INoteSpawnDataOptionHolder OptionGetter { get; set; }
+    public INoteSpawnDataOptionGetter OptionGetter { get; set; }
 
     public float GroundEndZ { get; set; }
 }

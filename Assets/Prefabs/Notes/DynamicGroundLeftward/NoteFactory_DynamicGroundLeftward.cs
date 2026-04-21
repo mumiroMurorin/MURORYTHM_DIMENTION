@@ -13,7 +13,7 @@ public class NoteFactory_DynamicGroundLeftward : NoteFactory<NoteData_DynamicGro
     [SerializeField] GameObject centerTilePrefab;
     [SerializeField] GameObject leftEdgeTilePrefab;
 
-    INoteSpawnDataOptionHolder optionHolder;
+    INoteSpawnDataOptionGetter optionHolder;
     ISpaceInputGetter spaceInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;

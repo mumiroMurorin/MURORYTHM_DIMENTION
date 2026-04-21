@@ -5,7 +5,7 @@ using UniRx;
 
 namespace ChartEditor
 {
-    public class ChartEditorOptionHolder : IChartEditorOptionGetter, IChartEditorOptionSetter
+    public class ChartEditorOptionHolder : IChartEditorOptionGetter, IChartEditorOptionSetter, INoteSpawnDataOptionGetter, INoteSpawnDataOptionSetter
     {
 
         #region DivNum レーン分割数
@@ -68,6 +68,49 @@ namespace ChartEditor
         public void SetResolution(Resolution resolution)
         {
             this.resolution.Value = resolution;
+        }
+
+        #endregion
+
+        #region NoteSpeed ノーツ速度
+
+        ReactiveProperty<float> noteSpeed = new ReactiveProperty<float>(200f);
+        IReadOnlyReactiveProperty<float> INoteSpawnDataOptionGetter.NoteSpeed => noteSpeed;
+
+        void INoteSpawnDataOptionSetter.SetNoteSpeed(float speed)
+        {
+            noteSpeed.Value = Mathf.Max(0f, speed);
+        }
+
+        #endregion
+
+        #region Offset オフセット
+
+        const float MAX_OFFSET = 1000f;
+        const float MIN_OFFSET = -1000f;
+
+        // オフセット関係
+        ReactiveProperty<float> offset = new ReactiveProperty<float>(0);
+        public IReadOnlyReactiveProperty<float> OffsetMs => offset;
+        public int OffsetDisplay => (int)offset.Value;
+
+        IReadOnlyReactiveProperty<bool> INoteSpawnDataOptionGetter.IsAutoModeRP => throw new System.NotImplementedException();
+
+        public void SetOffsetMs(float offset)
+        {
+            this.offset.Value = Mathf.Clamp(offset, MIN_OFFSET, MAX_OFFSET);
+        }
+
+        #endregion
+
+        #region AutoMode オートモード
+
+        ReactiveProperty<bool> isAutoMode = new ReactiveProperty<bool>();
+        public bool IsAutoMode { get { return isAutoMode.Value; } private set { isAutoMode.Value = value; } }
+        public IReadOnlyReactiveProperty<bool> IsAutoModeRP => isAutoMode;
+        public void SetAutoMode(bool isAutoMode)
+        {
+            IsAutoMode = isAutoMode;
         }
 
         #endregion

@@ -11,7 +11,7 @@ using Deform;
 /// </summary>
 public class NoteFactoryInitializingData
 {
-    public INoteSpawnDataOptionHolder OptionHolder { get; set; }
+    public INoteSpawnDataOptionGetter OptionHolder { get; set; }
 
     public ISliderInputGetter SliderInputGetter { get; set; }
 

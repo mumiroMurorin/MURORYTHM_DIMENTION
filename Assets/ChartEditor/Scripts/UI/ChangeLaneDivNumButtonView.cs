@@ -7,22 +7,13 @@ using UnityEngine.EventSystems;
 
 namespace ChartEditor
 {
-    public class ChangeLaneDivNumButtonView : MonoBehaviour
+    public class ChangeLaneDivNumButtonView : ButtonView
     {
         [SerializeField] TextMeshProUGUI tmp;
-
-        public Action OnButtonClickedListener;
 
         public void OnLaneDivNumChanged(int divNum)
         {
             tmp.text = divNum.ToString();
         }
-
-        public void OnButtonClicked()
-        {
-            OnButtonClickedListener?.Invoke();
-            EventSystem.current.SetSelectedGameObject(null);
-        }
     }
-
 }

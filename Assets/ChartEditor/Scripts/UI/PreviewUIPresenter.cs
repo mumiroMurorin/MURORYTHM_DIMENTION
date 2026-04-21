@@ -11,6 +11,9 @@ namespace ChartEditor
         [SerializeField] ButtonView previewRefreshButton_view;
         [SerializeField] ButtonView previewStartButton_view;
         [SerializeField] ButtonView backEditorButton_view;
+        [SerializeField] OffsetInputFieldView offsetInputField_view;
+        [SerializeField] ChangeLaneDivNumButtonView changeLaneDivNumButton_view;
+        [SerializeField] SliderView noteSpeedSlider_view;
 
         [Space(20)]
         [Header("Models")]
@@ -18,14 +21,19 @@ namespace ChartEditor
 
         IChartEditorDataGetter dataGetter_model;
         IChartEditorDataSetter dataSetter_model;
+        IChartEditorOptionSetter optionSetter_model;
+        IChartEditorOptionGetter optionGetter_model;
+
         IChartPreviewRefreshable previewRefreshable;
         EditNoteType editNoteTypeCache = EditNoteType.Ground;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter)
+        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, IChartEditorOptionSetter optionDataSetter, IChartEditorOptionGetter optionDataGetter)
         {
             this.dataGetter_model = dataGetter;
             this.dataSetter_model = dataSetter;
+            this.optionSetter_model = optionDataSetter;
+            this.optionGetter_model = optionDataGetter;
         }
 
         private void Start()
@@ -38,7 +46,18 @@ namespace ChartEditor
 
         private void Bind()
         {
+            // オフセットの変更
+            dataGetter_model?.Offset
+                .Subscribe(offsetInputField_view.OnChangeFloatValue)
+                .AddTo(this.gameObject);
 
+            // レーン分割数の変更
+            optionGetter_model?.LaneDivisionNum
+                .Subscribe(changeLaneDivNumButton_view.OnLaneDivNumChanged)
+                .AddTo(this.gameObject);
+
+            // ノートスピードの変更
+            
         }
 
         private void SetEvent()
@@ -67,6 +86,13 @@ namespace ChartEditor
                     ChangeEditNoteType(editNoteTypeCache);
                 };
             }
+
+            // オフセットフィールド
+            offsetInputField_view.OnFloatValueChangedListner += dataSetter_model.SetOffset;
+
+            // レーン分割数
+            changeLaneDivNumButton_view.OnPushButtonListner += () => optionSetter_model.SetLaneDivisionNum(true);
+
         }
 
         private void RefreshPreview()

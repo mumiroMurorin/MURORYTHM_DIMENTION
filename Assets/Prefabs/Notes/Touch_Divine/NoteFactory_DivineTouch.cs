@@ -13,7 +13,7 @@ public class NoteFactory_DivineTouch : NoteFactory<NoteData_DivineTouch>
     [SerializeField] GameObject centerTilePrefab;
     [SerializeField] GameObject leftEdgeTilePrefab;
 
-    INoteSpawnDataOptionHolder optionHolder;
+    INoteSpawnDataOptionGetter optionHolder;
     ISliderInputGetter sliderInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;

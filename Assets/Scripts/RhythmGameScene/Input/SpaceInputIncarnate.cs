@@ -13,10 +13,10 @@ public class SpaceInputIncarnate : MonoBehaviour
     [SerializeField] Vector3 judgeFieldSize;
 
     ISpaceInputGetter spaceInputGetter;
-    INoteSpawnDataOptionHolder spawnOptionGetter;
+    INoteSpawnDataOptionGetter spawnOptionGetter;
 
     [Inject]
-    public void Constructor(ISpaceInputGetter spaceInputGetter, INoteSpawnDataOptionHolder spawnOptionGetter)
+    public void Constructor(ISpaceInputGetter spaceInputGetter, INoteSpawnDataOptionGetter spawnOptionGetter)
     {
         this.spaceInputGetter = spaceInputGetter;
         this.spawnOptionGetter = spawnOptionGetter;

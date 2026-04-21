@@ -124,6 +124,6 @@ public class NoteData_SpaceHoldMesh : INoteData
 
     public ISpaceInputGetter SpaceInput { get; set; }
 
-    public INoteSpawnDataOptionHolder OptionGetter { get; set; }
+    public INoteSpawnDataOptionGetter OptionGetter { get; set; }
 }
 

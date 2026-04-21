@@ -9,13 +9,15 @@ public class InputHandlerForKeyboardInRhythmGameScene : InputHandlerForKeyboard
     [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
 
     IOptionSetter optionSetter;
-    INoteSpawnDataOptionHolder spawnDataGetter;
+    INoteSpawnDataOptionGetter spawnDataGetter;
+    INoteSpawnDataOptionSetter spawnDataSetter;
 
     [Inject]
-    public void Constructor(IOptionSetter optionSetter, INoteSpawnDataOptionHolder spawnDataGetter)
+    public void Constructor(IOptionSetter optionSetter, INoteSpawnDataOptionGetter spawnDataGetter, INoteSpawnDataOptionSetter spawnDataSetter)
     {
         this.optionSetter = optionSetter;
         this.spawnDataGetter = spawnDataGetter;
+        this.spawnDataSetter = spawnDataSetter;
     }
 
     protected override void EachUpdate()
@@ -38,7 +40,7 @@ public class InputHandlerForKeyboardInRhythmGameScene : InputHandlerForKeyboard
     /// </summary>
     private void SwitchAutoMode()
     {
-        optionSetter.SetAutoMode(!spawnDataGetter.IsAutoMode);
+        spawnDataSetter.SetAutoMode(!spawnDataGetter.IsAutoMode);
       
         if (spawnDataGetter.IsAutoMode) { Debug.Log("【System】オートモードに切り替え"); }
         else { Debug.Log("【System】オートモード終了"); }

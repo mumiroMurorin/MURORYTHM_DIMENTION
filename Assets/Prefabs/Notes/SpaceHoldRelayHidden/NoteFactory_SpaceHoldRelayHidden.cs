@@ -18,7 +18,7 @@ public class NoteFactory_SpaceHoldRelayHidden : NoteFactory<NoteData_SpaceHoldRe
     [Header("‹­’²ü‚Ìƒ}ƒeƒŠƒAƒ‹")]
     [SerializeField] Material edgeMaterial;
 
-    INoteSpawnDataOptionHolder optionHolder;
+    INoteSpawnDataOptionGetter optionHolder;
     ISpaceInputGetter spaceInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;

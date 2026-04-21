@@ -153,6 +153,6 @@ public class NoteData_HoldEnd : INoteData, IJudgableNoteData
 
     public IJudgementRecorder JudgementRecorder { get; set; }
 
-    public INoteSpawnDataOptionHolder OptionGetter { get; set; }
+    public INoteSpawnDataOptionGetter OptionGetter { get; set; }
 }
 

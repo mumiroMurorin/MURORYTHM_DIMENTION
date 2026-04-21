@@ -11,32 +11,39 @@ public class RootLifetimeScope : LifetimeScope
         base.Configure(builder);
 
         // 入力関係
-        builder.Register<InputHolder>(Lifetime.Singleton);
-        builder.Register<ISliderInputSetter>(resolver => resolver.Resolve<InputHolder>(), Lifetime.Singleton);
-        builder.Register<ISpaceInputSetter>(resolver => resolver.Resolve<InputHolder>(), Lifetime.Singleton);
-        builder.Register<ISliderInputGetter>(resolver => resolver.Resolve<InputHolder>(), Lifetime.Singleton);
-        builder.Register<ISpaceInputGetter>(resolver => resolver.Resolve<InputHolder>(), Lifetime.Singleton);
+        builder.Register<InputHolder>(Lifetime.Singleton)
+            .AsSelf()
+            .As<ISliderInputSetter>()
+            .As<ISpaceInputSetter>()
+            .As<ISliderInputGetter>()
+            .As<ISpaceInputGetter>();
 
         // オプション
-        builder.Register<OptionHolder>(Lifetime.Singleton);
-        builder.Register<INoteSpawnDataOptionHolder>(resolver => resolver.Resolve<OptionHolder>(), Lifetime.Singleton);
-        builder.Register<IOptionGetter>(resolver => resolver.Resolve<OptionHolder>(), Lifetime.Singleton);
-        builder.Register<IOptionSetter>(resolver => resolver.Resolve<OptionHolder>(), Lifetime.Singleton);
-        builder.Register<IVolumeGetter>(resolver => resolver.Resolve<OptionHolder>(), Lifetime.Singleton);
+        builder.Register<OptionHolder>(Lifetime.Singleton)
+            .AsSelf()
+            .As<INoteSpawnDataOptionGetter>()
+            .As<INoteSpawnDataOptionSetter>()
+            .As<IOptionGetter>()
+            .As<IOptionSetter>()
+            .As<IVolumeGetter>();
 
         // スコア
-        builder.Register<ScoreHolder>(Lifetime.Singleton);
-        builder.Register<IScoreGetter>(resolver => resolver.Resolve<ScoreHolder>(), Lifetime.Singleton);
-        builder.Register<IScoreSetter>(resolver => resolver.Resolve<ScoreHolder>(), Lifetime.Singleton);
+        builder.Register<ScoreHolder>(Lifetime.Singleton)
+            .AsSelf()
+            .As<IJudgementRecorder>()
+            .As<IScoreGetter>()
+            .As<IScoreSetter>();
 
         // 楽曲データ
-        builder.Register<MusicDataHolder>(Lifetime.Singleton);
-        builder.Register<IMusicDataGetter>(resolver => resolver.Resolve<MusicDataHolder>(), Lifetime.Singleton);
-        builder.Register<IMusicDataSetter>(resolver => resolver.Resolve<MusicDataHolder>(), Lifetime.Singleton);
+        builder.Register<MusicDataHolder>(Lifetime.Singleton)
+            .AsSelf()
+            .As<IMusicDataGetter>()
+            .As<IMusicDataSetter>();
 
         // 楽曲データリスト
-        builder.Register<MusicDataListHolder>(Lifetime.Singleton);
-        builder.Register<IMusicDataListGetter>(resolver => resolver.Resolve<MusicDataListHolder>(), Lifetime.Singleton);
-        builder.Register<IMusicDataListSetter>(resolver => resolver.Resolve<MusicDataListHolder>(), Lifetime.Singleton);
+        builder.Register<MusicDataListHolder>(Lifetime.Singleton)
+            .AsSelf()
+            .As<IMusicDataListGetter>()
+            .As<IMusicDataListSetter>();
     }
 }

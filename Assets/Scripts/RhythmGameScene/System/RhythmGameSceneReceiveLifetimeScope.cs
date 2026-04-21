@@ -9,8 +9,8 @@ public sealed class RhythmGameSceneReceiveLifetimeScope : LifetimeScope
 
         builder.Register<IJudgementRecorder>(resolver => resolver.Resolve<ScoreHolder>(), Lifetime.Singleton);
 
-        builder.Register<ChartDataHolder>(Lifetime.Singleton);
-        builder.Register<IChartDataGetter>(resolver => resolver.Resolve<ChartDataHolder>(), Lifetime.Singleton);
-        builder.Register<IChartDataSetter>(resolver => resolver.Resolve<ChartDataHolder>(), Lifetime.Singleton);
+        builder.Register<ChartDataHolder>(Lifetime.Singleton)
+            .As<IChartDataGetter>()
+            .As<IChartDataSetter>();
     }
 }

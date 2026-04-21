@@ -176,6 +176,6 @@ public class NoteData_SpaceHoldRelay : INoteData, IJudgableNoteData
 
     public IJudgementRecorder JudgementRecorder { get; set; }
 
-    public INoteSpawnDataOptionHolder OptionGetter { get; set; }
+    public INoteSpawnDataOptionGetter OptionGetter { get; set; }
 }
 

@@ -15,7 +15,7 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
     [Header("mesh1íPà ÇÃç≈ëÂí∑Ç≥")]
     [SerializeField] float maxTriangleLength = 0.5f;
 
-    INoteSpawnDataOptionHolder optionHolder;
+    INoteSpawnDataOptionGetter optionHolder;
     ISliderInputGetter sliderInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;

@@ -10,7 +10,7 @@ public class ChartLoaderJsonInSelectScene : MonoBehaviour, IChartLoader
 {
     [SerializeField] List<NoteTypeToJudgementWindow> judgementWindows;
 
-    [Inject] INoteSpawnDataOptionHolder optionGetter;
+    [Inject] INoteSpawnDataOptionGetter optionGetter;
 
     private void Start()
     {

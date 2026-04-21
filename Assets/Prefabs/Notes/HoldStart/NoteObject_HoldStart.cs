@@ -114,6 +114,6 @@ public class NoteData_HoldStart : INoteData, IClippedJudgableNote
 
     public IJudgementRecorder JudgementRecorder { get; set; }
 
-    public INoteSpawnDataOptionHolder OptionGetter { get; set; }
+    public INoteSpawnDataOptionGetter OptionGetter { get; set; }
 }
 

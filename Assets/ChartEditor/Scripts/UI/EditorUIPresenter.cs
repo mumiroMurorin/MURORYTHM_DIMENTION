@@ -12,8 +12,8 @@ namespace ChartEditor
     public class EditorUIPresenter : MonoBehaviour
     {
         [Header("Canvas")]
-        [SerializeField] Canvas editorCanvas;
-        [SerializeField] Canvas previewCanvas;
+        [SerializeField] GameObject editorCanvas;
+        [SerializeField] GameObject previewCanvas;
 
         [Header("Views")]
         [SerializeField] ChartExtendButtonView chartExtendButton_view;
@@ -21,7 +21,7 @@ namespace ChartEditor
         [SerializeField] MusicBrowseButtonView musicBrowseButton_view;
         [SerializeField] OffsetInputFieldView offsetInputField_view;
         [SerializeField] ChangeLaneDivNumButtonView changeLaneDivNumButton_view;
-        [SerializeField] ScrollSensitivitySliderView scrollSensitivitySlider_view;
+        [SerializeField] SliderView scrollSensitivitySlider_view;
         [SerializeField] MusicNameView musicName_view;
         [SerializeField] RhythmConfigBarView rhythmConfigBar_view;
         [SerializeField] RhythmConfigSubView rhythmConfigSubDivision_view;
@@ -85,7 +85,7 @@ namespace ChartEditor
 
             // オフセットの変更
             dataGetter_model?.Offset
-                .Subscribe(offsetInputField_view.OnChangeMainBPM)
+                .Subscribe(offsetInputField_view.OnChangeFloatValue)
                 .AddTo(this.gameObject);
 
             // レーン分割数の変更
@@ -95,10 +95,10 @@ namespace ChartEditor
 
             // スクロール感度
             optionGetter?.ScrollSensitivity
-                .Subscribe(scrollSensitivitySlider_view.OnSensitivityChanged)
+                .Subscribe(scrollSensitivitySlider_view.OnValueChanged)
                 .AddTo(this.gameObject);
 
-            // 楽曲名の変更
+            // 楽曲の変更
             dataGetter_model?.Music
                 .Subscribe(musicName_view.OnChangeMusic)
                 .AddTo(this.gameObject);
@@ -189,10 +189,10 @@ namespace ChartEditor
             musicBrowseButton_view.OnClickedListner += BrowseAudioFile;
 
             // オフセットフィールド
-            offsetInputField_view.OnValueChangedListner += dataSetter.SetOffset;
+            offsetInputField_view.OnFloatValueChangedListner += dataSetter.SetOffset;
 
             // レーン分割数
-            changeLaneDivNumButton_view.OnButtonClickedListener += () => optionSetter.SetLaneDivisionNum(true);
+            changeLaneDivNumButton_view.OnPushButtonListner += () => optionSetter.SetLaneDivisionNum(true);
 
             // スクロール感度
             scrollSensitivitySlider_view.OnSliderChangedListener += optionSetter.SetScrollSensitivity;
@@ -202,6 +202,7 @@ namespace ChartEditor
 
             // インポートボタン
             importButton_view.OnClickedListner += chartDataImporter_model.Import;
+            
             // 譜面延長ボタン
             chartExtendButton_view.OnClickedListner += () => laneExtender_model.ChangeChartLength(1);
 
@@ -245,8 +246,8 @@ namespace ChartEditor
 
         private void ActivateCanvas(EditNoteType noteType)
         {
-            previewCanvas.enabled = noteType == EditNoteType.Preview;
-            editorCanvas.enabled = noteType != EditNoteType.Preview;
+            previewCanvas.SetActive(noteType == EditNoteType.Preview);
+            editorCanvas.SetActive(noteType != EditNoteType.Preview);
         } 
 
         private void OnDestroy()

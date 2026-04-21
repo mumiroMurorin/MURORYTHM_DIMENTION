@@ -164,6 +164,6 @@ public class NoteData_DynamicGroundRightward : INoteData, IJudgableNoteData
 
     public IJudgementRecorder JudgementRecorder { get; set; }
 
-    public INoteSpawnDataOptionHolder OptionGetter { get; set; }
+    public INoteSpawnDataOptionGetter OptionGetter { get; set; }
 }
 

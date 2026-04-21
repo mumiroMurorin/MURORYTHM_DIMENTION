@@ -27,10 +27,10 @@ namespace ChartEditor
         [SerializeField] private SerializeInterface<ITimeGetter> timer;
 
         private global::ChartData chartData;
-        INoteSpawnDataOptionHolder optionHolder;
+        INoteSpawnDataOptionGetter optionHolder;
 
         [Inject]
-        public void Constructor(INoteSpawnDataOptionHolder optionHolder)
+        public void Constructor(INoteSpawnDataOptionGetter optionHolder)
         {
             this.optionHolder = optionHolder;
         }

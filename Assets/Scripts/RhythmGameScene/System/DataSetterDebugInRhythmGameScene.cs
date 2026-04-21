@@ -21,14 +21,20 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
     IMusicDataGetter musicDataGetter;
     IOptionSetter optionSetter;
     IScoreSetter scoreSetter;
+    INoteSpawnDataOptionSetter spawnDataSetter;
 
     [Inject]
-    public void Construct(IScoreSetter scoreSetter, IMusicDataGetter musicDataGetter, IMusicDataSetter musicDataSetter, IOptionSetter optionSetter)
+    public void Construct(IScoreSetter scoreSetter, 
+        IMusicDataGetter musicDataGetter, 
+        IMusicDataSetter musicDataSetter, 
+        IOptionSetter optionSetter,
+        INoteSpawnDataOptionSetter spawnDataSetter)
     {
         this.musicDataSetter = musicDataSetter;
         this.musicDataGetter = musicDataGetter;
         this.scoreSetter = scoreSetter;
         this.optionSetter = optionSetter;
+        this.spawnDataSetter = spawnDataSetter;
     }
 
     void Awake()
@@ -47,8 +53,8 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
             musicDataSetter.SetDifficulty(difficulty);
         }
 
-        optionSetter.SetNoteSpeed(noteSpeed);
-        optionSetter.SetAutoMode(isAutoMode);
+        spawnDataSetter.SetNoteSpeed(noteSpeed);
+        spawnDataSetter.SetAutoMode(isAutoMode);
         optionSetter.SetIsEnabledFastLate(isFastLateEnabled);
         
 #endif

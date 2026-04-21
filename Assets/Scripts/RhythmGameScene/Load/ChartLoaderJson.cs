@@ -11,7 +11,7 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
     [SerializeField] List<NoteTypeToJudgementWindow> judgementWindows;
 
     [Inject] IMusicDataGetter musicDataGetter;
-    [Inject] INoteSpawnDataOptionHolder optionGetter;
+    [Inject] INoteSpawnDataOptionGetter optionGetter;
     [Inject] IChartDataSetter chartDataSetter;
 
     private void Start()

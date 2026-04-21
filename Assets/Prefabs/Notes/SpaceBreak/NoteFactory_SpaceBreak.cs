@@ -21,7 +21,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     [Header("メインメッシュのマテリアル")]
     [SerializeField] Material mainMaterial;
 
-    INoteSpawnDataOptionHolder optionHolder;
+    INoteSpawnDataOptionGetter optionHolder;
     ISpaceInputGetter spaceInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;

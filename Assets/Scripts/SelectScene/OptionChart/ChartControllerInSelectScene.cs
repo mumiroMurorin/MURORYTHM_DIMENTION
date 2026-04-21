@@ -10,9 +10,8 @@ public class ChartControllerInSelectScene : MonoBehaviour
     [SerializeField] TextAsset chartJson;
     [SerializeField] SerializeInterface<IChartLoader> chartLoader;
 
-    [Inject] IJudgementRecorder judgementRecorder;
-    [Inject] IOptionGetter optionGetter;
-    [Inject] IOptionSetter optionSetter;
+    IOptionGetter optionGetter;
+    INoteSpawnDataOptionSetter spawnDataSetter;
 
     [SerializeField] ScoreSetterInSelectScene scoreSetter;
     [SerializeField] GroundControllerLinear groundController; 
@@ -23,9 +22,16 @@ public class ChartControllerInSelectScene : MonoBehaviour
 
     public ChartData ChartData { get; private set; }
 
+    [Inject]
+    public void Construct(IOptionGetter optionGetter, INoteSpawnDataOptionSetter spawnDataSetter)
+    {
+        this.optionGetter = optionGetter;
+        this.spawnDataSetter = spawnDataSetter;
+    }
+
     void Start()
     {
-        optionSetter?.SetAutoMode(true);
+        spawnDataSetter?.SetAutoMode(true);
         groundController.Initialize();
 
         Bind();
@@ -74,6 +80,6 @@ public class ChartControllerInSelectScene : MonoBehaviour
 
     private void OnDestroy()
     {
-        optionSetter?.SetAutoMode(false);
+        spawnDataSetter?.SetAutoMode(false);
     }
 }

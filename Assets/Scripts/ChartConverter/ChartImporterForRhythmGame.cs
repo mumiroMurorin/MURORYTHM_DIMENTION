@@ -20,7 +20,7 @@ namespace ChartConvert
         Dictionary<int, List<TimeToVertices>> chainNumberToVertices = new Dictionary<int, List<TimeToVertices>>();
 
 
-        public ChartData Import(ChartDataOrigin originData, INoteSpawnDataOptionHolder optionHolder)
+        public ChartData Import(ChartDataOrigin originData, INoteSpawnDataOptionGetter optionHolder)
         {
             Initialize();
 

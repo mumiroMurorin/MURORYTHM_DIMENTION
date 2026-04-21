@@ -1,0 +1,55 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UniRx;
+using VContainer;
+
+namespace ChartEditor
+{
+    public class GroundPreviewOptionSetter : MonoBehaviour
+    {
+        [SerializeField] GameObject[] divisionLines;
+
+        IChartEditorOptionGetter optionGetter;
+
+        [Inject]
+        public void Construct(IChartEditorOptionGetter optionGetter)
+        {
+            this.optionGetter = optionGetter;
+        }
+
+        private void Start()
+        {
+            Bind();
+        }
+
+        private void Bind()
+        {
+            optionGetter?.LaneDivisionNum
+                .Subscribe(SetDivisionLines)
+                .AddTo(this.gameObject);
+        }
+
+        private void SetDivisionLines(int divNum)
+        {
+            if (divisionLines.Length != 17) { return; }
+
+            for (int i = 0; i < divisionLines.Length; i++)
+            {
+                if (i == 0 || i == 16)
+                {
+                    divisionLines[i].SetActive(true);
+                }
+                else if (i % (16 / divNum) == 0)
+                {
+                    divisionLines[i].SetActive(true);
+                }
+                else
+                {
+                    divisionLines[i].SetActive(false);
+                }
+            }
+        }
+    }
+
+}

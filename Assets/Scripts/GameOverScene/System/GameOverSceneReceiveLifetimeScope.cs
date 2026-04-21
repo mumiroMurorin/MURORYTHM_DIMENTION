@@ -7,8 +7,8 @@ public sealed class GameOverSceneReceiveLifetimeScope : LifetimeScope
     {
         base.Configure(builder);
 
-        builder.Register<GameOverSceneDataHolder>(Lifetime.Singleton);
-        builder.Register<IGameOverSceneDataGetter>(resolver => resolver.Resolve<GameOverSceneDataHolder>(), Lifetime.Singleton);
-        builder.Register<IGameOverSceneDataSetter>(resolver => resolver.Resolve<GameOverSceneDataHolder>(), Lifetime.Singleton);
+        builder.Register<GameOverSceneDataHolder>(Lifetime.Singleton)
+            .As<IGameOverSceneDataGetter>()
+            .As<IGameOverSceneDataSetter>();
     }
 }

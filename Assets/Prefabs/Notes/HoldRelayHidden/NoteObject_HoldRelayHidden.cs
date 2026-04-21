@@ -152,6 +152,6 @@ public class NoteData_HoldRelayHidden : INoteData, IJudgableNoteData
 
     public IJudgementRecorder JudgementRecorder { get; set; }
 
-    public INoteSpawnDataOptionHolder OptionGetter { get; set; }
+    public INoteSpawnDataOptionGetter OptionGetter { get; set; }
 }
 

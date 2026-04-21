@@ -7,8 +7,8 @@ public sealed class LobbySceneReceiveLifetimeScope : LifetimeScope
     {
         base.Configure(builder);
 
-        builder.Register<LobbySceneDataHolder>(Lifetime.Singleton);
-        builder.Register<ILobbySceneDataGetter>(resolver => resolver.Resolve<LobbySceneDataHolder>(), Lifetime.Singleton);
-        builder.Register<ILobbySceneDataSetter>(resolver => resolver.Resolve<LobbySceneDataHolder>(), Lifetime.Singleton);
+        builder.Register<LobbySceneDataHolder>(Lifetime.Singleton)
+            .As<ILobbySceneDataGetter>()
+            .As<ILobbySceneDataSetter>();
     }
 }

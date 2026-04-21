@@ -18,7 +18,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     [Header("mesh1íPà ÇÃç≈ëÂí∑Ç≥")]
     [SerializeField] float maxTriangleLength = 0.5f;
 
-    INoteSpawnDataOptionHolder optionHolder;
+    INoteSpawnDataOptionGetter optionHolder;
     ISpaceInputGetter spaceInputGetter;
     ITimeGetter timer;
     Transform noteParent;

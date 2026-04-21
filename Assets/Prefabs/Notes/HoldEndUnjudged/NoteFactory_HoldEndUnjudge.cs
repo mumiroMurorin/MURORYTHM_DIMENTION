@@ -13,7 +13,7 @@ public class NoteFactory_HoldEndUnjudge : NoteFactory<NoteData_HoldEndUnjudge>
     [SerializeField] GameObject centerTilePrefab;
     [SerializeField] GameObject leftEdgeTilePrefab;
 
-    INoteSpawnDataOptionHolder optionHolder;
+    INoteSpawnDataOptionGetter optionHolder;
     ITimeGetter timer;
     Transform noteParent;
     Deformer groundDeformer;

@@ -9,10 +9,10 @@ namespace ChartEditor
         [SerializeField] ChartPreviewGenerator previewGenerator;
         [SerializeField] GroundControllerPreview groundController;
 
-        INoteSpawnDataOptionHolder optionHolder;
+        INoteSpawnDataOptionGetter optionHolder;
 
         [Inject]
-        public void Constructor(INoteSpawnDataOptionHolder optionHolder)
+        public void Constructor(INoteSpawnDataOptionGetter optionHolder)
         {
             this.optionHolder = optionHolder;
         }
