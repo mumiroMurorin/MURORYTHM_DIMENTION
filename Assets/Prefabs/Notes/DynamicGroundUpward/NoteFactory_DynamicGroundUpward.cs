@@ -132,11 +132,7 @@ public class NoteFactory_DynamicGroundUpward : NoteFactory<NoteData_DynamicGroun
         note.transform.SetParent(noteParent);
 
         // ˆÊ’u‚Ì’²®
-        note.transform.localPosition = new Vector3(
-            note.transform.position.x,
-            note.transform.position.y,
-            spawnZ
-            );
+        note.SetPosition(spawnZ);
     }
 }
 

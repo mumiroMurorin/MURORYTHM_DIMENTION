@@ -107,10 +107,6 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
         note.transform.SetParent(noteParent);
 
         // И╩ТuВ╠Т▓Ро
-        note.transform.localPosition = new Vector3(
-            note.transform.position.x,
-            note.transform.position.y,
-            spawnZ
-            );
+        note.SetPosition(spawnZ);
     }
 }

@@ -18,5 +18,18 @@ public abstract class NoteObject<T> : MonoBehaviour, INoteActivable where T : IN
     }
 
     abstract public void Initialize(T data);
+
+    /// <summary>
+    /// エディタ中にノートスピードが変更された際など
+    /// </summary>
+    /// <param name="z"></param>
+    public void SetPosition(float z)
+    {
+        this.transform.localPosition = new Vector3(
+            this.transform.position.x,
+            this.transform.position.y,
+            z
+            );
+    }
 }
 

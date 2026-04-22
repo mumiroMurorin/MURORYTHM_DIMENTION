@@ -10873,7 +10873,7 @@ MonoBehaviour:
   backEditorButton_view: {fileID: 559036974}
   offsetInputField_view: {fileID: 1805036170}
   changeLaneDivNumButton_view: {fileID: 1893107447}
-  noteSpeedSlider_view: {fileID: 0}
+  noteSpeedSlider_view: {fileID: 1001894058}
   previewRefreshTarget: {fileID: 265485328}
 --- !u!1 &650040763
 GameObject:
@@ -34104,16 +34104,16 @@ MonoBehaviour:
   m_FillRect: {fileID: 1703365669}
   m_HandleRect: {fileID: 0}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: 20
+  m_MaxValue: 500
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 20
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1001894058}
         m_TargetAssemblyTypeName: SliderView, Assembly-CSharp
-        m_MethodName: OnValueChanged
+        m_MethodName: OnSliderValueChanged
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

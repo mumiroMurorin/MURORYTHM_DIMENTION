@@ -74,12 +74,15 @@ namespace ChartEditor
 
         #region NoteSpeed ÉmÅ[Écë¨ìx
 
+        const int MAX_NOTESPEED = 500;
+        const int MIN_NOTESPEED = 20;
+
         ReactiveProperty<float> noteSpeed = new ReactiveProperty<float>(200f);
         IReadOnlyReactiveProperty<float> INoteSpawnDataOptionGetter.NoteSpeed => noteSpeed;
 
         void INoteSpawnDataOptionSetter.SetNoteSpeed(float speed)
         {
-            noteSpeed.Value = Mathf.Max(0f, speed);
+            noteSpeed.Value = Mathf.Clamp(speed, MIN_NOTESPEED, MAX_NOTESPEED);
         }
 
         #endregion

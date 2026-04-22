@@ -23,17 +23,26 @@ namespace ChartEditor
         IChartEditorDataSetter dataSetter_model;
         IChartEditorOptionSetter optionSetter_model;
         IChartEditorOptionGetter optionGetter_model;
+        INoteSpawnDataOptionSetter noteSpawnDataOptionSetter_model;
+        INoteSpawnDataOptionGetter noteSpawnDataOptionGetter_model;
 
         IChartPreviewRefreshable previewRefreshable;
         EditNoteType editNoteTypeCache = EditNoteType.Ground;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, IChartEditorOptionSetter optionDataSetter, IChartEditorOptionGetter optionDataGetter)
+        public void Construct(IChartEditorDataGetter dataGetter, 
+            IChartEditorDataSetter dataSetter, 
+            IChartEditorOptionSetter optionDataSetter, 
+            IChartEditorOptionGetter optionDataGetter,
+            INoteSpawnDataOptionSetter noteSpawnDataOptionSetter, 
+            INoteSpawnDataOptionGetter noteSpawnDataOptionGetter)
         {
             this.dataGetter_model = dataGetter;
             this.dataSetter_model = dataSetter;
             this.optionSetter_model = optionDataSetter;
             this.optionGetter_model = optionDataGetter;
+            this.noteSpawnDataOptionSetter_model = noteSpawnDataOptionSetter;
+            this.noteSpawnDataOptionGetter_model = noteSpawnDataOptionGetter;
         }
 
         private void Start()
@@ -57,7 +66,9 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
 
             // ノートスピードの変更
-            
+            noteSpawnDataOptionGetter_model?.NoteSpeed
+                .Subscribe(noteSpeedSlider_view.OnValueChanged)
+                .AddTo(this.gameObject);
         }
 
         private void SetEvent()
@@ -93,6 +104,8 @@ namespace ChartEditor
             // レーン分割数
             changeLaneDivNumButton_view.OnPushButtonListner += () => optionSetter_model.SetLaneDivisionNum(true);
 
+            // ノートスピード
+            noteSpeedSlider_view.OnSliderChangedListener += (value) => noteSpawnDataOptionSetter_model.SetNoteSpeed(value);
         }
 
         private void RefreshPreview()

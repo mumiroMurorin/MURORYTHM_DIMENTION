@@ -132,11 +132,7 @@ public class NoteFactory_HoldEnd : NoteFactory<NoteData_HoldEnd>
         note.transform.SetParent(noteParent);
 
         // И╩ТuВ╠Т▓Ро
-        note.transform.localPosition = new Vector3(
-            note.transform.position.x,
-            note.transform.position.y,
-            spawnZ
-            );
+        note.SetPosition(spawnZ);
     }
 }
 

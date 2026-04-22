@@ -298,7 +298,7 @@ MonoBehaviour:
     composer_name: "\u524A\u9664"
     music_spr: {fileID: 21300000, guid: 1512ba05fa48cde48858c7f68c23594f, type: 3}
     theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
-    clip: {fileID: 8300000, guid: 074a303835a350540874252c6455fb47, type: 3}
+    clip: {fileID: 8300000, guid: 14fca47ec4675dc4ba7afc1dc4bc724e, type: 3}
     sample_clip: {fileID: 8300000, guid: 0d1068dc9a46ed641b6c5e4506563fbc, type: 3}
     symphonyType: 10
     stageType: 102
@@ -309,7 +309,7 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: "MusicData/\u30A4\u30AC\u30AF/chart_hard.json"
+  chartFilePath: MusicData/Destr0yer/chart_master.json
   noteSpeed: 200
   isAutoMode: 0
   isFastLateEnabled: 1

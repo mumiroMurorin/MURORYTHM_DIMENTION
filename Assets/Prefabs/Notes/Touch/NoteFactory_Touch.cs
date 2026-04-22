@@ -131,10 +131,6 @@ public class NoteFactory_Touch : NoteFactory<NoteData_Touch>
         note.transform.SetParent(noteParent);
 
         // И╩ТuВ╠Т▓Ро
-        note.transform.localPosition = new Vector3(
-            note.transform.position.x,
-            note.transform.position.y,
-            spawnZ
-            );
+        note.SetPosition(spawnZ);
     }
 }
