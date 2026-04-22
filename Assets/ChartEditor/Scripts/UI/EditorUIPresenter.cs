@@ -32,30 +32,46 @@ namespace ChartEditor
         [SerializeField] ExplanationView explanation_view;
         [SerializeField] ScreenSizeDropDownView screenSizeDropDown_view;
         [SerializeField] SwitchLayerButtonView switchLayerButton_view;
+        [SerializeField] NoteSpeedSliderView noteSpeedSlider_view;
+
         [Header("Models")]
         [SerializeField] ChartDataExporter chartDataExporter_model;
         [SerializeField] ChartDataImporter chartDataImporter_model;
         [SerializeField] ConfigEditor configEditor_model;
         [SerializeField] LaneExtender laneExtender_model;
+        [SerializeField] MonoBehaviour previewRefreshTarget;
+
+        IChartPreviewRefreshable previewRefreshable;
 
         IChartEditorDataSetter dataSetter;
         IChartEditorDataGetter dataGetter_model;
         IChartEditorOptionSetter optionSetter;
         IChartEditorOptionGetter optionGetter;
+        INoteSpawnDataOptionSetter noteSpawnDataOptionSetter;
+        INoteSpawnDataOptionGetter noteSpawnDataOptionGetter;
 
         CancellationTokenSource soundLoadCts;
 
         [Inject]
-        public void Construct(IChartEditorDataSetter chartEditorDataSetter, IChartEditorDataGetter chartEditorDataGetter, IChartEditorOptionSetter optionDataSetter, IChartEditorOptionGetter optionDataGetter)
+        public void Construct(IChartEditorDataSetter chartEditorDataSetter, 
+            IChartEditorDataGetter chartEditorDataGetter, 
+            IChartEditorOptionSetter optionDataSetter, 
+            IChartEditorOptionGetter optionDataGetter, 
+            INoteSpawnDataOptionSetter noteSpawnDataOptionSetter,
+            INoteSpawnDataOptionGetter noteSpawnDataOptionGetter)
         {
             dataSetter = chartEditorDataSetter;
             optionSetter = optionDataSetter;
             dataGetter_model = chartEditorDataGetter;
             optionGetter = optionDataGetter;
+            this.noteSpawnDataOptionSetter = noteSpawnDataOptionSetter;
+            this.noteSpawnDataOptionGetter = noteSpawnDataOptionGetter;
         }
 
         void Start()
         {
+            previewRefreshable = previewRefreshTarget as IChartPreviewRefreshable;
+
             BindForRhythmConfig();
             BindForOther();
 
@@ -96,6 +112,11 @@ namespace ChartEditor
             // スクロール感度
             optionGetter?.ScrollSensitivity
                 .Subscribe(scrollSensitivitySlider_view.OnValueChanged)
+                .AddTo(this.gameObject);
+
+            // ノーツスピード
+            noteSpawnDataOptionGetter?.NoteSpeed
+                .Subscribe(noteSpeedSlider_view.OnValueChanged)
                 .AddTo(this.gameObject);
 
             // 楽曲の変更
@@ -219,6 +240,13 @@ namespace ChartEditor
             // レイヤー変更ボタン
             switchLayerButton_view.OnClickCloseButtonListner += () => {
                 dataSetter.SwitchEditNoteType();
+            };
+
+            // ノートスピード変更
+            noteSpeedSlider_view.OnNoteSpeedApplyListener += (value) =>
+            {
+                noteSpawnDataOptionSetter.SetNoteSpeed(value);
+                previewRefreshable?.RefreshPreviewFromEditorDataAsync().Forget();
             };
 
             explanationButton_view.OnClickedListner += () => dataSetter.SetEditMode(EditMode.Explanation);

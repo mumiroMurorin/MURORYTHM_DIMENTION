@@ -1,4 +1,7 @@
 using ChartConvert;
+using Cysharp.Threading.Tasks;
+using System;
+using System.Threading;
 using UnityEngine;
 using VContainer;
 
@@ -10,14 +13,54 @@ namespace ChartEditor
         [SerializeField] GroundControllerPreview groundController;
 
         INoteSpawnDataOptionGetter optionHolder;
+        IChartEditorDataGetter dataGetter;
+        CancellationTokenSource refreshPreviewCts;
 
         [Inject]
-        public void Constructor(INoteSpawnDataOptionGetter optionHolder)
+        public void Constructor(INoteSpawnDataOptionGetter optionHolder, IChartEditorDataGetter dataGetter)
         {
             this.optionHolder = optionHolder;
+            this.dataGetter = dataGetter;
         }
 
-        public void RefreshPreview(ChartDataOrigin savedChartData, string savedFilePath)
+        public async UniTask RefreshPreviewFromEditorDataAsync()
+        {
+            if (dataGetter?.ChartData?.Value == null) { return; }
+
+            refreshPreviewCts?.CancelAndDispose();
+            refreshPreviewCts = CancellationTokenSource.CreateLinkedTokenSource(this.GetCancellationTokenOnDestroy());
+
+            CancellationToken token = refreshPreviewCts.Token;
+            var chartData = dataGetter.ChartData.Value;
+            float offset = dataGetter.Offset.Value;
+
+            try
+            {
+                ChartDataOrigin chartDataOrigin = await UniTask.RunOnThreadPool(
+                    () =>
+                    {
+                        token.ThrowIfCancellationRequested();
+                        ChartExporter exporter = new ChartExporter();
+                        return exporter.Export(chartData, offset);
+                    },
+                    cancellationToken: token);
+
+                token.ThrowIfCancellationRequested();
+                await UniTask.SwitchToMainThread(token);
+
+                RefreshPreview(chartDataOrigin);
+            }
+            catch (OperationCanceledException)
+            {
+                // Ignore latest-only cancellation.
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+        }
+
+        public void RefreshPreview(ChartDataOrigin savedChartData)
         {
             if (savedChartData == null)
             {
@@ -44,6 +87,11 @@ namespace ChartEditor
             groundController.SetChartData(chartData);
             previewGenerator.DestroyChart();
             previewGenerator.Generate();
+        }
+
+        private void OnDestroy()
+        {
+            refreshPreviewCts?.CancelAndDispose();
         }
     }
 }

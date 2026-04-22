@@ -1,4 +1,4 @@
-using ChartConvert;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer;
 using UniRx;
@@ -30,11 +30,12 @@ namespace ChartEditor
         EditNoteType editNoteTypeCache = EditNoteType.Ground;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter, 
-            IChartEditorDataSetter dataSetter, 
-            IChartEditorOptionSetter optionDataSetter, 
+        public void Construct(
+            IChartEditorDataGetter dataGetter,
+            IChartEditorDataSetter dataSetter,
+            IChartEditorOptionSetter optionDataSetter,
             IChartEditorOptionGetter optionDataGetter,
-            INoteSpawnDataOptionSetter noteSpawnDataOptionSetter, 
+            INoteSpawnDataOptionSetter noteSpawnDataOptionSetter,
             INoteSpawnDataOptionGetter noteSpawnDataOptionGetter)
         {
             this.dataGetter_model = dataGetter;
@@ -55,17 +56,14 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // オフセットの変更
             dataGetter_model?.Offset
                 .Subscribe(offsetInputField_view.OnChangeFloatValue)
                 .AddTo(this.gameObject);
 
-            // レーン分割数の変更
             optionGetter_model?.LaneDivisionNum
                 .Subscribe(changeLaneDivNumButton_view.OnLaneDivNumChanged)
                 .AddTo(this.gameObject);
 
-            // ノートスピードの変更
             noteSpawnDataOptionGetter_model?.NoteSpeed
                 .Subscribe(noteSpeedSlider_view.OnValueChanged)
                 .AddTo(this.gameObject);
@@ -75,50 +73,47 @@ namespace ChartEditor
         {
             if (previewRefreshButton_view != null)
             {
-                previewRefreshButton_view.OnPushButtonListner += RefreshPreview;
+                previewRefreshButton_view.OnPushButtonListner += () => previewRefreshable?.RefreshPreviewFromEditorDataAsync().Forget();
             }
 
             if (previewStartButton_view != null)
             {
                 previewStartButton_view.OnPushButtonListner += () =>
                 {
-                    editNoteTypeCache = dataGetter_model.EditNoteType.Value;
-
-                    RefreshPreview();
-                    ChangeEditMode(EditMode.Preview);
-                    ChangeEditNoteType(EditNoteType.Preview);
+                    RunStartPreviewFlowAsync().Forget();
                 };
             }
 
             if (backEditorButton_view != null)
             {
-                backEditorButton_view.OnPushButtonListner += () => { 
+                backEditorButton_view.OnPushButtonListner += () =>
+                {
                     ChangeEditMode(EditMode.None);
                     ChangeEditNoteType(editNoteTypeCache);
                 };
             }
 
-            // オフセットフィールド
             offsetInputField_view.OnFloatValueChangedListner += dataSetter_model.SetOffset;
-
-            // レーン分割数
             changeLaneDivNumButton_view.OnPushButtonListner += () => optionSetter_model.SetLaneDivisionNum(true);
 
-            // ノートスピード
-            noteSpeedSlider_view.OnNoteSpeedApplyListener += (value) => { 
+            noteSpeedSlider_view.OnNoteSpeedApplyListener += (value) =>
+            {
                 noteSpawnDataOptionSetter_model.SetNoteSpeed(value);
-                RefreshPreview();
+                previewRefreshable?.RefreshPreviewFromEditorDataAsync().Forget();
             };
         }
 
-        private void RefreshPreview()
+        private async UniTaskVoid RunStartPreviewFlowAsync()
         {
-            if (previewRefreshable == null) { return; }
-            if (dataGetter_model?.ChartData?.Value == null) { return; }
+            editNoteTypeCache = dataGetter_model.EditNoteType.Value;
 
-            ChartExporter exporter = new ChartExporter();
-            ChartDataOrigin chartDataOrigin = exporter.Export(dataGetter_model.ChartData.Value, dataGetter_model.Offset.Value);
-            previewRefreshable.RefreshPreview(chartDataOrigin, ChartFilePathCache.CurrentChartFilePath);
+            if (previewRefreshable != null)
+            {
+                await previewRefreshable.RefreshPreviewFromEditorDataAsync();
+            }
+
+            ChangeEditMode(EditMode.Preview);
+            ChangeEditNoteType(EditNoteType.Preview);
         }
 
         private void ChangeEditMode(EditMode mode)
@@ -126,7 +121,7 @@ namespace ChartEditor
             dataSetter_model?.SetEditMode(mode);
         }
 
-        private void ChangeEditNoteType(EditNoteType type) 
+        private void ChangeEditNoteType(EditNoteType type)
         {
             dataSetter_model?.SetEditNoteType(type);
         }
