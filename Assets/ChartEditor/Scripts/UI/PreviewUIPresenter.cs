@@ -13,7 +13,7 @@ namespace ChartEditor
         [SerializeField] ButtonView backEditorButton_view;
         [SerializeField] OffsetInputFieldView offsetInputField_view;
         [SerializeField] ChangeLaneDivNumButtonView changeLaneDivNumButton_view;
-        [SerializeField] SliderView noteSpeedSlider_view;
+        [SerializeField] NoteSpeedSliderView noteSpeedSlider_view;
 
         [Space(20)]
         [Header("Models")]
@@ -105,7 +105,10 @@ namespace ChartEditor
             changeLaneDivNumButton_view.OnPushButtonListner += () => optionSetter_model.SetLaneDivisionNum(true);
 
             // ノートスピード
-            noteSpeedSlider_view.OnSliderChangedListener += (value) => noteSpawnDataOptionSetter_model.SetNoteSpeed(value);
+            noteSpeedSlider_view.OnNoteSpeedApplyListener += (value) => { 
+                noteSpawnDataOptionSetter_model.SetNoteSpeed(value);
+                RefreshPreview();
+            };
         }
 
         private void RefreshPreview()

@@ -10,6 +10,8 @@ public class SliderView : MonoBehaviour
 
     public event Action<float> OnSliderChangedListener;
 
+    public float SliderValue { get { return slider.value; } }
+
     public virtual void OnValueChanged(float value)
     {
         if (slider == null) { return; }
