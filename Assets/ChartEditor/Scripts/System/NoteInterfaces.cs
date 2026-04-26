@@ -34,9 +34,17 @@ namespace ChartEditor
     {
         IReadOnlyReactiveProperty<DeploymentNoteType> NoteTypeRP { get; }
 
-        void ChangeNoteType(bool isDone);
+        void ChangeNoteType();
 
         void SetNoteType(DeploymentNoteType noteType);
+    }
+
+    /// <summary>
+    /// Changes note type when note is mirrored
+    /// </summary>
+    public interface IMirrorTypeChangableNoteData
+    {
+        void ChangeNoteType();
     }
 
     public interface IVerticesControlableNoteData

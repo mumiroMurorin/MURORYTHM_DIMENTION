@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using UniRx;
+using System.Threading;
 
 namespace ChartEditor
 {
@@ -17,7 +18,9 @@ namespace ChartEditor
 
         IChartEditorDataGetter dataGetter;
         IChartEditorOptionGetter optionGetter;
-        
+
+        CancellationTokenSource updateLinePosCts;
+
         [Inject]
         public void Construct(IChartEditorDataGetter dataGetter, IChartEditorOptionGetter optionGetter)
         {
@@ -30,15 +33,16 @@ namespace ChartEditor
             Bind();
         }
 
-
         private void Bind()
         {
             // ïàñ ê∂ê¨
             dataGetter?.ChartData
                 .Where(data => data != null)
                 .Subscribe(data => {
-                    Initialze();
+                    ClearLane();
                     BindForChartData(data);
+                    updateLinePosCts?.CancelAndDispose();
+                    updateLinePosCts = DelayUtility.Run(0f, () => UpdateLinePos(0, 0));
                 })
                 .AddTo(this.gameObject);
 
@@ -163,11 +167,6 @@ namespace ChartEditor
                 .Subscribe(divNum => OnChangeDivisionNum(subData.BarData.BarIndex, subData.SubDivisionIndex, divNum))
                 .AddTo(this.gameObject)
                 .AddTo(lineObj);
-        }
-
-        private void Initialze()
-        {
-            ClearLane();
         }
 
         /// <summary>
@@ -390,6 +389,11 @@ namespace ChartEditor
 
             Debug.LogWarning($"ÅySystemÅzÉfÅ[É^Ç™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÇ≈ÇµÇΩ: {lineObj}");
             return null;
+        }
+
+        private void OnDestroy()
+        {
+            updateLinePosCts?.CancelAndDispose();
         }
 
         [System.Serializable]

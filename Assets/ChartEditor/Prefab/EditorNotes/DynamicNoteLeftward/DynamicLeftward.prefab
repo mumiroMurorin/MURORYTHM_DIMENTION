@@ -80,6 +80,7 @@ GameObject:
   - component: {fileID: 4298368082348736084}
   - component: {fileID: 4021689910197028441}
   - component: {fileID: 3291468535132178595}
+  - component: {fileID: 1019114120934667598}
   m_Layer: 9
   m_Name: MovableCollider
   m_TagString: Untagged
@@ -172,6 +173,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectableObject:
     obj: {fileID: 5475620226950634511}
+--- !u!114 &1019114120934667598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2165418544623308270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f4399c2d0e5184090d43d7e4b52665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  note:
+    obj: {fileID: 5475620226950634511}
 --- !u!1 &3511318229296851223
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,6 +200,7 @@ GameObject:
   - component: {fileID: 7507685374718297931}
   - component: {fileID: 2378236554927455431}
   - component: {fileID: 8073554054264152273}
+  - component: {fileID: 1371702700169176507}
   m_Layer: 9
   m_Name: ScalableColliderRight
   m_TagString: Untagged
@@ -270,6 +286,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectableObject:
+    obj: {fileID: 5475620226950634511}
+--- !u!114 &1371702700169176507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3511318229296851223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f4399c2d0e5184090d43d7e4b52665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  note:
     obj: {fileID: 5475620226950634511}
 --- !u!1 &3719472305083736302
 GameObject:
@@ -431,6 +461,7 @@ GameObject:
   - component: {fileID: 8571971541714523689}
   - component: {fileID: 2042939825380956139}
   - component: {fileID: 650026286173546183}
+  - component: {fileID: 2420523350380396970}
   m_Layer: 0
   m_Name: DynamicLeftward
   m_TagString: Untagged
@@ -549,6 +580,21 @@ MonoBehaviour:
   outlineColorOnSelect:
     color: {r: 1, g: 0.49411765, b: 0, a: 0.78431374}
     isBlinking: 1
+--- !u!114 &2420523350380396970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5475620226950634511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9eda58ced00afe4092c14385e5f7e98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noteMeshRenderer: {fileID: 5893660377328454484}
+  rightMaterial: {fileID: 2100000, guid: 6b037bca7cbd7794aa249bd58f14a3df, type: 2}
+  leftMaterial: {fileID: 2100000, guid: 2f75598ebef9fbf4aae0f3c22fcdfc27, type: 2}
 --- !u!1 &7846833803484370955
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,6 +608,7 @@ GameObject:
   - component: {fileID: 2266046564571738400}
   - component: {fileID: 6495107031725986632}
   - component: {fileID: 4268383470038792614}
+  - component: {fileID: 3783222319798753692}
   m_Layer: 9
   m_Name: ScalableColliderLeft
   m_TagString: Untagged
@@ -647,6 +694,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectableObject:
+    obj: {fileID: 5475620226950634511}
+--- !u!114 &3783222319798753692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7846833803484370955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f4399c2d0e5184090d43d7e4b52665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  note:
     obj: {fileID: 5475620226950634511}
 --- !u!1001 &5200321963045387869
 PrefabInstance:

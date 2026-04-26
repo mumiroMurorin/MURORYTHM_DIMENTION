@@ -62,9 +62,37 @@ namespace UndoRedo.Notes
             });
         }
 
+        public static void RecordNotesMovingMirror(List<NoteDataToAddress> previous, List<NoteDataToAddress> current)
+        {
+            Record(() =>
+            // ˆÚ“®
+            {
+                foreach (var pair in current)
+                {
+                    MoveNote(pair.NoteData, pair.Address);
+                    ChangeTypeNote(pair.NoteData);
+                }
+            }, () =>
+            // –ß‚·
+            {
+                foreach (var pair in previous)
+                {
+                    MoveNote(pair.NoteData, pair.Address);
+                    ChangeTypeNote(pair.NoteData);
+                }
+            });
+        }
+
         public static void MoveNote(IDeployableNoteData noteData, AddressWithinRange address)
         {
             noteData.SetAddress(address);
+        }
+
+        public static void ChangeTypeNote(IDeployableNoteData noteData)
+        {
+            if (noteData is not IMirrorTypeChangableNoteData t) { return; }
+
+            t?.ChangeNoteType();
         }
     }
 }

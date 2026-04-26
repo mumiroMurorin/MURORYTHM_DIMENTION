@@ -50,25 +50,12 @@ namespace ChartEditor
 
             NoteType = noteType;
         }
-        public void ChangeNoteType(bool isDone)
+        public void ChangeNoteType()
         {
             // 始点終点は必ず判定あり
             if (NoteObject.NextNote.Value == null || NoteObject.BackNote.Value == null) { return; }
 
-            switch (NoteType)
-            {
-                // 可視 → 不可視(中継点のみ)
-                case DeploymentNoteType.SpaceHold:
-                    if (isDone) { NoteType = DeploymentNoteType.SpaceHoldHidden; }
-                    else { NoteType = DeploymentNoteType.SpaceHoldHidden; }
-                    break;
-                // 不可視 → 可視
-                case DeploymentNoteType.SpaceHoldHidden:
-                    if (isDone) { NoteType = DeploymentNoteType.SpaceHold; }
-                    else { NoteType = DeploymentNoteType.SpaceHold; }
-                    break;
-            }
-
+            NoteType = NoteTypeCycle.NextNoteType(NoteType);
             UpdateNoteType();
         }
         private void UpdateNoteType()

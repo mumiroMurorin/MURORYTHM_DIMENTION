@@ -36,12 +36,12 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // 拡大率
             // グラウンド長さ更新
             dataGetter?.ChartSeconds
                 .Subscribe(seconds => UpdateGroundLength(seconds, optionGetter.ChartViewScale.Value))
                 .AddTo(this.gameObject);
 
+            // 拡大率
             optionGetter?.ChartViewScale
                 .Subscribe(scale => UpdateGroundLength(dataGetter.ChartSeconds.Value, scale))
                 .AddTo(this.gameObject);

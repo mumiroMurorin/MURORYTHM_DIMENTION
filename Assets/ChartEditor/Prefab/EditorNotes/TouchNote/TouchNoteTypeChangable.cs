@@ -51,10 +51,6 @@ namespace ChartEditor
             else if (noteType == DeploymentNoteType.DivineTouch) { noteMeshRenderer.material = divineMaterial; }
         }
 
-        public void OnChangeNoteType()
-        {
-
-        }
 
         private void OnDestroy()
         {

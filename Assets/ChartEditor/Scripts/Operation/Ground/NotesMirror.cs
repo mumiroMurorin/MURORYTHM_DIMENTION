@@ -38,7 +38,7 @@ namespace ChartEditor
             }
 
             // RedoUndoÇ…ìoò^
-            RecordNotesMoving(previousAddress, currentAddress);
+            RecordNotesMovingMirror(previousAddress, currentAddress);
 
             Debug.Log($"ÅyîΩì]Åz");
         }

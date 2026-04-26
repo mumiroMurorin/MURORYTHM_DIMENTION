@@ -9,11 +9,11 @@ using System.Threading;
 namespace ChartEditor
 {
     [RequireComponent(typeof(NoteObject))]
-    public class SpaceHoldNoteTypeChangable : MonoBehaviour, IChangableObject
+    public class DynamicRightNoteTypeChangable : MonoBehaviour, IChangableObject
     {
         [SerializeField] MeshRenderer noteMeshRenderer;
-        [SerializeField] Color normalColor = Color.white;
-        [SerializeField] Color hiddenColor = new Color(1, 1, 1, 0.25f); 
+        [SerializeField] Material rightMaterial;
+        [SerializeField] Material leftMaterial;
 
         NoteObject noteObject;
         ITypeChangableNoteData noteData;
@@ -41,39 +41,19 @@ namespace ChartEditor
 
             // ノーツタイプが変更された時
             noteData.NoteTypeRP
-                .Subscribe(ChangeNoteColor)
-                .AddTo(this.gameObject);
-
-            // IChainNoteDataに変換
-            if (noteObject.NoteData is not IChainNoteData chainData) { return; }
-
-            chainData.NoteObject.NextNote
-                .Subscribe(next => {
-                    ChangeNoteColor(noteData.NoteTypeRP.Value);
-                })
-                .AddTo(this.gameObject);
-
-            chainData.NoteObject.BackNote
-                .Subscribe(back => {
-                    ChangeNoteColor(noteData.NoteTypeRP.Value);
-                })
+                .Subscribe(ChangeNoteMaterial)
                 .AddTo(this.gameObject);
         }
 
-        private void ChangeNoteColor(DeploymentNoteType noteType)
+        private void ChangeNoteMaterial(DeploymentNoteType noteType)
         {
-            if (noteType == DeploymentNoteType.SpaceHold) { noteMeshRenderer.material.color = normalColor; }
-            else if (noteType == DeploymentNoteType.SpaceHoldHidden) { noteMeshRenderer.material.color = hiddenColor; }
+            if (noteType == DeploymentNoteType.DynamicGroundLeftward) { noteMeshRenderer.material = leftMaterial; }
+            else if (noteType == DeploymentNoteType.DynamicGroundRightward) { noteMeshRenderer.material = rightMaterial; }
         }
 
         private void OnDestroy()
         {
-            if (cts != null)
-            {
-                cts.Cancel();
-                cts.Dispose();
-                cts = null;
-            }
+            cts?.CancelAndDispose();
         }
     }
 

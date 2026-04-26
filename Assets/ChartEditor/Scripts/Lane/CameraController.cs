@@ -53,6 +53,8 @@ namespace ChartEditor
             chartEditorDataGetter?.ChartSeconds
                 .Subscribe(seconds => {
                     UpdateChartLength(seconds, optionGetter.ChartViewScale.Value);
+                    MoveCamera(chartEditorDataGetter.PlaybackProgress.Value);
+                    ChangeCameraOffset(chartEditorDataGetter.Offset.Value);
                 })
                 .AddTo(this.gameObject);
 

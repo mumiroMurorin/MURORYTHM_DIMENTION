@@ -287,7 +287,7 @@ namespace ChartEditor
     {
         ITypeChangableNoteData NoteData { get; }
 
-        public void OnChangeNoteType();
+        // public void OnChangeNoteType();
     }
 
     /// <summary>

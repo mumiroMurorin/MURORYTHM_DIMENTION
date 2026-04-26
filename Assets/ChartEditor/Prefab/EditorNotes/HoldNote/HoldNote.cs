@@ -50,41 +50,9 @@ namespace ChartEditor
 
             NoteType = noteType;
         }
-        public void ChangeNoteType(bool isDone)
+        public void ChangeNoteType()
         {
-            // 終点
-            if(NoteObject.NextNote.Value == null)
-            {
-                switch (NoteType)
-                {
-                    // 判定あり終点 → 判定なし終点
-                    case DeploymentNoteType.Hold:
-                        if (isDone) { NoteType = DeploymentNoteType.HoldEndUnjudge; }
-                        else { NoteType = DeploymentNoteType.HoldEndUnjudge; }
-                        break;
-                    // 判定なし終点 → 判定あり終点
-                    case DeploymentNoteType.HoldEndUnjudge:
-                        if (isDone) { NoteType = DeploymentNoteType.Hold; }
-                        else { NoteType = DeploymentNoteType.Hold; }
-                        break;
-                }
-            }
-            // 中継点
-            else
-            {
-                switch (NoteType)
-                {
-                    // 可視 → 不可視
-                    case DeploymentNoteType.Hold:
-                        NoteType = DeploymentNoteType.HoldHidden;
-                        break;
-                    // 不可視 → 可視
-                    case DeploymentNoteType.HoldHidden:
-                        NoteType = DeploymentNoteType.Hold;
-                        break;
-                }
-            }
-
+            NoteType = NoteTypeCycle.NextHoldNoteType(NoteType, NoteObject.NextNote.Value == null);
             UpdateNoteType();
         }
         private void UpdateNoteType()

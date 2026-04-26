@@ -69,11 +69,6 @@ namespace ChartEditor
             else if(noteType == DeploymentNoteType.HoldEndUnjudge) { noteMeshRenderer.material.color = holdEndUnjudgeColor; }
         }
 
-        public void OnChangeNoteType()
-        {
-
-        }
-
         private void OnDestroy()
         {
             if (cts != null)

@@ -40,22 +40,9 @@ namespace ChartEditor
 
             NoteType = noteType;
         }
-        public void ChangeNoteType(bool isDone)
+        public void ChangeNoteType()
         {
-            switch (NoteType)
-            {
-                // 通常タッチ → 神タッチ
-                case DeploymentNoteType.Touch:
-                    if (isDone) { NoteType = DeploymentNoteType.DivineTouch; }
-                    else { NoteType = DeploymentNoteType.DivineTouch; }
-                    break;
-                // 判定なし終点 → 判定あり終点
-                case DeploymentNoteType.DivineTouch:
-                    if (isDone) { NoteType = DeploymentNoteType.Touch; }
-                    else { NoteType = DeploymentNoteType.Touch; }
-                    break;
-            }
-
+            NoteType = NoteTypeCycle.NextNoteType(NoteType);
         }
 
         AddressWithinRange address;

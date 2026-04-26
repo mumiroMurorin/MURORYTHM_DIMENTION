@@ -12,7 +12,7 @@ namespace ChartEditor
     }
 
     [System.Serializable]
-    public class NoteData_DynamicLeftward : IDeployableNoteData
+    public class NoteData_DynamicLeftward : IDeployableNoteData, ITypeChangableNoteData, IMirrorTypeChangableNoteData
     {
         public NoteData_DynamicLeftward() { }
 
@@ -21,7 +21,29 @@ namespace ChartEditor
             this.SetAddress(new AddressWithinRange(data.address));
         }
 
-        public DeploymentNoteType NoteType => DeploymentNoteType.DynamicGroundLeftward;
+        ReactiveProperty<DeploymentNoteType> noteType = new ReactiveProperty<DeploymentNoteType>(DeploymentNoteType.DynamicGroundLeftward);
+        public DeploymentNoteType NoteType
+        {
+            get { return noteType.Value; }
+            private set { noteType.Value = value; }
+        }
+        public IReadOnlyReactiveProperty<DeploymentNoteType> NoteTypeRP => noteType;
+        public void SetNoteType(DeploymentNoteType noteType)
+        {
+            if (noteType != DeploymentNoteType.DynamicGroundLeftward &&
+                noteType != DeploymentNoteType.DynamicGroundRightward)
+            {
+                Debug.LogWarning($"yNotezDynamicNote‚Í {noteType} ‚É‘Î‰ž‚µ‚Ä‚¢‚Ü‚¹‚ñ");
+                return;
+            }
+
+            NoteType = noteType;
+        }
+        public void ChangeNoteType()
+        {
+            NoteType = NoteTypeCycle.NextNoteType(NoteType);
+        }
+
 
         AddressWithinRange address;
         public IReadOnlyAddressWithinRange Address => address;

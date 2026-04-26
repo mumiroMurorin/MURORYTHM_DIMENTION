@@ -36,6 +36,7 @@ public class GroundControllerPreview : MonoBehaviour
     public void SetChartData(ChartData chartData)
     {
         this.chartData = chartData;
+        MoveGround(timer.Value.TimeRP.Value);
     }
 
     /// <summary>

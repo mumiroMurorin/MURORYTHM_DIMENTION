@@ -39,17 +39,17 @@ namespace ChartEditor
             if (changableObject.NoteData == null) { return; }
 
             Record(() => { 
-                ChangeNoteType(changableObject, true); 
+                ChangeNoteType(changableObject); 
             }, 
             () => {
-                ChangeNoteType(changableObject, false);
+                ChangeNoteType(changableObject);
             });
         }
 
-        private void ChangeNoteType(IChangableObject changableObject, bool isDone)
+        private void ChangeNoteType(IChangableObject changableObject)
         {
-            changableObject.NoteData.ChangeNoteType(isDone);
-            changableObject.OnChangeNoteType();
+            changableObject.NoteData.ChangeNoteType();
+            //changableObject.OnChangeNoteType();
         }
     }
 
