@@ -19,6 +19,7 @@ namespace ChartEditor
         public NoteData_DynamicRightward(NoteData_DynamicRightward data)
         {
             SetAddress(data.address);
+            SetNoteType(data.NoteType);
         }
 
 

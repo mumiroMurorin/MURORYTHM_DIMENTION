@@ -19,6 +19,7 @@ namespace ChartEditor
         public NoteData_Touch(NoteData_Touch data)
         {
             SetAddress(data.address);
+            SetNoteType(data.NoteType);
         }
 
         // ノートタイプ

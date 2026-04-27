@@ -19,6 +19,7 @@ namespace ChartEditor
         public NoteData_Hold(NoteData_Hold data)
         {
             SetAddress(data.address);
+            SetNoteType(data.NoteType);
         }
 
 

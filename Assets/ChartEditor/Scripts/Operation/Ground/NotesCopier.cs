@@ -10,13 +10,9 @@ namespace ChartEditor
 {
     public class NotesCopier : MonoBehaviour
     {
-        [SerializeField] NoteDeployer noteDeployer;
-        [SerializeField] SpaceDeployer spaceDeployer;
-
         INotesDataGetter notesGetter;
         INotesDataSetter notesSetter;
         IChartEditorDataGetter dataGetter;
-        IChartEditorDataSetter dataSetter;
         Dictionary<IDeployableNoteData, AddressWithinRange> copiedNotes;
 
         EditMode[] ignoreEditModes = new EditMode[] {
@@ -35,7 +31,6 @@ namespace ChartEditor
             this.notesGetter = notesGetter;
             this.notesSetter = notesSetter;
             this.dataGetter = dataGetter;
-            this.dataSetter = dataSetter;
         }
 
         void Update()
@@ -45,76 +40,181 @@ namespace ChartEditor
             if (dataGetter.EditNoteType.Value != EditNoteType.Ground && dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
             if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
 
-            // ノーツのコピー
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C)) { CopyNotes(); }
-            // ノーツの貼り付け
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V)) { PasteNotes(); }
         }
 
-        /// <summary>
-        /// ノーツのコピー
-        /// </summary>
         private void CopyNotes()
         {
-            if(notesGetter.SelectingNotes == null || notesGetter.SelectingNotes.Count == 0) { return; }
+            if (notesGetter.SelectingNotes == null || notesGetter.SelectingNotes.Count == 0) { return; }
 
             copiedNotes = new Dictionary<IDeployableNoteData, AddressWithinRange>();
 
-            foreach(var note in notesGetter.SelectingNotes)
+            foreach (var note in notesGetter.SelectingNotes)
             {
                 copiedNotes.Add(note, new AddressWithinRange(note.Address));
             }
-            Debug.Log("【Notes】ノーツをコピー");
+
+            Debug.Log("【Notes】 Copied notes.");
         }
 
-        /// <summary>
-        /// ノーツの張り付け
-        /// </summary>
         private void PasteNotes()
+        {
+            if (!CanPasteNotes()) { return; }
+
+            var copiedNotesCopy = CreateCopiedNoteInfos();
+            if (copiedNotesCopy.Count == 0) { return; }
+
+            if (!TryCreatePasteContext(copiedNotesCopy, out var pasteContext)) { return; }
+
+            Record(() => {
+                notesSetter.ClearSelectingNotes();
+                PasteCopiedNotes(copiedNotesCopy, pasteContext);
+            },
+            () => {
+                DeleteCopiedNotes(copiedNotesCopy);
+            });
+
+            Debug.Log("【Notes】 Pasted notes.");
+        }
+
+        private bool CanPasteNotes()
         {
             var currentEditMode = dataGetter.CurrentEditMode.Value;
             var groundCollider = dataGetter.GetInteractableCollider<IDeployableCollider>();
             var spaceCollider = dataGetter.GetInteractableCollider<IFreedomDeployableCollider>();
 
-            if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
-            if (copiedNotes == null || copiedNotes.Count == 0) { return; }
-            if (groundCollider == null && spaceCollider == null) { return; }
+            if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return false; }
+            if (copiedNotes == null || copiedNotes.Count == 0) { return false; }
+            if (groundCollider == null && spaceCollider == null) { return false; }
 
-            // コピーされたノーツをコピーしたり
-            var copiedNotesCopy = copiedNotes.ToDictionary(
-                    pair => pair.Key.Copy(),     
-                    pair => pair.Value 
-                );
-            var firstNoteAddress = copiedNotesCopy.Keys.OrderedByAddress().ToList().First()?.Address;
-            var cursorAddress = groundCollider != null ? groundCollider.Address : spaceCollider.Address;
-            var subdivisionDelta = dataGetter.ChartData.Value.GetSubdivisionDelta(cursorAddress, new AddressInChart(firstNoteAddress));
-
-            // ペースト
-            Record(() => {
-                notesSetter.ClearSelectingNotes();    // 全選択解除
-                foreach (var pair in copiedNotesCopy) { PasetNote(pair.Key, pair.Value, subdivisionDelta); }
-            }, 
-            // 削除
-            () => {
-                foreach (var pair in copiedNotesCopy) { DeleteNote(pair.Key); }
-            });
-
-            Debug.Log("【Notes】ノーツを張り付け");
-
+            return true;
         }
 
-        private void PasetNote(IDeployableNoteData data, AddressWithinRange originAddress, int subdivisionDelta)
+        private List<CopiedNoteInfo> CreateCopiedNoteInfos()
         {
-            var address = dataGetter.ChartData.Value.AddressAddition(new AddressInChart(originAddress), subdivisionDelta);
+            return copiedNotes
+                .Select(pair => new CopiedNoteInfo(
+                    CopyNoteData(pair.Key),
+                    pair.Value,
+                    GetOriginalChainIndex(pair.Key)))
+                .ToList();
+        }
+
+        private IDeployableNoteData CopyNoteData(IDeployableNoteData sourceNote)
+        {
+            var copiedNote = sourceNote.Copy();
+
+            // Keep any user-changed note type even if a data class forgets to copy it.
+            if (sourceNote is ITypeChangableNoteData sourceTypeChangable &&
+                copiedNote is ITypeChangableNoteData copiedTypeChangable)
+            {
+                copiedTypeChangable.SetNoteType(sourceTypeChangable.NoteTypeRP.Value);
+            }
+
+            return copiedNote;
+        }
+
+        private int GetOriginalChainIndex(IDeployableNoteData noteData)
+        {
+            return noteData is IChainNoteData chainData ? chainData.ChainIndex.Value : -1;
+        }
+
+        private bool TryCreatePasteContext(List<CopiedNoteInfo> copiedNotesCopy, out PasteContext pasteContext)
+        {
+            pasteContext = default;
+
+            var firstNoteAddress = copiedNotesCopy
+                .Select(x => x.NoteData)
+                .OrderedByAddress()
+                .FirstOrDefault()
+                ?.Address;
+            if (firstNoteAddress == null) { return false; }
+
+            var cursorAddress = GetPasteCursorAddress();
+            if (cursorAddress == null) { return false; }
+
+            pasteContext = new PasteContext(
+                dataGetter.ChartData.Value.GetSubdivisionDelta(cursorAddress, new AddressInChart(firstNoteAddress)),
+                CreateChainIndexMap(copiedNotesCopy));
+
+            return true;
+        }
+
+        private IReadOnlyAddressInChart GetPasteCursorAddress()
+        {
+            var groundCollider = dataGetter.GetInteractableCollider<IDeployableCollider>();
+            if (groundCollider != null) { return groundCollider.Address; }
+
+            var spaceCollider = dataGetter.GetInteractableCollider<IFreedomDeployableCollider>();
+            return spaceCollider?.Address;
+        }
+
+        private Dictionary<int, int> CreateChainIndexMap(List<CopiedNoteInfo> copiedNotesCopy)
+        {
+            Dictionary<int, int> map = new Dictionary<int, int>();
+            HashSet<int> reservedIndexes = new HashSet<int>();
+
+            foreach (var originalChainIndex in copiedNotesCopy
+                         .Select(x => x.OriginalChainIndex)
+                         .Where(index => index >= 0)
+                         .Distinct()
+                         .OrderBy(index => index))
+            {
+                int newChainIndex = GetAvailableChainIndex(reservedIndexes);
+                reservedIndexes.Add(newChainIndex);
+                map[originalChainIndex] = newChainIndex;
+            }
+
+            return map;
+        }
+
+        private int GetAvailableChainIndex(HashSet<int> reservedIndexes)
+        {
+            int index = notesGetter.GetUsableChainNoteIndex();
+
+            while (reservedIndexes.Contains(index) || notesGetter.GetChainNoteList(index) != null)
+            {
+                index++;
+            }
+
+            return index;
+        }
+
+        private void PasteCopiedNotes(List<CopiedNoteInfo> copiedNotesCopy, PasteContext pasteContext)
+        {
+            foreach (var copied in copiedNotesCopy)
+            {
+                PasteSingleNote(copied, pasteContext);
+            }
+        }
+
+        private void PasteSingleNote(CopiedNoteInfo copiedNote, PasteContext pasteContext)
+        {
+            var data = copiedNote.NoteData;
+            var address = dataGetter.ChartData.Value.AddressAddition(new AddressInChart(copiedNote.OriginAddress), pasteContext.SubdivisionDelta);
             data.SetAddress(new AddressWithinRange(address, data.Address.Range.Count));
 
-            // 配置
+            if (data is IChainNoteData chainData &&
+                copiedNote.OriginalChainIndex >= 0 &&
+                pasteContext.ChainIndexMap.TryGetValue(copiedNote.OriginalChainIndex, out int newChainIndex))
+            {
+                chainData.SetChainIndex(newChainIndex);
+            }
+
             dataGetter.ChartData.Value.AddNote(data);
 
-            // 選択する
-            if (notesGetter.GetNoteObject(data).TryGetComponent(out ISelectableNoteObject selectable)) 
+            if (notesGetter.GetNoteObject(data).TryGetComponent(out ISelectableNoteObject selectable))
             {
                 notesSetter.TryAddSelectingNotes(selectable.NoteObject.NoteData);
+            }
+        }
+
+        private void DeleteCopiedNotes(List<CopiedNoteInfo> copiedNotesCopy)
+        {
+            foreach (var copied in copiedNotesCopy)
+            {
+                DeleteNote(copied.NoteData);
             }
         }
 
@@ -122,6 +222,34 @@ namespace ChartEditor
         {
             dataGetter.ChartData.Value.RemoveNote(data);
         }
-    }
 
+        private class CopiedNoteInfo
+        {
+            public CopiedNoteInfo(IDeployableNoteData noteData, AddressWithinRange originAddress, int originalChainIndex)
+            {
+                NoteData = noteData;
+                OriginAddress = originAddress;
+                OriginalChainIndex = originalChainIndex;
+            }
+
+            public IDeployableNoteData NoteData { get; }
+
+            public AddressWithinRange OriginAddress { get; }
+
+            public int OriginalChainIndex { get; }
+        }
+
+        private readonly struct PasteContext
+        {
+            public PasteContext(int subdivisionDelta, Dictionary<int, int> chainIndexMap)
+            {
+                SubdivisionDelta = subdivisionDelta;
+                ChainIndexMap = chainIndexMap;
+            }
+
+            public int SubdivisionDelta { get; }
+
+            public Dictionary<int, int> ChainIndexMap { get; }
+        }
+    }
 }

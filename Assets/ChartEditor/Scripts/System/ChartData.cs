@@ -539,7 +539,7 @@ namespace ChartEditor
         /// <param name="addressA"></param>
         /// <param name="AddressB"></param>
         /// <returns></returns>
-        public int GetSubdivisionDelta(AddressInChart targetAddress, AddressInChart baseAddress)
+        public int GetSubdivisionDelta(IReadOnlyAddressInChart targetAddress, IReadOnlyAddressInChart baseAddress)
         {
             AddressInChart former = new AddressInChart(targetAddress.IsEarlierThan(baseAddress) ? targetAddress : baseAddress);
             AddressInChart latter = new AddressInChart(targetAddress.IsEarlierThan(baseAddress) ? baseAddress : targetAddress);

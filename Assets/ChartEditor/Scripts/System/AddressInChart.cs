@@ -94,7 +94,7 @@ namespace ChartEditor
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        public bool IsSameAddress(AddressInChart address)
+        public bool IsSameAddress(IReadOnlyAddressInChart address)
         {
             return address.BarIndex == this.BarIndex && address.SubDivisionIndex == this.SubDivisionIndex && address.SliderIndex == this.SliderIndex;
         }
@@ -104,15 +104,15 @@ namespace ChartEditor
         /// ˆø”‚Ì‚Ù‚¤‚ª’x‚¯‚ê‚ÎTrue
         /// </summary>
         /// <param name="address"></param>
-        public bool IsEarlierThan(AddressInChart address)
+        public bool IsEarlierThan(IReadOnlyAddressInChart address)
         {
             // ˆá‚¤¬ß”Ô†‚Ìê‡
-            if (this.barIndex.Value < address.barIndex.Value) { return true; }
-            else if (this.barIndex.Value > address.barIndex.Value) { return false; }
+            if (this.barIndex.Value < address.BarIndex) { return true; }
+            else if (this.barIndex.Value > address.BarIndex) { return false; }
 
             // “¯‚¶¬ß”Ô†‚Ìê‡A•ªß”Ô†‚Å”»’f
-            if (this.subDivisionIndex.Value < address.subDivisionIndex.Value) { return true; }
-            else if (this.subDivisionIndex.Value > address.subDivisionIndex.Value) { return false; }
+            if (this.subDivisionIndex.Value < address.SubDivisionIndex) { return true; }
+            else if (this.subDivisionIndex.Value > address.SubDivisionIndex) { return false; }
 
             // ‘S‚­“¯‚¶ê‡false‚ğ•Ô‚·
             return false;
@@ -284,9 +284,9 @@ namespace ChartEditor
         float SliderIndex { get; }
         IReadOnlyReactiveProperty<float> SliderIndexRP { get; }
 
-        bool IsSameAddress(AddressInChart address);
+        bool IsSameAddress(IReadOnlyAddressInChart address);
 
-        bool IsEarlierThan(AddressInChart address);
+        bool IsEarlierThan(IReadOnlyAddressInChart address);
 
         string ToString();
     }

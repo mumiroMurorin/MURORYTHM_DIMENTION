@@ -19,6 +19,7 @@ namespace ChartEditor
         public NoteData_DynamicLeftward(NoteData_DynamicLeftward data)
         {
             this.SetAddress(new AddressWithinRange(data.address));
+            SetNoteType(data.NoteType);
         }
 
         ReactiveProperty<DeploymentNoteType> noteType = new ReactiveProperty<DeploymentNoteType>(DeploymentNoteType.DynamicGroundLeftward);
