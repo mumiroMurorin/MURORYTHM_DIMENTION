@@ -11,11 +11,11 @@ namespace ChartEditor
     [RequireComponent(typeof(NoteObject))]
     public class TouchNoteTypeChangable : MonoBehaviour, IChangableObject
     {
+        [SerializeField] NoteObject noteObject;
         [SerializeField] MeshRenderer noteMeshRenderer;
         [SerializeField] Material normalMaterial;
         [SerializeField] Material divineMaterial;
 
-        NoteObject noteObject;
         ITypeChangableNoteData noteData;
         ITypeChangableNoteData IChangableObject.NoteData => noteData;
 
@@ -23,7 +23,6 @@ namespace ChartEditor
 
         private void Start()
         {
-            noteObject = GetComponent<NoteObject>();
             Bind(cts.Token).Forget();
         }
 

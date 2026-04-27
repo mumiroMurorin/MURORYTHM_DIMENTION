@@ -11,12 +11,13 @@ namespace ChartEditor
     [RequireComponent(typeof(NoteObject))]
     public class SpaceNoteMovable : MonoBehaviour, IFreedomMovableObject
     {
+        [SerializeField] NoteObject noteObject;
+
         [Tooltip("移動時のアウトライン色")]
         [SerializeField] private ColorSetting outlineColorOnMove;
         [Tooltip("移動時浮く高さ")]
         [SerializeField] float addHeightOnMove = 1f;
 
-        NoteObject noteObject;
         NoteObject IFreedomMovableObject.Note => noteObject;
 
         Vector3 addPos;
@@ -24,7 +25,6 @@ namespace ChartEditor
 
         private void Start()
         {
-            noteObject = GetComponent<NoteObject>();
             Bind(cts.Token).Forget();
         }
 

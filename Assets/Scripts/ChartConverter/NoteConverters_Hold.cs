@@ -16,7 +16,7 @@ namespace ChartConvert
     {
         public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
-            if (noteDataInEditor.NoteType != DeploymentNoteType.Hold) { return false; }
+            if (noteDataInEditor.NoteType != DeploymentNoteType.HoldStart) { return false; }
             if (noteDataInEditor is not IChainNoteData thisNote) { return false; }
 
             // 前後ノーツチェック
@@ -57,7 +57,7 @@ namespace ChartConvert
 
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
-                typeChangableData.SetNoteType(DeploymentNoteType.Hold);
+                typeChangableData.SetNoteType(DeploymentNoteType.HoldStart);
                 onAddNoteData(noteData);
             }
 
@@ -99,7 +99,7 @@ namespace ChartConvert
     {
         public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
-            if (noteDataInEditor.NoteType != DeploymentNoteType.Hold) { return false; }
+            if (noteDataInEditor.NoteType != DeploymentNoteType.HoldRelay) { return false; }
             if (noteDataInEditor is not IChainNoteData thisNote) { return false; }
 
             // 前後ノーツチェック
@@ -139,7 +139,7 @@ namespace ChartConvert
 
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
-                typeChangableData.SetNoteType(DeploymentNoteType.Hold);
+                typeChangableData.SetNoteType(DeploymentNoteType.HoldRelay);
                 onAddNoteData(noteData);
             }
 
@@ -181,7 +181,7 @@ namespace ChartConvert
     {
         public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
-            if (noteDataInEditor.NoteType != DeploymentNoteType.HoldHidden) { return false; }
+            if (noteDataInEditor.NoteType != DeploymentNoteType.HoldMeshRelay) { return false; }
             if (noteDataInEditor is not IChainNoteData thisNote) { return false; }
 
             // 前後ノーツチェック
@@ -221,7 +221,7 @@ namespace ChartConvert
 
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
-                typeChangableData.SetNoteType(DeploymentNoteType.HoldHidden);
+                typeChangableData.SetNoteType(DeploymentNoteType.HoldMeshRelay);
                 onAddNoteData(noteData);
             }
 
@@ -254,7 +254,7 @@ namespace ChartConvert
     {
         public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
-            if (noteDataInEditor.NoteType != DeploymentNoteType.Hold) { return false; }
+            if (noteDataInEditor.NoteType != DeploymentNoteType.HoldEnd) { return false; }
             if (noteDataInEditor is not IChainNoteData thisNote) { return false; }
 
             // 前後ノーツチェック
@@ -295,7 +295,7 @@ namespace ChartConvert
 
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
-                typeChangableData.SetNoteType(DeploymentNoteType.Hold);
+                typeChangableData.SetNoteType(DeploymentNoteType.HoldEnd);
                 onAddNoteData(noteData);
             }
 

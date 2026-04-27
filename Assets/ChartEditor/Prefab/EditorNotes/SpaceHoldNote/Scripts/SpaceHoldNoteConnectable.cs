@@ -12,6 +12,8 @@ namespace ChartEditor
     [RequireComponent(typeof(NoteObject))]
     public class SpaceHoldNoteConnectable : MonoBehaviour, IConnectableObject
     {
+        [SerializeField] NoteObject noteObject;
+
         [Header("ノーツマテリアル")]
         [SerializeField] Material startMaterial;
         [SerializeField] Material relayMaterial;
@@ -31,7 +33,6 @@ namespace ChartEditor
         Transform IConnectableObject.MeshLeftEdge => meshLeftEdge;
 
         // ノート本体
-        NoteObject noteObject;
         NoteObject IConnectableObject.Note => noteObject;
 
         // 次ノート
@@ -52,7 +53,6 @@ namespace ChartEditor
 
         private void Start()
         {
-            noteObject = GetComponent<NoteObject>();
             Bind(cts.Token).Forget();
         }
 
@@ -64,11 +64,15 @@ namespace ChartEditor
             // ノートデータが存在するまで待つ
             await UniTask.WaitUntil(() => noteObject.NoteData.Address != null, cancellationToken: token);
 
+            // ノーツの種類変更
+            noteObject.NoteData.NoteTypeRP
+                .Subscribe(ChangeNoteMaterial)
+                .AddTo(this.gameObject);
+
             // 次ノーツが変わった時購読しなおす
             nextNote
                 .Subscribe(next => {
                     DisposeHoldMesh();
-                    ChangeNoteMaterial(backNote.Value, next);
                     if(next != null)
                     {
                         BindForThisNote();
@@ -79,7 +83,7 @@ namespace ChartEditor
 
             backNote
                 .Subscribe(back => {
-                    ChangeNoteMaterial(back, nextNote.Value);
+
                 })
                 .AddTo(this.gameObject);
         }
@@ -151,13 +155,25 @@ namespace ChartEditor
         /// <summary>
         /// マテリアルの変更
         /// </summary>
-        /// <param name="SpaceHoldNoteType"></param>
-        private void ChangeNoteMaterial(IConnectableObject back, IConnectableObject next)
+        /// <param name="holdNoteType"></param>
+        private void ChangeNoteMaterial(DeploymentNoteType noteType)
         {
-            if (back != null && next != null) { noteMeshRenderer.material = relayMaterial; }
-            else if (back != null && next == null) { noteMeshRenderer.material = endMaterial; }
-            else if (back == null && next != null) { noteMeshRenderer.material = startMaterial; }
-            else { noteMeshRenderer.material = relayMaterial; }
+            switch (noteType)
+            {
+                case DeploymentNoteType.SpaceHoldStart:
+                    noteMeshRenderer.material = startMaterial;
+                    break;
+                case DeploymentNoteType.SpaceHoldRelay:
+                case DeploymentNoteType.SpaceHoldMeshRelay:
+                    noteMeshRenderer.material = relayMaterial;
+                    break;
+                case DeploymentNoteType.SpaceHoldEnd:
+                    noteMeshRenderer.material = endMaterial;
+                    break;
+                default:
+                    Debug.Log($"【Note】設定されていないパラメータです: {noteType}");
+                    break;
+            }
         }
 
         private void GenerateMesh(Vector3 nextRight, Vector3 nextLeft)
@@ -183,12 +199,7 @@ namespace ChartEditor
         {
             OnDestroyListner?.Invoke();
 
-            if (cts != null)
-            {
-                cts.Cancel();
-                cts.Dispose();
-                cts = null;
-            }
+            cts?.CancelAndDispose();
         }
     }
 

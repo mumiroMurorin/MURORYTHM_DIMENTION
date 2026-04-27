@@ -9,6 +9,8 @@ namespace ChartEditor
     {
         DeploymentNoteType NoteType { get; }
 
+        IReadOnlyReactiveProperty<DeploymentNoteType> NoteTypeRP { get; }
+
         IReadOnlyAddressWithinRange Address { get; }
 
         void SetAddress(IReadOnlyAddressWithinRange address);

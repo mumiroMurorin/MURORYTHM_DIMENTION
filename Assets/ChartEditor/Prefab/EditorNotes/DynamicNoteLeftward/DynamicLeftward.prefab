@@ -66,7 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978a33c5b8234f84e9b01358ab742fa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteType: 30
+  note: {fileID: 6555863237657410154}
 --- !u!1 &2165418544623308270
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,6 +517,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69510d7ddfd43574fa6add420035ad59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 6555863237657410154}
   outlineColorOnDeploying:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
     isBlinking: 0
@@ -533,6 +534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc92915a8710724bb7fba33fdc3614b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 6555863237657410154}
   outlineColorOnMove:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
     isBlinking: 0
@@ -549,6 +551,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67df3ba5d04963d4a99b15fa0945bd25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 6555863237657410154}
   origin: {fileID: 3719472305083736302}
   outlineColorOnScaling:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
@@ -565,6 +568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e4ecdfbef92314d8aa5f412679e880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 6555863237657410154}
 --- !u!114 &650026286173546183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -577,6 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28ac7821903802c48ba7fea6e453d88e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 6555863237657410154}
   outlineColorOnSelect:
     color: {r: 1, g: 0.49411765, b: 0, a: 0.78431374}
     isBlinking: 1
@@ -592,6 +597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9eda58ced00afe4092c14385e5f7e98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 6555863237657410154}
   noteMeshRenderer: {fileID: 5893660377328454484}
   rightMaterial: {fileID: 2100000, guid: 6b037bca7cbd7794aa249bd58f14a3df, type: 2}
   leftMaterial: {fileID: 2100000, guid: 2f75598ebef9fbf4aae0f3c22fcdfc27, type: 2}

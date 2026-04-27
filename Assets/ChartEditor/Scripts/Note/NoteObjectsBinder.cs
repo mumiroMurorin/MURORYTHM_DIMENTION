@@ -190,6 +190,8 @@ namespace ChartEditor
         /// <param name="note"></param>
         private void OnRemoveNoteData(IDeployableNoteData note)
         {
+            if (note is System.IDisposable disposable) { disposable.Dispose(); }
+
             // オブジェクトの削除
             var noteObject = notesGetter.GetNoteObject(note);
             if (noteObject == null || !noteObject.TryGetComponent(out IDestroyableObject destroyableObject)) { return; }

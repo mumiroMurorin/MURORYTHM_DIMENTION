@@ -5,7 +5,7 @@ using UniRx;
 
 namespace ChartEditor
 {
-    public class ChartEditorOptionHolder : IChartEditorOptionGetter, IChartEditorOptionSetter, INoteSpawnDataOptionGetter, INoteSpawnDataOptionSetter
+    public class ChartEditorOptionHolder : IChartEditorOptionGetter, IChartEditorOptionSetter, INoteSpawnDataOptionGetter, INoteSpawnDataOptionSetter, IVolumeGetter
     {
 
         #region DivNum ÉåÅ[Éìï™äÑêî
@@ -97,11 +97,38 @@ namespace ChartEditor
         public IReadOnlyReactiveProperty<float> OffsetMs => offset;
         public int OffsetDisplay => (int)offset.Value;
 
-        IReadOnlyReactiveProperty<bool> INoteSpawnDataOptionGetter.IsAutoModeRP => throw new System.NotImplementedException();
 
         public void SetOffsetMs(float offset)
         {
             this.offset.Value = Mathf.Clamp(offset, MIN_OFFSET, MAX_OFFSET);
+        }
+
+        #endregion
+
+        #region SEVolume SEâπó 
+
+        // SEä÷åW
+        ReactiveProperty<float> seVolume = new ReactiveProperty<float>(0.8f);
+        public IReadOnlyReactiveProperty<float> SEVolume => seVolume;
+        public void SetSEVolume(float value)
+        {
+            seVolume.Value = Mathf.Clamp01(value);
+        }
+
+        // BGMä÷åW
+        ReactiveProperty<float> bgmVolume = new ReactiveProperty<float>(0.8f);
+        public IReadOnlyReactiveProperty<float> BGMVolume => bgmVolume;
+        public void SetBGMVolume(float value)
+        {
+            bgmVolume.Value = Mathf.Clamp01(value);
+        }
+
+        // JUDGEMENTSEä÷åW
+        ReactiveProperty<float> judgementSeVolume = new ReactiveProperty<float>(0.8f);
+        public IReadOnlyReactiveProperty<float> JudgementSEVolume => judgementSeVolume;
+        public void SetJudgementSEVolume(float value)
+        {
+            judgementSeVolume.Value = Mathf.Clamp01(value);
         }
 
         #endregion
@@ -131,6 +158,8 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<float> ScrollSensitivity { get; }
 
+        IReadOnlyReactiveProperty<float> JudgementSEVolume { get; }
+
         IReadOnlyReactiveProperty<Resolution> Resolution { get; }
     }
 
@@ -142,6 +171,8 @@ namespace ChartEditor
         void SetChartViewScale(float scale);
 
         void SetScrollSensitivity(float sensitivity);
+
+        void SetJudgementSEVolume(float value);
 
         void SetResolution(Resolution resolution);
     }

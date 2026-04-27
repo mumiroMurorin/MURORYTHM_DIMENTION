@@ -66,7 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978a33c5b8234f84e9b01358ab742fa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteType: 11
+  note: {fileID: 148318156737617283}
 --- !u!1 &1850755801682058433
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,6 +314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fb3d2091b338914e8eb57e00364ad74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 148318156737617283}
   outlineColorOnDeploying:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
     isBlinking: 0
@@ -330,6 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 876a1a13e29c86d4997ddcc477699717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 148318156737617283}
   outlineColorOnMove:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
     isBlinking: 0
@@ -346,6 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e4ecdfbef92314d8aa5f412679e880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 148318156737617283}
 --- !u!114 &3876255539538478899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,6 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e738686ce5a21ce4690c536a9aea5cac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 148318156737617283}
   startMaterial: {fileID: 2100000, guid: dcb27cb8fa98b3d4da6eb76ef79935c4, type: 2}
   relayMaterial: {fileID: 2100000, guid: f9f4e11ea34de3148ac37cd442edb66e, type: 2}
   endMaterial: {fileID: 2100000, guid: 6b17cd2b7ec0e9c49801cd84ddc4ff85, type: 2}
@@ -379,11 +383,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22d82023b5fe9c14aa64198f65fe64e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 148318156737617283}
   noteMeshRenderer: {fileID: 5893660377328454484}
   normalColor: {r: 1, g: 0, b: 1, a: 1}
   hiddenColor: {r: 1, g: 0, b: 1, a: 0.39215687}
-  hiddenJudgedColor: {r: 0.6862745, g: 0, b: 1, a: 0.64705884}
-  holdEndUnjudgeColor: {r: 0.6862745, g: 0, b: 1, a: 0.64705884}
 --- !u!114 &710799192814739928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,6 +399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58e53ca4303594b48952f23ae4337479, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 148318156737617283}
   colliderObject: {fileID: 1850755801682058433}
   vertexObjParent: {fileID: 1662506791899631096}
   vertexObject: {fileID: 7779273962934443966, guid: f9e84d1c5a03cf640877d7d917166f9f, type: 3}
@@ -416,6 +420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c185ae88b7daa2648b9ad213ca0923df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 148318156737617283}
 --- !u!114 &1700574378435686613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -428,6 +433,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28ac7821903802c48ba7fea6e453d88e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 148318156737617283}
   outlineColorOnSelect:
     color: {r: 1, g: 0.49411765, b: 0, a: 0.78431374}
     isBlinking: 1

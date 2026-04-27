@@ -33,6 +33,7 @@ namespace ChartEditor
         [SerializeField] ScreenSizeDropDownView screenSizeDropDown_view;
         [SerializeField] SwitchLayerButtonView switchLayerButton_view;
         [SerializeField] NoteSpeedSliderView noteSpeedSlider_view;
+        [SerializeField] SliderView seVolumeSlider_view;
 
         [Header("Models")]
         [SerializeField] ChartDataExporter chartDataExporter_model;
@@ -117,6 +118,11 @@ namespace ChartEditor
             // ノーツスピード
             noteSpawnDataOptionGetter?.NoteSpeed
                 .Subscribe(noteSpeedSlider_view.OnValueChanged)
+                .AddTo(this.gameObject);
+
+            // SE音量
+            optionGetter?.JudgementSEVolume
+                .Subscribe(seVolumeSlider_view.OnValueChanged)
                 .AddTo(this.gameObject);
 
             // 楽曲の変更
@@ -218,6 +224,9 @@ namespace ChartEditor
             // スクロール感度
             scrollSensitivitySlider_view.OnSliderChangedListener += optionSetter.SetScrollSensitivity;
 
+            // SEボリューム
+            seVolumeSlider_view.OnSliderChangedListener += optionSetter.SetJudgementSEVolume;
+
             // エクスポートボタン
             exportButton_view.OnClickedListner += chartDataExporter_model.ExportNewFile;
 
@@ -280,12 +289,7 @@ namespace ChartEditor
 
         private void OnDestroy()
         {
-            if (soundLoadCts != null)
-            {
-                soundLoadCts.Cancel();
-                soundLoadCts.Dispose();
-                soundLoadCts = null;
-            }
+            soundLoadCts?.CancelAndDispose();
         }
     }
 }

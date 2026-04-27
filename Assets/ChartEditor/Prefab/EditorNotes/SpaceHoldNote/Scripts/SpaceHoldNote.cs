@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace ChartEditor
     }
 
     [System.Serializable]
-    public class NoteData_SpaceHold : IChainNoteData, ITypeChangableNoteData, IVerticesControlableNoteData
+    public class NoteData_SpaceHold : IChainNoteData, ITypeChangableNoteData, IVerticesControlableNoteData, IDisposable
     {
         public NoteData_SpaceHold() {  }
 
@@ -34,7 +35,7 @@ namespace ChartEditor
 
 
         // ノートタイプ
-        ReactiveProperty<DeploymentNoteType> noteType = new ReactiveProperty<DeploymentNoteType>(DeploymentNoteType.SpaceHold);
+        ReactiveProperty<DeploymentNoteType> noteType = new ReactiveProperty<DeploymentNoteType>(DeploymentNoteType.SpaceHoldStart);
         public DeploymentNoteType NoteType {
             get { return noteType.Value; }
             private set { noteType.Value = value; }
@@ -42,8 +43,7 @@ namespace ChartEditor
         public IReadOnlyReactiveProperty<DeploymentNoteType> NoteTypeRP => noteType;
         public void SetNoteType(DeploymentNoteType noteType)
         {
-            if (noteType != DeploymentNoteType.SpaceHold &&
-                noteType != DeploymentNoteType.SpaceHoldHidden)
+            if (!IsSpaceHoldNoteType(noteType))
             {
                 Debug.LogWarning($"【Note】SpaceHoldNoteは {noteType} に対応していません");
                 return;
@@ -53,19 +53,51 @@ namespace ChartEditor
         }
         public void ChangeNoteType()
         {
-            // 始点終点は必ず判定あり
-            if (NoteObject.NextNote.Value == null || NoteObject.BackNote.Value == null) { return; }
-
             NoteType = NoteTypeCycle.NextNoteType(NoteType);
             UpdateNoteType();
         }
         private void UpdateNoteType()
         {
-            // 始点ノーツが変なことになってたら元に戻す
-            if (NoteObject.BackNote.Value == null)
+            if (NoteObject == null) { return; }
+
+            bool hasBackNote = NoteObject.BackNote.Value != null;
+            bool hasNextNote = NoteObject.NextNote.Value != null;
+
+            // 始点
+            if (!hasBackNote && hasNextNote)
             {
-                NoteType = DeploymentNoteType.SpaceHold;
+                SetDefaultIfInvalid(DeploymentNoteType.SpaceHoldStart, DeploymentNoteType.SpaceHoldStart);
+                return;
             }
+
+            // 中継点
+            if (hasBackNote && hasNextNote)
+            {
+                SetDefaultIfInvalid(DeploymentNoteType.SpaceHoldRelay, DeploymentNoteType.SpaceHoldRelay, DeploymentNoteType.SpaceHoldMeshRelay);
+                return;
+            }
+
+            // 終点
+            if (hasBackNote && !hasNextNote)
+            {
+                SetDefaultIfInvalid(DeploymentNoteType.SpaceHoldEnd, DeploymentNoteType.SpaceHoldEnd);
+                return;
+            }
+
+            SetDefaultIfInvalid(DeploymentNoteType.SpaceHoldStart, DeploymentNoteType.SpaceHoldStart);
+        }
+        private void SetDefaultIfInvalid(DeploymentNoteType defaultType, params DeploymentNoteType[] validTypes)
+        {
+            if (validTypes.Contains(NoteType)) { return; }
+
+            NoteType = defaultType;
+        }
+        private bool IsSpaceHoldNoteType(DeploymentNoteType noteType)
+        {
+            return noteType == DeploymentNoteType.SpaceHoldStart ||
+                   noteType == DeploymentNoteType.SpaceHoldRelay ||
+                   noteType == DeploymentNoteType.SpaceHoldMeshRelay ||
+                   noteType == DeploymentNoteType.SpaceHoldEnd;
         }
 
         // 頂点
@@ -85,9 +117,26 @@ namespace ChartEditor
 
 
         public IConnectableObject NoteObject { get; private set; }
+        IDisposable noteConnectionDisposable;
         public void SetNoteObject(IConnectableObject noteObject)
         {
+            noteConnectionDisposable?.Dispose();
+
             NoteObject = noteObject;
+            if (NoteObject == null) { return; }
+
+            noteConnectionDisposable = Observable.Merge(
+                    NoteObject.BackNote.Skip(1).AsUnitObservable(),
+                    NoteObject.NextNote.Skip(1).AsUnitObservable()
+                )
+                .ThrottleFrame(1)
+                .Subscribe(_ => UpdateNoteType());
+        }
+
+        public void Dispose()
+        {
+            noteConnectionDisposable?.Dispose();
+            noteConnectionDisposable = null;
         }
 
 

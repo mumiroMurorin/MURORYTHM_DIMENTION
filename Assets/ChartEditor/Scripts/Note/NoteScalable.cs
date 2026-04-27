@@ -11,19 +11,18 @@ namespace ChartEditor
     [RequireComponent(typeof(NoteObject))]
     public class NoteScalable : MonoBehaviour, IScalableObject
     {
+        [SerializeField] NoteObject noteObject;
         [Tooltip("配置時の元となる GameObject")]
         [SerializeField] GameObject origin;
         [Tooltip("選択時のアウトライン色")]
         [SerializeField] private ColorSetting outlineColorOnScaling;
 
-        NoteObject noteObject;
         CancellationTokenSource cts = new CancellationTokenSource();
 
         public NoteObject Note => noteObject;
 
         private void Start()
         {
-            noteObject = GetComponent<NoteObject>();
             Bind(cts.Token).Forget();
         }
 

@@ -390,12 +390,17 @@ namespace ChartEditor
         DynamicGroundRightward = 120,
         DynamicGroundLeftward = 130,
 
-        Hold = 510,
-        HoldHidden = 520,
-        HoldEndUnjudge = 530,
+        HoldStart = 510,
+        HoldRelay = 520,
+        HoldMeshRelay = 530,
+        HoldEnd = 540,
+        HoldEndUnjudge = 550,
 
-        SpaceHold = 800,
-        SpaceHoldHidden = 810,
+        SpaceHoldStart = 800,
+        SpaceHoldRelay = 810,
+        SpaceHoldMeshRelay = 820,
+        SpaceHoldEnd = 830,
+
         SpaceBreak = 900,
     }
 }

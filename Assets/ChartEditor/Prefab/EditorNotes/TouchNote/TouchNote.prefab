@@ -66,7 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978a33c5b8234f84e9b01358ab742fa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteType: 1
+  note: {fileID: 1727658991382057172}
 --- !u!1 &2150781262789464597
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,6 +397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69510d7ddfd43574fa6add420035ad59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 1727658991382057172}
   outlineColorOnDeploying:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
     isBlinking: 1
@@ -413,6 +414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc92915a8710724bb7fba33fdc3614b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 1727658991382057172}
   outlineColorOnMove:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
     isBlinking: 1
@@ -429,6 +431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67df3ba5d04963d4a99b15fa0945bd25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 1727658991382057172}
   origin: {fileID: 2150781262789464597}
   outlineColorOnScaling:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
@@ -445,6 +448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c88539d00265d14e9fe522aace94e47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 1727658991382057172}
   noteMeshRenderer: {fileID: 5893660377328454484}
   normalMaterial: {fileID: 2100000, guid: 84794a0467fabb04dad8cba7fc6dee00, type: 2}
   divineMaterial: {fileID: 2100000, guid: 21d004c48c3ad564da4a34105666a7c9, type: 2}
@@ -460,6 +464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28ac7821903802c48ba7fea6e453d88e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 1727658991382057172}
   outlineColorOnSelect:
     color: {r: 1, g: 0.49411765, b: 0, a: 0.78431374}
     isBlinking: 1
@@ -475,6 +480,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e4ecdfbef92314d8aa5f412679e880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 1727658991382057172}
 --- !u!1 &7846833803484370955
 GameObject:
   m_ObjectHideFlags: 0

@@ -66,7 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978a33c5b8234f84e9b01358ab742fa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteType: 11
+  note: {fileID: 3734698064947245665}
 --- !u!1 &2150781262789464597
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,6 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69510d7ddfd43574fa6add420035ad59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 3734698064947245665}
   outlineColorOnDeploying:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
     isBlinking: 0
@@ -446,6 +447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc92915a8710724bb7fba33fdc3614b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 3734698064947245665}
   outlineColorOnMove:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
     isBlinking: 0
@@ -462,6 +464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67df3ba5d04963d4a99b15fa0945bd25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 3734698064947245665}
   origin: {fileID: 2150781262789464597}
   outlineColorOnScaling:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
@@ -478,6 +481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e4ecdfbef92314d8aa5f412679e880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 3734698064947245665}
 --- !u!114 &6910124117480768948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -490,6 +494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ceff4e0cb5448a4e8cb0117733715a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 3734698064947245665}
   startMaterial: {fileID: 2100000, guid: a4b151adacf42b44bb604f1487afe6ee, type: 2}
   relayMaterial: {fileID: 2100000, guid: ba085195bd480c04ca970305e72fe911, type: 2}
   endMaterial: {fileID: 2100000, guid: 2f53ffd128c8f7345aa1fdb26cfe1037, type: 2}
@@ -513,6 +518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c8d11f443a05a4b9ddc26f3d8e6260, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 3734698064947245665}
   noteMeshRenderer: {fileID: 5893660377328454484}
   normalColor: {r: 0, g: 0.3137255, b: 1, a: 1}
   hiddenColor: {r: 0, g: 0.3137255, b: 1, a: 0.39215687}
@@ -529,6 +535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28ac7821903802c48ba7fea6e453d88e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 3734698064947245665}
   outlineColorOnSelect:
     color: {r: 1, g: 0.49411765, b: 0, a: 0.78431374}
     isBlinking: 1

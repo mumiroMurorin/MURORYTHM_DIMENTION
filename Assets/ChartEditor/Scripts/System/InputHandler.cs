@@ -27,6 +27,7 @@ namespace ChartEditor
         IChartEditorOptionSetter optionSetter;
         IChartEditorDataGetter dataGetter;
         IChartEditorOptionGetter optionGetter;
+        VerticesChainNavigator verticesChainNavigator;
 
         EditMode[] scaleIgnoreModes = new EditMode[]
         {
@@ -43,13 +44,19 @@ namespace ChartEditor
         };
 
         [Inject]
-        public void Construct(IChartEditorDataSetter dataSetter, IChartEditorDataGetter dataGetter, IChartEditorOptionSetter optionSetter, IChartEditorOptionGetter optionGetter)
+        public void Construct(
+            IChartEditorDataSetter dataSetter,
+            IChartEditorDataGetter dataGetter,
+            IChartEditorOptionSetter optionSetter,
+            IChartEditorOptionGetter optionGetter,
+            VerticesChainNavigator verticesChainNavigator)
         {
             this.dataSetter = dataSetter;
             this.dataGetter = dataGetter;
 
             this.optionSetter = optionSetter;
             this.optionGetter = optionGetter;
+            this.verticesChainNavigator = verticesChainNavigator;
         }
 
         private void Update()
@@ -68,6 +75,9 @@ namespace ChartEditor
             if (Input.GetKey(KeyCode.LeftControl) && !Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Z)) { Undo(); }
             // Redo
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Z)) { Redo(); }
+            // Move editing vertices along the connected SpaceHold chain
+            if (Input.GetKeyDown(KeyCode.UpArrow)) { verticesChainNavigator?.MoveToNext(); }
+            if (Input.GetKeyDown(KeyCode.DownArrow)) { verticesChainNavigator?.MoveToPrevious(); }
             // ショートカットキー
             CheckAndDoShortCutKey();
         }

@@ -11,11 +11,11 @@ namespace ChartEditor
     [RequireComponent(typeof(NoteObject))]
     public class SpaceHoldNoteTypeChangable : MonoBehaviour, IChangableObject
     {
+        [SerializeField] NoteObject noteObject;
         [SerializeField] MeshRenderer noteMeshRenderer;
         [SerializeField] Color normalColor = Color.white;
         [SerializeField] Color hiddenColor = new Color(1, 1, 1, 0.25f); 
 
-        NoteObject noteObject;
         ITypeChangableNoteData noteData;
         ITypeChangableNoteData IChangableObject.NoteData => noteData;
 
@@ -23,7 +23,6 @@ namespace ChartEditor
 
         private void Start()
         {
-            noteObject = GetComponent<NoteObject>();
             Bind(cts.Token).Forget();
         }
 
@@ -62,8 +61,8 @@ namespace ChartEditor
 
         private void ChangeNoteColor(DeploymentNoteType noteType)
         {
-            if (noteType == DeploymentNoteType.SpaceHold) { noteMeshRenderer.material.color = normalColor; }
-            else if (noteType == DeploymentNoteType.SpaceHoldHidden) { noteMeshRenderer.material.color = hiddenColor; }
+            if (noteType == DeploymentNoteType.SpaceHoldStart || noteType == DeploymentNoteType.SpaceHoldRelay || noteType == DeploymentNoteType.SpaceHoldEnd) { noteMeshRenderer.material.color = normalColor; }
+            else if (noteType == DeploymentNoteType.SpaceHoldMeshRelay) { noteMeshRenderer.material.color = hiddenColor; }
         }
 
         private void OnDestroy()

@@ -10,7 +10,7 @@ namespace ChartEditor
     [RequireComponent(typeof(NoteObject))]
     public class SpaceHoldEditableObject : MonoBehaviour, ISpaceEditableObject
     {
-        NoteObject noteObject;
+        [SerializeField] NoteObject noteObject;
         IVerticesControlableNoteData noteData;
         IVerticesControlableNoteData ISpaceEditableObject.NoteData => noteData;
 
@@ -18,7 +18,6 @@ namespace ChartEditor
 
         private void Start()
         {
-            noteObject = GetComponent<NoteObject>();
             Load(cts.Token).Forget();
         }
 

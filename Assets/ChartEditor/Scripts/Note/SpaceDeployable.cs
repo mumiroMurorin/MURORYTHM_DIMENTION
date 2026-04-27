@@ -8,11 +8,12 @@ namespace ChartEditor
     [RequireComponent(typeof(NoteObject))]
     public class SpaceDeployable : MonoBehaviour, IDeployableObject
     {
+        [SerializeField] NoteObject noteObject;
+
         [Tooltip("配置時のアウトライン色")]
         [SerializeField] private ColorSetting outlineColorOnDeploying;
         [SerializeField] private Renderer noteRenderer;
 
-        NoteObject noteObject;
         public NoteObject Note => noteObject;
         public Action OnDestroyListner { get; set; }
 

@@ -432,6 +432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f39a02b47647c6c4a99691adbbaa36fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vertexObject: {fileID: 5066945367664730491}
   outlineColorOnMove:
     color: {r: 0, g: 1, b: 0.9015646, a: 0.78431374}
     isBlinking: 0
@@ -448,6 +449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35acd4b84ff8ea946b700a552f103215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vertex: {fileID: 5066945367664730491}
 --- !u!114 &5017586433794651079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -460,6 +462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d11c2a1878b177d4fbc4a5cc0ea670b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vertexObject: {fileID: 5066945367664730491}
   outlineColorOnSelect:
     color: {r: 1, g: 0.49412054, b: 0, a: 0.78431374}
     isBlinking: 1

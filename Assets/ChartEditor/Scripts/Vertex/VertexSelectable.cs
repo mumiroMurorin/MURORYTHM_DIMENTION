@@ -7,17 +7,11 @@ namespace ChartEditor
     [RequireComponent(typeof(VertexObject))]
     public class VertexSelectable : MonoBehaviour, ISelectableVertexObject
     {
+        [SerializeField] VertexObject vertexObject;
         [Tooltip("選択時のアウトライン色")]
         [SerializeField] private ColorSetting outlineColorOnSelect;
 
-        VertexObject vertexObject;
-
         public VertexObject VertexObject => vertexObject;
-
-        private void Start()
-        {
-            vertexObject = GetComponent<VertexObject>();
-        }
 
         void ISelectableVertexObject.OnDeselect()
         {

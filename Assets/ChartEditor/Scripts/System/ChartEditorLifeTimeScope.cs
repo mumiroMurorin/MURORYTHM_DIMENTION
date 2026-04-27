@@ -18,12 +18,15 @@ namespace ChartEditor
                 .As<INoteSpawnDataOptionGetter>()
                 .As<INoteSpawnDataOptionSetter>()
                 .As<IChartEditorOptionGetter>()
-                .As<IChartEditorOptionSetter>();
+                .As<IChartEditorOptionSetter>()
+                .As<IVolumeGetter>();
 
             builder.Register<NotesDataHolder>(Lifetime.Singleton)
                 .AsSelf()
                 .As<INotesDataGetter>()
                 .As<INotesDataSetter>();
+
+            builder.Register<VerticesChainNavigator>(Lifetime.Singleton);
         }
     }
 }

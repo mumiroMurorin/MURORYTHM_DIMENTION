@@ -45,7 +45,7 @@ namespace ChartConvert
 
         public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
-            if (noteDataInEditor.NoteType != DeploymentNoteType.SpaceHold) { return false; }
+            if (noteDataInEditor.NoteType != DeploymentNoteType.SpaceHoldStart) { return false; }
             if (noteDataInEditor is not IChainNoteData chainData) { return false; }
             if (noteDataInEditor is not IVerticesControlableNoteData verticesData) { return false; }
 
@@ -80,6 +80,7 @@ namespace ChartConvert
             {
                 IDeployableNoteData noteData = new ChartEditor.NoteData_SpaceHold();
                 if (noteData is not IChainNoteData chainData) { return false; }
+                if (noteData is not ITypeChangableNoteData typeChangableData) { return false; }
                 if (noteData is not IVerticesControlableNoteData verticesData) { return false; }
 
                 // データのセット
@@ -87,6 +88,7 @@ namespace ChartConvert
 
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
+                typeChangableData.SetNoteType(DeploymentNoteType.SpaceHoldStart);
                 verticesData.SpaceHoldVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
                 onAddNoteData(noteData);
             }
@@ -131,7 +133,7 @@ namespace ChartConvert
 
         public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
-            if (noteDataInEditor.NoteType != DeploymentNoteType.SpaceHold) { return false; }
+            if (noteDataInEditor.NoteType != DeploymentNoteType.SpaceHoldRelay) { return false; }
             if (noteDataInEditor is not IChainNoteData chainData) { return false; }
             if (noteDataInEditor is not IVerticesControlableNoteData verticesData) { return false; }
 
@@ -165,6 +167,7 @@ namespace ChartConvert
             {
                 IDeployableNoteData noteData = new ChartEditor.NoteData_SpaceHold();
                 if (noteData is not IChainNoteData chainData) { return false; }
+                if (noteData is not ITypeChangableNoteData typeChangableData) { return false; }
                 if (noteData is not IVerticesControlableNoteData verticesData) { return false; }
 
                 // データのセット
@@ -172,6 +175,7 @@ namespace ChartConvert
 
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
+                typeChangableData.SetNoteType(DeploymentNoteType.SpaceHoldRelay);
                 verticesData.SpaceHoldVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
                 onAddNoteData(noteData);
             }
@@ -208,7 +212,7 @@ namespace ChartConvert
 
         public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
-            if (noteDataInEditor.NoteType != DeploymentNoteType.SpaceHoldHidden) { return false; }
+            if (noteDataInEditor.NoteType != DeploymentNoteType.SpaceHoldMeshRelay) { return false; }
             if (noteDataInEditor is not IChainNoteData chainData) { return false; }
             if (noteDataInEditor is not IVerticesControlableNoteData verticesData) { return false; }
 
@@ -248,7 +252,7 @@ namespace ChartConvert
                 // データのセット
                 var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
 
-                typeChangableData.SetNoteType(DeploymentNoteType.SpaceHoldHidden);
+                typeChangableData.SetNoteType(DeploymentNoteType.SpaceHoldMeshRelay);
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
                 verticesData.SpaceHoldVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
@@ -299,7 +303,7 @@ namespace ChartConvert
 
         public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
-            if (noteDataInEditor.NoteType != DeploymentNoteType.SpaceHold) { return false; }
+            if (noteDataInEditor.NoteType != DeploymentNoteType.SpaceHoldEnd) { return false; }
             if (noteDataInEditor is not IChainNoteData chainData) { return false; }
             if (noteDataInEditor is not IVerticesControlableNoteData verticesData) { return false; }
             
@@ -334,6 +338,7 @@ namespace ChartConvert
             {
                 IDeployableNoteData noteData = new ChartEditor.NoteData_SpaceHold();
                 if (noteData is not IChainNoteData chainData) { return false; }
+                if (noteData is not ITypeChangableNoteData typeChangableData) { return false; }
                 if (noteData is not IVerticesControlableNoteData verticesData) { return false; }
 
                 // データのセット
@@ -341,6 +346,7 @@ namespace ChartConvert
 
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
+                typeChangableData.SetNoteType(DeploymentNoteType.SpaceHoldEnd);
                 verticesData.SpaceHoldVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
                 onAddNoteData(noteData);
             }

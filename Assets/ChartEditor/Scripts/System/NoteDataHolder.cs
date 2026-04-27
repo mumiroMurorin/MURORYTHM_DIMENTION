@@ -71,6 +71,8 @@ namespace ChartEditor
         {
             foreach (var pair in dataToNoteObject)
             {
+                if (pair.Data is System.IDisposable disposable) { disposable.Dispose(); }
+                pair.OnDestroyDisposables?.Dispose();
                 pair.Object?.Destroy();
             }
 

@@ -8,19 +8,14 @@ namespace ChartEditor
     [RequireComponent(typeof(NoteObject))]
     public class NoteDeployable : MonoBehaviour, IDeployableObject
     {
+        [SerializeField] NoteObject noteObject;
         [Tooltip("配置時のアウトライン色")]
         [SerializeField] private ColorSetting outlineColorOnDeploying;
         [SerializeField] private Renderer noteRenderer;
 
-        NoteObject noteObject;
         public NoteObject Note { get { return noteObject; } private set { noteObject = value; } }
 
         public Action OnDestroyListner { get; set; }
-
-        private void Awake()
-        {
-            noteObject = GetComponent<NoteObject>();
-        }
 
         void IDeployableObject.OnInstantiate(IDeployableNoteData noteData, Func<IReadOnlyAddressWithinRange, Transform> getParentTransformFunc)
         {

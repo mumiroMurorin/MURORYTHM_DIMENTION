@@ -66,7 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978a33c5b8234f84e9b01358ab742fa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteType: 30
+  note: {fileID: 293581154099132339}
 --- !u!1 &3511318229296851223
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,6 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69510d7ddfd43574fa6add420035ad59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 293581154099132339}
   outlineColorOnDeploying:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
     isBlinking: 0
@@ -397,6 +398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc92915a8710724bb7fba33fdc3614b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 293581154099132339}
   outlineColorOnMove:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
     isBlinking: 0
@@ -413,6 +415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67df3ba5d04963d4a99b15fa0945bd25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 293581154099132339}
   origin: {fileID: 3719472305083736302}
   outlineColorOnScaling:
     color: {r: 0, g: 1, b: 0.9019608, a: 0.78431374}
@@ -429,6 +432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e4ecdfbef92314d8aa5f412679e880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 293581154099132339}
 --- !u!114 &4744609545541269163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -441,6 +445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28ac7821903802c48ba7fea6e453d88e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteObject: {fileID: 293581154099132339}
   outlineColorOnSelect:
     color: {r: 1, g: 0.49411765, b: 0, a: 0.78431374}
     isBlinking: 1

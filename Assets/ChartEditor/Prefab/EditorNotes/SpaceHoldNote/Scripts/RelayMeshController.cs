@@ -12,6 +12,7 @@ namespace ChartEditor
     [RequireComponent(typeof(NoteObject))]
     public class RelayMeshController : MonoBehaviour
     {
+        [SerializeField] NoteObject noteObject;
         [SerializeField] GameObject colliderObject;
         [SerializeField] Transform vertexObjParent;
         [SerializeField] GameObject vertexObject;
@@ -22,7 +23,6 @@ namespace ChartEditor
         [SerializeField] float upperLimit;
         [SerializeField] float lowerLimit;
 
-        NoteObject noteObject;
         IVerticesControlableNoteData verticesData;
         MeshFilter centerMeshFilter;
         List<DataToVertexObject> dataToObj = new List<DataToVertexObject>();
@@ -30,7 +30,6 @@ namespace ChartEditor
 
         private void Start()
         {
-            noteObject = GetComponent<NoteObject>();
             Initialize();
             Bind(cts.Token).Forget();
         }

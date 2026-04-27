@@ -21,7 +21,15 @@ namespace ChartEditor
            SetAddress(data.address);
         }
 
-        public DeploymentNoteType NoteType => DeploymentNoteType.DynamicGroundUpward;
+
+        ReactiveProperty<DeploymentNoteType> noteType = new ReactiveProperty<DeploymentNoteType>(DeploymentNoteType.DynamicGroundUpward);
+        public DeploymentNoteType NoteType
+        {
+            get { return noteType.Value; }
+            private set { noteType.Value = value; }
+        }
+        public IReadOnlyReactiveProperty<DeploymentNoteType> NoteTypeRP => noteType;
+
 
         AddressWithinRange address;
         public IReadOnlyAddressWithinRange Address => address;

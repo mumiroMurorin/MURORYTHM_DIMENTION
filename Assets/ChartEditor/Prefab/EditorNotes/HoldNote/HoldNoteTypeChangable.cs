@@ -11,13 +11,12 @@ namespace ChartEditor
     [RequireComponent(typeof(NoteObject))]
     public class HoldNoteTypeChangable : MonoBehaviour, IChangableObject
     {
+        [SerializeField] NoteObject noteObject;
         [SerializeField] MeshRenderer noteMeshRenderer;
         [SerializeField] Color normalColor = Color.white;
         [SerializeField] Color hiddenColor = new Color(1, 1, 1, 0.25f); 
-        //[SerializeField] Color hiddenJudgedColor = new Color(1, 0.5f, 0.5f, 0.25f); 
         [SerializeField] Color holdEndUnjudgeColor = new Color(1, 0.5f, 0.5f, 0.25f); 
 
-        NoteObject noteObject;
         ITypeChangableNoteData noteData;
         ITypeChangableNoteData IChangableObject.NoteData => noteData;
 
@@ -25,7 +24,6 @@ namespace ChartEditor
 
         private void Start()
         {
-            noteObject = GetComponent<NoteObject>();
             Bind(cts.Token).Forget();
         }
 
@@ -64,8 +62,8 @@ namespace ChartEditor
 
         private void ChangeNoteColor(DeploymentNoteType noteType)
         {
-            if (noteType == DeploymentNoteType.Hold) { noteMeshRenderer.material.color = normalColor; }
-            else if (noteType == DeploymentNoteType.HoldHidden) { noteMeshRenderer.material.color = hiddenColor; }
+            if (noteType == DeploymentNoteType.HoldStart || noteType == DeploymentNoteType.HoldRelay || noteType == DeploymentNoteType.HoldEnd) { noteMeshRenderer.material.color = normalColor; }
+            else if (noteType == DeploymentNoteType.HoldMeshRelay) { noteMeshRenderer.material.color = hiddenColor; }
             else if(noteType == DeploymentNoteType.HoldEndUnjudge) { noteMeshRenderer.material.color = holdEndUnjudgeColor; }
         }
 

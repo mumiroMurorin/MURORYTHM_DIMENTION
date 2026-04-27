@@ -7,17 +7,11 @@ namespace ChartEditor
     [RequireComponent(typeof(NoteObject))]
     public class NoteSelectable : MonoBehaviour, ISelectableNoteObject
     {
+        [SerializeField] NoteObject noteObject;
         [Tooltip("選択時のアウトライン色")]
         [SerializeField] private ColorSetting outlineColorOnSelect;
 
-        NoteObject noteObject;
-
         public NoteObject NoteObject => noteObject;
-
-        private void Awake()
-        {
-            noteObject = GetComponent<NoteObject>();
-        }
 
         void ISelectableNoteObject.OnDeselect()
         {

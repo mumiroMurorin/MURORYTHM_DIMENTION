@@ -11,12 +11,12 @@ namespace ChartEditor
     [RequireComponent(typeof(VertexObject))]
     public class VertexMovable : MonoBehaviour, IPointMovableObject
     {
+        [SerializeField] VertexObject vertexObject;
         [Tooltip("移動時のアウトライン色")]
         [SerializeField] ColorSetting outlineColorOnMove;
         [Tooltip("移動時浮く高さ")]
         [SerializeField] float addHeightOnMove = 1f;
 
-        VertexObject vertexObject;
         VertexObject IPointMovableObject.Vertex => vertexObject;
 
         Vector3 addPos;
@@ -24,7 +24,6 @@ namespace ChartEditor
 
         private void Start()
         {
-            vertexObject = GetComponent<VertexObject>();
             Bind(cts.Token).Forget();
         }
 

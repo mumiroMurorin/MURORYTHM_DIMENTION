@@ -7,13 +7,8 @@ namespace ChartEditor
     [RequireComponent(typeof(VertexObject))]
     public class VertexDestroyable : MonoBehaviour, IDestroyableVertex
     {
-        VertexObject vertex;
+        [SerializeField] VertexObject vertex;
         public VertexObject Vertex => vertex;
-
-        private void Start()
-        {
-            vertex = GetComponent<VertexObject>();
-        }
 
         void IDestroyableVertex.OnDestroy()
         {
