@@ -51,6 +51,6 @@ namespace ChartEditor
 
     public interface IVerticesControlableNoteData
     {
-        SpaceHoldVertices SpaceHoldVertices { get; }
+        SpaceVertices SpaceVertices { get; }
     }
 }

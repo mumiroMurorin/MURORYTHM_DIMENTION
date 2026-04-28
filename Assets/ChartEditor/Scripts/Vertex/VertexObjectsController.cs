@@ -71,7 +71,7 @@ namespace ChartEditor
                 .Subscribe(note =>
                 {
                     ResetVerticesPreview();
-                    BindForVerticesData(note?.SpaceHoldVertices);
+                    BindForVerticesData(note?.SpaceVertices);
                 })
                 .AddTo(this.gameObject);
 
@@ -81,7 +81,7 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
         }
 
-        private void BindForVerticesData(SpaceHoldVertices vertices)
+        private void BindForVerticesData(SpaceVertices vertices)
         {
             if(vertices == null) { return; }
 

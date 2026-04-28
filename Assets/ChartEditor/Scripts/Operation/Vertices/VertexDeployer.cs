@@ -71,7 +71,7 @@ namespace ChartEditor
             // データ上の追加
             VertexData vertexData = new VertexData(verticesController.WorldPosToNormalizedPos(worldPos));
 
-            var vertices = notesGetter.EditingVertices.Value.SpaceHoldVertices;
+            var vertices = notesGetter.EditingVertices.Value.SpaceVertices;
             // RedoUndoに対応
             Record(() =>
             // 配置
@@ -88,7 +88,7 @@ namespace ChartEditor
         /// 引数の頂点データを配置する
         /// </summary>
         /// <param name="data"></param>
-        public void DeployVertex(SpaceHoldVertices vertices, VertexData data)
+        public void DeployVertex(SpaceVertices vertices, VertexData data)
         {
             vertices.AddVertex(data);
         }

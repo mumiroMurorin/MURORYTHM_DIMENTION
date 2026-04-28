@@ -36,6 +36,8 @@ namespace ChartConvert
                 new DynamicDownwardConverter(),
                 new DynamicRightwardConverter(),
                 new DynamicLeftwardConverter(),
+
+                new SpaceBreakConverter(),
             };
 
             holdConverters = new List<IChainNoteConvertable>

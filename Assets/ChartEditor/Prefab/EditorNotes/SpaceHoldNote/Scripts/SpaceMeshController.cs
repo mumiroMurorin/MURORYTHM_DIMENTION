@@ -10,7 +10,7 @@ using MeshGenerate;
 namespace ChartEditor
 {
     [RequireComponent(typeof(NoteObject))]
-    public class RelayMeshController : MonoBehaviour
+    public class SpaceMeshController : MonoBehaviour
     {
         [SerializeField] NoteObject noteObject;
         [SerializeField] GameObject colliderObject;
@@ -44,25 +44,25 @@ namespace ChartEditor
             verticesData = (IVerticesControlableNoteData)noteObject.NoteData;
 
             // ObserveCountChanged()は初期化してくれないので、最初に購読
-            for (int i = 0; i < verticesData.SpaceHoldVertices.Vertices.Count; i++)
+            for (int i = 0; i < verticesData.SpaceVertices.Vertices.Count; i++)
             {
-                var vertex = verticesData.SpaceHoldVertices.Vertices[i];
+                var vertex = verticesData.SpaceVertices.Vertices[i];
                 OnAddVertex(vertex, i);
             }
 
             // 辺の変更通知に対してスケール更新
             // 追加されたとき
-            verticesData.SpaceHoldVertices.Vertices.ObserveAdd()
+            verticesData.SpaceVertices.Vertices.ObserveAdd()
                 .Subscribe(vertex => OnAddVertex(vertex.Value, vertex.Index))
                 .AddTo(this.gameObject);
 
             // 削除されたとき
-            verticesData.SpaceHoldVertices.Vertices.ObserveRemove()
+            verticesData.SpaceVertices.Vertices.ObserveRemove()
                 .Subscribe(vertex => OnRemoveVertex(vertex.Value))
                 .AddTo(this.gameObject);
 
             // クリアされたとき
-            verticesData.SpaceHoldVertices.Vertices.ObserveReset()
+            verticesData.SpaceVertices.Vertices.ObserveReset()
                 .Subscribe(_ => OnClearVertex())
                 .AddTo(this.gameObject);
         }

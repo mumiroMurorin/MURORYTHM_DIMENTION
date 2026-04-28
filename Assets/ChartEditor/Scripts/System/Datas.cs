@@ -10,7 +10,7 @@ namespace ChartEditor
     /// <summary>
     /// スペースホールドの頂点リスト
     /// </summary>
-    public class SpaceHoldVertices
+    public class SpaceVertices
     {
         Vector2[] defaultPositions = new Vector2[]
         {
@@ -24,7 +24,7 @@ namespace ChartEditor
         ReactiveCollection<VertexData> vertices = new ReactiveCollection<VertexData>();
         public IReadOnlyReactiveCollection<VertexData> Vertices => vertices;
 
-        public SpaceHoldVertices()
+        public SpaceVertices()
         {
             SetVertices(defaultPositions);
         }

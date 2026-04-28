@@ -46,7 +46,7 @@ namespace ChartEditor
 
         private void DestroyVertices()
         {
-            var currentEditVertices = notesGetter.EditingVertices.Value.SpaceHoldVertices;
+            var currentEditVertices = notesGetter.EditingVertices.Value.SpaceVertices;
 
             // 削除後に3頂点未満になる場合は削除しない
             if (currentEditVertices.Vertices.Count - vertexSelector.SelectingVertices.Count < 3)
@@ -79,7 +79,7 @@ namespace ChartEditor
         /// <summary>
         /// 指定した頂点データをオブジェクトごと削除する
         /// </summary>
-        public void DestroyVertex(SpaceHoldVertices vertices, VertexData data)
+        public void DestroyVertex(SpaceVertices vertices, VertexData data)
         {
             // データの削除
             vertices.RemoveVertex(data);

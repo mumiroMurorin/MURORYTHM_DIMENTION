@@ -46,7 +46,7 @@ namespace ChartEditor
             EditMode currentEditMode = dataGetter.CurrentEditMode.Value;
             if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
 
-            copiedVertices = notesGetter.EditingVertices.Value.SpaceHoldVertices.Vertices.Select(v => new VertexData(v)).ToList();
+            copiedVertices = notesGetter.EditingVertices.Value.SpaceVertices.Vertices.Select(v => new VertexData(v)).ToList();
             Debug.Log("【Vertices】頂点リストをコピー");
         }
 
@@ -60,9 +60,9 @@ namespace ChartEditor
             if (copiedVertices == null) { return; }
 
             // 現在編集中の頂点データを全て消して新たに代入する
-            var currentEdit = notesGetter.EditingVertices.Value.SpaceHoldVertices;
+            var currentEdit = notesGetter.EditingVertices.Value.SpaceVertices;
             var copiedVerticesCopy = copiedVertices.Select(v => new VertexData(v)).ToList();
-            var originVertices = notesGetter.EditingVertices.Value.SpaceHoldVertices.Vertices.Select(v => new VertexData(v)).ToList();
+            var originVertices = notesGetter.EditingVertices.Value.SpaceVertices.Vertices.Select(v => new VertexData(v)).ToList();
 
             Record(() =>
             // 張り付け

@@ -21,7 +21,7 @@ namespace ChartEditor
         {
             SetAddress(data.address);
             SetNoteType(data.NoteType);
-            SpaceHoldVertices.SetVertices(data.SpaceHoldVertices.Vertices.Select(x => new VertexData(x)).ToList());
+            SpaceVertices.SetVertices(data.SpaceVertices.Vertices.Select(x => new VertexData(x)).ToList());
         }
 
 
@@ -101,7 +101,7 @@ namespace ChartEditor
         }
 
         // 頂点
-        public SpaceHoldVertices SpaceHoldVertices { get; private set; } = new SpaceHoldVertices();
+        public SpaceVertices SpaceVertices { get; private set; } = new SpaceVertices();
 
         // アドレス
         AddressWithinRange address;

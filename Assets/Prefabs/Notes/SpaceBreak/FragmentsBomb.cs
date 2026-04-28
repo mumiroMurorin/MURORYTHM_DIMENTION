@@ -7,6 +7,7 @@ using System.Threading;
 public class FragmentsBomb : MonoBehaviour
 {
     [Header("”š”­ŠÖŒW")]
+    [SerializeField] float startSize = 0.75f;
     [SerializeField] float minForce;
     [SerializeField] float maxForce;
     [SerializeField] Vector3 center;
@@ -33,6 +34,7 @@ public class FragmentsBomb : MonoBehaviour
                 rb = child.gameObject.AddComponent<Rigidbody>();
             }
 
+            child.localScale = Vector3.one * startSize;
             childrenRb.Add(rb);
         }
 

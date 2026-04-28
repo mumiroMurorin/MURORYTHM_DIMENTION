@@ -64,7 +64,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_SpaceHoldStart data = new NoteDataOrigin_SpaceHoldStart()
             {
-                Vertices = verticesData.SpaceHoldVertices.GetVertexArray(),
+                Vertices = verticesData.SpaceVertices.GetVertexArray(),
                 HoldNumber = chainData.ChainIndex.Value
             };
 
@@ -89,7 +89,7 @@ namespace ChartConvert
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
                 typeChangableData.SetNoteType(DeploymentNoteType.SpaceHoldStart);
-                verticesData.SpaceHoldVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
+                verticesData.SpaceVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
                 onAddNoteData(noteData);
             }
 
@@ -151,7 +151,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_SpaceHoldRelay data = new NoteDataOrigin_SpaceHoldRelay()
             {
-                Vertices = verticesData.SpaceHoldVertices.GetVertexArray(),
+                Vertices = verticesData.SpaceVertices.GetVertexArray(),
                 HoldNumber = chainData.ChainIndex.Value
             };
 
@@ -176,7 +176,7 @@ namespace ChartConvert
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
                 typeChangableData.SetNoteType(DeploymentNoteType.SpaceHoldRelay);
-                verticesData.SpaceHoldVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
+                verticesData.SpaceVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
                 onAddNoteData(noteData);
             }
 
@@ -230,7 +230,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_SpaceHoldMeshRelay data = new NoteDataOrigin_SpaceHoldMeshRelay()
             {
-                Vertices = verticesData.SpaceHoldVertices.GetVertexArray(),
+                Vertices = verticesData.SpaceVertices.GetVertexArray(),
                 HoldNumber = chainData.ChainIndex.Value
             };
 
@@ -255,7 +255,7 @@ namespace ChartConvert
                 typeChangableData.SetNoteType(DeploymentNoteType.SpaceHoldMeshRelay);
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
-                verticesData.SpaceHoldVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
+                verticesData.SpaceVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
                 onAddNoteData(noteData);
             }
 
@@ -322,7 +322,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             NoteDataOrigin_SpaceHoldEnd data = new NoteDataOrigin_SpaceHoldEnd()
             {
-                Vertices = verticesData.SpaceHoldVertices.GetVertexArray(),
+                Vertices = verticesData.SpaceVertices.GetVertexArray(),
                 HoldNumber = chainData.ChainIndex.Value
             };
 
@@ -347,7 +347,7 @@ namespace ChartConvert
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
                 noteData.SetAddress(address);
                 typeChangableData.SetNoteType(DeploymentNoteType.SpaceHoldEnd);
-                verticesData.SpaceHoldVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
+                verticesData.SpaceVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
                 onAddNoteData(noteData);
             }
 
@@ -717,7 +717,7 @@ namespace ChartConvert
             // 追加するデータのインスタンス化
             var data = new NoteDataOrigin_SpaceBreak()
             {
-                Vertices = verticesData.SpaceHoldVertices.GetVertexArray(),
+                Vertices = verticesData.SpaceVertices.GetVertexArray(),
             };
 
             dataOrigin.SpaceBreakData.Add(data);
@@ -726,7 +726,20 @@ namespace ChartConvert
 
         public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ISubDivisionDataGetter dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
         {
-            // ※未実装
+            if (dataOrigin.SpaceBreakData == null) { return true; }
+
+            foreach (var noteDataOrigin in dataOrigin.SpaceBreakData)
+            {
+                IDeployableNoteData noteData = new ChartEditor.NoteData_SpaceBreak();
+                if (noteData is not IVerticesControlableNoteData verticesData) { return false; }
+
+                var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
+
+                noteData.SetAddress(address);
+                verticesData.SpaceVertices.SetVertices(noteDataOrigin.Vertices.Select(x => x.ToVector2()).ToArray());
+                onAddNoteData(noteData);
+            }
+
             return true;
         }
 

@@ -24,7 +24,7 @@ namespace ChartEditor
             if (dataGetter == null) { return; }
             if (notesGetter.EditingVertices.Value == null) { return; }
 
-            var vertices = notesGetter.EditingVertices.Value.SpaceHoldVertices;
+            var vertices = notesGetter.EditingVertices.Value.SpaceVertices;
 
             Record(() =>
             // ”½“]
@@ -42,7 +42,7 @@ namespace ChartEditor
             if (dataGetter == null) { return; }
             if (notesGetter.EditingVertices.Value == null) { return; }
 
-            var vertices = notesGetter.EditingVertices.Value.SpaceHoldVertices;
+            var vertices = notesGetter.EditingVertices.Value.SpaceVertices;
 
             Record(() =>
             // ”½“]
