@@ -11,6 +11,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     readonly float RADIUS = 10f;
 
     [SerializeField] GameObject noteObjectOriginPrefab;
+    [SerializeField] GameObject noteMeshPrefab;
 
     [Header("meshÇÃï™äÑêî")]
     [SerializeField] int meshDivisionNum = 10;
@@ -89,9 +90,9 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     /// </summary>
     private GameObject GenerateMeshObject(NoteData_SpaceHoldMesh noteData, bool isMeshReverse, INotePositionCalculator positionCalculator)
     {
-        GameObject obj = new GameObject("Mesh");
-        MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
-        MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
+        var obj = Instantiate(noteMeshPrefab);
+        if (!obj.TryGetComponent(out MeshFilter meshFilter)) { meshFilter = obj.AddComponent<MeshFilter>(); }
+        if (!obj.TryGetComponent(out MeshRenderer meshRenderer)) { meshRenderer = obj.AddComponent<MeshRenderer>(); }
 
         // ïúå≥
         List<TimeToVertices> timeToVertices = new List<TimeToVertices>();
@@ -103,7 +104,9 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         Mesh mesh = SpaceHoldMeshGenerator.GenerateSpaceHoldEdgeMesh(timeToVertices, positionCalculator, optionHolder.NoteSpeed.Value, meshDivisionNum, maxTriangleLength, isMeshReverse);
         meshFilter.mesh = mesh;
 
-        obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
+        if (!obj.TryGetComponent(out Deformable d)) { obj.AddComponent<Deformable>().AddDeformer(groundDeformer); }
+        else { d.AddDeformer(groundDeformer); }
+
         return obj;
     }
 

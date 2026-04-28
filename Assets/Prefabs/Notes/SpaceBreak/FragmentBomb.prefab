@@ -44,9 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 548ca7513233f6141bd0023cbdf51c83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minForce: 20
-  maxForce: 40
+  minForce: 30
+  maxForce: 75
   center: {x: 0, y: 0, z: 0}
   radius: 15
-  upwards: 2
-  lifeTime: 0.2
+  upwards: 4
+  extraGravityMultiplier: 50
+  applyExtraGravity: 1
+  lifeTime: 0.15

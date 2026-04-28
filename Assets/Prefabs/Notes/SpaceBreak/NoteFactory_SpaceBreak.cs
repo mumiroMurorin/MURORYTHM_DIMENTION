@@ -20,6 +20,10 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     [SerializeField] int fragmentAmount = 20;
     [Header("メインメッシュのマテリアル")]
     [SerializeField] Material mainMaterial;
+    [Header("輪郭線のマテリアル")]
+    [SerializeField] Material edgeMaterial;
+    [Header("輪郭線の太さ")]
+    [SerializeField] float edgeWidth = 0.05f;
 
     INoteSpawnDataOptionGetter optionHolder;
     ISpaceInputGetter spaceInputGetter;
@@ -100,7 +104,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
         var mesh = MeshGenerator.GenerateMeshWithDepth(points, noteDepth);
         meshFilter.mesh = mesh;
 
-        if(mesh != null)
+        if (mesh != null)
         {
             meshRenderer.material = mainMaterial;
 
@@ -113,7 +117,47 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
 
         GenerateFlagments(obj, noteData);
 
+        if (mesh != null)
+        {
+            var edgeObj = GenerateEdgeObject(points);
+            edgeObj.transform.SetParent(obj.transform, false);
+        }
+
         return obj;
+    }
+
+    /// <summary>
+    /// 前面・背面の輪郭線を生成
+    /// </summary>
+    private GameObject GenerateEdgeObject(List<Vector2> points)
+    {
+        var edgeParent = new GameObject("SpaceBreakEdge");
+
+        float halfDepth = noteDepth * 0.5f;
+        int baseRenderQueue = mainMaterial != null ? mainMaterial.renderQueue : 3002;
+
+        var backPoints = points.Select(p => new Vector3(p.x, p.y, halfDepth)).ToList();
+        var frontPoints = points.Select(p => new Vector3(p.x, p.y, -halfDepth)).ToList();
+
+        CreateLineObject("SpaceBreakEdge_Back", backPoints, edgeParent.transform);
+        CreateLineObject("SpaceBreakEdge_Front", frontPoints, edgeParent.transform);
+
+        return edgeParent;
+    }
+
+    private void CreateLineObject(string name, List<Vector3> points, Transform parent)
+    {
+        var obj = new GameObject(name);
+        obj.transform.SetParent(parent, false);
+
+        if (!obj.TryGetComponent(out MeshFilter meshFilter)) { meshFilter = obj.AddComponent<MeshFilter>(); }
+        if (!obj.TryGetComponent(out MeshRenderer meshRenderer)) { meshRenderer = obj.AddComponent<MeshRenderer>(); }
+
+        meshFilter.mesh = MeshGenerator.GenerateLineMesh(points, edgeWidth, true);
+        meshRenderer.material = edgeMaterial;
+
+        if (!obj.TryGetComponent(out Deformable d)) { obj.AddComponent<Deformable>().AddDeformer(groundDeformer); }
+        else { d.AddDeformer(groundDeformer); }
     }
 
     private void GenerateFlagments(GameObject meshObj, NoteData_SpaceBreak noteData)
@@ -122,7 +166,9 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
 
         // 色々設定
         rf.meshDemolition.am = fragmentAmount;  // フラグメント数
-        rf.meshDemolition.prp.col = RFColliderType.None;    // コライダーを消す
+        rf.physics.ct = RFColliderType.None;    // 元メッシュのコライダーを消す
+        rf.meshDemolition.cld = false;          // 子の輪郭線メッシュを破片化対象から外す
+        rf.meshDemolition.prp.col = RFColliderType.None;    // 破片のコライダーを消す
         rf.reset.destroyDelay = float.MaxValue;    // 自動でプールされるのを防ぐ 
         //rf.simulationType = SimType.Inactive;
         //rf.demolitionType = DemolitionType.AwakePrefragment;    

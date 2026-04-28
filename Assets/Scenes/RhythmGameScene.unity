@@ -298,7 +298,7 @@ MonoBehaviour:
     composer_name: "\u524A\u9664"
     music_spr: {fileID: 21300000, guid: 1512ba05fa48cde48858c7f68c23594f, type: 3}
     theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
-    clip: {fileID: 8300000, guid: 14fca47ec4675dc4ba7afc1dc4bc724e, type: 3}
+    clip: {fileID: 8300000, guid: 015896b2af4a8a04a95905417f694d54, type: 3}
     sample_clip: {fileID: 8300000, guid: 0d1068dc9a46ed641b6c5e4506563fbc, type: 3}
     symphonyType: 10
     stageType: 102
@@ -309,7 +309,7 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: MusicData/Destr0yer/chart_master.json
+  chartFilePath: MusicData/sample/onlySpaceBreak.json
   noteSpeed: 200
   isAutoMode: 0
   isFastLateEnabled: 1
@@ -2707,14 +2707,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: LoadingBody
       objectReference: {fileID: 0}
-    - target: {fileID: 5344308489783075046, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7003494081260383716, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4065,18 +4057,6 @@ PrefabInstance:
     - target: {fileID: 1582906479324217421, guid: a74f5192244238243a3b051e9e5b70e2, type: 3}
       propertyPath: m_Name
       value: Ready
-      objectReference: {fileID: 0}
-    - target: {fileID: 2826138234672101974, guid: a74f5192244238243a3b051e9e5b70e2, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5601094991250338147, guid: a74f5192244238243a3b051e9e5b70e2, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6182579293432456172, guid: a74f5192244238243a3b051e9e5b70e2, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 150
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

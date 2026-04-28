@@ -8,6 +8,7 @@ using Deform;
 public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
 {
     [SerializeField] GameObject noteObjectOriginPrefab;
+    [SerializeField] GameObject noteMeshPrefab;
 
     [Header("meshÇÃ1ÉåÅ[Éìì‡ÇÃï™äÑêî")]
     [SerializeField] int meshHorizontalDivisionNum = 10;
@@ -86,15 +87,18 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
     /// </summary>
     private GameObject GenerateMeshObject(NoteData_HoldMesh noteData, INotePositionCalculator positionCalculator)
     {
-        GameObject obj = new GameObject("Mesh");
-        MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
-        MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
+        var obj = Instantiate(noteMeshPrefab);
+        if (!obj.TryGetComponent(out MeshFilter meshFilter)) { meshFilter = obj.AddComponent<MeshFilter>(); }
+        if (!obj.TryGetComponent(out MeshRenderer meshRenderer)) { meshRenderer = obj.AddComponent<MeshRenderer>(); }
+
         Mesh mesh = GroundHoldMeshGenerator.GenerateGroundHoldMesh(noteData.TimeToRanges, positionCalculator, optionHolder.NoteSpeed.Value, meshHorizontalDivisionNum, maxTriangleLength);
 
         meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         meshFilter.mesh = mesh;
 
-        obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
+        if (!obj.TryGetComponent(out Deformable d)) { obj.AddComponent<Deformable>().AddDeformer(groundDeformer); }
+        else { d.AddDeformer(groundDeformer); }
+
         return obj;
     }
 

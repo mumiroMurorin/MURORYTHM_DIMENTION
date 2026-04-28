@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SpaceBreakNote_main
-  m_Shader: {fileID: 4800000, guid: ed36960288244ea43866066dfb2f37e7, type: 3}
+  m_Shader: {fileID: 4800000, guid: 114427b728b2994439dca02c0bc8b2c0, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -45,7 +45,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: c6604c29e8283484ba7e5c37cddb1a2a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -69,9 +69,9 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _MaxZ: 1
+    - _MaxZ: 187
     - _Metallic: 0
-    - _MinZ: 0
+    - _MinZ: -20
     - _Mode: 2
     - _OcclusionStrength: 1
     - _Parallax: 0.02
@@ -82,7 +82,7 @@ Material:
     - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 0, g: 0.93386817, b: 1, a: 0.49019608}
+    - _Color: {r: 0.972549, g: 0.18285547, b: 0.16078427, a: 0.5019608}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SecondaryColor: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []

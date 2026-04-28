@@ -50,3 +50,5 @@ MonoBehaviour:
   noteDepth: 1
   fragmentAmount: 25
   mainMaterial: {fileID: 2100000, guid: 5e1ac61d7a7378b48903ef9390d8d112, type: 2}
+  edgeMaterial: {fileID: 2100000, guid: 3df8e6f3a4f1ae242b54c9f0f0e9401e, type: 2}
+  edgeWidth: 0.35

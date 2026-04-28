@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4212254938933315147}
   - component: {fileID: 3121784222154283204}
   m_Layer: 0
-  m_Name: HoldSpaceMeshNoteOrigin
+  m_Name: SpaceHoldMeshNoteOrigin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
