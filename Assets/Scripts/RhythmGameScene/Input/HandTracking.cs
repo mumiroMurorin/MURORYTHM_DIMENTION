@@ -30,6 +30,8 @@ namespace Mediapipe.Unity.Tutorial
         [SerializeField] private int _height;
         [Header("FPS(確認用)")]
         [SerializeField] private int _fps;
+        [Header("処理間隔(1なら毎フレーム)")]
+        [SerializeField, Min(1)] private int _processFrameInterval = 2;
 
         ReactiveProperty<int> fps = new ReactiveProperty<int>();
         public IReadOnlyReactiveProperty<int> CameraFps => fps;
@@ -200,6 +202,12 @@ namespace Mediapipe.Unity.Tutorial
 
             while (true)
             {
+                if (_processFrameInterval > 1 && Time.frameCount % _processFrameInterval != 0)
+                {
+                    await UniTask.WaitForEndOfFrame(token);
+                    continue;
+                }
+
                 _inputTexture.SetPixels32(_webCamTexture.Value.GetPixels32(_pixelData));
                 using var imageFrame = new ImageFrame(ImageFormat.Types.Format.Srgba, _width, _height, _width * 4, _inputTexture.GetRawTextureData<byte>());
                 var currentTimestamp = stopwatch.ElapsedTicks / (System.TimeSpan.TicksPerMillisecond / 1000);
@@ -213,8 +221,8 @@ namespace Mediapipe.Unity.Tutorial
                 // FPSの更新
                 float end = Time.realtimeSinceStartup;
                 float deltaTime = end - start;
-                _fps = (int)(1f / deltaTime);
-                fps.Value = _fps;
+                _fps = deltaTime > 0 ? (int)(1f / deltaTime) : 0;
+                if (fps.Value != _fps) { fps.Value = _fps; }
 
                 if (handLandmarksStream.TryGetNext(out var LandMarks))
                 {

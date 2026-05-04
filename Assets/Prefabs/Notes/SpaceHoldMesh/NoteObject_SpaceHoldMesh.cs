@@ -14,14 +14,16 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
     [SerializeField] float judgementMarginTime = 0.1f;
     [SerializeField] float firstMarginTime = 0.1f;
     [Header("meshのマテリアル(未判定時)")]
-    [SerializeField] Material meshMaterialDefault;
+    [SerializeField] Material meshMaterialDefaultInside;
+    [SerializeField] Material meshMaterialDefaultOutside;
     [Header("meshのマテリアル(ホールド時)")]
-    [SerializeField] Material meshMaterialHolding;
+    [SerializeField] Material meshMaterialHoldingInside;
+    [SerializeField] Material meshMaterialHoldingOutside;
     [Header("meshのマテリアル(非ホールド時)")]
-    [SerializeField] Material meshMaterialUnholding;
+    [SerializeField] Material meshMaterialUnholdingInside;
+    [SerializeField] Material meshMaterialUnholdingOutside;
 
     NoteData_SpaceHoldMesh noteData;
-    List<MeshRenderer> meshRenderers;
 
     Vector2[] judgeRange;
     float holdingMarginCount;
@@ -36,15 +38,7 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
         holdingMarginCount = firstMarginTime;
 
         // マテリアルの設定
-        meshRenderers = new List<MeshRenderer>();
-        foreach (Transform child in this.gameObject.transform)
-        {
-            if (child.TryGetComponent(out MeshRenderer meshRenderer))
-            {
-                meshRenderers.Add(meshRenderer);
-                meshRenderer.material = meshMaterialDefault;
-            }
-        }
+        data.MeshRendererAsset.SetMaterial(meshMaterialDefaultInside, meshMaterialDefaultOutside);
     }
 
     /// <summary>
@@ -102,9 +96,13 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
     /// <param name="isTouching"></param>
     public void SetHoldStatus(bool isHolding)
     {
-        foreach (MeshRenderer meshRenderer in meshRenderers)
+        if (isHolding)
         {
-            meshRenderer.material = isHolding ? meshMaterialHolding : meshMaterialUnholding;
+            noteData.MeshRendererAsset.SetMaterial(meshMaterialHoldingInside, meshMaterialHoldingOutside);
+        }
+        else
+        {
+            noteData.MeshRendererAsset.SetMaterial(meshMaterialUnholdingInside, meshMaterialUnholdingOutside);
         }
     }
 }
@@ -120,6 +118,8 @@ public class NoteData_SpaceHoldMesh : INoteData
 
     public List<TimeToVertices> TimeToVertices { get; set; }
 
+    public HoldMeshRendererAsset MeshRendererAsset { get; set; }
+
     public ITimeGetter Timer { get; set; }
 
     public ISpaceInputGetter SpaceInput { get; set; }
@@ -127,3 +127,21 @@ public class NoteData_SpaceHoldMesh : INoteData
     public INoteSpawnDataOptionGetter OptionGetter { get; set; }
 }
 
+public class HoldMeshRendererAsset
+{
+    public HoldMeshRendererAsset(MeshRenderer inside, MeshRenderer outside)
+    {
+        InsideRenderer = inside;
+        OutsideRenderer = outside;
+    }
+
+    public MeshRenderer InsideRenderer { get; set; }
+
+    public MeshRenderer OutsideRenderer { get; set; }
+
+    public void SetMaterial(Material inside, Material outside)
+    {
+        InsideRenderer.material = inside;
+        OutsideRenderer.material = outside;
+    }
+}

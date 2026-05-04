@@ -47,8 +47,8 @@ MonoBehaviour:
   noteObjectOriginPrefab: {fileID: 8224908405846241423, guid: a92461db52e0dc54085858fd36b96c4a, type: 3}
   noteMeshPrefab: {fileID: 2776397303821155744, guid: d36ccc5adaa64c44a8f3b8dc451a606a, type: 3}
   frangmentParentPrefab: {fileID: 8802166155806146273, guid: 52ad3084545c75346a7b4c6aee994849, type: 3}
-  noteDepth: 2
-  fragmentAmount: 30
+  noteDepth: 5
+  fragmentAmount: 20
   mainMaterial: {fileID: 2100000, guid: 5e1ac61d7a7378b48903ef9390d8d112, type: 2}
   edgeMaterial: {fileID: 2100000, guid: 3df8e6f3a4f1ae242b54c9f0f0e9401e, type: 2}
   edgeWidth: 0.35

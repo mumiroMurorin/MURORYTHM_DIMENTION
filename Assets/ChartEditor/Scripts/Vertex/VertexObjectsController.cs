@@ -25,10 +25,20 @@ namespace ChartEditor
         [SerializeField] Color startColor;
         [SerializeField] Color endColor;
 
-        public Action OnAddVertexListner { get; set; }
-        public Action OnChangePositionListner { get; set; }
-        public Action OnRemoveVertexListner { get; set; }
-        public Action OnClearVertexListner { get; set; }
+        ReactiveProperty<DeploymentNoteType> editingNoteType = new();
+        public IObservable<DeploymentNoteType> EditingNoteType => editingNoteType;
+
+        Subject<Unit> onAddVertex = new();
+        public IObservable<Unit> OnAddVertexListener => onAddVertex;
+
+        Subject<Unit> onChangePosition = new();
+        public IObservable<Unit> OnChangePositionListener => onChangePosition;
+
+        Subject<Unit> onRemoveVertex = new();
+        public IObservable<Unit> OnRemoveVertexListener => onRemoveVertex;
+
+        Subject<Unit> onClearVertex = new();
+        public IObservable<Unit> OnClearVertexListener => onClearVertex;
 
         IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter dataSetter;
@@ -72,6 +82,12 @@ namespace ChartEditor
                 {
                     ResetVerticesPreview();
                     BindForVerticesData(note?.SpaceVertices);
+
+                    if (note is IDeployableNoteData deployable)
+                    {
+                        var noteType = deployable.NoteType;
+                        editingNoteType.Value = noteType;
+                    }
                 })
                 .AddTo(this.gameObject);
 
@@ -127,11 +143,11 @@ namespace ChartEditor
             vertexObj.gameObject.transform.localPosition = Vector3.zero;
             vertexObj.Initialize(
                 vertex,
-                () => { OnChangePositionListner?.Invoke(); },
+                () => { onChangePosition?.OnNext(Unit.Default); },
                 ConvertPositionOnChartGround
                 );
 
-            OnAddVertexListner?.Invoke();
+            onAddVertex?.OnNext(Unit.Default);
             UpdateVertexColor();
         }
 
@@ -145,14 +161,14 @@ namespace ChartEditor
             // オブジェクトの削除
             if (obj != null && obj.gameObject.TryGetComponent(out IDestroyableVertex destroyable)) { destroyable.OnDestroy(); }
 
-            OnRemoveVertexListner?.Invoke();
+            onRemoveVertex?.OnNext(Unit.Default);
             UpdateVertexColor();
         }
 
         private void OnClearVertex()
         {
             notesSetter.ClearDataToVertexObjectList();
-            OnClearVertexListner?.Invoke();
+            onRemoveVertex?.OnNext(Unit.Default);
         }
 
         /// <summary>

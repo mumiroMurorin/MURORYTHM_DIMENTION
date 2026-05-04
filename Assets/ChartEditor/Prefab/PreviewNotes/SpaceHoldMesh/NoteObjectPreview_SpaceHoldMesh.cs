@@ -9,7 +9,8 @@ using UniRx;
 public class NoteObjectPreview_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
 {
     [Header("meshのマテリアル")]
-    [SerializeField] Material meshMaterialDefault;
+    [SerializeField] Material meshMaterialInside;
+    [SerializeField] Material meshMaterialOutside;
 
     NoteData_SpaceHoldMesh noteData;
 
@@ -22,13 +23,7 @@ public class NoteObjectPreview_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh
         noteData = data;
 
         // マテリアルの設定
-        foreach (Transform child in this.gameObject.transform)
-        {
-            if (child.TryGetComponent(out MeshRenderer meshRenderer))
-            {
-                meshRenderer.material = meshMaterialDefault;
-            }
-        }
+        noteData.MeshRendererAsset.SetMaterial(meshMaterialInside, meshMaterialOutside);
     }
 
     public override void SetActive(bool isVisible) { }

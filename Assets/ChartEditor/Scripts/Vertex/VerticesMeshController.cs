@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MeshGenerate;
 using VContainer;
+using UniRx;
 
 namespace ChartEditor
 {
@@ -10,9 +11,12 @@ namespace ChartEditor
     {
         [SerializeField] VertexObjectsController verticesController;
         [SerializeField] Transform meshParent;
-        [SerializeField] Material centerMeshMaterial;
+
+        [SerializeField] Material spaceHoldMeshMaterial;
+        [SerializeField] Material spaceBreakMeshMaterial;
 
         MeshFilter centerMeshFilter;
+        MeshRenderer centerMeshRenderer;
 
         INotesDataSetter notesSetter;
         INotesDataGetter notesGetter;
@@ -27,15 +31,16 @@ namespace ChartEditor
         private void Start()
         {
             GenerateCenterMeshParent();
-            SetEvent();
+            Bind();
         }
 
-        private void SetEvent()
+        private void Bind()
         {
-            verticesController.OnAddVertexListner += UpdateMesh;
-            verticesController.OnRemoveVertexListner += UpdateMesh;
-            verticesController.OnClearVertexListner += UpdateMesh;
-            verticesController.OnChangePositionListner += UpdateMesh;
+            verticesController?.OnAddVertexListener.Subscribe(_ => UpdateMesh()).AddTo(this.gameObject);
+            verticesController?.OnRemoveVertexListener.Subscribe(_ => UpdateMesh()).AddTo(this.gameObject);
+            verticesController?.OnClearVertexListener.Subscribe(_ => UpdateMesh()).AddTo(this.gameObject);
+            verticesController?.OnChangePositionListener.Subscribe(_ => UpdateMesh()).AddTo(this.gameObject);
+            verticesController?.EditingNoteType.Subscribe(ChangeMaterial).AddTo(this.gameObject);
         }
 
         /// <summary>
@@ -63,13 +68,30 @@ namespace ChartEditor
         private void GenerateCenterMeshParent()
         {
             GameObject obj = new GameObject("CenterMesh");
-            MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
+            centerMeshRenderer = obj.AddComponent<MeshRenderer>();
             centerMeshFilter = obj.AddComponent<MeshFilter>();
-
-            meshRenderer.material = centerMeshMaterial;
 
             obj.transform.SetParent(meshParent);
             obj.transform.localPosition = Vector3.zero;
+        }
+
+        /// <summary>
+        /// メッシュのマテリアル変更
+        /// </summary>
+        /// <param name="type"></param>
+        private void ChangeMaterial(DeploymentNoteType type)
+        {
+            if (type == DeploymentNoteType.SpaceHoldStart ||
+                type == DeploymentNoteType.SpaceHoldRelay ||
+                type == DeploymentNoteType.SpaceHoldMeshRelay ||
+                type == DeploymentNoteType.SpaceHoldEnd)
+            {
+                centerMeshRenderer.material = spaceHoldMeshMaterial;
+            }
+            else if (type == DeploymentNoteType.SpaceBreak)
+            {
+                centerMeshRenderer.material = spaceBreakMeshMaterial;
+            }
         }
     }
 

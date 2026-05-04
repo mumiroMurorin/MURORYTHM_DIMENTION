@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SpaceBreakNote_main
-  m_Shader: {fileID: 4800000, guid: 114427b728b2994439dca02c0bc8b2c0, type: 3}
+  m_Shader: {fileID: 4800000, guid: c496eecc3d7a8b14a87f36d991e06d21, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -69,12 +69,17 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
+    - _GradientRadius: 0.5
     - _MaxZ: 187
     - _Metallic: 0
     - _MinZ: -20
     - _Mode: 2
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _RippleFrequency: 2.5
+    - _RippleSpeed: 2.5
+    - _RippleStrength: 0.3
+    - _RippleWidth: 0.4
     - _SeparationHeight: -10
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -82,7 +87,11 @@ Material:
     - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
+    - _CenterColor: {r: 0.8990258, g: 1, b: 0.85534585, a: 0}
     - _Color: {r: 0.972549, g: 0.18285547, b: 0.16078427, a: 0.5019608}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _OuterColor: {r: 0.20392156, g: 1, b: 0.57262605, a: 0.7058824}
+    - _RippleColor: {r: 1, g: 1, b: 1, a: 0}
     - _SecondaryColor: {r: 1, g: 1, b: 1, a: 0}
+    - _UVCenter: {r: 0.5, g: 0.5, b: 0, a: 0}
   m_BuildTextureStacks: []

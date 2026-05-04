@@ -72,15 +72,18 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         GameObject origin = Instantiate(noteObjectOriginPrefab);
 
         // ノーツオブジェクト(表)を生成
-        GameObject noteObj = GenerateMeshObject(data, false, positionCalculator);
-        noteObj.transform.SetParent(origin.transform);
+        var outsideMesh = GenerateMeshObject(data, false, positionCalculator);
+        outsideMesh.transform.SetParent(origin.transform);
 
         // ノーツオブジェクト(裏)を生成
-        GameObject noteObj_ = GenerateMeshObject(data, true, positionCalculator);
-        noteObj_.transform.SetParent(origin.transform);
+        var insideMesh = GenerateMeshObject(data, true, positionCalculator);
+        insideMesh.transform.SetParent(origin.transform);
 
         // コンポーネントを取得
         NoteObject<NoteData_SpaceHoldMesh> note = origin.GetComponent<NoteObject<NoteData_SpaceHoldMesh>>();
+
+        // レンダラーの登録
+        data.MeshRendererAsset = new HoldMeshRendererAsset(insideMesh, outsideMesh);
 
         return note;
     }
@@ -88,7 +91,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     /// <summary>
     /// ホールドのメッシュ部分の生成
     /// </summary>
-    private GameObject GenerateMeshObject(NoteData_SpaceHoldMesh noteData, bool isMeshReverse, INotePositionCalculator positionCalculator)
+    private MeshRenderer GenerateMeshObject(NoteData_SpaceHoldMesh noteData, bool isMeshReverse, INotePositionCalculator positionCalculator)
     {
         var obj = Instantiate(noteMeshPrefab);
         if (!obj.TryGetComponent(out MeshFilter meshFilter)) { meshFilter = obj.AddComponent<MeshFilter>(); }
@@ -107,7 +110,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         if (!obj.TryGetComponent(out Deformable d)) { obj.AddComponent<Deformable>().AddDeformer(groundDeformer); }
         else { d.AddDeformer(groundDeformer); }
 
-        return obj;
+        return meshRenderer;
     }
 
     /// <summary>

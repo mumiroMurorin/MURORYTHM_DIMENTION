@@ -5512,7 +5512,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   verticesController: {fileID: 853621225}
   meshParent: {fileID: 1262047918}
-  centerMeshMaterial: {fileID: 2100000, guid: 21405f45637915643b55d93c43c376f1, type: 2}
+  spaceHoldMeshMaterial: {fileID: 2100000, guid: 21405f45637915643b55d93c43c376f1, type: 2}
+  spaceBreakMeshMaterial: {fileID: 2100000, guid: 209739c65105fad49bb1080a84695481, type: 2}
 --- !u!1 &267646776
 GameObject:
   m_ObjectHideFlags: 0
@@ -16841,7 +16842,7 @@ Transform:
   m_GameObject: {fileID: 984779692}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 200, y: 0, z: 0}
+  m_LocalPosition: {x: 300, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

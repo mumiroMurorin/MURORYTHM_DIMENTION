@@ -634,21 +634,34 @@ namespace MeshGenerate
             // --- 頂点を組み立て ---
             List<Vector3> meshVerts = new List<Vector3>();
             List<int> meshTris = new List<int>();
+            List<Vector2> meshUvs = new List<Vector2>();
 
             float half = depth * 0.5f;
+            float minX = vertices.Min(v => v.x);
+            float maxX = vertices.Max(v => v.x);
+            float minY = vertices.Min(v => v.y);
+            float maxY = vertices.Max(v => v.y);
+            float width = Mathf.Max(maxX - minX, Mathf.Epsilon);
+            float height = Mathf.Max(maxY - minY, Mathf.Epsilon);
+            float invWidth = 1f / width;
+            float invHeight = 1f / height;
 
-            // 前面(Z=+half)
+            // 前面(Z=-half)
             int frontStart = 0;
             for (int i = 0; i < tess.Vertices.Length; i++)
             {
-                meshVerts.Add(new Vector3(tess.Vertices[i].Position.X, tess.Vertices[i].Position.Y, -half));
+                var pos2D = new Vector2(tess.Vertices[i].Position.X, tess.Vertices[i].Position.Y);
+                meshVerts.Add(new Vector3(pos2D.x, pos2D.y, -half));
+                meshUvs.Add(GetPlanarUV(pos2D, minX, minY, invWidth, invHeight));
             }
 
-            // 背面(Z=-half)
+            // 背面(Z=+half)
             int backStart = meshVerts.Count;
             for (int i = 0; i < tess.Vertices.Length; i++)
             {
-                meshVerts.Add(new Vector3(tess.Vertices[i].Position.X, tess.Vertices[i].Position.Y, half));
+                var pos2D = new Vector2(tess.Vertices[i].Position.X, tess.Vertices[i].Position.Y);
+                meshVerts.Add(new Vector3(pos2D.x, pos2D.y, half));
+                meshUvs.Add(GetPlanarUV(pos2D, minX, minY, invWidth, invHeight));
             }
 
             // --- 前面ポリゴン ---
@@ -681,11 +694,15 @@ namespace MeshGenerate
             }
 
             // --- 側面 ---
-            int sideStart = meshVerts.Count;
+            float perimeter = GetPerimeterLength(vertices);
+            float accumulatedLength = 0f;
 
             for (int i = 0; i < vertices.Count; i++)
             {
                 int next = (i + 1) % vertices.Count;
+                float edgeLength = Vector2.Distance(vertices[i], vertices[next]);
+                float startU = perimeter > Mathf.Epsilon ? accumulatedLength / perimeter : 0f;
+                float endU = perimeter > Mathf.Epsilon ? (accumulatedLength + edgeLength) / perimeter : 0f;
 
                 Vector3 v0 = new Vector3(vertices[i].x, vertices[i].y, -half);
                 Vector3 v1 = new Vector3(vertices[next].x, vertices[next].y, -half);
@@ -698,6 +715,12 @@ namespace MeshGenerate
                 meshVerts.Add(v2); // 2 上次手前
                 meshVerts.Add(v3); // 3 上手前
 
+                // 側面は周回方向をU、奥行きをVとして同じUV空間に収める
+                meshUvs.Add(new Vector2(startU, 0f));
+                meshUvs.Add(new Vector2(endU, 0f));
+                meshUvs.Add(new Vector2(endU, 1f));
+                meshUvs.Add(new Vector2(startU, 1f));
+
                 meshTris.Add(baseIndex + 0);
                 meshTris.Add(baseIndex + 2);
                 meshTris.Add(baseIndex + 1);
@@ -705,18 +728,39 @@ namespace MeshGenerate
                 meshTris.Add(baseIndex + 0);
                 meshTris.Add(baseIndex + 3);
                 meshTris.Add(baseIndex + 2);
+
+                accumulatedLength += edgeLength;
             }
 
             // --- Mesh生成 ---
             Mesh mesh = new Mesh();
             mesh.SetVertices(meshVerts);
             mesh.SetTriangles(meshTris, 0);
+            mesh.SetUVs(0, meshUvs);
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 
             return mesh;
         }
 
+        private static Vector2 GetPlanarUV(Vector2 position, float minX, float minY, float invWidth, float invHeight)
+        {
+            return new Vector2((position.x - minX) * invWidth, (position.y - minY) * invHeight);
+        }
+
+        private static float GetPerimeterLength(List<Vector2> vertices)
+        {
+            if (vertices == null || vertices.Count < 2) { return 0f; }
+
+            float perimeter = 0f;
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                int next = (i + 1) % vertices.Count;
+                perimeter += Vector2.Distance(vertices[i], vertices[next]);
+            }
+
+            return perimeter;
+        }
         /// <summary>
         /// メッシュのトライアングルインデックスを生成
         /// </summary>

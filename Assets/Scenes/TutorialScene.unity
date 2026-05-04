@@ -2808,6 +2808,77 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3115310235136475715, guid: 7565b9c6c2f3a6e4aa655934ce8d2cf6, type: 3}
   m_PrefabInstance: {fileID: 693597375}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &708115789 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7549315773620090739, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
+  m_PrefabInstance: {fileID: 733673864}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &708115791 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2997846735022968110, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
+  m_PrefabInstance: {fileID: 733673864}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &733673864
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 960448844}
+    m_Modifications:
+    - target: {fileID: 2947181549324164865, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
+      propertyPath: timer.obj
+      value: 
+      objectReference: {fileID: 1605477129}
+    - target: {fileID: 2997846735022968110, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2997846735022968110, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2997846735022968110, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2997846735022968110, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2997846735022968110, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2997846735022968110, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2997846735022968110, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2997846735022968110, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2997846735022968110, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2997846735022968110, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7549315773620090739, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
+      propertyPath: m_Name
+      value: HandTrackingForLeapMotion
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a8235f8ef93b60d4abbb2a374f3f7a79, type: 3}
 --- !u!4 &739987137 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3115310235136475715, guid: 0f5339056c5d55e47a2b08d4a0d397e7, type: 3}
@@ -2921,7 +2992,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &796097597
 Transform:
   m_ObjectHideFlags: 0
@@ -3912,6 +3983,7 @@ Transform:
   - {fileID: 1616190399}
   - {fileID: 796097597}
   - {fileID: 1176162897}
+  - {fileID: 708115791}
   m_Father: {fileID: 1514032049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &960448845
@@ -6363,7 +6435,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUseSpaceInput: 1
   spaceInputHandler:
-    obj: {fileID: 796097596}
+    obj: {fileID: 708115789}
 --- !u!114 &1821151699 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -9016481894752387304, guid: eda757d568a52cf46a8343cc43ee202b, type: 3}

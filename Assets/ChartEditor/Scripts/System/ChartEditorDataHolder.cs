@@ -96,11 +96,23 @@ namespace ChartEditor
         // 配置中のノーツタイプ
         ReactiveProperty<DeploymentNoteType> deploymentNoteType = new ReactiveProperty<DeploymentNoteType>(ChartEditor.DeploymentNoteType.Touch);
         IReadOnlyReactiveProperty<DeploymentNoteType> IChartEditorDataGetter.DeploymentNoteType => deploymentNoteType;
+        readonly Dictionary<EditNoteType, DeploymentNoteType> editNoteTypeToCachedNoteType = new Dictionary<EditNoteType, DeploymentNoteType>();
+
         void IChartEditorDataSetter.SetNoteType(DeploymentNoteType noteType)
         {
             deploymentNoteType.Value = noteType;
+            CacheNoteType(editNoteType.Value, noteType);
         }
 
+        bool IChartEditorDataGetter.TryGetCachedNoteType(EditNoteType editType, out DeploymentNoteType noteType)
+        {
+            return editNoteTypeToCachedNoteType.TryGetValue(editType, out noteType);
+        }
+
+        void CacheNoteType(EditNoteType editType, DeploymentNoteType noteType)
+        {
+            editNoteTypeToCachedNoteType[editType] = noteType;
+        }
         // インタラクトされているコライダーたち
         ReactiveCollection<IInteractableCollider> interactableColliders = new ReactiveCollection<IInteractableCollider>();
         public IReadOnlyReactiveCollection<IInteractableCollider> InteractableColliders => interactableColliders;
@@ -217,6 +229,8 @@ namespace ChartEditor
         T GetInteractableCollider<T>() where T : IInteractableCollider;
 
         IReadOnlyReactiveProperty<DeploymentNoteType> DeploymentNoteType { get; }
+
+        bool TryGetCachedNoteType(EditNoteType editType, out DeploymentNoteType noteType);
 
         IReadOnlyReactiveProperty<PlayMode> PlayMode { get; }
 

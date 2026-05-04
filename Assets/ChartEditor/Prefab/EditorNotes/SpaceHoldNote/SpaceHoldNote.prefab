@@ -366,6 +366,9 @@ MonoBehaviour:
   relayMaterial: {fileID: 2100000, guid: f9f4e11ea34de3148ac37cd442edb66e, type: 2}
   endMaterial: {fileID: 2100000, guid: 6b17cd2b7ec0e9c49801cd84ddc4ff85, type: 2}
   meshMaterial: {fileID: 2100000, guid: 21405f45637915643b55d93c43c376f1, type: 2}
+  outlineColorOnAlone:
+    color: {r: 1, g: 0, b: 0, a: 1}
+    isBlinking: 1
   meshDivisionNum: 30
   meshHeight: 0.01
   noteMeshRenderer: {fileID: 5893660377328454484}

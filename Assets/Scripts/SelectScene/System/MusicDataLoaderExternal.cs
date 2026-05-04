@@ -18,9 +18,9 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     [Tooltip("楽曲データファイル名")]
     [SerializeField] string musicInformationFileName = "information.json";
     [Tooltip("楽曲ジャケットファイル名")]
-    [SerializeField] string musicJacketFileName = "jacket.png";
+    [SerializeField] string[] musicJacketFileNames = new string[] { "jacket.png", "jacket.jpg", "jacket.jpeg" };
     [Tooltip("楽曲テーマ画像ファイル名")]
-    [SerializeField] string musicThemeImageFileName = "theme.png";
+    [SerializeField] string[] musicThemeImageFileNames = new string[] { "theme.png", "theme.jpg", "theme.jpeg" };
     [Tooltip("楽曲オーディオファイル名")]
     [SerializeField] string[] musicClipFileNames = new string[] { "clip.wav", "clip.mp3", "clip.ogg" };
     [Tooltip("楽曲サンプルオーディオファイル名")]
@@ -262,16 +262,13 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     /// <returns></returns>
     private async UniTask<bool> SetJacketFileAsync(MusicData musicData, string path, CancellationToken token)
     {
-        path = path + "/" + musicJacketFileName;
-
-        // ファイルの存在確認
-        if (!File.Exists(path))
+        if (!TryFindFilePath(path, musicJacketFileNames, out var jacketPath))
         {
             Debug.LogWarning("【System】指定されたフォルダが存在しません: " + path);
             return false;
         }
 
-        musicData.MusicSprite = await ImageLoader.LoadSpriteFromPathAsync(path, token);
+        musicData.MusicSprite = await ImageLoader.LoadSpriteFromPathAsync(jacketPath, token);
         return true;
     }
 
@@ -284,17 +281,31 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     /// <returns></returns>
     private async UniTask<bool> SetThemeImageFileAsync(MusicData musicData, string path, CancellationToken token)
     {
-        path = path + "/" + musicThemeImageFileName;
-
-        // ファイルの存在確認
-        if (!File.Exists(path))
+        if (!TryFindFilePath(path, musicThemeImageFileNames, out var themeImagePath))
         {
             Debug.LogWarning("【System】指定されたフォルダが存在しません: " + path);
             return false;
         }
 
-        musicData.ThemeSprite = await ImageLoader.LoadSpriteFromPathAsync(path, token);
+        musicData.ThemeSprite = await ImageLoader.LoadSpriteFromPathAsync(themeImagePath, token);
         return true;
+    }
+
+    private bool TryFindFilePath(string directoryPath, string[] fileNames, out string filePath)
+    {
+        foreach (var fileName in fileNames)
+        {
+            string candidatePath = directoryPath + "/" + fileName;
+
+            if (File.Exists(candidatePath))
+            {
+                filePath = candidatePath;
+                return true;
+            }
+        }
+
+        filePath = null;
+        return false;
     }
 
     /// <summary>

@@ -19,6 +19,8 @@ namespace ChartEditor
         [SerializeField] Material relayMaterial;
         [SerializeField] Material endMaterial;
         [SerializeField] Material meshMaterial;
+        [Tooltip("警告アウトライン色")]
+        [SerializeField] ColorSetting outlineColorOnAlone;
         [Space(40)]
         [SerializeField] int meshDivisionNum = 30;
         [SerializeField] float meshHeight = 0.01f;
@@ -51,6 +53,7 @@ namespace ChartEditor
         List<IDisposable> nextNoteDisposables = new List<IDisposable>();
         CancellationTokenSource cts = new CancellationTokenSource();
 
+        bool isAlone;
         private void Start()
         {
             Bind(cts.Token).Forget();
@@ -77,13 +80,14 @@ namespace ChartEditor
                     {
                         BindForThisNote();
                         BindForNextNote(next);
+                        SetWarning();
                     }
                 })
                 .AddTo(this.gameObject);
 
             backNote
                 .Subscribe(back => {
-
+                    SetWarning();
                 })
                 .AddTo(this.gameObject);
         }
@@ -173,6 +177,22 @@ namespace ChartEditor
                 default:
                     Debug.Log($"【Note】設定されていないパラメータです: {noteType}");
                     break;
+            }
+        }
+
+        private void SetWarning()
+        {
+            // 独りぼっち
+            if (backNote.Value == null && nextNote.Value == null && !isAlone)
+            {
+                noteObject.OutlineColors.Add(outlineColorOnAlone);
+                isAlone = true;
+            }
+            // 独立でない
+            else if ((backNote.Value != null || nextNote.Value != null) && isAlone)
+            {
+                noteObject.OutlineColors.Remove(outlineColorOnAlone);
+                isAlone = false;
             }
         }
 

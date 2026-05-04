@@ -44,11 +44,19 @@ namespace ChartEditor
                     switch (type)
                     {
                         case EditNoteType.Ground:
-                            dataSetter.SetNoteType(defaultNoteType_ground);
+                            if (!dataGetter.TryGetCachedNoteType(EditNoteType.Ground, out var groundType))
+                            {
+                                groundType = defaultNoteType_ground;
+                            }
+                            dataSetter.SetNoteType(groundType);
                             dataSetter.SetEditMode(EditMode.Deploy);
                             break;
                         case EditNoteType.Space:
-                            dataSetter.SetNoteType(defaultNoteType_space);
+                            if (!dataGetter.TryGetCachedNoteType(EditNoteType.Space, out var spaceType))
+                            {
+                                spaceType = defaultNoteType_space;
+                            }
+                            dataSetter.SetNoteType(spaceType);
                             dataSetter.SetEditMode(EditMode.SpaceDeploy);
                             break;
                     }
