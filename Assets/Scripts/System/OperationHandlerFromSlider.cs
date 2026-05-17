@@ -1,19 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+Ôªøusing System;
 using UniRx;
-using System;
-using System.Linq;
-using NaughtyAttributes;
+using UnityEngine;
 
 /// <summary>
-/// ëÄçÏä÷åWÇÃìùäáÉNÉâÉX
+/// Central operation handler for slider-touch based inputs.
 /// </summary>
 public class OperationHandlerFromSlider : MonoBehaviour, IOperationSetter, IOperationGetter
 {
-    [SerializeField] SerializeInterface<IInputHandler> inputHandler;
+    [SerializeField] private SerializeInterface<IInputHandler> inputHandler;
 
-    ReactiveCollection<SliderTouchData> sliderTouchDatas = new ReactiveCollection<SliderTouchData>();
+    private readonly ReactiveCollection<SliderTouchData> sliderTouchDatas = new ReactiveCollection<SliderTouchData>();
     IReadOnlyReactiveCollection<SliderTouchData> IOperationGetter.SliderTouchDatas => sliderTouchDatas;
 
     void IOperationSetter.SetOperate(SliderTouchData sliderTouchData)
@@ -32,7 +28,6 @@ public class OperationHandlerFromSlider : MonoBehaviour, IOperationSetter, IOper
 public interface IOperationSetter
 {
     void SetOperate(SliderTouchData sliderTouchData);
-
     void Dispose();
 }
 
@@ -42,73 +37,94 @@ public interface IOperationGetter
 }
 
 /// <summary>
-/// ÉXÉâÉCÉ_Å[É^ÉbÉ`ÇÃç€ÇÃÉfÅ[É^
+/// Data for a slider touch operation.
 /// </summary>
 public class SliderTouchData
 {
-    public SliderTouchData(OperationAsset asset, Action callback, SliderCoolDownHandler coolDownHandler = default)
+    public SliderTouchData(OperationAssetUnit asset, Action callback, SliderCoolDownHandler coolDownHandler = default)
     {
         SetSliderIndices(asset.SliderIndices);
         AddCallback(callback);
-        SetImageColor(asset.ThemeColor);
+        SetThemeColor(asset.ThemeColor);
+        SetControllerColor(asset.ControllerColor);
         SetText(asset.Text);
         this.coolDownHandler = coolDownHandler;
     }
 
-    public SliderTouchData(int[] sliderIndices, Action callback, Color imageColor = default, string text = default, SliderCoolDownHandler coolDownHandler = default)
+    public SliderTouchData(int[] sliderIndices, Action callback, Color themeColor = default, Color controllerColor = default, string text = default, SliderCoolDownHandler coolDownHandler = default)
     {
         SetSliderIndices(sliderIndices);
         AddCallback(callback);
-        SetImageColor(imageColor);
+        SetThemeColor(themeColor);
+        SetControllerColor(controllerColor == default ? themeColor : controllerColor);
         SetText(text);
         this.coolDownHandler = coolDownHandler;
     }
 
-    SliderCoolDownHandler coolDownHandler;
+    private readonly SliderCoolDownHandler coolDownHandler;
 
-    // ÉXÉâÉCÉ_Å[ÉCÉìÉfÉbÉNÉX
-    ReactiveCollection<int> sliderIndices = new ReactiveCollection<int>();
+    private readonly ReactiveCollection<int> sliderIndices = new ReactiveCollection<int>();
     public IReadOnlyReactiveCollection<int> SliderIndices => sliderIndices;
+
     public void SetSliderIndices(int[] indices)
     {
         sliderIndices.Clear();
-        foreach(int i in indices)
+        foreach (int index in indices)
         {
-            sliderIndices.Add(i);
+            sliderIndices.Add(index);
         }
     }
 
-    // É^ÉbÉ`Ç≥ÇÍÇΩéûÇÃãììÆ
-    ReactiveProperty<Action> callBack = new ReactiveProperty<Action>();
+    private readonly ReactiveProperty<Action> callBack = new ReactiveProperty<Action>();
     public IReadOnlyReactiveProperty<Action> Callback => callBack;
+
     public void AddCallback(Action action)
     {
         callBack.Value += action;
     }
+
     public void DisposeAction()
     {
         callBack.Value = null;
     }
 
-    // êF
-    ReactiveProperty<Color> imageColor = new ReactiveProperty<Color>();
-    public IReadOnlyReactiveProperty<Color> ImageColor => imageColor;
-    public void SetImageColor(Color color)
+
+    // ThemeColor
+    private readonly ReactiveProperty<Color> themeColor = new ReactiveProperty<Color>();
+    public IReadOnlyReactiveProperty<Color> ThemeColor => themeColor;
+
+    public void SetThemeColor(Color color)
     {
-        imageColor.Value = color;
+        themeColor.Value = color;
     }
 
-    // ÉeÉLÉXÉg
-    ReactiveProperty<string> text = new ReactiveProperty<string>();
-    public IReadOnlyReactiveProperty<string> Text => text;
-    public void SetText(string text)
+
+    // ControllerColor
+    private readonly ReactiveProperty<Color> controllerColor = new ReactiveProperty<Color>();
+    public IReadOnlyReactiveProperty<Color> ControllerColor => controllerColor;
+
+    public void SetControllerColor(Color color)
     {
-        this.text.Value = text;
+        controllerColor.Value = color;
     }
+
+
+    // Text
+    private readonly ReactiveProperty<string> text = new ReactiveProperty<string>();
+    public IReadOnlyReactiveProperty<string> Text => text;
+
+    public void SetText(string value)
+    {
+        text.Value = value;
+    }
+
 
     public void ExecuteAction()
     {
-        if (coolDownHandler != null && coolDownHandler.IsWaiting) { return; }
+        if (coolDownHandler != null && coolDownHandler.IsWaiting)
+        {
+            return;
+        }
 
         Callback?.Value?.Invoke();
         coolDownHandler?.ResetCoolTime();
@@ -116,7 +132,7 @@ public class SliderTouchData
 }
 
 /// <summary>
-/// SliderTouchDataÇÃã§í ë“Çøéûä‘Ç…égÇ§
+/// Shared cooldown for SliderTouchData.
 /// </summary>
 public class SliderCoolDownHandler
 {
@@ -125,7 +141,7 @@ public class SliderCoolDownHandler
         this.coolDownSeconds = coolDownSeconds;
     }
 
-    private float coolDownSeconds;
+    private readonly float coolDownSeconds;
 
     public bool IsWaiting { get; private set; }
 

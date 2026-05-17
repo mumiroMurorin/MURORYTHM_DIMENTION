@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: _Operations_LobbyScene
   m_EditorClassIdentifier: 
   assetsList:
+  - {fileID: 11400000, guid: 065c822e70984686944ba25b032bfded, type: 2}
   - {fileID: 11400000, guid: c9cee92035524ad45b02fe680fb9e6e7, type: 2}

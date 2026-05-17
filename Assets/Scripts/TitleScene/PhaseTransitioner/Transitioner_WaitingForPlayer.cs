@@ -25,11 +25,11 @@ namespace TransitionerInTitleScene
         {
             Debug.Log("【Transition】Transition to \"WaitingForPlayer\"");
 
-            cts?.CancelAndDispose();
-            cts = new CancellationTokenSource();
-            phaseTransitionable?.Value.RegisterCts(cts);
+            //cts?.CancelAndDispose();
+            //cts = new CancellationTokenSource();
+            //phaseTransitionable?.Value.RegisterCts(cts);
 
-            WaitForPlayerInput(TransitionNextPhase, cts.Token).Forget();
+            //WaitForPlayerInput(TransitionNextPhase, cts.Token).Forget();
         }
 
         private async UniTask WaitForPlayerInput(System.Action callback, CancellationToken token)
@@ -37,14 +37,6 @@ namespace TransitionerInTitleScene
             await UniTask.WaitUntil(() => Input.anyKeyDown, cancellationToken: token);
 
             callback?.Invoke();
-        }
-
-        /// <summary>
-        /// 次のフェーズへの移動
-        /// </summary>
-        private void TransitionNextPhase()
-        {
-            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInTitleScene.GameStart);
         }
     }
 }

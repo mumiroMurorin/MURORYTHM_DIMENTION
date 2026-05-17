@@ -27,7 +27,7 @@ public class SliderUnitUI : MonoBehaviour
 
     private void Bind(SliderTouchData sliderTouchData)
     {
-        sliderTouchData?.ImageColor
+        sliderTouchData?.ThemeColor
             .Subscribe(SetSliderColor)
             .AddTo(disposables)
             .AddTo(this.gameObject);
@@ -56,10 +56,10 @@ public class SliderUnitUI : MonoBehaviour
 
         isTouching = true;
         image.color = new Color(
-            Mathf.Clamp(sliderTouchData.ImageColor.Value.r - pressedDecrmentionColorValue, 0, 1),
-            Mathf.Clamp(sliderTouchData.ImageColor.Value.g - pressedDecrmentionColorValue, 0, 1),
-            Mathf.Clamp(sliderTouchData.ImageColor.Value.b - pressedDecrmentionColorValue, 0, 1),
-            sliderTouchData.ImageColor.Value.a);
+            Mathf.Clamp(sliderTouchData.ThemeColor.Value.r - pressedDecrmentionColorValue, 0, 1),
+            Mathf.Clamp(sliderTouchData.ThemeColor.Value.g - pressedDecrmentionColorValue, 0, 1),
+            Mathf.Clamp(sliderTouchData.ThemeColor.Value.b - pressedDecrmentionColorValue, 0, 1),
+            sliderTouchData.ThemeColor.Value.a);
 
         // ’x‚ç‚¹‚ÄŒ³‚É–ß‚·
         if (cts != null)
@@ -83,7 +83,7 @@ public class SliderUnitUI : MonoBehaviour
         if (!image) { return; }
 
         isTouching = false;
-        image.color = sliderTouchData.ImageColor.Value;
+        image.color = sliderTouchData.ThemeColor.Value;
     }
 
     private void OnDestroy()

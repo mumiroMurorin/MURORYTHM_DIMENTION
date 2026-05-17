@@ -383,9 +383,9 @@ MonoBehaviour:
   - phase: 3
     text: "\u697D\u66F2\u78BA\u8A8D"
   - phase: 4
-    text: "\u8A2D\u5B9A"
-  - phase: 5
     text: "\u697D\u66F2\u78BA\u8A8D"
+  - phase: 5
+    text: "\u8A2D\u5B9A"
   difficultyToTMPColorGradients:
   - difficulty: 0
     gradientAsset: {fileID: 11400000, guid: a9d7d4f1a8a6d224da370e29b0409054, type: 2}

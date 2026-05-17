@@ -12,6 +12,7 @@ namespace TransitionerInTitleScene
         [SerializeField] SerializeInterface<IPhaseTransitionableInTitleScene> phaseTransitionable;
         [SerializeField] SerializeInterface<IMusicDataListLoader> musicDataListLoader;
         [SerializeField] OptionDataSetter optionDataSetter;
+        [SerializeField] OperationDictionary operationDictionary;
         [SerializeField] VideoLoader videoLoader;
 
         readonly PhaseStatusInTitleScene status = PhaseStatusInTitleScene.LoadData;
@@ -49,12 +50,26 @@ namespace TransitionerInTitleScene
                 CheckAndTransition(isCompletedTask);
             });
 
+            RegisterOperation();
         }
 
         private void CheckAndTransition(bool[] isCompletedTask)
         {
             if(!isCompletedTask.All(x => x)) { return; }
             TransitionNextPhase();
+        }
+
+        private void RegisterOperation()
+        {
+            operationDictionary.RegisterOperation(OperationTag.Title_WaitingForPlayerInput, () => { TransitionGameStartPhase(); });
+        }
+
+        /// <summary>
+        /// GameStartフェーズへの移動
+        /// </summary>
+        private void TransitionGameStartPhase()
+        {
+            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInTitleScene.GameStart);
         }
 
         /// <summary>

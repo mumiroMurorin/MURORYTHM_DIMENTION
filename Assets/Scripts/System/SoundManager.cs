@@ -46,7 +46,7 @@ public enum SE_Type
 /// <summary>
 /// âπåπä«óùÉNÉâÉX
 /// </summary>
-public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
+public class SoundManager : SingletonMonoBehaviour<SoundManager>
 {
     [System.Serializable]
     class BGMTypeToAudioClip
@@ -99,8 +99,10 @@ public class SoundManager : LocalSingletonMonoBehaviour<SoundManager>
         this.volumeGetter = volumeGetter;
     }
 
-    private new void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         // BGMóp AudioSourceí«â¡
         bgmSources[0] = gameObject.AddComponent<AudioSource>();
         bgmSources[0].outputAudioMixerGroup = audioMixerGroupBGM;

@@ -29,7 +29,7 @@ public class SliderTopicTextController : MonoBehaviour
             .AddTo(this.gameObject);
 
         // ï\é¶êF
-        sliderTouchData?.ImageColor
+        sliderTouchData?.ThemeColor
             .Subscribe(UpdateColor)
             .AddTo(this.gameObject);
 

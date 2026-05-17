@@ -23,8 +23,4 @@ MonoBehaviour:
   operationAssetGroups:
   - coolTime: 0
     operations:
-    - tag: 510
-      leftEdge: 4
-      rightEdge: 11
-      themeColor: {r: 1, g: 0, b: 0, a: 1}
-      text: "\u6B21\u3078"
+    - {fileID: 11400000, guid: 82bac5be1b8d40b5b1ff76651b90794b, type: 2}

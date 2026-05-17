@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -14,23 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scene: 5
   phaseStatusTitleScene: 0
-  phaseStatusLobbyScene: 3
+  phaseStatusLobbyScene: 5
   phaseStatusSelectScene: 0
   phaseStatusRhythmGameScene: 0
   phaseStatusResultScene: 0
+  phaseStatusGameOverScene: 0
   delaySeconds: 0.5
   operationAssetGroups:
   - coolTime: 0
     operations:
-    - tag: 151
-      leftEdge: 0
-      rightEdge: 7
-      themeColor: {r: 0, g: 0, b: 1, a: 1}
-      text: "\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u3092\u30B9\u30AD\u30C3\u30D7"
-  - coolTime: 0
-    operations:
-    - tag: 150
-      leftEdge: 8
-      rightEdge: 15
-      themeColor: {r: 1, g: 0, b: 0, a: 1}
-      text: "\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u3092\u30D7\u30EC\u30A4"
+    - {fileID: 11400000, guid: 64c0f377c43e4a5babde68feffd80ada, type: 2}
+    - {fileID: 11400000, guid: ee688f89ed5842c8944a1fcec7bf9027, type: 2}

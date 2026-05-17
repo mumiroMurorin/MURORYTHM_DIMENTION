@@ -18,36 +18,17 @@ MonoBehaviour:
   phaseStatusSelectScene: 2
   phaseStatusRhythmGameScene: 0
   phaseStatusResultScene: 0
+  phaseStatusGameOverScene: 0
   delaySeconds: 0.5
   operationAssetGroups:
   - coolTime: 0
     operations:
-    - tag: 210
-      leftEdge: 5
-      rightEdge: 10
-      themeColor: {r: 1, g: 0.8117647, b: 0, a: 1}
-      text: "\u697D\u66F2\u9078\u629E"
-  - coolTime: 0.175
-    operations:
-    - tag: 220
-      leftEdge: 14
-      rightEdge: 15
-      themeColor: {r: 0, g: 0.8666667, b: 0.8117647, a: 1}
-      text: "\u53F3\u2192"
-    - tag: 221
-      leftEdge: 0
-      rightEdge: 1
-      themeColor: {r: 0, g: 0.8666667, b: 0.8117647, a: 1}
-      text: "\u2190\u5DE6"
+    - {fileID: 11400000, guid: f5682aefad3848fc951f6e667d5d6c99, type: 2}
   - coolTime: 0.1
     operations:
-    - tag: 230
-      leftEdge: 11
-      rightEdge: 13
-      themeColor: {r: 0.8156863, g: 0.03529412, b: 0.83137256, a: 1}
-      text: "\u96E3\u6613\u5EA6UP"
-    - tag: 231
-      leftEdge: 2
-      rightEdge: 4
-      themeColor: {r: 0.8156863, g: 0.03529412, b: 0.83137256, a: 1}
-      text: "\u96E3\u6613\u5EA6DOWN"
+    - {fileID: 11400000, guid: 496c7e58d54f4190a54fed3272d34350, type: 2}
+    - {fileID: 11400000, guid: cc51cf9bbf984722a9f2dd614631d1dd, type: 2}
+  - coolTime: 0.1
+    operations:
+    - {fileID: 11400000, guid: a78950096bbd43a89a0515715ee361c3, type: 2}
+    - {fileID: 11400000, guid: c8c5c53bdb39446782976d686a409c45, type: 2}

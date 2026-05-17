@@ -9,8 +9,6 @@ namespace TransitionerInLobbyScene
 {
     public class Transitioner_ConfirmTutorial_Operation : IPhaseTransitionerInLobbyScene
     {
-        [SerializeField] SerializeInterface<IPhaseTransitionableInLobbyScene> phaseTransitionable;
-
         readonly PhaseStatusInLobbyScene status = PhaseStatusInLobbyScene.ConfirmTutorial_Operation;
 
         bool IPhaseTransitionerInLobbyScene.ConditionChecker(PhaseStatusInLobbyScene status)
@@ -22,14 +20,6 @@ namespace TransitionerInLobbyScene
         {
             Debug.Log("【Transition】Transition to \"ConfirmTutorial_Operation\"");
 
-        }
-
-        /// <summary>
-        /// 次のフェーズへの移動
-        /// </summary>
-        private void TransitionNextPhase()
-        {
-            phaseTransitionable.Value.TransitionPhase(PhaseStatusInLobbyScene.FadeOut);
         }
     }
 

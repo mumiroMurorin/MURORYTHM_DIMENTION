@@ -1,19 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using NaughtyAttributes;
+ï»¿using System.Collections.Generic;
 using System.Linq;
+using NaughtyAttributes;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "OperationInPhase", menuName = "ScriptableObject/OperationInPhase")]
 public class OperationInPhase : ScriptableObject
 {
-    [Label("‘Î‰ƒV[ƒ“")]
-    [SerializeField] SceneTag scene;
+    [Label("å¯¾å¿œã‚·ãƒ¼ãƒ³")]
+    [SerializeField] private SceneTag scene;
 
-    #region =================== Title ===================
+    #region Title
 
-    [ShowIf("scene", SceneTag.TitleScene)] [Label("‘Î‰ƒtƒF[ƒY")]
-    [SerializeField] PhaseStatusInTitleScene phaseStatusTitleScene;
+    [ShowIf("scene", SceneTag.TitleScene)]
+    [Label("å¯¾å¿œãƒ•ã‚§ãƒ¼ã‚º")]
+    [SerializeField] private PhaseStatusInTitleScene phaseStatusTitleScene;
 
     public bool CheckCondition(PhaseStatusInTitleScene phase)
     {
@@ -21,10 +21,11 @@ public class OperationInPhase : ScriptableObject
     }
 
     #endregion
-    #region =================== Lobby ===================
+    #region Lobby
 
-    [ShowIf("scene", SceneTag.LobbyScene)] [Label("‘Î‰ƒtƒF[ƒY")]
-    [SerializeField] PhaseStatusInLobbyScene phaseStatusLobbyScene;
+    [ShowIf("scene", SceneTag.LobbyScene)]
+    [Label("å¯¾å¿œãƒ•ã‚§ãƒ¼ã‚º")]
+    [SerializeField] private PhaseStatusInLobbyScene phaseStatusLobbyScene;
 
     public bool CheckCondition(PhaseStatusInLobbyScene phase)
     {
@@ -32,32 +33,35 @@ public class OperationInPhase : ScriptableObject
     }
 
     #endregion
-    #region =================== Select ===================
+    #region Select
 
-    [ShowIf("scene", SceneTag.SelectScene)] [Label("‘Î‰ƒtƒF[ƒY")]
-    [SerializeField] PhaseStatusInSelectScene phaseStatusSelectScene;
+    [ShowIf("scene", SceneTag.SelectScene)]
+    [Label("å¯¾å¿œãƒ•ã‚§ãƒ¼ã‚º")]
+    [SerializeField] private PhaseStatusInSelectScene phaseStatusSelectScene;
 
     public bool CheckCondition(PhaseStatusInSelectScene phase)
     {
         return scene == SceneTag.SelectScene && phase == phaseStatusSelectScene;
     }
-    
-    #endregion
-    #region =================== RhythmGame ===================
 
-    [ShowIf("scene", SceneTag.RhythmGameScene)] [Label("‘Î‰ƒtƒF[ƒY")]
-    [SerializeField] PhaseStatusInRhythmGame phaseStatusRhythmGameScene;
+    #endregion
+    #region RhythmGame
+
+    [ShowIf("scene", SceneTag.RhythmGameScene)]
+    [Label("å¯¾å¿œãƒ•ã‚§ãƒ¼ã‚º")]
+    [SerializeField] private PhaseStatusInRhythmGame phaseStatusRhythmGameScene;
 
     public bool CheckCondition(PhaseStatusInRhythmGame phase)
     {
-        return scene == SceneTag.SelectScene && phase == phaseStatusRhythmGameScene;
+        return scene == SceneTag.RhythmGameScene && phase == phaseStatusRhythmGameScene;
     }
 
     #endregion
-    #region =================== Result ===================
+    #region Result
 
-    [ShowIf("scene", SceneTag.ResultScene)] [Label("‘Î‰ƒtƒF[ƒY")]
-    [SerializeField] PhaseStatusInResultScene phaseStatusResultScene;
+    [ShowIf("scene", SceneTag.ResultScene)]
+    [Label("å¯¾å¿œãƒ•ã‚§ãƒ¼ã‚º")]
+    [SerializeField] private PhaseStatusInResultScene phaseStatusResultScene;
 
     public bool CheckCondition(PhaseStatusInResultScene phase)
     {
@@ -65,11 +69,11 @@ public class OperationInPhase : ScriptableObject
     }
 
     #endregion
-    #region =================== GameOver ===================
+    #region GameOver
 
     [ShowIf("scene", SceneTag.GameOverScene)]
-    [Label("‘Î‰ƒtƒF[ƒY")]
-    [SerializeField] PhaseStatusInGameOverScene phaseStatusGameOverScene;
+    [Label("å¯¾å¿œãƒ•ã‚§ãƒ¼ã‚º")]
+    [SerializeField] private PhaseStatusInGameOverScene phaseStatusGameOverScene;
 
     public bool CheckCondition(PhaseStatusInGameOverScene phase)
     {
@@ -78,81 +82,49 @@ public class OperationInPhase : ScriptableObject
 
     #endregion
 
+    [SerializeField] private float delaySeconds = 0.5f;
+    [SerializeField] private OperationAssetGroup[] operationAssetGroups;
 
-    [SerializeField] float delaySeconds = 0.5f;
-    [SerializeField] OperationAssetGroup[] operationAssetGroups;
+    public IEnumerable<OperationAssetGroup> AssetGroups => operationAssetGroups;
 
-    public IEnumerable<OperationAssetGroup> AssetGroups { get { return operationAssetGroups; } }
-
-    public float DelaySeconds { get { return delaySeconds; } }
+    public float DelaySeconds => delaySeconds;
 }
 
 [System.Serializable]
 public class OperationAssetGroup
 {
-    [Label("ƒ^ƒbƒ`Œã‚ÌƒN[ƒ‹ƒ^ƒCƒ€")]
-    [SerializeField] float coolTime = 0.2f;
-    [SerializeField] OperationAsset[] operations;
+    [Label("ã‚¿ãƒƒãƒå¾Œã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ ")]
+    [SerializeField] private float coolTime = 0.2f;
 
-    public IEnumerable<OperationAsset> Operations { get { return operations; } }
+    [SerializeField] private OperationAssetUnit[] operations;
 
-    public SliderCoolDownHandler SliderCoolDownHandler { get { return new SliderCoolDownHandler(coolTime); } }
-}
+    public IEnumerable<OperationAssetUnit> Operations => operations;
 
-[System.Serializable]
-public class OperationAsset
-{
-    [Label("‘€ìƒ^ƒO")]
-    [SerializeField] OperationTag tag;
-
-    [Label("‘Î‰‚·‚éƒXƒ‰ƒCƒ_[”Ô†")]
-    [MinValue(0), MaxValue(15)] [SerializeField] int leftEdge;
-    [MinValue(0), MaxValue(15)] [SerializeField] int rightEdge;
-
-    [Label("ƒeƒLƒXƒgAƒXƒ‰ƒCƒ_[‚ÌF")]
-    [SerializeField] Color themeColor = Color.red;
-
-    [Label("‘Î‰ƒeƒLƒXƒg")]
-    [SerializeField] string text;
-
-    
-    public OperationTag Tag { get { return tag; } }
-
-    public int[] SliderIndices { get { return Enumerable.Range(leftEdge, rightEdge - leftEdge + 1).ToArray(); } }
-
-    public Color ThemeColor { get { return themeColor; } }
-
-    public string Text { get { return text; } }
+    public SliderCoolDownHandler SliderCoolDownHandler => new SliderCoolDownHandler(coolTime);
 }
 
 public enum OperationTag
 {
-    // Lobby...100`
+    Title_WaitingForPlayerInput = 50,
+    Lobby_SelectJapanese = 130,
+    Lobby_SelectEnglish = 131,
     Lobby_PlayTutorial = 150,
     Lobby_SkipTutorial = 151,
-
-    // Select...200`
     Select_SelectMusic = 210,
     Select_MoveRight = 220,
     Select_MoveLeft = 221,
     Select_UpDifficulty = 230,
     Select_DownDifficulty = 231,
-
     Select_Detail_StartMusic = 250,
     Select_Detail_UnStartableMusic = 251,
     Select_Detail_BackSelectMusic = 260,
     Select_Detail_OpenOption = 270,
-
     Select_Option_BackMusicDetail = 300,
     Select_Option_MoveRight = 310,
     Select_Option_MoveLeft = 311,
     Select_Option_PlusValue = 320,
     Select_Option_MinusValue = 321,
-
-    // Result...500`
     Result_ResultConfirm = 510,
-
-    // GameOver...900`
     GameOver_Continue = 990,
     GameOver_FinishGame = 991,
 }

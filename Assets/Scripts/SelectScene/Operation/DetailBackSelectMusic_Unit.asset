@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 996c824c92d64957bcbf175ccdaa45a4, type: 3}
+  m_Name: DetailBackSelectMusic_Unit
+  m_EditorClassIdentifier: 
+  tag: 260
+  leftEdge: 0
+  rightEdge: 1
+  themeColor: {r: 0, g: 0.47843137, b: 1, a: 1}
+  controllerColor: {r: 0, g: 0.47843137, b: 1, a: 1}
+  text: "\u697D\u66F2\u9078\u629E\u306B\u623B\u308B"

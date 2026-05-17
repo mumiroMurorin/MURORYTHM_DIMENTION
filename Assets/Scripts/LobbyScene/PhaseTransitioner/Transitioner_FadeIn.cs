@@ -32,7 +32,7 @@ namespace TransitionerInLobbyScene
         /// </summary>
         private void TransitionNextPhase()
         {
-            phaseTransitionable.Value.TransitionPhase(PhaseStatusInLobbyScene.ConfirmTutorial);
+            phaseTransitionable.Value.TransitionPhase(PhaseStatusInLobbyScene.SelectLanguage);
         }
     }
 

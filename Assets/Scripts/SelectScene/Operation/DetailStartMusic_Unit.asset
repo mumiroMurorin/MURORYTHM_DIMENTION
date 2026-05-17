@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 996c824c92d64957bcbf175ccdaa45a4, type: 3}
+  m_Name: DetailStartMusic_Unit
+  m_EditorClassIdentifier: 
+  tag: 250
+  leftEdge: 5
+  rightEdge: 10
+  themeColor: {r: 1, g: 0.8117647, b: 0, a: 1}
+  controllerColor: {r: 1, g: 0.8117647, b: 0, a: 1}
+  text: "\u697D\u66F2\u30B9\u30BF\u30FC\u30C8\uFF01"

@@ -48,7 +48,13 @@ MonoBehaviour:
   BGMFadeOutDuration: 3
   BGMCrossFadeDuration: 0.2
   Mute: 0
-  bgmClips: []
+  bgmClips:
+  - type: 800
+    clip: {fileID: 8300000, guid: 0e9c036266425fc43995ed113ce593e5, type: 3}
+  - type: 20
+    clip: {fileID: 8300000, guid: 54a3aa913aab28948aa7ad9a0cbc5ef5, type: 3}
+  - type: 900
+    clip: {fileID: 8300000, guid: 6c8b5bf5c8054324d93f8bb5bb70ff2c, type: 3}
   seClips:
   - type: 100
     clip: {fileID: 8300000, guid: 3e5c0f7fdda3d1847a09bc3dc6564999, type: 3}
@@ -78,6 +84,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 656aa3d0be5d5cf4f9aa9bded207ddf7, type: 3}
   - type: 951
     clip: {fileID: 8300000, guid: 2e2cbf3c6788f804393430c8cf95a72d, type: 3}
+  - type: 810
+    clip: {fileID: 8300000, guid: 77a0b5bb22755f6478a32f3ee9d3973b, type: 3}
   judgementSEs:
   - {fileID: 11400000, guid: a643cb651d507e84da9b38b124522d15, type: 2}
   - {fileID: 11400000, guid: 50fd7c4dc5808e54394cba875597b8b1, type: 2}

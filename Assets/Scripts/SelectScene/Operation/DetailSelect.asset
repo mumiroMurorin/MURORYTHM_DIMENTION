@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -18,38 +18,19 @@ MonoBehaviour:
   phaseStatusSelectScene: 3
   phaseStatusRhythmGameScene: 0
   phaseStatusResultScene: 0
+  phaseStatusGameOverScene: 0
   delaySeconds: 0.1
   operationAssetGroups:
   - coolTime: 0
     operations:
-    - tag: 250
-      leftEdge: 5
-      rightEdge: 10
-      themeColor: {r: 1, g: 0.8117647, b: 0, a: 1}
-      text: "\u697D\u66F2\u30B9\u30BF\u30FC\u30C8\uFF01"
+    - {fileID: 11400000, guid: 13bc044f4516434a80fda1e6a63618a4, type: 2}
   - coolTime: 0.1
     operations:
-    - tag: 230
-      leftEdge: 11
-      rightEdge: 13
-      themeColor: {r: 0.8156863, g: 0.03529412, b: 0.83137256, a: 1}
-      text: "\u96E3\u6613\u5EA6UP"
-    - tag: 231
-      leftEdge: 2
-      rightEdge: 4
-      themeColor: {r: 0.8156863, g: 0.03529412, b: 0.83137256, a: 1}
-      text: "\u96E3\u6613\u5EA6DOWN"
+    - {fileID: 11400000, guid: a78950096bbd43a89a0515715ee361c3, type: 2}
+    - {fileID: 11400000, guid: c8c5c53bdb39446782976d686a409c45, type: 2}
   - coolTime: 0
     operations:
-    - tag: 260
-      leftEdge: 0
-      rightEdge: 1
-      themeColor: {r: 0, g: 0.47843137, b: 1, a: 1}
-      text: "\u697D\u66F2\u9078\u629E\u306B\u623B\u308B"
+    - {fileID: 11400000, guid: 645459fd56294f31b9a3b5f955c6a0c6, type: 2}
   - coolTime: 0
     operations:
-    - tag: 270
-      leftEdge: 14
-      rightEdge: 15
-      themeColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-      text: "\u8A2D\u5B9A"
+    - {fileID: 11400000, guid: 37a38f68ecf3474880aba6e74fb2fb61, type: 2}

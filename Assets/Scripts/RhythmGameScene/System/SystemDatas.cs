@@ -73,6 +73,8 @@ public enum PhaseStatusInLobbyScene
 {
     LoadData,
     FadeIn,
+    SelectLanguage,
+    SelectLanguage_Operation,
     ConfirmTutorial,
     ConfirmTutorial_Operation,
     FadeOut,
@@ -118,6 +120,12 @@ public enum PhaseStatusInRootScene
     SettingOption,
     TransitionSelectScene,
     Reload,
+}
+
+public enum GameLanguage
+{
+    Japanese = 0,
+    English = 1,
 }
 
 public enum OptionType

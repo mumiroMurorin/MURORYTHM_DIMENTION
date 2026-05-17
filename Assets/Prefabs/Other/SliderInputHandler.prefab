@@ -46,8 +46,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   configs:
   - configName: SliderInputs
-    keyCodes: 4a0100004b0100004c0100004d0100004e0100004f01000050010000510100005201000053010000540100005501000056010000570100005801000059010000
-    isActive: 1
+    laneKeyCodes:
+    - keyCodes: 4a010000
+    - keyCodes: 4b010000
+    - keyCodes: 4c010000
+    - keyCodes: 4d010000
+    - keyCodes: 4e010000
+    - keyCodes: 4f010000
+    - keyCodes: 50010000
+    - keyCodes: 51010000
+    - keyCodes: 52010000
+    - keyCodes: 53010000
+    - keyCodes: 54010000
+    - keyCodes: 55010000
+    - keyCodes: 56010000
+    - keyCodes: 57010000
+    - keyCodes: 58010000
+    - keyCodes: 59010000
+    isActive: 0
   - configName: KeyBoardInputs
-    keyCodes: 31000000320000003300000034000000710000007700000065000000720000003500000036000000370000003800000074000000790000007500000069000000
+    laneKeyCodes:
+    - keyCodes: 31000000
+    - keyCodes: 32000000
+    - keyCodes: 33000000
+    - keyCodes: 34000000
+    - keyCodes: 71000000
+    - keyCodes: 77000000
+    - keyCodes: 65000000
+    - keyCodes: 72000000
+    - keyCodes: 35000000
+    - keyCodes: 36000000
+    - keyCodes: 37000000
+    - keyCodes: 38000000
+    - keyCodes: 74000000
+    - keyCodes: 79000000
+    - keyCodes: 75000000
+    - keyCodes: 69000000
+    isActive: 1
+  - configName: SliderInputs2
+    laneKeyCodes:
+    - keyCodes: ea010000eb010000
+    - keyCodes: ec010000ed010000
+    - keyCodes: f2010000f3010000
+    - keyCodes: f4010000f5010000
+    - keyCodes: d6010000d7010000
+    - keyCodes: d8010000d9010000
+    - keyCodes: de010000df010000
+    - keyCodes: e0010000e1010000
+    - keyCodes: c2010000c3010000
+    - keyCodes: c4010000c5010000
+    - keyCodes: ca010000cb010000
+    - keyCodes: cc010000cd010000
+    - keyCodes: ae010000af010000
+    - keyCodes: b0010000b1010000
+    - keyCodes: b6010000b7010000
+    - keyCodes: b8010000b9010000
     isActive: 1

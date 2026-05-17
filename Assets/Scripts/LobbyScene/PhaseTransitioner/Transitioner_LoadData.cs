@@ -42,12 +42,20 @@ namespace TransitionerInLobbyScene
         {
             operationDictionary.RegisterOperation(OperationTag.Lobby_PlayTutorial, () => { TransitionFadeOutPhase(true); });
             operationDictionary.RegisterOperation(OperationTag.Lobby_SkipTutorial, () => { TransitionFadeOutPhase(false); });
+            operationDictionary.RegisterOperation(OperationTag.Lobby_SelectJapanese, () => { SetLanguage(GameLanguage.Japanese); });
+            operationDictionary.RegisterOperation(OperationTag.Lobby_SelectEnglish, () => { SetLanguage(GameLanguage.English); });
         }
 
         private void TransitionFadeOutPhase(bool isPlayTutorial)
         {
             dataController?.DataSetter?.SetPlayTutorial(isPlayTutorial);
             phaseTransitionable?.Value.TransitionPhase(PhaseStatusInLobbyScene.FadeOut);
+        }
+
+        private void SetLanguage(GameLanguage language)
+        {
+            dataController?.DataSetter?.SetSelectedLanguage(language);
+            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInLobbyScene.ConfirmTutorial);
         }
     }
 }

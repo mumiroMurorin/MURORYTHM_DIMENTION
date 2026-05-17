@@ -1,21 +1,18 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UniRx;
 using VContainer;
 
 public class SliderInputSetter : MonoBehaviour
 {
-    [Header("対応する入力(必ず長さ16に)")]
-    [SerializeField] KeyCodeConfig[] configs;
+    private const int SliderMaxCount = 16;
 
-    ISliderInputSetter sliderInputSetter;
+    [Header("Key bindings")]
+    [SerializeField] private KeyCodeConfig[] configs;
 
-    // スライダー(キーボード) → ゲーム内入力
-    List<Dictionary<KeyCode, int>> keyCodeToSliderIndexList = new List<Dictionary<KeyCode, int>>();
-
-    bool[] sliderSwitchies = new bool[16];
+    private ISliderInputSetter sliderInputSetter;
+    private readonly List<KeyBinding> keyBindings = new List<KeyBinding>();
+    private readonly bool[] sliderSwitches = new bool[SliderMaxCount];
 
     [Inject]
     public void Inject(ISliderInputSetter inputSetter)
@@ -30,69 +27,99 @@ public class SliderInputSetter : MonoBehaviour
 
     private void Start()
     {
-        CheckSliderKeyCodes();
+        RebuildKeyBindings();
     }
 
-    void Update()
+    private void Update()
     {
-        // 全てのキー入力を監視
-        sliderSwitchies = new bool[16];
-        foreach (var keyCodeToSliderIndex in keyCodeToSliderIndexList)
-        {
-            if (keyCodeToSliderIndex.Count != 16) { continue; }
+        Array.Clear(sliderSwitches, 0, sliderSwitches.Length);
 
-            foreach (var pair in keyCodeToSliderIndex)
-            {
-                sliderSwitchies[pair.Value] |= Input.GetKey(pair.Key);
-            }
+        foreach (var binding in keyBindings)
+        {
+            if (!binding.IsValid) { continue; }
+
+            sliderSwitches[binding.SliderIndex] |= Input.GetKey(binding.KeyCode);
         }
 
-        for (int i = 0; i < sliderSwitchies.Length; i++)
+        for (var i = 0; i < sliderSwitches.Length; i++)
         {
-            sliderInputSetter?.SetSliderInput(i, sliderSwitchies[i]);
+            sliderInputSetter?.SetSliderInput(i, sliderSwitches[i]);
         }
+
     }
 
-    private void CheckSliderKeyCodes()
+    private void RebuildKeyBindings()
     {
+        keyBindings.Clear();
+
         if (configs == null) { return; }
-
-        keyCodeToSliderIndexList.Clear();
-        keyCodeToSliderIndexList = new List<Dictionary<KeyCode, int>>();
 
         foreach (var config in configs)
         {
-            if (config.KeyCodes.Length != 16) 
+            if (config == null || !config.IsActive) { continue; }
+
+            config.AddBindings(keyBindings);
+        }
+    }
+
+    public readonly struct KeyBinding
+    {
+        public readonly KeyCode KeyCode;
+        public readonly int SliderIndex;
+
+        public KeyBinding(KeyCode keyCode, int sliderIndex)
+        {
+            KeyCode = keyCode;
+            SliderIndex = sliderIndex;
+        }
+
+        public bool IsValid => KeyCode != KeyCode.None && 0 <= SliderIndex && SliderIndex < SliderMaxCount;
+    }
+
+    [Serializable]
+    public class KeyCodeConfig
+    {
+        [SerializeField] private string configName;
+
+        [Header("Multiple keys per lane")]
+        [SerializeField] private LaneKeyCodeConfig[] laneKeyCodes;
+
+        [SerializeField] private bool isActive;
+
+        public bool IsActive => isActive;
+
+        public void AddBindings(List<KeyBinding> bindings)
+        {
+            if (laneKeyCodes == null || laneKeyCodes.Length == 0) { return; }
+
+            if (laneKeyCodes.Length != SliderMaxCount)
             {
-                Debug.LogError("【入力】対応するキーの数が16でありません");
-                continue;
+                Debug.LogWarning($"[Input] {configName}: Lane key setting count should be 16. Current: {laneKeyCodes.Length}");
             }
 
-            if (!config.IsActive) { continue; }
-
-            var dictionary = new Dictionary<KeyCode, int>();
-            keyCodeToSliderIndexList.Add(dictionary);
-
-            for (int i = 0; i < 16; i++)
+            var count = Mathf.Min(laneKeyCodes.Length, SliderMaxCount);
+            for (var i = 0; i < count; i++)
             {
-                dictionary.Add(config.KeyCodes[i], i);
+                laneKeyCodes[i]?.AddBindings(bindings, i);
             }
         }
     }
 
-    [System.Serializable]
-    public class KeyCodeConfig
+    [Serializable]
+    public class LaneKeyCodeConfig
     {
-        [SerializeField] string configName;
+        [SerializeField] private KeyCode[] keyCodes;
 
-        [Header("対応する入力(必ず長さ16に)")]
-        [SerializeField] KeyCode[] keyCodes;
+        public void AddBindings(List<KeyBinding> bindings, int sliderIndex)
+        {
+            if (keyCodes == null) { return; }
 
-        [SerializeField] bool isActive;
+            foreach (var keyCode in keyCodes)
+            {
+                if (keyCode == KeyCode.None) { continue; }
 
-        public KeyCode[] KeyCodes { get { return keyCodes; } }
-
-        public bool IsActive { get { return isActive; } }
+                bindings.Add(new KeyBinding(keyCode, sliderIndex));
+            }
+        }
     }
 }
-

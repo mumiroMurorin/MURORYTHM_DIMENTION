@@ -10,9 +10,12 @@ namespace TransitionerInLobbyScene
     public class Transitioner_ConfirmTutorial : IPhaseTransitionerInLobbyScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInLobbyScene> phaseTransitionable;
-        [SerializeField] TextBoxController textBoxController;
+        [SerializeField] float delay = 0.5f;
+        [SerializeField] TextBoxController previousTopicTextBox;
+        [SerializeField] TextBoxController confirmTutorialTextBox;
 
         readonly PhaseStatusInLobbyScene status = PhaseStatusInLobbyScene.ConfirmTutorial;
+        CancellationTokenSource cts;
 
         bool IPhaseTransitionerInLobbyScene.ConditionChecker(PhaseStatusInLobbyScene status)
         {
@@ -23,7 +26,17 @@ namespace TransitionerInLobbyScene
         {
             Debug.Log("yTransitionzTransition to \"ConfirmTutorial\"");
 
-            textBoxController?.Open(TransitionNextPhase);
+            previousTopicTextBox?.Close(OpenConfirmTutorialWindow);
+        }
+
+        private void OpenConfirmTutorialWindow()
+        {
+            cts?.CancelAndDispose();
+            cts = DelayUtility.Run(delay, () =>
+            {
+                confirmTutorialTextBox?.Open(TransitionNextPhase);
+            });
+            phaseTransitionable?.Value?.RegisterCts(cts);
         }
 
         /// <summary>

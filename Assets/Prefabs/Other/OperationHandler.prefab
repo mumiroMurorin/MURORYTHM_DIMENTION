@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa65dfcfcc62add4e91199bb976d4dfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  operations: {fileID: 11400000, guid: a56501d2b6c48a64d8a528f5e5226545, type: 2}
+  operations: {fileID: 11400000, guid: 1e7664d0bac983348abce820afbf471b, type: 2}
   operationDictionary: {fileID: 7623715493339319837}
   operationSetter:
     obj: {fileID: 826874747931657081}
@@ -111,6 +111,7 @@ GameObject:
   - component: {fileID: 7983707598914975379}
   - component: {fileID: 4136450031809560061}
   - component: {fileID: 7623715493339319837}
+  - component: {fileID: 9183079818619817640}
   m_Layer: 0
   m_Name: OperationHandler
   m_TagString: Untagged
@@ -165,6 +166,120 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acab6e929b4329646acc5efca97d2352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9183079818619817640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 826874747931657081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c2a6f5846f285e4ba1ea181a01bc86f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  operationGetter_model:
+    obj: {fileID: 826874747931657081}
+  applyExistingItemsOnStart: 1
+  sliderIndexToLedMaps:
+  - sliderIndex: 0
+    ledAddresses:
+    - channel: 0
+      electrode: 0
+    - channel: 0
+      electrode: 1
+  - sliderIndex: 1
+    ledAddresses:
+    - channel: 0
+      electrode: 2
+    - channel: 0
+      electrode: 3
+  - sliderIndex: 2
+    ledAddresses:
+    - channel: 0
+      electrode: 8
+    - channel: 0
+      electrode: 9
+  - sliderIndex: 3
+    ledAddresses:
+    - channel: 0
+      electrode: 10
+    - channel: 0
+      electrode: 11
+  - sliderIndex: 4
+    ledAddresses:
+    - channel: 1
+      electrode: 0
+    - channel: 1
+      electrode: 1
+  - sliderIndex: 5
+    ledAddresses:
+    - channel: 1
+      electrode: 2
+    - channel: 1
+      electrode: 3
+  - sliderIndex: 6
+    ledAddresses:
+    - channel: 1
+      electrode: 8
+    - channel: 1
+      electrode: 9
+  - sliderIndex: 7
+    ledAddresses:
+    - channel: 1
+      electrode: 10
+    - channel: 1
+      electrode: 11
+  - sliderIndex: 8
+    ledAddresses:
+    - channel: 2
+      electrode: 0
+    - channel: 2
+      electrode: 1
+  - sliderIndex: 9
+    ledAddresses:
+    - channel: 2
+      electrode: 2
+    - channel: 2
+      electrode: 3
+  - sliderIndex: 10
+    ledAddresses:
+    - channel: 2
+      electrode: 8
+    - channel: 2
+      electrode: 9
+  - sliderIndex: 11
+    ledAddresses:
+    - channel: 2
+      electrode: 10
+    - channel: 2
+      electrode: 11
+  - sliderIndex: 12
+    ledAddresses:
+    - channel: 3
+      electrode: 0
+    - channel: 3
+      electrode: 1
+  - sliderIndex: 13
+    ledAddresses:
+    - channel: 3
+      electrode: 2
+    - channel: 3
+      electrode: 3
+  - sliderIndex: 14
+    ledAddresses:
+    - channel: 3
+      electrode: 8
+    - channel: 3
+      electrode: 9
+  - sliderIndex: 15
+    ledAddresses:
+    - channel: 3
+      electrode: 10
+    - channel: 3
+      electrode: 11
+  bindWaitTimeoutMs: 3000
+  connectWaitTimeoutMs: 5000
 --- !u!1 &2616164048275133180
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,7 +424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5cf427376a206c4d9d7c8c1dfb7207e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  operations: {fileID: 11400000, guid: d8dec3fcd36cc4c4bb77019c3ab0a09d, type: 2}
+  operations: {fileID: 11400000, guid: 75258970dc8f32c49b897ce0a34fb02c, type: 2}
   operationDictionary: {fileID: 7623715493339319837}
   operationSetter:
     obj: {fileID: 826874747931657081}
