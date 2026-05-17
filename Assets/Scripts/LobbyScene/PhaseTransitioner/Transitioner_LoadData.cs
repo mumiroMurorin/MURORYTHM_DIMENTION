@@ -1,8 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using VContainer;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 namespace TransitionerInLobbyScene
 {
@@ -21,7 +22,7 @@ namespace TransitionerInLobbyScene
 
         void IPhaseTransitionerInLobbyScene.Transition()
         {
-            Debug.Log("�yTransition�zTransition to \"LoadData\"");
+            Debug.Log("【Transition】Transition to \"LoadData\"");
 
             SoundManager.Instance.PlayBGM(BGM_Type.Lobby);
 
@@ -31,14 +32,14 @@ namespace TransitionerInLobbyScene
         }
 
         /// <summary>
-        /// ���̃t�F�[�Y�ւ̈ړ�
+        /// 次のフェーズへの移動
         /// </summary>
         private void TransitionNextPhase()
         {
             phaseTransitionable?.Value.TransitionPhase(PhaseStatusInLobbyScene.FadeIn);
         }
 
-        private void RegisterOperation() 
+        private void RegisterOperation()
         {
             operationDictionary.RegisterOperation(OperationTag.Lobby_PlayTutorial, () => { TransitionFadeOutPhase(true); });
             operationDictionary.RegisterOperation(OperationTag.Lobby_SkipTutorial, () => { TransitionFadeOutPhase(false); });
@@ -55,7 +56,31 @@ namespace TransitionerInLobbyScene
         private void SetLanguage(GameLanguage language)
         {
             dataController?.DataSetter?.SetSelectedLanguage(language);
+            ApplyLocalization(language);
             phaseTransitionable?.Value.TransitionPhase(PhaseStatusInLobbyScene.ConfirmTutorial);
+        }
+
+        private void ApplyLocalization(GameLanguage language)
+        {
+            if (LocalizationSettings.AvailableLocales == null)
+            {
+                Debug.LogWarning("【Transitioner_LoadData】Localization available locales is not initialized.");
+                return;
+            }
+
+            var locale = LocalizationSettings.AvailableLocales.GetLocale(new LocaleIdentifier(GetLocaleCode(language)));
+            if (locale == null)
+            {
+                Debug.LogWarning($"【Transitioner_LoadData】Locale was not found for {language}.");
+                return;
+            }
+
+            LocalizationSettings.SelectedLocale = locale;
+        }
+
+        private string GetLocaleCode(GameLanguage language)
+        {
+            return language == GameLanguage.English ? "en" : "ja";
         }
     }
 }

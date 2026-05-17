@@ -47,16 +47,18 @@ public class SliderTouchData
         AddCallback(callback);
         SetThemeColor(asset.ThemeColor);
         SetControllerColor(asset.ControllerColor);
+        SetControllerRainbow(asset.ControllerRainbow);
         SetText(asset.Text);
         this.coolDownHandler = coolDownHandler;
     }
 
-    public SliderTouchData(int[] sliderIndices, Action callback, Color themeColor = default, Color controllerColor = default, string text = default, SliderCoolDownHandler coolDownHandler = default)
+    public SliderTouchData(int[] sliderIndices, Action callback, Color themeColor = default, Color controllerColor = default, bool controllerRainbow = false, string text = default, SliderCoolDownHandler coolDownHandler = default)
     {
         SetSliderIndices(sliderIndices);
         AddCallback(callback);
         SetThemeColor(themeColor);
         SetControllerColor(controllerColor == default ? themeColor : controllerColor);
+        SetControllerRainbow(controllerRainbow);
         SetText(text);
         this.coolDownHandler = coolDownHandler;
     }
@@ -106,6 +108,14 @@ public class SliderTouchData
     public void SetControllerColor(Color color)
     {
         controllerColor.Value = color;
+    }
+
+    private readonly ReactiveProperty<bool> controllerRainbow = new ReactiveProperty<bool>();
+    public IReadOnlyReactiveProperty<bool> ControllerRainbow => controllerRainbow;
+
+    public void SetControllerRainbow(bool value)
+    {
+        controllerRainbow.Value = value;
     }
 
 

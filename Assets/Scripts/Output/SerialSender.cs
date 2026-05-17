@@ -253,4 +253,9 @@ public class SerialSender : SingletonMonoBehaviour<SerialSender>
     {
         SendRaw($"C {channel} {electrode} {color.r} {color.g} {color.b}");
     }
+
+    public void SetMappedRainbow(int channel, int electrode)
+    {
+        SendRaw($"R {channel} {electrode}");
+    }
 }

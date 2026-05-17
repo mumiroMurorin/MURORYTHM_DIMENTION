@@ -16,5 +16,6 @@ MonoBehaviour:
   leftEdge: 0
   rightEdge: 15
   themeColor: {r: 1, g: 0, b: 0, a: 1}
+  controllerRainbow: 1
   controllerColor: {r: 0.1809864, g: 1, b: 0, a: 1}
   text: 

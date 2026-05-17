@@ -18,6 +18,10 @@ public class OperationAssetUnit : ScriptableObject
     [Label("Theme Color")]
     [SerializeField] private Color themeColor = Color.red;
 
+    [Label("Controller Rainbow")]
+    [SerializeField] private bool controllerRainbow = false;
+
+    [HideIf(nameof(controllerRainbow))]
     [Label("Controller Color")]
     [SerializeField] private Color controllerColor = Color.red;
 
@@ -28,5 +32,6 @@ public class OperationAssetUnit : ScriptableObject
     public int[] SliderIndices => Enumerable.Range(leftEdge, rightEdge - leftEdge + 1).ToArray();
     public Color ThemeColor => themeColor;
     public Color ControllerColor => controllerColor;
+    public bool ControllerRainbow => controllerRainbow;
     public string Text => text;
 }

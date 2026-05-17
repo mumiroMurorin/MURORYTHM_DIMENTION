@@ -24,19 +24,6 @@ namespace TransitionerInTitleScene
         void IPhaseTransitionerInTitleScene.Transition()
         {
             Debug.Log("yTransitionzTransition to \"WaitingForPlayer\"");
-
-            //cts?.CancelAndDispose();
-            //cts = new CancellationTokenSource();
-            //phaseTransitionable?.Value.RegisterCts(cts);
-
-            //WaitForPlayerInput(TransitionNextPhase, cts.Token).Forget();
-        }
-
-        private async UniTask WaitForPlayerInput(System.Action callback, CancellationToken token)
-        {
-            await UniTask.WaitUntil(() => Input.anyKeyDown, cancellationToken: token);
-
-            callback?.Invoke();
         }
     }
 }
