@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -15,6 +15,10 @@ public class SpaceInputIncarnate : MonoBehaviour
     ISpaceInputGetter spaceInputGetter;
     INoteSpawnDataOptionGetter spawnOptionGetter;
 
+    bool isAutoMode;
+    bool canGetRightHand;
+    bool canGetLeftHand;
+
     [Inject]
     public void Constructor(ISpaceInputGetter spaceInputGetter, INoteSpawnDataOptionGetter spawnOptionGetter)
     {
@@ -29,25 +33,45 @@ public class SpaceInputIncarnate : MonoBehaviour
 
     private void Bind()
     {
-        // ‰Eè
         spaceInputGetter?.GetSpaceInput(SpaceTrackingTag.RightHand)
             .ObserveAdd()
             .Subscribe(value => MoveCaptureObject(rightHandCaptureObject, value.Value.Pos))
             .AddTo(this.gameObject);
 
-        // ¶è
         spaceInputGetter?.GetSpaceInput(SpaceTrackingTag.LeftHand)
             .ObserveAdd()
             .Subscribe(value => MoveCaptureObject(leftHandCaptureObject, value.Value.Pos))
             .AddTo(this.gameObject);
 
-        spawnOptionGetter?.IsAutoModeRP
-            .Subscribe(SetActiveCaputureObject)
+        spaceInputGetter?.GetCanGetSpaceInputReactiveProperty(SpaceTrackingTag.RightHand)
+            .Subscribe(value =>
+            {
+                canGetRightHand = value;
+                ApplyCaptureObjectVisibility();
+            })
             .AddTo(this.gameObject);
+
+        spaceInputGetter?.GetCanGetSpaceInputReactiveProperty(SpaceTrackingTag.LeftHand)
+            .Subscribe(value =>
+            {
+                canGetLeftHand = value;
+                ApplyCaptureObjectVisibility();
+            })
+            .AddTo(this.gameObject);
+
+        spawnOptionGetter?.IsAutoModeRP
+            .Subscribe(value =>
+            {
+                isAutoMode = value;
+                ApplyCaptureObjectVisibility();
+            })
+            .AddTo(this.gameObject);
+
+        ApplyCaptureObjectVisibility();
     }
 
     /// <summary>
-    /// ƒnƒ“ƒhƒIƒuƒWƒFƒNƒg‚ÌˆÊ’u‚ğ“®‚©‚·
+    /// ãƒãƒ³ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½ç½®ã‚’å‹•ã‹ã™
     /// </summary>
     /// <param name="handObject"></param>
     /// <param name="position"></param>
@@ -62,9 +86,16 @@ public class SpaceInputIncarnate : MonoBehaviour
         handObject.OnMoveHandPosition(position);
     }
 
-    private void SetActiveCaputureObject(bool isAutoMode)
+    private void ApplyCaptureObjectVisibility()
     {
-        rightHandCaptureObject.gameObject.SetActive(!isAutoMode);
-        leftHandCaptureObject.gameObject.SetActive(!isAutoMode);
+        if (rightHandCaptureObject != null)
+        {
+            rightHandCaptureObject.gameObject.SetActive(!isAutoMode && canGetRightHand);
+        }
+
+        if (leftHandCaptureObject != null)
+        {
+            leftHandCaptureObject.gameObject.SetActive(!isAutoMode && canGetLeftHand);
+        }
     }
 }

@@ -16,5 +16,6 @@ MonoBehaviour:
   leftEdge: 14
   rightEdge: 15
   themeColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+  controllerRainbow: 0
   controllerColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-  text: "\u623B\u308B"
+  textKey: Option_BackSelectMusicDetail

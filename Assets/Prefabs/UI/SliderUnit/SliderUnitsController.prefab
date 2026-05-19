@@ -135,6 +135,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sliderTopicPrefab: {fileID: 7738816561618148197, guid: 65d3c871a61bfc344bad369bcc3f74cf, type: 3}
   parent: {fileID: 5170528869690855405}
+  topicTextTable:
+    m_TableCollectionName: SliderTopic
 --- !u!1001 &243184794638948366
 PrefabInstance:
   m_ObjectHideFlags: 0

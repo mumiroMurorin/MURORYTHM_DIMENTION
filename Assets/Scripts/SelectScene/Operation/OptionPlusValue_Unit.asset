@@ -16,5 +16,6 @@ MonoBehaviour:
   leftEdge: 8
   rightEdge: 10
   themeColor: {r: 1, g: 0.29803923, b: 0.29803923, a: 1}
+  controllerRainbow: 0
   controllerColor: {r: 1, g: 0.29803923, b: 0.29803923, a: 1}
-  text: "\u8A2D\u5B9A\u9805\u76EE+"
+  textKey: Option_PlusValue

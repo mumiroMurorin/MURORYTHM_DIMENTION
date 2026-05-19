@@ -232,7 +232,7 @@ namespace Mediapipe.Unity.Tutorial
 
             try
             {
-                AssetLoader.Provide(new StreamingAssetsResourceManager());
+                AssetLoader.Provide(MediaPipeResourceManagerProvider.Instance);
             }
             catch (InvalidOperationException)
             {

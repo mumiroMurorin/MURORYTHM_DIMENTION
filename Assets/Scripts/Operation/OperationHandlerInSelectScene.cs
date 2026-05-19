@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -8,7 +8,7 @@ using NaughtyAttributes;
 
 public class OperationHandlerInSelectScene : MonoBehaviour
 {
-    [Label("‘€ìƒAƒZƒbƒgƒŠƒXƒg")]
+    [Label("æ“ä½œã‚¢ã‚»ãƒƒãƒˆãƒªã‚¹ãƒˆ")]
     [SerializeField] OperationListInScene operations;
 
     [SerializeField] OperationDictionary operationDictionary;
@@ -30,17 +30,17 @@ public class OperationHandlerInSelectScene : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒtƒF[ƒYƒ`ƒFƒ“ƒW‚ÌÛAŠY“–‚·‚é‘€ì‚ª‚ ‚é‚©ƒ`ƒFƒbƒN‚µ‚Ä‚ ‚Á‚½‚çƒZƒbƒg‚·‚é
+    /// ãƒ•ã‚§ãƒ¼ã‚ºãƒã‚§ãƒ³ã‚¸ã®éš›ã€è©²å½“ã™ã‚‹æ“ä½œãŒã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ã—ã¦ã‚ã£ãŸã‚‰ã‚»ãƒƒãƒˆã™ã‚‹
     /// </summary>
     /// <param name="phase"></param>
     public void OnChangePhase(PhaseStatusInSelectScene phase)
     {
         foreach (var assets in operations.AssetsList)
         {
-            // ƒV[ƒ“‚ÆƒtƒF[ƒY‚ªŠY“–H
+            // ã‚·ãƒ¼ãƒ³ã¨ãƒ•ã‚§ãƒ¼ã‚ºãŒè©²å½“ï¼Ÿ
             if (assets.CheckCondition(phase))
             {
-                // ‘€ì‚Ì”jŠü
+                // æ“ä½œã®ç ´æ£„
                 operationSetter.Value.Dispose();
 
                 cts?.CancelAndDispose();
@@ -50,24 +50,24 @@ public class OperationHandlerInSelectScene : MonoBehaviour
             }
         }
 
-        // ‘€ì‚Ì”jŠü
+        // æ“ä½œã®ç ´æ£„
         operationSetter.Value.Dispose();
     }
 
     /// <summary>
-    /// ‚»‚ÌƒtƒF[ƒY“à‚Ì‘€ì‚ğ‘S‚ÄƒZƒbƒg
+    /// ãã®ãƒ•ã‚§ãƒ¼ã‚ºå†…ã®æ“ä½œã‚’å…¨ã¦ã‚»ãƒƒãƒˆ
     /// </summary>
     /// <param name="assets"></param>
     private void SetOperation(OperationInPhase assets)
     {
-        // ‚»‚ÌƒtƒF[ƒY‚Ì‘€ì‚ğƒZƒbƒg
+        // ãã®ãƒ•ã‚§ãƒ¼ã‚ºã®æ“ä½œã‚’ã‚»ãƒƒãƒˆ
         foreach (var group in assets.AssetGroups)
         {
             var coolDownHandler = group.SliderCoolDownHandler;
 
             foreach (var asset in group.Operations)
             {
-                operationSetter?.Value?.SetOperate(new SliderTouchData(asset, operationDictionary.GetOperation(asset.Tag), coolDownHandler));
+                operationSetter?.Value?.SetOperate(new SliderTouchData(asset, operationDictionary.GetOperation(asset.Tag), operations.TextTableReference, coolDownHandler));
             }
         }
     }
@@ -77,3 +77,5 @@ public class OperationHandlerInSelectScene : MonoBehaviour
         cts?.CancelAndDispose();
     }
 }
+
+

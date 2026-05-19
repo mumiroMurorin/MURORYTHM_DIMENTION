@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -11,28 +11,22 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
     const int SLIDER_MAX_COUNT = 16;
     const int MAX_RECORD_SPACE_INDEX = 60;
 
-    // ƒXƒ‰ƒCƒ_[‚©‚ç‚Ì“ü—Í
+    // ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼ã‹ã‚‰ã®å…¥åŠ›
     ReactiveProperty<bool>[] sliderInput;
 
-    // ‹óŠÔ“ü—Í(‰Eè)
+    // ç©ºé–“å…¥åŠ›(å³æ‰‹)
     ReactiveCollection<TimeToPos> rightHandInput = new ReactiveCollection<TimeToPos>();
-    // ‰Eè‚Ì“®‚«‚ÌƒxƒNƒgƒ‹
+    // å³æ‰‹ã®å‹•ãã®ãƒ™ã‚¯ãƒˆãƒ«
     ReactiveProperty<Vector3> rightHandVelocity = new ReactiveProperty<Vector3>();
+    // å³æ‰‹ã‚’å–å¾—ã§ãã¦ã„ã‚‹ã‹
+    ReactiveProperty<bool> canGetRightHand = new ReactiveProperty<bool>();
 
-    // ‹óŠÔ“ü—Í(¶è)
+    // ç©ºé–“å…¥åŠ›(å·¦æ‰‹)
     ReactiveCollection<TimeToPos> leftHandInput = new ReactiveCollection<TimeToPos>();
-    // ¶è‚Ì“®‚«‚ÌƒxƒNƒgƒ‹
+    // å·¦æ‰‹ã®å‹•ãã®ãƒ™ã‚¯ãƒˆãƒ«
     ReactiveProperty<Vector3> leftHandVelocity = new ReactiveProperty<Vector3>();
-
-    // ‹óŠÔ“ü—Í’†H
-    ReactiveProperty<bool> canGetSpaceInput = new ReactiveProperty<bool>();
-    public IReadOnlyReactiveProperty<bool> CanGetSpaceInputReactiveProperty { get { return canGetSpaceInput; } }
-    public void SetCanGetSpaceInput(bool isGet)
-    {
-        if (canGetSpaceInput.Value == isGet) { return; }
-
-        canGetSpaceInput.Value = isGet;
-    }
+    // å·¦æ‰‹ã‚’å–å¾—ã§ãã¦ã„ã‚‹ã‹
+    ReactiveProperty<bool> canGetLeftHand = new ReactiveProperty<bool>();
 
     public void Initialize()
     {
@@ -44,19 +38,19 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
     }
 
     /// <summary>
-    /// (index)”Ô‚ÌƒXƒ‰ƒCƒ_[‚ğ(isEnable)ó‘Ô‚É‚·‚é
+    /// (index)ç•ªã®ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’(isEnable)çŠ¶æ…‹ã«ã™ã‚‹
     /// </summary>
     /// <param name="index"></param>
     public void SetSliderInput(int index, bool isEnable)
     {
-        if (index >= SLIDER_MAX_COUNT) { Debug.LogWarning($"yInputzOut of range: {index}"); return; }
+        if (index >= SLIDER_MAX_COUNT) { Debug.LogWarning($"ã€Inputã€‘Out of range: {index}"); return; }
         if (sliderInput[index].Value == isEnable) { return; }
 
         sliderInput[index].Value = isEnable;
     }
 
     /// <summary>
-    /// (tag)ƒ^ƒO‚Ìƒ|ƒWƒVƒ‡ƒ“‚ğpos‚ÉƒZƒbƒg
+    /// (tag)ã‚¿ã‚°ã®ãƒã‚¸ã‚·ãƒ§ãƒ³ã‚’posã«ã‚»ãƒƒãƒˆ
     /// </summary>
     /// <param name="tag"></param>
     /// <param name="pos"></param>
@@ -68,44 +62,75 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
                 var previous = rightHandInput.LastOrDefault();
                 var current = new TimeToPos(time, pos);
 
-                // ƒf[ƒ^‚Ì’Ç‰Á
                 rightHandInput.Add(current);
                 if (rightHandInput.Count < 2) { break; }
 
-                // ƒxƒNƒgƒ‹‚ÌZo
                 SetHandVector(previous, current, rightHandVelocity);
-                // —v‘f”‚ª‚¢‚Á‚Ï‚¢‚¾‚Á‚½‚çŒÃ‚¢‚â‚Â‚©‚çÁ‚· 
                 if (rightHandInput.Count > MAX_RECORD_SPACE_INDEX) { rightHandInput.RemoveAt(0); }
-                
                 break;
 
             case SpaceTrackingTag.LeftHand:
                 var previous_ = leftHandInput.LastOrDefault();
                 var current_ = new TimeToPos(time, pos);
 
-                // ƒf[ƒ^‚Ì’Ç‰Á
                 leftHandInput.Add(current_);
                 if (leftHandInput.Count < 2) { break; }
 
-                // ƒxƒNƒgƒ‹‚ÌZo
                 SetHandVector(previous_, current_, leftHandVelocity);
-                // —v‘f”‚ª‚¢‚Á‚Ï‚¢‚¾‚Á‚½‚çŒÃ‚¢‚â‚Â‚©‚çÁ‚· 
                 if (leftHandInput.Count > MAX_RECORD_SPACE_INDEX) { leftHandInput.RemoveAt(0); }
                 break;
             default:
-                Debug.LogWarning($"yInputzİ’è‚³‚ê‚Ä‚¢‚È‚¢ƒ^ƒO‚Å‚·: {tag}");
+                Debug.LogWarning($"ã€Inputã€‘è¨­å®šã•ã‚Œã¦ã„ãªã„ã‚¿ã‚°ã§ã™: {tag}");
                 return;
         }
     }
 
+    public void SetCanGetSpaceInput(SpaceTrackingTag tag, bool isGet)
+    {
+        switch (tag)
+        {
+            case SpaceTrackingTag.RightHand:
+                if (canGetRightHand.Value != isGet)
+                {
+                    canGetRightHand.Value = isGet;
+                }
+                break;
+
+            case SpaceTrackingTag.LeftHand:
+                if (canGetLeftHand.Value != isGet)
+                {
+                    canGetLeftHand.Value = isGet;
+                }
+                break;
+
+            default:
+                Debug.LogWarning($"ã€Inputã€‘è¨­å®šã•ã‚Œã¦ã„ãªã„ã‚¿ã‚°ã§ã™: {tag}");
+                return;
+        }
+    }
+
+    public IReadOnlyReactiveProperty<bool> GetCanGetSpaceInputReactiveProperty(SpaceTrackingTag spaceTrackingTag)
+    {
+        switch (spaceTrackingTag)
+        {
+            case SpaceTrackingTag.RightHand:
+                return canGetRightHand;
+            case SpaceTrackingTag.LeftHand:
+                return canGetLeftHand;
+            default:
+                Debug.LogWarning($"ã€Inputã€‘è¨­å®šã•ã‚Œã¦ã„ãªã„ã‚¿ã‚°ã§ã™: {spaceTrackingTag}");
+                return null;
+        }
+    }
+
     /// <summary>
-    /// ƒXƒ‰ƒCƒ_[“ü—Í(ReactiveProperty)‚ğ•Ô‚·
+    /// ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼å…¥åŠ›(ReactiveProperty)ã‚’è¿”ã™
     /// </summary>
     /// <param name="index"></param>
     /// <returns></returns>
     public IReadOnlyReactiveProperty<bool> GetSliderInputReactiveProperty(int index)
     {
-        if (index >= SLIDER_MAX_COUNT) { Debug.LogWarning($"yInputzOut of range: {index}"); return null; }
+        if (index >= SLIDER_MAX_COUNT) { Debug.LogWarning($"ã€Inputã€‘Out of range: {index}"); return null; }
 
         return sliderInput[index];
     }
@@ -119,13 +144,13 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
             case SpaceTrackingTag.LeftHand:
                 return leftHandInput;
             default:
-                Debug.LogWarning($"yInputzİ’è‚³‚ê‚Ä‚¢‚È‚¢ƒ^ƒO‚Å‚·: {spaceTrackingTag}");
+                Debug.LogWarning($"ã€Inputã€‘è¨­å®šã•ã‚Œã¦ã„ãªã„ã‚¿ã‚°ã§ã™: {spaceTrackingTag}");
                 return null;
         }
     }
 
     /// <summary>
-    /// ‹óŠÔ“ü—Í(ReactiveProperty)‚ğ•Ô‚·
+    /// ç©ºé–“å…¥åŠ›(ReactiveProperty)ã‚’è¿”ã™
     /// </summary>
     /// <param name="spaceTrackingTag"></param>
     /// <returns></returns>
@@ -138,20 +163,20 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
             case SpaceTrackingTag.LeftHand:
                 return leftHandVelocity;
             default:
-                Debug.LogWarning($"yInputzİ’è‚³‚ê‚Ä‚¢‚È‚¢ƒ^ƒO‚Å‚·: {spaceTrackingTag}");
+                Debug.LogWarning($"ã€Inputã€‘è¨­å®šã•ã‚Œã¦ã„ãªã„ã‚¿ã‚°ã§ã™: {spaceTrackingTag}");
                 return null;
         }
     }
 
     /// <summary>
-    /// è‚ÌÀ•W‚©‚ç“®‚«‚ğƒxƒNƒgƒ‹‰»‚·‚é
+    /// æ‰‹ã®åº§æ¨™ã‹ã‚‰å‹•ãã‚’ãƒ™ã‚¯ãƒˆãƒ«åŒ–ã™ã‚‹
     /// </summary>
     /// <param name="handInput"></param>
     private void SetHandVector(TimeToPos previous, TimeToPos current, ReactiveProperty<Vector3> recorder)
     {
-        if (previous.Time == current.Time) 
-        { 
-            recorder.Value = Vector3.zero; 
+        if (previous.Time == current.Time)
+        {
+            recorder.Value = Vector3.zero;
             return;
         }
 
@@ -159,7 +184,7 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
     }
 
     /// <summary>
-    /// ˆø”‚Ì”ÍˆÍ‚Éè‚ª“ü‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©
+    /// å¼•æ•°ã®ç¯„å›²ã«æ‰‹ãŒå…¥ã£ã¦ã„ã‚‹ã‹ã©ã†ã‹
     /// </summary>
     /// <param name="vertices"></param>
     /// <returns></returns>
@@ -170,7 +195,6 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
 
     public bool IsInSpaceRange(Vector2[] vertices, SpaceTrackingTag spaceTrackingTag, float radius = 0)
     {
-        // è‚Ì”»’è (Œğ·‚µ‚Ä‚¢‚½‚ç”ÍˆÍ“à”»’è)
         var handVectorList = GetSpaceInput(spaceTrackingTag);
         int count = handVectorList.Count;
 
@@ -179,7 +203,6 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
         var pos1 = handVectorList[count - 1].Pos;
         var pos2 = handVectorList[count - 2].Pos;
 
-        // ƒŒƒ“ƒW“à‚É“ü‚Á‚Ä‚¢‚é‚©Œğ·‚µ‚Ä‚¢‚½‚çtrue‚ğ•Ô‚·
         return IsSegmentIntersectingOrInsidePolygon(pos1, pos2, vertices)
             || IsCircleIntersectingPolygon(vertices, pos1, radius);
     }

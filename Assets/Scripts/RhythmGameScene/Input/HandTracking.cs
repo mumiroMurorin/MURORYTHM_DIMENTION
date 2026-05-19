@@ -14,50 +14,46 @@ namespace Mediapipe.Unity.Tutorial
 {
     public class HandTracking : MonoBehaviour, ICameraInfoHolder
     {
-        const int HAND_NUM = 2;
+        private const int HAND_NUM = 2;
 
         [SerializeField] private RawImage _screen;
 
-        // --- Handトラッキング用 ---
-
-        private enum ModelComplexity { Lite = 0, Full = 1, }
-        [SerializeField] ModelComplexity _modelComplexity = ModelComplexity.Lite;
+        // Hand tracking settings
+        [SerializeField] private HandTrackingModelComplexity _HandTrackingModelComplexity = HandTrackingModelComplexity.Lite;
         [SerializeField] private TextAsset _configAsset;
 
-        [Header("横幅(確認用)")]
+        [Header("Width")]
         [SerializeField] private int _width;
-        [Header("縦幅(確認用)")]
+        [Header("Height")]
         [SerializeField] private int _height;
-        [Header("FPS(確認用)")]
+        [Header("FPS")]
         [SerializeField] private int _fps;
-        [Header("処理間隔(1なら毎フレーム)")]
+        [Header("Process Frame Interval")]
         [SerializeField, Min(1)] private int _processFrameInterval = 2;
 
-        ReactiveProperty<int> fps = new ReactiveProperty<int>();
+        private ReactiveProperty<int> fps = new ReactiveProperty<int>();
         public IReadOnlyReactiveProperty<int> CameraFps => fps;
 
-        BodyTrackingSettings settings;
-        CalculatorGraph _graph;
-        static ResourceManager _resourceManager;
-
-        // カメラ入力用
-        ReactiveProperty<WebCamTexture> _webCamTexture = new ReactiveProperty<WebCamTexture>();
+        private BodyTrackingSettings settings;
+        private CalculatorGraph _graph;
+        // Camera texture
+        private ReactiveProperty<WebCamTexture> _webCamTexture = new ReactiveProperty<WebCamTexture>();
         public IReadOnlyReactiveProperty<WebCamTexture> WebCamInfo => _webCamTexture;
 
-        Texture2D _inputTexture;
-        Color32[] _pixelData;
+        private Texture2D _inputTexture;
+        private Color32[] _pixelData;
 
-        bool isReadyTracking;
+        private bool isReadyTracking;
 
-        List<NormalizedLandmarkList> landmarkList;
+        private List<NormalizedLandmarkList> landmarkList;
         public List<NormalizedLandmarkList> LandmarkList { get { return landmarkList; } }
-        OutputStream<NormalizedLandmarkListVectorPacket, List<NormalizedLandmarkList>> handLandmarksStream;
+        private OutputStream<NormalizedLandmarkListVectorPacket, List<NormalizedLandmarkList>> handLandmarksStream;
 
-        CancellationTokenSource initializeCts = new CancellationTokenSource();
-        CancellationTokenSource trackingCts = new CancellationTokenSource();
+        private CancellationTokenSource initializeCts = new CancellationTokenSource();
+        private CancellationTokenSource trackingCts = new CancellationTokenSource();
 
         /// <summary>
-        /// 非同期初期化関数のラップ
+        /// Initialize hand tracking.
         /// </summary>
         public void Initialize(BodyTrackingSettings settings = default)
         {
@@ -70,7 +66,7 @@ namespace Mediapipe.Unity.Tutorial
         }
 
         /// <summary>
-        /// 非同期トラッキング関数のラップ
+        /// Start tracking.
         /// </summary>
         [Obsolete]
         public void StartTracking()
@@ -85,54 +81,51 @@ namespace Mediapipe.Unity.Tutorial
         {
             isReadyTracking = false;
 
-            // Webカメラの初期化チェック
+            // Check webcam availability
             if (WebCamTexture.devices.Length == 0)
             {
-                Debug.LogError("【MediaPipe】No webcam devices found!");
+                Debug.LogError("[MediaPipe] No webcam devices found!");
                 return;
             }
 
-            if (WebCamTexture.devices.Length <= settings.CameraIndex) { settings.CameraIndex = 0; } 
+            if (WebCamTexture.devices.Length <= settings.CameraIndex) { settings.CameraIndex = 0; }
             var webCamDevice = WebCamTexture.devices[settings.CameraIndex];
 
-            // 解像度対応チェック
+            // Check supported resolution
             var isSurpported = await CheckIfTextureStartedAsync(webCamDevice.name, settings.CameraWidth.Value, settings.CameraHeight.Value, token);
-            // 対応してたらその解像度にする
-            if (isSurpported) 
-            { 
+            if (isSurpported)
+            {
                 _webCamTexture.Value = new WebCamTexture(webCamDevice.name, settings.CameraWidth.Value, settings.CameraHeight.Value);
             }
-            // 対応してなかったらデフォルト(最高?)解像度にする
-            else 
+            else
             {
                 _webCamTexture.Value = new WebCamTexture(webCamDevice.name, _width, _height);
             }
 
             _webCamTexture.Value.Play();
-            Debug.Log("【MediaPipe】WebCamTexture is playing: " + _webCamTexture.Value.isPlaying);
+            Debug.Log("[MediaPipe] WebCamTexture is playing: " + _webCamTexture.Value.isPlaying);
 
             try
             {
                 await UniTask.WaitUntil(() => _webCamTexture.Value.width > 16, cancellationToken: token);
 
-                // 解像度の動的設定
                 _width = _webCamTexture.Value.width;
                 _height = _webCamTexture.Value.height;
-                Debug.Log($"【MediaPipe】WebCamTexture is set resolution: {_width}x{_height}");
+                Debug.Log($"[MediaPipe] WebCamTexture is set resolution: {_width}x{_height}");
             }
             catch (OperationCanceledException)
             {
-                Debug.LogWarning("【MediaPipe】Initialization canceled during webcam wait.");
+                Debug.LogWarning("[MediaPipe] Initialization canceled during webcam wait.");
                 return;
             }
 
             if (_webCamTexture.Value.width <= 16)
             {
-                Debug.LogError("【MediaPipe】WebCamTexture did not initialize correctly.");
+                Debug.LogError("[MediaPipe] WebCamTexture did not initialize correctly.");
                 return;
             }
 
-            Debug.Log("【MediaPipe】WebCamTexture initialized successfully.");
+            Debug.Log("[MediaPipe] WebCamTexture initialized successfully.");
 
             _screen.rectTransform.sizeDelta = new Vector2(_width, _height);
             _screen.texture = _webCamTexture.Value;
@@ -140,20 +133,17 @@ namespace Mediapipe.Unity.Tutorial
             _inputTexture = new Texture2D(_width, _height, TextureFormat.RGBA32, false);
             _pixelData = new Color32[_webCamTexture.Value.width * _webCamTexture.Value.height];
 
-            _resourceManager ??= new StreamingAssetsResourceManager();
-
-            // LoadModelAssetsにCancel処理が組み込めなかったから凄く不安…
-            switch (_modelComplexity)
+            switch (_HandTrackingModelComplexity)
             {
-                case ModelComplexity.Lite:
-                    Debug.Log("【MediaPipe】Loading Lite Pose model...");
+                case HandTrackingModelComplexity.Lite:
+                    Debug.Log("[MediaPipe] Loading Lite hand model...");
                     await LoadModelAssets("hand_landmark_lite.bytes");
                     await LoadModelAssets("hand_recrop.bytes");
                     await LoadModelAssets("handedness.txt");
                     await LoadModelAssets("palm_detection_lite.bytes");
                     break;
-                case ModelComplexity.Full:
-                    Debug.Log("【MediaPipe】Loading Full Pose model...");
+                case HandTrackingModelComplexity.Full:
+                    Debug.Log("[MediaPipe] Loading Full hand model...");
                     await LoadModelAssets("hand_landmark_full.bytes");
                     await LoadModelAssets("hand_recrop.bytes");
                     await LoadModelAssets("handedness.txt");
@@ -163,14 +153,14 @@ namespace Mediapipe.Unity.Tutorial
 
             if (_configAsset == null)
             {
-                Debug.LogError("【MediaPipe】Configuration asset (_configAsset) is not assigned.");
+                Debug.LogError("[MediaPipe] Configuration asset (_configAsset) is not assigned.");
                 return;
             }
 
             _graph = new CalculatorGraph(_configAsset.text);
             if (_graph == null)
             {
-                Debug.LogError("【MediaPipe】Failed to initialize CalculatorGraph.");
+                Debug.LogError("[MediaPipe] Failed to initialize CalculatorGraph.");
                 return;
             }
 
@@ -178,7 +168,7 @@ namespace Mediapipe.Unity.Tutorial
             handLandmarksStream.StartPolling().AssertOk();
 
             var sidePacket = new SidePacket();
-            sidePacket.Emplace("model_complexity", new IntPacket((int)_modelComplexity));
+            sidePacket.Emplace("model_complexity", new IntPacket((int)_HandTrackingModelComplexity));
             sidePacket.Emplace("num_hands", new IntPacket(HAND_NUM));
             sidePacket.Emplace("input_rotation", new IntPacket(0));
             sidePacket.Emplace("input_horizontally_flipped", new BoolPacket(settings.IsHorizontallyFlipped.Value));
@@ -187,18 +177,16 @@ namespace Mediapipe.Unity.Tutorial
             _graph.StartRun(sidePacket).AssertOk();
 
             isReadyTracking = true;
-            Debug.Log("【MediaPipe】Graph started successfully!");
+            Debug.Log("[MediaPipe] Graph started successfully!");
         }
 
         [Obsolete]
         private async UniTask BodyTrackAsync(CancellationToken token)
         {
             await UniTask.WaitUntil(() => isReadyTracking == true, cancellationToken: token);
-            // タイマー開始
+
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-
-            // var screenRect = _screen.GetComponent<RectTransform>().rect;
 
             while (true)
             {
@@ -218,7 +206,6 @@ namespace Mediapipe.Unity.Tutorial
 
                 await UniTask.WaitForEndOfFrame(token);
 
-                // FPSの更新
                 float end = Time.realtimeSinceStartup;
                 float deltaTime = end - start;
                 _fps = deltaTime > 0 ? (int)(1f / deltaTime) : 0;
@@ -230,18 +217,14 @@ namespace Mediapipe.Unity.Tutorial
 
                     landmarkList = LandMarks;
                 }
-                else
-                {
-                    // Debug.LogWarning("【MediaPipe】No pose landmarks received.");
-                }
             }
         }
 
-        // モデル読み込み補助メソッド
+        // Load a model file.
         private IEnumerator LoadModelAssets(string assetName)
         {
-            yield return _resourceManager.PrepareAssetAsync(assetName);
-            Debug.Log($"【MediaPipe】Loaded {assetName}");
+            yield return MediaPipeResourceManagerProvider.Instance.PrepareAssetAsync(assetName);
+            Debug.Log($"[MediaPipe] Loaded {assetName}");
         }
 
         private void OnDestroy()
@@ -261,7 +244,7 @@ namespace Mediapipe.Unity.Tutorial
                 finally
                 {
                     _graph.Dispose();
-                    Debug.Log("【MediaPipe】Graph disposed.");
+                    Debug.Log("[MediaPipe] Graph disposed.");
                 }
             }
 

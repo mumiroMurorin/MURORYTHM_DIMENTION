@@ -16,5 +16,6 @@ MonoBehaviour:
   leftEdge: 11
   rightEdge: 13
   themeColor: {r: 0, g: 0.8666667, b: 0.8117647, a: 1}
+  controllerRainbow: 0
   controllerColor: {r: 0, g: 0.8666667, b: 0.8117647, a: 1}
-  text: "\u53F3\u2192"
+  textKey: Option_MoveRight

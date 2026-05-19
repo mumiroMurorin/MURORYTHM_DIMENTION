@@ -16,5 +16,6 @@ MonoBehaviour:
   leftEdge: 5
   rightEdge: 10
   themeColor: {r: 1, g: 0.8117647, b: 0, a: 1}
+  controllerRainbow: 0
   controllerColor: {r: 1, g: 0.8117647, b: 0, a: 1}
-  text: "\u697D\u66F2\u9078\u629E"
+  textKey: Select_SelectMusic

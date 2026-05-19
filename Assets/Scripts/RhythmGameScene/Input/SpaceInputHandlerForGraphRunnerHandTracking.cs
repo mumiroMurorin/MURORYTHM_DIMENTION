@@ -1,18 +1,9 @@
 using UniRx;
 using UnityEngine;
-using VContainer;
 using Mediapipe;
 
-public class SpaceInputHandlerForGraphRunnerHandTracking : MonoBehaviour, ISpaceInputHandler
+public class SpaceInputHandlerForGraphRunnerHandTracking : MonoBehaviour, ISpaceInputHandler, ICameraInfoHolder
 {
-    private enum TrackingPoint
-    {
-        Wrist,
-        PalmCenter,
-        MiddleMcp,
-    }
-
-    [SerializeField] private SerializeInterface<ITimeGetter> timer;
     [SerializeField] private Mediapipe.Unity.Tutorial.HandTrackingWithGraphRunner handTracking;
     [SerializeField] private TrackingPoint trackingPoint = TrackingPoint.PalmCenter;
 
@@ -32,8 +23,16 @@ public class SpaceInputHandlerForGraphRunnerHandTracking : MonoBehaviour, ISpace
     private readonly ReactiveProperty<Vector3> leftHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
     public IReadOnlyReactiveProperty<Vector3> LeftHandPos => leftHandPos;
 
+    public IReadOnlyReactiveProperty<WebCamTexture> WebCamInfo => handTracking != null ? handTracking.WebCamInfo : emptyWebCamInfo;
+    public IReadOnlyReactiveProperty<int> CameraFps => handTracking != null ? handTracking.CameraFps : emptyCameraFps;
+
+    private readonly ReactiveProperty<WebCamTexture> emptyWebCamInfo = new ReactiveProperty<WebCamTexture>(null);
+    private readonly ReactiveProperty<int> emptyCameraFps = new ReactiveProperty<int>(0);
+
+    public bool CanGetRightHand => hasRightHandTarget;
+    public bool CanGetLeftHand => hasLeftHandTarget;
+
     private bool isTracking;
-    private ISpaceInputSetter spaceInputSetter;
     private IOptionGetter optionGetter;
     private int lastResultVersion = -1;
 
@@ -46,10 +45,8 @@ public class SpaceInputHandlerForGraphRunnerHandTracking : MonoBehaviour, ISpace
     private float lastRightHandSeenTime = float.NegativeInfinity;
     private float lastLeftHandSeenTime = float.NegativeInfinity;
 
-    [Inject]
-    public void Construct(ISpaceInputSetter inputSetter, IOptionGetter optionGetter)
+    public void Initialize(IOptionGetter optionGetter)
     {
-        spaceInputSetter = inputSetter;
         this.optionGetter = optionGetter;
     }
 
@@ -57,7 +54,6 @@ public class SpaceInputHandlerForGraphRunnerHandTracking : MonoBehaviour, ISpace
     {
         ReadData();
         UpdatePositions();
-        SendData();
     }
 
     public bool IsExistCamera()
@@ -160,7 +156,6 @@ public class SpaceInputHandlerForGraphRunnerHandTracking : MonoBehaviour, ISpace
             return invertMediaPipeHandedness ? SwapHandTag(handTag) : handTag;
         }
 
-        // Fallback keeps the previous implementation's behavior.
         return index == 0 ? SpaceTrackingTag.RightHand : SpaceTrackingTag.LeftHand;
     }
 
@@ -256,17 +251,5 @@ public class SpaceInputHandlerForGraphRunnerHandTracking : MonoBehaviour, ISpace
     private void UpdateTrackingState()
     {
         isTracking = hasRightHandTarget || hasLeftHandTarget;
-    }
-
-    private void SendData()
-    {
-        if (spaceInputSetter == null) { return; }
-
-        var currentTime = timer.Value != null ? timer.Value.Time : 0;
-        var settings = optionGetter?.TrackingSettings;
-
-        spaceInputSetter.SetSpaceInput(SpaceTrackingTag.RightHand, SpaceInputNormalizer.NormalizeUsedVector2(rightHandPos.Value, settings), currentTime);
-        spaceInputSetter.SetSpaceInput(SpaceTrackingTag.LeftHand, SpaceInputNormalizer.NormalizeUsedVector2(leftHandPos.Value, settings), currentTime);
-        spaceInputSetter.SetCanGetSpaceInput(isTracking);
     }
 }

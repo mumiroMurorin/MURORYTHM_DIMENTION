@@ -15,6 +15,7 @@ namespace UIInRootScene
     {
         [Header("View")]
         [SerializeField] HandInfoView handInfo_view;
+        [SerializeField] TrackingModeDropDownView trackingModeDropDown_view;
         [SerializeField] ControllerPositionSettingView controllerLeftEdgeSetting_view;
         [SerializeField] ControllerPositionSettingView controllerRightEdgeSetting_view;
         [SerializeField] ControllerPositionSettingView controllerLowerCenterSetting_view;
@@ -31,13 +32,15 @@ namespace UIInRootScene
         [SerializeField] SerializeInterface<ICameraInfoHolder> cameraInfo_model;
 
         IOptionGetter optionGetter_model;
+        IOptionSetter optionSetter_model;
         ISpaceInputGetter spaceInputGetter_model;
         bool isHiddenUI;
 
         [Inject]
-        public void Construct(IOptionGetter optionGetter, ISpaceInputGetter spaceInputGetter)
+        public void Construct(IOptionGetter optionGetter, IOptionSetter optionSetter, ISpaceInputGetter spaceInputGetter)
         {
             optionGetter_model = optionGetter;
+            optionSetter_model = optionSetter;
             spaceInputGetter_model = spaceInputGetter;
         }
 
@@ -45,6 +48,7 @@ namespace UIInRootScene
         {
             Bind(); 
             SetEvent();
+            trackingModeDropDown_view?.OnChangeTrackingMode(optionGetter_model?.CurrentTrackingMode.Value ?? TrackingMode.BodyTracking);
         }
 
         private void Bind()
@@ -98,6 +102,11 @@ namespace UIInRootScene
 
             cameraInfo_model?.Value?.CameraFps
                 .Subscribe(cameraSettings_view.OnChangeFPS)
+                .AddTo(this.gameObject);
+
+            // トラッキングモード
+            optionGetter_model?.CurrentTrackingMode
+                .Subscribe(trackingModeDropDown_view.OnChangeTrackingMode)
                 .AddTo(this.gameObject);
         }
 
@@ -156,6 +165,14 @@ namespace UIInRootScene
                 phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
             };
 
+            // トラッキングモードの変更
+            trackingModeDropDown_view.OnTrackingModeChangedListener += (mode) =>
+            {
+                optionSetter_model?.SetCurrentTrackingMode(mode);
+                // リロード
+                phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
+            };
+
             // セレクトシーンに戻る
             backMusicSelectSceneButton_view.OnPushButtonListner += () => { phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.TransitionSelectScene); };
 
@@ -172,3 +189,4 @@ namespace UIInRootScene
     }
 
 }
+

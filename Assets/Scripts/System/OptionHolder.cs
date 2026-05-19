@@ -417,6 +417,19 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     {
         IsAutoMode = isAutoMode;
     }
+    #endregion
+
+
+    #region TrackingMode
+
+    ReactiveProperty<TrackingMode> currentTrackingMode = new ReactiveProperty<TrackingMode>(TrackingMode.BodyTracking);
+    public IReadOnlyReactiveProperty<TrackingMode> CurrentTrackingMode => currentTrackingMode;
+    public void SetCurrentTrackingMode(TrackingMode trackingMode)
+    {
+        if (currentTrackingMode.Value == trackingMode) { return; }
+
+        currentTrackingMode.Value = trackingMode;
+    }
 
     #endregion
 
@@ -494,6 +507,8 @@ public interface IOptionGetter
     IReadOnlyReactiveProperty<InfoTypeSub> SubInfo { get; }
     string SubInfoDisplay { get; }
 
+    IReadOnlyReactiveProperty<TrackingMode> CurrentTrackingMode { get; }
+
     BodyTrackingSettings TrackingSettings { get; }
 }
 
@@ -511,5 +526,9 @@ public interface IOptionSetter
 
     bool SetIsEnabledFastLate(bool isEnabled);
 
+    void SetCurrentTrackingMode(TrackingMode trackingMode);
+
     BodyTrackingSettings TrackingSettings { get; }
 }
+
+

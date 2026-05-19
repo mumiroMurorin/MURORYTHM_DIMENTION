@@ -1,98 +1,82 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Windows.Kinect;
-using VContainer;
+using UniRx;
 
-public class SpaceInputHandlerForKinect : MonoBehaviour
+public class SpaceInputHandlerForKinect : MonoBehaviour, ISpaceInputHandler, ICameraInfoHolder
 {
-    [SerializeField] BodySourceManager _manager;
-    [SerializeField] SerializeInterface<ITimeGetter> timer;
+    [SerializeField] private BodySourceManager _manager;
 
-    [SerializeField] Vector3 controllerCenter;
-    [SerializeField] Vector3 controllerSize;
+    [SerializeField] private Vector3 controllerCenter;
+    [SerializeField] private Vector3 controllerSize;
 
-    Body[] bodies;
+    private Body[] bodies;
 
-    Vector3 right_hand_pos = Vector3.zero;
-    Vector3 left_hand_pos = Vector3.zero;
+    private readonly ReactiveProperty<Vector3> rightHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
+    public IReadOnlyReactiveProperty<Vector3> RightHandPos => rightHandPos;
 
-    bool isTracking;
+    private readonly ReactiveProperty<Vector3> leftHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
+    public IReadOnlyReactiveProperty<Vector3> LeftHandPos => leftHandPos;
 
-    ISpaceInputSetter spaceInputSetter;
+    private readonly ReactiveProperty<WebCamTexture> emptyWebCamInfo = new ReactiveProperty<WebCamTexture>(null);
+    private readonly ReactiveProperty<int> emptyCameraFps = new ReactiveProperty<int>(0);
+    public IReadOnlyReactiveProperty<WebCamTexture> WebCamInfo => emptyWebCamInfo;
+    public IReadOnlyReactiveProperty<int> CameraFps => emptyCameraFps;
 
-    [Inject]
-    public void Construct(ISpaceInputSetter inputSetter)
+    private bool isTracking;
+    public bool CanGetRightHand => isTracking;
+    public bool CanGetLeftHand => isTracking;
+
+    public void Initialize(IOptionGetter optionGetter)
     {
-        spaceInputSetter = inputSetter;
     }
 
-    void Update()
+    private void Update()
     {
-        // トラッキングして
         Track();
+    }
 
-        // データを渡す
-        SendData();
+    public bool IsExistCamera()
+    {
+        return _manager != null;
+    }
+
+    public void InitializeBodyTracking()
+    {
+        isTracking = false;
+    }
+
+    public void StartTracking()
+    {
+        isTracking = false;
+    }
+
+    public void SwitchCamera()
+    {
+        Debug.Log("[Kinect] SwitchCamera is not supported.");
     }
 
     /// <summary>
-    /// KINECTからトラッキング情報を頂く
+    /// Acquire tracking data from Kinect.
     /// </summary>
     private void Track()
     {
         isTracking = false;
-        // そもそも参照が取れていないときはダメ
         if (_manager == null) return;
 
-        // ここで人の身体情報の配列(つまりは複数人の身体座標)を受け取る
         bodies = _manager.GetData();
 
         if (bodies == null) return;
 
-        // 複数人から一人一人の身体情報を取り出す
         foreach (var body in bodies)
         {
             if (body == null) { continue; }
             if (!body.IsTracked) { continue; }
 
-            right_hand_pos = body.Joints[JointType.HandRight].ToVector3();
-            left_hand_pos = body.Joints[JointType.HandLeft].ToVector3();
+            rightHandPos.Value = body.Joints[JointType.HandRight].ToVector3();
+            leftHandPos.Value = body.Joints[JointType.HandLeft].ToVector3();
 
             isTracking = true;
             break;
-
-            // 特定の部位の座標の取り出し方
-            //Debug.Log($"Right Hand Position : {body.Joints[JointType.HandRight].ToVector3()}");
         }
     }
-
-    /// <summary>
-    /// -1～1に正規化
-    /// </summary>
-    /// <param name="pos"></param>
-    /// <returns></returns>
-    private Vector3 Normalize(Vector3 pos)
-    {
-        Vector3 normalized = new Vector3(
-            (pos.x - controllerCenter.x) / (controllerSize.x / 2f),
-            (pos.y - controllerCenter.y) / (controllerSize.y / 2f),
-            (pos.z - controllerCenter.z) / (controllerSize.z / 2f)
-        );
-
-        // -1～1の範囲に収めて返す
-        return new Vector3(
-            Mathf.Clamp(normalized.x, -1f, 1f),
-            Mathf.Clamp(normalized.y, -1f, 1f),
-            Mathf.Clamp(normalized.z, -1f, 1f)
-        );
-    }
-
-    private void SendData()
-    {
-        spaceInputSetter?.SetSpaceInput(SpaceTrackingTag.RightHand, Normalize(right_hand_pos), timer.Value.Time);
-        spaceInputSetter?.SetSpaceInput(SpaceTrackingTag.LeftHand, Normalize(left_hand_pos), timer.Value.Time);
-        spaceInputSetter?.SetCanGetSpaceInput(isTracking);
-    }
 }
-

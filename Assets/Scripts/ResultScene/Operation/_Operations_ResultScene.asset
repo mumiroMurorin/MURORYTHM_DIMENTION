@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   assetsList:
   - {fileID: 11400000, guid: 981df0e5f09c75c45b7139451b319f51, type: 2}
+  textTableReference:
+    m_TableCollectionName: SliderTopic_Result

@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,15 +39,4 @@ public class EmotionAsset : ScriptableObject
     }
 }
 
-/// <summary>
-/// ÉVÉLÉ{Å[(Ç∆Ç©ÇÃÉLÉÉÉâ)ÇÃä¥èÓ
-/// </summary>
-public enum FaceEmotion
-{
-    Normal = 1,
-    Smile1 = 10,
-    Smile2 = 11,
-    Angry = 20,
-    Surprised = 30,
-    Null = 40,
-}
+

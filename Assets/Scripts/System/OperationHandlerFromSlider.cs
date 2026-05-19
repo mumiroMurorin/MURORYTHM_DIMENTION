@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Localization.Tables;
 
 /// <summary>
 /// Central operation handler for slider-touch based inputs.
@@ -41,25 +42,27 @@ public interface IOperationGetter
 /// </summary>
 public class SliderTouchData
 {
-    public SliderTouchData(OperationAssetUnit asset, Action callback, SliderCoolDownHandler coolDownHandler = default)
+    public SliderTouchData(OperationAssetUnit asset, Action callback, TableReference textTableReference, SliderCoolDownHandler coolDownHandler = default)
     {
         SetSliderIndices(asset.SliderIndices);
         AddCallback(callback);
         SetThemeColor(asset.ThemeColor);
         SetControllerColor(asset.ControllerColor);
         SetControllerRainbow(asset.ControllerRainbow);
-        SetText(asset.Text);
+        SetTextKey(asset.TextKey);
+        SetTextTableReference(textTableReference);
         this.coolDownHandler = coolDownHandler;
     }
 
-    public SliderTouchData(int[] sliderIndices, Action callback, Color themeColor = default, Color controllerColor = default, bool controllerRainbow = false, string text = default, SliderCoolDownHandler coolDownHandler = default)
+    public SliderTouchData(int[] sliderIndices, Action callback, Color themeColor = default, Color controllerColor = default, bool controllerRainbow = false, string textKey = default, TableReference textTableReference = default, SliderCoolDownHandler coolDownHandler = default)
     {
         SetSliderIndices(sliderIndices);
         AddCallback(callback);
         SetThemeColor(themeColor);
         SetControllerColor(controllerColor == default ? themeColor : controllerColor);
         SetControllerRainbow(controllerRainbow);
-        SetText(text);
+        SetTextKey(textKey);
+        SetTextTableReference(textTableReference);
         this.coolDownHandler = coolDownHandler;
     }
 
@@ -119,13 +122,21 @@ public class SliderTouchData
     }
 
 
-    // Text
-    private readonly ReactiveProperty<string> text = new ReactiveProperty<string>();
-    public IReadOnlyReactiveProperty<string> Text => text;
+    // TextKey
+    private readonly ReactiveProperty<string> textKey = new ReactiveProperty<string>();
+    public IReadOnlyReactiveProperty<string> TextKey => textKey;
 
-    public void SetText(string value)
+    public void SetTextKey(string value)
     {
-        text.Value = value;
+        textKey.Value = value;
+    }
+
+    private readonly ReactiveProperty<TableReference> textTableReference = new ReactiveProperty<TableReference>();
+    public IReadOnlyReactiveProperty<TableReference> TextTableReference => textTableReference;
+
+    public void SetTextTableReference(TableReference value)
+    {
+        textTableReference.Value = value;
     }
 
 

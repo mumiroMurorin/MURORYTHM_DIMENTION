@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u6771\u6D77\u9053\u4E2D\u819D\u6817\u6BDB"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: fdb900b191d2a6948965f12220315fc2, type: 2}
@@ -168,3 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   circularText: {fileID: 502794887317284678}
   tmp: {fileID: 6441245988188893491}
+  angleOfCharacterJa: 3
+  angleOfCharacterEn: 1.5
+  angleOfCharacterFallback: 2
+  autoAdjustmentAngleRange: 1

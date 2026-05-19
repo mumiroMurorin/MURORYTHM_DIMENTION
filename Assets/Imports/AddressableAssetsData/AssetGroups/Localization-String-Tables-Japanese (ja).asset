@@ -23,6 +23,30 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-ja
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d41ab2dc38f84e0429391ced051f2ece
+    m_Address: SliderTopic_Lobby_ja
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2640533adbb59ae4ea6685c54e3342c1
+    m_Address: SliderTopic_MusicSelect_ja
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 40f025c324a542244a241df93e37c10f
+    m_Address: SliderTopic_Result_ja
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb911a3c51a59b545a5da28e4782275a
+    m_Address: SliderTopic_GameOver_ja
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ja
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: b8fa537890e222948b9f6e627f68749a, type: 2}
   m_SchemaSet:

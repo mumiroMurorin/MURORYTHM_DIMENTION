@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -9,17 +9,21 @@ using System;
 public class BodyLoader : MonoBehaviour, IBodyLoader
 {
     [SerializeField] bool isUseSpaceInput;
-    [SerializeField] SerializeInterface<ISpaceInputHandler> spaceInputHandler;
+    [SerializeField] float loadTimeoutSeconds = 10f;
+    [SerializeField] SerializeInterface<ISpaceInputHub> spaceInputHandler;
 
     ISpaceInputGetter spaceInputGetter;
+    IOptionGetter optionGetter;
+    INoteSpawnDataOptionGetter spawnDataGetter;
     CancellationTokenSource cts;
 
     [Inject]
-    public void Constructor(ISpaceInputGetter spaceInputGetter)
+    public void Constructor(ISpaceInputGetter spaceInputGetter, IOptionGetter optionGetter, INoteSpawnDataOptionGetter spawnDataGetter)
     {
         this.spaceInputGetter = spaceInputGetter;
+        this.optionGetter = optionGetter;
+        this.spawnDataGetter = spawnDataGetter;
     }
-
 
     void IBodyLoader.WaitForLoadBody(Action callback)
     {
@@ -30,17 +34,19 @@ public class BodyLoader : MonoBehaviour, IBodyLoader
             return;
         }
 #endif
-        // ÉJÉÅÉâÇ™ê⁄ë±Ç≥ÇÍÇƒÇ¢Ç»Ç¢èÍçá
-        if (!spaceInputHandler.Value.IsExistCamera()) 
+        if (spaceInputHandler?.Value == null)
         {
             callback.Invoke();
             return;
         }
 
-        // ÉgÉâÉbÉLÉìÉOÇÃèâä˙âª
-        spaceInputHandler?.Value.InitializeBodyTracking();
+        if (!spaceInputHandler.Value.IsExistCamera())
+        {
+            callback.Invoke();
+            return;
+        }
 
-        // ÉgÉâÉbÉLÉìÉOäJén
+        spaceInputHandler?.Value.InitializeBodyTracking();
         spaceInputHandler?.Value.StartTracking();
 
         cts = new CancellationTokenSource();
@@ -49,8 +55,50 @@ public class BodyLoader : MonoBehaviour, IBodyLoader
 
     async UniTaskVoid LoadBodyAsync(Action callback, CancellationToken token)
     {
-        await UniTask.WaitUntil(() => spaceInputGetter.CanGetSpaceInputReactiveProperty.Value, cancellationToken: token);
+        if (spaceInputGetter == null)
+        {
+            callback.Invoke();
+            return;
+        }
+
+        try
+        {
+            var waitTrackingTask = UniTask.WaitUntil(() =>
+                IsTrackingReady() || IsAutoModeOn(),
+                cancellationToken: token);
+
+            if (loadTimeoutSeconds > 0f)
+            {
+                var timeoutTask = UniTask.Delay(TimeSpan.FromSeconds(loadTimeoutSeconds), cancellationToken: token);
+                int completedTaskIndex = await UniTask.WhenAny(waitTrackingTask, timeoutTask);
+
+                if (completedTaskIndex == 1)
+                {
+                    Debug.LogWarning($"„ÄêBodyLoader„ÄëTracking load timed out after {loadTimeoutSeconds} seconds.");
+                }
+            }
+            else
+            {
+                await waitTrackingTask;
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            return;
+        }
+
         callback.Invoke();
+    }
+
+    private bool IsTrackingReady()
+    {
+        return spaceInputGetter.GetCanGetSpaceInputReactiveProperty(SpaceTrackingTag.RightHand).Value
+            || spaceInputGetter.GetCanGetSpaceInputReactiveProperty(SpaceTrackingTag.LeftHand).Value;
+    }
+
+    private bool IsAutoModeOn()
+    {
+        return optionGetter != null && spawnDataGetter.IsAutoMode;
     }
 
     private void OnDestroy()

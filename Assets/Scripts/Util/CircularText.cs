@@ -1,25 +1,49 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using TMPro;
 
 [ExecuteAlways]
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class CircularText : MonoBehaviour
 {
-    [Header("‰~Œ`”z’u‚Ìİ’è")]
-    [Tooltip("‰~‚Ì”¼Œa")]
+    [Header("å††å½¢é…ç½®ã®è¨­å®š")]
+    [Tooltip("å††ã®åŠå¾„")]
     [SerializeField] float radius = 100f;
-    [Tooltip("”z’u‚·‚é•¶š‚ÌŠp“x‚Ì”ÍˆÍi“xj")]
+    [Tooltip("é…ç½®ã™ã‚‹æ–‡å­—ã®è§’åº¦ã®ç¯„å›²ï¼ˆåº¦ï¼‰")]
     [SerializeField] float angleRange = 180f;
-    [Tooltip("•¶š”‚É‰‚¶‚ÄŠp“x‚ğ©“®’²®‚·‚éê‡‚Í‚±‚±‚Éƒ`ƒFƒbƒN")]
+    [Tooltip("æ–‡å­—æ•°ã«å¿œã˜ã¦è§’åº¦ã‚’è‡ªå‹•èª¿æ•´ã™ã‚‹å ´åˆã¯ã“ã“ã«ãƒã‚§ãƒƒã‚¯")]
     [SerializeField] bool autoAdjustmentAngleRange = false;
-    [Tooltip("1•¶š–ˆ‚ÌŠp“x")]
+    [Tooltip("1æ–‡å­—æ¯ã®è§’åº¦")]
     [SerializeField] float angleOfCharacter;
-    [Tooltip("‰~ŒÊ‚Ì’†S‚Æ‚È‚éŠp“xi“xjB‚±‚Ì’l‚ğ’†S‚É•¶š‚ª”z’u‚³‚ê‚Ü‚·B")]
+    [Tooltip("å††å¼§ã®ä¸­å¿ƒã¨ãªã‚‹è§’åº¦ï¼ˆåº¦ï¼‰ã€‚ã“ã®å€¤ã‚’ä¸­å¿ƒã«æ–‡å­—ãŒé…ç½®ã•ã‚Œã¾ã™ã€‚")]
     [SerializeField] float centerAngle = 0f;
-    [Tooltip("Še•¶š‚É‰Á‚¦‚é‰ñ“]ƒIƒtƒZƒbƒgi“xjB’Êí‚Í90‚ÅA‰~‚ÌÚü•ûŒü‚É‰ˆ‚í‚¹‚Ü‚·B")]
+    [Tooltip("å„æ–‡å­—ã«åŠ ãˆã‚‹å›è»¢ã‚ªãƒ•ã‚»ãƒƒãƒˆï¼ˆåº¦ï¼‰ã€‚é€šå¸¸ã¯90ã§ã€å††ã®æ¥ç·šæ–¹å‘ã«æ²¿ã‚ã›ã¾ã™ã€‚")]
     [SerializeField] float characterRotationOffset = 90f;
 
     public float CenterAngle { set { centerAngle = value; } }
+
+    public void SetAngleOfCharacter(float value)
+    {
+        angleOfCharacter = value;
+    }
+
+    public void SetAutoAdjustmentAngleRange(bool value)
+    {
+        autoAdjustmentAngleRange = value;
+    }
+
+    public void RefreshLayout()
+    {
+        if (tmp == null)
+            tmp = GetComponent<TextMeshProUGUI>();
+        if (tmp == null) return;
+
+        tmp.ForceMeshUpdate();
+        textInfo = tmp.textInfo;
+        if (textInfo == null || textInfo.characterCount == 0)
+            return;
+
+        ApplyCircularLayout();
+    }
 
     private TextMeshProUGUI tmp;
     private TMP_TextInfo textInfo;
@@ -28,7 +52,7 @@ public class CircularText : MonoBehaviour
     void Awake()
     {
         tmp = GetComponent<TextMeshProUGUI>();
-        UpdateText();
+        RefreshLayout();
     }
 
     void Start()
@@ -42,7 +66,7 @@ public class CircularText : MonoBehaviour
 
     void Update()
     {
-        // î•ñ‚ÌXV
+        // æƒ…å ±ã®æ›´æ–°
         if (previousText != tmp.text)
         {
             tmp.ForceMeshUpdate();
@@ -56,22 +80,7 @@ public class CircularText : MonoBehaviour
     void OnValidate()
     {
         if (tmp == null) tmp = GetComponent<TextMeshProUGUI>();
-        UpdateText();
-    }
-
-    void UpdateText()
-    {
-        if (tmp == null)
-            tmp = GetComponent<TextMeshProUGUI>();
-        if (tmp == null) return;
-
-        tmp.ForceMeshUpdate();
-
-        textInfo = tmp.textInfo;
-        if (textInfo == null || textInfo.characterCount == 0)
-            return;
-
-        ApplyCircularLayout();
+        RefreshLayout();
     }
 
     void ApplyCircularLayout()
@@ -80,7 +89,7 @@ public class CircularText : MonoBehaviour
         if (totalCharacters == 0)
             return;
 
-        // •\¦‚³‚ê‚Ä‚¢‚é•¶š‚Ì”‚ğƒJƒEƒ“ƒg
+        // è¡¨ç¤ºã•ã‚Œã¦ã„ã‚‹æ–‡å­—ã®æ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆ
         int visibleCount = 0;
         for (int i = 0; i < totalCharacters; i++)
         {
@@ -90,20 +99,20 @@ public class CircularText : MonoBehaviour
         if (visibleCount == 0)
             return;
 
-        // Šp“x”ÍˆÍ‚Ì©“®’²®
+        // è§’åº¦ç¯„å›²ã®è‡ªå‹•èª¿æ•´
         if (autoAdjustmentAngleRange)
         {
             angleRange = angleOfCharacter * visibleCount;
         }
 
-        // ‰~ŒÊ‚Ì’†SŠp(centerAngle)‚ğŠî€‚ÉA‘S‘Ì‚Ì”z’u”ÍˆÍ(angleRange)‚ªŒˆ‚Ü‚é‚Ì‚Å
-        // Å‰‚Ì•¶š‚Ì”z’uŠp“x‚Í centerAngle - (angleRange / 2)
+        // å††å¼§ã®ä¸­å¿ƒè§’(centerAngle)ã‚’åŸºæº–ã«ã€å…¨ä½“ã®é…ç½®ç¯„å›²(angleRange)ãŒæ±ºã¾ã‚‹ã®ã§
+        // æœ€åˆã®æ–‡å­—ã®é…ç½®è§’åº¦ã¯ centerAngle - (angleRange / 2)
         float startAngle = centerAngle - (angleRange / 2f);
-        // Še•¶š‚Ì”z’uŠp“x‚ÌŠÔŠu
+        // å„æ–‡å­—ã®é…ç½®è§’åº¦ã®é–“éš”
         float angleStep = visibleCount > 1 ? angleRange / (visibleCount - 1) : 0f;
         int visibleIndex = 0;
 
-        // Še•¶š‚É‚Â‚¢‚Äˆ—
+        // å„æ–‡å­—ã«ã¤ã„ã¦å‡¦ç†
         for (int i = 0; i < totalCharacters; i++)
         {
             TMP_CharacterInfo charInfo = textInfo.characterInfo[i];
@@ -114,23 +123,23 @@ public class CircularText : MonoBehaviour
             int vertexIndex = charInfo.vertexIndex;
             Vector3[] vertices = textInfo.meshInfo[materialIndex].vertices;
 
-            // •¶š‚ÌlŠpŒ`‚Ì’†‰›iƒx[ƒXƒ‰ƒCƒ“’†Sj‚ğæ“¾
+            // æ–‡å­—ã®å››è§’å½¢ã®ä¸­å¤®ï¼ˆãƒ™ãƒ¼ã‚¹ãƒ©ã‚¤ãƒ³ä¸­å¿ƒï¼‰ã‚’å–å¾—
             Vector3 charMidBaseline = (vertices[vertexIndex] + vertices[vertexIndex + 2]) / 2;
-            // Še’¸“_‚ğ•¶š’†SŠî€‚ÉƒVƒtƒgi‘Š‘ÎÀ•W‚É‚·‚éj
+            // å„é ‚ç‚¹ã‚’æ–‡å­—ä¸­å¿ƒåŸºæº–ã«ã‚·ãƒ•ãƒˆï¼ˆç›¸å¯¾åº§æ¨™ã«ã™ã‚‹ï¼‰
             for (int j = 0; j < 4; j++)
             {
                 vertices[vertexIndex + j] -= charMidBaseline;
             }
 
-            // ‚±‚Ì•¶š‚Ì”z’uŠp“x‚ÍAstartAngle + visibleIndex * angleStep ‚ÅŒˆ’è
+            // ã“ã®æ–‡å­—ã®é…ç½®è§’åº¦ã¯ã€startAngle + visibleIndex * angleStep ã§æ±ºå®š
             float angle = startAngle + (visibleIndex * angleStep);
             float radian = angle * Mathf.Deg2Rad;
-            // ‰~Œ`ã‚Ì”z’uˆÊ’u‚ğŒvZ
+            // å††å½¢ä¸Šã®é…ç½®ä½ç½®ã‚’è¨ˆç®—
             Vector3 targetPosition = new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0) * radius;
-            // •¶š‚Ì‰ñ“]‚ÍA”z’uŠp“x‚É characterRotationOffset ‚ğ‰Á‚¦‚½Šp“x‚Å‰ñ“]‚³‚¹‚é
+            // æ–‡å­—ã®å›è»¢ã¯ã€é…ç½®è§’åº¦ã« characterRotationOffset ã‚’åŠ ãˆãŸè§’åº¦ã§å›è»¢ã•ã›ã‚‹
             Quaternion rotation = Quaternion.Euler(0, 0, angle + characterRotationOffset);
 
-            // Še’¸“_‚É‰ñ“]‚Æ•½sˆÚ“®‚ğ“K—p
+            // å„é ‚ç‚¹ã«å›è»¢ã¨å¹³è¡Œç§»å‹•ã‚’é©ç”¨
             for (int j = 0; j < 4; j++)
             {
                 vertices[vertexIndex + j] = rotation * vertices[vertexIndex + j] + targetPosition;
@@ -139,7 +148,7 @@ public class CircularText : MonoBehaviour
             visibleIndex++;
         }
 
-        // •ÏX‚µ‚½’¸“_î•ñ‚ğŠeƒƒbƒVƒ…‚É”½‰f
+        // å¤‰æ›´ã—ãŸé ‚ç‚¹æƒ…å ±ã‚’å„ãƒ¡ãƒƒã‚·ãƒ¥ã«åæ˜ 
         for (int i = 0; i < textInfo.meshInfo.Length; i++)
         {
             tmp.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);

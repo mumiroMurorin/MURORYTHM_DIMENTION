@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +10,7 @@ public class SliderTopicTextsControllerView : MonoBehaviour
     List<SliderTopicTextController> sliderTopics = new List<SliderTopicTextController>();
 
     /// <summary>
-    /// ‘€ì‚ª’Ç‰Á‚³‚ê‚½‚Ìˆ—
+    /// æ“ä½œãŒè¿½åŠ ã•ã‚ŒãŸæ™‚ã®å‡¦ç†
     /// </summary>
     /// <param name="sliderTouchData"></param>
     public void OnChangeSliderData(SliderTouchData sliderTouchData)
@@ -22,7 +22,7 @@ public class SliderTopicTextsControllerView : MonoBehaviour
     }
 
     /// <summary>
-    /// ‘€ì‚ªˆêV‚³‚ê‚½‚Ìˆ—
+    /// æ“ä½œãŒä¸€æ–°ã•ã‚ŒãŸæ™‚ã®å‡¦ç†
     /// </summary>
     public void OnClearSliderData()
     {
@@ -36,4 +36,3 @@ public class SliderTopicTextsControllerView : MonoBehaviour
         sliderTopics.Clear();
     }
 }
-

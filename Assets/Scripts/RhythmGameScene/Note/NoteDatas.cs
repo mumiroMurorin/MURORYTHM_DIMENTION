@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JudgementUtil.Dynamic;
@@ -6,8 +6,8 @@ using System.Linq;
 using Deform;
 
 /// <summary>
-/// Factory‚Ì‰Šú‰»‚É•K—v‚Èƒf[ƒ^
-/// ƒm[ƒc‚Ì‰Šú‰»‚É•K—v‚È‹¤’Ê‚Ìƒf[ƒ^‚Í‚±‚±‚É“ü‚ê‚é
+/// Factoryã®åˆæœŸåŒ–ã«å¿…è¦ãªãƒ‡ãƒ¼ã‚¿
+/// ãƒãƒ¼ãƒ„ã®åˆæœŸåŒ–ã«å¿…è¦ãªå…±é€šã®ãƒ‡ãƒ¼ã‚¿ã¯ã“ã“ã«å…¥ã‚Œã‚‹
 /// </summary>
 public class NoteFactoryInitializingData
 {
@@ -27,12 +27,12 @@ public class NoteFactoryInitializingData
 }
 
 /// <summary>
-/// Perfect`Good‚Ü‚Å‚Ì”»’è‹–—e”ÍˆÍ‚ğ‚Ü‚Æ‚ß‚½ƒNƒ‰ƒX
+/// Perfectï½Goodã¾ã§ã®åˆ¤å®šè¨±å®¹ç¯„å›²ã‚’ã¾ã¨ã‚ãŸã‚¯ãƒ©ã‚¹
 /// </summary>
 [System.Serializable]
 public class JudgementWindow 
 {
-    [Header("‚»‚ê‚¼‚ê‚Ì”»’è(•b)")]
+    [Header("ãã‚Œãã‚Œã®åˆ¤å®š(ç§’)")]
     [SerializeField] float perfectWindow_faster;
     [SerializeField] float perfectWindow_latter;
     [SerializeField] float greatWindow_faster;
@@ -53,19 +53,19 @@ public class JudgementWindow
     }
 
     /// <summary>
-    /// ”»’èŒë· ‘‚¯‚ê‚Î- ’x‚¯‚ê‚Î+
+    /// åˆ¤å®šèª¤å·® æ—©ã‘ã‚Œã°- é…ã‘ã‚Œã°+
     /// </summary>
     /// <param name="currentTime"></param>
     /// <param name="correctTiming"></param>
     /// <returns></returns>
     public JudgementAndErrorTime GetJudgementAndError(float currentTime, float correctTiming)
     {
-        // ”»’èŒë· ‘‚¯‚ê‚Î- ’x‚¯‚ê‚Î+
+        // åˆ¤å®šèª¤å·® æ—©ã‘ã‚Œã°- é…ã‘ã‚Œã°+
         float error = currentTime - correctTiming;
 
-        // Good”»’è‘O
+        // Goodåˆ¤å®šå‰
         if (correctTiming - goodWindow_faster > currentTime) { return new JudgementAndErrorTime { Judgement = Judgement.None, Error = error }; }
-        // Good”»’èŒã
+        // Goodåˆ¤å®šå¾Œ
         if (correctTiming + goodWindow_latter < currentTime) { return new JudgementAndErrorTime { Judgement = Judgement.Miss, Error = error }; }
 
         if (-perfectWindow_faster < error && error <= perfectWindow_latter) { return new JudgementAndErrorTime { Judgement = Judgement.Perfect, Error = error }; }
@@ -139,12 +139,12 @@ public class DynamicJudgementHandler
     {
         judgeVectors = new List<Vector3>();
 
-        // ‚»‚ê‚¼‚ê‚Ì”»’èƒxƒNƒgƒ‹‚ğ’²‚×‚é
+        // ãã‚Œãã‚Œã®åˆ¤å®šãƒ™ã‚¯ãƒˆãƒ«ã‚’èª¿ã¹ã‚‹
         for (int i = 0; i < range.Length; i++)
         {
             Vector3 vector = DynamicJudgement.CalcJudgementThresHold(10, range[i], rotationVector);
 
-            // Še—v‘f‚ª0‚Å‚È‚¢‚©’²‚×‚Ämagnitude‚ğ‘ã“ü
+            // å„è¦ç´ ãŒ0ã§ãªã„ã‹èª¿ã¹ã¦magnitudeã‚’ä»£å…¥
             if (vector.x > 0) { vector.x = magnitude; }
             else if (vector.x < 0) { vector.x = -magnitude; }
 
@@ -180,7 +180,7 @@ public struct JudgementAndErrorTime
 }
 
 /// <summary>
-/// ƒm[ƒc‚Ì”»’èî•ñ‚ğ“Z‚ß‚½ƒf[ƒ^
+/// ãƒãƒ¼ãƒ„ã®åˆ¤å®šæƒ…å ±ã‚’çºã‚ãŸãƒ‡ãƒ¼ã‚¿
 /// </summary>
 public class NoteJudgementData
 {
@@ -214,7 +214,7 @@ public class TimeToPos
 }
 
 /// <summary>
-/// ƒz[ƒ‹ƒhƒm[ƒc—p‚Ì“Z‚ßƒNƒ‰ƒX
+/// ãƒ›ãƒ¼ãƒ«ãƒ‰ãƒãƒ¼ãƒ„ç”¨ã®çºã‚ã‚¯ãƒ©ã‚¹
 /// </summary>
 public class TimeToRange
 {
@@ -229,7 +229,7 @@ public class TimeToRange
 }
 
 /// <summary>
-/// ƒXƒy[ƒXƒz[ƒ‹ƒhƒm[ƒc—p‚Ì“Z‚ßƒNƒ‰ƒX
+/// ã‚¹ãƒšãƒ¼ã‚¹ãƒ›ãƒ¼ãƒ«ãƒ‰ãƒãƒ¼ãƒ„ç”¨ã®çºã‚ã‚¯ãƒ©ã‚¹
 /// </summary>
 public class TimeToVertices
 {
@@ -244,7 +244,7 @@ public class TimeToVertices
 }
 
 /// <summary>
-/// ‰œs¨’¸“_ƒŠƒXƒg
+/// å¥¥è¡Œâ†’é ‚ç‚¹ãƒªã‚¹ãƒˆ
 /// </summary>
 public class DepthToVertices
 {
@@ -258,38 +258,4 @@ public class DepthToVertices
     public Vector2[] Vertices { get; set; }
 }
 
-/// <summary>
-/// ”»’èˆê——
-/// </summary>
-public enum Judgement
-{
-    Perfect = 1000,
-    Great = 100,
-    Good = 10,
-    Miss = 1,
-    None = 0,
-}
 
-/// <summary>
-/// ƒm[ƒcƒ^ƒCƒv
-/// </summary>
-public enum NoteType
-{
-    Touch = 1,
-    DivineTouch = 2,
-    HoldStart = 10,
-    HoldRelay = 11,
-    HoldRelayHidden = 12,
-    HoldEnd = 13,
-    HoldEndUnjudge = 15,
-    HoldMesh = 14,
-    SpaceHoldMesh = 20,
-    SpaceHoldRelay = 21,
-    SpaceHoldRelayHidden = 22,
-    SpaceBreak = 25,
-    DynamicGroundUpward = 30,
-    DynamicGroundDownward = 31,
-    DynamicGroundRightward = 32,
-    DynamicGroundLeftward = 33,
-    DynamicSpace = 34,
-}

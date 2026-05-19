@@ -16,5 +16,6 @@ MonoBehaviour:
   leftEdge: 11
   rightEdge: 13
   themeColor: {r: 0.8156863, g: 0.03529412, b: 0.83137256, a: 1}
+  controllerRainbow: 0
   controllerColor: {r: 0.8156863, g: 0.03529412, b: 0.83137256, a: 1}
-  text: "\u96E3\u6613\u5EA6UP"
+  textKey: UpDifficulty

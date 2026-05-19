@@ -6,13 +6,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "OperationInPhase", menuName = "ScriptableObject/OperationInPhase")]
 public class OperationInPhase : ScriptableObject
 {
-    [Label("対応シーン")]
+    [Label("蟇ｾ蠢懊す繝ｼ繝ｳ")]
     [SerializeField] private SceneTag scene;
 
     #region Title
 
     [ShowIf("scene", SceneTag.TitleScene)]
-    [Label("対応フェーズ")]
+    [Label("蟇ｾ蠢懊ヵ繧ｧ繝ｼ繧ｺ")]
     [SerializeField] private PhaseStatusInTitleScene phaseStatusTitleScene;
 
     public bool CheckCondition(PhaseStatusInTitleScene phase)
@@ -24,7 +24,7 @@ public class OperationInPhase : ScriptableObject
     #region Lobby
 
     [ShowIf("scene", SceneTag.LobbyScene)]
-    [Label("対応フェーズ")]
+    [Label("蟇ｾ蠢懊ヵ繧ｧ繝ｼ繧ｺ")]
     [SerializeField] private PhaseStatusInLobbyScene phaseStatusLobbyScene;
 
     public bool CheckCondition(PhaseStatusInLobbyScene phase)
@@ -36,7 +36,7 @@ public class OperationInPhase : ScriptableObject
     #region Select
 
     [ShowIf("scene", SceneTag.SelectScene)]
-    [Label("対応フェーズ")]
+    [Label("蟇ｾ蠢懊ヵ繧ｧ繝ｼ繧ｺ")]
     [SerializeField] private PhaseStatusInSelectScene phaseStatusSelectScene;
 
     public bool CheckCondition(PhaseStatusInSelectScene phase)
@@ -48,7 +48,7 @@ public class OperationInPhase : ScriptableObject
     #region RhythmGame
 
     [ShowIf("scene", SceneTag.RhythmGameScene)]
-    [Label("対応フェーズ")]
+    [Label("蟇ｾ蠢懊ヵ繧ｧ繝ｼ繧ｺ")]
     [SerializeField] private PhaseStatusInRhythmGame phaseStatusRhythmGameScene;
 
     public bool CheckCondition(PhaseStatusInRhythmGame phase)
@@ -60,7 +60,7 @@ public class OperationInPhase : ScriptableObject
     #region Result
 
     [ShowIf("scene", SceneTag.ResultScene)]
-    [Label("対応フェーズ")]
+    [Label("蟇ｾ蠢懊ヵ繧ｧ繝ｼ繧ｺ")]
     [SerializeField] private PhaseStatusInResultScene phaseStatusResultScene;
 
     public bool CheckCondition(PhaseStatusInResultScene phase)
@@ -72,7 +72,7 @@ public class OperationInPhase : ScriptableObject
     #region GameOver
 
     [ShowIf("scene", SceneTag.GameOverScene)]
-    [Label("対応フェーズ")]
+    [Label("蟇ｾ蠢懊ヵ繧ｧ繝ｼ繧ｺ")]
     [SerializeField] private PhaseStatusInGameOverScene phaseStatusGameOverScene;
 
     public bool CheckCondition(PhaseStatusInGameOverScene phase)
@@ -86,14 +86,13 @@ public class OperationInPhase : ScriptableObject
     [SerializeField] private OperationAssetGroup[] operationAssetGroups;
 
     public IEnumerable<OperationAssetGroup> AssetGroups => operationAssetGroups;
-
     public float DelaySeconds => delaySeconds;
 }
 
 [System.Serializable]
 public class OperationAssetGroup
 {
-    [Label("タッチ後のクールタイム")]
+    [Label("繧ｿ繝・メ蠕後・繧ｯ繝ｼ繝ｫ繧ｿ繧､繝")]
     [SerializeField] private float coolTime = 0.2f;
 
     [SerializeField] private OperationAssetUnit[] operations;
@@ -103,39 +102,4 @@ public class OperationAssetGroup
     public SliderCoolDownHandler SliderCoolDownHandler => new SliderCoolDownHandler(coolTime);
 }
 
-public enum OperationTag
-{
-    Title_WaitingForPlayerInput = 50,
-    Lobby_SelectJapanese = 130,
-    Lobby_SelectEnglish = 131,
-    Lobby_PlayTutorial = 150,
-    Lobby_SkipTutorial = 151,
-    Select_SelectMusic = 210,
-    Select_MoveRight = 220,
-    Select_MoveLeft = 221,
-    Select_UpDifficulty = 230,
-    Select_DownDifficulty = 231,
-    Select_Detail_StartMusic = 250,
-    Select_Detail_UnStartableMusic = 251,
-    Select_Detail_BackSelectMusic = 260,
-    Select_Detail_OpenOption = 270,
-    Select_Option_BackMusicDetail = 300,
-    Select_Option_MoveRight = 310,
-    Select_Option_MoveLeft = 311,
-    Select_Option_PlusValue = 320,
-    Select_Option_MinusValue = 321,
-    Result_ResultConfirm = 510,
-    GameOver_Continue = 990,
-    GameOver_FinishGame = 991,
-}
 
-public enum SceneTag
-{
-    TitleScene = 1,
-    LobbyScene = 5,
-    SelectScene = 10,
-    TutorialScene = 15,
-    RhythmGameScene = 20,
-    ResultScene = 25,
-    GameOverScene = 30,
-}

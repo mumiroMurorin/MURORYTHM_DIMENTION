@@ -1,0 +1,20 @@
+﻿public enum NoteType
+{
+    Touch = 1,
+    DivineTouch = 2,
+    HoldStart = 10,
+    HoldRelay = 11,
+    HoldRelayHidden = 12,
+    HoldEnd = 13,
+    HoldEndUnjudge = 15,
+    HoldMesh = 14,
+    SpaceHoldMesh = 20,
+    SpaceHoldRelay = 21,
+    SpaceHoldRelayHidden = 22,
+    SpaceBreak = 25,
+    DynamicGroundUpward = 30,
+    DynamicGroundDownward = 31,
+    DynamicGroundRightward = 32,
+    DynamicGroundLeftward = 33,
+    DynamicSpace = 34,
+}

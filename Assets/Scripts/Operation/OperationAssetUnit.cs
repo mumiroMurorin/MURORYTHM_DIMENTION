@@ -25,13 +25,13 @@ public class OperationAssetUnit : ScriptableObject
     [Label("Controller Color")]
     [SerializeField] private Color controllerColor = Color.red;
 
-    [Label("Text")]
-    [SerializeField] private string text;
+    [Label("Text Key")]
+    [SerializeField] private string textKey;
 
     public OperationTag Tag => tag;
     public int[] SliderIndices => Enumerable.Range(leftEdge, rightEdge - leftEdge + 1).ToArray();
     public Color ThemeColor => themeColor;
     public Color ControllerColor => controllerColor;
     public bool ControllerRainbow => controllerRainbow;
-    public string Text => text;
+    public string TextKey => textKey;
 }

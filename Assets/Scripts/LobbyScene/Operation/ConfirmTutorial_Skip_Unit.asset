@@ -16,5 +16,6 @@ MonoBehaviour:
   leftEdge: 0
   rightEdge: 7
   themeColor: {r: 0, g: 0.4509804, b: 1, a: 1}
+  controllerRainbow: 0
   controllerColor: {r: 0, g: 0.4509804, b: 1, a: 1}
-  text: "\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u3092\u30B9\u30AD\u30C3\u30D7"
+  textKey: Skip the tutorial

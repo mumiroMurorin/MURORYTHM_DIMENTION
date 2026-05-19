@@ -17,3 +17,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b4de79e40b1a7f54893254e7af6051cb, type: 2}
   - {fileID: 11400000, guid: e88595b373934904588f9a2d02a34757, type: 2}
   - {fileID: 11400000, guid: d802ced420135744e92c6fc0b8284178, type: 2}
+  textTableReference:
+    m_TableCollectionName: SliderTopic_MusicSelect

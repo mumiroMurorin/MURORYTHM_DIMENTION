@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -9,7 +9,7 @@ namespace TransitionerInRootScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInRootScene> phaseTransitionable;
         [SerializeField] SerializeInterface<ITimeController> timeController;
-        [SerializeField] SerializeInterface<ISpaceInputHandler> spaceInputHandler;
+        [SerializeField] SerializeInterface<ISpaceInputHub> spaceInputHandler;
         [SerializeField] BodyTrackingSettingsLoader trackingSettingsLoader;
         
         readonly PhaseStatusInRootScene status = PhaseStatusInRootScene.LoadData;
@@ -24,24 +24,31 @@ namespace TransitionerInRootScene
 
         void IPhaseTransitionerInRootScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"LoadData\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"LoadData\"");
 
-            // ƒZƒbƒeƒBƒ“ƒO‚Ìƒ[ƒh
+            // ã‚»ãƒƒãƒ†ã‚£ãƒ³ã‚°ã®ãƒ­ãƒ¼ãƒ‰
             trackingSettingsLoader?.LoadBodyTrackingSettings();
 
-            // ŠÔƒŠƒZƒbƒg
+            // æ™‚é–“ãƒªã‚»ãƒƒãƒˆ
             timeController?.Value.ResetTimer();
             timeController?.Value.StartTimer();
 
-            // ƒgƒ‰ƒbƒLƒ“ƒO‚ÌŠJn
-            spaceInputHandler?.Value.InitializeBodyTracking();
-            spaceInputHandler?.Value.StartTracking();
+            // ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã®é–‹å§‹
+            if (spaceInputHandler?.Value != null)
+            {
+                spaceInputHandler.Value.InitializeBodyTracking();
+                spaceInputHandler.Value.StartTracking();
+            }
+            else
+            {
+                Debug.LogWarning("ã€Transitionã€‘Space input hub is not assigned.");
+            }
 
             TransitionNextPhase();
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase()
         {
@@ -50,3 +57,4 @@ namespace TransitionerInRootScene
     }
 
 }
+

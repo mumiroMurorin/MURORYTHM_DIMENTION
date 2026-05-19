@@ -16,5 +16,6 @@ MonoBehaviour:
   leftEdge: 8
   rightEdge: 15
   themeColor: {r: 1, g: 0.35, b: 0, a: 1}
+  controllerRainbow: 0
   controllerColor: {r: 1, g: 0.35, b: 0, a: 1}
-  text: English
+  textKey: Language English

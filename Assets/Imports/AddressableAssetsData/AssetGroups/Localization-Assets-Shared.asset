@@ -27,6 +27,26 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 651fd4e3473f3a44db6619ab3f4af3e6
+    m_Address: Assets/Localization/SliderTopic Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 95bc0af31c4ded94fa88aa5275d265d3
+    m_Address: Assets/Localization/SliderTopic_MusicSelect Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78a5a280d2a921e41b72ecc8303f6dbd
+    m_Address: Assets/Localization/SliderTopic_Result Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1fcf09fef678e348a314bcf8728a9bb
+    m_Address: Assets/Localization/SliderTopic_GameOver Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: b8fa537890e222948b9f6e627f68749a, type: 2}
   m_SchemaSet:

@@ -2,42 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using VContainer;
-using System.Linq;
 
-public class SpaceInputHandlerForHandTracking : MonoBehaviour, ISpaceInputHandler
+public class SpaceInputHandlerForHandTracking : MonoBehaviour, ISpaceInputHandler, ICameraInfoHolder
 {
-    const int CAPTURE_INDEX = 0;
+    private const int CAPTURE_INDEX = 0;
 
-    [SerializeField] SerializeInterface<ITimeGetter> timer;
-    [SerializeField] Mediapipe.Unity.Tutorial.HandTracking handTracking;
-    [SerializeField] HandRigDriver hand;
+    [SerializeField] private Mediapipe.Unity.Tutorial.HandTracking handTracking;
+    [SerializeField] private HandRigDriver hand;
 
-
-    ReactiveProperty<Vector3> rightHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
+    private readonly ReactiveProperty<Vector3> rightHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
     public IReadOnlyReactiveProperty<Vector3> RightHandPos => rightHandPos;
 
-    ReactiveProperty<Vector3> leftHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
+    private readonly ReactiveProperty<Vector3> leftHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
     public IReadOnlyReactiveProperty<Vector3> LeftHandPos => leftHandPos;
 
-    bool isTracking;
+    public IReadOnlyReactiveProperty<WebCamTexture> WebCamInfo => handTracking != null ? handTracking.WebCamInfo : emptyWebCamInfo;
+    public IReadOnlyReactiveProperty<int> CameraFps => handTracking != null ? handTracking.CameraFps : emptyCameraFps;
 
-    ISpaceInputSetter spaceInputSetter;
-    ISpaceInputGetter spaceInputGetter;
-    IOptionGetter optionGetter;
+    private readonly ReactiveProperty<WebCamTexture> emptyWebCamInfo = new ReactiveProperty<WebCamTexture>(null);
+    private readonly ReactiveProperty<int> emptyCameraFps = new ReactiveProperty<int>(0);
 
-    [Inject]
-    public void Construct(ISpaceInputSetter inputSetter, ISpaceInputGetter inputGetter, IOptionGetter optionGetter)
+    public bool CanGetRightHand { get; private set; }
+    public bool CanGetLeftHand { get; private set; }
+
+    private bool isTracking;
+    private IOptionGetter optionGetter;
+
+    public void Initialize(IOptionGetter optionGetter)
     {
-        spaceInputSetter = inputSetter;
-        spaceInputGetter = inputGetter;
         this.optionGetter = optionGetter;
     }
 
-    void Update()
+    private void Update()
     {
         ReadData();
-        SendData();
     }
 
     public bool IsExistCamera()
@@ -51,7 +49,7 @@ public class SpaceInputHandlerForHandTracking : MonoBehaviour, ISpaceInputHandle
 
         if (devices.Length == 0)
         {
-            Debug.Log("ÅyMediaPipeÅzÉJÉÅÉâÇ™ê⁄ë±Ç≥ÇÍÇƒÇ¢Ç‹ÇπÇÒ");
+            Debug.Log("„ÄêMediaPipe„Äë„Ç´„É°„É©„ÅåÊé•Á∂ö„Åï„Çå„Å¶„ÅÑ„Åæ„Åõ„Çì");
             return;
         }
 
@@ -70,11 +68,20 @@ public class SpaceInputHandlerForHandTracking : MonoBehaviour, ISpaceInputHandle
     }
 
     /// <summary>
-    /// BodyTrackingÇÃèÓïÒÇê≥ãKâª
+    /// BodyTracking„ÅÆÊÉÖÂ†±„ÇíÊ≠£Ë¶èÂåñ
     /// </summary>
     private void ReadData()
     {
-        if (handTracking.LandmarkList == null) { isTracking = false; return; }
+        if (handTracking.LandmarkList == null)
+        {
+            isTracking = false;
+            CanGetRightHand = false;
+            CanGetLeftHand = false;
+            return;
+        }
+
+        CanGetRightHand = handTracking.LandmarkList.Count > 0;
+        CanGetLeftHand = handTracking.LandmarkList.Count > 1;
 
         if (handTracking.LandmarkList.Count > 0)
         {
@@ -82,36 +89,18 @@ public class SpaceInputHandlerForHandTracking : MonoBehaviour, ISpaceInputHandle
                 handTracking.LandmarkList[0].Landmark[CAPTURE_INDEX].X,
                 handTracking.LandmarkList[0].Landmark[CAPTURE_INDEX].Y,
                 handTracking.LandmarkList[0].Landmark[CAPTURE_INDEX].Z
-                );
+            );
         }
-        
-        if(handTracking.LandmarkList.Count > 1)
+
+        if (handTracking.LandmarkList.Count > 1)
         {
             leftHandPos.Value = new Vector3(
                 handTracking.LandmarkList[1].Landmark[CAPTURE_INDEX].X,
                 handTracking.LandmarkList[1].Landmark[CAPTURE_INDEX].Y,
                 handTracking.LandmarkList[1].Landmark[CAPTURE_INDEX].Z
-                );
+            );
         }
 
         isTracking = true;
-
-        // hand.MediapipeWorldPoints = handTracking.LandmarkList[0];
-
-        //Debug.Log($"ÅyMediaPipeÅzRight: {rightHandPos} left: {leftHandPos}");
-    }
-
-
-    /// <summary>
-    /// ÉfÅ[É^Çï€éùÉNÉâÉXÇ…ëóêM
-    /// </summary>
-    private void SendData()
-    {
-        if (spaceInputSetter == null) { return; }
-
-        spaceInputSetter.SetSpaceInput(SpaceTrackingTag.RightHand, SpaceInputNormalizer.NormalizeUsedVector2(rightHandPos.Value, optionGetter?.TrackingSettings), timer.Value != null ? timer.Value.Time : 0);
-        spaceInputSetter.SetSpaceInput(SpaceTrackingTag.LeftHand, SpaceInputNormalizer.NormalizeUsedVector2(leftHandPos.Value, optionGetter?.TrackingSettings), timer.Value != null ? timer.Value.Time : 0);
-
-        spaceInputSetter.SetCanGetSpaceInput(isTracking);
     }
 }

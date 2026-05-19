@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: SliderTopic_MusicSelect_ja
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: ja
+  m_SharedData: {fileID: 11400000, guid: 95bc0af31c4ded94fa88aa5275d265d3, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 9829732352
+    m_Localized: "\u623B\u308B"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 348616249344
+    m_Localized: "\u8A2D\u5B9A"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 405235159040
+    m_Localized: "\u697D\u66F2\u30B9\u30BF\u30FC\u30C8\uFF01"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 643870085120
+    m_Localized: "\u96E3\u6613\u5EA6DOWN"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 894270033920
+    m_Localized: "\u623B\u308B"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1190652137472
+    m_Localized: "\u8A2D\u5B9A\u9805\u76EE-"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1259384197120
+    m_Localized: "\u2190\u5DE6"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1301188825088
+    m_Localized: "\u53F3\u2192"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1411318665216
+    m_Localized: "\u8A2D\u5B9A\u9805\u76EE+"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 688099020800
+    m_Localized: "\u2190\u5DE6"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 749633654784
+    m_Localized: "\u53F3\u2192"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 852964528128
+    m_Localized: "\u697D\u66F2\u9078\u629E"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1418461564928
+    m_Localized: "\u96E3\u6613\u5EA6UP"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

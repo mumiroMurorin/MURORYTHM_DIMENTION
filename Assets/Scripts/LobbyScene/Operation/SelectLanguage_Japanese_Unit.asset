@@ -16,5 +16,6 @@ MonoBehaviour:
   leftEdge: 0
   rightEdge: 7
   themeColor: {r: 0, g: 0.45, b: 1, a: 1}
+  controllerRainbow: 0
   controllerColor: {r: 0, g: 0.45, b: 1, a: 1}
-  text: "\u65E5\u672C\u8A9E"
+  textKey: Language Japanese

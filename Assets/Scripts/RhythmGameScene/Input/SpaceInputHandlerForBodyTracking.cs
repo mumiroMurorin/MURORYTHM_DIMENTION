@@ -1,41 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using VContainer;
 
-public class SpaceInputHandlerForBodyTracking : MonoBehaviour, ISpaceInputHandler
+public class SpaceInputHandlerForBodyTracking : MonoBehaviour, ISpaceInputHandler, ICameraInfoHolder
 {
-    const int RIGHT_HAND_INDEX = 19;
-    const int LEFT_HAND_INDEX = 20;
+    private const int RIGHT_HAND_INDEX = 19;
+    private const int LEFT_HAND_INDEX = 20;
 
-    [SerializeField] SerializeInterface<ITimeGetter> timer;
-    [SerializeField] Mediapipe.Unity.Tutorial.BodyTracking bodyTracking;
+    [SerializeField] private Mediapipe.Unity.Tutorial.BodyTracking bodyTracking;
 
-    ReactiveProperty<Vector3> rightHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
+    private readonly ReactiveProperty<Vector3> rightHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
     public IReadOnlyReactiveProperty<Vector3> RightHandPos => rightHandPos;
 
-    ReactiveProperty<Vector3> leftHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
+    private readonly ReactiveProperty<Vector3> leftHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
     public IReadOnlyReactiveProperty<Vector3> LeftHandPos => leftHandPos;
 
-    bool isTracking;
+    private readonly ReactiveProperty<WebCamTexture> emptyWebCamInfo = new ReactiveProperty<WebCamTexture>(null);
+    private readonly ReactiveProperty<int> emptyCameraFps = new ReactiveProperty<int>(0);
 
-    ISpaceInputSetter spaceInputSetter;
-    ISpaceInputGetter spaceInputGetter;
-    IOptionGetter optionGetter;
+    public IReadOnlyReactiveProperty<WebCamTexture> WebCamInfo => bodyTracking != null ? bodyTracking.WebCamInfo : emptyWebCamInfo;
+    public IReadOnlyReactiveProperty<int> CameraFps => bodyTracking != null ? bodyTracking.CameraFps : emptyCameraFps;
 
-    [Inject]
-    public void Construct(ISpaceInputSetter inputSetter, ISpaceInputGetter inputGetter, IOptionGetter optionGetter)
+    public bool CanGetRightHand { get; private set; }
+    public bool CanGetLeftHand { get; private set; }
+
+    private bool isTracking;
+    private IOptionGetter optionGetter;
+
+    public void Initialize(IOptionGetter optionGetter)
     {
-        spaceInputSetter = inputSetter;
-        spaceInputGetter = inputGetter;
         this.optionGetter = optionGetter;
     }
 
-    void Update()
+    private void Update()
     {
         ReadData();
-        SendData();
     }
 
     public bool IsExistCamera()
@@ -49,7 +47,7 @@ public class SpaceInputHandlerForBodyTracking : MonoBehaviour, ISpaceInputHandle
 
         if (devices.Length == 0)
         {
-            Debug.Log("ÅyMediaPipeÅzÉJÉÅÉâÇ™ê⁄ë±Ç≥ÇÍÇƒÇ¢Ç‹ÇπÇÒ");
+            Debug.Log("„ÄêMediaPipe„Äë„Ç´„É°„É©„ÅåÊé•Á∂ö„Åï„Çå„Å¶„ÅÑ„Åæ„Åõ„Çì");
             return;
         }
 
@@ -68,58 +66,51 @@ public class SpaceInputHandlerForBodyTracking : MonoBehaviour, ISpaceInputHandle
     }
 
     /// <summary>
-    /// BodyTrackingÇÃèÓïÒÇê≥ãKâª
+    /// BodyTracking„ÅÆÊÉÖÂ†±„ÇíÊ≠£Ë¶èÂåñ
     /// </summary>
     private void ReadData()
     {
-        if (bodyTracking.LandmarkList == null) { isTracking = false; return; }
+        var landmarkList = bodyTracking.LandmarkList;
+        if (landmarkList == null || landmarkList.Landmark == null || landmarkList.Landmark.Count <= LEFT_HAND_INDEX)
+        {
+            isTracking = false;
+            CanGetRightHand = false;
+            CanGetLeftHand = false;
+            return;
+        }
 
-        // í èÌ
-        if(optionGetter == null || !optionGetter.TrackingSettings.IsHandFlipped.Value)
+        CanGetRightHand = true;
+        CanGetLeftHand = true;
+
+        if (optionGetter == null || !optionGetter.TrackingSettings.IsHandFlipped.Value)
         {
             rightHandPos.Value = new Vector3(
-                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].X,
-                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].Y,
-                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].Z
-                );
+                landmarkList.Landmark[RIGHT_HAND_INDEX].X,
+                landmarkList.Landmark[RIGHT_HAND_INDEX].Y,
+                landmarkList.Landmark[RIGHT_HAND_INDEX].Z
+            );
 
             leftHandPos.Value = new Vector3(
-                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].X,
-                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].Y,
-                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].Z
-                );
+                landmarkList.Landmark[LEFT_HAND_INDEX].X,
+                landmarkList.Landmark[LEFT_HAND_INDEX].Y,
+                landmarkList.Landmark[LEFT_HAND_INDEX].Z
+            );
         }
-        // îΩì]
         else
         {
             leftHandPos.Value = new Vector3(
-                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].X,
-                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].Y,
-                bodyTracking.LandmarkList.Landmark[RIGHT_HAND_INDEX].Z
-              );
+                landmarkList.Landmark[RIGHT_HAND_INDEX].X,
+                landmarkList.Landmark[RIGHT_HAND_INDEX].Y,
+                landmarkList.Landmark[RIGHT_HAND_INDEX].Z
+            );
 
             rightHandPos.Value = new Vector3(
-                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].X,
-                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].Y,
-                bodyTracking.LandmarkList.Landmark[LEFT_HAND_INDEX].Z
-                );
+                landmarkList.Landmark[LEFT_HAND_INDEX].X,
+                landmarkList.Landmark[LEFT_HAND_INDEX].Y,
+                landmarkList.Landmark[LEFT_HAND_INDEX].Z
+            );
         }
 
         isTracking = true;
-        //Debug.Log($"ÅyMediaPipeÅzRight: {rightHandPos} left: {leftHandPos}");
-    }
-
-
-    /// <summary>
-    /// ÉfÅ[É^Çï€éùÉNÉâÉXÇ…ëóêM
-    /// </summary>
-    private void SendData()
-    {
-        if (spaceInputSetter == null) { return; }
-
-        spaceInputSetter.SetSpaceInput(SpaceTrackingTag.RightHand, SpaceInputNormalizer.NormalizeUsedVector2(rightHandPos.Value, optionGetter?.TrackingSettings), timer.Value != null ? timer.Value.Time : 0);
-        spaceInputSetter.SetSpaceInput(SpaceTrackingTag.LeftHand, SpaceInputNormalizer.NormalizeUsedVector2(leftHandPos.Value, optionGetter?.TrackingSettings), timer.Value != null ? timer.Value.Time : 0);
-
-        spaceInputSetter.SetCanGetSpaceInput(isTracking);
     }
 }

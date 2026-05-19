@@ -1,24 +1,19 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
 /// <summary>
-/// ƒXƒ‰ƒCƒ_[‚©‚ç‚Ì“ü—Í‚ğó‚¯æ‚é
+/// ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼ã‹ã‚‰ã®å…¥åŠ›ã‚’å—ã‘å–ã‚‹
 /// </summary>
 public interface ISliderInputGetter
 {
     IReadOnlyReactiveProperty<bool> GetSliderInputReactiveProperty(int index);
 }
 
-public enum SpaceTrackingTag
-{
-    RightHand,
-    LeftHand,
-}
 
 /// <summary>
-/// ƒXƒy[ƒX‚Ì“ü—Í‚ğó‚¯æ‚é
+/// ã‚¹ãƒšãƒ¼ã‚¹ã®å…¥åŠ›ã‚’å—ã‘å–ã‚‹
 /// </summary>
 public interface ISpaceInputGetter
 {
@@ -26,7 +21,7 @@ public interface ISpaceInputGetter
 
     IReadOnlyReactiveProperty<Vector3> GetSpaceInputVelocity(SpaceTrackingTag spaceTrackingTag);
 
-    IReadOnlyReactiveProperty<bool> CanGetSpaceInputReactiveProperty { get; }
+    IReadOnlyReactiveProperty<bool> GetCanGetSpaceInputReactiveProperty(SpaceTrackingTag spaceTrackingTag);
 
     bool IsInSpaceRange(Vector2[] vertices, float radius = 0);
 
@@ -34,12 +29,16 @@ public interface ISpaceInputGetter
 }
 
 /// <summary>
-/// ƒXƒy[ƒX“ü—Í‚Ìî•ñ‚ğ•Û‚·‚é
+/// ã‚¹ãƒšãƒ¼ã‚¹å…¥åŠ›ã®æƒ…å ±ã‚’ä¿æŒã™ã‚‹
 /// </summary>
 public interface ISpaceInputHandler
 {
+    void Initialize(IOptionGetter optionGetter);
+
     IReadOnlyReactiveProperty<Vector3> RightHandPos { get; }
     IReadOnlyReactiveProperty<Vector3> LeftHandPos { get; }
+    bool CanGetRightHand { get; }
+    bool CanGetLeftHand { get; }
 
     bool IsExistCamera();
 
@@ -49,6 +48,8 @@ public interface ISpaceInputHandler
 
     void SwitchCamera();
 }
+
+public interface ISpaceInputHub : ISpaceInputHandler, ICameraInfoHolder { }
 
 public interface ICameraInfoHolder
 {
@@ -71,5 +72,6 @@ public interface ISpaceInputSetter
 
     public void SetSpaceInput(SpaceTrackingTag tag, Vector3 pos, float time);
 
-    public void SetCanGetSpaceInput(bool isGet);
+    public void SetCanGetSpaceInput(SpaceTrackingTag tag, bool isGet);
 }
+

@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: SliderTopic_MusicSelect Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: SliderTopic_MusicSelect
+  m_TableCollectionNameGuidString: 95bc0af31c4ded94fa88aa5275d265d3
+  m_Entries:
+  - m_Id: 9829732352
+    m_Key: Detail_BackSelectMusic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 348616249344
+    m_Key: Detail_OpenOption
+    m_Metadata:
+      m_Items: []
+  - m_Id: 405235159040
+    m_Key: Detail_StartMusic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 643870085120
+    m_Key: DownDifficulty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 894270033920
+    m_Key: Option_BackSelectMusicDetail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1190652137472
+    m_Key: Option_MinusValue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1259384197120
+    m_Key: Option_MoveLeft
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1301188825088
+    m_Key: Option_MoveRight
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1411318665216
+    m_Key: Option_PlusValue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 688099020800
+    m_Key: Select_MoveLeft
+    m_Metadata:
+      m_Items: []
+  - m_Id: 749633654784
+    m_Key: Select_MoveRight
+    m_Metadata:
+      m_Items: []
+  - m_Id: 852964528128
+    m_Key: Select_SelectMusic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1418461564928
+    m_Key: UpDifficulty
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 1127769498476085261
+  references:
+    version: 2
+    RefIds:
+    - rid: 1127769498476085261
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1779118236543
