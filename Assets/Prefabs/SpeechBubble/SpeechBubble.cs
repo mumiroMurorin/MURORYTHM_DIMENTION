@@ -1,5 +1,6 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using TMPro;
+using UnityEngine.Serialization;
 
 public abstract class SpeechBubble : MonoBehaviour
 {
@@ -7,9 +8,6 @@ public abstract class SpeechBubble : MonoBehaviour
 
     public void Speak(string text, SpeechBubbleConfig config)
     {
-        // this.tmp.text = text;
-        // this.gameObject.SetActive(true);
-
         OnSpeak(text, config);
     }
 
@@ -20,8 +18,6 @@ public abstract class SpeechBubble : MonoBehaviour
         if (this == null) { return; }
         if (this.gameObject == null) { return; }
 
-        // this?.gameObject?.SetActive(false);
-
         OnShutUp();
     }
 
@@ -31,19 +27,17 @@ public abstract class SpeechBubble : MonoBehaviour
 [System.Serializable]
 public class SpeechBubbleConfig
 {
-    [Tooltip("0–¢–‚Ì‚Æ‚«ƒfƒtƒHƒ‹ƒg‚Ì’l‚É‚È‚é")]
+    [Tooltip("0æœªæº€ã®ã¨ããƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®å€¤ã«ãªã‚‹")]
     [SerializeField] float fontSize = -1f;
     [SerializeField] Color fontColor = Color.white;
-    [Tooltip("•¶šoŒ»ƒXƒs[ƒh[char/sec]")]
-    [SerializeField] float characterRevealSpeed = 10f;
-    [Tooltip("Š´î")]
+    [FormerlySerializedAs("characterRevealSpeed")]
+    [Tooltip("ã—ã‚ƒã¹ã‚Šçµ‚ã‚ã‚‹ã¾ã§ã®ç§’æ•°")]
+    [SerializeField] float speechDuration = 1f;
+    [Tooltip("æ„Ÿæƒ…")]
     [SerializeField] FaceEmotion emotion = FaceEmotion.Normal;
 
     public float FontSize { get { return fontSize; } set { fontSize = value; } }
-
     public Color FontColor { get { return fontColor; } set { fontColor = value; } }
-
-    public float CharacterRevealSpeed { get { return characterRevealSpeed; } set { characterRevealSpeed = value; } }
-
+    public float SpeechDuration { get { return speechDuration; } set { speechDuration = value; } }
     public FaceEmotion Emotion { get { return emotion; } }
 }

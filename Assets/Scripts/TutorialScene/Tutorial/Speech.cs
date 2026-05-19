@@ -1,33 +1,46 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using UnityEngine.Localization.Settings;
+using UnityEngine.Serialization;
 
 namespace Tutorial
 {
-    /// <summary>
-    /// ÉZÉäÉtÇèoÇ∑
-    /// </summary>
     [System.Serializable]
     public class Speech : TutorialActionNode
     {
         [SerializeField] SpeechBubbleTutorial speechBubble;
-        [SerializeField,TextArea(0,5)] string text;
+        [FormerlySerializedAs("text")]
+        [SerializeField] string textKey;
         [SerializeField] float waitSeconds = 2.5f;
         [SerializeField] SpeechBubbleConfig config;
         [SerializeField] SerializeInterface<IDisposer> disposableObject;
 
-        CancellationTokenSource textAnimationCts;
-        CancellationTokenSource waitingPlayerCts;
+        private const string TutorialTextTableName = "TutorialText";
+
+        private CancellationTokenSource textAnimationCts;
+        private CancellationTokenSource waitingPlayerCts;
 
         public override void Do()
         {
-            speechBubble?.Speak(text, config);
-
             textAnimationCts = new CancellationTokenSource();
             disposableObject?.Value?.SetCts(textAnimationCts);
 
-            // ÉAÉjÉÅÅ[ÉVÉáÉìÇ™èIÇ¡ÇΩèÍçáÉAÉNÉVÉáÉìë“ÇøÇÉLÉÉÉìÉZÉã
+            speechBubble.OnFinishAnimationListner -= OnFinishTextAnimation;
             speechBubble.OnFinishAnimationListner += OnFinishTextAnimation;
+
+            speechBubble?.Speak(ResolveText(), config);
+        }
+
+        private string ResolveText()
+        {
+            if (string.IsNullOrWhiteSpace(textKey))
+            {
+                return string.Empty;
+            }
+
+            var localizedText = LocalizationSettings.StringDatabase.GetLocalizedString(TutorialTextTableName, textKey);
+            return string.IsNullOrEmpty(localizedText) ? textKey : localizedText;
         }
 
         private void OnFinishTextAnimation()
@@ -43,8 +56,8 @@ namespace Tutorial
             waitingPlayerCts = new CancellationTokenSource();
             disposableObject?.Value?.SetCts(waitingPlayerCts);
 
-            // ï∂éöÉAÉjÉÅÅ[ÉVÉáÉìå„ÇøÇÂÇ¢ë“Çø
-            WaitForSecondsAsync(() => {
+            WaitForSecondsAsync(() =>
+            {
                 speechBubble.ShutUp();
                 next?.Do();
             }, waitingPlayerCts.Token).Forget();

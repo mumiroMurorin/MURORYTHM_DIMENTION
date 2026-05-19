@@ -1,8 +1,8 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using TMPro;
 using System.Threading;
 
-public class SpeechBubbleAnimation : SpeechBubble
+public abstract class SpeechBubbleAnimation : SpeechBubble
 {
     [SerializeField] SpeechBubbleConfig defaultConfig;
 
@@ -24,25 +24,35 @@ public class SpeechBubbleAnimation : SpeechBubble
     {
         tmp.text = text;
 
-        // ƒvƒŒƒC’†A‡”Ô‚É•\Ž¦
-        // (TimeLineó‚Å‚Íˆê‹C‚É•\Ž¦)
-        if (Application.isPlaying && config.CharacterRevealSpeed > 0f)
+        var duration = GetSpeechDuration(config);
+        if (Application.isPlaying && duration > 0f)
         {
-            // ‰Šú‰»
             tmp.maxVisibleCharacters = 0;
             float delaySeconds = 0f;
 
             ResetTextCts();
             ctsArray = new CancellationTokenSource[text.Length + 1];
 
+            var revealInterval = text.Length > 0 ? duration / text.Length : 0f;
+
             for (int i = 0; i < text.Length + 1; i++)
             {
                 int visibleNum = i;
                 ctsArray[i] = DelayUtility.Run(delaySeconds, () => { tmp.maxVisibleCharacters = visibleNum; });
 
-                delaySeconds += 1f / config.CharacterRevealSpeed;
+                delaySeconds += revealInterval;
             }
         }
+    }
+
+    protected float GetSpeechDuration(SpeechBubbleConfig config)
+    {
+        if (config != null)
+        {
+            return config.SpeechDuration;
+        }
+
+        return defaultConfig != null ? defaultConfig.SpeechDuration : 0f;
     }
 
     protected override void OnShutUp()

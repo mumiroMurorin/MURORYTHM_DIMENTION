@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Threading;
@@ -13,49 +13,51 @@ public class SpeechBubbleTutorial : SpeechBubbleAnimation
     protected override void SetText(string text, SpeechBubbleConfig config)
     {
         tmp.text = text;
-        emotionAsset?.ApplySprite(config.Emotion, faceImage);
+        var emotion = config != null ? config.Emotion : FaceEmotion.Normal;
+        emotionAsset?.ApplySprite(emotion, faceImage);
 
-        // ƒvƒŒƒC’†A‡”Ô‚É•\Ž¦
-        // (TimeLineó‚Å‚Íˆê‹C‚É•\Ž¦)
-        if (Application.isPlaying && config.CharacterRevealSpeed > 0f)
+        var duration = GetSpeechDuration(config);
+        if (Application.isPlaying && duration > 0f)
         {
-            // ‰Šú‰»
             tmp.maxVisibleCharacters = 0;
             float delaySeconds = 0f;
 
             ResetTextCts();
             ctsArray = new CancellationTokenSource[text.Length + 1];
 
+            var revealInterval = text.Length > 0 ? duration / text.Length : 0f;
+
             for (int i = 0; i < text.Length + 1; i++)
             {
                 int visibleNum = i;
 
-                // ÅŒã‚Ì•¶Žš•\Ž¦
-                if(i == text.Length)
+                if (i == text.Length)
                 {
-                    ctsArray[i] = DelayUtility.Run(delaySeconds, () => {
+                    ctsArray[i] = DelayUtility.Run(delaySeconds, () =>
+                    {
                         tmp.maxVisibleCharacters = visibleNum;
                         tmp.ForceMeshUpdate();
                         OnFinishAnimationListner?.Invoke();
                     }, true);
                 }
-                // ‚»‚êˆÈŠO
                 else
                 {
-                    ctsArray[i] = DelayUtility.Run(delaySeconds, () => {
+                    ctsArray[i] = DelayUtility.Run(delaySeconds, () =>
+                    {
                         tmp.maxVisibleCharacters = visibleNum;
                         tmp.ForceMeshUpdate();
                     }, true);
                 }
 
-                delaySeconds += 1f / config.CharacterRevealSpeed;
+                delaySeconds += revealInterval;
             }
+        }
+        else
+        {
+            OnFinishAnimationListner?.Invoke();
         }
     }
 
-    /// <summary>
-    /// ƒeƒLƒXƒg‘—‚è‚ðƒLƒƒƒ“ƒZƒ‹‚µ‚Ä‘S•¶•\Ž¦
-    /// </summary>
     public void CancelAnimation()
     {
         ResetTextCts();

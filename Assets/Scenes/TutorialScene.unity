@@ -7085,12 +7085,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u307E\u305A\u306F\u3001\u30EA\u30BA\u30E0\u30B2\u30FC\u30E0\u306E\u57FA\u672C\u3001\u300C<#ff3333>\u30BF\u30C3\u30C1\u30CE\u30FC\u30C4</color>\u300D\uFF01"
-        waitSeconds: 0.8
+        textKey: Text3
+        waitSeconds: 1.3
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 2.5
           emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7098,12 +7098,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u65E9\u901F\u3084\u3063\u3066\u307F\u308B\u305E\uFF01"
-        waitSeconds: 1.6
+        textKey: Text5
+        waitSeconds: 1.4
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 1.5
           emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7111,31 +7111,31 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u6B21\u306F\u3053\u306E\u30CE\u30FC\u30C4\u3060\uFF01\u300C<#ff3333>\u30DB\u30FC\u30EB\u30C9\u30CE\u30FC\u30C4</color>\u300D\uFF01"
+        textKey: Text6
         waitSeconds: 0.8
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 4
           emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692162781609987
       type: {class: Wait, ns: Tutorial, asm: Assembly-CSharp}
       data:
-        seconds: 8
+        seconds: 9
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897664
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u3088\u3046\uFF01\u4FFA\u306F\u3053\u306E\u30B2\u30FC\u30E0\u306E\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u3092\u62C5\u5F53\u3059\u308B\n<#ff3333>\u30B7\u30AD\u30DC\u30FC</color>\u3060\u305C\uFF01\u3088\u308D\u3057\u304F\u306A\uFF01"
+        textKey: Text1
         waitSeconds: 0.8
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 6
           emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7143,12 +7143,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u65E9\u901F\u3060\u304C\u3001\u3053\u306E\u30B2\u30FC\u30E0\u3092\u69CB\u6210\u3059\u308B<#ff3333>\u30CE\u30FC\u30C4</color>\u3063\u3061\u3085\u3046\u3082\u3093\u3092\u7D39\u4ECB\u3059\u308B\u305C\uFF01\r\n\u3053\u3044\u3064\u304C\u3044\u306A\u3044\u3068\u97F3\u697D\u30B2\u30FC\u30E0\u306F\u59CB\u307E\u3089\u306A\u3044\u304B\u3089\u306A\uFF01"
+        textKey: Text2
         waitSeconds: 0.8
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 8
           emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7156,12 +7156,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u3053\u306E\u30CE\u30FC\u30C4\u304C\u6765\u305F\u3089\u3001<#ffff00>\u9EC4\u8272\u3044\u7DDA</color>\u306B\u5408\u308F\u305B\u3066<#ff3333>\u30BF\u30C3\u30C1</color>\u3060\uFF01\n\u30EA\u30BA\u30E0\u306B\u4E57\u3063\u3066\u30BF\u30C3\u30C1\u3059\u308B\u3068\u3044\u3044\uFF01"
-        waitSeconds: 0
+        textKey: Text4
+        waitSeconds: 1
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 4.9
           emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7169,12 +7169,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u3053\u3044\u3064\u306F\u3001\u6700\u521D\u306B\u30BF\u30C3\u30C1\u3057\u305F\u5F8C\u306B\n<#ff3333>\u6700\u5F8C\u307E\u3067\u62BC\u3057\u3063\u3071\u306A\u3057</color>\u306B\u3057\u3068\u304D\u3083\u3044\u3044\uFF01"
+        textKey: Text7
         waitSeconds: 0.8
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 5.1
           emotion: 11
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7182,12 +7182,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u6700\u5F8C\u306F\u7121\u7406\u306B\u624B\u3092\u96E2\u3059\u5FC5\u8981\u306F\u306A\u3044\u305C\uFF01\n\u65E9\u901F\u3084\u3063\u3066\u307F\u3088\u3046\uFF01"
+        textKey: Text8
         waitSeconds: 2.5
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 2.7
           emotion: 10
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7201,12 +7201,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "OK\uFF01\u7D9A\u3044\u3066\u306F\u300C<#ff3333>\u30C0\u30A4\u30CA\u30DF\u30C3\u30AF\u30CE\u30FC\u30C4</color>\u300D\u3060\uFF01"
+        textKey: Text9
         waitSeconds: 0.8
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 3.7
           emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7214,12 +7214,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u3053\u3044\u3064\u306F\u3001\u30BF\u30C3\u30C1\u3057\u305F\u5F8C\n\u624B\u3092\u30C0\u30A4\u30CA\u30DF\u30C3\u30AF\u306B\u52D5\u304B\u3059\u3093\u3060\uFF01"
-        waitSeconds: 2.5
+        textKey: Text10
+        waitSeconds: 2
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 2.7
           emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7227,12 +7227,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u4F8B\u3048\u3070\u3053\u3044\u3064\u306A\u3089\u3001\u30BF\u30C3\u30C1\u3057\u305F\u5F8C\n\u6065\u305A\u304B\u3057\u304C\u3089\u305A<#ff3333>\u624B\u3092\u4E0A\u306B\u3042\u3052\u308B</color>\u3093\u3060\u305C\uFF01"
+        textKey: Text11
         waitSeconds: 0.8
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 5.1
           emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7240,31 +7240,31 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u3058\u3083\u3042Let's Try\uFF01"
+        textKey: Text13
         waitSeconds: 2.5
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 1.3
           emotion: 10
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897675
       type: {class: Wait, ns: Tutorial, asm: Assembly-CSharp}
       data:
-        seconds: 10
+        seconds: 9.5
         disposableObject:
           obj: {fileID: 2103926583}
     - rid: 4817692173062897676
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u30C0\u30A4\u30CA\u30DF\u30C3\u30AF\u30CE\u30FC\u30C4\u306F\u3044\u308D\u3093\u306A\u65B9\u5411\u3067\u3084\u3063\u3066\u304F\u308B\u304B\u3089\u306A\uFF01\n<#ff3333>\u3068\u306B\u304B\u304F\u305D\u306E\u65B9\u5411\u306B\u624B\u3092\u52D5\u304B\u3059</color>\u3053\u3068\u3092\u610F\u8B58\u3060\uFF01"
+        textKey: Text12
         waitSeconds: 0.8
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 6.5
           emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7272,12 +7272,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u300C\u306A\uFF1F\u7C21\u5358\u3060\u308D\uFF1F\u300D"
+        textKey: Text14
         waitSeconds: 2.5
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 0.9
           emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7285,12 +7285,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u6700\u5F8C\u306F\u3053\u3044\u3064\u3001\u300C<#ff3333>\u30B9\u30DA\u30FC\u30B9\u30DB\u30FC\u30EB\u30C9</color>\u300D\u3060\uFF01"
+        textKey: Text15
         waitSeconds: 0.8
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 3.6
           emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7298,12 +7298,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u3061\u3087\u3063\u3068\u96E3\u3057\u3044\u611F\u899A\u3060\u304C\u3001\u624B\u3092\u5B99\u306B\u6D6E\u304B\u305B\u3066\n<#ff3333>\u81EA\u5206\u306E\u624B\u306E\u4F4D\u7F6E\u3092\u30CE\u30FC\u30C4\u306B\u5408\u308F\u305B\u3066\u30AD\u30FC\u30D7</color>\u3060\uFF01"
+        textKey: Text16
         waitSeconds: 0.8
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 5.9
           emotion: 40
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7311,12 +7311,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u304A\u624B\u672C\u3092\u898B\u3066\u307F\u3088\u3046\uFF01\n\u3061\u3087\u3063\u3068\u4F4D\u7F6E\u304C\u30BA\u30EC\u3066\u3082\u5927\u4E08\u592B\u3060\u304B\u3089\u306A\uFF01"
+        textKey: Text17
         waitSeconds: 2.5
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 3
           emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7330,12 +7330,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u3088\u3057\uFF01\u305D\u308C\u3058\u3083\u3042\u3084\u3063\u3066\u307F\u308B\u304B\uFF01"
+        textKey: Text18
         waitSeconds: 2.5
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 1.5
           emotion: 10
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7343,12 +7343,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u3069\u3046\u3060\uFF1F\u6700\u521D\u306F\u96E3\u3057\u3044\u304B\u3082\u3057\u308C\u306A\u3044\u304C\u3001\n\u3060\u3093\u3060\u3093\u3068\u6163\u308C\u3066\u3044\u304F\u3082\u3093\u3060\u305C\uFF1F"
+        textKey: Text19
         waitSeconds: 2.5
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 3.4
           emotion: 40
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7356,12 +7356,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u3088\u3063\u3057\u3083\uFF01\u3053\u308C\u3067\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u306F\u7D42\u308F\u308A\u3060\u305C\uFF01"
+        textKey: Text20
         waitSeconds: 2.5
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 2.2
           emotion: 1
         disposableObject:
           obj: {fileID: 2103926583}
@@ -7369,12 +7369,12 @@ MonoBehaviour:
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
         speechBubble: {fileID: 7075155757383821495}
-        text: "\u6B21\u306F\u597D\u304D\u306A\u66F2\u3092\u9078\u3093\u3067\u30D7\u30EC\u30A4\u3057\u3066\u307F\u3088\u3046\u305C\uFF01"
+        textKey: Text21
         waitSeconds: 2.5
         config:
           fontSize: -1
           fontColor: {r: 1, g: 1, b: 1, a: 1}
-          characterRevealSpeed: 10
+          speechDuration: 2
           emotion: 10
         disposableObject:
           obj: {fileID: 2103926583}

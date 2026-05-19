@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1 &1851154158127204260
 GameObject:
@@ -238,7 +238,7 @@ MonoBehaviour:
   defaultConfig:
     fontSize: 48
     fontColor: {r: 1, g: 1, b: 1, a: 1}
-    characterRevealSpeed: 10
+    speechDuration: 1
     emotion: 1
   faceImage: {fileID: 4282307173989032551}
   emotionAsset: {fileID: 11400000, guid: 2d9a19a1c67f3f04aab4557242a47bf2, type: 2}

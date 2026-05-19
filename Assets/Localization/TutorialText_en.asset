@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: TutorialText_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 4744716e667ce554588b8d1f31fc9458, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 137600815104
+    m_Localized: "Hey! I'm <#ff3333>Shikibo</color>,\nthe one in charge of this game's
+      tutorial! \nNice to meet you!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 180038782976
+    m_Localized: 'Let''s get started by introducing the <#ff3333>notes</color> that
+      make up this game!
+
+      Without them, a rhythm game can''t even begin!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 200582483968
+    m_Localized: 'First up, the basics of rhythm games: the <#ff3333>Touch Note</color>!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 241414033408
+    m_Localized: 'When this note comes up, <#ffff00>touch it</color> in time with
+      the <#ff3333>yellow line</color>!
+
+      Just keep the rhythm and tap along!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 271579467776
+    m_Localized: Let's try it right away!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 305708519424
+    m_Localized: 'Next up: the <#ff3333>Hold Note</color>!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 343302066176
+    m_Localized: This one starts with a tap, then you just keep it <#ff3333>held
+      until the end</color>!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 374218280960
+    m_Localized: 'You don''t need to force your hand off at the end!
+
+      Let''s
+      give it a try!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 404954140672
+    m_Localized: OK! Next is the <#ff3333>Dynamic Note</color>!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 477247164416
+    m_Localized: 'After touching this one,
+
+      move your hand dynamically!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 504891822080
+    m_Localized: 'For example, after touching this one,
+
+      don''t be shy and
+      <#ff3333>raise your hand up</color>!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 514140262400
+    m_Localized: 'Dynamic notes can come from all kinds of directions!
+
+      Just
+      remember to <#ff3333>move your hand in that direction</color>.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 544976785408
+    m_Localized: Alright, let's try it!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 574009757696
+    m_Localized: See? Pretty easy, right?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 602514247680
+    m_Localized: Last up, the <#ff3333>Space Hold</color>!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 626660855808
+    m_Localized: 'It''s a bit trickier, but float your hands in the air and
+
+      <#ff3333>keep
+      your hand position aligned with the notes</color>!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 668532592640
+    m_Localized: 'Let''s watch a demonstration!
+
+      It''s okay if your position
+      is a little off!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 694956707840
+    m_Localized: Alright! Let's give it a shot!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 742243291136
+    m_Localized: 'How''s that? It might be tough at first,
+
+      but you''ll get
+      used to it little by little.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 769065865216
+    m_Localized: Alright! That's the end of the tutorial!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 794550456320
+    m_Localized: Next, choose a song you like and give it a try!
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []
