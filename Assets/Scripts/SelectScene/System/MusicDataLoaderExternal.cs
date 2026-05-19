@@ -131,6 +131,9 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         // ˆê‚Â‚Å‚àˆ—‚ª¸”s‚µ‚½‚ç•Ô‚·
         if(!results.All(x => x)) { return null; }
 
+        // ‹L˜^‚Ì“Ç‚İ‚İ
+        MusicRecordPersistence.LoadAndApply(musicData);
+
         Debug.Log($"ySystemz{musicData.MusicName} ƒ[ƒhŠ®—¹: {path}");
         return musicData;
     }

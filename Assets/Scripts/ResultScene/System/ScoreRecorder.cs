@@ -34,6 +34,10 @@ public class ScoreRecorder : MonoBehaviour
         var scoreRank = scoreGetter.CurrentScoreRank.Value;
         var record = new MusicRecord(score, scoreRank,comboRank, judgementCount);
 
-        musicDataGetter.Music.Value.SetMusicRecord(musicDataGetter.Difficulty.Value, record);
+        var musicData = musicDataGetter.Music.Value;
+        var difficulty = musicDataGetter.Difficulty.Value;
+
+        musicData.SetMusicRecord(difficulty, record);
+        MusicRecordPersistence.SaveIfBetter(musicData, difficulty, record);
     }
 }
