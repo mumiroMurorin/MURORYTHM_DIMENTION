@@ -10,11 +10,13 @@ using System.IO;
 public class BodyTrackingSettingsLoader : MonoBehaviour
 {
     IOptionGetter optionGetter;
+    IOptionSetter optionSetter;
 
     [Inject]
-    public void Construct(IOptionGetter optionGetter)
+    public void Construct(IOptionGetter optionGetter, IOptionSetter optionSetter)
     {
         this.optionGetter = optionGetter;
+        this.optionSetter = optionSetter;
     }
 
     /// <summary>
@@ -37,6 +39,7 @@ public class BodyTrackingSettingsLoader : MonoBehaviour
         }
 
         optionGetter.TrackingSettings.SetFromDTO(dto);
+        optionSetter?.SetCurrentTrackingMode(dto.trackingMode);
         Debug.Log("ÅySystemÅzBodyTrackingSettingsÇÃÉçÅ[ÉhÇ…ê¨å˜");
     }
 }
@@ -45,10 +48,12 @@ public static class BodyTrackingSettingsConverter
 {
     const string FILE_NAME = "bodyTrackingSettings.json";
 
-    public static bool Save(BodyTrackingSettings trackingSettings)
+    public static bool Save(IOptionGetter optionGetter)
     {
+        if (optionGetter == null) { return false; }
+
         string filePath = Path.Combine(Application.persistentDataPath, FILE_NAME);
-        var settings = new BodyTrackingSettingsDTO(trackingSettings);
+        var settings = new BodyTrackingSettingsDTO(optionGetter.TrackingSettings, optionGetter.CurrentTrackingMode.Value);
 
         return TrySaveToJsonFile(settings, filePath);
     }

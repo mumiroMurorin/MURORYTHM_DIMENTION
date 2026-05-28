@@ -16,5 +16,6 @@ MonoBehaviour:
   leftEdge: 0
   rightEdge: 7
   themeColor: {r: 0, g: 0, b: 1, a: 1}
+  controllerRainbow: 0
   controllerColor: {r: 0, g: 0, b: 1, a: 1}
-  text: "\u30B2\u30FC\u30E0\u3092\u7D42\u4E86\u3059\u308B"
+  textKey: FinishGame

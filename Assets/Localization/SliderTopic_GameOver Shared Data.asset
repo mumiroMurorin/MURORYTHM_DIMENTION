@@ -20,7 +20,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 60060717056
-    m_Key: GameOver
+    m_Key: FinishGame
     m_Metadata:
       m_Items: []
   m_Metadata:

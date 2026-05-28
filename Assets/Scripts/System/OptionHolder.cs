@@ -296,7 +296,7 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     #region Info
 
     // ƒƒCƒ“î•ñ
-    ReactiveProperty<InfoTypeMain> mainInfo = new ReactiveProperty<InfoTypeMain>(InfoTypeMain.ScoreRankSubtraction);
+    ReactiveProperty<InfoTypeMain> mainInfo = new ReactiveProperty<InfoTypeMain>(InfoTypeMain.ComboAP);
     public IReadOnlyReactiveProperty<InfoTypeMain> MainInfo => mainInfo;
     public bool ChangeMainInfo()
     {

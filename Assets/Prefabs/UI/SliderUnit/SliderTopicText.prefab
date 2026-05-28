@@ -148,7 +148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da5f9ed155f4cb74694b2d6d533cf7f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 880
+  radius: 860
+  pingPongRadius: 1
+  radiusPingPongDelta: 10
+  radiusPingPongDuration: 1
   angleRange: 21
   autoAdjustmentAngleRange: 1
   angleOfCharacter: 3

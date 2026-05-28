@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+Ôªøusing System;
 using TMPro;
-using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace UIInRootScene
 {
@@ -13,6 +11,7 @@ namespace UIInRootScene
         [SerializeField] TextMeshProUGUI cameraNameTMP;
         [SerializeField] TextMeshProUGUI cameraResolutionTMP;
         [SerializeField] TextMeshProUGUI cameraFpsTMP;
+        [SerializeField] CameraResolutionDropDownView cameraResolutionDropDown_view;
         [SerializeField] TMP_InputField inputFieldWidth;
         [SerializeField] TMP_InputField inputFieldHeight;
         [SerializeField] Button applyResolutionButton;
@@ -24,11 +23,17 @@ namespace UIInRootScene
         public Action OnPushFlipHorizontalButtonListner { get; set; }
         public Action OnPushFlipVerticalButtonListner { get; set; }
         public Action OnPushViewImageButtonListner { get; set; }
-        public Action<int,int> OnPushApplyResolutionButtonListener { get; set; }
+        public Action<int, int> OnPushApplyResolutionButtonListener { get; set; }
+        public Action<int, int> OnPushSelectResolutionListner { get; set; }
         public Action OnPushSwitchCameraButtonListner { get; set; }
 
         void Start()
         {
+            if (cameraResolutionDropDown_view != null)
+            {
+                cameraResolutionDropDown_view.OnCameraResolutionChangedListener += OnPushResolutionDropdown;
+            }
+
             viewImageButton?.onClick.AddListener(OnPushViewImageButton);
             flipHorizontalButton?.onClick.AddListener(OnPushFlipHorizontalButton);
             flipVerticalButton?.onClick.AddListener(OnPushFlipVerticalButton);
@@ -40,28 +45,39 @@ namespace UIInRootScene
         {
             if (webCam == null)
             {
-                // ñºëOÇÃçXêV
                 cameraNameTMP.text = "No Connection";
-
-                // âëúìxÇÃçXêV
                 cameraResolutionTMP.text = "-";
+                return;
             }
-            else
-            {
-                // ñºëOÇÃçXêV
-                cameraNameTMP.text = webCam.deviceName;
 
-                // âëúìxÇÃçXêV
-                cameraResolutionTMP.text = $"{webCam.width} Å~ {webCam.height}";
-                inputFieldWidth.text = webCam.width.ToString();
-                inputFieldHeight.text = webCam.height.ToString();
-            }
+            cameraNameTMP.text = webCam.deviceName;
+            cameraResolutionTMP.text = $"{webCam.width} √ó {webCam.height}";
+            OnChangeCameraResolution(webCam.width, webCam.height);
         }
 
         public void OnChangeFPS(int fps)
         {
-            // fpsÇÃçXêV
             cameraFpsTMP.text = $"{fps}fps";
+        }
+
+        public void RefreshResolutionOptions(int cameraIndex, int currentWidth = -1, int currentHeight = -1)
+        {
+            cameraResolutionDropDown_view?.RefreshResolutions(cameraIndex, currentWidth, currentHeight);
+        }
+
+        public void OnChangeCameraResolution(int width, int height)
+        {
+            if (inputFieldWidth != null)
+            {
+                inputFieldWidth.text = width > 0 ? width.ToString() : string.Empty;
+            }
+
+            if (inputFieldHeight != null)
+            {
+                inputFieldHeight.text = height > 0 ? height.ToString() : string.Empty;
+            }
+
+            cameraResolutionDropDown_view?.OnChangeCameraResolution(width, height);
         }
 
         private void OnPushViewImageButton()
@@ -84,13 +100,19 @@ namespace UIInRootScene
 
         private void OnPushApplyResolutionButton()
         {
-            if (!int.TryParse(inputFieldWidth.text, out int width) || !int.TryParse(inputFieldHeight.text, out int height)) 
+            if (!int.TryParse(inputFieldWidth.text, out int width) || !int.TryParse(inputFieldHeight.text, out int height))
             {
-                Debug.LogWarning($"ÉtÉBÅ[ÉãÉhÇ…ñ≥å¯Ç»ílÇ™ì¸óÕÇ≥ÇÍÇƒÇ¢Ç‹Ç∑: {inputFieldWidth.text}x{inputFieldHeight.text}");
+                Debug.LogWarning($"„Éï„Ç£„Éº„É´„Éâ„Å´ÁÑ°Âäπ„Å™ÂÄ§„ÅåÂÖ•Âäõ„Åï„Çå„Å¶„ÅÑ„Åæ„Åô: {inputFieldWidth.text}x{inputFieldHeight.text}");
                 return;
             }
 
             OnPushApplyResolutionButtonListener?.Invoke(width, height);
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+
+        private void OnPushResolutionDropdown(int width, int height)
+        {
+            OnPushSelectResolutionListner?.Invoke(width, height);
             EventSystem.current.SetSelectedGameObject(null);
         }
 
@@ -100,5 +122,4 @@ namespace UIInRootScene
             EventSystem.current.SetSelectedGameObject(null);
         }
     }
-
 }

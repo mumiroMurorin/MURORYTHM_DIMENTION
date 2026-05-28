@@ -6,13 +6,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "OperationInPhase", menuName = "ScriptableObject/OperationInPhase")]
 public class OperationInPhase : ScriptableObject
 {
-    [Label("蟇ｾ蠢懊す繝ｼ繝ｳ")]
+    [Label("対象シーン")]
     [SerializeField] private SceneTag scene;
 
     #region Title
 
     [ShowIf("scene", SceneTag.TitleScene)]
-    [Label("蟇ｾ蠢懊ヵ繧ｧ繝ｼ繧ｺ")]
+    [Label("対象フェーズ")]
     [SerializeField] private PhaseStatusInTitleScene phaseStatusTitleScene;
 
     public bool CheckCondition(PhaseStatusInTitleScene phase)
@@ -24,7 +24,7 @@ public class OperationInPhase : ScriptableObject
     #region Lobby
 
     [ShowIf("scene", SceneTag.LobbyScene)]
-    [Label("蟇ｾ蠢懊ヵ繧ｧ繝ｼ繧ｺ")]
+    [Label("対象フェーズ")]
     [SerializeField] private PhaseStatusInLobbyScene phaseStatusLobbyScene;
 
     public bool CheckCondition(PhaseStatusInLobbyScene phase)
@@ -36,7 +36,7 @@ public class OperationInPhase : ScriptableObject
     #region Select
 
     [ShowIf("scene", SceneTag.SelectScene)]
-    [Label("蟇ｾ蠢懊ヵ繧ｧ繝ｼ繧ｺ")]
+    [Label("対象フェーズ")]
     [SerializeField] private PhaseStatusInSelectScene phaseStatusSelectScene;
 
     public bool CheckCondition(PhaseStatusInSelectScene phase)
@@ -48,7 +48,7 @@ public class OperationInPhase : ScriptableObject
     #region RhythmGame
 
     [ShowIf("scene", SceneTag.RhythmGameScene)]
-    [Label("蟇ｾ蠢懊ヵ繧ｧ繝ｼ繧ｺ")]
+    [Label("対象フェーズ")]
     [SerializeField] private PhaseStatusInRhythmGame phaseStatusRhythmGameScene;
 
     public bool CheckCondition(PhaseStatusInRhythmGame phase)
@@ -60,7 +60,7 @@ public class OperationInPhase : ScriptableObject
     #region Result
 
     [ShowIf("scene", SceneTag.ResultScene)]
-    [Label("蟇ｾ蠢懊ヵ繧ｧ繝ｼ繧ｺ")]
+    [Label("対象フェーズ")]
     [SerializeField] private PhaseStatusInResultScene phaseStatusResultScene;
 
     public bool CheckCondition(PhaseStatusInResultScene phase)
@@ -72,7 +72,7 @@ public class OperationInPhase : ScriptableObject
     #region GameOver
 
     [ShowIf("scene", SceneTag.GameOverScene)]
-    [Label("蟇ｾ蠢懊ヵ繧ｧ繝ｼ繧ｺ")]
+    [Label("対象フェーズ")]
     [SerializeField] private PhaseStatusInGameOverScene phaseStatusGameOverScene;
 
     public bool CheckCondition(PhaseStatusInGameOverScene phase)
@@ -92,7 +92,7 @@ public class OperationInPhase : ScriptableObject
 [System.Serializable]
 public class OperationAssetGroup
 {
-    [Label("繧ｿ繝・メ蠕後・繧ｯ繝ｼ繝ｫ繧ｿ繧､繝")]
+    [Label("タッチ後のクールタイム")]
     [SerializeField] private float coolTime = 0.2f;
 
     [SerializeField] private OperationAssetUnit[] operations;

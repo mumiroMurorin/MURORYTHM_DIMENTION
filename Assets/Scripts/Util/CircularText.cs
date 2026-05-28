@@ -8,6 +8,12 @@ public class CircularText : MonoBehaviour
     [Header("円形配置の設定")]
     [Tooltip("円の半径")]
     [SerializeField] float radius = 100f;
+    [Tooltip("Radius をピンポンさせるかどうか")]
+    [SerializeField] bool pingPongRadius = false;
+    [Tooltip("Radius の変化量")]
+    [SerializeField] float radiusPingPongDelta = 10f;
+    [Tooltip("Radius が片道移動する時間")]
+    [SerializeField] float radiusPingPongDuration = 1f;
     [Tooltip("配置する文字の角度の範囲（度）")]
     [SerializeField] float angleRange = 180f;
     [Tooltip("文字数に応じて角度を自動調整する場合はここにチェック")]
@@ -48,11 +54,22 @@ public class CircularText : MonoBehaviour
     private TextMeshProUGUI tmp;
     private TMP_TextInfo textInfo;
     private string previousText;
+    private float previousRadius;
+    private float previousAngleRange;
+    private bool previousAutoAdjustmentAngleRange;
+    private float previousAngleOfCharacter;
+    private float previousCenterAngle;
+    private float previousCharacterRotationOffset;
+    private bool previousPingPongRadius;
+    private float previousRadiusPingPongDelta;
+    private float previousRadiusPingPongDuration;
+    private float previousAppliedRadius = float.MinValue;
 
     void Awake()
     {
         tmp = GetComponent<TextMeshProUGUI>();
         RefreshLayout();
+        CacheLayoutState();
     }
 
     void Start()
@@ -62,18 +79,20 @@ public class CircularText : MonoBehaviour
         ApplyCircularLayout();
 
         previousText = tmp.text;
+        CacheLayoutState();
     }
 
     void Update()
     {
-        // 情報の更新
-        if (previousText != tmp.text)
-        {
-            tmp.ForceMeshUpdate();
-            textInfo = tmp.textInfo;
-            ApplyCircularLayout();
+        if (tmp == null)
+            tmp = GetComponent<TextMeshProUGUI>();
+        if (tmp == null)
+            return;
 
-            previousText = tmp.text;
+        if (ShouldRefreshLayout())
+        {
+            RefreshLayout();
+            CacheLayoutState();
         }
     }
 
@@ -135,7 +154,7 @@ public class CircularText : MonoBehaviour
             float angle = startAngle + (visibleIndex * angleStep);
             float radian = angle * Mathf.Deg2Rad;
             // 円形上の配置位置を計算
-            Vector3 targetPosition = new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0) * radius;
+            Vector3 targetPosition = new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0) * GetCurrentRadius();
             // 文字の回転は、配置角度に characterRotationOffset を加えた角度で回転させる
             Quaternion rotation = Quaternion.Euler(0, 0, angle + characterRotationOffset);
 
@@ -153,5 +172,60 @@ public class CircularText : MonoBehaviour
         {
             tmp.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
         }
+    }
+
+    float GetCurrentRadius()
+    {
+        if (!pingPongRadius || radiusPingPongDuration <= 0f || Mathf.Approximately(radiusPingPongDelta, 0f))
+            return radius;
+
+        float time = Application.isPlaying ? Time.unscaledTime : Time.realtimeSinceStartup;
+        float cycle = Mathf.PingPong(time / radiusPingPongDuration, 1f);
+        return radius + Mathf.Lerp(-radiusPingPongDelta, radiusPingPongDelta, cycle);
+    }
+
+    bool ShouldRefreshLayout()
+    {
+        if (previousText != tmp.text)
+            return true;
+        if (!Mathf.Approximately(previousRadius, radius))
+            return true;
+        if (!Mathf.Approximately(previousAngleRange, angleRange))
+            return true;
+        if (previousAutoAdjustmentAngleRange != autoAdjustmentAngleRange)
+            return true;
+        if (!Mathf.Approximately(previousAngleOfCharacter, angleOfCharacter))
+            return true;
+        if (!Mathf.Approximately(previousCenterAngle, centerAngle))
+            return true;
+        if (!Mathf.Approximately(previousCharacterRotationOffset, characterRotationOffset))
+            return true;
+        if (previousPingPongRadius != pingPongRadius)
+            return true;
+        if (!Mathf.Approximately(previousRadiusPingPongDelta, radiusPingPongDelta))
+            return true;
+        if (!Mathf.Approximately(previousRadiusPingPongDuration, radiusPingPongDuration))
+            return true;
+
+        float currentAppliedRadius = GetCurrentRadius();
+        if (!Mathf.Approximately(previousAppliedRadius, currentAppliedRadius))
+            return true;
+
+        return false;
+    }
+
+    void CacheLayoutState()
+    {
+        previousText = tmp != null ? tmp.text : string.Empty;
+        previousRadius = radius;
+        previousAngleRange = angleRange;
+        previousAutoAdjustmentAngleRange = autoAdjustmentAngleRange;
+        previousAngleOfCharacter = angleOfCharacter;
+        previousCenterAngle = centerAngle;
+        previousCharacterRotationOffset = characterRotationOffset;
+        previousPingPongRadius = pingPongRadius;
+        previousRadiusPingPongDelta = radiusPingPongDelta;
+        previousRadiusPingPongDuration = radiusPingPongDuration;
+        previousAppliedRadius = GetCurrentRadius();
     }
 }

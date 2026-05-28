@@ -1,4 +1,4 @@
-Ôªøusing System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -22,7 +22,7 @@ namespace TransitionerInLobbyScene
 
         void IPhaseTransitionerInLobbyScene.Transition()
         {
-            Debug.Log("„ÄêTransition„ÄëTransition to \"LoadData\"");
+            Debug.Log("ÅyTransitionÅzTransition to \"LoadData\"");
 
             SoundManager.Instance.PlayBGM(BGM_Type.Lobby);
 
@@ -32,7 +32,7 @@ namespace TransitionerInLobbyScene
         }
 
         /// <summary>
-        /// Ê¨°„ÅÆ„Éï„Çß„Éº„Ç∫„Å∏„ÅÆÁßªÂãï
+        /// éüÇÃÉtÉFÅ[ÉYÇ÷ÇÃà⁄ìÆ
         /// </summary>
         private void TransitionNextPhase()
         {
@@ -45,6 +45,8 @@ namespace TransitionerInLobbyScene
             operationDictionary.RegisterOperation(OperationTag.Lobby_SkipTutorial, () => { TransitionFadeOutPhase(false); });
             operationDictionary.RegisterOperation(OperationTag.Lobby_SelectJapanese, () => { SetLanguage(GameLanguage.Japanese); });
             operationDictionary.RegisterOperation(OperationTag.Lobby_SelectEnglish, () => { SetLanguage(GameLanguage.English); });
+            operationDictionary.RegisterOperation(OperationTag.Lobby_CautionPlaying1_Confirm, () => { phaseTransitionable?.Value.TransitionPhase(PhaseStatusInLobbyScene.CautionPlaying2); });
+            operationDictionary.RegisterOperation(OperationTag.Lobby_CautionPlaying2_Confirm, () => { phaseTransitionable?.Value.TransitionPhase(PhaseStatusInLobbyScene.ConfirmTutorial); });
         }
 
         private void TransitionFadeOutPhase(bool isPlayTutorial)
@@ -57,21 +59,21 @@ namespace TransitionerInLobbyScene
         {
             dataController?.DataSetter?.SetSelectedLanguage(language);
             ApplyLocalization(language);
-            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInLobbyScene.ConfirmTutorial);
+            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInLobbyScene.CautionPlaying1);
         }
 
         private void ApplyLocalization(GameLanguage language)
         {
             if (LocalizationSettings.AvailableLocales == null)
             {
-                Debug.LogWarning("„ÄêTransitioner_LoadData„ÄëLocalization available locales is not initialized.");
+                Debug.LogWarning("ÅyTransitioner_LoadDataÅzLocalization available locales is not initialized.");
                 return;
             }
 
             var locale = LocalizationSettings.AvailableLocales.GetLocale(new LocaleIdentifier(GetLocaleCode(language)));
             if (locale == null)
             {
-                Debug.LogWarning($"„ÄêTransitioner_LoadData„ÄëLocale was not found for {language}.");
+                Debug.LogWarning($"ÅyTransitioner_LoadDataÅzLocale was not found for {language}.");
                 return;
             }
 

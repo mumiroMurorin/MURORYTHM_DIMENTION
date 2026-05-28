@@ -23,6 +23,14 @@ MonoBehaviour:
     m_Key: Confirm to continue game
     m_Metadata:
       m_Items: []
+  - m_Id: 1713967557103616
+    m_Key: PlayingNote1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1714342582407168
+    m_Key: Playing Note2
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

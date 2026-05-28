@@ -1,4 +1,4 @@
-﻿public enum PhaseStatusInLobbyScene
+public enum PhaseStatusInLobbyScene
 {
     LoadData,
     FadeIn,
@@ -9,4 +9,8 @@
     FadeOut,
     TransitionSelectScene,
     TransitionTutorialScene,
+    CautionPlaying1,
+    CautionPlaying1_Operation,
+    CautionPlaying2,
+    CautionPlaying2_Operation,
 }

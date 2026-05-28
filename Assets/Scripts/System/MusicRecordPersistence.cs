@@ -29,9 +29,11 @@ public static class MusicRecordPersistence
             var record = FindRecord(database, chartKey);
             if (record == null) { continue; }
 
+            var scoreRank = ScoreRankUtility.GetRankFromScore(record.score);
+
             musicData.SetMusicRecord(
                 difficulty,
-                new MusicRecord(record.score, ScoreRank.None, record.comboRank, JudgementToCount.zero)
+                new MusicRecord(record.score, scoreRank, record.comboRank, JudgementToCount.zero)
             );
         }
     }

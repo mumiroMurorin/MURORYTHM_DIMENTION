@@ -85,7 +85,7 @@ public class BodyTrackingSettings
         if(dto == null) { return; }
 
         SetCameraHeight(dto.cameraHeight);
-        SetCameraWidth(dto.cameraHeight);
+        SetCameraWidth(dto.cameraWidth);
         CameraIndex = dto.cameraIndex;
         SetIsHorizontallyFlipped(dto.isHorizontallyFlipped);
         SetIsVerticallyFlipped(dto.isVerticallyFlipped);
@@ -104,11 +104,12 @@ public class BodyTrackingSettingsDTO
 {
     public BodyTrackingSettingsDTO() { }
 
-    public BodyTrackingSettingsDTO(BodyTrackingSettings settings)
+    public BodyTrackingSettingsDTO(BodyTrackingSettings settings, TrackingMode trackingMode)
     {
         this.cameraWidth = settings.CameraWidth.Value;
         this.cameraHeight = settings.CameraHeight.Value;
         this.cameraIndex = settings.CameraIndex;
+        this.trackingMode = trackingMode;
         this.isHorizontallyFlipped = settings.IsHorizontallyFlipped.Value;
         this.isHandFlipped = settings.IsHandFlipped.Value;
         this.isVerticallyFlipped = settings.IsVerticallyFlipped.Value;
@@ -121,6 +122,7 @@ public class BodyTrackingSettingsDTO
     public int cameraHeight;
 
     public int cameraIndex;
+    public TrackingMode trackingMode = TrackingMode.BodyTracking;
 
     // トラッキングの左右反転
     public bool isHorizontallyFlipped;

@@ -22,7 +22,7 @@ public class BodyTrackingSettingsSaver : MonoBehaviour
     {
         if(optionGetter == null) { return; }
 
-        if (!Save(optionGetter.TrackingSettings))
+        if (!Save(optionGetter))
         {
             Debug.LogWarning("ÅySystemÅzBodyTrackingSettingsÇÃï€ë∂Ç…é∏îsÇµÇ‹ÇµÇΩ");
         }

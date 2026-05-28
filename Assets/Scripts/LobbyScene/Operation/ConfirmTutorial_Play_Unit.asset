@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: ConfirmTutorial_Play_Unit
   m_EditorClassIdentifier: 
   tag: 150
-  leftEdge: 8
-  rightEdge: 15
-  themeColor: {r: 1, g: 0.34901962, b: 0, a: 1}
+  leftEdge: 0
+  rightEdge: 10
+  themeColor: {r: 1, g: 0.3529412, b: 0.3529412, a: 1}
   controllerRainbow: 0
-  controllerColor: {r: 1, g: 0.34901962, b: 0, a: 1}
+  controllerColor: {r: 1, g: 0.3529412, b: 0.3529412, a: 1}
   textKey: Play the tutorial

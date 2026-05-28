@@ -51,6 +51,8 @@ public abstract class InputHandlerForSlider : MonoBehaviour, IInputHandler
         foreach (int index in indices)
         {
             sliderInputGetter.GetSliderInputReactiveProperty(index)
+                // 最初からタッチされているときの誤動作防止
+                .Skip(1)
                 // タッチされた時
                 .Where(value => value)
                 // 無効時間を過ぎているとき

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: ConfirmTutorial_Skip_Unit
   m_EditorClassIdentifier: 
   tag: 151
-  leftEdge: 0
-  rightEdge: 7
-  themeColor: {r: 0, g: 0.4509804, b: 1, a: 1}
+  leftEdge: 12
+  rightEdge: 15
+  themeColor: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
   controllerRainbow: 0
-  controllerColor: {r: 0, g: 0.4509804, b: 1, a: 1}
+  controllerColor: {r: 0.6431373, g: 0.6431373, b: 0.6431373, a: 1}
   textKey: Skip the tutorial

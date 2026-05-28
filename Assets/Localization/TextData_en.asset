@@ -26,6 +26,14 @@ MonoBehaviour:
     m_Localized: Continue the game?
     m_Metadata:
       m_Items: []
+  - m_Id: 1713967557103616
+    m_Localized: Important Notes Regarding Sensors
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1714342582407168
+    m_Localized: Important Notes Regarding the Controller
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

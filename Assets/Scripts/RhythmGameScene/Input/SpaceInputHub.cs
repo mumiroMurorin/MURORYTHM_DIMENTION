@@ -98,11 +98,14 @@ public class SpaceInputHub : MonoBehaviour, ISpaceInputHub
         }
 
         var currentTime = timer?.Value != null ? timer.Value.Time : 0f;
+        var trackingSettings = optionGetter?.TrackingSettings;
+        var rightHandPos = SpaceInputNormalizer.NormalizeUsedVector2(handler.RightHandPos.Value, trackingSettings);
+        var leftHandPos = SpaceInputNormalizer.NormalizeUsedVector2(handler.LeftHandPos.Value, trackingSettings);
 
         spaceInputSetter.SetCanGetSpaceInput(SpaceTrackingTag.RightHand, handler.CanGetRightHand);
         spaceInputSetter.SetCanGetSpaceInput(SpaceTrackingTag.LeftHand, handler.CanGetLeftHand);
-        spaceInputSetter.SetSpaceInput(SpaceTrackingTag.RightHand, handler.RightHandPos.Value, currentTime);
-        spaceInputSetter.SetSpaceInput(SpaceTrackingTag.LeftHand, handler.LeftHandPos.Value, currentTime);
+        spaceInputSetter.SetSpaceInput(SpaceTrackingTag.RightHand, rightHandPos, currentTime);
+        spaceInputSetter.SetSpaceInput(SpaceTrackingTag.LeftHand, leftHandPos, currentTime);
     }
 
     private ISpaceInputHandler GetActiveHandler()

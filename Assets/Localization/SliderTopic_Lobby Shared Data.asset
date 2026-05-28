@@ -31,6 +31,10 @@ MonoBehaviour:
     m_Key: Language Japanese
     m_Metadata:
       m_Items: []
+  - m_Id: 616761458544640
+    m_Key: NextNote
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

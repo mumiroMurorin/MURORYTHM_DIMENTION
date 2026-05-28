@@ -14,9 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TableCollectionName: ImageData
   m_TableCollectionNameGuidString: 7afbae98f6793d443a1516532f2d2ead
-  m_Entries: []
+  m_Entries:
+  - m_Id: 1721173925023744
+    m_Key: Note1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1724167928270848
+    m_Key: Note2
+    m_Metadata:
+      m_Items: []
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 1127769536523665414
   m_KeyGenerator:
     rid: 1127769429922021400
   references:
@@ -26,3 +35,17 @@ MonoBehaviour:
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
       data:
         m_CustomEpoch: 1778855188519
+    - rid: 1127769536523665414
+      type: {class: AssetTypeMetadata, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries:
+        - m_KeyId: 1721173925023744
+          m_TableCodes:
+          - en
+          - ja
+        - m_KeyId: 1724167928270848
+          m_TableCodes:
+          - en
+          - ja
+        m_TypeString: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null

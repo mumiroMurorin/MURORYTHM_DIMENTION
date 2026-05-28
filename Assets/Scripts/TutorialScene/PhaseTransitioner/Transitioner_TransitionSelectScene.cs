@@ -13,6 +13,8 @@ namespace TransitionerInTutorialScene
     {
         [Scene]
         [SerializeField] string nextSceneName;
+        [SerializeField] OptionAsset initializingOption;
+        [SerializeField] OptionDataSetter optionDataSetter;
         [SerializeField] float waitTime = 0f;
 
         readonly PhaseStatusInTutorialScene status = PhaseStatusInTutorialScene.TransitionSelectScene;
@@ -26,6 +28,9 @@ namespace TransitionerInTutorialScene
         void IPhaseTransitionerInTutorialScene.Transition()
         {
             Debug.Log("ÅyTransitionÅzTransition to \"TransitionSelectScene\"");
+
+            optionDataSetter?.SetOption(initializingOption);
+
             LoadSceneAsync(cts.Token).Forget();
         }
 

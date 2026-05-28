@@ -15,7 +15,7 @@ MonoBehaviour:
   tag: 260
   leftEdge: 0
   rightEdge: 1
-  themeColor: {r: 0, g: 0.47843137, b: 1, a: 1}
+  themeColor: {r: 0, g: 1, b: 0.38431373, a: 1}
   controllerRainbow: 0
-  controllerColor: {r: 0, g: 0.47843137, b: 1, a: 1}
+  controllerColor: {r: 0, g: 1, b: 0.38431373, a: 1}
   textKey: Detail_BackSelectMusic

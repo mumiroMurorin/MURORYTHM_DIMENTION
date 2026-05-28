@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UniRx;
-using System.Linq;
-using VContainer;
-using TransitionerInSelectScene;
+ï»¿using System.Threading;
 using Cysharp.Threading.Tasks;
-using System.Threading;
+using System;
+using System.Linq;
+using UniRx;
+using UnityEngine;
+using VContainer;
 using TransitionerInRootScene;
+using TransitionerInSelectScene;
 
 namespace UIInRootScene
 {
@@ -46,14 +45,19 @@ namespace UIInRootScene
 
         private void Start()
         {
-            Bind(); 
+            Bind();
             SetEvent();
             trackingModeDropDown_view?.OnChangeTrackingMode(optionGetter_model?.CurrentTrackingMode.Value ?? TrackingMode.BodyTracking);
+            cameraSettings_view?.RefreshResolutionOptions(
+                optionGetter_model?.TrackingSettings.CameraIndex ?? 0,
+                optionGetter_model?.TrackingSettings.CameraWidth.Value ?? -1,
+                optionGetter_model?.TrackingSettings.CameraHeight.Value ?? -1
+            );
         }
 
         private void Bind()
         {
-            // ³‹K‰»‘O‚ÌŽè‚ÌÀ•W
+            // æ­£è¦åŒ–å‰ã®æ‰‹ã®åº§æ¨™
             spaceInputHandler_model?.Value?.RightHandPos
                 .Subscribe(handInfo_view.OnChangeRightHandOriginPosition)
                 .AddTo(this.gameObject);
@@ -62,7 +66,7 @@ namespace UIInRootScene
                 .Subscribe(handInfo_view.OnChangeLeftHandOriginPosition)
                 .AddTo(this.gameObject);
 
-            // ³‹K‰»‚³‚ê‚½Žè‚ÌÀ•W
+            // æ­£è¦åŒ–ã•ã‚ŒãŸæ‰‹ã®åº§æ¨™
             spaceInputGetter_model?.GetSpaceInput(SpaceTrackingTag.RightHand).ObserveAdd()
                 .Subscribe(pos => { handInfo_view.OnChangeRightHandNormalizedPosition(pos.Value.Pos); })
                 .AddTo(this.gameObject);
@@ -71,7 +75,7 @@ namespace UIInRootScene
                 .Subscribe(pos => { handInfo_view.OnChangeLeftHandNormalizedPosition(pos.Value.Pos); })
                 .AddTo(this.gameObject);
 
-            // ƒxƒNƒgƒ‹•ûŒü
+            // ãƒ™ã‚¯ãƒˆãƒ«æ–¹å‘
             spaceInputGetter_model?.GetSpaceInputVelocity(SpaceTrackingTag.RightHand)
                 .Subscribe(handInfo_view.OnChangeRightHandVelocity)
                 .AddTo(this.gameObject);
@@ -80,31 +84,58 @@ namespace UIInRootScene
                 .Subscribe(handInfo_view.OnChangeLeftHandVelocity)
                 .AddTo(this.gameObject);
 
-            // ƒRƒ“ƒgƒ[ƒ‰¶’[
+            // ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©å·¦ç«¯
             optionGetter_model?.TrackingSettings.ControllerLeftEdge
                 .Subscribe(controllerLeftEdgeSetting_view.OnChangePosition)
                 .AddTo(this.gameObject);
 
-            // ƒRƒ“ƒgƒ[ƒ‰‰E’[
+            // ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©å³ç«¯
             optionGetter_model?.TrackingSettings.ControllerRightEdge
                 .Subscribe(controllerRightEdgeSetting_view.OnChangePosition)
                 .AddTo(this.gameObject);
 
-            // ƒRƒ“ƒgƒ[ƒ‰‰º
+            // ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ä¸‹
             optionGetter_model?.TrackingSettings.ControllerLowerCenter
                 .Subscribe(controllerLowerCenterSetting_view.OnChangePosition)
                 .AddTo(this.gameObject);
 
-            // ƒJƒƒ‰î•ñ
+            // ã‚«ãƒ¡ãƒ©æƒ…å ±
             cameraInfo_model?.Value?.WebCamInfo
-                .Subscribe(cameraSettings_view.OnChangeCameraInfo)
+                .Subscribe(webCam =>
+                {
+                    cameraSettings_view.OnChangeCameraInfo(webCam);
+
+                    if (webCam != null)
+                    {
+                        cameraSettings_view.RefreshResolutionOptions(
+                            optionGetter_model?.TrackingSettings.CameraIndex ?? 0,
+                            optionGetter_model?.TrackingSettings.CameraWidth.Value ?? webCam.width,
+                            optionGetter_model?.TrackingSettings.CameraHeight.Value ?? webCam.height
+                        );
+                    }
+                })
                 .AddTo(this.gameObject);
 
             cameraInfo_model?.Value?.CameraFps
                 .Subscribe(cameraSettings_view.OnChangeFPS)
                 .AddTo(this.gameObject);
 
-            // ƒgƒ‰ƒbƒLƒ“ƒOƒ‚[ƒh
+            // ã‚«ãƒ¡ãƒ©è§£åƒåº¦
+            if (optionGetter_model != null)
+            {
+                optionGetter_model.TrackingSettings.CameraWidth
+                    .CombineLatest(
+                        optionGetter_model.TrackingSettings.CameraHeight,
+                        (width, height) => (width, height)
+                    )
+                    .Subscribe(size =>
+                    {
+                        cameraSettings_view.OnChangeCameraResolution(size.width, size.height);
+                    })
+                    .AddTo(this.gameObject);
+            }
+
+            // ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰
             optionGetter_model?.CurrentTrackingMode
                 .Subscribe(trackingModeDropDown_view.OnChangeTrackingMode)
                 .AddTo(this.gameObject);
@@ -112,81 +143,84 @@ namespace UIInRootScene
 
         private void SetEvent()
         {
-            // ‰EŽè¶Žè‚Ì”½“]
+            // å³æ‰‹å·¦æ‰‹ã®åè»¢
             handInfo_view.OnPushFlipButtonListner += () => { optionGetter_model?.TrackingSettings.SetIsHandFlipped(!optionGetter_model.TrackingSettings.IsHandFlipped.Value); };
 
-            // ƒRƒ“ƒgƒ[ƒ‰¶’[
+            // ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©å·¦ç«¯
             controllerLeftEdgeSetting_view.OnChangeValueListner += (pos) => { optionGetter_model?.TrackingSettings.SetControllerLeftEdge(pos); };
             controllerLeftEdgeSetting_view.OnPushSetRightPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerLeftEdge(spaceInputHandler_model.Value.RightHandPos.Value); };
             controllerLeftEdgeSetting_view.OnPushSetLeftPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerLeftEdge(spaceInputHandler_model.Value.LeftHandPos.Value); };
 
-            // ƒRƒ“ƒgƒ[ƒ‰‰E’[
+            // ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©å³ç«¯
             controllerRightEdgeSetting_view.OnChangeValueListner += (pos) => { optionGetter_model?.TrackingSettings.SetControllerRightEdge(pos); };
             controllerRightEdgeSetting_view.OnPushSetRightPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerRightEdge(spaceInputHandler_model.Value.RightHandPos.Value); };
             controllerRightEdgeSetting_view.OnPushSetLeftPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerRightEdge(spaceInputHandler_model.Value.LeftHandPos.Value); };
 
-            // ƒRƒ“ƒgƒ[ƒ‰‰º
+            // ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ä¸‹
             controllerLowerCenterSetting_view.OnChangeValueListner += (pos) => { optionGetter_model?.TrackingSettings.SetControllerLowerCenter(pos); };
             controllerLowerCenterSetting_view.OnPushSetRightPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerLowerCenter(spaceInputHandler_model.Value.RightHandPos.Value); };
             controllerLowerCenterSetting_view.OnPushSetLeftPositionButtonListner += () => { optionGetter_model?.TrackingSettings.SetControllerLowerCenter(spaceInputHandler_model.Value.LeftHandPos.Value); };
 
-            // “ü—Í‰f‘œ‚ÌŠm”F
+            // å…¥åŠ›æ˜ åƒã®ç¢ºèª
             cameraSettings_view.OnPushViewImageButtonListner += () => { cameraImage_view.SetActive(!cameraImage_view.activeSelf); };
 
-            // “ü—Í‰f‘œ‚Ì”½“]
-            cameraSettings_view.OnPushFlipHorizontalButtonListner += () => 
-            { 
+            // å…¥åŠ›æ˜ åƒã®åè»¢
+            cameraSettings_view.OnPushFlipHorizontalButtonListner += () =>
+            {
                 optionGetter_model?.TrackingSettings.SetIsHorizontallyFlipped(!optionGetter_model.TrackingSettings.IsHorizontallyFlipped.Value);
-                // ƒŠƒ[ƒh
-                phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
-            }; 
-            
-            cameraSettings_view.OnPushFlipVerticalButtonListner += () => 
-            { 
-                optionGetter_model?.TrackingSettings.SetIsVerticallyFlipped(!optionGetter_model.TrackingSettings.IsVerticallyFlipped.Value);
-                // ƒŠƒ[ƒh
                 phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
             };
 
-            // ‰ð‘œ“x‚Ì•ÏX
+            cameraSettings_view.OnPushFlipVerticalButtonListner += () =>
+            {
+                optionGetter_model?.TrackingSettings.SetIsVerticallyFlipped(!optionGetter_model.TrackingSettings.IsVerticallyFlipped.Value);
+                phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
+            };
+
+            // è§£åƒåº¦ã®å¤‰æ›´(å…¥åŠ›æ¬„)
             cameraSettings_view.OnPushApplyResolutionButtonListener += (width, height) =>
             {
                 optionGetter_model?.TrackingSettings.SetCameraWidth(width);
                 optionGetter_model?.TrackingSettings.SetCameraHeight(height);
-                // ƒŠƒ[ƒh
+                cameraSettings_view.OnChangeCameraResolution(width, height);
                 phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
             };
 
-            // ƒJƒƒ‰‚Ì•ÏX
+            // è§£åƒåº¦ã®å¤‰æ›´(ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³)
+            cameraSettings_view.OnPushSelectResolutionListner += (width, height) =>
+            {
+                optionGetter_model?.TrackingSettings.SetCameraWidth(width);
+                optionGetter_model?.TrackingSettings.SetCameraHeight(height);
+                cameraSettings_view.OnChangeCameraResolution(width, height);
+                phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
+            };
+
+            // ã‚«ãƒ¡ãƒ©ã®å¤‰æ›´
             cameraSettings_view.OnPushSwitchCameraButtonListner += () =>
             {
                 spaceInputHandler_model.Value.SwitchCamera();
-                // ƒŠƒ[ƒh
                 phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
             };
 
-            // ƒgƒ‰ƒbƒLƒ“ƒOƒ‚[ƒh‚Ì•ÏX
+            // ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã®å¤‰æ›´
             trackingModeDropDown_view.OnTrackingModeChangedListener += (mode) =>
             {
                 optionSetter_model?.SetCurrentTrackingMode(mode);
-                // ƒŠƒ[ƒh
                 phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
             };
 
-            // ƒZƒŒƒNƒgƒV[ƒ“‚É–ß‚é
+            // ã‚»ãƒ¬ã‚¯ãƒˆã‚·ãƒ¼ãƒ³ã«æˆ»ã‚‹
             backMusicSelectSceneButton_view.OnPushButtonListner += () => { phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.TransitionSelectScene); };
 
-            // UI”ñ•\Ž¦
-            hiddenUIButton_view.OnPushButtonListner += () => 
+            // UIéžè¡¨ç¤º
+            hiddenUIButton_view.OnPushButtonListner += () =>
             {
                 isHiddenUI = !isHiddenUI;
-                foreach(var obj in hiddenObjects)
+                foreach (var obj in hiddenObjects)
                 {
                     obj.SetActive(!isHiddenUI);
                 }
             };
         }
     }
-
 }
-

@@ -1,8 +1,10 @@
-﻿public enum OperationTag
+public enum OperationTag
 {
     Title_WaitingForPlayerInput = 50,
     Lobby_SelectJapanese = 130,
     Lobby_SelectEnglish = 131,
+    Lobby_CautionPlaying1_Confirm = 140,
+    Lobby_CautionPlaying2_Confirm = 141,
     Lobby_PlayTutorial = 150,
     Lobby_SkipTutorial = 151,
     Select_SelectMusic = 210,

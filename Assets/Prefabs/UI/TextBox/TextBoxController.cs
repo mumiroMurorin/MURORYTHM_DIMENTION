@@ -12,6 +12,8 @@ public class TextBoxController : MonoBehaviour
     [SerializeField] SE_Type closeSe;
     [SerializeField] Animator anim;
 
+    [SerializeField] ImageBoxController linkedImageBox;
+
     const string OPEN_ANIM_NAME = "Open";
     const string CLOSE_ANIM_NAME = "Close";
 
@@ -41,6 +43,8 @@ public class TextBoxController : MonoBehaviour
 
     private async UniTask WaitForOpenAsync(Action callback, CancellationToken token)
     {
+        linkedImageBox?.Open();
+
         this.gameObject.SetActive(true);
         SoundManager.Instance.PlaySE(openSe);
         isOpening = false;
@@ -53,6 +57,8 @@ public class TextBoxController : MonoBehaviour
 
     private async UniTask WaitForCloseAsync(Action callback, CancellationToken token)
     {
+        linkedImageBox?.Close();
+
         isOpening = true;
         
         SoundManager.Instance.PlaySE(closeSe);
