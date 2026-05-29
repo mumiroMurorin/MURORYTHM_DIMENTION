@@ -7,19 +7,19 @@ using LibTessDotNet;
 namespace MeshGenerate
 {
     /// <summary>
-    /// GroundHoldMesh‚Ì¶¬‚ğ‚Â‚©‚³‚Ç‚éƒNƒ‰ƒX
+    /// GroundHoldMeshã®ç”Ÿæˆã‚’ã¤ã‹ã•ã©ã‚‹ã‚¯ãƒ©ã‚¹
     /// </summary>
     public class GroundHoldMeshGenerator
     {
         /// <summary>
-        /// ƒOƒ‰ƒEƒ“ƒh‰ˆ‚¢‚ÌƒƒbƒVƒ…‚ğ¶¬‚·‚é
+        /// ã‚°ãƒ©ã‚¦ãƒ³ãƒ‰æ²¿ã„ã®ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ç”Ÿæˆã™ã‚‹
         /// </summary>
         /// <returns></returns>
         public static Mesh GenerateGroundHoldMesh(List<TimeToRange> timeToRanges, INotePositionCalculator posCalc, float speed, int horizontalDivisionNum, float limitLength, float radius = 10f)
         {
             Mesh mesh = new Mesh();
 
-            // triangle‚Ìindex‚ğ32ƒrƒbƒg‚É‚µ‚ÄƒfƒJ‚¢ƒz[ƒ‹ƒh‚É‚à‘Î‰‚³‚¹‚é
+            // triangleã®indexã‚’32ãƒ“ãƒƒãƒˆã«ã—ã¦ãƒ‡ã‚«ã„ãƒ›ãƒ¼ãƒ«ãƒ‰ã«ã‚‚å¯¾å¿œã•ã›ã‚‹
             mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
             List<int> triangles = new List<int>();
@@ -33,18 +33,18 @@ namespace MeshGenerate
             {
                 float length = speed * (posCalc.GetPosition(timeToRanges[i + 1].Timing) - posCalc.GetPosition(timeToRanges[i].Timing));
 
-                // ‚»‚ê‚¼‚ê‚Ì’[‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ‘ã“ü
+                // ãã‚Œãã‚Œã®ç«¯ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ä»£å…¥
                 float startLeft = timeToRanges[i].Range[0];
                 float startRight = timeToRanges[i].Range[^1];
                 float endLeft = timeToRanges[i + 1].Range[0];
                 float endRight = timeToRanges[i + 1].Range[^1];
 
-                // ŒX‚«‚ğŒvZ
+                // å‚¾ãã‚’è¨ˆç®—
                 float slopeLeft = (endLeft - startLeft) == 0 ? float.PositiveInfinity : length / (endLeft - startLeft);
                 float slopeRight = (endRight - startRight) == 0 ? float.PositiveInfinity : length / (endRight - startRight);
 
 
-                // ‚³‚ç‚ÉMesh‚ğ•ªŠ„‚·‚é
+                // ã•ã‚‰ã«Meshã‚’åˆ†å‰²ã™ã‚‹
                 float divLength = length / Mathf.Ceil(length / limitLength);
                 float localZ = 0;
                 for (int j = 0; j < Mathf.Ceil(length / limitLength); j++)
@@ -54,7 +54,7 @@ namespace MeshGenerate
                     float endLeftDiv = GetXInLinearFunction(slopeLeft, 0, localZ + divLength) + startLeft;
                     float endRightDiv = GetXInLinearFunction(slopeRight, 0, localZ + divLength) + startRight;
 
-                    // ’¸“_ƒCƒ“ƒfƒbƒNƒXƒŠƒXƒg‚ğì¬
+                    // é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒªã‚¹ãƒˆã‚’ä½œæˆ
                     List<float> indexStart = GetMeshPointList(slopeLeft < float.PositiveInfinity && slopeLeft < 0 ? endLeftDiv : startLeftDiv,
                         slopeRight < float.PositiveInfinity && slopeRight > 0 ? endRightDiv + 1 : startRightDiv + 1, horizontalDivisionNum,
                         new float[] { startLeftDiv, startRightDiv + 1, endLeftDiv, endRightDiv + 1 });
@@ -63,21 +63,21 @@ namespace MeshGenerate
                        slopeRight < float.PositiveInfinity && slopeRight < 0 ? startRightDiv + 1 : endRightDiv + 1, horizontalDivisionNum,
                        new float[] { startLeftDiv, startRightDiv + 1, endLeftDiv, endRightDiv + 1 });
 
-                    // ’¸“_ƒŠƒXƒg‚ğ¶¬
+                    // é ‚ç‚¹ãƒªã‚¹ãƒˆã‚’ç”Ÿæˆ
                     List<Vector3> verticesStart = GenerateVertices(indexStart, startLeftDiv, startRightDiv + 1, slopeLeft, slopeRight, currentStartZ + localZ, radius);
                     List<Vector3> verticesEnd = GenerateVertices(indexEnd, endLeftDiv, endRightDiv + 1, slopeLeft, slopeRight, currentStartZ + localZ + divLength, radius);
 
-                    // ’¸“_ƒŠƒXƒg‚Ì‘ã“ü
+                    // é ‚ç‚¹ãƒªã‚¹ãƒˆã®ä»£å…¥
                     vertices.AddRange(verticesStart);
                     vertices.AddRange(verticesEnd);
 
-                    // UVÀ•W‚Ì¶¬,‘ã“ü
-                    List<Vector2> uvListStart = GetUVPositionList(verticesStart, currentStartZ + localZ, maxLength);
-                    List<Vector2> uvListEnd = GetUVPositionList(verticesEnd, currentStartZ + localZ + divLength, maxLength);
+                    // UVåº§æ¨™ã®ç”Ÿæˆ,ä»£å…¥
+                    List<Vector2> uvListStart = GetUVPositionList(verticesStart, indexStart, startLeftDiv, startRightDiv + 1f, maxLength);
+                    List<Vector2> uvListEnd = GetUVPositionList(verticesEnd, indexEnd, endLeftDiv, endRightDiv + 1f, maxLength);
                     uvs.AddRange(uvListStart);
                     uvs.AddRange(uvListEnd);
 
-                    // ƒgƒ‰ƒCƒAƒ“ƒOƒ‹ƒCƒ“ƒfƒbƒNƒX‚ğ¶¬A‘ã“ü
+                    // ãƒˆãƒ©ã‚¤ã‚¢ãƒ³ã‚°ãƒ«ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ç”Ÿæˆã€ä»£å…¥
                     triangles.AddRange(MeshGenerator.GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count, false));
 
                     localZ += divLength;
@@ -101,13 +101,13 @@ namespace MeshGenerate
         }
 
         /// <summary>
-        /// ”ÍˆÍ“à‚ÌƒƒbƒVƒ…’¸“_ƒŠƒXƒg‚ğ•Ô‚·
+        /// ç¯„å›²å†…ã®ãƒ¡ãƒƒã‚·ãƒ¥é ‚ç‚¹ãƒªã‚¹ãƒˆã‚’è¿”ã™
         /// </summary>
         private static List<float> GetMeshPointList(float first, float end, int divNum, float[] addIndex)
         {
             if (divNum <= 0)
             {
-                Debug.LogError("yNotezƒƒbƒVƒ…•ªŠ„”‚ª0ˆÈ‰º‚Å‚·");
+                Debug.LogError("ã€Noteã€‘ãƒ¡ãƒƒã‚·ãƒ¥åˆ†å‰²æ•°ãŒ0ä»¥ä¸‹ã§ã™");
                 return new List<float>();
             }
 
@@ -127,7 +127,7 @@ namespace MeshGenerate
         }
 
         /// <summary>
-        /// w’è‚µ‚½ƒCƒ“ƒfƒbƒNƒXƒŠƒXƒg‚©‚çƒƒbƒVƒ…‚Ì’¸“_À•W‚ğŒvZ‚·‚é
+        /// æŒ‡å®šã—ãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒªã‚¹ãƒˆã‹ã‚‰ãƒ¡ãƒƒã‚·ãƒ¥ã®é ‚ç‚¹åº§æ¨™ã‚’è¨ˆç®—ã™ã‚‹
         /// </summary>
         private static List<Vector3> GenerateVertices(List<float> indices, float left, float right, float slopeLeft, float slopeRight, float baseZ, float radius)
         {
@@ -141,31 +141,34 @@ namespace MeshGenerate
                 else if (f > right) { z += slopeRight * (f - right); }
 
                 vertices.Add(new Vector3(radius * Mathf.Cos(deg), radius * Mathf.Sin(deg), z));
-                //vertices.Add(new Vector3(f, -10, z));  // ƒfƒoƒbƒO—p
             }
             return vertices;
         }
 
         /// <summary>
-        /// ˆø”ƒ‰ƒCƒ“‚ÌUV’¸“_À•W‚ğ¶¬
+        /// å¼•æ•°ãƒ©ã‚¤ãƒ³ã®UVé ‚ç‚¹åº§æ¨™ã‚’ç”Ÿæˆ
         /// </summary>
         /// <param name="vertices"></param>
+        /// <param name="indices"></param>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        private static List<Vector2> GetUVPositionList(List<Vector3> vertices, float baseZ, float length)
+        private static List<Vector2> GetUVPositionList(List<Vector3> vertices, List<float> indices, float left, float right, float length)
         {
             List<Vector2> uvList = new List<Vector2>();
 
-            Vector3 firstMatch = vertices.FirstOrDefault(v => Mathf.Approximately(v.z, baseZ));
-            Vector3 lastMatch = vertices.LastOrDefault(v => Mathf.Approximately(v.z, baseZ));
-            float minX = firstMatch.x;
-            float maxX = lastMatch.x;
+            if (vertices == null || indices == null) { return uvList; }
+            if (vertices.Count == 0 || indices.Count == 0) { return uvList; }
 
-            foreach (Vector3 pos in vertices)
+            int count = Mathf.Min(vertices.Count, indices.Count);
+            float width = right - left;
+
+            for (int i = 0; i < count; i++)
             {
                 Vector2 uv = new Vector2();
-                uv.x = Mathf.Clamp((pos.x - minX) / (maxX - minX), 0f, 1f);
-                uv.y = pos.z / length;
+                uv.x = Mathf.Approximately(width, 0f) ? 0f : Mathf.Clamp01((indices[i] - left) / width);
+                uv.y = length > Mathf.Epsilon ? vertices[i].z / length : 0f;
                 uvList.Add(uv);
             }
 
@@ -174,12 +177,12 @@ namespace MeshGenerate
     }
 
     /// <summary>
-    /// SpaceHoldMesh‚Ì¶¬‚ğ‚Â‚©‚³‚Ç‚éƒNƒ‰ƒX
+    /// SpaceHoldMeshã®ç”Ÿæˆã‚’ã¤ã‹ã•ã©ã‚‹ã‚¯ãƒ©ã‚¹
     /// </summary>
     public class SpaceHoldMeshGenerator
     {
         /// <summary>
-        /// —§‘Ì“I‚ÈƒIƒuƒWƒFƒNƒg‚Ì‘¤–Ê‚ğ¶¬‚·‚é
+        /// ç«‹ä½“çš„ãªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å´é¢ã‚’ç”Ÿæˆã™ã‚‹
         /// </summary>
         /// <param name="timeToVertices"></param>
         /// <param name="speed"></param>
@@ -206,52 +209,52 @@ namespace MeshGenerate
         private static Mesh GenerateSpaceHoldEdgeMesh(List<DepthToVertices> depthToVertices, int meshDivisionNum, float lerpThresholdDepth, bool isMeshReverse)
         {
             Mesh mesh = new Mesh();
-            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;    // ƒhƒfƒJƒCƒƒbƒVƒ…‚É‘Î‰
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;    // ãƒ‰ãƒ‡ã‚«ã‚¤ãƒ¡ãƒƒã‚·ãƒ¥ã«å¯¾å¿œ
 
-            List<int> triangles = new List<int>();          // OŠpŒ`Œ`¬‡ƒŠƒXƒg
-            List<Vector3> vertices = new List<Vector3>();   // ’¸“_ƒŠƒXƒg
-            float currentStartZ = 0;                        // ŒvZÏ‚İZ
+            List<int> triangles = new List<int>();          // ä¸‰è§’å½¢å½¢æˆé †ãƒªã‚¹ãƒˆ
+            List<Vector3> vertices = new List<Vector3>();   // é ‚ç‚¹ãƒªã‚¹ãƒˆ
+            float currentStartZ = 0;                        // è¨ˆç®—æ¸ˆã¿Z
             int currentMeshIndex = 0;
 
-            // Å‘å’¸“_”‚ğ’²‚×‚Ä•ªŠ„”‚ğXV‚·‚é
+            // æœ€å¤§é ‚ç‚¹æ•°ã‚’èª¿ã¹ã¦åˆ†å‰²æ•°ã‚’æ›´æ–°ã™ã‚‹
             foreach (var t in depthToVertices)
             {
                 if (meshDivisionNum < t.Vertices.Length)
                 { meshDivisionNum = t.Vertices.Length; }
             }
 
-            // ’†Œp“_‚Ì”‚¾‚¯ŒJ‚è•Ô‚·
+            // ä¸­ç¶™ç‚¹ã®æ•°ã ã‘ç¹°ã‚Šè¿”ã™
             for (int i = 0; i < depthToVertices.Count - 1; i++)
             {
-                float depth = depthToVertices[i + 1].Depth - depthToVertices[i].Depth;    // ‰œs
-                int verticesCountStart = depthToVertices[i].Vertices.Length;    // n“_’¸“_”
-                int verticesCountEnd = depthToVertices[i + 1].Vertices.Length;  // I“_’¸“_”
-                var verticesStart = new List<Vector3>();              // n“_’¸“_ƒŠƒXƒg
-                var verticesEnd = new List<Vector3>();                // I“_’¸“_ƒŠƒXƒg
+                float depth = depthToVertices[i + 1].Depth - depthToVertices[i].Depth;    // å¥¥è¡Œ
+                int verticesCountStart = depthToVertices[i].Vertices.Length;    // å§‹ç‚¹é ‚ç‚¹æ•°
+                int verticesCountEnd = depthToVertices[i + 1].Vertices.Length;  // çµ‚ç‚¹é ‚ç‚¹æ•°
+                var verticesStart = new List<Vector3>();              // å§‹ç‚¹é ‚ç‚¹ãƒªã‚¹ãƒˆ
+                var verticesEnd = new List<Vector3>();                // çµ‚ç‚¹é ‚ç‚¹ãƒªã‚¹ãƒˆ
 
                 if (verticesCountStart != verticesCountEnd)
                 {
-                    Debug.LogError($"listA‚ÆlistB‚Ì’·‚³‚ªˆê’v‚µ‚Ä‚¢‚Ü‚¹‚ñ: {verticesCountStart} - {verticesCountEnd}");
+                    Debug.LogError($"listAã¨listBã®é•·ã•ãŒä¸€è‡´ã—ã¦ã„ã¾ã›ã‚“: {verticesCountStart} - {verticesCountEnd}");
                     return null;
                 }
 
                 verticesStart = GenerateVertices(depthToVertices[i].Vertices.ToList(), new List<float>(), currentStartZ);
                 verticesEnd = GenerateVertices(depthToVertices[i + 1].Vertices.ToList(), new List<float>(), currentStartZ + depth);
 
-                // ƒƒbƒVƒ…‚ğüŒ`•âŠÔ
+                // ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ç·šå½¢è£œé–“
                 var interpolationVerticesList = LinearInterpolationVertices(verticesStart, verticesEnd, Mathf.CeilToInt(depth / lerpThresholdDepth));
 
-                // üŒ`•âŠÔ‚³‚ê‚½‘S‚Ä‚Ì’¸“_ƒŠƒXƒg
+                // ç·šå½¢è£œé–“ã•ã‚ŒãŸå…¨ã¦ã®é ‚ç‚¹ãƒªã‚¹ãƒˆ
                 for (int j = 0; j < interpolationVerticesList.Count - 1; j++)
                 {
                     var verticesA = interpolationVerticesList[j];
                     var verticesB = interpolationVerticesList[j + 1];
 
-                    // ’¸“_ƒŠƒXƒg‚Ì‘ã“ü
+                    // é ‚ç‚¹ãƒªã‚¹ãƒˆã®ä»£å…¥
                     vertices.AddRange(verticesA);
                     vertices.AddRange(verticesB);
 
-                    // ƒgƒ‰ƒCƒAƒ“ƒOƒ‹ƒCƒ“ƒfƒbƒNƒX‚ğ¶¬A‘ã“ü
+                    // ãƒˆãƒ©ã‚¤ã‚¢ãƒ³ã‚°ãƒ«ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ç”Ÿæˆã€ä»£å…¥
                     var tris = MeshGenerator.GenerateTriangles(currentMeshIndex, verticesA.Count, verticesB.Count, isMeshReverse);
                     triangles.AddRange(tris);
 
@@ -261,10 +264,10 @@ namespace MeshGenerate
                 currentStartZ += depth;
             }
 
-            // •s³ƒ`ƒFƒbƒN
+            // ä¸æ­£ãƒã‚§ãƒƒã‚¯
             if (!CheckValidMesh(vertices, triangles)) { return null; }
 
-            // ŒvZ‚µ‚½’l‚ğ‚»‚ê‚¼‚ê‘ã“ü
+            // è¨ˆç®—ã—ãŸå€¤ã‚’ãã‚Œãã‚Œä»£å…¥
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
             mesh.RecalculateNormals();
@@ -277,7 +280,7 @@ namespace MeshGenerate
         {
             var vertices = new List<Vector3>[timeToVertices.Count];
 
-            // Å‘å’¸“_”‚ğ’²‚×‚Ä•ªŠ„”‚ğXV‚·‚é
+            // æœ€å¤§é ‚ç‚¹æ•°ã‚’èª¿ã¹ã¦åˆ†å‰²æ•°ã‚’æ›´æ–°ã™ã‚‹
             foreach (var t in timeToVertices)
             {
                 if (minCount < t.Vertices.Length)
@@ -286,11 +289,11 @@ namespace MeshGenerate
 
             for (int i = 0; i < timeToVertices.Count - 1; i++)
             {
-                List<float> ratios;    // Še’¸“_‹——£‚Ì•Ó‘S‘Ì‚Ì’·‚³‚É‘Î‚·‚éŠ„‡
-                int verticesCountStart = timeToVertices[i].Vertices.Length;    // n“_’¸“_”
-                int verticesCountEnd = timeToVertices[i + 1].Vertices.Length;  // I“_’¸“_”
+                List<float> ratios;    // å„é ‚ç‚¹è·é›¢ã®è¾ºå…¨ä½“ã®é•·ã•ã«å¯¾ã™ã‚‹å‰²åˆ
+                int verticesCountStart = timeToVertices[i].Vertices.Length;    // å§‹ç‚¹é ‚ç‚¹æ•°
+                int verticesCountEnd = timeToVertices[i + 1].Vertices.Length;  // çµ‚ç‚¹é ‚ç‚¹æ•°
 
-                // n“_I“_‚É“¯”‚Æ‚È‚é‚æ‚¤‚È’¸“_‚ğ‘Å‚¿A’¸“_ƒŠƒXƒg‚ğ¶¬
+                // å§‹ç‚¹çµ‚ç‚¹ã«åŒæ•°ã¨ãªã‚‹ã‚ˆã†ãªé ‚ç‚¹ã‚’æ‰“ã¡ã€é ‚ç‚¹ãƒªã‚¹ãƒˆã‚’ç”Ÿæˆ
                 ratios = Enumerable.Range(0, minCount - verticesCountStart).Select(i => i / ((float)minCount - verticesCountStart)).ToList();
                 vertices[i] = GenerateVertices(timeToVertices[i].Vertices.ToList(), ratios, 0);
 
@@ -298,7 +301,7 @@ namespace MeshGenerate
                 vertices[i + 1] = GenerateVertices(timeToVertices[i + 1].Vertices.ToList(), ratios, 0);
             }
 
-            // ‘ã“ü
+            // ä»£å…¥
             for(int i = 0; i < timeToVertices.Count; i++)
             {
                 timeToVertices[i].Vertices = vertices[i].Select(x => (Vector2)x).ToArray();
@@ -309,14 +312,14 @@ namespace MeshGenerate
 
         public static List<Vector2> InterpolatePoints(List<Vector2> startVertices, List<Vector2> endVertices, float t, int minCount = 10)
         {
-            List<float> ratios;    // Še’¸“_‹——£‚Ì•Ó‘S‘Ì‚Ì’·‚³‚É‘Î‚·‚éŠ„‡
+            List<float> ratios;    // å„é ‚ç‚¹è·é›¢ã®è¾ºå…¨ä½“ã®é•·ã•ã«å¯¾ã™ã‚‹å‰²åˆ
             int verticesCountStart = startVertices.Count;
             int verticesCountEnd = endVertices.Count;
 
-            // Å‘å’¸“_”‚ğ’²‚×‚Ä•ªŠ„”‚ğXV‚·‚é
+            // æœ€å¤§é ‚ç‚¹æ•°ã‚’èª¿ã¹ã¦åˆ†å‰²æ•°ã‚’æ›´æ–°ã™ã‚‹
             minCount = Mathf.Max(minCount, verticesCountStart, verticesCountEnd);
 
-            // n“_I“_‚É“¯”‚Æ‚È‚é‚æ‚¤‚È’¸“_‚ğ‘Å‚¿A’¸“_ƒŠƒXƒg‚ğ¶¬
+            // å§‹ç‚¹çµ‚ç‚¹ã«åŒæ•°ã¨ãªã‚‹ã‚ˆã†ãªé ‚ç‚¹ã‚’æ‰“ã¡ã€é ‚ç‚¹ãƒªã‚¹ãƒˆã‚’ç”Ÿæˆ
             ratios = Enumerable.Range(0, minCount - verticesCountStart).Select(i => i / ((float)minCount - verticesCountStart)).ToList();
             var verticesStart = GenerateVertices(startVertices, ratios, 0);
 
@@ -324,7 +327,7 @@ namespace MeshGenerate
             var verticesEnd = GenerateVertices(endVertices, ratios, 0);
 
 
-            // ’†ŠÔ“_‚ğ¶¬
+            // ä¸­é–“ç‚¹ã‚’ç”Ÿæˆ
             var result = new List<Vector2>();
 
             for (int i = 0; i < verticesStart.Count - 1; i++)
@@ -332,7 +335,7 @@ namespace MeshGenerate
                 Vector2 pointA = verticesStart[i];
                 Vector2 pointB = verticesEnd[i];
 
-                // ü•ªAB‚Ì’†‚Ì”ä—¦ ratio ‚Ì“_‚ğŒvZiüŒ`•âŠÔj
+                // ç·šåˆ†ABã®ä¸­ã®æ¯”ç‡ ratio ã®ç‚¹ã‚’è¨ˆç®—ï¼ˆç·šå½¢è£œé–“ï¼‰
                 Vector2 interpolated = Vector2.Lerp(pointA, pointB, t);
                 result.Add(interpolated);
             }
@@ -341,7 +344,7 @@ namespace MeshGenerate
         }
 
         /// <summary>
-        /// üŒ`•âŠÔ‚µ‚ÄŠŠ‚ç‚©‚ÈƒƒbƒVƒ…‚É‚·‚é(n“_I“_‹¤‚É“¯‚¶’·‚³‚Å‚ ‚é‚±‚Æ)
+        /// ç·šå½¢è£œé–“ã—ã¦æ»‘ã‚‰ã‹ãªãƒ¡ãƒƒã‚·ãƒ¥ã«ã™ã‚‹(å§‹ç‚¹çµ‚ç‚¹å…±ã«åŒã˜é•·ã•ã§ã‚ã‚‹ã“ã¨)
         /// </summary>
         /// <param name="startVertices"></param>
         /// <param name="endVertices"></param>
@@ -374,29 +377,29 @@ namespace MeshGenerate
         }
 
         /// <summary>
-        /// •s³‚È’l‚ª‚È‚¢‚©ƒ`ƒFƒbƒN
+        /// ä¸æ­£ãªå€¤ãŒãªã„ã‹ãƒã‚§ãƒƒã‚¯
         /// </summary>
         /// <param name="vertices"></param>
         /// <param name="triangles"></param>
         /// <returns></returns>
         static bool CheckValidMesh(List<Vector3> vertices, List<int> triangles)
         {
-            // –³Œø”ƒ`ƒFƒbƒN
+            // ç„¡åŠ¹æ•°ãƒã‚§ãƒƒã‚¯
             foreach (var v in vertices)
             {
                 if (HasInvalidVertex(v))
                 {
-                    Debug.LogError("yMeshzInvalid vertex found: " + v);
+                    Debug.LogError("ã€Meshã€‘Invalid vertex found: " + v);
                     return false;
                 }
             }
 
-            // –³Œø”ƒ`ƒFƒbƒN
+            // ç„¡åŠ¹æ•°ãƒã‚§ãƒƒã‚¯
             foreach (var i in triangles)
             {
                 if (i < 0 || i >= vertices.Count)
                 {
-                    Debug.LogError($"yMeshzInvalid triangle index: {i}/{vertices.Count}");
+                    Debug.LogError($"ã€Meshã€‘Invalid triangle index: {i}/{vertices.Count}");
                     return false;
                 }
             }
@@ -411,7 +414,7 @@ namespace MeshGenerate
         }
 
         /// <summary>
-        /// ’¸“_ƒŠƒXƒg(Mesh¶¬‚ÉÅ’áŒÀ•K—v‚È’¸“_)‚Æ‘Å“_Š„‡ƒŠƒXƒg‚É]‚¢’¸“_ƒŠƒXƒg‚ğ•Ô‚·
+        /// é ‚ç‚¹ãƒªã‚¹ãƒˆ(Meshç”Ÿæˆã«æœ€ä½é™å¿…è¦ãªé ‚ç‚¹)ã¨æ‰“ç‚¹å‰²åˆãƒªã‚¹ãƒˆã«å¾“ã„é ‚ç‚¹ãƒªã‚¹ãƒˆã‚’è¿”ã™
         /// </summary>
         /// <param name="vertices"></param>
         /// <param name="ratios"></param>
@@ -421,11 +424,11 @@ namespace MeshGenerate
         {
             List<Vector3> result = new List<Vector3>();
 
-            // ‰½‚à“ü‚Á‚Ä‚È‚©‚Á‚½‚ç‚Ç‚¤‚µ‚æ‚¤‚à‚È‚¢‚Ì‚Å•Ô‚·
+            // ä½•ã‚‚å…¥ã£ã¦ãªã‹ã£ãŸã‚‰ã©ã†ã—ã‚ˆã†ã‚‚ãªã„ã®ã§è¿”ã™
             if (ratios == null) { return result; }
             if (vertices == null) { return result; }
 
-            // vertices‚ªˆê“_‚¾‚Á‚½‚çˆê“_‚ÉW–ñ‚³‚¹‚é
+            // verticesãŒä¸€ç‚¹ã ã£ãŸã‚‰ä¸€ç‚¹ã«é›†ç´„ã•ã›ã‚‹
             if (vertices.Count < 2)
             {
                 for (int i = 0; i < ratios.Count; i++)
@@ -435,7 +438,7 @@ namespace MeshGenerate
                 return result;
             }
 
-            // Še•Ó‚Ì’·‚³‚ğŒvZ‚µA‘S‘Ì‚Ì’·‚³‚ğ‹‚ß‚é
+            // å„è¾ºã®é•·ã•ã‚’è¨ˆç®—ã—ã€å…¨ä½“ã®é•·ã•ã‚’æ±‚ã‚ã‚‹
             List<float> segmentLengths = new List<float>();
             float totalLength = 0f;
 
@@ -446,7 +449,7 @@ namespace MeshGenerate
                 totalLength += segmentLength;
             }
 
-            // vertices‚ªˆê“_‚¾‚Á‚½‚çˆê“_‚ÉW–ñ‚³‚¹‚é
+            // verticesãŒä¸€ç‚¹ã ã£ãŸã‚‰ä¸€ç‚¹ã«é›†ç´„ã•ã›ã‚‹
             if (Mathf.Approximately(totalLength, 0f))
             {
                 for (int i = 0; i < ratios.Count; i++)
@@ -458,7 +461,7 @@ namespace MeshGenerate
 
             result = new List<Vector3>();
 
-            // Š„‡ƒŠƒXƒg‚É]‚Á‚Ä‘Î‰‚·‚é“_‚ğ‹‚ß‚é
+            // å‰²åˆãƒªã‚¹ãƒˆã«å¾“ã£ã¦å¯¾å¿œã™ã‚‹ç‚¹ã‚’æ±‚ã‚ã‚‹
             foreach (float ratio in ratios)
             {
                 float targetLength = ratio * totalLength;
@@ -483,14 +486,14 @@ namespace MeshGenerate
 
             result.AddRange(vertices.Select(v => new Vector3(v.x, v.y, z)).ToList());
             result = result.OrderBy(p => GetDistanceFromStart(vertices, p)).ToList();
-            // ÅŒã‚ÉÅ‰‚Ì—v‘f‚ğ‚Â‚¯‚é
+            // æœ€å¾Œã«æœ€åˆã®è¦ç´ ã‚’ã¤ã‘ã‚‹
             result.Add(result[0]);
 
             return result;
         }
 
         /// <summary>
-        /// ’¸“_ƒŠƒXƒg‚É]‚Á‚Äpoint‚Ì’n“_‚ğŠ„‡‚Å•Ô‚·
+        /// é ‚ç‚¹ãƒªã‚¹ãƒˆã«å¾“ã£ã¦pointã®åœ°ç‚¹ã‚’å‰²åˆã§è¿”ã™
         /// </summary>
         /// <param name="vertices"></param>
         /// <param name="point"></param>
@@ -517,12 +520,12 @@ namespace MeshGenerate
     }
 
     /// <summary>
-    /// ‚»‚Ì‘¼ƒƒbƒVƒ…‚Ì¶¬‚ğ‚Â‚©‚³‚Ç‚éƒNƒ‰ƒX
+    /// ãã®ä»–ãƒ¡ãƒƒã‚·ãƒ¥ã®ç”Ÿæˆã‚’ã¤ã‹ã•ã©ã‚‹ã‚¯ãƒ©ã‚¹
     /// </summary>
     public class MeshGenerator
     {
         /// <summary>
-        /// ˆø”’¸“_ƒŠƒXƒg‚©‚çƒƒbƒVƒ…(©ŒÈŒğ·‚È‚µ)‚Ì¶¬
+        /// å¼•æ•°é ‚ç‚¹ãƒªã‚¹ãƒˆã‹ã‚‰ãƒ¡ãƒƒã‚·ãƒ¥(è‡ªå·±äº¤å·®ãªã—)ã®ç”Ÿæˆ
         /// </summary>
         /// <param name="vertices"></param>
         /// <returns></returns>
@@ -530,11 +533,11 @@ namespace MeshGenerate
         {
             if (vertices == null || vertices.Count < 3)
             {
-                Debug.LogWarning("yMeshz’¸“_ƒŠƒXƒg‚ª–³Œø‚Å‚·i3“_ˆÈã•K—vj");
+                Debug.LogWarning("ã€Meshã€‘é ‚ç‚¹ãƒªã‚¹ãƒˆãŒç„¡åŠ¹ã§ã™ï¼ˆ3ç‚¹ä»¥ä¸Šå¿…è¦ï¼‰");
                 return null;
             }
 
-            // LibTessDotNet‚Ì‰Šú‰»
+            // LibTessDotNetã®åˆæœŸåŒ–
             Tess tess = new Tess();
             ContourVertex[] contour = new ContourVertex[vertices.Count];
 
@@ -546,13 +549,13 @@ namespace MeshGenerate
                 };
             }
 
-            // ’¸“_ƒŠƒXƒg‚ğ—ÖŠs‚Æ‚µ‚Ä’Ç‰Á
+            // é ‚ç‚¹ãƒªã‚¹ãƒˆã‚’è¼ªéƒ­ã¨ã—ã¦è¿½åŠ 
             tess.AddContour(contour, ContourOrientation.Original);
 
-            // OŠpŒ`•ªŠ„‚ğÀs
+            // ä¸‰è§’å½¢åˆ†å‰²ã‚’å®Ÿè¡Œ
             tess.Tessellate(WindingRule.EvenOdd, ElementType.Polygons, 3);
 
-            // Meshì¬
+            // Meshä½œæˆ
             Mesh mesh = new Mesh();
             Vector3[] meshVertices = new Vector3[tess.Vertices.Length];
             int[] meshTriangles = new int[tess.Elements.Length];
@@ -576,7 +579,7 @@ namespace MeshGenerate
         }
 
         /// <summary>
-        /// 4“_‚©‚çƒƒbƒVƒ…‚ğ¶¬‚·‚é
+        /// 4ç‚¹ã‹ã‚‰ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ç”Ÿæˆã™ã‚‹
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -605,7 +608,7 @@ namespace MeshGenerate
         }
 
         /// <summary>
-        /// ’¸“_ƒŠƒXƒg‚ğ‰œ‚É‚¸‚ç‚µ‚½•ª‚Ì” Œ^ƒƒbƒVƒ…‚ğ¶¬‚·‚é
+        /// é ‚ç‚¹ãƒªã‚¹ãƒˆã‚’å¥¥ã«ãšã‚‰ã—ãŸåˆ†ã®ç®±å‹ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ç”Ÿæˆã™ã‚‹
         /// </summary>
         /// <param name="vertices"></param>
         /// <param name="depth"></param>
@@ -614,7 +617,7 @@ namespace MeshGenerate
         {
             if (vertices == null || vertices.Count < 3)
             {
-                Debug.LogWarning("yMeshz’¸“_ƒŠƒXƒg‚ª–³Œø‚Å‚·i3“_ˆÈã•K—vj");
+                Debug.LogWarning("ã€Meshã€‘é ‚ç‚¹ãƒªã‚¹ãƒˆãŒç„¡åŠ¹ã§ã™ï¼ˆ3ç‚¹ä»¥ä¸Šå¿…è¦ï¼‰");
                 return null;
             }
 
@@ -631,7 +634,7 @@ namespace MeshGenerate
             tess.AddContour(contour, ContourOrientation.Original);
             tess.Tessellate(WindingRule.EvenOdd, ElementType.Polygons, 3);
 
-            // --- ’¸“_‚ğ‘g‚İ—§‚Ä ---
+            // --- é ‚ç‚¹ã‚’çµ„ã¿ç«‹ã¦ ---
             List<Vector3> meshVerts = new List<Vector3>();
             List<int> meshTris = new List<int>();
             List<Vector2> meshUvs = new List<Vector2>();
@@ -646,7 +649,7 @@ namespace MeshGenerate
             float invWidth = 1f / width;
             float invHeight = 1f / height;
 
-            // ‘O–Ê(Z=-half)
+            // å‰é¢(Z=-half)
             int frontStart = 0;
             for (int i = 0; i < tess.Vertices.Length; i++)
             {
@@ -655,7 +658,7 @@ namespace MeshGenerate
                 meshUvs.Add(GetPlanarUV(pos2D, minX, minY, invWidth, invHeight));
             }
 
-            // ”w–Ê(Z=+half)
+            // èƒŒé¢(Z=+half)
             int backStart = meshVerts.Count;
             for (int i = 0; i < tess.Vertices.Length; i++)
             {
@@ -664,7 +667,7 @@ namespace MeshGenerate
                 meshUvs.Add(GetPlanarUV(pos2D, minX, minY, invWidth, invHeight));
             }
 
-            // --- ‘O–Êƒ|ƒŠƒSƒ“ ---
+            // --- å‰é¢ãƒãƒªã‚´ãƒ³ ---
             for (int i = 0; i < tess.ElementCount; i++)
             {
                 int i0 = tess.Elements[i * 3 + 0];
@@ -678,7 +681,7 @@ namespace MeshGenerate
                 meshTris.Add(frontStart + i2);
             }
 
-            // --- ”w–Êƒ|ƒŠƒSƒ“i”½“]j---
+            // --- èƒŒé¢ãƒãƒªã‚´ãƒ³ï¼ˆåè»¢ï¼‰---
             for (int i = 0; i < tess.ElementCount; i++)
             {
                 int i0 = tess.Elements[i * 3 + 0];
@@ -687,13 +690,13 @@ namespace MeshGenerate
 
                 if (i0 == -1 || i1 == -1 || i2 == -1) continue;
 
-                // ‹t‡‚É‚µ‚Ä— Œü‚«‚É
+                // é€†é †ã«ã—ã¦è£å‘ãã«
                 meshTris.Add(backStart + i2);
                 meshTris.Add(backStart + i1);
                 meshTris.Add(backStart + i0);
             }
 
-            // --- ‘¤–Ê ---
+            // --- å´é¢ ---
             float perimeter = GetPerimeterLength(vertices);
             float accumulatedLength = 0f;
 
@@ -710,12 +713,12 @@ namespace MeshGenerate
                 Vector3 v3 = new Vector3(vertices[i].x, vertices[i].y, +half);
 
                 int baseIndex = meshVerts.Count;
-                meshVerts.Add(v0); // 0 ‰º‰œ
-                meshVerts.Add(v1); // 1 ‰ºŸ‰œ
-                meshVerts.Add(v2); // 2 ãŸè‘O
-                meshVerts.Add(v3); // 3 ãè‘O
+                meshVerts.Add(v0); // 0 ä¸‹å¥¥
+                meshVerts.Add(v1); // 1 ä¸‹æ¬¡å¥¥
+                meshVerts.Add(v2); // 2 ä¸Šæ¬¡æ‰‹å‰
+                meshVerts.Add(v3); // 3 ä¸Šæ‰‹å‰
 
-                // ‘¤–Ê‚Íü‰ñ•ûŒü‚ğUA‰œs‚«‚ğV‚Æ‚µ‚Ä“¯‚¶UV‹óŠÔ‚Éû‚ß‚é
+                // å´é¢ã¯å‘¨å›æ–¹å‘ã‚’Uã€å¥¥è¡Œãã‚’Vã¨ã—ã¦åŒã˜UVç©ºé–“ã«åã‚ã‚‹
                 meshUvs.Add(new Vector2(startU, 0f));
                 meshUvs.Add(new Vector2(endU, 0f));
                 meshUvs.Add(new Vector2(endU, 1f));
@@ -732,7 +735,7 @@ namespace MeshGenerate
                 accumulatedLength += edgeLength;
             }
 
-            // --- Mesh¶¬ ---
+            // --- Meshç”Ÿæˆ ---
             Mesh mesh = new Mesh();
             mesh.SetVertices(meshVerts);
             mesh.SetTriangles(meshTris, 0);
@@ -762,7 +765,7 @@ namespace MeshGenerate
             return perimeter;
         }
         /// <summary>
-        /// ƒƒbƒVƒ…‚Ìƒgƒ‰ƒCƒAƒ“ƒOƒ‹ƒCƒ“ƒfƒbƒNƒX‚ğ¶¬
+        /// ãƒ¡ãƒƒã‚·ãƒ¥ã®ãƒˆãƒ©ã‚¤ã‚¢ãƒ³ã‚°ãƒ«ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ç”Ÿæˆ
         /// </summary>
         public static List<int> GenerateTriangles(int startIndex, int countStart, int countEnd, bool isReverse)
         {
@@ -783,7 +786,7 @@ namespace MeshGenerate
         }
 
         /// <summary>
-        /// ³‹K‰»
+        /// æ­£è¦åŒ–
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="center"></param>
@@ -796,20 +799,20 @@ namespace MeshGenerate
 
         public static Vector3 GetEularAngle(Vector3 pos, Vector3 target)
         {
-            // “_A‚Ö‚Ì•ûŒü‚ğŒvZ
+            // ç‚¹Aã¸ã®æ–¹å‘ã‚’è¨ˆç®—
             Vector2 direction = target - pos;
 
-            // Atan2‚ÅŠp“x‚ğŒvZ (ƒ‰ƒWƒAƒ“)
+            // Atan2ã§è§’åº¦ã‚’è¨ˆç®— (ãƒ©ã‚¸ã‚¢ãƒ³)
             float angleRad = Mathf.Atan2(direction.y, direction.x);
 
-            // ƒ‰ƒWƒAƒ“‚ğ“x”–@‚É•ÏŠ·
+            // ãƒ©ã‚¸ã‚¢ãƒ³ã‚’åº¦æ•°æ³•ã«å¤‰æ›
             float angleDeg = angleRad * Mathf.Rad2Deg;
 
             return new Vector3(0, 0, angleDeg);
         }
 
         /// <summary>
-        /// ü‚ğ•`‚­
+        /// ç·šã‚’æã
         /// </summary>
         /// <param name="points"></param>
         /// <param name="width"></param>
@@ -818,10 +821,10 @@ namespace MeshGenerate
         {
             if (points == null || points.Count < 2) { return null; }
 
-            // ƒ‹[ƒvˆ—
+            // ãƒ«ãƒ¼ãƒ—å‡¦ç†
             if (isLoop)
             {
-                // Add ‚Ì•›ì—p‚ğ”ğ‚¯‚é‚½‚ßƒRƒs[‚ğì‚é
+                // Add ã®å‰¯ä½œç”¨ã‚’é¿ã‘ã‚‹ãŸã‚ã‚³ãƒ”ãƒ¼ã‚’ä½œã‚‹
                 points = new List<Vector3>(points);
                 points.Add(points[0]);
             }
@@ -830,7 +833,7 @@ namespace MeshGenerate
             List<int> triangles = new List<int>();
             List<Vector2> uvs = new List<Vector2>();
 
-            // ü‚Ì‘S’·‚ğŒvZiUV‚Ì”ä—¦‚Ég‚¤j
+            // ç·šã®å…¨é•·ã‚’è¨ˆç®—ï¼ˆUVã®æ¯”ç‡ã«ä½¿ã†ï¼‰
             float totalLength = 0f;
             for (int i = 1; i < points.Count; i++)
             {
@@ -868,7 +871,7 @@ namespace MeshGenerate
                 vertices.Add(points[i] - offset);
                 vertices.Add(points[i] + offset);
 
-                // ---- UVŒvZ ----
+                // ---- UVè¨ˆç®— ----
                 if (i > 0)
                 {
                     accumulatedLength += Vector3.Distance(points[i - 1], points[i]);

@@ -46,5 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noteObjectOriginPrefab: {fileID: 8224908405846241423, guid: 3613f0fcc64a621458a59387d7149cd2, type: 3}
   noteMeshPrefab: {fileID: 2776397303821155744, guid: 42c571f76ab05c044bc8723b01361e79, type: 3}
-  meshDivisionNum: 10
+  meshDivisionNum: 30
   maxTriangleLength: 1

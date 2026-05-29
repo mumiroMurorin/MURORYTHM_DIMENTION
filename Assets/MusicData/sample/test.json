@@ -1,0 +1,98 @@
+{
+  "BarDatas": [
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0,
+          "HoldStartData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0,
+          "HoldEndData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 200.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    }
+  ],
+  "OffsetMs": 0.0
+}
