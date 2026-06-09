@@ -106,6 +106,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MusicTopic_Creation
       objectReference: {fileID: 0}
+    - target: {fileID: 2836885213505817656, guid: 61a8530e57359a442a6d4b62940a7ece, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7483873074466848383, guid: 61a8530e57359a442a6d4b62940a7ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -331,6 +335,10 @@ PrefabInstance:
     - target: {fileID: 2836885213505817656, guid: 1808e0aa843de6d4c934367f045642c5, type: 3}
       propertyPath: m_Name
       value: MusicTopic_Default
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836885213505817656, guid: 1808e0aa843de6d4c934367f045642c5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7483873074466848383, guid: 1808e0aa843de6d4c934367f045642c5, type: 3}
       propertyPath: m_Pivot.x

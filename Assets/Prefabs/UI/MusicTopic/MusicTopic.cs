@@ -13,6 +13,7 @@ public abstract class MusicTopic : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI level_tmp;
     [SerializeField] protected TextMeshProUGUI score_tmp;
     [SerializeField] protected Image back_image;
+    [SerializeField] protected Image musicTheme_image;
     [SerializeField] protected Image music_image;
     [SerializeField] protected Image scoreLamp_image;
     [SerializeField] protected Image comboLamp_image;
@@ -32,11 +33,13 @@ public abstract class MusicTopic : MonoBehaviour
     public virtual void OnSetMusicTopic(MusicData data)
     {
         // 楽曲名
-        title_tmp.text = data.MusicName;
+        if(title_tmp != null) { title_tmp.text = data.MusicName; }
         // コンポーザー
-        composer_tmp.text = data.ComposerName;
+        if (composer_tmp != null) { composer_tmp.text = data.ComposerName; }
         // サムネ
-        music_image.sprite = data.MusicSprite;
+        if (music_image != null) { music_image.sprite = data.MusicSprite; }
+        // 楽曲テーマ
+        if (musicTheme_image!= null) { musicTheme_image.sprite = data.ThemeSprite; }
     }
 
     /// <summary>
