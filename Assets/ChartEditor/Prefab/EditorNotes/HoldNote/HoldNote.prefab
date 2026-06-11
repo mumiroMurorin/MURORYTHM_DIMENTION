@@ -496,6 +496,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noteObject: {fileID: 3734698064947245665}
   startMaterial: {fileID: 2100000, guid: a4b151adacf42b44bb604f1487afe6ee, type: 2}
+  diveineStartMaterial: {fileID: 2100000, guid: 5c23afbf5709da14eb9c5cfec6ee77b9, type: 2}
   relayMaterial: {fileID: 2100000, guid: ba085195bd480c04ca970305e72fe911, type: 2}
   endMaterial: {fileID: 2100000, guid: 2f53ffd128c8f7345aa1fdb26cfe1037, type: 2}
   meshMaterial: {fileID: 2100000, guid: 096c53fe127642e4fb33559b498a855c, type: 2}

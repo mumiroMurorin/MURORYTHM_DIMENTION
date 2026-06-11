@@ -65,7 +65,7 @@ namespace ChartEditor
             // Žn“_
             if (!hasBackNote && hasNextNote)
             {
-                SetDefaultIfInvalid(DeploymentNoteType.HoldStart, DeploymentNoteType.HoldStart);
+                SetDefaultIfInvalid(DeploymentNoteType.HoldStart, DeploymentNoteType.HoldStart, DeploymentNoteType.DivineHoldStart);
                 return;
             }
 
@@ -83,7 +83,7 @@ namespace ChartEditor
                 return;
             }
 
-            SetDefaultIfInvalid(DeploymentNoteType.HoldStart, DeploymentNoteType.HoldStart);
+            SetDefaultIfInvalid(DeploymentNoteType.HoldStart, DeploymentNoteType.HoldStart, DeploymentNoteType.DivineHoldStart);
         }
         private void SetDefaultIfInvalid(DeploymentNoteType defaultType, params DeploymentNoteType[] validTypes)
         {
@@ -94,6 +94,7 @@ namespace ChartEditor
         private bool IsHoldNoteType(DeploymentNoteType noteType)
         {
             return noteType == DeploymentNoteType.HoldStart ||
+                   noteType == DeploymentNoteType.DivineHoldStart ||
                    noteType == DeploymentNoteType.HoldRelay ||
                    noteType == DeploymentNoteType.HoldMeshRelay ||
                    noteType == DeploymentNoteType.HoldEnd ||

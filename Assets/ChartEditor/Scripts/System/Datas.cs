@@ -416,6 +416,7 @@ namespace ChartEditor
         DynamicGroundLeftward = 130,
 
         HoldStart = 510,
+        DivineHoldStart = 511,
         HoldRelay = 520,
         HoldMeshRelay = 530,
         HoldEnd = 540,

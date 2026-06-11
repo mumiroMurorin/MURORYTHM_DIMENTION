@@ -25,6 +25,8 @@ namespace ChartEditor
                     return DeploymentNoteType.DivineTouch;
                 case NoteType.HoldStart:
                     return DeploymentNoteType.HoldStart;
+                case NoteType.DivineHoldStart:
+                    return DeploymentNoteType.DivineHoldStart;
                 case NoteType.HoldRelay:
                     return DeploymentNoteType.HoldRelay;
                 case NoteType.HoldRelayHidden:
@@ -62,6 +64,8 @@ namespace ChartEditor
                     return NoteType.DivineTouch;
                 case DeploymentNoteType.HoldStart:
                     return NoteType.HoldStart;
+                case DeploymentNoteType.DivineHoldStart:
+                    return NoteType.DivineHoldStart;
                 case DeploymentNoteType.HoldRelay:
                     return NoteType.HoldRelay;
                 case DeploymentNoteType.HoldMeshRelay:

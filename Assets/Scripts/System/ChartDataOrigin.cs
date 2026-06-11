@@ -1,138 +1,104 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ChartConvert
 {
     /// <summary>
-    /// •ˆ–Êƒtƒ@ƒCƒ‹‚Ì‚à‚Æ‚Æ‚È‚éƒNƒ‰ƒX
+    /// è­œé¢ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚‚ã¨ã¨ãªã‚‹ã‚¯ãƒ©ã‚¹
     /// </summary>
     public class ChartDataOrigin
     {
         /// <summary>
-        /// ¬ßƒf[ƒ^‚ğ‚Ü‚Æ‚ß‚Äˆê‚Â‚Ì•ˆ–Ê‚Æ‚·‚é
+        /// å°ç¯€ãƒ‡ãƒ¼ã‚¿ã‚’ã¾ã¨ã‚ã¦ä¸€ã¤ã®è­œé¢ã¨ã™ã‚‹
         /// </summary>
         public List<BarDataOrigin> BarDatas { get; set; }
 
         /// <summary>
-        /// ƒIƒtƒZƒbƒg[ms]
+        /// ã‚ªãƒ•ã‚»ãƒƒãƒˆ[ms]
         /// </summary>
         public float OffsetMs { get; set; }
     }
 
     /// <summary>
-    /// ¬ßƒf[ƒ^
+    /// å°ç¯€ãƒ‡ãƒ¼ã‚¿
     /// </summary>
     public class BarDataOrigin
     {
-        // M/N”q‚ÌM
         public int BeatCount { get; set; }
 
-        // M/N”q‚ÌN
         public float BeatUnit { get; set; }
 
-        // ‚±‚Ì¬ß‚Ì•ªŠ„”
         public int DivisionNum { get; set; }
 
         /// <summary>
-        /// •ªßƒf[ƒ^‚ğ“Z‚ß‚Ä¬ß‚Æ‚·‚é
+        /// åˆ†ç¯€ãƒ‡ãƒ¼ã‚¿ã‚’çºã‚ã¦å°ç¯€ã¨ã™ã‚‹
         /// </summary>
         public List<SubDivisionDataOrigin> SubDivisionDatas { get; set; }
     }
 
     /// <summary>
-    /// •ªßƒf[ƒ^
+    /// åˆ†ç¯€ãƒ‡ãƒ¼ã‚¿
     /// </summary>
     public class SubDivisionDataOrigin
     {
-        // ‚¨‚È‚¶‚İBPM
         public float Bpm { get; set; }
 
-        // ƒXƒs[ƒh”{—¦(ƒ\ƒtƒ‰ƒ“)
         public float SpeedRatio { get; set; }
 
-        // -------------- ‚±‚Ì•ªß‚É”z’u‚³‚ê‚Ä‚¢‚éƒm[ƒcƒŠƒXƒg ------------------
-
-        // ƒ^ƒbƒ`ƒm[ƒc
         public List<NoteDataOrigin_Touch> TouchNoteData { get; set; }
         public List<NoteDataOrigin_DivineTouch> DivineTouchData { get; set; }
-        
-        // ƒ_ƒCƒiƒ~ƒbƒNƒm[ƒc 
+
         public List<NoteDataOrigin_DynamicUpward> DynamicUpwardData { get; set; }
         public List<NoteDataOrigin_DynamicDownward> DynamicDownwardData { get; set; }
         public List<NoteDataOrigin_DynamicRightward> DynamicRightwardData { get; set; }
         public List<NoteDataOrigin_DynamicLeftward> DynamicLeftwardData { get; set; }
 
-        // ƒz[ƒ‹ƒhƒm[ƒc
         public List<NoteDataOrigin_HoldStart> HoldStartData { get; set; }
+        public List<NoteDataOrigin_DivineHoldStart> DivineHoldStartData { get; set; }
         public List<NoteDataOrigin_HoldEnd> HoldEndData { get; set; }
         public List<NoteDataOrigin_HoldEndUnjudge> HoldEndUnjudgeData { get; set; }
         public List<NoteDataOrigin_HoldRelay> HoldRelayData { get; set; }
         public List<NoteDataOrigin_HoldMeshRelay> HoldMeshRelayData { get; set; }
 
-        // ƒXƒy[ƒXƒz[ƒ‹ƒhƒm[ƒc
         public List<NoteDataOrigin_SpaceHoldStart> SpaceHoldStartData { get; set; }
         public List<NoteDataOrigin_SpaceHoldRelay> SpaceHoldRelayData { get; set; }
         public List<NoteDataOrigin_SpaceHoldMeshRelay> SpaceHoldMeshRelayData { get; set; }
         public List<NoteDataOrigin_SpaceHoldEnd> SpaceHoldEndData { get; set; }
 
-        // ƒXƒy[ƒXƒuƒŒƒCƒN
         public List<NoteDataOrigin_SpaceBreak> SpaceBreakData { get; set; }
     }
 
-    #region NoteDataOriginClass ƒm[ƒcƒf[ƒ^ƒNƒ‰ƒX
-
-    /// <summary>
-    /// ƒ^ƒbƒ`ƒm[ƒcƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_Touch
     {
         public int[] Range { get; set; }
     }
 
-    /// <summary>
-    /// _ƒ^ƒbƒ`ƒm[ƒcƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_DivineTouch
     {
         public int[] Range { get; set; }
     }
 
-    /// <summary>
-    /// ãƒ_ƒCƒiƒ~ƒbƒNƒm[ƒcƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_DynamicUpward
     {
         public int[] Range { get; set; }
     }
 
-    /// <summary>
-    /// ‰ºƒ_ƒCƒiƒ~ƒbƒNƒm[ƒcƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_DynamicDownward
     {
         public int[] Range { get; set; }
     }
 
-    /// <summary>
-    /// ‰Eƒ_ƒCƒiƒ~ƒbƒNƒm[ƒcƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_DynamicRightward
     {
         public int[] Range { get; set; }
     }
 
-    /// <summary>
-    /// ¶ƒ_ƒCƒiƒ~ƒbƒNƒm[ƒcƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_DynamicLeftward
     {
         public int[] Range { get; set; }
     }
 
-    /// <summary>
-    /// ƒz[ƒ‹ƒhn“_ƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_HoldStart
     {
         public int HoldNumber { get; set; }
@@ -140,9 +106,13 @@ namespace ChartConvert
         public int[] Range { get; set; }
     }
 
-    /// <summary>
-    /// ƒz[ƒ‹ƒhI“_ƒf[ƒ^
-    /// </summary>
+    public class NoteDataOrigin_DivineHoldStart
+    {
+        public int HoldNumber { get; set; }
+
+        public int[] Range { get; set; }
+    }
+
     public class NoteDataOrigin_HoldEnd
     {
         public int HoldNumber { get; set; }
@@ -150,9 +120,6 @@ namespace ChartConvert
         public int[] Range { get; set; }
     }
 
-    /// <summary>
-    /// ƒz[ƒ‹ƒhI“_(”»’è‚È‚µ)ƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_HoldEndUnjudge
     {
         public int HoldNumber { get; set; }
@@ -160,9 +127,6 @@ namespace ChartConvert
         public int[] Range { get; set; }
     }
 
-    /// <summary>
-    /// ƒz[ƒ‹ƒh’†Œp“_ƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_HoldRelay
     {
         public int HoldNumber { get; set; }
@@ -170,9 +134,6 @@ namespace ChartConvert
         public int[] Range { get; set; }
     }
 
-    /// <summary>
-    /// ƒz[ƒ‹ƒhƒƒbƒVƒ…’†Œp“_ƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_HoldMeshRelay
     {
         public int HoldNumber { get; set; }
@@ -180,9 +141,6 @@ namespace ChartConvert
         public int[] Range { get; set; }
     }
 
-    /// <summary>
-    /// ƒXƒy[ƒXƒz[ƒ‹ƒhn“_ƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_SpaceHoldStart
     {
         public int HoldNumber { get; set; }
@@ -190,9 +148,6 @@ namespace ChartConvert
         public SimpleVector2[] Vertices { get; set; }
     }
 
-    /// <summary>
-    /// ƒXƒy[ƒXƒz[ƒ‹ƒh’†Œp“_ƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_SpaceHoldRelay
     {
         public int HoldNumber { get; set; }
@@ -200,9 +155,6 @@ namespace ChartConvert
         public SimpleVector2[] Vertices { get; set; }
     }
 
-    /// <summary>
-    /// ƒXƒy[ƒXƒz[ƒ‹ƒhƒƒbƒVƒ…’†Œp“_ƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_SpaceHoldMeshRelay
     {
         public int HoldNumber { get; set; }
@@ -210,9 +162,6 @@ namespace ChartConvert
         public SimpleVector2[] Vertices { get; set; }
     }
 
-    /// <summary>
-    /// ƒXƒy[ƒXƒz[ƒ‹ƒhI“_ƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_SpaceHoldEnd
     {
         public int HoldNumber { get; set; }
@@ -220,14 +169,8 @@ namespace ChartConvert
         public SimpleVector2[] Vertices { get; set; }
     }
 
-    /// <summary>
-    /// ƒXƒy[ƒXƒuƒŒƒCƒNƒf[ƒ^
-    /// </summary>
     public class NoteDataOrigin_SpaceBreak
     {
         public SimpleVector2[] Vertices { get; set; }
     }
-
-    #endregion
-
 }

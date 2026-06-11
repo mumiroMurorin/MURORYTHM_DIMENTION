@@ -66,6 +66,7 @@ namespace ChartConvert
             holdConverters = new List<IHoldDataToRhythmGameConvertable>()
             {
                 new HoldStartConverter(),
+                new DivineHoldStartConverter(),
                 new HoldRelayConverter(),
                 new HoldEndConverter(),
                 new HoldEndUnjudgeConverter(),

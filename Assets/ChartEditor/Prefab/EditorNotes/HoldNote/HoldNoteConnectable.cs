@@ -197,6 +197,7 @@ namespace ChartEditor
             switch (noteType)
             {
                 case DeploymentNoteType.HoldStart:
+                case DeploymentNoteType.DivineHoldStart:
                     noteMeshRenderer.material = startMaterial;
                     break;
                 case DeploymentNoteType.HoldRelay:

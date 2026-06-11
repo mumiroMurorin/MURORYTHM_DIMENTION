@@ -3,6 +3,7 @@
     Touch = 1,
     DivineTouch = 2,
     HoldStart = 10,
+    DivineHoldStart = 16,
     HoldRelay = 11,
     HoldRelayHidden = 12,
     HoldEnd = 13,

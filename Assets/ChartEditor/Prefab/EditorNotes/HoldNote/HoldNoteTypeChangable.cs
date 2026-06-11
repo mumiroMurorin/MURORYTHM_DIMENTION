@@ -16,6 +16,7 @@ namespace ChartEditor
         [SerializeField] Color normalColor = Color.white;
         [SerializeField] Color hiddenColor = new Color(1, 1, 1, 0.25f); 
         [SerializeField] Color holdEndUnjudgeColor = new Color(1, 0.5f, 0.5f, 0.25f); 
+        [SerializeField] Color holdStartDivineColor = new Color(1, 1, 0f, 1); 
 
         ITypeChangableNoteData noteData;
         ITypeChangableNoteData IChangableObject.NoteData => noteData;
@@ -62,9 +63,23 @@ namespace ChartEditor
 
         private void ChangeNoteColor(DeploymentNoteType noteType)
         {
-            if (noteType == DeploymentNoteType.HoldStart || noteType == DeploymentNoteType.HoldRelay || noteType == DeploymentNoteType.HoldEnd) { noteMeshRenderer.material.color = normalColor; }
-            else if (noteType == DeploymentNoteType.HoldMeshRelay) { noteMeshRenderer.material.color = hiddenColor; }
-            else if(noteType == DeploymentNoteType.HoldEndUnjudge) { noteMeshRenderer.material.color = holdEndUnjudgeColor; }
+            switch (noteType)
+            {
+                case DeploymentNoteType.HoldStart:
+                case DeploymentNoteType.HoldRelay:
+                case DeploymentNoteType.HoldEnd:
+                    noteMeshRenderer.material.color = normalColor;
+                    break;
+                case DeploymentNoteType.HoldMeshRelay:
+                    noteMeshRenderer.material.color = hiddenColor;
+                    break;
+                case DeploymentNoteType.HoldEndUnjudge:
+                    noteMeshRenderer.material.color = holdEndUnjudgeColor;
+                    break;
+                case DeploymentNoteType.DivineHoldStart:
+                    noteMeshRenderer.material.color = holdStartDivineColor;
+                    break;
+            }
         }
 
         private void OnDestroy()

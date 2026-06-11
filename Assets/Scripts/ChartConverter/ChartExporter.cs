@@ -43,6 +43,7 @@ namespace ChartConvert
             holdConverters = new List<IChainNoteConvertable>
             {
                 new HoldStartConverter(),
+                new DivineHoldStartConverter(),
                 new HoldRelayConverter(),
                 new HoldEndConverter(),
                 new HoldEndUnjudgeConverter(),

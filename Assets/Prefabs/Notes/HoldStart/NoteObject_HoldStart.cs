@@ -100,7 +100,7 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
 /// </summary>
 public class NoteData_HoldStart : INoteData, IClippedJudgableNote
 {
-    public NoteType NoteType => NoteType.HoldStart;
+    public virtual NoteType NoteType => NoteType.HoldStart;
 
     public float Timing { get; set; }
 

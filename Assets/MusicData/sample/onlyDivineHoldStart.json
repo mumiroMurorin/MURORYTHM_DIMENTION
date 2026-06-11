@@ -1,0 +1,350 @@
+{
+  "BarDatas": [
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0,
+          "DivineHoldStartData": [
+            {
+              "HoldNumber": 3,
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0,
+          "DivineHoldStartData": [
+            {
+              "HoldNumber": 4,
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0,
+          "DivineHoldStartData": [
+            {
+              "HoldNumber": 2,
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 3,
+              "Range": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 4,
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0,
+          "DivineHoldStartData": [
+            {
+              "HoldNumber": 1,
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 2,
+              "Range": [
+                8,
+                9,
+                10,
+                11
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 4,
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0,
+          "DivineHoldStartData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ],
+          "HoldEndData": [
+            {
+              "HoldNumber": 1,
+              "Range": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0,
+          "HoldEndData": [
+            {
+              "HoldNumber": 4,
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0,
+          "HoldEndData": [
+            {
+              "HoldNumber": 0,
+              "Range": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 256.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    }
+  ],
+  "OffsetMs": 0.0
+}

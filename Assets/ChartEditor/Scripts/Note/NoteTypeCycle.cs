@@ -15,6 +15,11 @@ namespace ChartEditor
                 case DeploymentNoteType.DivineTouch:
                     return DeploymentNoteType.Touch;
 
+                case DeploymentNoteType.HoldStart:
+                    return DeploymentNoteType.DivineHoldStart;
+                case DeploymentNoteType.DivineHoldStart:
+                    return DeploymentNoteType.HoldStart;
+
                 case DeploymentNoteType.DynamicGroundUpward:
                     return DeploymentNoteType.DynamicGroundDownward;
                 case DeploymentNoteType.DynamicGroundDownward:

@@ -91,6 +91,83 @@ namespace ChartConvert
         }
 
     }
+    /// <summary>
+    /// 神ホールドスタートノーツ
+    /// </summary>
+    public class DivineHoldStartConverter : IHoldDataToRhythmGameConvertable, IChainNoteConvertable
+    {
+        public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
+        {
+            if (noteDataInEditor.NoteType != DeploymentNoteType.DivineHoldStart) { return false; }
+            if (noteDataInEditor is not IChainNoteData thisNote) { return false; }
+
+            var backNote = thisNote.NoteObject.BackNote.Value;
+            var nextNote = thisNote.NoteObject.NextNote.Value;
+            if (backNote != null) { return false; }
+            if (backNote == null && nextNote == null) { return false; }
+
+            if (dataOrigin.DivineHoldStartData == null)
+            {
+                dataOrigin.DivineHoldStartData = new List<NoteDataOrigin_DivineHoldStart>();
+            }
+
+            NoteDataOrigin_DivineHoldStart data = new NoteDataOrigin_DivineHoldStart()
+            {
+                Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray(),
+                HoldNumber = thisNote.ChainIndex.Value
+            };
+
+            dataOrigin.DivineHoldStartData.Add(data);
+            return true;
+        }
+
+        public bool AddDataForEditorData(SubDivisionDataOrigin dataOrigin, ISubDivisionDataGetter dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
+        {
+            if (dataOrigin.DivineHoldStartData == null) { return true; }
+
+            foreach (var noteDataOrigin in dataOrigin.DivineHoldStartData)
+            {
+                IDeployableNoteData noteData = new ChartEditor.NoteData_Hold();
+                if (noteData is not IChainNoteData chainData) { return false; }
+                if (noteData is not ITypeChangableNoteData typeChangableData) { return false; }
+
+                var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
+
+                chainData.SetChainIndex(noteDataOrigin.HoldNumber);
+                noteData.SetAddress(address);
+                typeChangableData.SetNoteType(DeploymentNoteType.DivineHoldStart);
+                onAddNoteData(noteData);
+            }
+
+            return true;
+        }
+
+        public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing, Dictionary<int, List<TimeToRange>> holdNumberToRanges)
+        {
+            if (dataOrigin.DivineHoldStartData == null) { return true; }
+
+            foreach (var noteOrigin in dataOrigin.DivineHoldStartData)
+            {
+                if (holdNumberToRanges.ContainsKey(noteOrigin.HoldNumber))
+                {
+                    Debug.LogWarning($"【Converter】DivineHoldStartの変換の際、既にHoldNumberが存在しました: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                holdNumberToRanges.Add(noteOrigin.HoldNumber, new List<TimeToRange>() { new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()) });
+
+                NoteData_DivineHoldStart noteData = new NoteData_DivineHoldStart
+                {
+                    Range = (int[])noteOrigin.Range.Clone(),
+                    Timing = timing
+                };
+
+                onAddNoteData(noteData);
+            }
+
+            return true;
+        }
+    }
 
     /// <summary>
     /// ホールド中継ノーツ
@@ -424,6 +501,7 @@ namespace ChartConvert
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             AddHoldStartData(dataOrigin, timing);
+            AddHoldStartDivineData(dataOrigin, timing);
             AddHoldRelayData(dataOrigin, timing);
             AddHoldMeshRelayData(dataOrigin, timing);
             AddHoldEndData(dataOrigin, onAddNoteData, timing);
@@ -450,6 +528,30 @@ namespace ChartConvert
 
                 meshList = new List<TimeToRange>();
                 meshList.Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
+                numberToHoldMeshDataOrigin.Add(noteOrigin.HoldNumber, meshList);
+            }
+
+            return true;
+        }
+
+        private bool AddHoldStartDivineData(SubDivisionDataOrigin dataOrigin, float timing)
+        {
+            if (dataOrigin.DivineHoldStartData == null) { return true; }
+
+            // 始点、メッシュデータ格納リストの作成
+            foreach (var noteOrigin in dataOrigin.DivineHoldStartData)
+            {
+                // 一度ディクショナリーに格納
+                List<TimeToRange> meshList;
+                // ディクショナリーに登録されていなければ新規作成
+                if (numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
+                {
+                    Debug.LogWarning($"【Converter】始点データが既に登録されています: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                meshList = new List<TimeToRange>();
+                meshList.Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
                 numberToHoldMeshDataOrigin.Add(noteOrigin.HoldNumber, meshList);
             }
 
@@ -562,6 +664,7 @@ namespace ChartConvert
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
             AddHoldStartData(dataOrigin.HoldStartData, dataOrigin.Bpm, timing);
+            AddHoldStartDevineData(dataOrigin.DivineHoldStartData, dataOrigin.Bpm, timing);
             AddHoldRelayData(dataOrigin.HoldRelayData, dataOrigin.Bpm, timing);
             AddHoldMeshRelayData(dataOrigin.HoldMeshRelayData, dataOrigin.Bpm, timing);
             AddHoldEndData(dataOrigin.HoldEndData, onAddNoteData, dataOrigin.Bpm, timing);
@@ -571,6 +674,30 @@ namespace ChartConvert
         }
 
         private bool AddHoldStartData(List<NoteDataOrigin_HoldStart> dataOrigin, float bpm, float timing)
+        {
+            if (dataOrigin == null) { return true; }
+
+            // 始点、メッシュデータ格納リストの作成
+            foreach (var noteOrigin in dataOrigin)
+            {
+                // 一度ディクショナリーに格納
+                List<TimeToDetail> meshList;
+                // ディクショナリーに登録されていなければ新規作成
+                if (numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
+                {
+                    Debug.LogWarning($"【Converter】始点データが既に登録されています: {noteOrigin.HoldNumber}");
+                    return false;
+                }
+
+                meshList = new List<TimeToDetail>();
+                meshList.Add(new TimeToDetail(timing, noteOrigin.Range.Select(x => (float)x).ToArray(), true, bpm));
+                numberToHoldMeshDataOrigin.Add(noteOrigin.HoldNumber, meshList);
+            }
+
+            return true;
+        }
+
+        private bool AddHoldStartDevineData(List<NoteDataOrigin_DivineHoldStart> dataOrigin, float bpm, float timing)
         {
             if (dataOrigin == null) { return true; }
 
