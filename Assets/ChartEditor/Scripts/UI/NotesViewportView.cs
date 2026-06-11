@@ -8,9 +8,10 @@ namespace ChartEditor
     {
         [SerializeField] GameObject obj;
 
-        public void OnChangeEditMode(EditMode mode)
+        public void OnChangeEditMode(EditMode mode, EditNoteType editNoteType)
         {
-            if(mode == EditMode.Connecting) { obj.SetActive(false); }
+            if (editNoteType == EditNoteType.Vertices) { obj.SetActive(false); }
+            else if (mode == EditMode.Connecting) { obj.SetActive(false); }
             else { obj.SetActive(true); }
         }
     }

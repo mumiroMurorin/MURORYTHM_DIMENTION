@@ -48,7 +48,7 @@ namespace ChartEditor
 
             // ノーツビューの可視不可視
             editorDataGetter_model?.CurrentEditMode
-                .Subscribe(notesViewport_view.OnChangeEditMode)
+                .Subscribe(mode => notesViewport_view.OnChangeEditMode(mode, editorDataGetter_model.EditNoteType.Value))
                 .AddTo(this.gameObject);
         }
 

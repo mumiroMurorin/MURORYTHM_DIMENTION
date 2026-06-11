@@ -49,6 +49,13 @@ namespace ChartEditor
         /// <param name="addVertex"></param>
         private void InsertVertexNearByNearestIndex(VertexData addVertex)
         {
+            if (vertices.Count == 0)
+            {
+                vertices.Add(addVertex);
+                UpdateVertexIndex();
+                return;
+            }
+
             // 1”Ô–Ú‚É‹ß‚¢’¸“_‚ðŒ©‚Â‚¯‚é
             int nearestIndex = 0;
             float nearestSqrMagnitude = addVertex.GetSqrMagnitude(vertices[0]);
@@ -135,6 +142,24 @@ namespace ChartEditor
         public void SetVertices(List<VertexData> vertexDataList)
         {
             vertices.Clear();
+
+            if (vertexDataList == null || vertexDataList.Count == 0)
+            {
+                return;
+            }
+
+            // Fresh vertex lists such as presets may not have indices yet.
+            // In that case, preserve the incoming order as-is.
+            if (vertexDataList.All(v => v.VertexIndex < 0))
+            {
+                foreach (var v in vertexDataList)
+                {
+                    vertices.Add(new VertexData(v));
+                }
+
+                UpdateVertexIndex();
+                return;
+            }
 
             vertexDataList.Sort((a, b) => a.VertexIndex - b.VertexIndex);
             
