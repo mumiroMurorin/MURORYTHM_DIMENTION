@@ -1,4 +1,4 @@
-Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
+Shader "Notes/SpaceHold/SpaceHold_Horizontal_Outside"
 {
     Properties
     {
@@ -15,7 +15,7 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
 
         _StripeColor("Stripe Color", Color) = (1,1,1,1)
         _StripeTex("Stripe Texture", 2D) = "white" {}
-        _StripeFrequency("Stripe Frequency", Float) = 0.1
+        _StripeFrequency("Stripe Frequency", Float) = 4.0
         _StripeSecondaryWidth("Stripe Secondary Width", Range(0.01, 0.95)) = 0.25
         _StripeBlendSoftness("Stripe Blend Softness", Range(0.001, 0.5)) = 0.08
     }
@@ -56,7 +56,6 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
                 float3 worldPos : TEXCOORD2;
-                float3 localPos : TEXCOORD3;
             };
 
             sampler2D _MainTex;
@@ -81,7 +80,6 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-                o.localPos = v.vertex.xyz;
                 UNITY_TRANSFER_FOG(o, o.vertex);
                 return o;
             }
@@ -97,7 +95,7 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
                 float pingPong = abs(frac(_Time.y / duration) * 2.0 - 1.0);
                 float intensity = lerp(_PingPongIntensityMin, _PingPongIntensityMax, pingPong);
 
-                float stripePhase = i.localPos.z * _StripeFrequency * UNITY_TWO_PI;
+                float stripePhase = i.uv.x * _StripeFrequency * UNITY_TWO_PI;
                 float stripeWave = (cos(stripePhase) + 1.0) * 0.5;
                 float stripeThreshold = saturate(1.0 - _StripeSecondaryWidth);
                 float stripeFeather = max(_StripeBlendSoftness, 0.0001);

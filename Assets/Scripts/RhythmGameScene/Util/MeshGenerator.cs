@@ -217,6 +217,8 @@ namespace MeshGenerate
             int currentMeshIndex = 0;
 
             // 最大頂点数を調べて分割数を更新する
+            float totalDepth = depthToVertices[^1].Depth - depthToVertices[0].Depth;
+            List<Vector2> uvs = new List<Vector2>();
             foreach (var t in depthToVertices)
             {
                 if (meshDivisionNum < t.Vertices.Length)
@@ -253,6 +255,8 @@ namespace MeshGenerate
                     // 頂点リストの代入
                     vertices.AddRange(verticesA);
                     vertices.AddRange(verticesB);
+                    uvs.AddRange(GetSpaceHoldUVs(verticesA, totalDepth));
+                    uvs.AddRange(GetSpaceHoldUVs(verticesB, totalDepth));
 
                     // トライアングルインデックスを生成、代入
                     var tris = MeshGenerator.GenerateTriangles(currentMeshIndex, verticesA.Count, verticesB.Count, isMeshReverse);
@@ -270,10 +274,55 @@ namespace MeshGenerate
             // 計算した値をそれぞれ代入
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
+            mesh.uv = uvs.ToArray();
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 
             return mesh;
+        }
+
+        private static List<Vector2> GetSpaceHoldUVs(List<Vector3> stripVertices, float totalDepth)
+        {
+            var uvList = new List<Vector2>();
+            if (stripVertices == null || stripVertices.Count == 0)
+            {
+                return uvList;
+            }
+
+            int lastIndex = stripVertices.Count - 1;
+            float perimeter = 0f;
+            for (int i = 0; i < lastIndex; i++)
+            {
+                perimeter += Vector3.Distance(stripVertices[i], stripVertices[i + 1]);
+            }
+
+            float accumulated = 0f;
+            for (int i = 0; i < stripVertices.Count; i++)
+            {
+                float u;
+                if (i == lastIndex)
+                {
+                    u = 1f;
+                }
+                else if (perimeter <= Mathf.Epsilon)
+                {
+                    u = 0f;
+                }
+                else
+                {
+                    u = accumulated / perimeter;
+                }
+
+                float v = totalDepth > Mathf.Epsilon ? stripVertices[i].z / totalDepth : 0f;
+                uvList.Add(new Vector2(u, v));
+
+                if (i < lastIndex)
+                {
+                    accumulated += Vector3.Distance(stripVertices[i], stripVertices[i + 1]);
+                }
+            }
+
+            return uvList;
         }
 
         public static void VertexCountNormalizer(List<TimeToVertices> timeToVertices, int minCount)

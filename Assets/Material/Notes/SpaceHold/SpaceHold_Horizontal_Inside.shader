@@ -1,4 +1,4 @@
-Shader "Notes/SpaceHold/SpaceHold_Default_Inside"
+Shader "Notes/SpaceHold/SpaceHold_Horizontal_Inside"
 {
     Properties
     {
@@ -17,7 +17,7 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Inside"
 
         _StripeColor("Stripe Color", Color) = (1,1,1,1)
         _StripeTex("Stripe Texture", 2D) = "white" {}
-        _StripeFrequency("Stripe Frequency", Float) = 0.1
+        _StripeFrequency("Stripe Frequency", Float) = 4.0
         _StripeSecondaryWidth("Stripe Secondary Width", Range(0.01, 0.95)) = 0.25
         _StripeBlendSoftness("Stripe Blend Softness", Range(0.001, 0.5)) = 0.08
     }
@@ -68,8 +68,7 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Inside"
             float pingPong = abs(frac(_Time.y / duration) * 2.0 - 1.0);
             float intensity = lerp(_PingPongIntensityMin, _PingPongIntensityMax, pingPong);
 
-            float localZ = mul(unity_WorldToObject, float4(IN.worldPos, 1.0)).z;
-            float stripePhase = localZ * _StripeFrequency * UNITY_TWO_PI;
+            float stripePhase = IN.uv_MainTex.x * _StripeFrequency * UNITY_TWO_PI;
             float stripeWave = (cos(stripePhase) + 1.0) * 0.5;
             float stripeThreshold = saturate(1.0 - _StripeSecondaryWidth);
             float stripeFeather = max(_StripeBlendSoftness, 0.0001);

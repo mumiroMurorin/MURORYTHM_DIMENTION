@@ -8,6 +8,11 @@ namespace UndoRedo.Vertices
 {
     public static class VerticesMoveRecord
     {
+        public static void RecordVertexMoving(VertexData data, Vector2 previous, Vector2 current)
+        {
+            Record(() => MoveVertex(data, current), () => MoveVertex(data, previous));
+        }
+
         /// <summary>
         /// 頂点データの移動をRedoUndoに対応させる
         /// </summary>

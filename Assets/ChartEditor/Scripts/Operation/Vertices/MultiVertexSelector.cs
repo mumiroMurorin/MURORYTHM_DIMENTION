@@ -1,4 +1,5 @@
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace ChartEditor
 
         List<ISelectableVertexObject> selectingObjects = new List<ISelectableVertexObject>();
         public List<VertexData> SelectingVertices { get; private set; } = new List<VertexData>();
+        readonly Subject<Unit> selectionChanged = new Subject<Unit>();
+        public IObservable<Unit> OnSelectionChanged => selectionChanged;
 
         IChartEditorDataGetter dataGetter;
         EditMode[] ignoreEditModes = new EditMode[] {
@@ -74,6 +77,7 @@ namespace ChartEditor
             selectingObjects.Add(obj);
             SelectingVertices.Add(obj.VertexObject.VertexData);
             obj.OnSelect();
+            NotifySelectionChanged();
         }
 
         /// <summary>
@@ -87,6 +91,7 @@ namespace ChartEditor
                 selectingObjects.Remove(obj);
                 SelectingVertices.Remove(obj.VertexObject.VertexData);
                 obj.OnDeselect();
+                NotifySelectionChanged();
             }
             // 含まれていない場合はリストに追加
             else
@@ -94,6 +99,7 @@ namespace ChartEditor
                 selectingObjects.Add(obj);
                 SelectingVertices.Add(obj.VertexObject.VertexData);
                 obj.OnSelect();
+                NotifySelectionChanged();
             }
         }
 
@@ -102,6 +108,8 @@ namespace ChartEditor
         /// </summary>
         public void DeselectAll()
         {
+            if (selectingObjects.Count == 0 && SelectingVertices.Count == 0) { return; }
+
             foreach(var obj in selectingObjects)
             {
                 obj?.OnDeselect();
@@ -109,6 +117,12 @@ namespace ChartEditor
 
             selectingObjects.Clear();
             SelectingVertices.Clear();
+            NotifySelectionChanged();
+        }
+
+        void NotifySelectionChanged()
+        {
+            selectionChanged?.OnNext(Unit.Default);
         }
     }
 
