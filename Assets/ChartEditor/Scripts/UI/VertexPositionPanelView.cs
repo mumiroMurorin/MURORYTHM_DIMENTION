@@ -1,18 +1,23 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ChartEditor
 {
     public class VertexPositionPanelView : MonoBehaviour
     {
+        [SerializeField] GameObject[] displayElements; 
         [SerializeField] TMP_InputField inputFieldX;
         [SerializeField] TMP_InputField inputFieldY;
+        [SerializeField] TextChangableButtonView openCloseButton_view;
 
         public event Action OnBeginEditListener;
         public event Action OnEndEditListener;
         public event Action<float> OnXValueChangedListener;
         public event Action<float> OnYValueChangedListener;
+
+        bool isOpenPanel;
 
         void Awake()
         {
@@ -28,6 +33,13 @@ namespace ChartEditor
                 inputFieldY.onSelect.AddListener(_ => OnBeginEditListener?.Invoke());
                 inputFieldY.onValueChanged.AddListener(OnYValueChanged);
                 inputFieldY.onEndEdit.AddListener(_ => OnEndEditListener?.Invoke());
+            }
+
+            if (openCloseButton_view != null)
+            {
+                openCloseButton_view.OnPushButtonListner += OnSwitchPanelState;
+                openCloseButton_view.OnChangeValue(isOpenPanel);
+                UpdatePanelState(isOpenPanel);
             }
         }
 
@@ -68,6 +80,24 @@ namespace ChartEditor
         {
             if (!float.TryParse(value, out var parsed)) { return; }
             OnYValueChangedListener?.Invoke(parsed);
+        }
+
+        void OnSwitchPanelState()
+        {
+            isOpenPanel = !isOpenPanel;
+            openCloseButton_view.OnChangeValue(isOpenPanel);
+            UpdatePanelState(isOpenPanel);
+        }
+
+        void UpdatePanelState(bool isOpen)
+        {
+            foreach(var o in displayElements)
+            {
+                o.SetActive(isOpen);
+            }
+
+            Canvas.ForceUpdateCanvases();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
         }
     }
 }

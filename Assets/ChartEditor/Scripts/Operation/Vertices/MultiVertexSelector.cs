@@ -31,6 +31,11 @@ namespace ChartEditor
             this.dataGetter = dataGetter;
         }
 
+        private void Start()
+        {
+            Bind();
+        }
+
         void Update()
         {
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
@@ -63,6 +68,19 @@ namespace ChartEditor
                     SelectSingle(obj);
                 }
             }
+        }
+
+        private void Bind()
+        {
+            dataGetter.EditNoteType
+                    .Subscribe(editNoteType =>
+                    {
+                        if (editNoteType != EditNoteType.Vertices)
+                        {
+                            DeselectAll();
+                        }
+                    })
+                    .AddTo(this.gameObject);
         }
 
         private void SelectSingle(ISelectableVertexObject obj)
