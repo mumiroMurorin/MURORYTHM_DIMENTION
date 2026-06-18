@@ -48,7 +48,7 @@ public abstract class JudgementEffectSpawner : MonoBehaviour
     public IJudgementEffectController Spawn(NoteJudgementData judgementData)
     {
         // ˆê’U–³‚©‚Á‚½‚ç•Ô‚·
-        if (effectPool.Count <= 0) { return null; }
+        if (effectPool == null || effectPool.Count <= 0) { return null; }
 
         var effect = effectPool.Pop();
 

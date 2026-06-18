@@ -1,6 +1,7 @@
 using System;
 using UniRx;
 using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.Localization.Tables;
 
 /// <summary>
@@ -10,19 +11,36 @@ public class OperationHandlerFromSlider : MonoBehaviour, IOperationSetter, IOper
 {
     [SerializeField] private SerializeInterface<IInputHandler> inputHandler;
 
-    private readonly ReactiveCollection<SliderTouchData> sliderTouchDatas = new ReactiveCollection<SliderTouchData>();
+    // 今登録されているスライダー情報
+    readonly ReactiveCollection<SliderTouchData> sliderTouchDatas = new ReactiveCollection<SliderTouchData>();
     IReadOnlyReactiveCollection<SliderTouchData> IOperationGetter.SliderTouchDatas => sliderTouchDatas;
+
+    // タッチされた時のコールバック
+    readonly Subject<SliderTouchData> onTouchSliderListner = new Subject<SliderTouchData>();
+    IObservable<SliderTouchData> IOperationGetter.OnTouchSliderListner => onTouchSliderListner;
 
     void IOperationSetter.SetOperate(SliderTouchData sliderTouchData)
     {
         sliderTouchDatas.Add(sliderTouchData);
-        inputHandler?.Value.OnTouchSlider(sliderTouchData.SliderIndices, sliderTouchData.ExecuteAction);
+        inputHandler?.Value.SubscriveForTouchSlider(sliderTouchData.SliderIndices, 
+            () => { 
+                sliderTouchData.ExecuteAction();
+                onTouchSliderListner.OnNext(sliderTouchData);
+            });
     }
 
-    void IOperationSetter.Dispose()
+    public void Dispose()
     {
+        foreach (var data in sliderTouchDatas) { data.Dispose(); }
+
         sliderTouchDatas.Clear();
         inputHandler?.Value.Dispose();
+    }
+
+    private void OnDestroy()
+    {
+        Dispose();
+        onTouchSliderListner?.Dispose();
     }
 }
 
@@ -35,6 +53,8 @@ public interface IOperationSetter
 public interface IOperationGetter
 {
     IReadOnlyReactiveCollection<SliderTouchData> SliderTouchDatas { get; }
+
+    IObservable<SliderTouchData> OnTouchSliderListner { get; }
 }
 
 /// <summary>
@@ -45,7 +65,7 @@ public class SliderTouchData
     public SliderTouchData(OperationAssetUnit asset, Action callback, TableReference textTableReference, SliderCoolDownHandler coolDownHandler = default)
     {
         SetSliderIndices(asset.SliderIndices);
-        AddCallback(callback);
+        SetCallback(callback);
         SetThemeColor(asset.ThemeColor);
         SetControllerColor(asset.ControllerColor);
         SetControllerRainbow(asset.ControllerRainbow);
@@ -57,7 +77,7 @@ public class SliderTouchData
     public SliderTouchData(int[] sliderIndices, Action callback, Color themeColor = default, Color controllerColor = default, bool controllerRainbow = false, string textKey = default, TableReference textTableReference = default, SliderCoolDownHandler coolDownHandler = default)
     {
         SetSliderIndices(sliderIndices);
-        AddCallback(callback);
+        SetCallback(callback);
         SetThemeColor(themeColor);
         SetControllerColor(controllerColor == default ? themeColor : controllerColor);
         SetControllerRainbow(controllerRainbow);
@@ -68,87 +88,73 @@ public class SliderTouchData
 
     private readonly SliderCoolDownHandler coolDownHandler;
 
-    private readonly ReactiveCollection<int> sliderIndices = new ReactiveCollection<int>();
-    public IReadOnlyReactiveCollection<int> SliderIndices => sliderIndices;
 
-    public void SetSliderIndices(int[] indices)
+    private int[] sliderIndices;
+    public IEnumerable<int> SliderIndices { get { return sliderIndices; } }
+    private void SetSliderIndices(int[] indices)
     {
-        sliderIndices.Clear();
-        foreach (int index in indices)
-        {
-            sliderIndices.Add(index);
-        }
+        sliderIndices = indices;
     }
 
-    private readonly ReactiveProperty<Action> callBack = new ReactiveProperty<Action>();
-    public IReadOnlyReactiveProperty<Action> Callback => callBack;
 
-    public void AddCallback(Action action)
+    private ReactiveProperty<Action> callBack = new ReactiveProperty<Action>();
+    private void SetCallback(Action action)
     {
-        callBack.Value += action;
-    }
-
-    public void DisposeAction()
-    {
-        callBack.Value = null;
+        callBack.Value = action;
     }
 
 
     // ThemeColor
-    private readonly ReactiveProperty<Color> themeColor = new ReactiveProperty<Color>();
-    public IReadOnlyReactiveProperty<Color> ThemeColor => themeColor;
-
-    public void SetThemeColor(Color color)
+    public Color ThemeColor { get; private set; } = Color.red;
+    private void SetThemeColor(Color color)
     {
-        themeColor.Value = color;
+        ThemeColor = color;
     }
 
 
     // ControllerColor
-    private readonly ReactiveProperty<Color> controllerColor = new ReactiveProperty<Color>();
-    public IReadOnlyReactiveProperty<Color> ControllerColor => controllerColor;
-
-    public void SetControllerColor(Color color)
+    public Color ControllerColor { get; private set; } = Color.red;
+    private void SetControllerColor(Color color)
     {
-        controllerColor.Value = color;
+        ControllerColor = color;
     }
 
-    private readonly ReactiveProperty<bool> controllerRainbow = new ReactiveProperty<bool>();
-    public IReadOnlyReactiveProperty<bool> ControllerRainbow => controllerRainbow;
 
-    public void SetControllerRainbow(bool value)
+    // ControllerRainbowColor
+    public bool ControllerRainbow { get; private set; }
+    private void SetControllerRainbow(bool value)
     {
-        controllerRainbow.Value = value;
+        ControllerRainbow = value;
     }
 
 
     // TextKey
-    private readonly ReactiveProperty<string> textKey = new ReactiveProperty<string>();
-    public IReadOnlyReactiveProperty<string> TextKey => textKey;
-
-    public void SetTextKey(string value)
+    public string TextKey { get; private set; }
+    private void SetTextKey(string value)
     {
-        textKey.Value = value;
+        TextKey = value;
     }
 
-    private readonly ReactiveProperty<TableReference> textTableReference = new ReactiveProperty<TableReference>();
-    public IReadOnlyReactiveProperty<TableReference> TextTableReference => textTableReference;
 
-    public void SetTextTableReference(TableReference value)
+    // TableReference
+    public TableReference TextTableReference { get; private set; }
+    private void SetTextTableReference(TableReference value)
     {
-        textTableReference.Value = value;
+        TextTableReference = value;
     }
 
 
     public void ExecuteAction()
     {
-        if (coolDownHandler != null && coolDownHandler.IsWaiting)
-        {
-            return;
-        }
+        if (coolDownHandler != null && coolDownHandler.IsWaiting) { return; }
 
-        Callback?.Value?.Invoke();
+        callBack?.Value?.Invoke();
         coolDownHandler?.ResetCoolTime();
+    }
+
+    public void Dispose()
+    {
+        callBack.Value = null;
     }
 }
 

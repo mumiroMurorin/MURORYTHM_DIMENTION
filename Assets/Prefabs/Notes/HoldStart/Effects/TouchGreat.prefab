@@ -79,7 +79,6 @@ GameObject:
   - component: {fileID: 1230168480689223434}
   - component: {fileID: 529141840500528538}
   - component: {fileID: 5492460940447415818}
-  - component: {fileID: 4206730941620778259}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -152,37 +151,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4206730941620778259
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 757875938798949615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 529141840500528538}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &780675384288784547
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,7 +209,6 @@ GameObject:
   - component: {fileID: 4664854035090485674}
   - component: {fileID: 1052399427290897309}
   - component: {fileID: 3370058566922874618}
-  - component: {fileID: 1264454898521140696}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -314,37 +281,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1264454898521140696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1414961725943078861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 1052399427290897309}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &2471599280583769795
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,7 +292,6 @@ GameObject:
   - component: {fileID: 4173942158167491177}
   - component: {fileID: 505510588446810486}
   - component: {fileID: 8193068109741276892}
-  - component: {fileID: 7302512230232336483}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -429,37 +364,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7302512230232336483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2471599280583769795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 505510588446810486}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &2474501397373498884
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,7 +375,6 @@ GameObject:
   - component: {fileID: 242795812479385561}
   - component: {fileID: 5767588507349556387}
   - component: {fileID: 628107394911747425}
-  - component: {fileID: 1023750976840780407}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -544,37 +447,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1023750976840780407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2474501397373498884}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 5767588507349556387}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &2490430940543893598
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,7 +458,6 @@ GameObject:
   - component: {fileID: 1627752357793548345}
   - component: {fileID: 8108790692668692563}
   - component: {fileID: 1960210420945507489}
-  - component: {fileID: 3526806642481802745}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -659,37 +530,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3526806642481802745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2490430940543893598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 8108790692668692563}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &2707127052456546872
 GameObject:
   m_ObjectHideFlags: 0
@@ -5610,7 +5450,6 @@ GameObject:
   - component: {fileID: 8171602775192276966}
   - component: {fileID: 6777833148506207851}
   - component: {fileID: 4671321613040547842}
-  - component: {fileID: 4887657163861488500}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -5683,37 +5522,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4887657163861488500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3207915197059133676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 6777833148506207851}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &3340552316875342404
 GameObject:
   m_ObjectHideFlags: 0
@@ -5725,7 +5533,6 @@ GameObject:
   - component: {fileID: 8280212449601190676}
   - component: {fileID: 8473949066102954898}
   - component: {fileID: 7118249392236374797}
-  - component: {fileID: 1683645516330030751}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -5798,37 +5605,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1683645516330030751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3340552316875342404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 8473949066102954898}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &4491097829748936887
 GameObject:
   m_ObjectHideFlags: 0
@@ -5840,7 +5616,6 @@ GameObject:
   - component: {fileID: 2891308027866477302}
   - component: {fileID: 246411118694983273}
   - component: {fileID: 659722067353906857}
-  - component: {fileID: 5458942071782088667}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -5913,37 +5688,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5458942071782088667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4491097829748936887}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 246411118694983273}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &5253900757640467185
 GameObject:
   m_ObjectHideFlags: 0
@@ -5955,7 +5699,6 @@ GameObject:
   - component: {fileID: 8618721358075725785}
   - component: {fileID: 4762437145125062320}
   - component: {fileID: 8446462351318326897}
-  - component: {fileID: 2700421528158087819}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -6028,37 +5771,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2700421528158087819
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5253900757640467185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 4762437145125062320}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &5536375016055289809
 GameObject:
   m_ObjectHideFlags: 0
@@ -6070,7 +5782,6 @@ GameObject:
   - component: {fileID: 4104305619132694654}
   - component: {fileID: 7711990869523476568}
   - component: {fileID: 1335300364238014981}
-  - component: {fileID: 2230263432915295536}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -6143,37 +5854,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2230263432915295536
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5536375016055289809}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 7711990869523476568}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &6031414352166382111
 GameObject:
   m_ObjectHideFlags: 0
@@ -6185,7 +5865,6 @@ GameObject:
   - component: {fileID: 3138988740220790397}
   - component: {fileID: 156460551057678146}
   - component: {fileID: 1986520553743067306}
-  - component: {fileID: 8415374163306817123}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -6258,37 +5937,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8415374163306817123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6031414352166382111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 156460551057678146}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &6131018691272662074
 GameObject:
   m_ObjectHideFlags: 0
@@ -6300,7 +5948,6 @@ GameObject:
   - component: {fileID: 3233702804903560775}
   - component: {fileID: 617262306470993512}
   - component: {fileID: 3594508934962298513}
-  - component: {fileID: 9033238462140530968}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -6373,37 +6020,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &9033238462140530968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6131018691272662074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 617262306470993512}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &6568386949114275362
 GameObject:
   m_ObjectHideFlags: 0
@@ -6415,7 +6031,6 @@ GameObject:
   - component: {fileID: 5540373889369182412}
   - component: {fileID: 6429584093277298713}
   - component: {fileID: 836387286148461825}
-  - component: {fileID: 2845684744316174508}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -6488,37 +6103,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2845684744316174508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6568386949114275362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 6429584093277298713}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &7768345691128038467
 GameObject:
   m_ObjectHideFlags: 0
@@ -6530,7 +6114,6 @@ GameObject:
   - component: {fileID: 8017024801844812095}
   - component: {fileID: 6020726540951109965}
   - component: {fileID: 3861844574054813056}
-  - component: {fileID: 7109141298766129513}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -6603,37 +6186,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7109141298766129513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7768345691128038467}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 6020726540951109965}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &8524077944113561390
 GameObject:
   m_ObjectHideFlags: 0
@@ -6645,7 +6197,6 @@ GameObject:
   - component: {fileID: 3000264447846737536}
   - component: {fileID: 3215477456861718791}
   - component: {fileID: 6823542280905326013}
-  - component: {fileID: 1345367293318638575}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -6718,37 +6269,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1345367293318638575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8524077944113561390}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 3215477456861718791}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!1 &8987460603889673892
 GameObject:
   m_ObjectHideFlags: 0
@@ -6760,7 +6280,6 @@ GameObject:
   - component: {fileID: 1186713085241502680}
   - component: {fileID: 5392309203844306718}
   - component: {fileID: 7383518061148803059}
-  - component: {fileID: 8891381509730303306}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -6833,34 +6352,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8891381509730303306
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8987460603889673892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85212d1b13358614ca54e74ba56f93ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assignOriginalMeshOnDisable: 1
-  updateMode: 0
-  cullingMode: 1
-  normalsRecalculation: 0
-  boundsRecalculation: 0
-  colliderRecalculation: 0
-  meshCollider: {fileID: 0}
-  data:
-    OriginalMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-    Target:
-      meshFilter: {fileID: 5392309203844306718}
-      skinnedMeshRenderer: {fileID: 0}
-    initialized: 1
-  deformerElements:
-  - component: {fileID: 0}
-    active: 1
-  customBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.25, y: 0.25, z: 0.25}

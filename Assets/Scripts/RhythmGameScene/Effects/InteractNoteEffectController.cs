@@ -50,6 +50,8 @@ public class InteractNoteEffectController : MonoBehaviour, IInteractNoteEffectCo
         this.gameObject.SetActive(true);
         foreach (var effect in effects)
         {
+            // 再生されるエフェクトはSetEffect内でアクティブになってるはず
+            if (!effect.Effect.gameObject.activeInHierarchy) { return; }
             effect.Effect.Play();
         }
 

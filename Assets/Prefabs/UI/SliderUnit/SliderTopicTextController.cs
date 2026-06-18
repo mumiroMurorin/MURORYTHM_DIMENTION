@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -25,26 +25,9 @@ public class SliderTopicTextController : MonoBehaviour
     public void SetSliderTouchData(SliderTouchData sliderTouchData)
     {
         // 範囲だけは初期化されないので明示的に更新
-        UpdateRange(sliderTouchData.SliderIndices.ToArray());
-        Bind(sliderTouchData);
-    }
-
-    private void Bind(SliderTouchData sliderTouchData)
-    {
-        // 表示範囲更新
-        sliderTouchData?.SliderIndices.ObserveCountChanged()
-            .Subscribe(_ => UpdateRange(sliderTouchData.SliderIndices.ToArray()))
-            .AddTo(this.gameObject);
-
-        // 表示色
-        sliderTouchData?.ThemeColor
-            .Subscribe(UpdateColor)
-            .AddTo(this.gameObject);
-
-        // 表示テキストキー
-        sliderTouchData?.TextKey
-            .Subscribe(textKey => ApplyLocalizedText(sliderTouchData, textKey))
-            .AddTo(this.gameObject);
+        SetRange(sliderTouchData.SliderIndices.ToArray());
+        SetColor(sliderTouchData.ThemeColor);
+        ApplyLocalizedText(sliderTouchData, sliderTouchData?.TextKey);
     }
 
     private void ApplyLocalizedText(SliderTouchData sliderTouchData, string textKey)
@@ -53,46 +36,43 @@ public class SliderTopicTextController : MonoBehaviour
 
         if (string.IsNullOrWhiteSpace(textKey))
         {
-            UpdateText(string.Empty);
+            SetText(string.Empty);
             return;
         }
 
-        var tableReference = sliderTouchData.TextTableReference.Value;
+        var tableReference = sliderTouchData.TextTableReference;
         if (tableReference.ReferenceType == UnityEngine.Localization.Tables.TableReference.Type.Empty)
         {
-            UpdateText(textKey);
+            SetText(textKey);
             return;
         }
 
         localizedString = new LocalizedString(tableReference, textKey);
-        localizedString.StringChanged += UpdateText;
+        localizedString.StringChanged += SetText;
         localizedString.RefreshString();
     }
 
     private void ClearLocalizedTextBinding()
     {
-        if (localizedString == null)
-        {
-            return;
-        }
+        if (localizedString == null) { return; }
 
-        localizedString.StringChanged -= UpdateText;
+        localizedString.StringChanged -= SetText;
         localizedString = null;
     }
 
-    private void UpdateRange(int[] indices)
+    private void SetRange(int[] indices)
     {
         // 角度の計算
         float range = indices.Max() - indices.Min() + 1;
         circularText.CenterAngle = (indices.Min() + range / 2f) * 11.25f - 180f;
     }
 
-    private void UpdateColor(Color color)
+    private void SetColor(Color color)
     {
         tmp.faceColor = color;
     }
 
-    private void UpdateText(string text)
+    private void SetText(string text)
     {
         tmp.text = text;
         circularText.SetAngleOfCharacter(GetAngleOfCharacterByLocale());

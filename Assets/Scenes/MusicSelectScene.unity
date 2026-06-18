@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.4366757, g: 0.48427194, b: 0.5645252, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -134,6 +134,10 @@ PrefabInstance:
     - target: {fileID: 2320136115065221412, guid: 002622a8cd3c78c40800eb0b825f6cf6, type: 3}
       propertyPath: m_Name
       value: InteractEffectController
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320136115065221412, guid: 002622a8cd3c78c40800eb0b825f6cf6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3217530237588728887, guid: 002622a8cd3c78c40800eb0b825f6cf6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -545,6 +549,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1423946252}
     m_Modifications:
+    - target: {fileID: 1579286686757275085, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1606054991329240329, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1893700926238291093, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2110705400260581442, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2449300753122106449, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2524060769357823371, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -585,9 +609,49 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2660866972743390356, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3723435569747845605, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342039878413496615, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4668865351624581156, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5733177448290540664, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6172133425577201363, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6960174529777952923, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
       propertyPath: m_Name
       value: JudgementEffectController
+      objectReference: {fileID: 0}
+    - target: {fileID: 6960174529777952923, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7467479011041830441, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7962507528022539513, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9025099690331380909, guid: b251e388c68dc754a99cf9ff8db963ff, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1844,6 +1908,10 @@ PrefabInstance:
     - target: {fileID: 6117121690577090241, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Name
       value: Stage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6117121690577090241, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6387229053482288308, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Mesh
@@ -3396,6 +3464,10 @@ PrefabInstance:
     - target: {fileID: 7896517693994468305, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
       propertyPath: m_Name
       value: ChartGenerator
+      objectReference: {fileID: 0}
+    - target: {fileID: 7896517693994468305, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 699343328728032737, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}

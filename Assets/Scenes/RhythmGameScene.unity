@@ -257,7 +257,7 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: MusicData/Destr0yer/chart_master.json
+  chartFilePath: MusicData/Aleph-0/chart_master.json
   noteSpeed: 200
   isAutoMode: 1
   isFastLateEnabled: 1
@@ -1302,6 +1302,18 @@ PrefabInstance:
     - target: {fileID: 1582906479324217421, guid: a74f5192244238243a3b051e9e5b70e2, type: 3}
       propertyPath: m_Name
       value: Ready
+      objectReference: {fileID: 0}
+    - target: {fileID: 2826138234672101974, guid: a74f5192244238243a3b051e9e5b70e2, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5601094991250338147, guid: a74f5192244238243a3b051e9e5b70e2, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6182579293432456172, guid: a74f5192244238243a3b051e9e5b70e2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 150
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

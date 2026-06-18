@@ -27,10 +27,7 @@ public class SliderUnitUI : MonoBehaviour
 
     private void Bind(SliderTouchData sliderTouchData)
     {
-        sliderTouchData?.ThemeColor
-            .Subscribe(SetSliderColor)
-            .AddTo(disposables)
-            .AddTo(this.gameObject);
+        SetSliderColor(sliderTouchData.ThemeColor);
     }
 
     private void SetSliderColor(Color color)
@@ -56,21 +53,14 @@ public class SliderUnitUI : MonoBehaviour
 
         isTouching = true;
         image.color = new Color(
-            Mathf.Clamp(sliderTouchData.ThemeColor.Value.r - pressedDecrmentionColorValue, 0, 1),
-            Mathf.Clamp(sliderTouchData.ThemeColor.Value.g - pressedDecrmentionColorValue, 0, 1),
-            Mathf.Clamp(sliderTouchData.ThemeColor.Value.b - pressedDecrmentionColorValue, 0, 1),
-            sliderTouchData.ThemeColor.Value.a);
+            Mathf.Clamp(sliderTouchData.ThemeColor.r - pressedDecrmentionColorValue, 0, 1),
+            Mathf.Clamp(sliderTouchData.ThemeColor.g - pressedDecrmentionColorValue, 0, 1),
+            Mathf.Clamp(sliderTouchData.ThemeColor.b - pressedDecrmentionColorValue, 0, 1),
+            sliderTouchData.ThemeColor.a);
 
         // ’x‚ç‚¹‚ÄŒ³‚É–ß‚·
-        if (cts != null)
-        {
-            cts.Cancel();
-            cts.Dispose();
-            cts = null;
-        }
-
-        cts = new CancellationTokenSource();
-        _ = DelayedExecutor.ExecuteAfterDelay(duration, () => DisConnectSlider(sliderTouchData), cts.Token);
+        cts?.CancelAndDispose();
+        cts = DelayUtility.Run(duration, () => DisConnectSlider(sliderTouchData));
     }
 
     /// <summary>
@@ -83,16 +73,11 @@ public class SliderUnitUI : MonoBehaviour
         if (!image) { return; }
 
         isTouching = false;
-        image.color = sliderTouchData.ThemeColor.Value;
+        image.color = sliderTouchData.ThemeColor;
     }
 
     private void OnDestroy()
     {
-        if (cts != null)
-        {
-            cts.Cancel();
-            cts.Dispose();
-            cts = null;
-        }
+        cts?.CancelAndDispose();
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8073758721734375329}
   - component: {fileID: 1817571218248197571}
   - component: {fileID: -1101328328039236685}
-  - component: {fileID: 3603916568986927512}
+  - component: {fileID: 7339305693502537295}
   m_Layer: 0
   m_Name: SpaceHoldMesh
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3603916568986927512
+--- !u!114 &7339305693502537295
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

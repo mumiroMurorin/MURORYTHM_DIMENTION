@@ -588,18 +588,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5493261185757931217, guid: 97fe1f5948ffe7844948f3f4a47afb57, type: 3}
-      propertyPath: meshDivisionNum
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5493261185757931217, guid: 97fe1f5948ffe7844948f3f4a47afb57, type: 3}
-      propertyPath: maxTriangleLength
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5493261185757931217, guid: 97fe1f5948ffe7844948f3f4a47afb57, type: 3}
-      propertyPath: meshHorizontalDivisionNum
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 8581259717299761544, guid: 97fe1f5948ffe7844948f3f4a47afb57, type: 3}
       propertyPath: m_Name
       value: NoteFactory_HoldMesh
@@ -852,14 +840,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6117056429854002331}
     m_Modifications:
-    - target: {fileID: -7189193357750488896, guid: 02fc3dfaa44d74142ba4aad656e76404, type: 3}
-      propertyPath: meshDivisionNum
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: -7189193357750488896, guid: 02fc3dfaa44d74142ba4aad656e76404, type: 3}
-      propertyPath: maxTriangleLength
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2064485049643204070, guid: 02fc3dfaa44d74142ba4aad656e76404, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

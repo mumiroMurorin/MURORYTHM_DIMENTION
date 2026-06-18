@@ -98,12 +98,16 @@ namespace UIInSelectScene
 
         private void BindSliderUI()
         {
+            // ƒ^ƒbƒ`‚³‚ê‚½Žž‚ÌUI‹““®
+            operationGetter_model?.Value.OnTouchSliderListner
+                .Subscribe(sliderUnitsController_view.OnTouchSlider)
+                .AddTo(this.gameObject);
+
             // ‘€ì‚Ì’Ç‰Á
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveAdd()
                 .Subscribe(value =>
                 {
-                    SetInteractionSliderEvent(value.Value);
                     sliderUnitsController_view?.OnChangeSliderData(value.Value);
                     topicTextsController_view?.OnChangeSliderData(value.Value);
                 })
@@ -134,11 +138,6 @@ namespace UIInSelectScene
         private void SetEvent()
         {
 
-        }
-
-        private void SetInteractionSliderEvent(SliderTouchData sliderTouchData)
-        {
-            sliderTouchData.AddCallback(() => sliderUnitsController_view.OnTouchSlider(sliderTouchData));
         }
     }
 }

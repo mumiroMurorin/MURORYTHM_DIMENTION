@@ -144,8 +144,8 @@ public class OperationThemeColorSerialBridge : MonoBehaviour
                 return;
             }
 
-            bool controllerRainbow = sliderTouchData.ControllerRainbow.Value;
-            Color32 color = sliderTouchData.ControllerColor.Value;
+            bool controllerRainbow = sliderTouchData.ControllerRainbow;
+            Color32 color = sliderTouchData.ControllerColor;
             foreach (int sliderIndex in sliderTouchData.SliderIndices)
             {
                 var ledMap = sliderIndexToLedMaps.FirstOrDefault(map => map.SliderIndex == sliderIndex);

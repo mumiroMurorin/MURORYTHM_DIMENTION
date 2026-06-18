@@ -21,6 +21,17 @@ public abstract class InteractNoteEffect : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (particleEndCallback != null)
+        {
+            foreach (var c in particleEndCallback)
+            {
+                c.OnStopParticleListner -= OnFinishParticle;
+            }
+        }
+    }
+
     public void SetEffect(INoteData noteData, Action returnToPool)
     {
         OnFinishParticle = returnToPool; 

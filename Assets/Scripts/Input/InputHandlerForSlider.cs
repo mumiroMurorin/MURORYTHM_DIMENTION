@@ -31,17 +31,7 @@ public abstract class InputHandlerForSlider : MonoBehaviour, IInputHandler
 
     protected abstract void EachUpdate();
 
-    void IInputHandler.OnTouchSlider(IReadOnlyReactiveCollection<int> indices, Action callback)
-    {
-        // Å‰‚¾‚¯–¾Ž¦“I‚ÉŽÀs
-        BindForIndices(indices, callback);
-
-        indices?.ObserveCountChanged()
-            .Subscribe(_ => BindForIndices(indices, callback))
-            .AddTo(this.gameObject);
-    }
-
-    private void BindForIndices(IReadOnlyReactiveCollection<int> indices, Action callback)
+    void IInputHandler.SubscriveForTouchSlider(IEnumerable<int> indices, Action callback)
     {
         if (disposables == null || disposables.IsDisposed)
         {
@@ -76,7 +66,7 @@ public abstract class InputHandlerForSlider : MonoBehaviour, IInputHandler
 
 public interface IInputHandler
 {
-    void OnTouchSlider(IReadOnlyReactiveCollection<int> indices, Action callback);
+    void SubscriveForTouchSlider(IEnumerable<int> indices, Action callback);
 
     void Dispose();
 }
