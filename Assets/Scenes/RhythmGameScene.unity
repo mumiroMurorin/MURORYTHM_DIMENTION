@@ -247,7 +247,7 @@ MonoBehaviour:
     - 
   difficulty: 3
   chartFilePath: MusicData/Aleph-0/chart_master.json
-  noteSpeed: 190
+  noteSpeed: 200
   groundRadius: 2000
   isAutoMode: 1
   isFastLateEnabled: 1
@@ -1082,14 +1082,6 @@ PrefabInstance:
     - target: {fileID: 3557880811985844621, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
       propertyPath: m_Name
       value: LoadingBody
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344308489783075046, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7003494081260383716, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2152,7 +2144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed07db9c99ac59f4e9da1284ad6c5307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUseSpaceInput: 1
+  isUseSpaceInput: 0
   loadTimeoutSeconds: 10
   spaceInputHandler:
     obj: {fileID: 2008376453}

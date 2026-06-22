@@ -26,7 +26,6 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
     private void Bind()
     {
         if (noteData == null) { return; }
-        if (noteData.OptionGetter.IsAutoMode) { return; }
 
         // ê¨å˜îªíË
         foreach (int index in noteData.Range)
