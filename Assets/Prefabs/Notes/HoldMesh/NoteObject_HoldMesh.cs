@@ -7,15 +7,15 @@ using JudgementUtil.Hold;
 using System.Linq;
 
 /// <summary>
-/// ƒ^ƒbƒ`ƒm[ƒc‚ÉƒAƒ^ƒbƒ`‚³‚ê‚éƒNƒ‰ƒX
+/// ã‚¿ãƒƒãƒãƒãƒ¼ãƒ„ã«ã‚¢ã‚¿ãƒƒãƒã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 public class NoteObject_HoldMesh : NoteObject<NoteData_HoldMesh>
 {
-    [Header("mesh‚Ìƒ}ƒeƒŠƒAƒ‹(–¢”»’è)")]
+    [Header("meshã®ãƒãƒ†ãƒªã‚¢ãƒ«(æœªåˆ¤å®šæ™‚)")]
     [SerializeField] Material meshMaterialDefault;
-    [Header("mesh‚Ìƒ}ƒeƒŠƒAƒ‹(ƒ^ƒbƒ`)")]
+    [Header("meshã®ãƒãƒ†ãƒªã‚¢ãƒ«(ã‚¿ãƒƒãƒæ™‚)")]
     [SerializeField] Material meshMaterialTouching;
-    [Header("mesh‚Ìƒ}ƒeƒŠƒAƒ‹(”ñƒ^ƒbƒ`)")]
+    [Header("meshã®ãƒãƒ†ãƒªã‚¢ãƒ«(éã‚¿ãƒƒãƒæ™‚)")]
     [SerializeField] Material meshMaterialUntouching;
 
     NoteData_HoldMesh noteData;
@@ -24,14 +24,14 @@ public class NoteObject_HoldMesh : NoteObject<NoteData_HoldMesh>
     List<int> judgeRange = new List<int>();
 
     /// <summary>
-    /// ‰Šú‰»
+    /// åˆæœŸåŒ–
     /// </summary>
     /// <param name="data"></param>
     public override void Initialize(NoteData_HoldMesh data)
     {
         noteData = data;
 
-        // ƒ}ƒeƒŠƒAƒ‹‚Ìİ’è
+        // ãƒãƒ†ãƒªã‚¢ãƒ«ã®è¨­å®š
         meshRenderers = new List<MeshRenderer>();
         foreach (Transform child in this.gameObject.transform)
         {
@@ -43,40 +43,34 @@ public class NoteObject_HoldMesh : NoteObject<NoteData_HoldMesh>
         }
     }
 
-    /// <summary>
-    /// ƒz[ƒ‹ƒhƒƒbƒVƒ…‚ÍƒAƒNƒeƒBƒu‰»‚Ì‰e‹¿‚ğó‚¯‚È‚¢
-    /// </summary>
-    /// <param name="isVisible"></param>
-    public override void SetActive(bool isVisible) { }
-
     private void Update()
     {
         if (noteData == null) { return; }
         if (noteData.Timer == null) { return; }
         if (noteData.Timer.Time < noteData.Timing) { return; }
 
-        // ”»’è”ÍˆÍ‚ÌXV
+        // åˆ¤å®šç¯„å›²ã®æ›´æ–°
         judgeRange = HoldJudgement.GetJudgeRange(noteData.TimeToRanges, noteData.Timer.Time);
 
         UpdateTouchStatus();
     }
 
     /// <summary>
-    /// ƒ^ƒbƒ`”»’è‚ğXV‚·‚é
+    /// ã‚¿ãƒƒãƒåˆ¤å®šã‚’æ›´æ–°ã™ã‚‹
     /// </summary>
     private void UpdateTouchStatus()
     {
         if (noteData.Timer == null) { return; }
         if (judgeRange == null) { return; }
 
-        // ”»’è”ÍˆÍ“à‚ÌƒXƒ‰ƒCƒ_[“ü—Í‚ğ’²‚×‚é
+        // åˆ¤å®šç¯„å›²å†…ã®ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼å…¥åŠ›ã‚’èª¿ã¹ã‚‹
         if (!noteData.OptionGetter.IsAutoMode) { SetTouchStatus(GroundJudgement.IsTouchingSlider(noteData.SliderInput, judgeRange.ToArray())); }
         else { SetTouchStatus(true); }
         return;
     }
 
     /// <summary>
-    /// ƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚Åƒ}ƒeƒŠƒAƒ‹‚ğ•ÏX‚·‚é
+    /// ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã§ãƒãƒ†ãƒªã‚¢ãƒ«ã‚’å¤‰æ›´ã™ã‚‹
     /// </summary>
     /// <param name="isTouching"></param>
     public void SetTouchStatus(bool isTouching)
@@ -88,7 +82,7 @@ public class NoteObject_HoldMesh : NoteObject<NoteData_HoldMesh>
     }
 
     /// <summary>
-    /// ƒm[ƒc‚ğ‹@”\’â~‚·‚é
+    /// ãƒãƒ¼ãƒ„ã‚’æ©Ÿèƒ½åœæ­¢ã™ã‚‹
     /// </summary>
     private void SetDisable()
     {
@@ -97,7 +91,7 @@ public class NoteObject_HoldMesh : NoteObject<NoteData_HoldMesh>
 }
 
 /// <summary>
-/// (‰Šú‰»‚É•K—v‚È•Ï”‚àŠÜ‚Ş)ƒz[ƒ‹ƒhƒƒbƒVƒ…ƒm[ƒc‚Ìƒf[ƒ^
+/// (åˆæœŸåŒ–ã«å¿…è¦ãªå¤‰æ•°ã‚‚å«ã‚€)ãƒ›ãƒ¼ãƒ«ãƒ‰ãƒ¡ãƒƒã‚·ãƒ¥ãƒãƒ¼ãƒ„ã®ãƒ‡ãƒ¼ã‚¿
 /// </summary>
 public class NoteData_HoldMesh : INoteData
 {

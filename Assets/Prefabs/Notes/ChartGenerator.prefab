@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6117056429854002331}
   - component: {fileID: 699343328728032737}
+  - component: {fileID: 3803758075353284194}
   m_Layer: 0
   m_Name: ChartGenerator
   m_TagString: Untagged
@@ -25,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7896517693994468305}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -99,9 +100,23 @@ MonoBehaviour:
   - noteType: 33
     factory: {fileID: 1471301347289454810}
   noteParent: {fileID: 0}
-  groundDeformer: {fileID: 0}
   timer:
     obj: {fileID: 0}
+  noteVisibilityController: {fileID: 3803758075353284194}
+  visibleBehindDistance: 5
+  visibleAheadDistance: 100
+--- !u!114 &3803758075353284194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7896517693994468305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8b15dc681a4f99813913e162b14aac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &62621273876057343
 PrefabInstance:
   m_ObjectHideFlags: 0

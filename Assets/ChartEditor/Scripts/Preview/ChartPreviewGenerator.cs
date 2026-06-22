@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using Deform;
 using UnityEngine;
 using VContainer;
 
@@ -23,7 +22,6 @@ namespace ChartEditor
 
         [Header("Factory Initialization")]
         [SerializeField] private Transform noteParent;
-        [SerializeField] private Deformer groundDeformer;
         [SerializeField] private SerializeInterface<ITimeGetter> timer;
 
         private global::ChartData chartData;
@@ -82,7 +80,6 @@ namespace ChartEditor
             NoteFactoryInitializingData data = new NoteFactoryInitializingData
             {
                 NoteParent = noteParent,
-                GroundDeformer = groundDeformer,
                 OptionHolder = optionHolder ?? null,
                 Timer = timer.Value,
                 JudgementRecorder = null

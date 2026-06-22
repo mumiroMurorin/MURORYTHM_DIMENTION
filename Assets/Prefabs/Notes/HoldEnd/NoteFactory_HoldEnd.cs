@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Deform;
 
 public class NoteFactory_HoldEnd : NoteFactory<NoteData_HoldEnd>
 {
     [SerializeField] GameObject noteObjectOriginPrefab;
 
-    [Header("ƒ}ƒX‚É‰‚¶‚½ƒm[ƒcƒ^ƒCƒ‹")]
+    [Header("ãƒã‚¹ã«å¿œã˜ãŸãƒãƒ¼ãƒ„ã‚¿ã‚¤ãƒ«")]
     [SerializeField] GameObject singleTilePrefab;
     [SerializeField] GameObject rightEdgeTilePrefab;
     [SerializeField] GameObject centerTilePrefab;
@@ -18,13 +17,11 @@ public class NoteFactory_HoldEnd : NoteFactory<NoteData_HoldEnd>
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
     Transform noteParent;
-    Deformer groundDeformer;
 
     public override void Initialize(NoteFactoryInitializingData initializingData)
     {
         this.optionHolder = initializingData.OptionHolder;
         this.noteParent = initializingData.NoteParent;
-        this.groundDeformer = initializingData.GroundDeformer;
         this.sliderInputGetter = initializingData.SliderInputGetter;
         this.judgementRecorder = initializingData.JudgementRecorder;
         this.timer = initializingData.Timer;
@@ -32,25 +29,25 @@ public class NoteFactory_HoldEnd : NoteFactory<NoteData_HoldEnd>
 
     public override NoteObject<NoteData_HoldEnd> Spawn(NoteData_HoldEnd data, INotePositionCalculator positionCalculator)
     {
-        // ¶¬
+        // ç”Ÿæˆ
         NoteObject<NoteData_HoldEnd> note = GenerateNoteInstance(ConvertNoteData(data));
 
-        // ˆÊ’u’²®
+        // ä½ç½®èª¿æ•´
         SetTransform(note, positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value);
 
-        // ‰Šú‰»
+        // åˆæœŸåŒ–
         note.Initialize(data);
 
         return note;
     }
 
     /// <summary>
-    /// ƒm[ƒgƒf[ƒ^‚É‚³‚ç‚È‚éî•ñ‚ğ’Ç‰Á
+    /// ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã«ã•ã‚‰ãªã‚‹æƒ…å ±ã‚’è¿½åŠ 
     /// </summary>
     /// <param name="data"></param>
     private NoteData_HoldEnd ConvertNoteData(NoteData_HoldEnd data)
     {
-        // ƒm[ƒcƒf[ƒ^‚É‚¢‚ë‚¢‚ë’Ç‰Á
+        // ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿ã«ã„ã‚ã„ã‚è¿½åŠ 
         data.SliderInput = this.sliderInputGetter;
         data.Timer = this.timer;
         data.JudgementRecorder = this.judgementRecorder;
@@ -60,7 +57,7 @@ public class NoteFactory_HoldEnd : NoteFactory<NoteData_HoldEnd>
     }
 
     /// <summary>
-    /// ƒm[ƒc‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»‚µ‚Ä•Ô‚·
+    /// ãƒãƒ¼ãƒ„ã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã—ã¦è¿”ã™
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
@@ -68,71 +65,64 @@ public class NoteFactory_HoldEnd : NoteFactory<NoteData_HoldEnd>
     {
         GameObject origin = Instantiate(noteObjectOriginPrefab);
 
-        // ƒm[ƒcƒIƒuƒWƒFƒNƒg‚ğ¶¬
+        // ãƒãƒ¼ãƒ„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
         GameObject noteObj = GenerateNoteObject(data.Range.Length);
 
-        // origin‚É‚­‚Á‚Â‚¯‚é
+        // originã«ãã£ã¤ã‘ã‚‹
         noteObj.transform.SetParent(origin.transform);
 
-        // Šp“x(ƒŒ[ƒ“)’²®
+        // è§’åº¦(ãƒ¬ãƒ¼ãƒ³)èª¿æ•´
         noteObj.transform.eulerAngles = new Vector3(0, 0, CalcNoteTransform.NoteAngle(data.Range));
 
-        // ƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾
+        // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—
         NoteObject<NoteData_HoldEnd> note = origin.GetComponent<NoteObject<NoteData_HoldEnd>>();
 
         return note;
     }
 
     /// <summary>
-    /// ƒm[ƒcƒ^ƒCƒ‹‚ğ‘g‚İ‡‚í‚¹‚Äƒm[ƒc‚ğ¶¬
+    /// ãƒãƒ¼ãƒ„ã‚¿ã‚¤ãƒ«ã‚’çµ„ã¿åˆã‚ã›ã¦ãƒãƒ¼ãƒ„ã‚’ç”Ÿæˆ
     /// </summary>
     /// <param name="size"></param>
     /// <returns></returns>
     private GameObject GenerateNoteObject(int size)
     {
         Vector3 pos, rot;
-        GameObject pre = new GameObject("NoteObjects");   //‚Ü‚Æ‚ß–ğ‚ÌƒIƒuƒWƒFƒNƒg¶¬
+        GameObject pre = new GameObject("NoteObjects");   //ã¾ã¨ã‚å½¹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 
-        // 1ƒ}ƒX‚¸‚Â¶¬
+        // 1ãƒã‚¹ãšã¤ç”Ÿæˆ
         for (int i = 0; i < size; i++)
         {
-            // ¦ƒ|ƒWƒVƒ‡ƒ“‚ÆŠp“x‚ÌŒvZ
+            // â€»ãƒã‚¸ã‚·ãƒ§ãƒ³ã¨è§’åº¦ã®è¨ˆç®—
 
             //pos = new Vector3(10 * Mathf.Cos((((size - 1) / 2f - i) * 11.25f - 90f) * Mathf.Deg2Rad), 10 * Mathf.Sin((((size - 1) / 2f - i) * 11.25f - 90f) * Mathf.Deg2Rad), 0);
             float radian = (5.625f * (2 * i - size + 1) - 90f) * Mathf.Deg2Rad;
             pos = new Vector3(10 * Mathf.Cos(radian), 10 * Mathf.Sin(radian), 0);
             rot = new Vector3(0, 0, ((size - 1) / 2f - (size - i - 1)) * 11.25f);
 
-            // 1ƒ}ƒXƒm[ƒg‚Ì
+            // 1ãƒã‚¹ãƒãƒ¼ãƒˆã®æ™‚
             if (size == 1) { Instantiate(singleTilePrefab, pos, Quaternion.Euler(rot), pre.transform); }
-            // ƒm[ƒg¶’[‚Ì
+            // ãƒãƒ¼ãƒˆå·¦ç«¯ã®æ™‚
             else if (i == 0) { Instantiate(leftEdgeTilePrefab, pos, Quaternion.Euler(rot), pre.transform); }
-            // ƒm[ƒg‰E’[‚Ì
+            // ãƒãƒ¼ãƒˆå³ç«¯ã®æ™‚
             else if (i == size - 1) { Instantiate(rightEdgeTilePrefab, pos, Quaternion.Euler(rot), pre.transform); }
-            // ƒm[ƒg’†‚Ì
+            // ãƒãƒ¼ãƒˆä¸­ã®æ™‚
             else { Instantiate(centerTilePrefab, pos, Quaternion.Euler(rot), pre.transform); }
-        }
-
-        // Deform‚Ìİ’è
-        foreach (Transform t in pre.transform)
-        {
-            Deformable d = t.GetComponentInChildren<Deformable>();
-            d.AddDeformer(groundDeformer);
         }
 
         return pre;
     }
 
     /// <summary>
-    /// ˆÊ’u’²®‚È‚Ç
+    /// ä½ç½®èª¿æ•´ãªã©
     /// </summary>
     private void SetTransform(NoteObject<NoteData_HoldEnd> note, float spawnZ)
     {
-        // “®‚­’n–Ê‚ğe“o˜^
+        // å‹•ãåœ°é¢ã‚’è¦ªç™»éŒ²
         note.transform.SetParent(noteParent);
 
-        // ˆÊ’u‚Ì’²®
-        note.SetPosition(spawnZ);
+        // ä½ç½®ã®èª¿æ•´
+        note.SetPosition(spawnZ, optionHolder.NoteCurveRadius.Value);
     }
 }
 

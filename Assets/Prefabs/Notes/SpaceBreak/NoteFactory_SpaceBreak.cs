@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using MeshGenerate;
-using Deform;
 using RayFire;
 
 public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
@@ -14,15 +13,15 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     [SerializeField] GameObject noteObjectOriginPrefab;
     [SerializeField] GameObject noteMeshPrefab;
     [SerializeField] GameObject frangmentParentPrefab;
-    [Header("Œú‚³")]
+    [Header("åšã•")]
     [SerializeField] float noteDepth = 0.1f;
-    [Header("Œ‡•Ğ•ªŠ„”")]
+    [Header("æ¬ ç‰‡åˆ†å‰²æ•°")]
     [SerializeField] int fragmentAmount = 20;
-    [Header("ƒƒCƒ“ƒƒbƒVƒ…‚Ìƒ}ƒeƒŠƒAƒ‹")]
+    [Header("ãƒ¡ã‚¤ãƒ³ãƒ¡ãƒƒã‚·ãƒ¥ã®ãƒãƒ†ãƒªã‚¢ãƒ«")]
     [SerializeField] Material mainMaterial;
-    [Header("—ÖŠsü‚Ìƒ}ƒeƒŠƒAƒ‹")]
+    [Header("è¼ªéƒ­ç·šã®ãƒãƒ†ãƒªã‚¢ãƒ«")]
     [SerializeField] Material edgeMaterial;
-    [Header("—ÖŠsü‚Ì‘¾‚³")]
+    [Header("è¼ªéƒ­ç·šã®å¤ªã•")]
     [SerializeField] float edgeWidth = 0.05f;
 
     INoteSpawnDataOptionGetter optionHolder;
@@ -30,13 +29,11 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
     Transform noteParent;
-    Deformer groundDeformer;
 
     public override void Initialize(NoteFactoryInitializingData initializingData)
     {
         this.optionHolder = initializingData.OptionHolder;
         this.noteParent = initializingData.NoteParent;
-        this.groundDeformer = initializingData.GroundDeformer;
         this.spaceInputGetter = initializingData.SpaceInputGetter;
         this.judgementRecorder = initializingData.JudgementRecorder;
         this.timer = initializingData.Timer;
@@ -44,25 +41,25 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
 
     public override NoteObject<NoteData_SpaceBreak> Spawn(NoteData_SpaceBreak data, INotePositionCalculator positionCalculator)
     {
-        // ¶¬
+        // ç”Ÿæˆ
         NoteObject<NoteData_SpaceBreak> note = GenerateNoteInstance(ConvertNoteData(data));
 
-        // ˆÊ’u’²®
+        // ä½ç½®èª¿æ•´
         SetTransform(note, positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value);
 
-        // ‰Šú‰»
+        // åˆæœŸåŒ–
         note.Initialize(data);
 
         return note;
     }
 
     /// <summary>
-    /// ƒm[ƒgƒf[ƒ^‚É‚³‚ç‚È‚éî•ñ‚ğ’Ç‰Á
+    /// ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã«ã•ã‚‰ãªã‚‹æƒ…å ±ã‚’è¿½åŠ 
     /// </summary>
     /// <param name="data"></param>
     private NoteData_SpaceBreak ConvertNoteData(NoteData_SpaceBreak data)
     {
-        // ƒm[ƒcƒf[ƒ^‚É‚¢‚ë‚¢‚ë’Ç‰Á
+        // ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿ã«ã„ã‚ã„ã‚è¿½åŠ 
         data.SpaceInput = this.spaceInputGetter;
         data.Timer = this.timer;
         data.JudgementRecorder = this.judgementRecorder;
@@ -72,7 +69,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     }
 
     /// <summary>
-    /// ƒm[ƒc‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»‚µ‚Ä•Ô‚·
+    /// ãƒãƒ¼ãƒ„ã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã—ã¦è¿”ã™
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
@@ -80,18 +77,18 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     {
         GameObject origin = Instantiate(noteObjectOriginPrefab);
 
-        // ƒm[ƒcƒIƒuƒWƒFƒNƒg(•\)‚ğ¶¬
+        // ãƒãƒ¼ãƒ„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(è¡¨)ã‚’ç”Ÿæˆ
         GameObject noteObj = GenerateMeshObject(data);
         noteObj.transform.SetParent(origin.transform);
 
-        // ƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾
+        // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—
         NoteObject<NoteData_SpaceBreak> note = origin.GetComponent<NoteObject<NoteData_SpaceBreak>>();
 
         return note;
     }
 
     /// <summary>
-    /// ƒz[ƒ‹ƒh‚ÌƒƒbƒVƒ…•”•ª‚Ì¶¬
+    /// ãƒ›ãƒ¼ãƒ«ãƒ‰ã®ãƒ¡ãƒƒã‚·ãƒ¥éƒ¨åˆ†ã®ç”Ÿæˆ
     /// </summary>
     private GameObject GenerateMeshObject(NoteData_SpaceBreak noteData)
     {
@@ -107,12 +104,9 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
         if (mesh != null)
         {
             meshRenderer.material = mainMaterial;
-
-            if (!obj.TryGetComponent(out Deformable d)) { obj.AddComponent<Deformable>().AddDeformer(groundDeformer); }
-            else { d.AddDeformer(groundDeformer); }
         }
 
-        // ¬Œ÷‰‰o‚Ì‚½‚ß‚ÉMesh‚ğ•Û‘¶
+        // æˆåŠŸæ¼”å‡ºã®ãŸã‚ã«Meshã‚’ä¿å­˜
         noteData.Mesh = mesh;
 
         GenerateFlagments(obj, noteData);
@@ -127,7 +121,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     }
 
     /// <summary>
-    /// ‘O–ÊE”w–Ê‚Ì—ÖŠsü‚ğ¶¬
+    /// å‰é¢ãƒ»èƒŒé¢ã®è¼ªéƒ­ç·šã‚’ç”Ÿæˆ
     /// </summary>
     private GameObject GenerateEdgeObject(List<Vector2> points)
     {
@@ -155,21 +149,18 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
 
         meshFilter.mesh = MeshGenerator.GenerateLineMesh(points, edgeWidth, true);
         meshRenderer.material = edgeMaterial;
-
-        if (!obj.TryGetComponent(out Deformable d)) { obj.AddComponent<Deformable>().AddDeformer(groundDeformer); }
-        else { d.AddDeformer(groundDeformer); }
     }
 
     private void GenerateFlagments(GameObject meshObj, NoteData_SpaceBreak noteData)
     {
         if (!meshObj.TryGetComponent(out RayfireRigid rf)) { rf = meshObj.AddComponent<RayfireRigid>(); }
 
-        // FXİ’è
-        rf.meshDemolition.am = fragmentAmount;  // ƒtƒ‰ƒOƒƒ“ƒg”
-        rf.physics.ct = RFColliderType.None;    // Œ³ƒƒbƒVƒ…‚ÌƒRƒ‰ƒCƒ_[‚ğÁ‚·
-        rf.meshDemolition.cld = false;          // q‚Ì—ÖŠsüƒƒbƒVƒ…‚ğ”j•Ğ‰»‘ÎÛ‚©‚çŠO‚·
-        rf.meshDemolition.prp.col = RFColliderType.None;    // ”j•Ğ‚ÌƒRƒ‰ƒCƒ_[‚ğÁ‚·
-        rf.reset.destroyDelay = float.MaxValue;    // ©“®‚Åƒv[ƒ‹‚³‚ê‚é‚Ì‚ğ–h‚® 
+        // è‰²ã€…è¨­å®š
+        rf.meshDemolition.am = fragmentAmount;  // ãƒ•ãƒ©ã‚°ãƒ¡ãƒ³ãƒˆæ•°
+        rf.physics.ct = RFColliderType.None;    // å…ƒãƒ¡ãƒƒã‚·ãƒ¥ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’æ¶ˆã™
+        rf.meshDemolition.cld = false;          // å­ã®è¼ªéƒ­ç·šãƒ¡ãƒƒã‚·ãƒ¥ã‚’ç ´ç‰‡åŒ–å¯¾è±¡ã‹ã‚‰å¤–ã™
+        rf.meshDemolition.prp.col = RFColliderType.None;    // ç ´ç‰‡ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’æ¶ˆã™
+        rf.reset.destroyDelay = float.MaxValue;    // è‡ªå‹•ã§ãƒ—ãƒ¼ãƒ«ã•ã‚Œã‚‹ã®ã‚’é˜²ã 
         //rf.simulationType = SimType.Inactive;
         //rf.demolitionType = DemolitionType.AwakePrefragment;    
 
@@ -182,7 +173,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
 
     private void OnDemolished(RayfireRigid rigid, NoteData_SpaceBreak noteData, GameObject origin)
     {
-        // Œ‡•Ğ‚½‚¿‚ğˆê‚Â‚ÌeƒIƒuƒWƒFƒNƒg‚É‚Ü‚Æ‚ß‚é
+        // æ¬ ç‰‡ãŸã¡ã‚’ä¸€ã¤ã®è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã¾ã¨ã‚ã‚‹
         var parent = Instantiate(frangmentParentPrefab).transform;
         parent.SetParent(origin.transform);
         parent.localPosition = Vector3.zero;
@@ -193,7 +184,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
             frag.gameObject.transform.SetParent(parent);
         }
 
-        // ”š”­‚Ì€”õ
+        // çˆ†ç™ºã®æº–å‚™
         if (!parent.TryGetComponent(out FragmentsBomb bomb)) { bomb = parent.gameObject.AddComponent<FragmentsBomb>(); }
 
         bomb.Initialize();
@@ -201,14 +192,14 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     }
 
     /// <summary>
-    /// ˆÊ’u’²®‚È‚Ç
+    /// ä½ç½®èª¿æ•´ãªã©
     /// </summary>
     private void SetTransform(NoteObject<NoteData_SpaceBreak> note, float spawnZ)
     {
-        // “®‚­’n–Ê‚ğe“o˜^
+        // å‹•ãåœ°é¢ã‚’è¦ªç™»éŒ²
         note.transform.SetParent(noteParent);
 
-        // ˆÊ’u‚Ì’²®
-        note.SetPosition(spawnZ);
+        // ä½ç½®ã®èª¿æ•´
+        note.SetPosition(spawnZ, optionHolder.NoteCurveRadius.Value);
     }
 }

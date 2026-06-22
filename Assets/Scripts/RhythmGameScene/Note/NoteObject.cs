@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class NoteObject<T> : MonoBehaviour, INoteActivable where T : INoteData
+public abstract class NoteObject<T> : MonoBehaviour, INoteVisibilityTarget where T : INoteData
 {
-    public void Start()
-    {
-        SetActive(false);
-    }
+    public float StartChartDistance { get; private set; }
+
+    public float EndChartDistance { get; private set; }
 
     virtual public void SetActive(bool isVisible)
     {
@@ -20,16 +19,25 @@ public abstract class NoteObject<T> : MonoBehaviour, INoteActivable where T : IN
     abstract public void Initialize(T data);
 
     /// <summary>
-    /// �G�f�B�^���Ƀm�[�g�X�s�[�h���ύX���ꂽ�ۂȂ�
+    /// エディタ中にノートスピードが変更された際など
     /// </summary>
     /// <param name="z"></param>
-    public void SetPosition(float z)
+    public void SetPosition(float distance, float radius)
     {
-        this.transform.localPosition = new Vector3(
-            this.transform.position.x,
-            this.transform.position.y,
-            z
-            );
+        SetPosition(distance, distance, radius);
+    }
+
+    /// <summary>
+    /// ホールド系ノーツの開始・終了距離を保持し、開始位置へ配置する
+    /// </summary>
+    public void SetPosition(float startDistance, float endDistance, float radius)
+    {
+        // 逆方向のソフランでも表示区間として扱えるよう、小さい方を開始距離とする
+        StartChartDistance = Mathf.Min(startDistance, endDistance);
+        EndChartDistance = Mathf.Max(startDistance, endDistance);
+
+        // 生成時に円弧上の位置と接線方向へ合わせる
+        NoteTrackCurve.SetPose(this.transform, startDistance, radius);
     }
 }
 

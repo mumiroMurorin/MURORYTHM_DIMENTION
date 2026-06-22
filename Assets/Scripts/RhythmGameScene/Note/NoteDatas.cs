@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using JudgementUtil.Dynamic;
 using System.Linq;
-using Deform;
 
 /// <summary>
 /// Factoryの初期化に必要なデータ
@@ -22,8 +21,6 @@ public class NoteFactoryInitializingData
     public IJudgementRecorder JudgementRecorder { get; set; }
 
     public Transform NoteParent { get; set; }
-
-    public Deformer GroundDeformer { get; set; }
 }
 
 /// <summary>

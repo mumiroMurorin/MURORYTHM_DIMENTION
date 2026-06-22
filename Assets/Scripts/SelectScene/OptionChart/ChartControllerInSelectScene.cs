@@ -6,7 +6,7 @@ using UniRx;
 
 public class ChartControllerInSelectScene : MonoBehaviour
 {
-    [Header("ƒIƒvƒVƒ‡ƒ“—p•ˆ–Ê")]
+    [Header("ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç”¨è­œé¢")]
     [SerializeField] TextAsset chartJson;
     [SerializeField] SerializeInterface<IChartLoader> chartLoader;
 
@@ -39,7 +39,7 @@ public class ChartControllerInSelectScene : MonoBehaviour
 
     private void Bind()
     {
-        // ƒXƒe[ƒ^ƒX‚ªƒIƒvƒVƒ‡ƒ“‚Ì‚Æ‚«‚Ì‚İ•ˆ–Ê‚ğ“®‚©‚·
+        // ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãŒã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®ã¨ãã®ã¿è­œé¢ã‚’å‹•ã‹ã™
         statusGetter?.Value?.PhaseStatus
             .Where(status => status == PhaseStatusInSelectScene.MusicOption)
             .Subscribe(_ => { timeController?.Value?.StartTimer(); })
@@ -50,17 +50,23 @@ public class ChartControllerInSelectScene : MonoBehaviour
             .Subscribe(_ => { timeController?.Value?.StopTimer(); })
             .AddTo(this.gameObject);
 
-        // ƒIƒtƒZƒbƒg‚ª•Ï‚í‚Á‚½Û‚ÍƒŠƒZƒbƒg
+        // ã‚ªãƒ•ã‚»ãƒƒãƒˆãŒå¤‰ã‚ã£ãŸéš›ã¯ãƒªã‚»ãƒƒãƒˆ
         optionGetter?.OffsetMs
             .Subscribe(_ => ReloadChart())
             .AddTo(this.gameObject);
 
-        // ƒm[ƒgƒXƒs[ƒh‚ª•Ï‚í‚Á‚½Û‚ÍƒŠƒZƒbƒg
+        // ãƒãƒ¼ãƒˆã‚¹ãƒ”ãƒ¼ãƒ‰ãŒå¤‰ã‚ã£ãŸéš›ã¯ãƒªã‚»ãƒƒãƒˆ
         optionGetter?.NoteSpeed
             .Subscribe(_ => RestartChart())
             .AddTo(this.gameObject);
 
-        // •ˆ–ÊI—¹ƒŠƒZƒbƒg
+        // ã€ãƒãƒ¼ãƒ„è»Œé“ã€‘åŠå¾„ã‚’å¤‰æ›´ã—ãŸå ´åˆã¯å††å¼§ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ä½œã‚Šç›´ã™
+        optionGetter?.NoteCurveRadius
+            .Skip(1)
+            .Subscribe(_ => RestartChart())
+            .AddTo(this.gameObject);
+
+        // è­œé¢çµ‚äº†æ™‚ãƒªã‚»ãƒƒãƒˆ
         chartEnder?.Value?.BindOnEndChart(() => RestartChart());
     }
 

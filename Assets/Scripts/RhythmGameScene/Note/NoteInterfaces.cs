@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Deform;
 
 /// <summary>
-/// Šeíƒm[ƒcƒf[ƒ^‚ÌŠî‚Æ‚È‚éƒCƒ“ƒ^[ƒtƒF[ƒX
+/// å„ç¨®ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿ã®åŸºã¨ãªã‚‹ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
 /// </summary>
 public interface INoteData
 {
     public NoteType NoteType { get; }
 
     /// <summary>
-    /// Šy‹ÈŠJn‚©‚çn•bŒã‚Éƒm[ƒc‚Ì”»’è
+    /// æ¥½æ›²é–‹å§‹ã‹ã‚‰nç§’å¾Œã«ãƒãƒ¼ãƒ„ã®åˆ¤å®š
     /// </summary>
     public float Timing { get; set; }
 
@@ -21,7 +20,7 @@ public interface INoteData
 }
 
 /// <summary>
-/// ”»’è‚ª‘¶İ‚·‚éƒm[ƒc
+/// åˆ¤å®šãŒå­˜åœ¨ã™ã‚‹ãƒãƒ¼ãƒ„
 /// </summary>
 public interface IJudgableNoteData
 {
@@ -31,7 +30,7 @@ public interface IJudgableNoteData
 }
 
 /// <summary>
-/// í‚è”»’è‚ª‘¶İ‚·‚éƒm[ƒc
+/// å‰Šã‚Šåˆ¤å®šãŒå­˜åœ¨ã™ã‚‹ãƒãƒ¼ãƒ„
 /// </summary>
 public interface IClippedJudgableNote
 {
@@ -45,7 +44,7 @@ public interface IClippedJudgableNote
 }
 
 /// <summary>
-/// Šeíƒm[ƒc‚Ì¶¬‚ğs‚¤
+/// å„ç¨®ãƒãƒ¼ãƒ„ã®ç”Ÿæˆã‚’è¡Œã†
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public interface INoteFactory<T> where T : INoteData
@@ -56,7 +55,7 @@ public interface INoteFactory<T> where T : INoteData
 }
 
 /// <summary>
-/// ƒCƒ“ƒXƒyƒNƒ^[‚Åİ’è‚Å‚«‚é‚æ‚¤‚ÉŠî’êƒNƒ‰ƒX‚Åƒ‰ƒbƒv
+/// ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã§è¨­å®šã§ãã‚‹ã‚ˆã†ã«åŸºåº•ã‚¯ãƒ©ã‚¹ã§ãƒ©ãƒƒãƒ—
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public abstract class NoteFactory<T> : MonoBehaviour, INoteFactory<T> where T : INoteData
@@ -67,7 +66,7 @@ public abstract class NoteFactory<T> : MonoBehaviour, INoteFactory<T> where T : 
 }
 
 /// <summary>
-/// ƒm[ƒcƒCƒ“ƒ^ƒ‰ƒNƒgƒGƒtƒFƒNƒg‚Ì‰Šú‰»‚È‚Ç
+/// ãƒãƒ¼ãƒ„ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ–ãªã©
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public interface IInteractNoteEffectController
@@ -80,7 +79,7 @@ public interface IInteractNoteEffectController
 }
 
 /// <summary>
-/// ƒm[ƒc”»’èƒGƒtƒFƒNƒg‚Ì‰Šú‰»‚È‚Ç
+/// ãƒãƒ¼ãƒ„åˆ¤å®šã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ–ãªã©
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public interface IJudgementEffectController
@@ -93,9 +92,19 @@ public interface IJudgementEffectController
 }
 
 /// <summary>
-/// ƒm[ƒc‚ÌƒAƒNƒeƒBƒu‰»‚ª‚Å‚«‚é
+/// ãƒãƒ¼ãƒ„ã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ãŒã§ãã‚‹
 /// </summary>
 public interface INoteActivable
 {
     void SetActive(bool isVisible);
+}
+
+/// <summary>
+/// è­œé¢ä¸Šã®ç´¯ç©è·é›¢ã‚’ä½¿ã£ã¦è¡¨ç¤ºã‚’åˆ‡ã‚Šæ›¿ãˆã‚‰ã‚Œã‚‹ãƒãƒ¼ãƒ„
+/// </summary>
+public interface INoteVisibilityTarget : INoteActivable
+{
+    float StartChartDistance { get; }
+
+    float EndChartDistance { get; }
 }

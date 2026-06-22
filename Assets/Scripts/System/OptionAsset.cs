@@ -6,6 +6,7 @@ using UnityEngine;
 public class OptionAsset : ScriptableObject
 {
     [SerializeField] float noteSpeed = 100f;
+    [SerializeField] float noteCurveRadius = 2000f;
     [SerializeField] float seVolume = 0.8f;
     [SerializeField] float bgmVolume = 0.8f;
     [SerializeField] float offset = 0;
@@ -15,6 +16,7 @@ public class OptionAsset : ScriptableObject
     [SerializeField] InfoTypeSub subInfo = InfoTypeSub.None;
 
     public float NoteSpeed { get { return noteSpeed; } }
+    public float NoteCurveRadius { get { return noteCurveRadius > 0f ? noteCurveRadius : 2000f; } }
     public float SeVolume { get { return seVolume; } }
     public float BgmVolume { get { return bgmVolume; } }
     public float Offset { get { return offset; } }

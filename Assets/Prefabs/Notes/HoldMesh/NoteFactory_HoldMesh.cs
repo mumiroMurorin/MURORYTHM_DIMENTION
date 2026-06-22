@@ -10,10 +10,10 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
     [SerializeField] GameObject noteObjectOriginPrefab;
     [SerializeField] GameObject noteMeshPrefab;
 
-    [Header("mesh‚Ì1ƒŒ[ƒ““à‚Ì•ªŠ„”")]
+    [Header("meshã®1ãƒ¬ãƒ¼ãƒ³å†…ã®åˆ†å‰²æ•°")]
     [SerializeField] int meshHorizontalDivisionNum = 10;
 
-    [Header("mesh1’PˆÊ‚ÌÅ‘å’·‚³")]
+    [Header("mesh1å˜ä½ã®æœ€å¤§é•·ã•")]
     [SerializeField] float maxTriangleLength = 0.5f;
 
     INoteSpawnDataOptionGetter optionHolder;
@@ -21,13 +21,11 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
     Transform noteParent;
-    Deformer groundDeformer;
 
     public override void Initialize(NoteFactoryInitializingData initializingData)
     {
         this.optionHolder = initializingData.OptionHolder;
         this.noteParent = initializingData.NoteParent;
-        this.groundDeformer = initializingData.GroundDeformer;
         this.sliderInputGetter = initializingData.SliderInputGetter;
         this.judgementRecorder = initializingData.JudgementRecorder;
         this.timer = initializingData.Timer;
@@ -35,25 +33,30 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
 
     public override NoteObject<NoteData_HoldMesh> Spawn(NoteData_HoldMesh data, INotePositionCalculator positionCalculator)
     {
-        // ¶¬
+        // ç”Ÿæˆ
         NoteObject<NoteData_HoldMesh> note = GenerateNoteInstance(ConvertNoteData(data), positionCalculator);
 
-        // ˆÊ’u’²®
-        SetTransform(note, positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value);
+        // ä½ç½®èª¿æ•´
+        float startDistance = positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value;
+        float endTiming = data.TimeToRanges != null && data.TimeToRanges.Count > 0
+            ? data.TimeToRanges.Max(x => x.Timing)
+            : data.Timing;
+        float endDistance = positionCalculator.GetPosition(endTiming) * optionHolder.NoteSpeed.Value;
+        SetTransform(note, startDistance, endDistance);
 
-        // ‰Šú‰»
+        // åˆæœŸåŒ–
         note.Initialize(data);
 
         return note;
     }
 
     /// <summary>
-    /// ƒm[ƒgƒf[ƒ^‚É‚³‚ç‚È‚éî•ñ‚ğ’Ç‰Á
+    /// ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã«ã•ã‚‰ãªã‚‹æƒ…å ±ã‚’è¿½åŠ 
     /// </summary>
     /// <param name="data"></param>
     private NoteData_HoldMesh ConvertNoteData(NoteData_HoldMesh data)
     {
-        // ƒm[ƒcƒf[ƒ^‚É‚¢‚ë‚¢‚ë’Ç‰Á
+        // ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿ã«ã„ã‚ã„ã‚è¿½åŠ 
         data.SliderInput = this.sliderInputGetter;
         data.Timer = this.timer;
         data.OptionGetter = optionHolder;
@@ -62,7 +65,7 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
     }
 
     /// <summary>
-    /// ƒm[ƒc‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»‚µ‚Ä•Ô‚·
+    /// ãƒãƒ¼ãƒ„ã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã—ã¦è¿”ã™
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
@@ -70,20 +73,20 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
     {
         GameObject origin = Instantiate(noteObjectOriginPrefab);
 
-        // ƒm[ƒcƒIƒuƒWƒFƒNƒg‚ğ¶¬
+        // ãƒãƒ¼ãƒ„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
         GameObject noteObj = GenerateMeshObject(data, positionCalculator);
 
-        // origin‚É‚­‚Á‚Â‚¯‚é
+        // originã«ãã£ã¤ã‘ã‚‹
         noteObj.transform.SetParent(origin.transform);
 
-        // ƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾
+        // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—
         NoteObject<NoteData_HoldMesh> note = origin.GetComponent<NoteObject<NoteData_HoldMesh>>();
 
         return note;
     }
 
     /// <summary>
-    /// ƒz[ƒ‹ƒh‚ÌƒƒbƒVƒ…•”•ª‚Ì¶¬
+    /// ãƒ›ãƒ¼ãƒ«ãƒ‰ã®ãƒ¡ãƒƒã‚·ãƒ¥éƒ¨åˆ†ã®ç”Ÿæˆ
     /// </summary>
     private GameObject GenerateMeshObject(NoteData_HoldMesh noteData, INotePositionCalculator positionCalculator)
     {
@@ -91,26 +94,29 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
         if (!obj.TryGetComponent(out MeshFilter meshFilter)) { meshFilter = obj.AddComponent<MeshFilter>(); }
         if (!obj.TryGetComponent(out MeshRenderer meshRenderer)) { meshRenderer = obj.AddComponent<MeshRenderer>(); }
 
-        Mesh mesh = GroundHoldMeshGenerator.GenerateGroundHoldMesh(noteData.TimeToRanges, positionCalculator, optionHolder.NoteSpeed.Value, meshHorizontalDivisionNum, maxTriangleLength);
+        Mesh mesh = GroundHoldMeshGenerator.GenerateGroundHoldMesh(
+            noteData.TimeToRanges,
+            positionCalculator,
+            optionHolder.NoteSpeed.Value,
+            meshHorizontalDivisionNum,
+            maxTriangleLength,
+            optionHolder.NoteCurveRadius.Value);
 
         meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         meshFilter.mesh = mesh;
-
-        if (!obj.TryGetComponent(out Deformable d)) { obj.AddComponent<Deformable>().AddDeformer(groundDeformer); }
-        else { d.AddDeformer(groundDeformer); }
 
         return obj;
     }
 
     /// <summary>
-    /// ˆÊ’u’²®‚È‚Ç
+    /// ä½ç½®èª¿æ•´ãªã©
     /// </summary>
-    private void SetTransform(NoteObject<NoteData_HoldMesh> note, float spawnZ)
+    private void SetTransform(NoteObject<NoteData_HoldMesh> note, float startDistance, float endDistance)
     {
-        // “®‚­’n–Ê‚ğe“o˜^
+        // å‹•ãåœ°é¢ã‚’è¦ªç™»éŒ²
         note.transform.SetParent(noteParent);
 
-        // ˆÊ’u‚Ì’²®
-        note.SetPosition(spawnZ);
+        // ä½ç½®ã®èª¿æ•´
+        note.SetPosition(startDistance, endDistance, optionHolder.NoteCurveRadius.Value);
     }
 }

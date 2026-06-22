@@ -1,7 +1,6 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Deform;
 
 public class NoteFactory_DivineHoldStart : NoteFactory<NoteData_DivineHoldStart>
 {
@@ -18,13 +17,11 @@ public class NoteFactory_DivineHoldStart : NoteFactory<NoteData_DivineHoldStart>
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
     Transform noteParent;
-    Deformer groundDeformer;
 
     public override void Initialize(NoteFactoryInitializingData initializingData)
     {
         optionHolder = initializingData.OptionHolder;
         noteParent = initializingData.NoteParent;
-        groundDeformer = initializingData.GroundDeformer;
         sliderInputGetter = initializingData.SliderInputGetter;
         judgementRecorder = initializingData.JudgementRecorder;
         timer = initializingData.Timer;
@@ -73,18 +70,12 @@ public class NoteFactory_DivineHoldStart : NoteFactory<NoteData_DivineHoldStart>
             else { Instantiate(centerTilePrefab, pos, Quaternion.Euler(rot), pre.transform); }
         }
 
-        foreach (Transform t in pre.transform)
-        {
-            Deformable d = t.GetComponentInChildren<Deformable>();
-            d.AddDeformer(groundDeformer);
-        }
-
         return pre;
     }
 
     private void SetTransform(NoteObject<NoteData_DivineHoldStart> note, float spawnZ)
     {
         note.transform.SetParent(noteParent);
-        note.SetPosition(spawnZ);
+        note.SetPosition(spawnZ, optionHolder.NoteCurveRadius.Value);
     }
 }

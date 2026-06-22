@@ -24,7 +24,6 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
 
     [Header("Factory Initialization")]
     [SerializeField] private Transform noteParent;
-    [SerializeField] private Deformer groundDeformer;
     [SerializeField] private SerializeInterface<ITimeGetter> timer;
 
     private INoteSpawnDataOptionGetter spawnDataOptionHolder;
@@ -64,7 +63,6 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
         NoteFactoryInitializingData data = new NoteFactoryInitializingData
         {
             NoteParent = noteParent,
-            GroundDeformer = groundDeformer,
             OptionHolder = spawnDataOptionHolder,
             SliderInputGetter = sliderInputGetter,
             SpaceInputGetter = spaceInputGetter,

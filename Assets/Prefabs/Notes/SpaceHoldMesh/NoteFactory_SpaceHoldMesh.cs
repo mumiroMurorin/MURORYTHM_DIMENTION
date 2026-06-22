@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using MeshGenerate;
-using Deform;
 
 public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
 {
@@ -13,48 +12,51 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     [SerializeField] GameObject noteObjectOriginPrefab;
     [SerializeField] GameObject noteMeshPrefab;
 
-    [Header("mesh‚Ì•ªŠ„”")]
+    [Header("meshã®åˆ†å‰²æ•°")]
     [SerializeField] int meshDivisionNum = 10;
 
-    [Header("mesh1’PˆÊ‚ÌÅ‘å’·‚³")]
+    [Header("mesh1å˜ä½ã®æœ€å¤§é•·ã•")]
     [SerializeField] float maxTriangleLength = 0.5f;
 
     INoteSpawnDataOptionGetter optionHolder;
     ISpaceInputGetter spaceInputGetter;
     ITimeGetter timer;
     Transform noteParent;
-    Deformer groundDeformer;
 
     public override void Initialize(NoteFactoryInitializingData initializingData)
     {
         this.optionHolder = initializingData.OptionHolder;
         this.noteParent = initializingData.NoteParent;
-        this.groundDeformer = initializingData.GroundDeformer;
         this.spaceInputGetter = initializingData.SpaceInputGetter;
         this.timer = initializingData.Timer;
     }
 
     public override NoteObject<NoteData_SpaceHoldMesh> Spawn(NoteData_SpaceHoldMesh data, INotePositionCalculator positionCalculator)
     {
-        // ¶¬
+        // ç”Ÿæˆ
         NoteObject<NoteData_SpaceHoldMesh> note = GenerateNoteInstance(ConvertNoteData(data), positionCalculator);
 
-        // ˆÊ’u’²®
-        SetTransform(note, positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value);
+        // ä½ç½®èª¿æ•´
+        float startDistance = positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value;
+        float endTiming = data.TimeToVertices != null && data.TimeToVertices.Count > 0
+            ? data.TimeToVertices.Max(x => x.Timing)
+            : data.Timing;
+        float endDistance = positionCalculator.GetPosition(endTiming) * optionHolder.NoteSpeed.Value;
+        SetTransform(note, startDistance, endDistance);
 
-        // ‰Šú‰»
+        // åˆæœŸåŒ–
         note.Initialize(data);
 
         return note;
     }
 
     /// <summary>
-    /// ƒm[ƒgƒf[ƒ^‚É‚³‚ç‚È‚éî•ñ‚ğ’Ç‰Á
+    /// ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã«ã•ã‚‰ãªã‚‹æƒ…å ±ã‚’è¿½åŠ 
     /// </summary>
     /// <param name="data"></param>
     private NoteData_SpaceHoldMesh ConvertNoteData(NoteData_SpaceHoldMesh data)
     {
-        // ƒm[ƒcƒf[ƒ^‚É‚¢‚ë‚¢‚ë’Ç‰Á
+        // ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿ã«ã„ã‚ã„ã‚è¿½åŠ 
         data.SpaceInput = this.spaceInputGetter;
         data.Timer = this.timer;
         data.OptionGetter = this.optionHolder;
@@ -63,7 +65,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     }
 
     /// <summary>
-    /// ƒm[ƒc‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»‚µ‚Ä•Ô‚·
+    /// ãƒãƒ¼ãƒ„ã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã—ã¦è¿”ã™
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
@@ -71,25 +73,25 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     {
         GameObject origin = Instantiate(noteObjectOriginPrefab);
 
-        // ƒm[ƒcƒIƒuƒWƒFƒNƒg(•\)‚ğ¶¬
+        // ãƒãƒ¼ãƒ„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(è¡¨)ã‚’ç”Ÿæˆ
         var outsideMesh = GenerateMeshObject(data, false, positionCalculator);
         outsideMesh.transform.SetParent(origin.transform);
 
-        // ƒm[ƒcƒIƒuƒWƒFƒNƒg(— )‚ğ¶¬
+        // ãƒãƒ¼ãƒ„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(è£)ã‚’ç”Ÿæˆ
         var insideMesh = GenerateMeshObject(data, true, positionCalculator);
         insideMesh.transform.SetParent(origin.transform);
 
-        // ƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾
+        // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—
         NoteObject<NoteData_SpaceHoldMesh> note = origin.GetComponent<NoteObject<NoteData_SpaceHoldMesh>>();
 
-        // ƒŒƒ“ƒ_ƒ‰[‚Ì“o˜^
+        // ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã®ç™»éŒ²
         data.MeshRendererAsset = new HoldMeshRendererAsset(insideMesh, outsideMesh);
 
         return note;
     }
 
     /// <summary>
-    /// ƒz[ƒ‹ƒh‚ÌƒƒbƒVƒ…•”•ª‚Ì¶¬
+    /// ãƒ›ãƒ¼ãƒ«ãƒ‰ã®ãƒ¡ãƒƒã‚·ãƒ¥éƒ¨åˆ†ã®ç”Ÿæˆ
     /// </summary>
     private MeshRenderer GenerateMeshObject(NoteData_SpaceHoldMesh noteData, bool isMeshReverse, INotePositionCalculator positionCalculator)
     {
@@ -97,31 +99,35 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         if (!obj.TryGetComponent(out MeshFilter meshFilter)) { meshFilter = obj.AddComponent<MeshFilter>(); }
         if (!obj.TryGetComponent(out MeshRenderer meshRenderer)) { meshRenderer = obj.AddComponent<MeshRenderer>(); }
 
-        // •œŒ³
+        // å¾©å…ƒ
         List<TimeToVertices> timeToVertices = new List<TimeToVertices>();
         foreach (TimeToVertices t in noteData.TimeToVertices)
         {
             timeToVertices.Add(new TimeToVertices(t.Timing, t.Vertices.Select(v => (Vector2)MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToArray()));
         }
 
-        Mesh mesh = SpaceHoldMeshGenerator.GenerateSpaceHoldEdgeMesh(timeToVertices, positionCalculator, optionHolder.NoteSpeed.Value, meshDivisionNum, maxTriangleLength, isMeshReverse);
+        Mesh mesh = SpaceHoldMeshGenerator.GenerateSpaceHoldEdgeMesh(
+            timeToVertices,
+            positionCalculator,
+            optionHolder.NoteSpeed.Value,
+            meshDivisionNum,
+            maxTriangleLength,
+            isMeshReverse,
+            optionHolder.NoteCurveRadius.Value);
         meshFilter.mesh = mesh;
-
-        if (!obj.TryGetComponent(out Deformable d)) { obj.AddComponent<Deformable>().AddDeformer(groundDeformer); }
-        else { d.AddDeformer(groundDeformer); }
 
         return meshRenderer;
     }
 
     /// <summary>
-    /// ˆÊ’u’²®‚È‚Ç
+    /// ä½ç½®èª¿æ•´ãªã©
     /// </summary>
-    private void SetTransform(NoteObject<NoteData_SpaceHoldMesh> note, float spawnZ)
+    private void SetTransform(NoteObject<NoteData_SpaceHoldMesh> note, float startDistance, float endDistance)
     {
-        // “®‚­’n–Ê‚ğe“o˜^
+        // å‹•ãåœ°é¢ã‚’è¦ªç™»éŒ²
         note.transform.SetParent(noteParent);
 
-        // ˆÊ’u‚Ì’²®
-        note.SetPosition(spawnZ);
+        // ä½ç½®ã®èª¿æ•´
+        note.SetPosition(startDistance, endDistance, optionHolder.NoteCurveRadius.Value);
     }
 }

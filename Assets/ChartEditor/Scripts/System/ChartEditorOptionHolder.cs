@@ -8,7 +8,7 @@ namespace ChartEditor
     public class ChartEditorOptionHolder : IChartEditorOptionGetter, IChartEditorOptionSetter, INoteSpawnDataOptionGetter, INoteSpawnDataOptionSetter, IVolumeGetter
     {
 
-        #region DivNum ƒŒ[ƒ“•ªŠ„”
+        #region DivNum ãƒ¬ãƒ¼ãƒ³åˆ†å‰²æ•°
 
         ReactiveProperty<int> laneDivisionNum = new ReactiveProperty<int>(4);
         IReadOnlyReactiveProperty<int> IChartEditorOptionGetter.LaneDivisionNum => laneDivisionNum;
@@ -17,27 +17,27 @@ namespace ChartEditor
         {
             int num = laneDivisionNum.Value;
 
-            // Å‘å’l‚Ì1‚É–ß‚·
+            // æœ€å¤§å€¤ã®æ™‚1ã«æˆ»ã™
             if (num >= 16 && isNext) { laneDivisionNum.Value = 1; }
-            // Å¬’l‚Ì16‚É‚·‚é
+            // æœ€å°å€¤ã®æ™‚16ã«ã™ã‚‹
             else if (num <= 1 && !isNext) { laneDivisionNum.Value = 16; }
             // *2
             else if (isNext && num > 0 && (num & (num - 1)) == 0) { laneDivisionNum.Value = num * 2; }
-            // €2
+            // Ã·2
             else if (!isNext && num > 0 && (num & (num - 1)) == 0) { laneDivisionNum.Value = num / 2; }
-            // ‚»‚êˆÈŠO‚Ì1‚É–ß‚·
+            // ãã‚Œä»¥å¤–ã®æ™‚1ã«æˆ»ã™
             else { laneDivisionNum.Value = 1; }
         }
 
         #endregion
 
-        #region Scale Šg‘å—¦
+        #region Scale æ‹¡å¤§ç‡
 
         const float MAX_SCALE = 100f;
         const float MIN_SCALE = 1f;
 
         /// <summary>
-        /// 1•bŠÔ‚ÌƒOƒ‰ƒEƒ“ƒh’·‚³
+        /// 1ç§’é–“ã®ã‚°ãƒ©ã‚¦ãƒ³ãƒ‰é•·ã•
         /// </summary>
         ReactiveProperty<float> chartViewScale = new ReactiveProperty<float>(5f);
         IReadOnlyReactiveProperty<float> IChartEditorOptionGetter.ChartViewScale => chartViewScale;
@@ -49,7 +49,7 @@ namespace ChartEditor
 
         #endregion
 
-        #region Sensitivity ˆÚ“®Š´“x
+        #region Sensitivity ç§»å‹•æ„Ÿåº¦
 
         ReactiveProperty<float> scrollSensitivity = new ReactiveProperty<float>(0.5f);
         IReadOnlyReactiveProperty<float> IChartEditorOptionGetter.ScrollSensitivity => scrollSensitivity;
@@ -61,7 +61,7 @@ namespace ChartEditor
 
         #endregion
 
-        #region ƒXƒNƒŠ[ƒ“ƒTƒCƒY
+        #region ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚µã‚¤ã‚º
 
         ReactiveProperty<Resolution> resolution = new ReactiveProperty<Resolution>(ChartEditor.Resolution.w1920_1080);
         public IReadOnlyReactiveProperty<Resolution> Resolution => resolution;
@@ -72,7 +72,7 @@ namespace ChartEditor
 
         #endregion
 
-        #region NoteSpeed ƒm[ƒc‘¬“x
+        #region NoteSpeed ãƒãƒ¼ãƒ„é€Ÿåº¦
 
         const int MAX_NOTESPEED = 500;
         const int MIN_NOTESPEED = 20;
@@ -87,12 +87,28 @@ namespace ChartEditor
 
         #endregion
 
-        #region Offset ƒIƒtƒZƒbƒg
+        #region NoteCurveRadius ãƒãƒ¼ãƒ„è»Œé“åŠå¾„
+
+        const float MAX_NOTE_CURVE_RADIUS = 10000f;
+        const float MIN_NOTE_CURVE_RADIUS = 10f;
+
+        // ã€ãƒãƒ¼ãƒ„è»Œé“ã€‘ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã§ã‚‚ã‚²ãƒ¼ãƒ æœ¬ç·¨ã¨åŒã˜åŠå¾„ã‚’ä½¿ç”¨ã™ã‚‹
+        ReactiveProperty<float> noteCurveRadius = new ReactiveProperty<float>(2000f);
+        IReadOnlyReactiveProperty<float> INoteSpawnDataOptionGetter.NoteCurveRadius => noteCurveRadius;
+
+        void INoteSpawnDataOptionSetter.SetNoteCurveRadius(float radius)
+        {
+            noteCurveRadius.Value = Mathf.Clamp(radius, MIN_NOTE_CURVE_RADIUS, MAX_NOTE_CURVE_RADIUS);
+        }
+
+        #endregion
+
+        #region Offset ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 
         const float MAX_OFFSET = 1000f;
         const float MIN_OFFSET = -1000f;
 
-        // ƒIƒtƒZƒbƒgŠÖŒW
+        // ã‚ªãƒ•ã‚»ãƒƒãƒˆé–¢ä¿‚
         ReactiveProperty<float> offset = new ReactiveProperty<float>(0);
         public IReadOnlyReactiveProperty<float> OffsetMs => offset;
         public int OffsetDisplay => (int)offset.Value;
@@ -105,9 +121,9 @@ namespace ChartEditor
 
         #endregion
 
-        #region SEVolume SE‰¹—Ê
+        #region SEVolume SEéŸ³é‡
 
-        // SEŠÖŒW
+        // SEé–¢ä¿‚
         ReactiveProperty<float> seVolume = new ReactiveProperty<float>(0.8f);
         public IReadOnlyReactiveProperty<float> SEVolume => seVolume;
         public void SetSEVolume(float value)
@@ -115,7 +131,7 @@ namespace ChartEditor
             seVolume.Value = Mathf.Clamp01(value);
         }
 
-        // BGMŠÖŒW
+        // BGMé–¢ä¿‚
         ReactiveProperty<float> bgmVolume = new ReactiveProperty<float>(0.8f);
         public IReadOnlyReactiveProperty<float> BGMVolume => bgmVolume;
         public void SetBGMVolume(float value)
@@ -123,7 +139,7 @@ namespace ChartEditor
             bgmVolume.Value = Mathf.Clamp01(value);
         }
 
-        // JUDGEMENTSEŠÖŒW
+        // JUDGEMENTSEé–¢ä¿‚
         ReactiveProperty<float> judgementSeVolume = new ReactiveProperty<float>(0.8f);
         public IReadOnlyReactiveProperty<float> JudgementSEVolume => judgementSeVolume;
         public void SetJudgementSEVolume(float value)
@@ -133,7 +149,7 @@ namespace ChartEditor
 
         #endregion
 
-        #region AutoMode ƒI[ƒgƒ‚[ƒh
+        #region AutoMode ã‚ªãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰
 
         ReactiveProperty<bool> isAutoMode = new ReactiveProperty<bool>();
         public bool IsAutoMode { get { return isAutoMode.Value; } private set { isAutoMode.Value = value; } }
@@ -152,7 +168,7 @@ namespace ChartEditor
         IReadOnlyReactiveProperty<int> LaneDivisionNum { get; }
 
         /// <summary>
-        /// ƒGƒfƒBƒ^‚ÌŠg‘å”{—¦A1•bŠÔ‚ÌUnity’· [z/sec]
+        /// ã‚¨ãƒ‡ã‚£ã‚¿ã®æ‹¡å¤§å€ç‡ã€1ç§’é–“ã®Unityé•· [z/sec]
         /// </summary>
         IReadOnlyReactiveProperty<float> ChartViewScale { get; }
 

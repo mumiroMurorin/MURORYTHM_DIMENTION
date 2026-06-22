@@ -30,6 +30,4 @@ public class NoteObjectPreview_HoldMesh : NoteObject<NoteData_HoldMesh>
             }
         }
     }
-
-    public override void SetActive(bool isVisible) { }
 }

@@ -48,6 +48,7 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float2 uv2 : TEXCOORD1;
             };
 
             struct v2f
@@ -57,6 +58,7 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
                 float4 vertex : SV_POSITION;
                 float3 worldPos : TEXCOORD2;
                 float3 localPos : TEXCOORD3;
+                float trackDistance : TEXCOORD4;
             };
 
             sampler2D _MainTex;
@@ -82,6 +84,8 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
                 o.localPos = v.vertex.xyz;
+                // 【ノーツ軌道】曲げる前の進行距離をUV2から受け取る
+                o.trackDistance = v.uv2.x;
                 UNITY_TRANSFER_FOG(o, o.vertex);
                 return o;
             }
@@ -97,7 +101,7 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
                 float pingPong = abs(frac(_Time.y / duration) * 2.0 - 1.0);
                 float intensity = lerp(_PingPongIntensityMin, _PingPongIntensityMax, pingPong);
 
-                float stripePhase = i.localPos.z * _StripeFrequency * UNITY_TWO_PI;
+                float stripePhase = i.trackDistance * _StripeFrequency * UNITY_TWO_PI;
                 float stripeWave = (cos(stripePhase) + 1.0) * 0.5;
                 float stripeThreshold = saturate(1.0 - _StripeSecondaryWidth);
                 float stripeFeather = max(_StripeBlendSoftness, 0.0001);

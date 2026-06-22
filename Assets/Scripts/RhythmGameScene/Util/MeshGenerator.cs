@@ -15,7 +15,7 @@ namespace MeshGenerate
         /// グラウンド沿いのメッシュを生成する
         /// </summary>
         /// <returns></returns>
-        public static Mesh GenerateGroundHoldMesh(List<TimeToRange> timeToRanges, INotePositionCalculator posCalc, float speed, int horizontalDivisionNum, float limitLength, float radius = 10f)
+        public static Mesh GenerateGroundHoldMesh(List<TimeToRange> timeToRanges, INotePositionCalculator posCalc, float speed, int horizontalDivisionNum, float limitLength, float curveRadius, float radius = 10f)
         {
             Mesh mesh = new Mesh();
 
@@ -87,10 +87,14 @@ namespace MeshGenerate
                 currentStartZ += length;
             }
 
+            // 【ノーツ軌道】UV計算後の頂点を円弧へ曲げ、直線距離基準のUVを維持する
+            NoteTrackCurve.BendVertices(vertices, curveRadius);
+
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
             mesh.uv = uvs.ToArray();
             mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
 
             return mesh;
         }
@@ -189,7 +193,7 @@ namespace MeshGenerate
         /// <param name="meshDivisionNum"></param>
         /// <param name="isMeshReverse"></param>
         /// <returns></returns>
-        public static Mesh GenerateSpaceHoldEdgeMesh(List<TimeToVertices> timeToVertices, INotePositionCalculator posCalc, float speed, int meshDivisionNum, float lerpThresholdDepth, bool isMeshReverse)
+        public static Mesh GenerateSpaceHoldEdgeMesh(List<TimeToVertices> timeToVertices, INotePositionCalculator posCalc, float speed, int meshDivisionNum, float lerpThresholdDepth, bool isMeshReverse, float curveRadius)
         {
             if (timeToVertices == null) { return new Mesh(); }
             if (timeToVertices.Count == 0) { return new Mesh(); }
@@ -203,10 +207,10 @@ namespace MeshGenerate
                 depthToVerticesList.Add(new DepthToVertices(depth, vertices));
             }
 
-            return GenerateSpaceHoldEdgeMesh(depthToVerticesList, meshDivisionNum, lerpThresholdDepth, isMeshReverse);
+            return GenerateSpaceHoldEdgeMesh(depthToVerticesList, meshDivisionNum, lerpThresholdDepth, isMeshReverse, curveRadius);
         }
 
-        private static Mesh GenerateSpaceHoldEdgeMesh(List<DepthToVertices> depthToVertices, int meshDivisionNum, float lerpThresholdDepth, bool isMeshReverse)
+        private static Mesh GenerateSpaceHoldEdgeMesh(List<DepthToVertices> depthToVertices, int meshDivisionNum, float lerpThresholdDepth, bool isMeshReverse, float curveRadius)
         {
             Mesh mesh = new Mesh();
             mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;    // ドデカイメッシュに対応
@@ -219,6 +223,7 @@ namespace MeshGenerate
             // 最大頂点数を調べて分割数を更新する
             float totalDepth = depthToVertices[^1].Depth - depthToVertices[0].Depth;
             List<Vector2> uvs = new List<Vector2>();
+            List<Vector2> trackUVs = new List<Vector2>();
             foreach (var t in depthToVertices)
             {
                 if (meshDivisionNum < t.Vertices.Length)
@@ -257,6 +262,8 @@ namespace MeshGenerate
                     vertices.AddRange(verticesB);
                     uvs.AddRange(GetSpaceHoldUVs(verticesA, totalDepth));
                     uvs.AddRange(GetSpaceHoldUVs(verticesB, totalDepth));
+                    trackUVs.AddRange(verticesA.Select(v => new Vector2(v.z, 0f)));
+                    trackUVs.AddRange(verticesB.Select(v => new Vector2(v.z, 0f)));
 
                     // トライアングルインデックスを生成、代入
                     var tris = MeshGenerator.GenerateTriangles(currentMeshIndex, verticesA.Count, verticesB.Count, isMeshReverse);
@@ -272,9 +279,13 @@ namespace MeshGenerate
             if (!CheckValidMesh(vertices, triangles)) { return null; }
 
             // 計算した値をそれぞれ代入
+            // 【ノーツ軌道】断面形状を維持したままSpaceHold全体を円弧へ曲げる
+            NoteTrackCurve.BendVertices(vertices, curveRadius);
+
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
             mesh.uv = uvs.ToArray();
+            mesh.uv2 = trackUVs.ToArray();
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 

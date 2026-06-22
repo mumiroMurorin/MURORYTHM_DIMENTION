@@ -40,7 +40,7 @@ public class GroundControllerPreview : MonoBehaviour
     }
 
     /// <summary>
-    /// �O���E���h�𓮂���
+    /// グラウンドを動かす
     /// </summary>
     private void MoveGround(float time)
     {
@@ -48,9 +48,8 @@ public class GroundControllerPreview : MonoBehaviour
 
         float z = chartData.PositionGraph.GetPosition(time);
 
-        this.gameObject.transform.position = new Vector3(
-            this.transform.position.x, 
-            this.transform.position.y,
-            -optionGetter.NoteSpeed.Value * z);
+        // 【ノーツ軌道】譜面エディタのプレビューも円の中心まわりに回転させる
+        float distance = optionGetter.NoteSpeed.Value * z;
+        NoteTrackCurve.SetProgress(this.gameObject.transform, distance, optionGetter.NoteCurveRadius.Value);
     }
 }

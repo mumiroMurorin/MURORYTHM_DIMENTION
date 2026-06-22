@@ -32,10 +32,12 @@ public class GroundControllerLinear : MonoBehaviour
     }
 
     /// <summary>
-    /// �O���E���h�𓮂���
+    /// グラウンドを動かす
     /// </summary>
     private void MoveGround(float time)
     {
-        this.gameObject.transform.position = Vector3.back * optionHolder.NoteSpeed.Value * time;
+        // 【ノーツ軌道】選曲画面のプレビューも本編と同じ円軌道で進行させる
+        float distance = optionHolder.NoteSpeed.Value * time;
+        NoteTrackCurve.SetProgress(this.gameObject.transform, distance, optionHolder.NoteCurveRadius.Value);
     }
 }

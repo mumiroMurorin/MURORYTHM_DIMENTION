@@ -14,6 +14,7 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
     [SerializeField] Difficulty difficulty;
     [SerializeField] string chartFilePath;
     [SerializeField] float noteSpeed;
+    [SerializeField] float groundRadius = 2000f;
     [SerializeField] bool isAutoMode;
     [SerializeField] bool isFastLateEnabled;
 
@@ -56,6 +57,7 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
         spawnDataSetter.SetNoteSpeed(noteSpeed);
         spawnDataSetter.SetAutoMode(isAutoMode);
         optionSetter.SetIsEnabledFastLate(isFastLateEnabled);
+        spawnDataSetter.SetNoteCurveRadius(groundRadius);
         
 #endif
     }

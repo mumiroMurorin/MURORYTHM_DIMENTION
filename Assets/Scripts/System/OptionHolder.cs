@@ -7,7 +7,7 @@ using System;
 public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSetter, IVolumeGetter, IOptionGetter, IOptionSetter
 {
     /// <summary>
-    /// ƒIƒvƒVƒ‡ƒ“‚É’l‚ğ‰ÁŒ¸Z
+    /// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã«å€¤ã‚’åŠ æ¸›ç®—
     /// </summary>
     /// <param name="optionType"></param>
     /// <param name="delta"></param>
@@ -49,12 +49,13 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     }
 
     /// <summary>
-    /// ƒIƒvƒVƒ‡ƒ“ƒAƒZƒbƒg‚Ì’l‚ğ”½‰f
+    /// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚¢ã‚»ãƒƒãƒˆã®å€¤ã‚’åæ˜ 
     /// </summary>
     /// <param name="asset"></param>
     public void SetOption(OptionAsset asset)
     {
         SetNoteSpeed(asset.NoteSpeed);
+        SetNoteCurveRadius(asset.NoteCurveRadius);
         SetOffsetMs(asset.Offset);
         SetSEVolume(asset.SeVolume);
         SetBGMVolume(asset.BgmVolume);
@@ -65,7 +66,7 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     }
 
     /// <summary>
-    /// ƒIƒvƒVƒ‡ƒ“‚É•ÏX‚ª‚ ‚Á‚½Û”­‰Î‚·‚é
+    /// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã«å¤‰æ›´ãŒã‚ã£ãŸéš›ç™ºç«ã™ã‚‹
     /// </summary>
     Subject<int> OnChangeOptionValueListnener = new Subject<int>();
     public IObservable<int> OnChangeOptionValue => OnChangeOptionValueListnener;
@@ -76,7 +77,7 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     const int MIN_NOTESPEED = 20;
 
     /// <summary>
-    /// ƒm[ƒc‚ª1•bŠÔ‚É“®‚­(unity’PˆÊ)‘¬“x
+    /// ãƒãƒ¼ãƒ„ãŒ1ç§’é–“ã«å‹•ã(unityå˜ä½)é€Ÿåº¦
     /// </summary>
     ReactiveProperty<float> noteSpeed = new ReactiveProperty<float>(170f);
     public IReadOnlyReactiveProperty<float> NoteSpeed => noteSpeed;
@@ -103,9 +104,25 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     #endregion
 
 
+    #region NoteCurveRadius
+
+    const float MAX_NOTE_CURVE_RADIUS = 10000f;
+    const float MIN_NOTE_CURVE_RADIUS = 10f;
+
+    // ã€ãƒãƒ¼ãƒ„è»Œé“ã€‘ãƒãƒ¼ãƒ„ãŒé€²è¡Œã™ã‚‹å††å¼§ã®åŠå¾„
+    ReactiveProperty<float> noteCurveRadius = new ReactiveProperty<float>(2000f);
+    public IReadOnlyReactiveProperty<float> NoteCurveRadius => noteCurveRadius;
+    public void SetNoteCurveRadius(float radius)
+    {
+        noteCurveRadius.Value = Mathf.Clamp(radius, MIN_NOTE_CURVE_RADIUS, MAX_NOTE_CURVE_RADIUS);
+    }
+
+    #endregion
+
+
     #region SEVolume
 
-    // SEŠÖŒW
+    // SEé–¢ä¿‚
     ReactiveProperty<float> seVolume = new ReactiveProperty<float>(0.8f);
     public IReadOnlyReactiveProperty<float> SEVolume => seVolume;
     public int SEVolumeDisplay => (int)(seVolume.Value * 10f);
@@ -127,7 +144,7 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
         return true;
     }
 
-    // ”»’è‰¹ŠÖŒW
+    // åˆ¤å®šéŸ³é–¢ä¿‚
     ReactiveProperty<float> judgementSeVolume = new ReactiveProperty<float>(0.8f);
     public IReadOnlyReactiveProperty<float> JudgementSEVolume => judgementSeVolume;
     public int JudgementSEVolumeDisplay => Mathf.RoundToInt(judgementSeVolume.Value * 10);
@@ -155,7 +172,7 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
 
     #region BGMVolume
 
-    // BGMŠÖŒW
+    // BGMé–¢ä¿‚
     ReactiveProperty<float> bgmVolume = new ReactiveProperty<float>(0.8f);
     public IReadOnlyReactiveProperty<float> BGMVolume => bgmVolume;
     public int BGMVolumeDisplay => (int)(bgmVolume.Value * 10f);
@@ -181,7 +198,7 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     const float MAX_OFFSET = 1000f;
     const float MIN_OFFSET = -1000f;
 
-    // ƒIƒtƒZƒbƒgŠÖŒW
+    // ã‚ªãƒ•ã‚»ãƒƒãƒˆé–¢ä¿‚
     ReactiveProperty<float> offset = new ReactiveProperty<float>(0);
     public IReadOnlyReactiveProperty<float> OffsetMs => offset;
     public int OffsetDisplay => (int)offset.Value;
@@ -287,7 +304,7 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     }
     public string EnabledFastLateDisplay 
     {
-        get { return isEnabledFastLate.Value ? "•\¦‚·‚é" : "•\¦‚µ‚È‚¢"; }
+        get { return isEnabledFastLate.Value ? "è¡¨ç¤ºã™ã‚‹" : "è¡¨ç¤ºã—ãªã„"; }
     }
 
     #endregion
@@ -295,7 +312,7 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
 
     #region Info
 
-    // ƒƒCƒ“î•ñ
+    // ãƒ¡ã‚¤ãƒ³æƒ…å ±
     ReactiveProperty<InfoTypeMain> mainInfo = new ReactiveProperty<InfoTypeMain>(InfoTypeMain.ComboAP);
     public IReadOnlyReactiveProperty<InfoTypeMain> MainInfo => mainInfo;
     public bool ChangeMainInfo()
@@ -334,24 +351,24 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
             switch (mainInfo.Value)
             {
                 case InfoTypeMain.None:
-                    return "•\¦‚µ‚È‚¢";
+                    return "è¡¨ç¤ºã—ãªã„";
                 case InfoTypeMain.Combo:
-                    return "ƒRƒ“ƒ{";
+                    return "ã‚³ãƒ³ãƒœ";
                 case InfoTypeMain.ComboFC:
-                    return "ƒRƒ“ƒ{\n<size=50%>(FC•\¦‚ ‚è)";
+                    return "ã‚³ãƒ³ãƒœ\n<size=50%>(FCè¡¨ç¤ºã‚ã‚Š)";
                 case InfoTypeMain.ComboAP:
-                    return "ƒRƒ“ƒ{\n<size=50%>(AP•\¦‚ ‚è)";
+                    return "ã‚³ãƒ³ãƒœ\n<size=50%>(APè¡¨ç¤ºã‚ã‚Š)";
                 case InfoTypeMain.ScoreRank:
-                    return "ƒXƒRƒAƒ‰ƒ“ƒN\n<size=50%>(‰ÁZ•û®)";
+                    return "ã‚¹ã‚³ã‚¢ãƒ©ãƒ³ã‚¯\n<size=50%>(åŠ ç®—æ–¹å¼)";
                 case InfoTypeMain.ScoreRankSubtraction:
-                    return "ƒXƒRƒAƒ‰ƒ“ƒN\n<size=50%>(Œ¸Z•û®)";
+                    return "ã‚¹ã‚³ã‚¢ãƒ©ãƒ³ã‚¯\n<size=50%>(æ¸›ç®—æ–¹å¼)";
             }
 
             return $"{mainInfo.Value}";
         } 
     }
 
-    // ƒTƒuî•ñ
+    // ã‚µãƒ–æƒ…å ±
     ReactiveProperty<InfoTypeSub> subInfo = new ReactiveProperty<InfoTypeSub>(InfoTypeSub.Breakdown);
     public IReadOnlyReactiveProperty<InfoTypeSub> SubInfo => subInfo;
     public bool ChangeSubInfo()
@@ -389,15 +406,15 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
             switch (subInfo.Value)
             {
                 case InfoTypeSub.None:
-                    return "•\¦‚µ‚È‚¢";
+                    return "è¡¨ç¤ºã—ãªã„";
                 case InfoTypeSub.ScoreAddition:
-                    return "ƒXƒRƒA\n<size=50%>(‰ÁZ•û®)";
+                    return "ã‚¹ã‚³ã‚¢\n<size=50%>(åŠ ç®—æ–¹å¼)";
                 case InfoTypeSub.ScoreSubtraction:
-                    return "ƒXƒRƒA\n<size=50%>(Œ¸Z•û®)";
+                    return "ã‚¹ã‚³ã‚¢\n<size=50%>(æ¸›ç®—æ–¹å¼)";
                 case InfoTypeSub.ComboRank:
                     return "AP/FC";
                 case InfoTypeSub.Breakdown:
-                    return "”»’è“à–ó";
+                    return "åˆ¤å®šå†…è¨³";
             }
 
             return $"{subInfo.Value}";
@@ -434,7 +451,7 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     #endregion
 
 
-    #region â‘Ìİ’è
+    #region ç­ä½“è¨­å®š
 
     BodyTrackingSettings trackingSettings = new BodyTrackingSettings();
     public BodyTrackingSettings TrackingSettings => trackingSettings;
@@ -446,6 +463,8 @@ public interface INoteSpawnDataOptionGetter
 {
     IReadOnlyReactiveProperty<float> NoteSpeed { get; }
 
+    IReadOnlyReactiveProperty<float> NoteCurveRadius { get; }
+
     IReadOnlyReactiveProperty<float> OffsetMs { get; }
 
     IReadOnlyReactiveProperty<bool> IsAutoModeRP { get; }
@@ -456,6 +475,8 @@ public interface INoteSpawnDataOptionGetter
 public interface INoteSpawnDataOptionSetter
 {
     void SetNoteSpeed(float speed);
+
+    void SetNoteCurveRadius(float radius);
 
     void SetOffsetMs(float offset);
 
@@ -476,6 +497,8 @@ public interface IOptionGetter
     IObservable<int> OnChangeOptionValue { get; }
 
     IReadOnlyReactiveProperty<float> NoteSpeed { get; }
+
+    IReadOnlyReactiveProperty<float> NoteCurveRadius { get; }
 
     float NoteSpeedDisplay { get; }
 
@@ -515,11 +538,11 @@ public interface IOptionGetter
 public interface IOptionSetter
 {
     /// <summary>
-    /// ƒIƒvƒVƒ‡ƒ“‚Ì’l‚ğŸ‚Ì’l‚É
+    /// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®å€¤ã‚’æ¬¡ã®å€¤ã«
     /// </summary>
     /// <param name="optionType"></param>
     /// <param name="delta"></param>
-    /// <returns>’l‚Ì•ÏX‚É¬Œ÷H</returns>
+    /// <returns>å€¤ã®å¤‰æ›´ã«æˆåŠŸï¼Ÿ</returns>
     bool SetOption(OptionType optionType, int delta);
 
     void SetOption(OptionAsset asset);

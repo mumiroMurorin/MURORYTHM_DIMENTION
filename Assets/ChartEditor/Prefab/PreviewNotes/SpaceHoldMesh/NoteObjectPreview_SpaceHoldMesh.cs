@@ -25,7 +25,4 @@ public class NoteObjectPreview_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh
         // マテリアルの設定
         noteData.MeshRendererAsset.SetMaterial(meshMaterialInside, meshMaterialOutside);
     }
-
-    public override void SetActive(bool isVisible) { }
-
 }

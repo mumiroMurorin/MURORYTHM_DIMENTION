@@ -185,17 +185,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6974557688898039621, guid: 0bdf943cac66cd74b979d989fac1d3f4, type: 3}
   m_PrefabInstance: {fileID: 574212}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &79835141 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5072021793780670651, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
-  m_PrefabInstance: {fileID: 2472307707742378117}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 596018e53e94bfb4d9de7a811cb67477, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &121986724
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,7 +235,7 @@ MonoBehaviour:
     composer_name: "\u524A\u9664"
     music_spr: {fileID: 21300000, guid: 1512ba05fa48cde48858c7f68c23594f, type: 3}
     theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
-    clip: {fileID: 8300000, guid: 14fca47ec4675dc4ba7afc1dc4bc724e, type: 3}
+    clip: {fileID: 8300000, guid: 015896b2af4a8a04a95905417f694d54, type: 3}
     sample_clip: {fileID: 8300000, guid: 0d1068dc9a46ed641b6c5e4506563fbc, type: 3}
     symphonyType: 20
     stageType: 200
@@ -258,7 +247,8 @@ MonoBehaviour:
     - 
   difficulty: 3
   chartFilePath: MusicData/Aleph-0/chart_master.json
-  noteSpeed: 200
+  noteSpeed: 190
+  groundRadius: 2000
   isAutoMode: 1
   isFastLateEnabled: 1
 --- !u!1 &234263431
@@ -1092,6 +1082,14 @@ PrefabInstance:
     - target: {fileID: 3557880811985844621, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
       propertyPath: m_Name
       value: LoadingBody
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344308489783075046, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7003494081260383716, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2044,9 +2042,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1010482526}
     - target: {fileID: 699343328728032737, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
-      propertyPath: groundDeformer
-      value: 
-      objectReference: {fileID: 79835141}
+      propertyPath: visibleAheadDistance
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 699343328728032737, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
+      propertyPath: visibleBehindDistance
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6117056429854002331, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2150,7 +2152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed07db9c99ac59f4e9da1284ad6c5307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUseSpaceInput: 0
+  isUseSpaceInput: 1
   loadTimeoutSeconds: 10
   spaceInputHandler:
     obj: {fileID: 2008376453}

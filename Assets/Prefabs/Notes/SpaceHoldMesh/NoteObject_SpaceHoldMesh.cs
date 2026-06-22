@@ -6,20 +6,20 @@ using System.Linq;
 using static JudgementUtil.SpacaHold.SpaceHoldJudgement;
 
 /// <summary>
-/// ƒXƒy[ƒXƒz[ƒ‹ƒhƒƒbƒVƒ…‚ÉƒAƒ^ƒbƒ`‚³‚ê‚éƒNƒ‰ƒX
+/// ã‚¹ãƒšãƒ¼ã‚¹ãƒ›ãƒ¼ãƒ«ãƒ‰ãƒ¡ãƒƒã‚·ãƒ¥ã«ã‚¢ã‚¿ãƒƒãƒã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
 {
     [SerializeField] float judgementMarginRadius = 0.25f;
     [SerializeField] float judgementMarginTime = 0.1f;
     [SerializeField] float firstMarginTime = 0.1f;
-    [Header("mesh‚Ìƒ}ƒeƒŠƒAƒ‹(–¢”»’è)")]
+    [Header("meshã®ãƒãƒ†ãƒªã‚¢ãƒ«(æœªåˆ¤å®šæ™‚)")]
     [SerializeField] Material meshMaterialDefaultInside;
     [SerializeField] Material meshMaterialDefaultOutside;
-    [Header("mesh‚Ìƒ}ƒeƒŠƒAƒ‹(ƒz[ƒ‹ƒh)")]
+    [Header("meshã®ãƒãƒ†ãƒªã‚¢ãƒ«(ãƒ›ãƒ¼ãƒ«ãƒ‰æ™‚)")]
     [SerializeField] Material meshMaterialHoldingInside;
     [SerializeField] Material meshMaterialHoldingOutside;
-    [Header("mesh‚Ìƒ}ƒeƒŠƒAƒ‹(”ñƒz[ƒ‹ƒh)")]
+    [Header("meshã®ãƒãƒ†ãƒªã‚¢ãƒ«(éãƒ›ãƒ¼ãƒ«ãƒ‰æ™‚)")]
     [SerializeField] Material meshMaterialUnholdingInside;
     [SerializeField] Material meshMaterialUnholdingOutside;
 
@@ -29,7 +29,7 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
     float holdingMarginCount;
 
     /// <summary>
-    /// ‰Šú‰»
+    /// åˆæœŸåŒ–
     /// </summary>
     /// <param name="data"></param>
     public override void Initialize(NoteData_SpaceHoldMesh data)
@@ -37,15 +37,9 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
         noteData = data;
         holdingMarginCount = firstMarginTime;
 
-        // ƒ}ƒeƒŠƒAƒ‹‚Ìİ’è
+        // ãƒãƒ†ãƒªã‚¢ãƒ«ã®è¨­å®š
         data.MeshRendererAsset.SetMaterial(meshMaterialDefaultInside, meshMaterialDefaultOutside);
     }
-
-    /// <summary>
-    /// ƒz[ƒ‹ƒhƒƒbƒVƒ…‚ÍƒAƒNƒeƒBƒu‰»‚Ì‰e‹¿‚ğó‚¯‚È‚¢
-    /// </summary>
-    /// <param name="isVisible"></param>
-    public override void SetActive(bool isVisible) { }
 
     private void Update()
     {
@@ -53,37 +47,37 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
         if (noteData.Timer == null) { return; }
         if (noteData.Timer.Time < noteData.Timing) { return; }
 
-        // ƒ}[ƒWƒ“ƒ^ƒCƒ€‚ÌXV
+        // ãƒãƒ¼ã‚¸ãƒ³ã‚¿ã‚¤ãƒ ã®æ›´æ–°
         if (holdingMarginCount > 0f) { holdingMarginCount -= Time.deltaTime; }
         else { holdingMarginCount = 0; }
 
-        // ”»’è”ÍˆÍ‚ÌXV
+        // åˆ¤å®šç¯„å›²ã®æ›´æ–°
         judgeRange = InterpolatePoints(noteData.TimeToVertices, noteData.Timer.Time);
 
         UpdateHoldStatus();
     }
 
     /// <summary>
-    /// ”ÍˆÍ“à”»’è‚ğXV‚·‚é
+    /// ç¯„å›²å†…åˆ¤å®šã‚’æ›´æ–°ã™ã‚‹
     /// </summary>
     private void UpdateHoldStatus()
     {
         if (noteData.Timer == null) { return; }
         if (judgeRange == null) { return; }
 
-        // ”»’è”ÍˆÍ“à‚ÌƒXƒ‰ƒCƒ_[“ü—Í‚ğ’²‚×‚é
-        // ƒvƒŒƒC
+        // åˆ¤å®šç¯„å›²å†…ã®ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼å…¥åŠ›ã‚’èª¿ã¹ã‚‹
+        // ãƒ—ãƒ¬ã‚¤æ™‚
         if (!noteData.OptionGetter.IsAutoMode) 
         {
             bool isInRange = noteData.SpaceInput.IsInSpaceRange(judgeRange, judgementMarginRadius);
 
-            // ƒ}[ƒWƒ“ƒ^ƒCƒ€‚ÌXV
+            // ãƒãƒ¼ã‚¸ãƒ³ã‚¿ã‚¤ãƒ ã®æ›´æ–°
             if (isInRange) { holdingMarginCount = judgementMarginTime; }
 
-            // ”ÍˆÍ“à ‚Ü‚½‚Í ƒ}[ƒWƒ“ƒ^ƒCƒ€’†‚Íƒz[ƒ‹ƒh’†‚É‚·‚é
+            // ç¯„å›²å†… ã¾ãŸã¯ ãƒãƒ¼ã‚¸ãƒ³ã‚¿ã‚¤ãƒ ä¸­ã¯ãƒ›ãƒ¼ãƒ«ãƒ‰ä¸­ã«ã™ã‚‹
             SetHoldStatus(isInRange || holdingMarginCount > 0f);
         }
-        // ƒI[ƒgƒ‚[ƒh
+        // ã‚ªãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰æ™‚
         else 
         { 
             SetHoldStatus(true);
@@ -91,7 +85,7 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
     }
 
     /// <summary>
-    /// ƒz[ƒ‹ƒh‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚Åƒ}ƒeƒŠƒAƒ‹‚ğ•ÏX‚·‚é
+    /// ãƒ›ãƒ¼ãƒ«ãƒ‰ã•ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã§ãƒãƒ†ãƒªã‚¢ãƒ«ã‚’å¤‰æ›´ã™ã‚‹
     /// </summary>
     /// <param name="isTouching"></param>
     public void SetHoldStatus(bool isHolding)
@@ -108,7 +102,7 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
 }
 
 /// <summary>
-/// (‰Šú‰»‚É•K—v‚È•Ï”‚àŠÜ‚Ş)ƒz[ƒ‹ƒhƒƒbƒVƒ…ƒm[ƒc‚Ìƒf[ƒ^
+/// (åˆæœŸåŒ–ã«å¿…è¦ãªå¤‰æ•°ã‚‚å«ã‚€)ãƒ›ãƒ¼ãƒ«ãƒ‰ãƒ¡ãƒƒã‚·ãƒ¥ãƒãƒ¼ãƒ„ã®ãƒ‡ãƒ¼ã‚¿
 /// </summary>
 public class NoteData_SpaceHoldMesh : INoteData
 {

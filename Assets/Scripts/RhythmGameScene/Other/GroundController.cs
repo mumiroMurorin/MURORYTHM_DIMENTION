@@ -34,12 +34,14 @@ public class GroundController : MonoBehaviour
     }
 
     /// <summary>
-    /// �O���E���h�𓮂���
+    /// グラウンドを動かす
     /// </summary>
     private void MoveGround(float time)
     {
         float z = chartDataGetter.Chart.PositionGraph.GetPosition(time);
 
-        this.gameObject.transform.position = Vector3.back * optionHolder.NoteSpeed.Value * z;
+        // 【ノーツ軌道】全ノーツを個別更新せず、親を円の中心まわりに回転させる
+        float distance = optionHolder.NoteSpeed.Value * z;
+        NoteTrackCurve.SetProgress(this.gameObject.transform, distance, optionHolder.NoteCurveRadius.Value);
     }
 }

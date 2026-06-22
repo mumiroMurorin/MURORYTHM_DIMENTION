@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using MeshGenerate;
-using Deform;
 
 public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
 {
@@ -11,11 +10,11 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     readonly float RADIUS = 10f;
 
     [SerializeField] GameObject noteObjectOriginPrefab;
-    [Header("y‹­’²üz‘¾‚³")]
+    [Header("ã€å¼·èª¿ç·šã€‘å¤ªã•")]
     [SerializeField] float enphasisLineWidth = 0.1f;
-    [Header("ƒƒCƒ“ƒƒbƒVƒ…‚Ìƒ}ƒeƒŠƒAƒ‹")]
+    [Header("ãƒ¡ã‚¤ãƒ³ãƒ¡ãƒƒã‚·ãƒ¥ã®ãƒãƒ†ãƒªã‚¢ãƒ«")]
     [SerializeField] Material mainMaterial;
-    [Header("‹­’²ü‚Ìƒ}ƒeƒŠƒAƒ‹")]
+    [Header("å¼·èª¿ç·šã®ãƒãƒ†ãƒªã‚¢ãƒ«")]
     [SerializeField] Material edgeMaterial;
 
     INoteSpawnDataOptionGetter optionHolder;
@@ -23,13 +22,11 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
     Transform noteParent;
-    Deformer groundDeformer;
 
     public override void Initialize(NoteFactoryInitializingData initializingData)
     {
         this.optionHolder = initializingData.OptionHolder;
         this.noteParent = initializingData.NoteParent;
-        this.groundDeformer = initializingData.GroundDeformer;
         this.spaceInputGetter = initializingData.SpaceInputGetter;
         this.judgementRecorder = initializingData.JudgementRecorder;
         this.timer = initializingData.Timer;
@@ -37,25 +34,25 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
 
     public override NoteObject<NoteData_SpaceHoldRelay> Spawn(NoteData_SpaceHoldRelay data, INotePositionCalculator positionCalculator)
     {
-        // ¶¬
+        // ç”Ÿæˆ
         NoteObject<NoteData_SpaceHoldRelay> note = GenerateNoteInstance(ConvertNoteData(data));
 
-        // ˆÊ’u’²®
+        // ä½ç½®èª¿æ•´
         SetTransform(note, positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value);
 
-        // ‰Šú‰»
+        // åˆæœŸåŒ–
         note.Initialize(data);
 
         return note;
     }
 
     /// <summary>
-    /// ƒm[ƒgƒf[ƒ^‚É‚³‚ç‚È‚éî•ñ‚ğ’Ç‰Á
+    /// ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã«ã•ã‚‰ãªã‚‹æƒ…å ±ã‚’è¿½åŠ 
     /// </summary>
     /// <param name="data"></param>
     private NoteData_SpaceHoldRelay ConvertNoteData(NoteData_SpaceHoldRelay data)
     {
-        // ƒm[ƒcƒf[ƒ^‚É‚¢‚ë‚¢‚ë’Ç‰Á
+        // ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿ã«ã„ã‚ã„ã‚è¿½åŠ 
         data.SpaceInput = this.spaceInputGetter;
         data.Timer = this.timer;
         data.JudgementRecorder = this.judgementRecorder;
@@ -65,7 +62,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     }
 
     /// <summary>
-    /// ƒm[ƒc‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»‚µ‚Ä•Ô‚·
+    /// ãƒãƒ¼ãƒ„ã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã—ã¦è¿”ã™
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
@@ -73,22 +70,22 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     {
         GameObject origin = Instantiate(noteObjectOriginPrefab);
 
-        // ƒm[ƒcƒIƒuƒWƒFƒNƒg(•\)‚ğ¶¬
+        // ãƒãƒ¼ãƒ„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(è¡¨)ã‚’ç”Ÿæˆ
         GameObject noteObj = GenerateMeshObject(data);
         noteObj.transform.SetParent(origin.transform);
 
-        // ‹­’²ü‚Ì¶¬
+        // å¼·èª¿ç·šã®ç”Ÿæˆ
         GameObject emphasisLineObj = GeneratEmphasisLineObject(data);
         emphasisLineObj.transform.SetParent(origin.transform);
 
-        // ƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾
+        // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—
         NoteObject<NoteData_SpaceHoldRelay> note = origin.GetComponent<NoteObject<NoteData_SpaceHoldRelay>>();
 
         return note;
     }
 
     /// <summary>
-    /// ƒz[ƒ‹ƒh‚ÌƒƒbƒVƒ…•”•ª‚Ì¶¬
+    /// ãƒ›ãƒ¼ãƒ«ãƒ‰ã®ãƒ¡ãƒƒã‚·ãƒ¥éƒ¨åˆ†ã®ç”Ÿæˆ
     /// </summary>
     private GameObject GenerateMeshObject(NoteData_SpaceHoldRelay noteData)
     {
@@ -103,12 +100,11 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
 
         meshRenderer.material = mainMaterial;
 
-        obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
         return obj;
     }
 
     /// <summary>
-    /// ƒz[ƒ‹ƒh‚Ì‹­’²ü‚Ì¶¬
+    /// ãƒ›ãƒ¼ãƒ«ãƒ‰ã®å¼·èª¿ç·šã®ç”Ÿæˆ
     /// </summary>
     private GameObject GeneratEmphasisLineObject(NoteData_SpaceHoldRelay noteData)
     {
@@ -118,26 +114,25 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
         var points = noteData.Vertices.Select(v => MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToList();
         Mesh mesh = MeshGenerator.GenerateLineMesh(points, enphasisLineWidth, isLoop: true);
         meshFilter.mesh = mesh;
-        // ¬Œ÷‰‰o‚Ì‚½‚ß‚ÉMesh‚ğ•Û‘¶
+        // æˆåŠŸæ¼”å‡ºã®ãŸã‚ã«Meshã‚’ä¿å­˜
         noteData.Mesh = mesh;
 
         if (mesh == null) { return obj; }
 
         meshRenderer.material = edgeMaterial;
 
-        obj.AddComponent<Deformable>().AddDeformer(groundDeformer);
         return obj;
     }
 
     /// <summary>
-    /// ˆÊ’u’²®‚È‚Ç
+    /// ä½ç½®èª¿æ•´ãªã©
     /// </summary>
     private void SetTransform(NoteObject<NoteData_SpaceHoldRelay> note, float spawnZ)
     {
-        // “®‚­’n–Ê‚ğe“o˜^
+        // å‹•ãåœ°é¢ã‚’è¦ªç™»éŒ²
         note.transform.SetParent(noteParent);
 
-        // ˆÊ’u‚Ì’²®
-        note.SetPosition(spawnZ);
+        // ä½ç½®ã®èª¿æ•´
+        note.SetPosition(spawnZ, optionHolder.NoteCurveRadius.Value);
     }
 }
