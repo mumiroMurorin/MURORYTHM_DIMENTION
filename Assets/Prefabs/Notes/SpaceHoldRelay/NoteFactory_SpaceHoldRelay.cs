@@ -10,7 +10,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     readonly float RADIUS = 10f;
 
     [SerializeField] GameObject noteObjectOriginPrefab;
-    [Header("【強調線】太さ")]
+    [Header("強調線の太さ")]
     [SerializeField] float enphasisLineWidth = 0.1f;
     [Header("メインメッシュのマテリアル")]
     [SerializeField] Material mainMaterial;
@@ -35,7 +35,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     public override NoteObject<NoteData_SpaceHoldRelay> Spawn(NoteData_SpaceHoldRelay data, INotePositionCalculator positionCalculator)
     {
         // 生成
-        NoteObject<NoteData_SpaceHoldRelay> note = GenerateNoteInstance(ConvertNoteData(data));
+        NoteObject<NoteData_SpaceHoldRelay> note = GenerateNoteInstance(ConvertNoteData(data, positionCalculator));
 
         // 位置調整
         SetTransform(note, positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value);
@@ -47,22 +47,35 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     }
 
     /// <summary>
-    /// ノートデータにさらなる情報を追加
+    /// ノートデータに必要な情報を追加
     /// </summary>
     /// <param name="data"></param>
-    private NoteData_SpaceHoldRelay ConvertNoteData(NoteData_SpaceHoldRelay data)
+    private NoteData_SpaceHoldRelay ConvertNoteData(NoteData_SpaceHoldRelay data, INotePositionCalculator positionCalculator)
     {
-        // ノーツデータにいろいろ追加
+        // ノートデータに必要な情報を追加
         data.SpaceInput = this.spaceInputGetter;
         data.Timer = this.timer;
         data.JudgementRecorder = this.judgementRecorder;
         data.OptionGetter = optionHolder;
+        data.PositionCalculator = positionCalculator;
+        data.NoteSpeed = optionHolder.NoteSpeed.Value;
+        data.DepthToVertices = GenerateDepthToVertices(data.TimeToVertices, positionCalculator, data.NoteSpeed);
 
         return data;
     }
 
+    private List<DepthToVertices> GenerateDepthToVertices(List<TimeToVertices> timeToVertices, INotePositionCalculator positionCalculator, float noteSpeed)
+    {
+        if (timeToVertices == null) { return null; }
+        if (positionCalculator == null) { return null; }
+
+        return timeToVertices
+            .Select(x => new DepthToVertices(positionCalculator.GetPosition(x.Timing) * noteSpeed, x.Vertices))
+            .ToList();
+    }
+
     /// <summary>
-    /// ノーツをインスタンス化して返す
+    /// ノートをインスタンス化して返す
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
@@ -70,11 +83,11 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     {
         GameObject origin = Instantiate(noteObjectOriginPrefab);
 
-        // ノーツオブジェクト(表)を生成
+        // ノートオブジェクトの表を生成
         GameObject noteObj = GenerateMeshObject(data);
         noteObj.transform.SetParent(origin.transform);
 
-        // 強調線の生成
+        // 強調線を生成
         GameObject emphasisLineObj = GeneratEmphasisLineObject(data);
         emphasisLineObj.transform.SetParent(origin.transform);
 
@@ -85,7 +98,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     }
 
     /// <summary>
-    /// ホールドのメッシュ部分の生成
+    /// ホールドメッシュ部分を生成
     /// </summary>
     private GameObject GenerateMeshObject(NoteData_SpaceHoldRelay noteData)
     {
@@ -104,7 +117,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     }
 
     /// <summary>
-    /// ホールドの強調線の生成
+    /// ホールド強調線を生成
     /// </summary>
     private GameObject GeneratEmphasisLineObject(NoteData_SpaceHoldRelay noteData)
     {

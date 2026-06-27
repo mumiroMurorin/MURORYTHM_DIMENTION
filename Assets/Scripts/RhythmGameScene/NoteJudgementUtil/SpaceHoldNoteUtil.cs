@@ -8,7 +8,7 @@ namespace JudgementUtil.SpacaHold
     static public class SpaceHoldJudgement
     {
         /// <summary>
-        /// 2ŸŒ³’¸“_ƒŠƒXƒg‚©‚ç\¬‚³‚ê‚éMesh‚Ì’†‚É“_‚ª‚ ‚é‚©”»’è
+        /// 2æ¬¡å…ƒé ‚ç‚¹ãƒªã‚¹ãƒˆã‹ã‚‰æ§‹æˆã•ã‚Œã‚‹Meshã®ä¸­ã«ç‚¹ãŒã‚ã‚‹ã‹åˆ¤å®š
         /// </summary>
         /// <param name="point"></param>
         /// <param name="polygon"></param>
@@ -23,7 +23,7 @@ namespace JudgementUtil.SpacaHold
                 Vector2 a = polygon[i];
                 Vector2 b = polygon[(i + 1) % count];
 
-                // Ëü‚ªƒGƒbƒW‚ğ‰¡Ø‚é‚©ƒ`ƒFƒbƒN
+                // å°„ç·šãŒã‚¨ãƒƒã‚¸ã‚’æ¨ªåˆ‡ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
                 if (((a.y <= point.y) && (b.y > point.y)) || ((a.y > point.y) && (b.y <= point.y)))
                 {
                     float t = (point.y - a.y) / (b.y - a.y);
@@ -36,28 +36,28 @@ namespace JudgementUtil.SpacaHold
                 }
             }
 
-            // Šï”‰ñŒğ·‚·‚ê‚Î’†‚É‚ ‚é
+            // å¥‡æ•°å›äº¤å·®ã™ã‚Œã°ä¸­ã«ã‚ã‚‹
             return (crossings % 2) == 1;
         }
 
         /// <summary>
-        /// ü•ª‚ªƒ|ƒŠƒSƒ“‚ÆŒğ·‚Ü‚½‚Íƒ|ƒŠƒSƒ“‚ÉŠÜ‚Ü‚ê‚é‚©”»’è‚·‚é
+        /// ç·šåˆ†ãŒãƒãƒªã‚´ãƒ³ã¨äº¤å·®ã¾ãŸã¯ãƒãƒªã‚´ãƒ³ã«å«ã¾ã‚Œã‚‹ã‹åˆ¤å®šã™ã‚‹
         /// </summary>
-        /// <param name="lineStart">ü•ª‚Ìn“_</param>
-        /// <param name="lineEnd">ü•ª‚ÌI“_</param>
-        /// <param name="polygon">ƒ|ƒŠƒSƒ“‚Ì’¸“_”z—ñi•Â‚¶‚½}Œ`‚ğ‘z’èj</param>
-        /// <returns>true:Œğ·‚Ü‚½‚Í“à•ï, false:”ñŒğ·</returns>
+        /// <param name="lineStart">ç·šåˆ†ã®å§‹ç‚¹</param>
+        /// <param name="lineEnd">ç·šåˆ†ã®çµ‚ç‚¹</param>
+        /// <param name="polygon">ãƒãƒªã‚´ãƒ³ã®é ‚ç‚¹é…åˆ—ï¼ˆé–‰ã˜ãŸå›³å½¢ã‚’æƒ³å®šï¼‰</param>
+        /// <returns>true:äº¤å·®ã¾ãŸã¯å†…åŒ…, false:éäº¤å·®</returns>
         public static bool IsSegmentIntersectingOrInsidePolygon(Vector2 lineStart, Vector2 lineEnd, Vector2[] polygon)
         {
             int count = polygon.Length;
 
-            // ü•ª‚Ìn“_‚Ü‚½‚ÍI“_‚ªƒ|ƒŠƒSƒ““à‚É‚ ‚é‚©
+            // ç·šåˆ†ã®å§‹ç‚¹ã¾ãŸã¯çµ‚ç‚¹ãŒãƒãƒªã‚´ãƒ³å†…ã«ã‚ã‚‹ã‹
             if (IsPointInPolygon(lineStart, polygon) || IsPointInPolygon(lineEnd, polygon))
             {
                 return true;
             }
 
-            // ü•ª‚ªƒ|ƒŠƒSƒ“‚Ì‚¢‚¸‚ê‚©‚Ì•Ó‚ÆŒğ·‚µ‚Ä‚¢‚é‚©
+            // ç·šåˆ†ãŒãƒãƒªã‚´ãƒ³ã®ã„ãšã‚Œã‹ã®è¾ºã¨äº¤å·®ã—ã¦ã„ã‚‹ã‹
             for (int i = 0; i < count; i++)
             {
                 Vector2 a = polygon[i];
@@ -73,7 +73,7 @@ namespace JudgementUtil.SpacaHold
         }
 
         /// <summary>
-        /// ƒ|ƒŠƒSƒ““à‚É‰~‚ª”í‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©•Ô‚·
+        /// ãƒãƒªã‚´ãƒ³å†…ã«å††ãŒè¢«ã£ã¦ã„ã‚‹ã‹ã©ã†ã‹è¿”ã™
         /// </summary>
         /// <param name="vertices"></param>
         /// <param name="point"></param>
@@ -81,14 +81,14 @@ namespace JudgementUtil.SpacaHold
         /// <returns></returns>
         public static bool IsCircleIntersectingPolygon(Vector2[] vertices, Vector2 point, float radius)
         {
-            // ‰~‚Ì’†S‚ªƒ|ƒŠƒSƒ“‚Ì“à•”‚É‚ ‚é‚©‚Ç‚¤‚©
+            // å††ã®ä¸­å¿ƒãŒãƒãƒªã‚´ãƒ³ã®å†…éƒ¨ã«ã‚ã‚‹ã‹ã©ã†ã‹
             if (IsPointInPolygon(vertices, point)) { return true; }
 
-            // Še•Ó‚Æ‰~‚ªŒğ·‚µ‚Ä‚¢‚é‚©Šm”F
+            // å„è¾ºã¨å††ãŒäº¤å·®ã—ã¦ã„ã‚‹ã‹ç¢ºèª
             for (int i = 0; i < vertices.Length; i++)
             {
                 Vector2 a = vertices[i];
-                Vector2 b = vertices[(i + 1) % vertices.Length]; // ƒ‹[ƒv‘Î‰
+                Vector2 b = vertices[(i + 1) % vertices.Length]; // ãƒ«ãƒ¼ãƒ—å¯¾å¿œ
 
                 if (DistancePointToLineSegment(point, a, b) <= radius)
                 {
@@ -100,7 +100,7 @@ namespace JudgementUtil.SpacaHold
         }
 
         /// <summary>
-        /// Ë‰e‹——£‚Å“_‚Æü•ª‚ÌÅ’Z‹——£‚ğ‹‚ß‚é
+        /// å°„å½±è·é›¢ã§ç‚¹ã¨ç·šåˆ†ã®æœ€çŸ­è·é›¢ã‚’æ±‚ã‚ã‚‹
         /// </summary>
         /// <param name="point"></param>
         /// <param name="a"></param>
@@ -111,13 +111,13 @@ namespace JudgementUtil.SpacaHold
             Vector2 ab = b - a;
             Vector2 ap = point - a;
             float t = Vector2.Dot(ap, ab) / ab.sqrMagnitude;
-            t = Mathf.Clamp01(t); // ü•ªã‚ÉƒNƒ‰ƒ“ƒv
+            t = Mathf.Clamp01(t); // ç·šåˆ†ä¸Šã«ã‚¯ãƒ©ãƒ³ãƒ—
             Vector2 closestPoint = a + ab * t;
             return Vector2.Distance(point, closestPoint);
         }
 
         /// <summary>
-        /// ƒ|ƒŠƒSƒ““à‚É“_‚ªŠÜ‚Ü‚ê‚é‚©iƒNƒƒX”–@ / Ray-castingj
+        /// ãƒãƒªã‚´ãƒ³å†…ã«ç‚¹ãŒå«ã¾ã‚Œã‚‹ã‹ï¼ˆã‚¯ãƒ­ã‚¹æ•°æ³• / Ray-castingï¼‰
         /// </summary>
         /// <param name="poly"></param>
         /// <param name="point"></param>
@@ -138,7 +138,7 @@ namespace JudgementUtil.SpacaHold
         }
 
         /// <summary>
-        /// ü•ª“¯m‚ªŒğ·‚·‚é‚©‚ğ”»’è‚·‚é
+        /// ç·šåˆ†åŒå£«ãŒäº¤å·®ã™ã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹
         /// </summary>
         /// <param name="p1"></param>
         /// <param name="p2"></param>
@@ -152,35 +152,52 @@ namespace JudgementUtil.SpacaHold
             float d3 = Cross(q2 - q1, p1 - q1);
             float d4 = Cross(q2 - q1, p2 - q1);
 
-            // Œğ·”»’èi•„†‚ªˆÙ‚È‚éj
+            // äº¤å·®åˆ¤å®šï¼ˆç¬¦å·ãŒç•°ãªã‚‹ï¼‰
             return d1 * d2 < 0 && d3 * d4 < 0;
         }
 
         public static Vector2[] InterpolatePoints(List<TimeToVertices> timeToVertices, float timing)
         {
+            if (timeToVertices == null || timeToVertices.Count == 0)
+            {
+                return null;
+            }
+
+            if (timeToVertices.Count == 1)
+            {
+                return timeToVertices[0].Vertices;
+            }
+
             int index = LowerBound(timeToVertices, timing);
             float ratio = 0f;
             Vector2[] fromIndices;
             Vector2[] toIndices;
 
-            // ƒm[ƒcˆÈ‘O
+            // ãƒãƒ¼ãƒ„ä»¥å‰
             if (index <= 0) 
             {
                 ratio = 0f;
                 fromIndices = timeToVertices[0].Vertices;
                 toIndices = timeToVertices[1].Vertices;
             }
-            // ƒm[ƒcˆÈŒã
+            // ãƒãƒ¼ãƒ„ä»¥å¾Œ
             else if (index >= timeToVertices.Count) 
             {
                 ratio = 1f;
                 fromIndices = timeToVertices[^2].Vertices;
                 toIndices = timeToVertices[^1].Vertices;
             }
-            // ƒm[ƒc’†
+            // ãƒãƒ¼ãƒ„ä¸­
             else 
             {
-                ratio = (timeToVertices[index].Timing - timeToVertices[index - 1].Timing) / (timing - timeToVertices[index - 1].Timing);
+                float previousTiming = timeToVertices[index - 1].Timing;
+                float nextTiming = timeToVertices[index].Timing;
+
+                ratio = Mathf.Approximately(nextTiming, previousTiming)
+                    ? 0f
+                    : (timing - previousTiming) / (nextTiming - previousTiming);
+                ratio = Mathf.Clamp01(ratio);
+
                 fromIndices = timeToVertices[index - 1].Vertices;
                 toIndices = timeToVertices[index].Vertices;
             }
@@ -188,8 +205,54 @@ namespace JudgementUtil.SpacaHold
             return InterpolatePoints(fromIndices, toIndices, ratio);
         }
 
+        public static Vector2[] InterpolatePointsByDepth(List<DepthToVertices> depthToVertices, float depth)
+        {
+            if (depthToVertices == null || depthToVertices.Count == 0)
+            {
+                return null;
+            }
+
+            if (depthToVertices.Count == 1)
+            {
+                return depthToVertices[0].Vertices;
+            }
+
+            int index = LowerBound(depthToVertices, depth);
+            float ratio = 0f;
+            Vector2[] fromIndices;
+            Vector2[] toIndices;
+
+            if (index <= 0)
+            {
+                ratio = 0f;
+                fromIndices = depthToVertices[0].Vertices;
+                toIndices = depthToVertices[1].Vertices;
+            }
+            else if (index >= depthToVertices.Count)
+            {
+                ratio = 1f;
+                fromIndices = depthToVertices[^2].Vertices;
+                toIndices = depthToVertices[^1].Vertices;
+            }
+            else
+            {
+                float previousDepth = depthToVertices[index - 1].Depth;
+                float nextDepth = depthToVertices[index].Depth;
+
+                ratio = Mathf.Approximately(nextDepth, previousDepth)
+                    ? 0f
+                    : (depth - previousDepth) / (nextDepth - previousDepth);
+                ratio = Mathf.Clamp01(ratio);
+
+                fromIndices = depthToVertices[index - 1].Vertices;
+                toIndices = depthToVertices[index].Vertices;
+            }
+
+            return InterpolatePoints(fromIndices, toIndices, ratio);
+        }
+
         /// <summary>
-        /// ’†ŠÔ“_‚ğo—Í
+        /// ä¸­é–“ç‚¹ã‚’å‡ºåŠ›
         /// </summary>
         /// <param name="listA"></param>
         /// <param name="listB"></param>
@@ -199,7 +262,7 @@ namespace JudgementUtil.SpacaHold
         {
             if (listA.Length != listB.Length) 
             {
-                Debug.LogError("listA‚ÆlistB‚Ì’·‚³‚ªˆê’v‚µ‚Ä‚¢‚Ü‚¹‚ñ");
+                Debug.LogError("listAã¨listBã®é•·ã•ãŒä¸€è‡´ã—ã¦ã„ã¾ã›ã‚“");
                 return null;
             }
 
@@ -210,7 +273,7 @@ namespace JudgementUtil.SpacaHold
                 Vector2 pointA = listA[i];
                 Vector2 pointB = listB[i];
 
-                // ü•ªAB‚Ì’†‚Ì”ä—¦ ratio ‚Ì“_‚ğŒvZiüŒ`•âŠÔj
+                // ç·šåˆ†ABã®ä¸­ã®æ¯”ç‡ ratio ã®ç‚¹ã‚’è¨ˆç®—ï¼ˆç·šå½¢è£œé–“ï¼‰
                 Vector2 interpolated = Vector2.Lerp(pointA, pointB, ratio);
                 result[i] = interpolated;
             }
@@ -229,7 +292,7 @@ namespace JudgementUtil.SpacaHold
         }
 
         /// <summary>
-        /// ŠOÏ
+        /// å¤–ç©
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -240,7 +303,7 @@ namespace JudgementUtil.SpacaHold
         }
 
         /// <summary>
-        /// “ñ•ª’Tõ
+        /// äºŒåˆ†æ¢ç´¢
         /// </summary>
         /// <param name="list"></param>
         /// <param name="target"></param>
@@ -252,6 +315,20 @@ namespace JudgementUtil.SpacaHold
             {
                 int mid = (left + right) / 2;
                 if (list[mid].Timing < target)
+                    left = mid + 1;
+                else
+                    right = mid;
+            }
+            return left;
+        }
+
+        private static int LowerBound(List<DepthToVertices> list, float target)
+        {
+            int left = 0, right = list.Count;
+            while (left < right)
+            {
+                int mid = (left + right) / 2;
+                if (list[mid].Depth < target)
                     left = mid + 1;
                 else
                     right = mid;

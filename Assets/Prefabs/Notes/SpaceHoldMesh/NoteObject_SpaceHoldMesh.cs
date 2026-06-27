@@ -16,17 +16,23 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
     [Header("meshのマテリアル(未判定時)")]
     [SerializeField] Material meshMaterialDefaultInside;
     [SerializeField] Material meshMaterialDefaultOutside;
+    [SerializeField] Material meshMaterialDefaultOutline;
     [Header("meshのマテリアル(ホールド時)")]
     [SerializeField] Material meshMaterialHoldingInside;
     [SerializeField] Material meshMaterialHoldingOutside;
+    [SerializeField] Material meshMaterialHoldingOutline;
     [Header("meshのマテリアル(非ホールド時)")]
     [SerializeField] Material meshMaterialUnholdingInside;
     [SerializeField] Material meshMaterialUnholdingOutside;
+    [SerializeField] Material meshMaterialUnholdingOutline;
+    [Header("判定範囲表示")]
+    [SerializeField] SpaceHoldJudgementRangeMeshView judgementRangeView;
 
     NoteData_SpaceHoldMesh noteData;
 
     Vector2[] judgeRange;
     float holdingMarginCount;
+    bool isVisibleByController = true;
 
     /// <summary>
     /// 初期化
@@ -36,25 +42,40 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
     {
         noteData = data;
         holdingMarginCount = firstMarginTime;
+        SetJudgementRangeVisible(false);
 
         // マテリアルの設定
-        data.MeshRendererAsset.SetMaterial(meshMaterialDefaultInside, meshMaterialDefaultOutside);
+        data.MeshRendererAsset.SetMaterial(meshMaterialDefaultInside, meshMaterialDefaultOutside, meshMaterialDefaultOutline);
+
+        judgementRangeView?.Initialize(noteData.JudgementRangeLineParent);
     }
 
     private void Update()
     {
-        if (noteData == null) { return; }
-        if (noteData.Timer == null) { return; }
-        if (noteData.Timer.Time < noteData.Timing) { return; }
+        if (noteData == null) { SetJudgementRangeVisible(false); return; }
+        if (noteData.Timer == null) { SetJudgementRangeVisible(false); return; }
+        if (noteData.Timer.Time < noteData.Timing) { SetJudgementRangeVisible(false); return; }
 
         // マージンタイムの更新
         if (holdingMarginCount > 0f) { holdingMarginCount -= Time.deltaTime; }
         else { holdingMarginCount = 0; }
 
         // 判定範囲の更新
-        judgeRange = InterpolatePoints(noteData.TimeToVertices, noteData.Timer.Time);
+        judgeRange = InterpolatePointsByDepth(noteData.DepthToVertices, GetCurrentDepth());
 
+        UpdateJudgementRangeView(judgeRange);
         UpdateHoldStatus();
+    }
+
+    public override void SetActive(bool isVisible)
+    {
+        base.SetActive(isVisible);
+        isVisibleByController = isVisible;
+
+        if (!isVisible)
+        {
+            SetJudgementRangeVisible(false);
+        }
     }
 
     /// <summary>
@@ -92,12 +113,50 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
     {
         if (isHolding)
         {
-            noteData.MeshRendererAsset.SetMaterial(meshMaterialHoldingInside, meshMaterialHoldingOutside);
+            noteData.MeshRendererAsset.SetMaterial(meshMaterialHoldingInside, meshMaterialHoldingOutside,meshMaterialHoldingOutline);
         }
         else
         {
-            noteData.MeshRendererAsset.SetMaterial(meshMaterialUnholdingInside, meshMaterialUnholdingOutside);
+            noteData.MeshRendererAsset.SetMaterial(meshMaterialUnholdingInside, meshMaterialUnholdingOutside, meshMaterialUnholdingOutline);
         }
+    }
+
+    private void UpdateJudgementRangeView(Vector2[] points)
+    {
+        bool isVisible = isVisibleByController && IsInJudgementLineTiming();
+        judgementRangeView?.UpdateRange(points, isVisible);
+    }
+
+    private bool IsInJudgementLineTiming()
+    {
+        if (noteData == null) { return false; }
+        if (noteData.Timer == null) { return false; }
+        if (noteData.TimeToVertices == null || noteData.TimeToVertices.Count == 0) { return false; }
+
+        float currentTime = noteData.Timer.Time;
+        float startTime = noteData.TimeToVertices[0].Timing;
+        float endTime = noteData.TimeToVertices[^1].Timing;
+
+        return startTime <= currentTime && currentTime <= endTime;
+    }
+
+    private float GetCurrentDepth()
+    {
+        if (noteData == null) { return 0f; }
+        if (noteData.Timer == null) { return 0f; }
+        if (noteData.PositionCalculator == null) { return 0f; }
+
+        return noteData.PositionCalculator.GetPosition(noteData.Timer.Time) * noteData.NoteSpeed;
+    }
+
+    private void OnDisable()
+    {
+        SetJudgementRangeVisible(false);
+    }
+
+    private void SetJudgementRangeVisible(bool isVisible)
+    {
+        judgementRangeView?.SetVisible(isVisible);
     }
 }
 
@@ -112,6 +171,12 @@ public class NoteData_SpaceHoldMesh : INoteData
 
     public List<TimeToVertices> TimeToVertices { get; set; }
 
+    public List<DepthToVertices> DepthToVertices { get; set; }
+
+    public INotePositionCalculator PositionCalculator { get; set; }
+
+    public float NoteSpeed { get; set; }
+
     public HoldMeshRendererAsset MeshRendererAsset { get; set; }
 
     public ITimeGetter Timer { get; set; }
@@ -119,23 +184,39 @@ public class NoteData_SpaceHoldMesh : INoteData
     public ISpaceInputGetter SpaceInput { get; set; }
 
     public INoteSpawnDataOptionGetter OptionGetter { get; set; }
+
+    public Transform JudgementRangeLineParent { get; set; }
 }
 
 public class HoldMeshRendererAsset
 {
-    public HoldMeshRendererAsset(MeshRenderer inside, MeshRenderer outside)
+    public HoldMeshRendererAsset(
+        MeshRenderer insideForward,
+        MeshRenderer insideReverse,
+        MeshRenderer outline)
     {
-        InsideRenderer = inside;
-        OutsideRenderer = outside;
+        InsideForwardRenderer = insideForward;
+        InsideReverseRenderer = insideReverse;
+        OutlineRenderer = outline;
     }
 
-    public MeshRenderer InsideRenderer { get; set; }
+    public MeshRenderer InsideForwardRenderer { get; set; }
 
-    public MeshRenderer OutsideRenderer { get; set; }
+    public MeshRenderer InsideReverseRenderer { get; set; }
 
-    public void SetMaterial(Material inside, Material outside)
+    public MeshRenderer OutlineRenderer { get; set; }
+
+
+    public void SetMaterial(Material inside, Material outside, Material outline)
     {
-        InsideRenderer.material = inside;
-        OutsideRenderer.material = outside;
+        SetMaterialIfExists(InsideForwardRenderer, inside);
+        SetMaterialIfExists(InsideReverseRenderer, inside);
+        SetMaterialIfExists(OutlineRenderer, outline);
+    }
+
+    private void SetMaterialIfExists(MeshRenderer meshRenderer, Material material)
+    {
+        if (meshRenderer == null) { return; }
+        meshRenderer.material = material;
     }
 }

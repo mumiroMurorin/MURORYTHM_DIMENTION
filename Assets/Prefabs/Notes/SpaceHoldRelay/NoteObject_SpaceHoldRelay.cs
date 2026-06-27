@@ -16,7 +16,7 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     bool isJudged;
 
     /// <summary>
-    /// ‰Šú‰»
+    /// åˆæœŸåŒ–
     /// </summary>
     /// <param name="data"></param>
     public override void Initialize(NoteData_SpaceHoldRelay data)
@@ -29,7 +29,7 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
         if (noteData == null) { return; }
         if (isJudged) { return; }
 
-        // ”»’èŠÔ‰ß‚¬‚Ä‚é‚Æ‚«
+        // åˆ¤å®šæ™‚é–“éãã¦ã‚‹ã¨ã
         if (noteData.JudgementWindow.IsPassJudgementRange(noteData.Timer.Time, noteData.Timing))
         {
             SendJudgementData();
@@ -37,7 +37,7 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
             return;
         }
 
-        // ”»’èŠÔ“à‚Å‚È‚¢‚Æ‚«
+        // åˆ¤å®šæ™‚é–“å†…ã§ãªã„ã¨ã
         if (!IsInJudgementTimeRange()) { return; }
 
         if (!noteData.OptionGetter.IsAutoMode) 
@@ -52,14 +52,14 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     }
 
     /// <summary>
-    /// ”»’è
+    /// åˆ¤å®š
     /// </summary>
     private void NormalJudgement()
     {
-        // ”»’èŠÔŠO‚È‚ç•Ô‚·
+        // åˆ¤å®šæ™‚é–“å¤–ãªã‚‰è¿”ã™
         if (!IsInJudgementTimeRange()) { return; }
 
-        // Å‚”»’èŠ‚Âƒm[ƒc‚ª‰ß‚¬‚½‚Æ‚«”»’è‘—M
+        // æœ€é«˜åˆ¤å®šä¸”ã¤ãƒãƒ¼ãƒ„ãŒéããŸã¨ãåˆ¤å®šé€ä¿¡
         if (bestJudgement == Judgement.Perfect && noteData.Timing <= noteData.Timer.Time)
         {
             SendJudgementData();
@@ -67,19 +67,19 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
             return;
         }
 
-        // ”»’èŠÔ“à‚©‚Â˜g“à‚Éè‚ª‚ ‚é‚Æ‚«
+        // åˆ¤å®šæ™‚é–“å†…ã‹ã¤æ å†…ã«æ‰‹ãŒã‚ã‚‹ã¨ã
         bool isInRange = noteData.SpaceInput.IsInSpaceRange(judgeRange, judgementMarginRadius);
         if (!isInRange) { return; }
 
         var jae = noteData.JudgementWindow.GetJudgementAndError(noteData.Timer.Time, noteData.Timing);
         
-        // Å‚”»’è‚ÌXV
+        // æœ€é«˜åˆ¤å®šã®æ›´æ–°
         if ((int)bestJudgement < (int)jae.Judgement)
         {
             bestJudgement = jae.Judgement;
         }
 
-        // ’x‚ß‚¾‚Á‚½A‘¦”»’è
+        // é…ã‚ã ã£ãŸæ™‚ã€å³æ™‚åˆ¤å®š
         if (jae.Error > 0)
         {
             SendJudgementData();
@@ -88,11 +88,11 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     }
 
     /// <summary>
-    /// ƒI[ƒg”»’è
+    /// ã‚ªãƒ¼ãƒˆåˆ¤å®š
     /// </summary>
     private void AutoJudgement()
     {
-        // Å‚”»’è‚Ì‚Æ‚«Šm’è
+        // æœ€é«˜åˆ¤å®šã®ã¨ãç¢ºå®š
         if (noteData.Timing > noteData.Timer.Time) { return; }
 
         bestJudgement = Judgement.Perfect;
@@ -101,7 +101,7 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     }
 
     /// <summary>
-    /// ”»’èƒf[ƒ^‚ğ‘—M
+    /// åˆ¤å®šãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡
     /// </summary>
     private void SendJudgementData()
     {
@@ -113,24 +113,24 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     }
 
     /// <summary>
-    /// ”»’è”ÍˆÍ‚ÌXV
+    /// åˆ¤å®šç¯„å›²ã®æ›´æ–°
     /// </summary>
     private void UpdateJudgementRange()
     {
-        // ‘O”»’è
+        // å‰åˆ¤å®š
         if (noteData.Timing >= noteData.Timer.Time)
         {
-            judgeRange = InterpolatePoints(noteData.TimeToVertices, noteData.Timer.Time);
+            judgeRange = InterpolatePointsByDepth(noteData.DepthToVertices, GetCurrentDepth());
         }
-        // Œã‚ë”»’èA”»’èŠÔ‚ÌƒŒƒ“ƒW‚ğƒL[ƒv
+        // å¾Œã‚åˆ¤å®šã€åˆ¤å®šæ™‚é–“æ™‚ã®ãƒ¬ãƒ³ã‚¸ã‚’ã‚­ãƒ¼ãƒ—
         else
         {
-            judgeRange = noteData.Vertices;
+            judgeRange = InterpolatePointsByDepth(noteData.DepthToVertices, GetDepth(noteData.Timing));
         }
     }
 
     /// <summary>
-    /// ”»’è”ÍˆÍ“à‚©’²‚×‚é
+    /// åˆ¤å®šç¯„å›²å†…ã‹èª¿ã¹ã‚‹
     /// </summary>
     /// <returns></returns>
     private bool IsInJudgementTimeRange()
@@ -145,16 +145,33 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     }
 
     /// <summary>
-    /// ƒm[ƒc‚ğ‹@”\’â~‚·‚é
+    /// ãƒãƒ¼ãƒ„ã‚’æ©Ÿèƒ½åœæ­¢ã™ã‚‹
     /// </summary>
     private void SetDisable()
     {
         this.gameObject.SetActive(false);
     }
+
+    private float GetCurrentDepth()
+    {
+        if (noteData == null) { return 0f; }
+        if (noteData.Timer == null) { return 0f; }
+        if (noteData.PositionCalculator == null) { return 0f; }
+
+        return GetDepth(noteData.Timer.Time);
+    }
+
+    private float GetDepth(float time)
+    {
+        if (noteData == null) { return 0f; }
+        if (noteData.PositionCalculator == null) { return 0f; }
+
+        return noteData.PositionCalculator.GetPosition(time) * noteData.NoteSpeed;
+    }
 }
 
 /// <summary>
-/// (‰Šú‰»‚É•K—v‚È•Ï”‚àŠÜ‚Ş)ƒz[ƒ‹ƒhƒƒbƒVƒ…ƒm[ƒc‚Ìƒf[ƒ^
+/// (åˆæœŸåŒ–ã«å¿…è¦ãªå¤‰æ•°ã‚‚å«ã‚€)ãƒ›ãƒ¼ãƒ«ãƒ‰ãƒ¡ãƒƒã‚·ãƒ¥ãƒãƒ¼ãƒ„ã®ãƒ‡ãƒ¼ã‚¿
 /// </summary>
 public class NoteData_SpaceHoldRelay : INoteData, IJudgableNoteData
 {
@@ -167,6 +184,12 @@ public class NoteData_SpaceHoldRelay : INoteData, IJudgableNoteData
     public Vector2[] Vertices { get; set; }
 
     public List<TimeToVertices> TimeToVertices { get; set; }
+
+    public List<DepthToVertices> DepthToVertices { get; set; }
+
+    public INotePositionCalculator PositionCalculator { get; set; }
+
+    public float NoteSpeed { get; set; }
 
     public Mesh Mesh { get; set; }
 

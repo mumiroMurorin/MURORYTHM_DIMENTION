@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2993335810231384405}
@@ -52,7 +52,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: f8ff81bcb3190ff4387826df28d397aa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -133,40 +133,40 @@ MonoBehaviour:
   sprites:
   - judgement: 1000
     fastLate: 0
-    sprite: {fileID: 21300000, guid: 6b4d1afd427e353498b4888ea435f287, type: 3}
+    sprite: {fileID: 21300000, guid: 64b71b88f624e3f41a4899d05702acd3, type: 3}
   - judgement: 1000
     fastLate: 1
-    sprite: {fileID: 21300000, guid: 6b4d1afd427e353498b4888ea435f287, type: 3}
+    sprite: {fileID: 21300000, guid: 64b71b88f624e3f41a4899d05702acd3, type: 3}
   - judgement: 1000
     fastLate: 2
-    sprite: {fileID: 21300000, guid: 6b4d1afd427e353498b4888ea435f287, type: 3}
+    sprite: {fileID: 21300000, guid: 64b71b88f624e3f41a4899d05702acd3, type: 3}
   - judgement: 100
     fastLate: 0
-    sprite: {fileID: 21300000, guid: 76a49712219eeb642b5b3ecfeddc09b4, type: 3}
+    sprite: {fileID: 21300000, guid: be8830c0f2cc73c4891ba78ca5f3eba7, type: 3}
   - judgement: 100
     fastLate: 1
-    sprite: {fileID: 21300000, guid: f0a9230baf280914e97e3f9b701b0818, type: 3}
+    sprite: {fileID: 21300000, guid: bad1fbdf2fedde24eb19b72b9afdcca9, type: 3}
   - judgement: 100
     fastLate: 2
-    sprite: {fileID: 21300000, guid: 6bb8186ac2b7f5a449bda3935a874890, type: 3}
+    sprite: {fileID: 21300000, guid: 66222fb54bfac9445ae97dbaa9bfa3d4, type: 3}
   - judgement: 10
     fastLate: 0
-    sprite: {fileID: 21300000, guid: 7efe8b249fccf7745b348400d4a2083f, type: 3}
+    sprite: {fileID: 21300000, guid: 1651bfe9d2361824bb587091858a8331, type: 3}
   - judgement: 10
     fastLate: 1
-    sprite: {fileID: 21300000, guid: b0c7ee5b14c279e41b37b6c08e5acfda, type: 3}
+    sprite: {fileID: 21300000, guid: 16149fffa564366428671f4a0c61165b, type: 3}
   - judgement: 10
     fastLate: 2
-    sprite: {fileID: 21300000, guid: 21b47f33112aa004883fef965dded9cf, type: 3}
+    sprite: {fileID: 21300000, guid: 65b26233d467708478d2b6dde2e48936, type: 3}
   - judgement: 1
     fastLate: 0
-    sprite: {fileID: 21300000, guid: ba13c5347927e174b923fd7a4f1009d5, type: 3}
+    sprite: {fileID: 21300000, guid: f7f6b6d3b6175bf4d86cdcd591fb4b23, type: 3}
   - judgement: 1
     fastLate: 1
-    sprite: {fileID: 21300000, guid: ba13c5347927e174b923fd7a4f1009d5, type: 3}
+    sprite: {fileID: 21300000, guid: f7f6b6d3b6175bf4d86cdcd591fb4b23, type: 3}
   - judgement: 1
     fastLate: 2
-    sprite: {fileID: 21300000, guid: ba13c5347927e174b923fd7a4f1009d5, type: 3}
+    sprite: {fileID: 21300000, guid: f7f6b6d3b6175bf4d86cdcd591fb4b23, type: 3}
   spriteRenderer: {fileID: 4366772811187476307}
   anim: {fileID: 2112256445054745092}
 --- !u!95 &2112256445054745092
@@ -179,7 +179,7 @@ Animator:
   m_GameObject: {fileID: 1500984401244750326}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fc29bf5dfd792924796e0729a418f7ac, type: 2}
+  m_Controller: {fileID: 9100000, guid: 61a4587e0abae4f4eac39d8edc1494b1, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

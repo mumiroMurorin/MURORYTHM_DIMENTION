@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4212254938933315147}
   - component: {fileID: 3121784222154283204}
+  - component: {fileID: 7348185221297426011}
   m_Layer: 0
   m_Name: SpaceHoldMeshNoteOrigin
   m_TagString: Untagged
@@ -29,7 +30,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5069610759618604533}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3121784222154283204
@@ -49,7 +51,113 @@ MonoBehaviour:
   firstMarginTime: 0.1
   meshMaterialDefaultInside: {fileID: 2100000, guid: f0e82ed9653c7604a8c2a2eb1beea3a1, type: 2}
   meshMaterialDefaultOutside: {fileID: 2100000, guid: 8de6ef7ea1e5fff4297b6e2b40587367, type: 2}
+  meshMaterialDefaultOutline: {fileID: 2100000, guid: 9879c1273ec156948bac4aedf50f876d, type: 2}
   meshMaterialHoldingInside: {fileID: 2100000, guid: eedffeccf4569d146b08c376e4169533, type: 2}
   meshMaterialHoldingOutside: {fileID: 2100000, guid: 1c576805fedcb464082f205c96d448c9, type: 2}
+  meshMaterialHoldingOutline: {fileID: 2100000, guid: f28bf8f73f6739848a3974ba7371023f, type: 2}
   meshMaterialUnholdingInside: {fileID: 2100000, guid: 942f5d0d457e2f6498b4669de7ead07d, type: 2}
   meshMaterialUnholdingOutside: {fileID: 2100000, guid: 85810bdc019df3c49b8616aaae6b0603, type: 2}
+  meshMaterialUnholdingOutline: {fileID: 2100000, guid: 28e41011b5c72b44a967df4c2026d960, type: 2}
+  judgementRangeView: {fileID: 7348185221297426011}
+--- !u!114 &7348185221297426011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8224908405846241423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f319f2f948e4b1490f7a1d4d086bc5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showJudgementRange: 1
+  meshFilter: {fileID: 6066666802898568270}
+  meshRenderer: {fileID: 91298112961660618}
+  material: {fileID: 2100000, guid: ec2749e8d8cdeec47b384e5c14cb6915, type: 2}
+  lineWidth: 0.25
+  zOffset: -0.01
+  normalizeRadius: 10
+--- !u!1 &8840368366467242802
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5069610759618604533}
+  - component: {fileID: 6066666802898568270}
+  - component: {fileID: 91298112961660618}
+  m_Layer: 0
+  m_Name: JudgementRangeLine
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5069610759618604533
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8840368366467242802}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4212254938933315147}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &6066666802898568270
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8840368366467242802}
+  m_Mesh: {fileID: 0}
+--- !u!23 &91298112961660618
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8840368366467242802}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}

@@ -48,3 +48,4 @@ MonoBehaviour:
   noteMeshPrefab: {fileID: 2776397303821155744, guid: 42c571f76ab05c044bc8723b01361e79, type: 3}
   meshDivisionNum: 10
   maxTriangleLength: 2
+  outlineGap: 0.01

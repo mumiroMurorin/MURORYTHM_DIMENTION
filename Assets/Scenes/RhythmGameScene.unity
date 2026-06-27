@@ -235,10 +235,10 @@ MonoBehaviour:
     composer_name: "\u524A\u9664"
     music_spr: {fileID: 21300000, guid: 1512ba05fa48cde48858c7f68c23594f, type: 3}
     theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
-    clip: {fileID: 8300000, guid: 015896b2af4a8a04a95905417f694d54, type: 3}
+    clip: {fileID: 8300000, guid: 993bb1f8d9375c04da5f17d29a0760de, type: 3}
     sample_clip: {fileID: 8300000, guid: 0d1068dc9a46ed641b6c5e4506563fbc, type: 3}
-    symphonyType: 20
-    stageType: 200
+    symphonyType: 10
+    stageType: 100
     difficulties: 00000000000000000000000000000000
     chartPaths:
     - 
@@ -246,7 +246,7 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: MusicData/Aleph-0/chart_master.json
+  chartFilePath: MusicData/Altale/chart_master.json
   noteSpeed: 200
   groundRadius: 2000
   isAutoMode: 1

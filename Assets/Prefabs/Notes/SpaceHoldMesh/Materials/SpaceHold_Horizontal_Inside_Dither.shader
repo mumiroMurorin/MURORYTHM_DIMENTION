@@ -1,13 +1,15 @@
-Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
+Shader "Notes/SpaceHold/SpaceHold_Horizontal_Inside_Dither"
 {
     Properties
     {
-        _MainTex("Texture", 2D) = "white" {}
-        _Color("Color (Inside Range)", Color) = (1,1,1,1)
-        _SecondaryColor("Secondary Color (Outside Range)", Color) = (1,1,1,0)
+        _MainTex("Albedo (RGB)", 2D) = "white" {}
+        _Color("Color", Color) = (1,1,1,1)
+        _SecondaryColor("Secondary Color", Color) = (1,1,1,1)
+        _Glossiness("Smoothness", Range(0,1)) = 0.5
+        _Metallic("Metallic", Range(0,1)) = 0.0
 
-        _MinZ("Visible Range Min Z", Float) = -20.0
-        _MaxZ("Visible Range Max Z", Float) = 187.0
+        _MinZ("Visible Range Min Z", Float) = 0.0
+        _MaxZ("Visible Range Max Z", Float) = 1.0
 
         _PingPongIntensityMin("PingPong Intensity Min", Range(0, 5)) = 0.8
         _PingPongIntensityMax("PingPong Intensity Max", Range(0, 5)) = 1.2
@@ -15,17 +17,18 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
 
         _StripeColor("Stripe Color", Color) = (1,1,1,1)
         _StripeTex("Stripe Texture", 2D) = "white" {}
-        _StripeFrequency("Stripe Frequency", Float) = 0.1
+        _StripeFrequency("Stripe Frequency", Float) = 4.0
         _StripeSecondaryWidth("Stripe Secondary Width", Range(0.01, 0.95)) = 0.25
         _StripeBlendSoftness("Stripe Blend Softness", Range(0.001, 0.5)) = 0.08
+        _DitherAlpha("Dither Alpha", Range(0, 1)) = 1.0
     }
 
     SubShader
     {
         Tags
         {
-            "RenderType" = "Transparent"
-            "Queue" = "Transparent"
+            "RenderType" = "TransparentCutout"
+            "Queue" = "AlphaTest"
             "IgnoreProjector" = "True"
         }
 
@@ -34,10 +37,11 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
 
         Pass
         {
-            Blend SrcAlpha OneMinusSrcAlpha
-            ZWrite Off
+            ZWrite On
+            ZTest LEqual
 
             CGPROGRAM
+            #pragma target 3.0
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_fog
@@ -48,7 +52,6 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
-                float2 uv2 : TEXCOORD1;
             };
 
             struct v2f
@@ -57,8 +60,7 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
                 float3 worldPos : TEXCOORD2;
-                float3 localPos : TEXCOORD3;
-                float trackDistance : TEXCOORD4;
+                float4 screenPos : TEXCOORD3;
             };
 
             sampler2D _MainTex;
@@ -76,6 +78,24 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
             float _StripeFrequency;
             float _StripeSecondaryWidth;
             float _StripeBlendSoftness;
+            float _DitherAlpha;
+
+            float Dither4x4(float2 screenPosition)
+            {
+                int x = (int)fmod(screenPosition.x, 4.0);
+                int y = (int)fmod(screenPosition.y, 4.0);
+                int index = x + y * 4;
+
+                const float thresholds[16] =
+                {
+                    0.0 / 16.0,  8.0 / 16.0,  2.0 / 16.0, 10.0 / 16.0,
+                    12.0 / 16.0, 4.0 / 16.0, 14.0 / 16.0,  6.0 / 16.0,
+                    3.0 / 16.0, 11.0 / 16.0,  1.0 / 16.0,  9.0 / 16.0,
+                    15.0 / 16.0, 7.0 / 16.0, 13.0 / 16.0,  5.0 / 16.0
+                };
+
+                return thresholds[index];
+            }
 
             v2f vert(appdata v)
             {
@@ -83,9 +103,7 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-                o.localPos = v.vertex.xyz;
-                // 【ノーツ軌道】曲げる前の進行距離をUV2から受け取る
-                o.trackDistance = v.uv2.x;
+                o.screenPos = ComputeScreenPos(o.vertex);
                 UNITY_TRANSFER_FOG(o, o.vertex);
                 return o;
             }
@@ -101,7 +119,7 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
                 float pingPong = abs(frac(_Time.y / duration) * 2.0 - 1.0);
                 float intensity = lerp(_PingPongIntensityMin, _PingPongIntensityMax, pingPong);
 
-                float stripePhase = i.trackDistance * _StripeFrequency * UNITY_TWO_PI;
+                float stripePhase = i.uv.x * _StripeFrequency * UNITY_TWO_PI;
                 float stripeWave = (cos(stripePhase) + 1.0) * 0.5;
                 float stripeThreshold = saturate(1.0 - _StripeSecondaryWidth);
                 float stripeFeather = max(_StripeBlendSoftness, 0.0001);
@@ -115,73 +133,20 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Outside"
                 fixed4 stripeCol = stripeSample * _StripeColor;
                 stripeCol.a *= col.a;
                 col = lerp(col, stripeCol, stripeMask);
+
+                float2 screenUV = i.screenPos.xy / max(i.screenPos.w, 0.0001);
+                float2 screenPosition = screenUV * _ScreenParams.xy;
+                float alpha = saturate(col.a * _DitherAlpha);
+                clip(alpha - Dither4x4(screenPosition));
+
                 col.rgb *= intensity;
+                col.a = 1.0;
                 UNITY_APPLY_FOG(i.fogCoord, col);
-
                 return col;
-            }
-            ENDCG
-        }
-
-        Pass
-        {
-            Name "ShadowCaster"
-            Tags { "LightMode" = "ShadowCaster" }
-
-            ZWrite On
-            ZTest LEqual
-            Cull Back
-
-            CGPROGRAM
-            #pragma target 3.0
-            #pragma vertex vertShadow
-            #pragma fragment fragShadow
-            #pragma multi_compile_shadowcaster
-
-            #include "UnityCG.cginc"
-
-            struct appdata
-            {
-                float4 vertex : POSITION;
-                float3 normal : NORMAL;
-                float2 uv : TEXCOORD0;
-            };
-
-            struct v2f
-            {
-                V2F_SHADOW_CASTER;
-                float2 uv : TEXCOORD1;
-                float3 worldPos : TEXCOORD2;
-            };
-
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
-            fixed4 _Color;
-            fixed4 _SecondaryColor;
-            float _MinZ;
-            float _MaxZ;
-
-            v2f vertShadow(appdata v)
-            {
-                v2f o;
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-                TRANSFER_SHADOW_CASTER_NORMALOFFSET(o)
-                return o;
-            }
-
-            float4 fragShadow(v2f i) : SV_Target
-            {
-                fixed alpha = tex2D(_MainTex, i.uv).a;
-                float inRange = step(_MinZ, i.worldPos.z) * step(i.worldPos.z, _MaxZ);
-                fixed tintAlpha = lerp(_SecondaryColor.a, _Color.a, inRange);
-
-                clip(alpha * tintAlpha - 0.001h);
-                SHADOW_CASTER_FRAGMENT(i)
             }
             ENDCG
         }
     }
 
-    FallBack "Transparent/VertexLit"
+    FallBack "Transparent/Cutout/VertexLit"
 }

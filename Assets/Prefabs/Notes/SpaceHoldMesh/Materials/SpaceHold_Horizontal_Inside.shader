@@ -1,10 +1,10 @@
-Shader "Notes/SpaceHold/SpaceHold_Default_Inside"
+Shader "Notes/SpaceHold/SpaceHold_Horizontal_Inside"
 {
     Properties
     {
+        _MainTex("Albedo (RGB)", 2D) = "white" {}
         _Color("Color", Color) = (1,1,1,1)
         _SecondaryColor("Secondary Color", Color) = (1,1,1,1)
-        _MainTex("Albedo (RGB)", 2D) = "white" {}
         _Glossiness("Smoothness", Range(0,1)) = 0.5
         _Metallic("Metallic", Range(0,1)) = 0.0
 
@@ -17,7 +17,7 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Inside"
 
         _StripeColor("Stripe Color", Color) = (1,1,1,1)
         _StripeTex("Stripe Texture", 2D) = "white" {}
-        _StripeFrequency("Stripe Frequency", Float) = 0.1
+        _StripeFrequency("Stripe Frequency", Float) = 4.0
         _StripeSecondaryWidth("Stripe Secondary Width", Range(0.01, 0.95)) = 0.25
         _StripeBlendSoftness("Stripe Blend Softness", Range(0.001, 0.5)) = 0.08
     }
@@ -28,7 +28,7 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Inside"
         LOD 200
 
         CGPROGRAM
-        #pragma surface surf Standard alpha:fade vertex:vert
+        #pragma surface surf Standard alpha:fade
         #pragma target 3.0
 
         sampler2D _MainTex;
@@ -39,7 +39,6 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Inside"
         {
             float2 uv_MainTex;
             float3 worldPos;
-            float trackDistance;
         };
 
         half _Glossiness;
@@ -59,13 +58,6 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Inside"
         UNITY_INSTANCING_BUFFER_START(Props)
         UNITY_INSTANCING_BUFFER_END(Props)
 
-        void vert(inout appdata_full v, out Input o)
-        {
-            UNITY_INITIALIZE_OUTPUT(Input, o);
-            // 【ノーツ軌道】テクスチャ設定の影響を受けずにUV2の進行距離を渡す
-            o.trackDistance = v.texcoord1.x;
-        }
-
         void surf(Input IN, inout SurfaceOutputStandard o)
         {
             float inRange = step(_MinZ, IN.worldPos.z) * step(IN.worldPos.z, _MaxZ);
@@ -76,8 +68,7 @@ Shader "Notes/SpaceHold/SpaceHold_Default_Inside"
             float pingPong = abs(frac(_Time.y / duration) * 2.0 - 1.0);
             float intensity = lerp(_PingPongIntensityMin, _PingPongIntensityMax, pingPong);
 
-            // 【ノーツ軌道】曲げる前の進行距離をUV2から参照する
-            float stripePhase = IN.trackDistance * _StripeFrequency * UNITY_TWO_PI;
+            float stripePhase = IN.uv_MainTex.x * _StripeFrequency * UNITY_TWO_PI;
             float stripeWave = (cos(stripePhase) + 1.0) * 0.5;
             float stripeThreshold = saturate(1.0 - _StripeSecondaryWidth);
             float stripeFeather = max(_StripeBlendSoftness, 0.0001);

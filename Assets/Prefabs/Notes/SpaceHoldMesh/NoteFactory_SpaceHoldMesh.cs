@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -18,6 +17,9 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     [Header("mesh1単位の最大長さ")]
     [SerializeField] float maxTriangleLength = 0.5f;
 
+    [Header("アウトライン生成の隙間")]
+    [SerializeField] float outlineGap = 0.05f;
+
     INoteSpawnDataOptionGetter optionHolder;
     ISpaceInputGetter spaceInputGetter;
     ITimeGetter timer;
@@ -34,7 +36,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     public override NoteObject<NoteData_SpaceHoldMesh> Spawn(NoteData_SpaceHoldMesh data, INotePositionCalculator positionCalculator)
     {
         // 生成
-        NoteObject<NoteData_SpaceHoldMesh> note = GenerateNoteInstance(ConvertNoteData(data), positionCalculator);
+        NoteObject<NoteData_SpaceHoldMesh> note = GenerateNoteInstance(ConvertNoteData(data, positionCalculator), positionCalculator);
 
         // 位置調整
         float startDistance = positionCalculator.GetPosition(data.Timing) * optionHolder.NoteSpeed.Value;
@@ -51,60 +53,71 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     }
 
     /// <summary>
-    /// ノートデータにさらなる情報を追加
+    /// ノートデータに必要な情報を追加
     /// </summary>
-    /// <param name="data"></param>
-    private NoteData_SpaceHoldMesh ConvertNoteData(NoteData_SpaceHoldMesh data)
+    private NoteData_SpaceHoldMesh ConvertNoteData(NoteData_SpaceHoldMesh data, INotePositionCalculator positionCalculator)
     {
-        // ノーツデータにいろいろ追加
         data.SpaceInput = this.spaceInputGetter;
         data.Timer = this.timer;
         data.OptionGetter = this.optionHolder;
+        data.PositionCalculator = positionCalculator;
+        data.NoteSpeed = optionHolder.NoteSpeed.Value;
+        data.DepthToVertices = GenerateDepthToVertices(data.TimeToVertices, positionCalculator, data.NoteSpeed);
+        data.JudgementRangeLineParent = this.transform;
 
         return data;
+    }
+
+    private List<DepthToVertices> GenerateDepthToVertices(List<TimeToVertices> timeToVertices, INotePositionCalculator positionCalculator, float noteSpeed)
+    {
+        if (timeToVertices == null) { return null; }
+        if (positionCalculator == null) { return null; }
+
+        return timeToVertices
+            .Select(x => new DepthToVertices(positionCalculator.GetPosition(x.Timing) * noteSpeed, x.Vertices))
+            .ToList();
     }
 
     /// <summary>
     /// ノーツをインスタンス化して返す
     /// </summary>
-    /// <param name="data"></param>
-    /// <returns></returns>
     private NoteObject<NoteData_SpaceHoldMesh> GenerateNoteInstance(NoteData_SpaceHoldMesh data, INotePositionCalculator positionCalculator)
     {
         GameObject origin = Instantiate(noteObjectOriginPrefab);
 
-        // ノーツオブジェクト(表)を生成
-        var outsideMesh = GenerateMeshObject(data, false, positionCalculator);
-        outsideMesh.transform.SetParent(origin.transform);
+        // 外側位置に、アウトラインメッシュを生成
+        MeshRenderer outlineMesh = GenerateMeshObject(data, outlineGap, false, positionCalculator);
+        outlineMesh.transform.SetParent(origin.transform);
 
-        // ノーツオブジェクト(裏)を生成
-        var insideMesh = GenerateMeshObject(data, true, positionCalculator);
-        insideMesh.transform.SetParent(origin.transform);
+        // 内側位置に、表向きと裏向きのメッシュを生成
+        MeshRenderer insideForwardMesh = GenerateMeshObject(data, 0f, false, positionCalculator);
+        insideForwardMesh.transform.SetParent(origin.transform);
 
-        // コンポーネントを取得
+        MeshRenderer insideReverseMesh = GenerateMeshObject(data, 0f, true, positionCalculator);
+        insideReverseMesh.transform.SetParent(origin.transform);
+
         NoteObject<NoteData_SpaceHoldMesh> note = origin.GetComponent<NoteObject<NoteData_SpaceHoldMesh>>();
 
-        // レンダラーの登録
-        data.MeshRendererAsset = new HoldMeshRendererAsset(insideMesh, outsideMesh);
+        // 既存のSetMaterial呼び出しを維持するため、Renderer管理だけ4枚対応にする
+        data.MeshRendererAsset = new HoldMeshRendererAsset(
+            insideForwardMesh,
+            insideReverseMesh,
+            outlineMesh);
 
         return note;
     }
 
     /// <summary>
-    /// ホールドのメッシュ部分の生成
+    /// ホールドメッシュ部分を生成
     /// </summary>
-    private MeshRenderer GenerateMeshObject(NoteData_SpaceHoldMesh noteData, bool isMeshReverse, INotePositionCalculator positionCalculator)
+    private MeshRenderer GenerateMeshObject(NoteData_SpaceHoldMesh noteData, float surfaceOffset, bool isMeshReverse, INotePositionCalculator positionCalculator)
     {
         var obj = Instantiate(noteMeshPrefab);
         if (!obj.TryGetComponent(out MeshFilter meshFilter)) { meshFilter = obj.AddComponent<MeshFilter>(); }
         if (!obj.TryGetComponent(out MeshRenderer meshRenderer)) { meshRenderer = obj.AddComponent<MeshRenderer>(); }
 
-        // 復元
-        List<TimeToVertices> timeToVertices = new List<TimeToVertices>();
-        foreach (TimeToVertices t in noteData.TimeToVertices)
-        {
-            timeToVertices.Add(new TimeToVertices(t.Timing, t.Vertices.Select(v => (Vector2)MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToArray()));
-        }
+        // 判定用データは触らず、見た目用コピーだけを内外方向へずらす
+        List<TimeToVertices> timeToVertices = GenerateVisualTimeToVertices(noteData.TimeToVertices, surfaceOffset);
 
         Mesh mesh = SpaceHoldMeshGenerator.GenerateSpaceHoldEdgeMesh(
             timeToVertices,
@@ -117,6 +130,59 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         meshFilter.mesh = mesh;
 
         return meshRenderer;
+    }
+
+    private List<TimeToVertices> GenerateVisualTimeToVertices(List<TimeToVertices> source, float surfaceOffset)
+    {
+        List<TimeToVertices> result = new List<TimeToVertices>();
+        if (source == null) { return result; }
+
+        foreach (TimeToVertices t in source)
+        {
+            Vector2[] offsetVertices = OffsetVerticesFromCenter(t.Vertices, surfaceOffset);
+            Vector2[] normalizedVertices = offsetVertices
+                .Select(v => (Vector2)MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS))
+                .ToArray();
+
+            result.Add(new TimeToVertices(t.Timing, normalizedVertices));
+        }
+
+        return result;
+    }
+
+    private Vector2[] OffsetVerticesFromCenter(Vector2[] vertices, float offset)
+    {
+        if (vertices == null) { return new Vector2[0]; }
+        if (vertices.Length == 0) { return new Vector2[0]; }
+        if (Mathf.Approximately(offset, 0f)) { return vertices.ToArray(); }
+
+        Vector2 center = CalcCenter(vertices);
+        Vector2[] result = new Vector2[vertices.Length];
+
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            Vector2 direction = vertices[i] - center;
+            if (direction.sqrMagnitude <= Mathf.Epsilon)
+            {
+                result[i] = vertices[i];
+                continue;
+            }
+
+            result[i] = vertices[i] + direction.normalized * offset;
+        }
+
+        return result;
+    }
+
+    private Vector2 CalcCenter(Vector2[] vertices)
+    {
+        Vector2 center = Vector2.zero;
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            center += vertices[i];
+        }
+
+        return center / vertices.Length;
     }
 
     /// <summary>
