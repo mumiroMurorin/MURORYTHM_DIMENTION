@@ -103,8 +103,8 @@ MonoBehaviour:
   timer:
     obj: {fileID: 0}
   noteVisibilityController: {fileID: 3803758075353284194}
-  visibleBehindDistance: 5
-  visibleAheadDistance: 100
+  visibleBehindDistance: 10
+  visibleAheadDistance: 256
 --- !u!114 &3803758075353284194
 MonoBehaviour:
   m_ObjectHideFlags: 0

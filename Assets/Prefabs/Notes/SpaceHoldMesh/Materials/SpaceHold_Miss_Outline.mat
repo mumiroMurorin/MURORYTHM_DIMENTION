@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SpaceHold_Miss_Outline
-  m_Shader: {fileID: 4800000, guid: 60b417e55ca27514ca1e8ad2e4530bd2, type: 3}
+  m_Shader: {fileID: 4800000, guid: b7e41f662d77721449ef728d9910d84e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -17,7 +17,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3002
+  m_CustomRenderQueue: 3003
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -73,7 +73,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _MaxZ: -20
+    - _MaxZ: 183
     - _Metallic: 1
     - _MinZ: -20
     - _Mode: 2
@@ -88,15 +88,16 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 5
+    - _StencilRef: 1
     - _StripeBlendSoftness: 0.5
     - _StripeFrequency: 20
     - _StripeSecondaryWidth: 0.3
     - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 0, g: 0.5943396, b: 0.5943396, a: 0.47058824}
+    - _Color: {r: 0.78431374, g: 0.43137255, b: 0.78431374, a: 0.88235295}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _SecondaryColor: {r: 1, g: 1, b: 1, a: 0}
-    - _StripeColor: {r: 0, g: 1, b: 1, a: 0.6862745}
+    - _StripeColor: {r: 1, g: 0.43137255, b: 1, a: 0.6862745}
   m_BuildTextureStacks: []

@@ -51,5 +51,7 @@ MonoBehaviour:
   meshDivisionNum: 10
   shadowDivisionNum: 24
   maxTriangleLength: 2
-  outlineGap: 0.01
+  enableOutline: 1
+  enableJudgementRangeLine: 1
+  outlineGap: 0.02
   shadowRadiusOffset: 0

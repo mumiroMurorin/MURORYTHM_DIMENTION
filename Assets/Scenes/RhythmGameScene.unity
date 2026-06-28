@@ -235,10 +235,10 @@ MonoBehaviour:
     composer_name: "\u524A\u9664"
     music_spr: {fileID: 21300000, guid: 1512ba05fa48cde48858c7f68c23594f, type: 3}
     theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
-    clip: {fileID: 8300000, guid: 275cd6af67414094eb8c0eb6d38f9e2c, type: 3}
+    clip: {fileID: 8300000, guid: 993bb1f8d9375c04da5f17d29a0760de, type: 3}
     sample_clip: {fileID: 8300000, guid: 6bb917bc6d659314c85522d193d72c5b, type: 3}
     symphonyType: 10
-    stageType: 100
+    stageType: 200
     difficulties: 00000000000000000000000000000000
     chartPaths:
     - 
@@ -246,7 +246,7 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: "MusicData/\u6708\u307E\u3067\u5C4A\u3051\u3001\u4E0D\u6B7B\u306E\u7159/chart_master.json"
+  chartFilePath: MusicData/Altale/chart_master.json
   noteSpeed: 200
   groundRadius: 2000
   isAutoMode: 1
@@ -1082,6 +1082,14 @@ PrefabInstance:
     - target: {fileID: 3557880811985844621, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
       propertyPath: m_Name
       value: LoadingBody
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344308489783075046, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7003494081260383716, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2033,13 +2041,17 @@ PrefabInstance:
       propertyPath: noteParent
       value: 
       objectReference: {fileID: 1010482526}
-    - target: {fileID: 699343328728032737, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
-      propertyPath: visibleAheadDistance
-      value: 256
+    - target: {fileID: 797780899788562966, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
+      propertyPath: enableGroundLine
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 699343328728032737, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
-      propertyPath: visibleBehindDistance
-      value: 10
+    - target: {fileID: 5718480892716312342, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
+      propertyPath: enableOutline
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5718480892716312342, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
+      propertyPath: enableJudgementRangeLine
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6117056429854002331, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2080,6 +2092,10 @@ PrefabInstance:
     - target: {fileID: 6117056429854002331, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6869460142404363862, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
+      propertyPath: enableGroundLine
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7896517693994468305, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
       propertyPath: m_Name

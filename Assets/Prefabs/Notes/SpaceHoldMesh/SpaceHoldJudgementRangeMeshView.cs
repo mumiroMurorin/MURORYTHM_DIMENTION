@@ -14,6 +14,15 @@ public class SpaceHoldJudgementRangeMeshView : MonoBehaviour
 
     Mesh currentMesh;
 
+    public void SetShowJudgementRange(bool show)
+    {
+        showJudgementRange = show;
+        if (!showJudgementRange)
+        {
+            SetVisible(false);
+        }
+    }
+
     public void Initialize(Transform lineParent)
     {
         SetupMeshObject(lineParent);

@@ -21,6 +21,8 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     [SerializeField] float maxTriangleLength = 0.5f;
 
     [Header("アウトライン生成の隙間")]
+    [SerializeField] bool enableOutline = true;
+    [SerializeField] bool enableJudgementRangeLine = true;
     [SerializeField] float outlineGap = 0.05f;
     [SerializeField] float shadowRadiusOffset = 0.02f;
 
@@ -68,6 +70,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         data.NoteSpeed = optionHolder.NoteSpeed.Value;
         data.DepthToVertices = GenerateDepthToVertices(data.TimeToVertices, positionCalculator, data.NoteSpeed);
         data.JudgementRangeLineParent = this.transform;
+        data.EnableJudgementRangeLine = enableJudgementRangeLine;
 
         return data;
     }
@@ -89,9 +92,18 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     {
         GameObject origin = Instantiate(noteObjectOriginPrefab);
 
-        // 外側位置に、アウトラインメッシュを生成
-        MeshRenderer outlineMesh = GenerateMeshObject(data, outlineGap, false, positionCalculator);
-        outlineMesh.transform.SetParent(origin.transform);
+        MeshRenderer outlineForwardMesh = null;
+        MeshRenderer outlineReverseMesh = null;
+
+        if (enableOutline)
+        {
+            // アウトライン機能が有効な時だけ、外側に少し広げたメッシュを生成
+            outlineForwardMesh = GenerateMeshObject(data, outlineGap, false, positionCalculator);
+            outlineForwardMesh.transform.SetParent(origin.transform);
+
+            outlineReverseMesh = GenerateMeshObject(data, outlineGap, true, positionCalculator);
+            outlineReverseMesh.transform.SetParent(origin.transform);
+        }
 
         // 内側位置に、表向きと裏向きのメッシュを生成
         MeshRenderer insideForwardMesh = GenerateMeshObject(data, 0f, false, positionCalculator);
@@ -100,6 +112,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         MeshRenderer insideReverseMesh = GenerateMeshObject(data, 0f, true, positionCalculator);
         insideReverseMesh.transform.SetParent(origin.transform);
 
+        // 影メッシュを生成
         MeshRenderer shadowMesh = GenerateShadowMeshObject(data, positionCalculator);
         shadowMesh.transform.SetParent(origin.transform);
 
@@ -109,7 +122,8 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         data.MeshRendererAsset = new HoldMeshRendererAsset(
             insideForwardMesh,
             insideReverseMesh,
-            outlineMesh,
+            outlineForwardMesh,
+            outlineReverseMesh,
             shadowMesh);
 
         return note;

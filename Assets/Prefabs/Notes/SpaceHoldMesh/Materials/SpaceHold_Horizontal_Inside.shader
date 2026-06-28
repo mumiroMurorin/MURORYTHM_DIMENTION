@@ -20,12 +20,21 @@ Shader "Notes/SpaceHold/SpaceHold_Horizontal_Inside"
         _StripeFrequency("Stripe Frequency", Float) = 4.0
         _StripeSecondaryWidth("Stripe Secondary Width", Range(0.01, 0.95)) = 0.25
         _StripeBlendSoftness("Stripe Blend Softness", Range(0.001, 0.5)) = 0.08
+
+        _StencilRef("Stencil Ref", Int) = 1
     }
 
     SubShader
     {
         Tags { "Queue" = "Transparent" }
         LOD 200
+
+        Stencil
+        {
+            Ref [_StencilRef]
+            Comp Always
+            Pass Replace
+        }
 
         CGPROGRAM
         #pragma surface surf Standard alpha:fade
