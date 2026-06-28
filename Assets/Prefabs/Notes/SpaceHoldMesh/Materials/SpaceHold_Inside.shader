@@ -1,4 +1,4 @@
-Shader "Notes/SpaceHold/SpaceHold_HorizontalStripe"
+Shader "Notes/SpaceHold/SpaceHold_Inside"
 {
     Properties
     {

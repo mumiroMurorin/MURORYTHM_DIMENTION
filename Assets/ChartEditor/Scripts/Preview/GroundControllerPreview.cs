@@ -48,7 +48,7 @@ public class GroundControllerPreview : MonoBehaviour
 
         float z = chartData.PositionGraph.GetPosition(time);
 
-        // 【ノーツ軌道】譜面エディタのプレビューも円の中心まわりに回転させる
+        // 譜面エディタのプレビューも円の中心まわりに回転させる
         float distance = optionGetter.NoteSpeed.Value * z;
         NoteTrackCurve.SetProgress(this.gameObject.transform, distance, optionGetter.NoteCurveRadius.Value);
     }

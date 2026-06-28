@@ -238,7 +238,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 993bb1f8d9375c04da5f17d29a0760de, type: 3}
     sample_clip: {fileID: 8300000, guid: 6bb917bc6d659314c85522d193d72c5b, type: 3}
     symphonyType: 10
-    stageType: 200
+    stageType: 100
     difficulties: 00000000000000000000000000000000
     chartPaths:
     - 
@@ -2095,7 +2095,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6869460142404363862, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
       propertyPath: enableGroundLine
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7896517693994468305, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
       propertyPath: m_Name

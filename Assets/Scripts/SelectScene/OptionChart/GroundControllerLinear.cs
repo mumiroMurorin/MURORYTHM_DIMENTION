@@ -36,7 +36,7 @@ public class GroundControllerLinear : MonoBehaviour
     /// </summary>
     private void MoveGround(float time)
     {
-        // 【ノーツ軌道】選曲画面のプレビューも本編と同じ円軌道で進行させる
+        // 選曲画面のプレビューも本編と同じ円軌道で進行させる
         float distance = optionHolder.NoteSpeed.Value * time;
         NoteTrackCurve.SetProgress(this.gameObject.transform, distance, optionHolder.NoteCurveRadius.Value);
     }

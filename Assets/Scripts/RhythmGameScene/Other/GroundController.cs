@@ -40,7 +40,7 @@ public class GroundController : MonoBehaviour
     {
         float z = chartDataGetter.Chart.PositionGraph.GetPosition(time);
 
-        // 【ノーツ軌道】全ノーツを個別更新せず、親を円の中心まわりに回転させる
+        // 全ノーツを個別更新せず、親を円の中心まわりに回転させる
         float distance = optionHolder.NoteSpeed.Value * z;
         NoteTrackCurve.SetProgress(this.gameObject.transform, distance, optionHolder.NoteCurveRadius.Value);
     }
