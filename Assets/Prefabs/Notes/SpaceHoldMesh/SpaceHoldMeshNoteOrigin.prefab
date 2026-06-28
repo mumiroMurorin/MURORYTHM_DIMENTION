@@ -46,18 +46,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 381f0af99864ef24282b31c9f0f70b1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  judgementMarginRadius: 0.3
+  judgementMarginRadius: 0.15
   judgementMarginTime: 0.15
   firstMarginTime: 0.1
   meshMaterialDefaultInside: {fileID: 2100000, guid: f0e82ed9653c7604a8c2a2eb1beea3a1, type: 2}
   meshMaterialDefaultOutside: {fileID: 2100000, guid: 8de6ef7ea1e5fff4297b6e2b40587367, type: 2}
   meshMaterialDefaultOutline: {fileID: 2100000, guid: 9879c1273ec156948bac4aedf50f876d, type: 2}
+  meshMaterialDefaultShadow: {fileID: 2100000, guid: 6ab62f80e7d34b328c0d14dcf02e2f90, type: 2}
   meshMaterialHoldingInside: {fileID: 2100000, guid: eedffeccf4569d146b08c376e4169533, type: 2}
   meshMaterialHoldingOutside: {fileID: 2100000, guid: 1c576805fedcb464082f205c96d448c9, type: 2}
   meshMaterialHoldingOutline: {fileID: 2100000, guid: f28bf8f73f6739848a3974ba7371023f, type: 2}
+  meshMaterialHoldingShadow: {fileID: 2100000, guid: 6ab62f80e7d34b328c0d14dcf02e2f90, type: 2}
   meshMaterialUnholdingInside: {fileID: 2100000, guid: 942f5d0d457e2f6498b4669de7ead07d, type: 2}
   meshMaterialUnholdingOutside: {fileID: 2100000, guid: 85810bdc019df3c49b8616aaae6b0603, type: 2}
   meshMaterialUnholdingOutline: {fileID: 2100000, guid: 28e41011b5c72b44a967df4c2026d960, type: 2}
+  meshMaterialUnholdingShadow: {fileID: 2100000, guid: bf7ac6718db68da4bb650227f8837a81, type: 2}
   judgementRangeView: {fileID: 7348185221297426011}
 --- !u!114 &7348185221297426011
 MonoBehaviour:

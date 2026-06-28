@@ -964,4 +964,258 @@ namespace MeshGenerate
             return mesh;
         }
     }
+
+    public class SpaceHoldShadowMeshGenerator
+    {
+        const float MinRadius = 0.01f;
+
+        public static Mesh GenerateSpaceHoldShadowMesh(
+            List<TimeToVertices> timeToVertices,
+            INotePositionCalculator posCalc,
+            float speed,
+            int shadowDivisionNum,
+            float lerpThresholdDepth,
+            float trackCurveRadius,
+            float halfPipeRadius,
+            float radiusOffset)
+        {
+            if (timeToVertices == null) { return new Mesh(); }
+            if (timeToVertices.Count == 0) { return new Mesh(); }
+            if (posCalc == null) { return new Mesh(); }
+
+            List<DepthToVertices> depthToVertices = timeToVertices
+                .Select(t => new DepthToVertices(speed * posCalc.GetPosition(t.Timing), t.Vertices))
+                .ToList();
+
+            return GenerateShadowMeshFromOutline(depthToVertices, shadowDivisionNum, lerpThresholdDepth, trackCurveRadius, halfPipeRadius, radiusOffset);
+        }
+
+        private static Mesh GenerateShadowMeshFromOutline(
+            List<DepthToVertices> depthToVertices,
+            int shadowDivisionNum,
+            float lerpThresholdDepth,
+            float trackCurveRadius,
+            float halfPipeRadius,
+            float radiusOffset)
+        {
+            Mesh mesh = new Mesh();
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+
+            List<Vector3> vertices = new List<Vector3>();
+            List<int> triangles = new List<int>();
+            List<Vector2> uvs = new List<Vector2>();
+            float currentStartZ = 0f;
+            int currentMeshIndex = 0;
+            float totalDepth = depthToVertices[^1].Depth - depthToVertices[0].Depth;
+
+            for (int i = 0; i < depthToVertices.Count - 1; i++)
+            {
+                float depth = depthToVertices[i + 1].Depth - depthToVertices[i].Depth;
+                List<Vector3> startOutline = GenerateSectionOutline(depthToVertices[i].Vertices, currentStartZ, shadowDivisionNum, halfPipeRadius, radiusOffset);
+                List<Vector3> endOutline = GenerateSectionOutline(depthToVertices[i + 1].Vertices, currentStartZ + depth, shadowDivisionNum, halfPipeRadius, radiusOffset);
+                int interpolateSteps = Mathf.Max(1, Mathf.CeilToInt(depth / Mathf.Max(lerpThresholdDepth, 0.001f)));
+
+                for (int j = 0; j < interpolateSteps; j++)
+                {
+                    float tA = j / (float)interpolateSteps;
+                    float tB = (j + 1) / (float)interpolateSteps;
+                    List<Vector3> verticesA = GenerateInterpolatedOutline(startOutline, endOutline, tA, trackCurveRadius, halfPipeRadius, radiusOffset);
+                    List<Vector3> verticesB = GenerateInterpolatedOutline(startOutline, endOutline, tB, trackCurveRadius, halfPipeRadius, radiusOffset);
+
+                    vertices.AddRange(verticesA);
+                    vertices.AddRange(verticesB);
+                    uvs.AddRange(GetShadowUVs(verticesA, totalDepth));
+                    uvs.AddRange(GetShadowUVs(verticesB, totalDepth));
+                    triangles.AddRange(MeshGenerator.GenerateTriangles(currentMeshIndex, verticesA.Count, verticesB.Count, false));
+
+                    currentMeshIndex += verticesA.Count + verticesB.Count;
+                }
+
+                currentStartZ += depth;
+            }
+
+            mesh.SetVertices(vertices);
+            mesh.SetTriangles(triangles, 0);
+            mesh.SetUVs(0, uvs);
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+            return mesh;
+        }
+
+        private static List<Vector3> GenerateSectionOutline(
+            Vector2[] sectionVertices,
+            float z,
+            int shadowDivisionNum,
+            float halfPipeRadius,
+            float radiusOffset)
+        {
+            if (sectionVertices == null || sectionVertices.Length == 0)
+            {
+                return new List<Vector3> { new Vector3(0f, 0f, z), new Vector3(0f, 0f, z) };
+            }
+
+            float sourceRadius = Mathf.Max(halfPipeRadius, MinRadius);
+            float projectionRadius = Mathf.Max(halfPipeRadius - Mathf.Max(0f, radiusOffset), MinRadius);
+            float minX = Mathf.Clamp(sectionVertices.Min(v => v.x), -sourceRadius, sourceRadius);
+            float maxX = Mathf.Clamp(sectionVertices.Max(v => v.x), -sourceRadius, sourceRadius);
+            float minAngle = GetHalfPipeAngle(minX, sourceRadius);
+            float maxAngle = GetHalfPipeAngle(maxX, sourceRadius);
+            int divisionCount = Mathf.Max(1, shadowDivisionNum);
+            List<Vector3> outline = new List<Vector3>();
+            for (int i = 0; i <= divisionCount; i++)
+            {
+                float t = i / (float)divisionCount;
+                float angle = Mathf.Lerp(minAngle, maxAngle, t);
+                outline.Add(new Vector3(
+                    projectionRadius * Mathf.Sin(angle),
+                    -projectionRadius * Mathf.Cos(angle),
+                    z));
+            }
+
+            return outline;
+        }
+
+        private static float GetHalfPipeAngle(float x, float radius)
+        {
+            return Mathf.Asin(Mathf.Clamp(x / Mathf.Max(radius, MinRadius), -1f, 1f));
+        }
+
+        private static List<Vector3> GenerateInterpolatedOutline(
+            List<Vector3> startOutline,
+            List<Vector3> endOutline,
+            float t,
+            float trackCurveRadius,
+            float halfPipeRadius,
+            float radiusOffset)
+        {
+            List<Vector3> result = new List<Vector3>();
+            int count = Mathf.Min(startOutline.Count, endOutline.Count);
+            for (int i = 0; i < count; i++)
+            {
+                Vector3 vertex = Vector3.Lerp(startOutline[i], endOutline[i], t);
+                result.Add(ProjectToHalfPipe(vertex, trackCurveRadius, halfPipeRadius, radiusOffset));
+            }
+
+            return result;
+        }
+
+        private static List<Vector2> GetShadowUVs(List<Vector3> stripVertices, float totalDepth)
+        {
+            List<Vector2> uvList = new List<Vector2>();
+            int lastIndex = stripVertices.Count - 1;
+            for (int i = 0; i < stripVertices.Count; i++)
+            {
+                float u = lastIndex > 0 ? i / (float)lastIndex : 0f;
+                float v = totalDepth > Mathf.Epsilon ? stripVertices[i].z / totalDepth : 0f;
+                uvList.Add(new Vector2(u, v));
+            }
+
+            return uvList;
+        }
+
+        private static Vector3 ProjectToHalfPipe(Vector3 vertex, float trackCurveRadius, float halfPipeRadius, float radiusOffset)
+        {
+            float safeHalfPipeRadius = Mathf.Max(halfPipeRadius - Mathf.Max(0f, radiusOffset), MinRadius);
+
+            float x = Mathf.Clamp(vertex.x, -safeHalfPipeRadius, safeHalfPipeRadius);
+            float baseY = -Mathf.Sqrt(safeHalfPipeRadius * safeHalfPipeRadius - x * x);
+            Vector3 halfPipeVertex = new Vector3(x, baseY, vertex.z);
+            return NoteTrackCurve.BendVertex(halfPipeVertex, trackCurveRadius);
+        }
+    }
+
+    public class SpaceBreakShadowMeshGenerator
+    {
+        const float MinRadius = 0.01f;
+
+        public static Mesh GenerateSpaceBreakShadowMesh(
+            List<Vector2> vertices,
+            float depth,
+            int shadowDivisionNum,
+            float trackCurveRadius,
+            float halfPipeRadius,
+            float radiusOffset)
+        {
+            if (vertices == null || vertices.Count == 0) { return new Mesh(); }
+
+            float halfDepth = depth * 0.5f;
+            List<Vector3> backOutline = GenerateSectionOutline(vertices, halfDepth, shadowDivisionNum, halfPipeRadius, radiusOffset);
+            List<Vector3> frontOutline = GenerateSectionOutline(vertices, -halfDepth, shadowDivisionNum, halfPipeRadius, radiusOffset);
+
+            List<Vector3> meshVertices = new List<Vector3>();
+            meshVertices.AddRange(ProjectOutline(backOutline, trackCurveRadius));
+            meshVertices.AddRange(ProjectOutline(frontOutline, trackCurveRadius));
+
+            Mesh mesh = new Mesh();
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+            mesh.SetVertices(meshVertices);
+            mesh.SetTriangles(MeshGenerator.GenerateTriangles(0, backOutline.Count, frontOutline.Count, false), 0);
+            mesh.SetUVs(0, GetShadowUVs(meshVertices, depth));
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+            return mesh;
+        }
+
+        private static List<Vector3> GenerateSectionOutline(
+            List<Vector2> vertices,
+            float z,
+            int shadowDivisionNum,
+            float halfPipeRadius,
+            float radiusOffset)
+        {
+            float sourceRadius = Mathf.Max(halfPipeRadius, MinRadius);
+            float projectionRadius = Mathf.Max(halfPipeRadius - Mathf.Max(0f, radiusOffset), MinRadius);
+            float minX = Mathf.Clamp(vertices.Min(v => v.x), -sourceRadius, sourceRadius);
+            float maxX = Mathf.Clamp(vertices.Max(v => v.x), -sourceRadius, sourceRadius);
+            float minAngle = GetHalfPipeAngle(minX, sourceRadius);
+            float maxAngle = GetHalfPipeAngle(maxX, sourceRadius);
+            int divisionCount = Mathf.Max(1, shadowDivisionNum);
+
+            List<Vector3> outline = new List<Vector3>();
+            for (int i = 0; i <= divisionCount; i++)
+            {
+                float t = i / (float)divisionCount;
+                float angle = Mathf.Lerp(minAngle, maxAngle, t);
+                outline.Add(new Vector3(
+                    projectionRadius * Mathf.Sin(angle),
+                    -projectionRadius * Mathf.Cos(angle),
+                    z));
+            }
+
+            return outline;
+        }
+
+        private static float GetHalfPipeAngle(float x, float radius)
+        {
+            return Mathf.Asin(Mathf.Clamp(x / Mathf.Max(radius, MinRadius), -1f, 1f));
+        }
+
+        private static List<Vector3> ProjectOutline(List<Vector3> outline, float trackCurveRadius)
+        {
+            List<Vector3> result = new List<Vector3>();
+            foreach (Vector3 vertex in outline)
+            {
+                result.Add(NoteTrackCurve.BendVertex(vertex, trackCurveRadius));
+            }
+
+            return result;
+        }
+
+        private static List<Vector2> GetShadowUVs(List<Vector3> vertices, float depth)
+        {
+            List<Vector2> uvs = new List<Vector2>();
+            int stripCount = vertices.Count / 2;
+            float invDepth = depth > Mathf.Epsilon ? 1f / depth : 0f;
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                int indexInStrip = i % stripCount;
+                float u = stripCount > 1 ? indexInStrip / (float)(stripCount - 1) : 0f;
+                float v = (vertices[i].z + depth * 0.5f) * invDepth;
+                uvs.Add(new Vector2(u, v));
+            }
+
+            return uvs;
+        }
+    }
 }

@@ -12,6 +12,7 @@ public class NoteObjectPreview_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh
     [SerializeField] Material meshMaterialInside;
     [SerializeField] Material meshMaterialOutside;
     [SerializeField] Material meshMaterialOutline;
+    [SerializeField] Material meshMaterialShadow;
 
     NoteData_SpaceHoldMesh noteData;
 
@@ -24,6 +25,6 @@ public class NoteObjectPreview_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh
         noteData = data;
 
         // マテリアルの設定
-        noteData.MeshRendererAsset.SetMaterial(meshMaterialInside, meshMaterialOutside, meshMaterialOutline);
+        noteData.MeshRendererAsset.SetMaterial(meshMaterialInside, meshMaterialOutside, meshMaterialOutline, meshMaterialShadow);
     }
 }

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Note_Right
-  m_Shader: {fileID: 4800000, guid: a6db069d3bb784d43bc84e2b3a43b998, type: 3}
+  m_Shader: {fileID: 4800000, guid: 4f8be7d57f8f4f7a8c1d2b2c5a2f7f31, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -16,7 +16,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3002
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -71,7 +71,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _MaxZ: 187
+    - _MaxZ: 183
     - _Metallic: 0
     - _MinZ: -20
     - _Mode: 0

@@ -9,6 +9,9 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
 {
     [SerializeField] float judgementMarginRadius = 0.25f;
     [SerializeField] float judgeMagnitude;
+    [Header("Shadow Material")]
+    [SerializeField] Material shadowMaterialDefault;
+    [SerializeField] Material shadowMaterialJudged;
 
     NoteData_SpaceBreak noteData;
 
@@ -16,12 +19,13 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
     bool isJudged;
 
     /// <summary>
-    /// ‰Šú‰»
+    /// åˆæœŸåŒ–
     /// </summary>
     /// <param name="data"></param>
     public override void Initialize(NoteData_SpaceBreak data)
     {
         noteData = data;
+        SetShadowMaterial(shadowMaterialDefault);
     }
 
     private void Update()
@@ -29,7 +33,7 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
         if (noteData == null) { return; }
         if (isJudged) { return; }
 
-        // ”»’èŠÔ‰ß‚¬‚Ä‚é‚Æ‚«
+        // åˆ¤å®šæ™‚é–“éãã¦ã‚‹ã¨ã
         if (noteData.JudgementWindow.IsPassJudgementRange(noteData.Timer.Time, noteData.Timing))
         {
             SendJudgementData();
@@ -37,7 +41,7 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
             return;
         }
 
-        // ”»’èŠÔ“à‚Å‚È‚¢‚Æ‚«
+        // åˆ¤å®šæ™‚é–“å†…ã§ãªã„ã¨ã
         if (!IsInJudgementTimeRange()) { return; }
 
         if (!noteData.OptionGetter.IsAutoMode) 
@@ -51,23 +55,24 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
     }
 
     /// <summary>
-    /// ”»’è
+    /// åˆ¤å®š
     /// </summary>
     private void NormalJudgement()
     {
-        // ”»’èŠÔŠO‚È‚ç•Ô‚·
+        // åˆ¤å®šæ™‚é–“å¤–ãªã‚‰è¿”ã™
         if (!IsInJudgementTimeRange()) { return; }
 
-        // Å‚”»’èŠ‚Âƒm[ƒc‚ª‰ß‚¬‚½‚Æ‚«”»’è‘—M
+        // æœ€é«˜åˆ¤å®šä¸”ã¤ãƒãƒ¼ãƒ„ãŒéããŸã¨ãåˆ¤å®šé€ä¿¡
         if (bestJudgement == Judgement.Perfect && noteData.Timing <= noteData.Timer.Time)
         {
             SendJudgementData();
+            SetShadowMaterial(shadowMaterialJudged);
             StartDestroyAnimation();
             SetDisable();
             return;
         }
 
-        // ”»’èŠÔ“à‚©‚Â˜g“à‚Éè‚ª‚ ‚èAè‡’l‚ğ‰z‚¦‚Ä‚¢‚éê‡
+        // åˆ¤å®šæ™‚é–“å†…ã‹ã¤æ å†…ã«æ‰‹ãŒã‚ã‚Šã€é–¾å€¤ã‚’è¶Šãˆã¦ã„ã‚‹å ´åˆ
         bool isInRangeRight = noteData.SpaceInput.IsInSpaceRange(noteData.Vertices, SpaceTrackingTag.RightHand, judgementMarginRadius);
         bool isInRangeLeft = noteData.SpaceInput.IsInSpaceRange(noteData.Vertices, SpaceTrackingTag.LeftHand, judgementMarginRadius);
         bool isOverThresholdRight = judgeMagnitude <= noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.RightHand).Value.magnitude;
@@ -77,37 +82,39 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
 
         var jae = noteData.JudgementWindow.GetJudgementAndError(noteData.Timer.Time, noteData.Timing);
         
-        // Å‚”»’è‚ÌXV
+        // æœ€é«˜åˆ¤å®šã®æ›´æ–°
         if ((int)bestJudgement < (int)jae.Judgement)
         {
             bestJudgement = jae.Judgement;
         }
 
-        // ’x‚ß‚¾‚Á‚½A‘¦”»’è
+        // é…ã‚ã ã£ãŸæ™‚ã€å³æ™‚åˆ¤å®š
         if (jae.Error > 0)
         {
             SendJudgementData();
+            SetShadowMaterial(shadowMaterialJudged);
             StartDestroyAnimation();
             SetDisable();
         }
     }
 
     /// <summary>
-    /// ƒI[ƒg”»’è
+    /// ã‚ªãƒ¼ãƒˆåˆ¤å®š
     /// </summary>
     private void AutoJudgement()
     {
-        // Å‚”»’è‚Ì‚Æ‚«Šm’è
+        // æœ€é«˜åˆ¤å®šã®ã¨ãç¢ºå®š
         if (noteData.Timing > noteData.Timer.Time) { return; }
 
         bestJudgement = Judgement.Perfect;
         SendJudgementData();
+        SetShadowMaterial(shadowMaterialJudged);
         StartDestroyAnimation();
         SetDisable();
     }
 
     /// <summary>
-    /// ”»’èƒf[ƒ^‚ğ‘—M
+    /// åˆ¤å®šãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡
     /// </summary>
     private void SendJudgementData()
     {
@@ -119,7 +126,7 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
     }
 
     /// <summary>
-    /// ”»’è”ÍˆÍ“à‚©’²‚×‚é
+    /// åˆ¤å®šç¯„å›²å†…ã‹èª¿ã¹ã‚‹
     /// </summary>
     /// <returns></returns>
     private bool IsInJudgementTimeRange()
@@ -144,8 +151,13 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
         noteData.FlagmentBomb.Explosion(center);
     }
 
+    private void SetShadowMaterial(Material material)
+    {
+        noteData?.MeshRendererAsset?.SetShadowMaterial(material);
+    }
+
     /// <summary>
-    /// ƒm[ƒc‚ğ‹@”\’â~‚·‚é
+    /// ãƒãƒ¼ãƒ„ã‚’æ©Ÿèƒ½åœæ­¢ã™ã‚‹
     /// </summary>
     private void SetDisable()
     {
@@ -154,7 +166,7 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
 }
 
 /// <summary>
-/// (‰Šú‰»‚É•K—v‚È•Ï”‚àŠÜ‚Ş)ƒz[ƒ‹ƒhƒƒbƒVƒ…ƒm[ƒc‚Ìƒf[ƒ^
+/// (åˆæœŸåŒ–ã«å¿…è¦ãªå¤‰æ•°ã‚‚å«ã‚€)ãƒ›ãƒ¼ãƒ«ãƒ‰ãƒ¡ãƒƒã‚·ãƒ¥ãƒãƒ¼ãƒ„ã®ãƒ‡ãƒ¼ã‚¿
 /// </summary>
 public class NoteData_SpaceBreak : INoteData, IJudgableNoteData
 {
@@ -168,6 +180,8 @@ public class NoteData_SpaceBreak : INoteData, IJudgableNoteData
 
     public Mesh Mesh { get; set; }
 
+    public SpaceBreakMeshRendererAsset MeshRendererAsset { get; set; }
+
     public FragmentsBomb FlagmentBomb { get; set; }
 
     public ISpaceInputGetter SpaceInput { get; set; }
@@ -177,5 +191,23 @@ public class NoteData_SpaceBreak : INoteData, IJudgableNoteData
     public IJudgementRecorder JudgementRecorder { get; set; }
 
     public INoteSpawnDataOptionGetter OptionGetter { get; set; }
+}
+
+public class SpaceBreakMeshRendererAsset
+{
+    public SpaceBreakMeshRendererAsset(MeshRenderer shadow)
+    {
+        ShadowRenderer = shadow;
+    }
+
+    public MeshRenderer ShadowRenderer { get; set; }
+
+    public void SetShadowMaterial(Material material)
+    {
+        if (ShadowRenderer == null) { return; }
+        if (material == null) { return; }
+
+        ShadowRenderer.material = material;
+    }
 }
 

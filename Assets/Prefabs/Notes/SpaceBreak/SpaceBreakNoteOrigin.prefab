@@ -46,3 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   judgementMarginRadius: 0.25
   judgeMagnitude: 1
+  shadowMaterialDefault: {fileID: 2100000, guid: e0b6a5f10c514bf2b6a0a6e172ce4b22, type: 2}
+  shadowMaterialJudged: {fileID: 2100000, guid: 0fd725f1133746689a9c4c28a8d94c21, type: 2}

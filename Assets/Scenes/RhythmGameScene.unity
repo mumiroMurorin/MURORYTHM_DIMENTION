@@ -235,8 +235,8 @@ MonoBehaviour:
     composer_name: "\u524A\u9664"
     music_spr: {fileID: 21300000, guid: 1512ba05fa48cde48858c7f68c23594f, type: 3}
     theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
-    clip: {fileID: 8300000, guid: 993bb1f8d9375c04da5f17d29a0760de, type: 3}
-    sample_clip: {fileID: 8300000, guid: 0d1068dc9a46ed641b6c5e4506563fbc, type: 3}
+    clip: {fileID: 8300000, guid: 275cd6af67414094eb8c0eb6d38f9e2c, type: 3}
+    sample_clip: {fileID: 8300000, guid: 6bb917bc6d659314c85522d193d72c5b, type: 3}
     symphonyType: 10
     stageType: 100
     difficulties: 00000000000000000000000000000000
@@ -246,7 +246,7 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: MusicData/Altale/chart_master.json
+  chartFilePath: "MusicData/\u6708\u307E\u3067\u5C4A\u3051\u3001\u4E0D\u6B7B\u306E\u7159/chart_master.json"
   noteSpeed: 200
   groundRadius: 2000
   isAutoMode: 1
@@ -2671,7 +2671,7 @@ PrefabInstance:
     - target: {fileID: 1019410027254325006, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 6485666689860371354, guid: 82b53020e6814d04aab9cfd7ac49ac10, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 1306721051046045800, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -2954,10 +2954,6 @@ PrefabInstance:
       objectReference: {fileID: -643376796560498950, guid: 796ea846c9ce48c4da82af3fc0c7e72e, type: 3}
     - target: {fileID: 8197773896528942447, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_ReceiveShadows
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8259239214574859370, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
-      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8382956314958948087, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}

@@ -10,15 +10,19 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
 
     [SerializeField] GameObject noteObjectOriginPrefab;
     [SerializeField] GameObject noteMeshPrefab;
+    [SerializeField] GameObject shadowMeshPrefab;
+    [SerializeField] Material shadowMaterial;
 
     [Header("meshの分割数")]
     [SerializeField] int meshDivisionNum = 10;
+    [SerializeField] int shadowDivisionNum = 24;
 
     [Header("mesh1単位の最大長さ")]
     [SerializeField] float maxTriangleLength = 0.5f;
 
     [Header("アウトライン生成の隙間")]
     [SerializeField] float outlineGap = 0.05f;
+    [SerializeField] float shadowRadiusOffset = 0.02f;
 
     INoteSpawnDataOptionGetter optionHolder;
     ISpaceInputGetter spaceInputGetter;
@@ -96,13 +100,17 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         MeshRenderer insideReverseMesh = GenerateMeshObject(data, 0f, true, positionCalculator);
         insideReverseMesh.transform.SetParent(origin.transform);
 
+        MeshRenderer shadowMesh = GenerateShadowMeshObject(data, positionCalculator);
+        shadowMesh.transform.SetParent(origin.transform);
+
         NoteObject<NoteData_SpaceHoldMesh> note = origin.GetComponent<NoteObject<NoteData_SpaceHoldMesh>>();
 
         // 既存のSetMaterial呼び出しを維持するため、Renderer管理だけ4枚対応にする
         data.MeshRendererAsset = new HoldMeshRendererAsset(
             insideForwardMesh,
             insideReverseMesh,
-            outlineMesh);
+            outlineMesh,
+            shadowMesh);
 
         return note;
     }
@@ -128,6 +136,37 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
             isMeshReverse,
             optionHolder.NoteCurveRadius.Value);
         meshFilter.mesh = mesh;
+
+        return meshRenderer;
+    }
+
+    private MeshRenderer GenerateShadowMeshObject(NoteData_SpaceHoldMesh noteData, INotePositionCalculator positionCalculator)
+    {
+        var obj = Instantiate(shadowMeshPrefab);
+        obj.name = "SpaceHoldShadow";
+
+        if (!obj.TryGetComponent(out MeshFilter meshFilter)) { meshFilter = obj.AddComponent<MeshFilter>(); }
+        if (!obj.TryGetComponent(out MeshRenderer meshRenderer)) { meshRenderer = obj.AddComponent<MeshRenderer>(); }
+
+        List<TimeToVertices> timeToVertices = GenerateVisualTimeToVertices(noteData.TimeToVertices, 0f);
+        Mesh mesh = SpaceHoldShadowMeshGenerator.GenerateSpaceHoldShadowMesh(
+            timeToVertices,
+            positionCalculator,
+            optionHolder.NoteSpeed.Value,
+            shadowDivisionNum,
+            maxTriangleLength,
+            optionHolder.NoteCurveRadius.Value,
+            RADIUS,
+            shadowRadiusOffset);
+
+        meshFilter.mesh = mesh;
+        if (shadowMaterial != null)
+        {
+            meshRenderer.material = shadowMaterial;
+        }
+
+        meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        meshRenderer.receiveShadows = false;
 
         return meshRenderer;
     }

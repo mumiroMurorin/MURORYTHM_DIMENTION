@@ -17,14 +17,17 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
     [SerializeField] Material meshMaterialDefaultInside;
     [SerializeField] Material meshMaterialDefaultOutside;
     [SerializeField] Material meshMaterialDefaultOutline;
+    [SerializeField] Material meshMaterialDefaultShadow;
     [Header("meshのマテリアル(ホールド時)")]
     [SerializeField] Material meshMaterialHoldingInside;
     [SerializeField] Material meshMaterialHoldingOutside;
     [SerializeField] Material meshMaterialHoldingOutline;
+    [SerializeField] Material meshMaterialHoldingShadow;
     [Header("meshのマテリアル(非ホールド時)")]
     [SerializeField] Material meshMaterialUnholdingInside;
     [SerializeField] Material meshMaterialUnholdingOutside;
     [SerializeField] Material meshMaterialUnholdingOutline;
+    [SerializeField] Material meshMaterialUnholdingShadow;
     [Header("判定範囲表示")]
     [SerializeField] SpaceHoldJudgementRangeMeshView judgementRangeView;
 
@@ -45,7 +48,7 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
         SetJudgementRangeVisible(false);
 
         // マテリアルの設定
-        data.MeshRendererAsset.SetMaterial(meshMaterialDefaultInside, meshMaterialDefaultOutside, meshMaterialDefaultOutline);
+        data.MeshRendererAsset.SetMaterial(meshMaterialDefaultInside, meshMaterialDefaultOutside, meshMaterialDefaultOutline, meshMaterialDefaultShadow);
 
         judgementRangeView?.Initialize(noteData.JudgementRangeLineParent);
     }
@@ -113,11 +116,11 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
     {
         if (isHolding)
         {
-            noteData.MeshRendererAsset.SetMaterial(meshMaterialHoldingInside, meshMaterialHoldingOutside,meshMaterialHoldingOutline);
+            noteData.MeshRendererAsset.SetMaterial(meshMaterialHoldingInside, meshMaterialHoldingOutside,meshMaterialHoldingOutline, meshMaterialHoldingShadow);
         }
         else
         {
-            noteData.MeshRendererAsset.SetMaterial(meshMaterialUnholdingInside, meshMaterialUnholdingOutside, meshMaterialUnholdingOutline);
+            noteData.MeshRendererAsset.SetMaterial(meshMaterialUnholdingInside, meshMaterialUnholdingOutside, meshMaterialUnholdingOutline, meshMaterialUnholdingShadow);
         }
     }
 
@@ -193,11 +196,13 @@ public class HoldMeshRendererAsset
     public HoldMeshRendererAsset(
         MeshRenderer insideForward,
         MeshRenderer insideReverse,
-        MeshRenderer outline)
+        MeshRenderer outline,
+        MeshRenderer shadow)
     {
         InsideForwardRenderer = insideForward;
         InsideReverseRenderer = insideReverse;
         OutlineRenderer = outline;
+        ShadowRenderer = shadow;
     }
 
     public MeshRenderer InsideForwardRenderer { get; set; }
@@ -206,12 +211,14 @@ public class HoldMeshRendererAsset
 
     public MeshRenderer OutlineRenderer { get; set; }
 
+    public MeshRenderer ShadowRenderer { get; set; }
 
-    public void SetMaterial(Material inside, Material outside, Material outline)
+    public void SetMaterial(Material inside, Material outside, Material outline, Material shadow)
     {
         SetMaterialIfExists(InsideForwardRenderer, inside);
         SetMaterialIfExists(InsideReverseRenderer, inside);
         SetMaterialIfExists(OutlineRenderer, outline);
+        SetMaterialIfExists(ShadowRenderer, shadow);
     }
 
     private void SetMaterialIfExists(MeshRenderer meshRenderer, Material material)

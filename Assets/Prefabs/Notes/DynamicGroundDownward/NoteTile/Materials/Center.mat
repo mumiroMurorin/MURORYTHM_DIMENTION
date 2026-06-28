@@ -76,7 +76,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _MaxZ: 187
+    - _MaxZ: 183
     - _Metallic: 0
     - _MinZ: -20
     - _Mode: 2

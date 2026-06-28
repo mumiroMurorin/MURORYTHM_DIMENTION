@@ -12,6 +12,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
 
     [SerializeField] GameObject noteObjectOriginPrefab;
     [SerializeField] GameObject noteMeshPrefab;
+    [SerializeField] GameObject noteShadowPrefab;
     [SerializeField] GameObject frangmentParentPrefab;
     [Header("厚さ")]
     [SerializeField] float noteDepth = 0.1f;
@@ -23,6 +24,8 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     [SerializeField] Material edgeMaterial;
     [Header("輪郭線の太さ")]
     [SerializeField] float edgeWidth = 0.05f;
+    [SerializeField] int shadowDivisionNum = 24;
+    [SerializeField] float shadowRadiusOffset = 0.02f;
 
     INoteSpawnDataOptionGetter optionHolder;
     ISpaceInputGetter spaceInputGetter;
@@ -81,8 +84,13 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
         GameObject noteObj = GenerateMeshObject(data);
         noteObj.transform.SetParent(origin.transform);
 
+        // 影オブジェクトを生成
+        MeshRenderer shadowMesh = GenerateShadowMeshObject(data);
+        shadowMesh.transform.SetParent(origin.transform, false);
+
         // コンポーネントを取得
         NoteObject<NoteData_SpaceBreak> note = origin.GetComponent<NoteObject<NoteData_SpaceBreak>>();
+        data.MeshRendererAsset = new SpaceBreakMeshRendererAsset(shadowMesh);
 
         return note;
     }
@@ -118,6 +126,33 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
         }
 
         return obj;
+    }
+
+    private MeshRenderer GenerateShadowMeshObject(NoteData_SpaceBreak noteData)
+    {
+        var obj = Instantiate(noteShadowPrefab);
+        obj.name = "SpaceBreakShadow";
+
+        if (!obj.TryGetComponent(out MeshFilter meshFilter)) { meshFilter = obj.AddComponent<MeshFilter>(); }
+        if (!obj.TryGetComponent(out MeshRenderer meshRenderer)) { meshRenderer = obj.AddComponent<MeshRenderer>(); }
+
+        List<Vector2> points = noteData.Vertices
+            .Select(v => (Vector2)MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS))
+            .ToList();
+
+        Mesh mesh = SpaceBreakShadowMeshGenerator.GenerateSpaceBreakShadowMesh(
+            points,
+            noteDepth,
+            shadowDivisionNum,
+            optionHolder.NoteCurveRadius.Value,
+            RADIUS,
+            shadowRadiusOffset);
+
+        meshFilter.mesh = mesh;
+        meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        meshRenderer.receiveShadows = false;
+
+        return meshRenderer;
     }
 
     /// <summary>
