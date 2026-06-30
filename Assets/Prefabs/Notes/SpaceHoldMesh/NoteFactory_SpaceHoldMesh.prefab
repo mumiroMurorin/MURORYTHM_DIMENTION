@@ -53,5 +53,9 @@ MonoBehaviour:
   maxTriangleLength: 2
   enableOutline: 1
   enableJudgementRangeLine: 1
+  enableScreenSpaceOutlineTarget: 0
+  screenSpaceOutlineLayerName: SpaceHoldScreenOutline
+  minStencilId: 1
+  maxStencilId: 255
   outlineGap: 0.02
   shadowRadiusOffset: 0

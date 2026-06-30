@@ -23,8 +23,14 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     [Header("アウトライン生成の隙間")]
     [SerializeField] bool enableOutline = true;
     [SerializeField] bool enableJudgementRangeLine = true;
+    [SerializeField] bool enableScreenSpaceOutlineTarget = true;
+    [SerializeField] string screenSpaceOutlineLayerName = "SpaceHoldScreenOutline";
+    [SerializeField] int minStencilId = 1;
+    [SerializeField] int maxStencilId = 255;
     [SerializeField] float outlineGap = 0.05f;
     [SerializeField] float shadowRadiusOffset = 0.02f;
+
+    int currentStencilId;
 
     INoteSpawnDataOptionGetter optionHolder;
     ISpaceInputGetter spaceInputGetter;
@@ -71,8 +77,24 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         data.DepthToVertices = GenerateDepthToVertices(data.TimeToVertices, positionCalculator, data.NoteSpeed);
         data.JudgementRangeLineParent = this.transform;
         data.EnableJudgementRangeLine = enableJudgementRangeLine;
+        data.StencilId = GetNextStencilId();
 
         return data;
+    }
+
+    private int GetNextStencilId()
+    {
+        int min = Mathf.Clamp(minStencilId, 0, 255);
+        int max = Mathf.Clamp(maxStencilId, min, 255);
+        int id = Mathf.Clamp(currentStencilId, min, max);
+
+        currentStencilId = id + 1;
+        if (currentStencilId > max)
+        {
+            currentStencilId = min;
+        }
+
+        return id;
     }
 
     private List<DepthToVertices> GenerateDepthToVertices(List<TimeToVertices> timeToVertices, INotePositionCalculator positionCalculator, float noteSpeed)
@@ -126,7 +148,23 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
             outlineReverseMesh,
             shadowMesh);
 
+        if (enableScreenSpaceOutlineTarget)
+        {
+            int outlineLayer = LayerMask.NameToLayer(screenSpaceOutlineLayerName);
+            data.MeshRendererAsset.SetScreenSpaceOutlineTarget(EncodeScreenOutlineIdColor(data.StencilId), outlineLayer);
+        }
+
         return note;
+    }
+
+    private Color EncodeScreenOutlineIdColor(int id)
+    {
+        int encodedId = Mathf.Clamp(id, 0, 16777214) + 1;
+        float r = (encodedId & 0xFF) / 255f;
+        float g = ((encodedId >> 8) & 0xFF) / 255f;
+        float b = ((encodedId >> 16) & 0xFF) / 255f;
+
+        return new Color(r, g, b, 1f);
     }
 
     /// <summary>

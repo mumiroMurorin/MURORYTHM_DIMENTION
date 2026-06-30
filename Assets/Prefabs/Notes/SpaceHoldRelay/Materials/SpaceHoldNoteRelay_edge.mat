@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SpaceHoldNoteRelay_edge
-  m_Shader: {fileID: 4800000, guid: acb3b9098e5dabb41b544815a87fb9af, type: 3}
+  m_Shader: {fileID: 4800000, guid: 03834a23481c2df48aa2af4b969332bb, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

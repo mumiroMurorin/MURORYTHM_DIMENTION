@@ -246,8 +246,8 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: MusicData/Altale/chart_master.json
-  noteSpeed: 200
+  chartFilePath: MusicData/CalamityFortune/chart_master.json
+  noteSpeed: 60
   groundRadius: 2000
   isAutoMode: 1
   isFastLateEnabled: 1

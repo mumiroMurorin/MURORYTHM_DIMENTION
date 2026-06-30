@@ -55,6 +55,7 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
             meshMaterialDefaultInside, meshMaterialDefaultOutside,
             meshMaterialDefaultOutlineInside, meshMaterialDefaultOutlineOutside,
             meshMaterialDefaultShadow);
+        data.MeshRendererAsset.SetStencilId(data.StencilId);
 
         if (judgementRangeView != null)
         {
@@ -173,6 +174,11 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
         SetJudgementRangeVisible(false);
     }
 
+    private void OnDestroy()
+    {
+        noteData?.MeshRendererAsset?.DestroyMaterialInstances();
+    }
+
     private void SetJudgementRangeVisible(bool isVisible)
     {
         judgementRangeView?.SetVisible(isVisible);
@@ -207,10 +213,15 @@ public class NoteData_SpaceHoldMesh : INoteData
     public Transform JudgementRangeLineParent { get; set; }
 
     public bool EnableJudgementRangeLine { get; set; } = true;
+
+    public int StencilId { get; set; }
 }
 
 public class HoldMeshRendererAsset
 {
+    static readonly int StencilRefPropertyId = Shader.PropertyToID("_StencilRef");
+    static readonly int ScreenOutlineIdColorPropertyId = Shader.PropertyToID("_ScreenOutlineIdColor");
+
     public HoldMeshRendererAsset(
         MeshRenderer insideForward,
         MeshRenderer insideReverse,
@@ -224,6 +235,10 @@ public class HoldMeshRendererAsset
         OutlineReverseRenderer = outlineReverse;
         ShadowRenderer = shadow;
     }
+
+    int stencilId = -1;
+    readonly Dictionary<Material, Material> stencilMaterialCache = new Dictionary<Material, Material>();
+    readonly MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
 
     public MeshRenderer InsideForwardRenderer { get; set; }
 
@@ -244,9 +259,79 @@ public class HoldMeshRendererAsset
         SetMaterialIfExists(ShadowRenderer, shadow);
     }
 
+    public void SetStencilId(int id)
+    {
+        stencilId = Mathf.Clamp(id, 0, 255);
+        ClearStencilMaterialCache();
+        ApplyStencilIdIfExists(InsideForwardRenderer);
+        ApplyStencilIdIfExists(InsideReverseRenderer);
+        ApplyStencilIdIfExists(OutlineForwardRenderer);
+        ApplyStencilIdIfExists(OutlineReverseRenderer);
+    }
+
+    public void SetScreenSpaceOutlineTarget(Color idColor, int layer)
+    {
+        ApplyScreenSpaceOutlineTargetIfExists(InsideForwardRenderer, idColor, layer);
+        ApplyScreenSpaceOutlineTargetIfExists(InsideReverseRenderer, idColor, layer);
+    }
+
     private void SetMaterialIfExists(MeshRenderer meshRenderer, Material material)
     {
         if (meshRenderer == null) { return; }
-        meshRenderer.material = material;
+        meshRenderer.sharedMaterial = GetStencilMaterial(material);
+    }
+
+    private void ApplyStencilIdIfExists(MeshRenderer meshRenderer)
+    {
+        if (meshRenderer == null) { return; }
+        meshRenderer.sharedMaterial = GetStencilMaterial(meshRenderer.sharedMaterial);
+    }
+
+    private void ApplyScreenSpaceOutlineTargetIfExists(MeshRenderer meshRenderer, Color idColor, int layer)
+    {
+        if (meshRenderer == null) { return; }
+
+        meshRenderer.GetPropertyBlock(propertyBlock);
+        propertyBlock.SetColor(ScreenOutlineIdColorPropertyId, idColor);
+        meshRenderer.SetPropertyBlock(propertyBlock);
+
+        if (0 <= layer && layer <= 31)
+        {
+            meshRenderer.gameObject.layer = layer;
+        }
+    }
+
+    private Material GetStencilMaterial(Material source)
+    {
+        if (source == null) { return null; }
+        if (stencilId < 0) { return source; }
+        if (!source.HasProperty(StencilRefPropertyId)) { return source; }
+
+        if (stencilMaterialCache.TryGetValue(source, out Material cachedMaterial))
+        {
+            return cachedMaterial;
+        }
+
+        Material material = new Material(source);
+        material.SetInt(StencilRefPropertyId, stencilId);
+        stencilMaterialCache.Add(source, material);
+
+        return material;
+    }
+
+    public void DestroyMaterialInstances()
+    {
+        ClearStencilMaterialCache();
+    }
+
+    private void ClearStencilMaterialCache()
+    {
+        foreach (Material material in stencilMaterialCache.Values)
+        {
+            if (material == null) { continue; }
+            Object.Destroy(material);
+        }
+
+        stencilMaterialCache.Clear();
     }
 }

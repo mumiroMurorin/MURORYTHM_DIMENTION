@@ -13,6 +13,9 @@ Shader "Notes/SpaceHold/SpaceHold_Outline"
         _PingPongIntensityMax("PingPong Intensity Max", Range(0, 5)) = 1.2
         _PingPongDuration("PingPong Duration", Float) = 1.0
 
+        _OccludedAlpha("Occluded Alpha", Range(0, 1)) = 0.25
+        _OccludedIntensity("Occluded Intensity", Range(0, 2)) = 0.6
+
         _StencilRef("Stencil Ref", Int) = 1
     }
 
@@ -93,6 +96,84 @@ Shader "Notes/SpaceHold/SpaceHold_Outline"
 
                 col *= tintColor;
                 col.rgb *= intensity;
+                UNITY_APPLY_FOG(i.fogCoord, col);
+
+                return col;
+            }
+            ENDCG
+        }
+
+        Pass
+        {
+            Name "OccludedOutline"
+
+            Blend SrcAlpha OneMinusSrcAlpha
+            ZWrite Off
+            ZTest Greater
+
+            Stencil
+            {
+                Ref [_StencilRef]
+                Comp NotEqual
+            }
+
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile_fog
+
+            #include "UnityCG.cginc"
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float2 uv : TEXCOORD0;
+                UNITY_FOG_COORDS(1)
+                float4 vertex : SV_POSITION;
+                float3 worldPos : TEXCOORD2;
+            };
+
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+            fixed4 _Color;
+            fixed4 _SecondaryColor;
+            float _MinZ;
+            float _MaxZ;
+            float _PingPongIntensityMin;
+            float _PingPongIntensityMax;
+            float _PingPongDuration;
+            float _OccludedAlpha;
+            float _OccludedIntensity;
+
+            v2f vert(appdata v)
+            {
+                v2f o;
+                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                UNITY_TRANSFER_FOG(o, o.vertex);
+                return o;
+            }
+
+            fixed4 frag(v2f i) : SV_Target
+            {
+                fixed4 col = tex2D(_MainTex, i.uv);
+
+                float inRange = step(_MinZ, i.worldPos.z) * step(i.worldPos.z, _MaxZ);
+                fixed4 tintColor = lerp(_SecondaryColor, _Color, inRange);
+
+                float duration = max(_PingPongDuration, 0.0001);
+                float pingPong = abs(frac(_Time.y / duration) * 2.0 - 1.0);
+                float intensity = lerp(_PingPongIntensityMin, _PingPongIntensityMax, pingPong);
+
+                col *= tintColor;
+                col.rgb *= intensity * _OccludedIntensity;
+                col.a *= _OccludedAlpha;
                 UNITY_APPLY_FOG(i.fogCoord, col);
 
                 return col;
