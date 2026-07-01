@@ -223,16 +223,16 @@ public class HoldMeshRendererAsset
     static readonly int ScreenOutlineIdColorPropertyId = Shader.PropertyToID("_ScreenOutlineIdColor");
 
     public HoldMeshRendererAsset(
-        MeshRenderer insideForward,
-        MeshRenderer insideReverse,
-        MeshRenderer outlineForward,
-        MeshRenderer outlineReverse,
+        MeshRenderer inside,
+        MeshRenderer outside,
+        MeshRenderer insideOutline,
+        MeshRenderer outsideOutline,
         MeshRenderer shadow)
     {
-        InsideForwardRenderer = insideForward;
-        InsideReverseRenderer = insideReverse;
-        OutlineForwardRenderer = outlineForward;
-        OutlineReverseRenderer = outlineReverse;
+        InsideRenderer = inside;
+        OutsideRenderer = outside;
+        InsideOutlineRenderer = insideOutline;
+        OutsideOutlineRenderer = outsideOutline;
         ShadowRenderer = shadow;
     }
 
@@ -240,22 +240,22 @@ public class HoldMeshRendererAsset
     readonly Dictionary<Material, Material> stencilMaterialCache = new Dictionary<Material, Material>();
     readonly MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
 
-    public MeshRenderer InsideForwardRenderer { get; set; }
+    public MeshRenderer InsideRenderer { get; set; }
 
-    public MeshRenderer InsideReverseRenderer { get; set; }
+    public MeshRenderer OutsideRenderer { get; set; }
 
-    public MeshRenderer OutlineForwardRenderer { get; set; }
+    public MeshRenderer InsideOutlineRenderer { get; set; }
 
-    public MeshRenderer OutlineReverseRenderer { get; set; }
+    public MeshRenderer OutsideOutlineRenderer { get; set; }
 
     public MeshRenderer ShadowRenderer { get; set; }
 
     public void SetMaterial(Material inside, Material outside, Material outlineInside, Material outlineOutside, Material shadow)
     {
-        SetMaterialIfExists(InsideForwardRenderer, outside);
-        SetMaterialIfExists(InsideReverseRenderer, inside);
-        SetMaterialIfExists(OutlineForwardRenderer, outlineOutside);
-        SetMaterialIfExists(OutlineReverseRenderer, outlineInside);
+        SetMaterialIfExists(InsideRenderer, inside);
+        SetMaterialIfExists(OutsideRenderer, outside);
+        SetMaterialIfExists(InsideOutlineRenderer, outlineInside);
+        SetMaterialIfExists(OutsideOutlineRenderer, outlineOutside);
         SetMaterialIfExists(ShadowRenderer, shadow);
     }
 
@@ -263,16 +263,16 @@ public class HoldMeshRendererAsset
     {
         stencilId = Mathf.Clamp(id, 0, 255);
         ClearStencilMaterialCache();
-        ApplyStencilIdIfExists(InsideForwardRenderer);
-        ApplyStencilIdIfExists(InsideReverseRenderer);
-        ApplyStencilIdIfExists(OutlineForwardRenderer);
-        ApplyStencilIdIfExists(OutlineReverseRenderer);
+        ApplyStencilIdIfExists(InsideRenderer);
+        ApplyStencilIdIfExists(OutsideRenderer);
+        ApplyStencilIdIfExists(InsideOutlineRenderer);
+        ApplyStencilIdIfExists(OutsideOutlineRenderer);
     }
 
     public void SetScreenSpaceOutlineTarget(Color idColor, int layer)
     {
-        ApplyScreenSpaceOutlineTargetIfExists(InsideForwardRenderer, idColor, layer);
-        ApplyScreenSpaceOutlineTargetIfExists(InsideReverseRenderer, idColor, layer);
+        ApplyScreenSpaceOutlineTargetIfExists(InsideRenderer, idColor, layer);
+        ApplyScreenSpaceOutlineTargetIfExists(OutsideRenderer, idColor, layer);
     }
 
     private void SetMaterialIfExists(MeshRenderer meshRenderer, Material material)

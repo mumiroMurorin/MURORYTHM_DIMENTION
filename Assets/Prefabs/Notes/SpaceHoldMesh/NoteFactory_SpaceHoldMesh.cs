@@ -29,6 +29,8 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     [SerializeField] int maxStencilId = 255;
     [SerializeField] float outlineGap = 0.05f;
     [SerializeField] float shadowRadiusOffset = 0.02f;
+    [SerializeField] bool normalizeVerticesWinding = true;
+    [SerializeField] bool useClockwiseWinding = true;
 
     int currentStencilId;
 
@@ -69,6 +71,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     /// </summary>
     private NoteData_SpaceHoldMesh ConvertNoteData(NoteData_SpaceHoldMesh data, INotePositionCalculator positionCalculator)
     {
+        data.TimeToVertices = NormalizeTimeToVerticesWinding(data.TimeToVertices);
         data.SpaceInput = this.spaceInputGetter;
         data.Timer = this.timer;
         data.OptionGetter = this.optionHolder;
@@ -80,6 +83,47 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         data.StencilId = GetNextStencilId();
 
         return data;
+    }
+
+    private List<TimeToVertices> NormalizeTimeToVerticesWinding(List<TimeToVertices> source)
+    {
+        if (source == null) { return null; }
+        if (!normalizeVerticesWinding) { return source; }
+
+        return source
+            .Select(x => new TimeToVertices(x.Timing, NormalizeWinding(x.Vertices)))
+            .ToList();
+    }
+
+    private Vector2[] NormalizeWinding(Vector2[] vertices)
+    {
+        if (vertices == null) { return null; }
+        if (vertices.Length < 3) { return vertices.ToArray(); }
+
+        bool isClockwise = CalcSignedArea(vertices) < 0f;
+        if (isClockwise == useClockwiseWinding)
+        {
+            return vertices.ToArray();
+        }
+
+        Vector2[] result = vertices.ToArray();
+        System.Array.Reverse(result);
+        return result;
+    }
+
+    private float CalcSignedArea(Vector2[] vertices)
+    {
+        float signedArea = 0f;
+
+        // 頂点順が揺れると法線が反転するため、断面ポリゴンの符号付き面積で向きを判定する
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            Vector2 current = vertices[i];
+            Vector2 next = vertices[(i + 1) % vertices.Length];
+            signedArea += current.x * next.y - next.x * current.y;
+        }
+
+        return signedArea * 0.5f;
     }
 
     private int GetNextStencilId()
@@ -114,25 +158,25 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     {
         GameObject origin = Instantiate(noteObjectOriginPrefab);
 
-        MeshRenderer outlineForwardMesh = null;
-        MeshRenderer outlineReverseMesh = null;
+        MeshRenderer insideOutlineMesh = null;
+        MeshRenderer outsideOutlineMesh = null;
 
         if (enableOutline)
         {
             // アウトライン機能が有効な時だけ、外側に少し広げたメッシュを生成
-            outlineForwardMesh = GenerateMeshObject(data, outlineGap, false, positionCalculator);
-            outlineForwardMesh.transform.SetParent(origin.transform);
+            insideOutlineMesh = GenerateMeshObject(data, outlineGap, true, positionCalculator);
+            insideOutlineMesh.transform.SetParent(origin.transform);
 
-            outlineReverseMesh = GenerateMeshObject(data, outlineGap, true, positionCalculator);
-            outlineReverseMesh.transform.SetParent(origin.transform);
+            outsideOutlineMesh = GenerateMeshObject(data, outlineGap, false, positionCalculator);
+            outsideOutlineMesh.transform.SetParent(origin.transform);
         }
 
         // 内側位置に、表向きと裏向きのメッシュを生成
-        MeshRenderer insideForwardMesh = GenerateMeshObject(data, 0f, false, positionCalculator);
-        insideForwardMesh.transform.SetParent(origin.transform);
+        MeshRenderer mainInsideMesh = GenerateMeshObject(data, 0f, true, positionCalculator);
+        mainInsideMesh.transform.SetParent(origin.transform);
 
-        MeshRenderer insideReverseMesh = GenerateMeshObject(data, 0f, true, positionCalculator);
-        insideReverseMesh.transform.SetParent(origin.transform);
+        MeshRenderer mainOutsideMesh = GenerateMeshObject(data, 0f, false, positionCalculator);
+        mainOutsideMesh.transform.SetParent(origin.transform);
 
         // 影メッシュを生成
         MeshRenderer shadowMesh = GenerateShadowMeshObject(data, positionCalculator);
@@ -142,10 +186,10 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
 
         // 既存のSetMaterial呼び出しを維持するため、Renderer管理だけ4枚対応にする
         data.MeshRendererAsset = new HoldMeshRendererAsset(
-            insideForwardMesh,
-            insideReverseMesh,
-            outlineForwardMesh,
-            outlineReverseMesh,
+            mainInsideMesh,
+            mainOutsideMesh,
+            insideOutlineMesh,
+            outsideOutlineMesh,
             shadowMesh);
 
         if (enableScreenSpaceOutlineTarget)

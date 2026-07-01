@@ -246,7 +246,7 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: MusicData/CalamityFortune/chart_master.json
+  chartFilePath: MusicData/Aleph-0/chart_master.json
   noteSpeed: 200
   groundRadius: 2000
   isAutoMode: 1
