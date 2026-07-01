@@ -235,10 +235,10 @@ MonoBehaviour:
     composer_name: "\u524A\u9664"
     music_spr: {fileID: 21300000, guid: 1512ba05fa48cde48858c7f68c23594f, type: 3}
     theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
-    clip: {fileID: 8300000, guid: 993bb1f8d9375c04da5f17d29a0760de, type: 3}
+    clip: {fileID: 8300000, guid: 208648ff585d0534f89288210f0d80e1, type: 3}
     sample_clip: {fileID: 8300000, guid: 6bb917bc6d659314c85522d193d72c5b, type: 3}
     symphonyType: 10
-    stageType: 100
+    stageType: 200
     difficulties: 00000000000000000000000000000000
     chartPaths:
     - 
@@ -247,7 +247,7 @@ MonoBehaviour:
     - 
   difficulty: 3
   chartFilePath: MusicData/CalamityFortune/chart_master.json
-  noteSpeed: 60
+  noteSpeed: 200
   groundRadius: 2000
   isAutoMode: 1
   isFastLateEnabled: 1
@@ -2095,7 +2095,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6869460142404363862, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
       propertyPath: enableGroundLine
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7896517693994468305, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
       propertyPath: m_Name

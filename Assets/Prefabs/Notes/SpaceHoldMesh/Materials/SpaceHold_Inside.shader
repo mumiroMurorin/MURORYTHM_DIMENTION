@@ -82,9 +82,9 @@ Shader "Notes/SpaceHold/SpaceHold_Inside"
             {
                 fixed alpha = tex2D(_MainTex, i.uv).a;
                 float inRange = step(_MinZ, i.worldPos.z) * step(i.worldPos.z, _MaxZ);
-                fixed tintAlpha = lerp(_SecondaryColor.a, _Color.a, inRange);
 
-                clip(alpha * tintAlpha - 0.001h);
+                clip(inRange - 0.5h);
+                clip(alpha * _Color.a - 0.001h);
                 return 0;
             }
             ENDCG
@@ -154,7 +154,7 @@ Shader "Notes/SpaceHold/SpaceHold_Inside"
                 fixed4 col = tex2D(_MainTex, i.uv);
 
                 float inRange = step(_MinZ, i.worldPos.z) * step(i.worldPos.z, _MaxZ);
-                fixed4 tintColor = lerp(_SecondaryColor, _Color, inRange);
+                clip(inRange - 0.5h);
 
                 float duration = max(_PingPongDuration, 0.0001);
                 float pingPong = abs(frac(_Time.y / duration) * 2.0 - 1.0);
@@ -169,7 +169,7 @@ Shader "Notes/SpaceHold/SpaceHold_Inside"
                     stripeThreshold + stripeFeather,
                     stripeWave);
 
-                col *= tintColor;
+                col *= _Color;
                 fixed4 stripeSample = tex2D(_StripeTex, TRANSFORM_TEX(i.uv, _StripeTex));
                 fixed4 stripeCol = stripeSample * _StripeColor;
                 stripeCol.a *= col.a;
@@ -233,9 +233,9 @@ Shader "Notes/SpaceHold/SpaceHold_Inside"
             {
                 fixed alpha = tex2D(_MainTex, i.uv).a;
                 float inRange = step(_MinZ, i.worldPos.z) * step(i.worldPos.z, _MaxZ);
-                fixed tintAlpha = lerp(_SecondaryColor.a, _Color.a, inRange);
 
-                clip(alpha * tintAlpha - 0.001h);
+                clip(inRange - 0.5h);
+                clip(alpha * _Color.a - 0.001h);
                 SHADOW_CASTER_FRAGMENT(i)
             }
             ENDCG
