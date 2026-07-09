@@ -3053,7 +3053,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed07db9c99ac59f4e9da1284ad6c5307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUseSpaceInput: 1
+  isUseSpaceInput: 0
   loadTimeoutSeconds: 10
   spaceInputHandler:
     obj: {fileID: 393527483}

@@ -18,11 +18,17 @@ public class DynamicNoteAnimation : MonoBehaviour
         currentOffset = targetRenderer.material.GetTextureOffset(bufferName);
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if(targetRenderer == null) { return; }
+        if (targetRenderer == null) { return; }
 
-        currentOffset = new Vector2((currentOffset.x + speed.x) % 1f, (currentOffset.y + speed.y) % 1f);
+        // 以前の「FixedUpdate 1回あたりの移動量」を保ったまま、描画フレームに合わせて滑らかに進める
+        float fixedDeltaTime = Mathf.Max(Time.fixedDeltaTime, Mathf.Epsilon);
+        Vector2 frameSpeed = speed * (Time.deltaTime / fixedDeltaTime);
+
+        currentOffset = new Vector2(
+            Mathf.Repeat(currentOffset.x + frameSpeed.x, 1f),
+            Mathf.Repeat(currentOffset.y + frameSpeed.y, 1f));
         targetRenderer.material.SetTextureOffset(bufferName, currentOffset);
     }
 }

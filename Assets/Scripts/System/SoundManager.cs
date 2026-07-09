@@ -249,6 +249,35 @@ public class SoundManager : SingletonMonoBehaviour<SoundManager>
     }
 
     /// <summary>
+    /// w’è‚µ‚½BGM‚ÌŒ»İÄ¶•b”‚ğæ“¾‚·‚é
+    /// </summary>
+    public bool TryGetBGMPlaybackSeconds(BGM_Type bgmType, out float seconds)
+    {
+        seconds = 0f;
+
+        AudioClip targetClip = GetBGMClip(bgmType);
+        if (targetClip == null) { return false; }
+
+        AudioSource targetSource = null;
+        foreach (AudioSource source in bgmSources)
+        {
+            if (source == null) { continue; }
+            if (source.clip != targetClip) { continue; }
+            if (!source.isPlaying) { continue; }
+
+            // ‹ÈI—¹Œã‚É’â~Ï‚İSource‚ÌtimeSamples‚ğE‚¤‚Æ•ˆ–ÊŠÔ‚ªŠª‚«–ß‚é‚½‚ßAÄ¶’†‚Ì‚İÌ—p‚·‚é
+            targetSource = source;
+            break;
+        }
+
+        if (targetSource == null || targetSource.clip == null) { return false; }
+        if (targetSource.clip.frequency <= 0) { return false; }
+
+        seconds = (float)targetSource.timeSamples / targetSource.clip.frequency;
+        return true;
+    }
+
+    /// <summary>
     /// ”»’èSE‚ÌÄ¶
     /// </summary>
     /// <param name="noteType"></param>

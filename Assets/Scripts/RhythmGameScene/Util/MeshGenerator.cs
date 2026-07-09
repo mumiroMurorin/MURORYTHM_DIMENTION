@@ -619,10 +619,18 @@ namespace MeshGenerate
             Mesh mesh = new Mesh();
             Vector3[] meshVertices = new Vector3[tess.Vertices.Length];
             int[] meshTriangles = new int[tess.Elements.Length];
+            Vector2[] meshUvs = new Vector2[tess.Vertices.Length];
+            Vector2 min = GetMinXY(vertices);
+            Vector2 max = GetMaxXY(vertices);
+            Vector2 size = max - min;
+            float invWidth = Mathf.Abs(size.x) > Mathf.Epsilon ? 1f / size.x : 0f;
+            float invHeight = Mathf.Abs(size.y) > Mathf.Epsilon ? 1f / size.y : 0f;
 
             for (int i = 0; i < tess.Vertices.Length; i++)
             {
                 meshVertices[i] = new Vector3(tess.Vertices[i].Position.X, tess.Vertices[i].Position.Y, 0);
+                Vector2 pos = meshVertices[i];
+                meshUvs[i] = new Vector2((pos.x - min.x) * invWidth, (pos.y - min.y) * invHeight);
             }
 
             for (int i = 0; i < tess.Elements.Length; i++)
@@ -632,10 +640,35 @@ namespace MeshGenerate
 
             mesh.vertices = meshVertices;
             mesh.triangles = meshTriangles;
+            mesh.uv = meshUvs;
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 
             return mesh;
+        }
+
+        private static Vector2 GetMinXY(List<Vector3> vertices)
+        {
+            Vector2 min = vertices[0];
+            for (int i = 1; i < vertices.Count; i++)
+            {
+                min.x = Mathf.Min(min.x, vertices[i].x);
+                min.y = Mathf.Min(min.y, vertices[i].y);
+            }
+
+            return min;
+        }
+
+        private static Vector2 GetMaxXY(List<Vector3> vertices)
+        {
+            Vector2 max = vertices[0];
+            for (int i = 1; i < vertices.Count; i++)
+            {
+                max.x = Mathf.Max(max.x, vertices[i].x);
+                max.y = Mathf.Max(max.y, vertices[i].y);
+            }
+
+            return max;
         }
 
         /// <summary>

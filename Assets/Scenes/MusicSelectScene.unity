@@ -3041,6 +3041,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firstIntervalSeconds: 0
+  syncWithMusic: 0
+  syncBgmType: 500
+  maxCountdownDeltaTime: 0.05
 --- !u!4 &996988515
 Transform:
   m_ObjectHideFlags: 0

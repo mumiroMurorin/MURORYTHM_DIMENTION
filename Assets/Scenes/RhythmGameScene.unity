@@ -238,7 +238,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 208648ff585d0534f89288210f0d80e1, type: 3}
     sample_clip: {fileID: 8300000, guid: 6bb917bc6d659314c85522d193d72c5b, type: 3}
     symphonyType: 10
-    stageType: 200
+    stageType: 101
     difficulties: 00000000000000000000000000000000
     chartPaths:
     - 
@@ -246,7 +246,7 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: MusicData/Aleph-0/chart_master.json
+  chartFilePath: MusicData/CalamityFortune/chart_master.json
   noteSpeed: 200
   groundRadius: 2000
   isAutoMode: 1
@@ -1085,7 +1085,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5344308489783075046, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7003494081260383716, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
       propertyPath: m_IsActive
@@ -1558,6 +1558,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firstIntervalSeconds: 1.5
+  syncWithMusic: 1
+  syncBgmType: 500
+  maxCountdownDeltaTime: 0.05
 --- !u!1 &1617607291
 GameObject:
   m_ObjectHideFlags: 0

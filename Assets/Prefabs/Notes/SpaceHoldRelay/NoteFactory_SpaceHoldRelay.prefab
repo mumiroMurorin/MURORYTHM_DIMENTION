@@ -50,4 +50,4 @@ MonoBehaviour:
   edgeMaterial: {fileID: 2100000, guid: d2fa97aecb969c4469dc1d8789468e28, type: 2}
   enableGroundLine: 1
   groundLineMaterial: {fileID: 2100000, guid: d2fa97aecb969c4469dc1d8789468e28, type: 2}
-  groundLineWidth: 0.35
+  groundLineWidth: 0.2
