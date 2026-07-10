@@ -35,6 +35,7 @@ public class ChartControllerInSelectScene : MonoBehaviour
         groundController.Initialize();
 
         Bind();
+        ReloadChart();
     }
 
     private void Bind()
@@ -52,11 +53,13 @@ public class ChartControllerInSelectScene : MonoBehaviour
 
         // オフセットが変わった際はリセット
         optionGetter?.OffsetMs
+            .Skip(1)
             .Subscribe(_ => ReloadChart())
             .AddTo(this.gameObject);
 
         // ノートスピードが変わった際はリセット
         optionGetter?.NoteSpeed
+            .Skip(1)
             .Subscribe(_ => RestartChart())
             .AddTo(this.gameObject);
 

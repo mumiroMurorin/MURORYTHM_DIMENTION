@@ -279,7 +279,6 @@ MonoBehaviour:
     - channel: 3
       electrode: 11
   bindWaitTimeoutMs: 3000
-  connectWaitTimeoutMs: 5000
 --- !u!1 &2616164048275133180
 GameObject:
   m_ObjectHideFlags: 0

@@ -36,6 +36,7 @@ public class SpaceInputHub : MonoBehaviour, ISpaceInputHub
         this.optionGetter = optionGetter;
 
         InitializeHandlers();
+        BindTrackingMode();
     }
 
     private void Start()
@@ -62,6 +63,21 @@ public class SpaceInputHub : MonoBehaviour, ISpaceInputHub
         kinectHandler?.Value?.Initialize(optionGetter);
 
         isHandlersInitialized = true;
+    }
+
+    private void BindTrackingMode()
+    {
+        optionGetter?.CurrentTrackingMode
+            .Subscribe(ApplyTrackingMode)
+            .AddTo(this.gameObject);
+    }
+
+    private void ApplyTrackingMode(TrackingMode trackingMode)
+    {
+        if (leapMotionHandler?.Value is SpaceInputHandlerForLeapMotion leapMotion)
+        {
+            leapMotion.SetProviderActive(trackingMode == TrackingMode.LeapMotion);
+        }
     }
 
     private void Update()

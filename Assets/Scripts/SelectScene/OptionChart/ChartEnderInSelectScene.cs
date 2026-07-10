@@ -17,9 +17,10 @@ public class ChartEnderInSelectScene : MonoBehaviour, IChartEnder
         // •ˆ–ÊI—¹ˆ—‚ðw“Ç
         scoreGetter.NoteJudgementDatas
             .ObserveCountChanged()
-            .Where(count => count >= scoreSetter.AddNoteCount)
+            .Pairwise()
+            .Where(pair => pair.Previous < scoreSetter.AddNoteCount && pair.Current >= scoreSetter.AddNoteCount)
             .Delay(System.TimeSpan.FromSeconds(delaySeconds))
-            .Subscribe(count =>
+            .Subscribe(_ =>
             {
                 callback?.Invoke();
             })

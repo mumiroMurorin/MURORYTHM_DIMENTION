@@ -30,12 +30,14 @@ public class OperationThemeColorSerialBridge : MonoBehaviour
         new SliderIndexToLedMap(15, new List<LedAddress> { new LedAddress(3, 10), new LedAddress(3, 11) }),
     };
     [SerializeField] private int bindWaitTimeoutMs = 3000;
-    [SerializeField] private int connectWaitTimeoutMs = 5000;
 
     private readonly CompositeDisposable disposables = new CompositeDisposable();
 
     private IOperationGetter operationGetter;
     private CancellationToken destroyToken;
+    private SerialSender cachedSender;
+    private bool refreshRequested;
+    private bool isRefreshing;
 
     private async void Start()
     {
@@ -85,22 +87,22 @@ public class OperationThemeColorSerialBridge : MonoBehaviour
 
         sliderTouchDatas
             .ObserveAdd()
-            .Subscribe(x => ApplySliderTouchDataAsync(x.Value, destroyToken).Forget())
+            .Subscribe(_ => RequestRefresh())
             .AddTo(disposables);
 
         sliderTouchDatas
             .ObserveRemove()
-            .Subscribe(_ => RefreshAllLedsAsync(destroyToken).Forget())
+            .Subscribe(_ => RequestRefresh())
             .AddTo(disposables);
 
         sliderTouchDatas
             .ObserveReset()
-            .Subscribe(_ => ClearControllerAsync(destroyToken).Forget())
+            .Subscribe(_ => RequestRefresh())
             .AddTo(disposables);
 
         if (applyExistingItemsOnStart)
         {
-            await RefreshAllLedsAsync(token);
+            RequestRefresh();
         }
     }
 
@@ -109,122 +111,102 @@ public class OperationThemeColorSerialBridge : MonoBehaviour
         disposables.Dispose();
     }
 
-    private async UniTask<SerialSender> WaitForSenderAsync(CancellationToken token)
+    private void RequestRefresh()
+    {
+        refreshRequested = true;
+        if (isRefreshing) { return; }
+
+        RefreshLoopAsync(destroyToken).Forget();
+    }
+
+    private async UniTaskVoid RefreshLoopAsync(CancellationToken token)
+    {
+        isRefreshing = true;
+        try
+        {
+            while (refreshRequested)
+            {
+                refreshRequested = false;
+
+                // Batch Reset/Add bursts caused by phase changes into a single LED refresh.
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
+                RefreshCurrentOperations();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        finally
+        {
+            isRefreshing = false;
+
+            if (refreshRequested && !token.IsCancellationRequested)
+            {
+                RefreshLoopAsync(token).Forget();
+            }
+        }
+    }
+
+    private void RefreshCurrentOperations()
+    {
+        var sender = GetConnectedSender();
+        if (sender == null) { return; }
+
+        sender.ClearManual();
+
+        if (operationGetter == null) { return; }
+
+        IReadOnlyReactiveCollection<SliderTouchData> sliderTouchDatas = operationGetter.SliderTouchDatas;
+        if (sliderTouchDatas == null) { return; }
+
+        foreach (var sliderTouchData in sliderTouchDatas)
+        {
+            ApplySliderTouchData(sender, sliderTouchData);
+        }
+    }
+
+    private void ApplySliderTouchData(SerialSender sender, SliderTouchData sliderTouchData)
+    {
+        if (sender == null) { return; }
+        if (sliderTouchData == null) { return; }
+
+        bool controllerRainbow = sliderTouchData.ControllerRainbow;
+        Color32 color = sliderTouchData.ControllerColor;
+        foreach (int sliderIndex in sliderTouchData.SliderIndices)
+        {
+            var ledMap = sliderIndexToLedMaps.FirstOrDefault(map => map.SliderIndex == sliderIndex);
+            if (ledMap == null) { continue; }
+
+            foreach (var ledAddress in ledMap.LedAddresses)
+            {
+                if (controllerRainbow)
+                {
+                    sender.SetMappedRainbow(ledAddress.Channel, ledAddress.Electrode);
+                }
+                else
+                {
+                    sender.SetMappedLed(ledAddress.Channel, ledAddress.Electrode, color);
+                }
+            }
+        }
+    }
+
+    private SerialSender GetConnectedSender()
     {
         var sender = ResolveSender();
-        if (sender == null)
-        {
-            return null;
-        }
-
-        if (sender.IsConnected)
-        {
-            return sender;
-        }
-
-        var waitTask = UniTask.WaitUntil(() => ResolveSender()?.IsConnected == true, cancellationToken: token);
-        var timeoutTask = UniTask.Delay(connectWaitTimeoutMs, cancellationToken: token);
-        await UniTask.WhenAny(waitTask, timeoutTask);
-
-        return ResolveSender()?.IsConnected == true ? ResolveSender() : null;
-    }
-
-    private async UniTask ApplySliderTouchDataAsync(SliderTouchData sliderTouchData, CancellationToken token)
-    {
-        try
-        {
-            if (sliderTouchData == null)
-            {
-                return;
-            }
-
-            var sender = await WaitForSenderAsync(token);
-            if (sender == null)
-            {
-                return;
-            }
-
-            bool controllerRainbow = sliderTouchData.ControllerRainbow;
-            Color32 color = sliderTouchData.ControllerColor;
-            foreach (int sliderIndex in sliderTouchData.SliderIndices)
-            {
-                var ledMap = sliderIndexToLedMaps.FirstOrDefault(map => map.SliderIndex == sliderIndex);
-                if (ledMap == null)
-                {
-                    continue;
-                }
-
-                foreach (var ledAddress in ledMap.LedAddresses)
-                {
-                    if (controllerRainbow)
-                    {
-                        sender.SetMappedRainbow(ledAddress.Channel, ledAddress.Electrode);
-                    }
-                    else
-                    {
-                        sender.SetMappedLed(ledAddress.Channel, ledAddress.Electrode, color);
-                    }
-                }
-            }
-        }
-        catch (OperationCanceledException)
-        {
-        }
-    }
-
-    private async UniTask RefreshAllLedsAsync(CancellationToken token)
-    {
-        try
-        {
-            var sender = await WaitForSenderAsync(token);
-            if (sender == null)
-            {
-                return;
-            }
-
-            sender.ClearManual();
-
-            if (operationGetter == null)
-            {
-                return;
-            }
-
-            IReadOnlyReactiveCollection<SliderTouchData> sliderTouchDatas = operationGetter.SliderTouchDatas;
-            if (sliderTouchDatas == null)
-            {
-                return;
-            }
-
-            foreach (var sliderTouchData in sliderTouchDatas)
-            {
-                await ApplySliderTouchDataAsync(sliderTouchData, token);
-            }
-        }
-        catch (OperationCanceledException)
-        {
-        }
-    }
-
-    private async UniTask ClearControllerAsync(CancellationToken token)
-    {
-        try
-        {
-            var sender = await WaitForSenderAsync(token);
-            if (sender == null)
-            {
-                return;
-            }
-
-            sender.ClearManual();
-        }
-        catch (OperationCanceledException)
-        {
-        }
+        if (sender == null) { return null; }
+        return sender.IsConnected ? sender : null;
     }
 
     private SerialSender ResolveSender()
     {
-        return FindObjectOfType<SerialSender>();
+        if (cachedSender != null)
+        {
+            return cachedSender;
+        }
+
+        cachedSender = FindObjectOfType<SerialSender>();
+        return cachedSender;
     }
 
     private void EnsureDefaultMaps()

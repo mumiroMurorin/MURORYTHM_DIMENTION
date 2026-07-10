@@ -6,6 +6,7 @@ public class SpaceInputHandlerForLeapMotion : MonoBehaviour, ISpaceInputHandler,
 {
     [SerializeField] private LeapProvider leapProvider;
     [SerializeField] private bool autoFindProvider = true;
+    [SerializeField] private bool enableProviderOnAwake;
     [SerializeField] private bool useStabilizedPalmPosition = true;
 
     private readonly ReactiveProperty<Vector3> rightHandPos = new ReactiveProperty<Vector3>(Vector3.zero);
@@ -34,6 +35,7 @@ public class SpaceInputHandlerForLeapMotion : MonoBehaviour, ISpaceInputHandler,
     private void Awake()
     {
         TryFindLeapProvider();
+        SetProviderActive(enableProviderOnAwake);
     }
 
     private void Update()
@@ -57,12 +59,7 @@ public class SpaceInputHandlerForLeapMotion : MonoBehaviour, ISpaceInputHandler,
     [System.Obsolete]
     public void StartTracking()
     {
-        TryFindLeapProvider();
-
-        if (leapProvider != null)
-        {
-            leapProvider.enabled = true;
-        }
+        SetProviderActive(true);
     }
 
     public void SwitchCamera()
@@ -77,11 +74,26 @@ public class SpaceInputHandlerForLeapMotion : MonoBehaviour, ISpaceInputHandler,
         leapProvider = FindAnyObjectByType<LeapProvider>();
     }
 
+    public void SetProviderActive(bool isActive)
+    {
+        TryFindLeapProvider();
+
+        if (leapProvider == null) { return; }
+
+        leapProvider.enabled = isActive;
+        if (!isActive)
+        {
+            isTracking = false;
+            hasRightHand = false;
+            hasLeftHand = false;
+        }
+    }
+
     private void ReadData()
     {
         TryFindLeapProvider();
 
-        if (leapProvider == null || leapProvider.CurrentFrame == null)
+        if (leapProvider == null || !leapProvider.enabled || leapProvider.CurrentFrame == null)
         {
             isTracking = false;
             hasRightHand = false;
