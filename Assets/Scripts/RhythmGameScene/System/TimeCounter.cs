@@ -47,8 +47,8 @@ public class TimeCounter : MonoBehaviour, ITimeGetter, ITimeController
 
         // 楽曲開始後はAudioSourceの再生位置を正とする
         if (syncWithMusic &&
-            SoundManager.Instance != null &&
-            SoundManager.Instance.TryGetBGMPlaybackSeconds(syncBgmType, out float musicTime))
+            SoundManager.TryGetInstance(out SoundManager soundManager) &&
+            soundManager.TryGetBGMPlaybackSeconds(syncBgmType, out float musicTime))
         {
             hasSyncedWithMusic = true;
             time.Value = Mathf.Max(time.Value, musicTime);

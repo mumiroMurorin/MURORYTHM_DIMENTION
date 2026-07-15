@@ -4,6 +4,7 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
+using UIInGameOverScene;
 
 namespace TransitionerInGameOverScene
 {
@@ -14,7 +15,7 @@ namespace TransitionerInGameOverScene
         [SerializeField] SerializeInterface<IPhaseTransitionableInGameOverScene> phaseTransitionable;
         [SerializeField] GameOverSceneDataController dataController;
         [SerializeField] TextBoxController textBoxController;
-        [SerializeField] SikibooController sikibooController;
+        [SerializeField] CharacterAnimationControllersBinder characterAnimationControllersBinder;
 
         readonly PhaseStatusInGameOverScene status = PhaseStatusInGameOverScene.Animation;
 
@@ -35,7 +36,7 @@ namespace TransitionerInGameOverScene
             // コンティニュー
             if (dataController.DataGetter.IsContinue.Value) 
             {
-                sikibooController?.OnContinueSelected();
+                characterAnimationControllersBinder?.OnContinueSelected();
 
                 cts?.CancelAndDispose();
                 cts = DelayUtility.Run(afterContinueDelaySeconds, () => phaseTransitionable.Value.TransitionPhase(PhaseStatusInGameOverScene.FadeOut));
@@ -43,7 +44,7 @@ namespace TransitionerInGameOverScene
             // ゲーム終了
             else
             {
-                sikibooController?.OnFinishSelected();
+                characterAnimationControllersBinder?.OnFinishSelected();
 
                 cts?.CancelAndDispose();
                 cts = DelayUtility.Run(afterFinishDelaySeconds, () => phaseTransitionable.Value.TransitionPhase(PhaseStatusInGameOverScene.FadeOut));

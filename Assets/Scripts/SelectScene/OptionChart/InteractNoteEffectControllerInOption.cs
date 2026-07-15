@@ -1,45 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
-using VContainer;
-using UnityEngine;
 using UniRx;
+using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
-public class InteractNoteEffectControllerInOption : MonoBehaviour
+public class InteractNoteEffectControllerInOption : InteractNoteEffectControllerBinder
 {
-    [SerializeField] List<InteractNoteEffectSpawner> spawners;
+    [SerializeField] bool useMusicDataListGetter;
 
-    IScoreGetter scoreGetter;
+    IMusicDataListGetter musicDataListGetter;
 
     [Inject]
-    public void Constructor(IScoreGetter scoreGetter)
+    public void ConstructMusicDataListGetter(
+    IMusicDataListGetter musicDataListGetter)
     {
-        this.scoreGetter = scoreGetter;
+        this.musicDataListGetter = musicDataListGetter;
     }
 
-    private void Start()
+    protected override void Start()
     {
-        Bind();
     }
 
-    private void Bind()
+    public void InitializeAfterLoadData()
     {
-        // 記録を監視、増え次第エフェクトを発生させる
-        scoreGetter.NoteJudgementDatas
-            .ObserveAdd()
-            .Subscribe(value => SpawnEffect(value.Value))
-            .AddTo(this.gameObject);
+        Initialize();
     }
 
-    private void SpawnEffect(NoteJudgementData judgementData)
+    protected override MusicData GetCurrentMusicData()
     {
-        foreach (InteractNoteEffectSpawner spawner in spawners)
+        if (useMusicDataListGetter)
         {
-            if (spawner.ConditionChecker(judgementData))
-            {
-                spawner.Spawn(judgementData);
-            }
+            return musicDataListGetter?.CurrentMusicData?.Value;
         }
 
+        return base.GetCurrentMusicData();
     }
 }
-

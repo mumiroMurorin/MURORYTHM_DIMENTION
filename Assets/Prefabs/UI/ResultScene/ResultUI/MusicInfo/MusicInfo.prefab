@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Feryquitas
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 3607e76ab6fa196468b4f8ca80ce5a27, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bbc17472500554744bf31f13284ecf01, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 30cc3fb07f943cb40a53bf03c301595c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35
+  m_fontSize: 25.05
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -560,37 +560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb663ca1e6c0e944e93ccdae7a6853c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colors:
-  - symphonyType: 10
-    sprites:
-    - difficulty: 0
-      sprite: {fileID: 21300000, guid: 25e4079379b276d4d81df95ac8e683df, type: 3}
-    - difficulty: 1
-      sprite: {fileID: 21300000, guid: fb1709aebc11c9642a877929e023a8ca, type: 3}
-    - difficulty: 2
-      sprite: {fileID: 21300000, guid: f16d5df0df1f00c4f98143905ad45114, type: 3}
-    - difficulty: 3
-      sprite: {fileID: 21300000, guid: c3b059128efa40d4fae432de15817f52, type: 3}
-  - symphonyType: 20
-    sprites:
-    - difficulty: 0
-      sprite: {fileID: 21300000, guid: 25e4079379b276d4d81df95ac8e683df, type: 3}
-    - difficulty: 1
-      sprite: {fileID: 21300000, guid: fb1709aebc11c9642a877929e023a8ca, type: 3}
-    - difficulty: 2
-      sprite: {fileID: 21300000, guid: f16d5df0df1f00c4f98143905ad45114, type: 3}
-    - difficulty: 3
-      sprite: {fileID: 21300000, guid: 9426bc68655f7bb44b1c55abb77bc271, type: 3}
-  - symphonyType: 0
-    sprites:
-    - difficulty: 0
-      sprite: {fileID: 21300000, guid: 25e4079379b276d4d81df95ac8e683df, type: 3}
-    - difficulty: 1
-      sprite: {fileID: 21300000, guid: fb1709aebc11c9642a877929e023a8ca, type: 3}
-    - difficulty: 2
-      sprite: {fileID: 21300000, guid: f16d5df0df1f00c4f98143905ad45114, type: 3}
-    - difficulty: 3
-      sprite: {fileID: 21300000, guid: ecc5c154286e464409eb5e7e71857c99, type: 3}
+  symphonyTypePresentationDatabase: {fileID: 11400000, guid: 429a5dca876a39743bd78706c233758b, type: 2}
   musicTitle_text: {fileID: 487074020309335840}
   composer_text: {fileID: 4567311398341186159}
   jacket_image: {fileID: 7707087705501113412}
@@ -651,7 +621,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 25}
-  m_SizeDelta: {x: -550, y: -104.399994}
+  m_SizeDelta: {x: -550, y: -90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6470837171611106860
 CanvasRenderer:
@@ -683,8 +653,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u30AD\u30DF\u3068\u50D5\u3068\u306E\u846C\u9001\u6B4C"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 3607e76ab6fa196468b4f8ca80ce5a27, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bbc17472500554744bf31f13284ecf01, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 30cc3fb07f943cb40a53bf03c301595c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -708,7 +678,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 65.6
+  m_fontSize: 57.3
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

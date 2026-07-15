@@ -5,6 +5,7 @@ using UnityEngine;
 public class StageController : MonoBehaviour, IStageController
 {
     [SerializeField] CharacterSpawner characterSpawner;
+    [SerializeField] SymphonyTypePresentationDatabase symphonyTypePresentationDatabase;
 
     [Header("タイトルオブジェクト設定")]
     [SerializeField] FlyingTextSettings titleSettings;
@@ -26,16 +27,31 @@ public class StageController : MonoBehaviour, IStageController
         titleOutline.ApplyOutline(titleObj);
 
         // 難易度オブジェクトのスポーン
-        string difString = "";
-        if (musicDataGetter.Difficulty.Value != Difficulty.Master) { difString = musicDataGetter.Difficulty.Value.ToString().ToUpper(); }
-        else if (musicDataGetter.Music.Value.SymphonyType == SymphonyType.Creation) { difString = "GENESIS"; }
-        else if (musicDataGetter.Music.Value.SymphonyType == SymphonyType.Destruction) { difString = "APOCALYPSE"; }
+        string difString = GetDifficultyText(musicDataGetter);
 
         var diffObj = characterSpawner.SpawnCharacter(difString, difficultySettings);
         diffObj.transform.SetParent(difficultyParent);
         diffObj.transform.localPosition = Vector3.zero;
         diffObj.transform.localEulerAngles = Vector3.zero;
         difficultyOutline.ApplyOutline(diffObj);
+    }
+
+    private string GetDifficultyText(IMusicDataGetter musicDataGetter)
+    {
+        if (musicDataGetter.Difficulty.Value != Difficulty.Master)
+        {
+            return musicDataGetter.Difficulty.Value.ToString().ToUpper();
+        }
+
+        SymphonyType symphonyType = musicDataGetter.Music.Value.SymphonyType;
+        string masterDifficultyText = symphonyTypePresentationDatabase?.GetMasterDifficultyText(symphonyType);
+        if (!string.IsNullOrEmpty(masterDifficultyText))
+        {
+            return masterDifficultyText;
+        }
+
+        Debug.LogWarning($"[StageController] Master difficulty text is not set: {symphonyType}");
+        return Difficulty.Master.ToString().ToUpper();
     }
 }
 

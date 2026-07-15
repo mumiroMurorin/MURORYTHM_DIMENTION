@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ReadyToPlayUIControllerView : MonoBehaviour
 {
-    [SerializeField] StageDataToSprite[] dataToBackSprites;
+    [SerializeField] SymphonyTypePresentationDatabase symphonyTypePresentationDatabase;
 
     [SerializeField] TextMeshProUGUI titleTmp;
     [SerializeField] TextMeshProUGUI composerTmp;
@@ -44,27 +44,14 @@ public class ReadyToPlayUIControllerView : MonoBehaviour
     {
         if (difficultyImage == null) { return; }
 
-        foreach (var pair in dataToBackSprites)
+        SymphonyTypePresentationData presentationData = symphonyTypePresentationDatabase?.Get(symphonyType);
+        Sprite sprite = presentationData?.GetReadyDifficultySprite(difficulty);
+        if (sprite == null)
         {
-            if (pair.CheckCondition(difficulty, symphonyType))
-            {
-                difficultyImage.sprite = pair.Sprite;
-            }
-        }
-    }
-
-    [System.Serializable]
-    public class StageDataToSprite
-    {
-        [SerializeField] Difficulty difficulty;
-        [SerializeField] SymphonyType symphonyType;
-        [SerializeField] Sprite sprite;
-
-        public bool CheckCondition(Difficulty difficulty, SymphonyType symphonyType)
-        {
-            return this.difficulty == difficulty && this.symphonyType == symphonyType;
+            Debug.LogWarning($"[ReadyToPlayUIControllerView] Ready difficulty sprite is not set: {symphonyType}, {difficulty}");
+            return;
         }
 
-        public Sprite Sprite { get { return sprite; } }
+        difficultyImage.sprite = sprite;
     }
 }

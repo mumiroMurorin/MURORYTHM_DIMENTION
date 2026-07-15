@@ -2799,6 +2799,7 @@ GameObject:
   - component: {fileID: 830572940}
   - component: {fileID: 830572938}
   - component: {fileID: 830572939}
+  - component: {fileID: 830572941}
   m_Layer: 0
   m_Name: InteractEffectController
   m_TagString: Untagged
@@ -2880,7 +2881,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 830572936}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2afcab0a5f0411444835c181107cd06f, type: 3}
   m_Name: 
@@ -2911,7 +2912,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 830572936}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2afcab0a5f0411444835c181107cd06f, type: 3}
   m_Name: 
@@ -2935,6 +2936,21 @@ MonoBehaviour:
   - {fileID: 1312950225}
   - {fileID: 1838363407}
   - {fileID: 1504201690}
+--- !u!114 &830572941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830572936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb40423a0cff4c05bf9ef9bbc1644c71, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  symphonyTypePresentationDatabase: {fileID: 11400000, guid: 429a5dca876a39743bd78706c233758b, type: 2}
+  generatedControllerParent: {fileID: 0}
+  useMusicDataListGetter: 0
 --- !u!1001 &833712229
 PrefabInstance:
   m_ObjectHideFlags: 0

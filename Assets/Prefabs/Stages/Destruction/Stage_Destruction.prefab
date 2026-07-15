@@ -9884,6 +9884,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSpawner: {fileID: 8787467329146251009}
+  symphonyTypePresentationDatabase: {fileID: 11400000, guid: 429a5dca876a39743bd78706c233758b, type: 2}
   titleSettings:
     defaultMaterial: {fileID: 2100000, guid: 3abf473d50106f44c9611c2c76fd9a91, type: 2}
     edgeMaterial: {fileID: 2100000, guid: 32b24f24a51006641bc6feba2dfbdb01, type: 2}

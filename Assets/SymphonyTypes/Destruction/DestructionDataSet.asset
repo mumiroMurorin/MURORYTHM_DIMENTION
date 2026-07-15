@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93491c1adf2833c4bbcca412db874f49, type: 3}
+  m_Name: DestructionDataSet
+  m_EditorClassIdentifier: 
+  symphonyType: 20
+  masterDifficultyText: Apocalypse
+  circlePrefab: {fileID: 7158449014006009990, guid: ac744ab68eabdbb4395ca92b8c2c93f9, type: 3}
+  musicTopicPrefab: {fileID: 5851512985726491624, guid: b734c621537e611448e476a2884b8da8, type: 3}
+  difficultyViewPrefab: {fileID: 4267105018292403668, guid: 9746c159dc91496448c41194f95577d3, type: 3}
+  characterAnimationControllerPrefab: {fileID: 8281821115957407553, guid: ee74b827870017c44998f65c5aac6b5d, type: 3}
+  interactNoteEffectControllerPrefab: {fileID: 5109615378871327524, guid: ccab6141059b43741bf39af128bb0629, type: 3}
+  readyDifficultySprites:
+  - difficulty: 0
+    sprite: {fileID: 21300000, guid: 25e4079379b276d4d81df95ac8e683df, type: 3}
+  - difficulty: 1
+    sprite: {fileID: 21300000, guid: fb1709aebc11c9642a877929e023a8ca, type: 3}
+  - difficulty: 2
+    sprite: {fileID: 21300000, guid: f16d5df0df1f00c4f98143905ad45114, type: 3}
+  - difficulty: 3
+    sprite: {fileID: 21300000, guid: 9426bc68655f7bb44b1c55abb77bc271, type: 3}
+  resultDifficultySprites:
+  - difficulty: 0
+    sprite: {fileID: 21300000, guid: 25e4079379b276d4d81df95ac8e683df, type: 3}
+  - difficulty: 1
+    sprite: {fileID: 21300000, guid: fb1709aebc11c9642a877929e023a8ca, type: 3}
+  - difficulty: 2
+    sprite: {fileID: 21300000, guid: f16d5df0df1f00c4f98143905ad45114, type: 3}
+  - difficulty: 3
+    sprite: {fileID: 21300000, guid: 9426bc68655f7bb44b1c55abb77bc271, type: 3}
+  resultAdditionalAnimatorPrefab: {fileID: 7127587569856307223, guid: 40a5d6716483d0348aa9f10e6f7f274b, type: 3}

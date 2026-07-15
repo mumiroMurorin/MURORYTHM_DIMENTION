@@ -26,6 +26,17 @@ public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
+    public static bool TryGetInstance(out T value)
+    {
+        if (instance == null)
+        {
+            instance = FindObjectOfType<T>();
+        }
+
+        value = instance;
+        return value != null;
+    }
+
     protected virtual void Awake()
     {
         if (instance == null)

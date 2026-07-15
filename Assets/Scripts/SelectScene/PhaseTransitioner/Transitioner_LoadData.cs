@@ -15,6 +15,7 @@ namespace TransitionerInSelectScene
         [SerializeField] MusicDataListController musicDataListController;
         [SerializeField] OptionDataListController optionDataListController;
         [SerializeField] MusicDataSetter musicDataSetter;
+        [SerializeField] InteractNoteEffectControllerInOption interactNoteEffectControllerInOption;
 
         readonly PhaseStatusInSelectScene status = PhaseStatusInSelectScene.LoadData;
 
@@ -35,14 +36,21 @@ namespace TransitionerInSelectScene
             if (!musicDataListLoader.Value.CheckLoadedMusicDatas()) 
             {
                 musicDataListLoader.Value.LoadMusicDataList(() => {
+                    InitializeInteractNoteEffectControllerInOption();
                     isCompletedTask[0] = true;
                     CheckAndTransition(isCompletedTask);
                 });
             }
             else
             {
+                InitializeInteractNoteEffectControllerInOption();
                 phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.FadeIn);
             }
+        }
+
+        private void InitializeInteractNoteEffectControllerInOption()
+        {
+            interactNoteEffectControllerInOption?.InitializeAfterLoadData();
         }
 
         private void CheckAndTransition(bool[] isCompletedTask)

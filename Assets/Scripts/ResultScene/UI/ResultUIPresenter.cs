@@ -9,7 +9,6 @@ namespace UIInResultScene
 {
     public class ResultUIPresenter : MonoBehaviour
     {
-        [SerializeField] Image[] jacketImages;
         [SerializeField] Image[] themeImages;
         [SerializeField] GameObject[] hideUIs;
         [SerializeField] MusicInfoView musicInfo_view;
@@ -47,15 +46,6 @@ namespace UIInResultScene
 
         private void Initialize()
         {
-            // ジャケット画像
-            if (jacketImages != null)
-            {
-                foreach (var image in jacketImages)
-                {
-                    image.sprite = musicDataGetter_model.Music.Value.MusicSprite;
-                }
-            }
-
             // テーマ画像
             if (themeImages != null)
             {
@@ -133,7 +123,9 @@ namespace UIInResultScene
 
             // 背景
             musicDataGetter_model?.Music
-                .Subscribe(data => circleController_view.OnChangeSymphonyType(data.SymphonyType))
+                .Where(data => data != null)
+                .Take(1)
+                .Subscribe(circleController_view.OnChangeMusicData)
                 .AddTo(this.gameObject);
         }
 

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93491c1adf2833c4bbcca412db874f49, type: 3}
+  m_Name: CreationDataSet
+  m_EditorClassIdentifier: 
+  symphonyType: 10
+  masterDifficultyText: Genesis
+  circlePrefab: {fileID: 7158449014006009990, guid: 827377e4789f309429b8363cd8581945, type: 3}
+  musicTopicPrefab: {fileID: 7660488239386400337, guid: 61a8530e57359a442a6d4b62940a7ece, type: 3}
+  difficultyViewPrefab: {fileID: 8652755227020481776, guid: ebb54f85d7da424458a6d038ea9b1ed4, type: 3}
+  resultAdditionalAnimatorPrefab: {fileID: 7127587569856307223, guid: 95e57600ac3db8b4fa562cc9f2a67dd9, type: 3}
+  characterAnimationControllerPrefab: {fileID: 8281821115957407553, guid: ee74b827870017c44998f65c5aac6b5d, type: 3}
+  interactNoteEffectControllerPrefab: {fileID: 3898630236826765611, guid: ca3e2bb9c53b8cc4fa7b87a57ab4816b, type: 3}
+  readyDifficultySprites:
+  - difficulty: 0
+    sprite: {fileID: 21300000, guid: 25e4079379b276d4d81df95ac8e683df, type: 3}
+  - difficulty: 1
+    sprite: {fileID: 21300000, guid: fb1709aebc11c9642a877929e023a8ca, type: 3}
+  - difficulty: 2
+    sprite: {fileID: 21300000, guid: f16d5df0df1f00c4f98143905ad45114, type: 3}
+  - difficulty: 3
+    sprite: {fileID: 21300000, guid: c3b059128efa40d4fae432de15817f52, type: 3}
+  resultDifficultySprites:
+  - difficulty: 0
+    sprite: {fileID: 21300000, guid: 25e4079379b276d4d81df95ac8e683df, type: 3}
+  - difficulty: 1
+    sprite: {fileID: 21300000, guid: fb1709aebc11c9642a877929e023a8ca, type: 3}
+  - difficulty: 2
+    sprite: {fileID: 21300000, guid: f16d5df0df1f00c4f98143905ad45114, type: 3}
+  - difficulty: 3
+    sprite: {fileID: 21300000, guid: c3b059128efa40d4fae432de15817f52, type: 3}

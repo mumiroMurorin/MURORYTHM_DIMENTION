@@ -8,7 +8,7 @@ namespace UIInResultScene
 {
     public class MusicInfoView : MonoBehaviour
     {
-        [SerializeField] SymphonyTypeToDTC[] colors;
+        [SerializeField] SymphonyTypePresentationDatabase symphonyTypePresentationDatabase;
         [SerializeField] TextMeshProUGUI musicTitle_text;
         [SerializeField] TextMeshProUGUI composer_text;
         [SerializeField] Image jacket_image;
@@ -43,40 +43,16 @@ namespace UIInResultScene
 
         private void SetDifficultyImage(SymphonyType symphonyType, Difficulty difficulty)
         {
-            if (colors == null) { return; }
+            if (difficultyImage == null) { return; }
 
-            foreach (var c in colors)
+            Sprite sprite = symphonyTypePresentationDatabase?.GetResultDifficultySprite(symphonyType, difficulty);
+            if (sprite == null)
             {
-                if (c.CheckCondition(symphonyType))
-                {
-                    difficultyImage.sprite = c.GetSprite(difficulty);
-                    return;
-                }
-            }
-        }
-
-        [System.Serializable]
-        class SymphonyTypeToDTC
-        {
-            [SerializeField] SymphonyType symphonyType;
-            [SerializeField] DifficultyToSprite[] sprites;
-
-            public bool CheckCondition(SymphonyType symphonyType)
-            {
-                return this.symphonyType == symphonyType;
+                Debug.LogWarning($"[MusicInfoView] Result difficulty sprite is not set: {symphonyType}, {difficulty}");
+                return;
             }
 
-            public Sprite GetSprite(Difficulty difficulty)
-            {
-                if (sprites == null) { return null; }
-
-                foreach(var s in sprites)
-                {
-                    if (s.CheckCondition(difficulty)) { return s.Sprite; }
-                }
-
-                return null;
-            }
+            difficultyImage.sprite = sprite;
         }
     }
 }
