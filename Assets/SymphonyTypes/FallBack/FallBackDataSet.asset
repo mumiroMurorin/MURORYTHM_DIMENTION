@@ -17,8 +17,8 @@ MonoBehaviour:
   circlePrefab: {fileID: 7158449014006009990, guid: ac80652a7c94bdc4d9272aa4afd06258, type: 3}
   musicTopicPrefab: {fileID: 1735335226173175770, guid: 1808e0aa843de6d4c934367f045642c5, type: 3}
   difficultyViewPrefab: {fileID: 3422132914526108030, guid: a897821c21c075a4bb52869c52b54f2a, type: 3}
-  characterAnimationControllerPrefab: {fileID: 8281821115957407553, guid: ee74b827870017c44998f65c5aac6b5d, type: 3}
   interactNoteEffectControllerPrefab: {fileID: 519368923180885979, guid: fa38de16b83062b48bc4f9d60e8622c0, type: 3}
+  characterAnimationControllerPrefab: {fileID: 8281821115957407553, guid: 61ec357d6c226974f9333129b6d52aeb, type: 3}
   readyDifficultySprites:
   - difficulty: 0
     sprite: {fileID: 21300000, guid: 25e4079379b276d4d81df95ac8e683df, type: 3}

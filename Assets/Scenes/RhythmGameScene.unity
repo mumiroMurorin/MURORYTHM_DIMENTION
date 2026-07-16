@@ -237,7 +237,7 @@ MonoBehaviour:
     theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
     clip: {fileID: 8300000, guid: 208648ff585d0534f89288210f0d80e1, type: 3}
     sample_clip: {fileID: 8300000, guid: 6bb917bc6d659314c85522d193d72c5b, type: 3}
-    symphonyType: 20
+    symphonyType: 10
     stageType: 101
     difficulties: 00000000000000000000000000000000
     chartPaths:
