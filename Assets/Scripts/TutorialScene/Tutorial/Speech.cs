@@ -9,27 +9,38 @@ namespace Tutorial
     [System.Serializable]
     public class Speech : TutorialActionNode
     {
-        [SerializeField] SpeechBubbleTutorial speechBubble;
         [FormerlySerializedAs("text")]
         [SerializeField] string textKey;
         [SerializeField] float waitSeconds = 2.5f;
         [SerializeField] SpeechBubbleConfig config;
-        [SerializeField] SerializeInterface<IDisposer> disposableObject;
 
         private const string TutorialTextTableName = "TutorialText";
 
+        private TutorialRuntimeContext context;
         private CancellationTokenSource textAnimationCts;
         private CancellationTokenSource waitingPlayerCts;
 
+        public override void Initialize(TutorialRuntimeContext context)
+        {
+            this.context = context;
+        }
+
         public override void Do()
         {
+            SpeechBubbleTutorial currentSpeechBubble = GetSpeechBubble();
+            if (currentSpeechBubble == null)
+            {
+                next?.Do();
+                return;
+            }
+
             textAnimationCts = new CancellationTokenSource();
-            disposableObject?.Value?.SetCts(textAnimationCts);
+            RegisterCts(textAnimationCts);
 
-            speechBubble.OnFinishAnimationListner -= OnFinishTextAnimation;
-            speechBubble.OnFinishAnimationListner += OnFinishTextAnimation;
+            currentSpeechBubble.OnFinishAnimationListner -= OnFinishTextAnimation;
+            currentSpeechBubble.OnFinishAnimationListner += OnFinishTextAnimation;
 
-            speechBubble?.Speak(ResolveText(), config);
+            currentSpeechBubble.Speak(ResolveText(), config);
         }
 
         private string ResolveText()
@@ -48,17 +59,21 @@ namespace Tutorial
             textAnimationCts?.CancelAndDispose();
             AfterTextAnimation();
 
-            speechBubble.OnFinishAnimationListner -= OnFinishTextAnimation;
+            SpeechBubbleTutorial currentSpeechBubble = GetSpeechBubble();
+            if (currentSpeechBubble != null)
+            {
+                currentSpeechBubble.OnFinishAnimationListner -= OnFinishTextAnimation;
+            }
         }
 
         private void AfterTextAnimation()
         {
             waitingPlayerCts = new CancellationTokenSource();
-            disposableObject?.Value?.SetCts(waitingPlayerCts);
+            RegisterCts(waitingPlayerCts);
 
             WaitForSecondsAsync(() =>
             {
-                speechBubble.ShutUp();
+                GetSpeechBubble()?.ShutUp();
                 next?.Do();
             }, waitingPlayerCts.Token).Forget();
         }
@@ -67,6 +82,16 @@ namespace Tutorial
         {
             await UniTask.WaitForSeconds(waitSeconds, cancellationToken: token);
             callback?.Invoke();
+        }
+
+        private SpeechBubbleTutorial GetSpeechBubble()
+        {
+            return context?.SpeechBubble;
+        }
+
+        private void RegisterCts(CancellationTokenSource cts)
+        {
+            context?.Disposer?.SetCts(cts);
         }
     }
 }

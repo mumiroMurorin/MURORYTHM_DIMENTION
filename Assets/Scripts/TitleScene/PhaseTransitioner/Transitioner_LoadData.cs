@@ -29,6 +29,7 @@ namespace TransitionerInTitleScene
             bool[] isCompletedTask = new bool[2];
 
             optionDataSetter?.SetOption(initializingOption);
+            optionDataSetter?.ResetTutorialGuideCharacterType();
 
             // 楽曲データリストの読み込みとセット
             if (!musicDataListLoader.Value.CheckLoadedMusicDatas())

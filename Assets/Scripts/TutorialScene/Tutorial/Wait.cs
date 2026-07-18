@@ -1,26 +1,30 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 
 namespace Tutorial
 {
     /// <summary>
-    /// ƒQ[ƒ€‚ğˆê’â~‚©‚çÄ¶‚·‚é
+    /// ã‚²ãƒ¼ãƒ ã‚’ä¸€æ™‚åœæ­¢ã‹ã‚‰å†ç”Ÿã™ã‚‹
     /// </summary>
     [System.Serializable]
     public class Wait : TutorialActionNode
     {
         [SerializeField] float seconds;
-        [SerializeField] SerializeInterface<IDisposer> disposableObject;
 
         CancellationTokenSource cts;
+        TutorialRuntimeContext context;
+
+        public override void Initialize(TutorialRuntimeContext context)
+        {
+            this.context = context;
+        }
 
         public override void Do()
         {
             cts?.CancelAndDispose();
             cts = DelayUtility.Run(seconds, () => { next?.Do(); }, true);
-
-            disposableObject?.Value?.SetCts(cts);
+            context?.Disposer?.SetCts(cts);
         }
     }
 }

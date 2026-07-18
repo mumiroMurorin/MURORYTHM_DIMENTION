@@ -1,26 +1,33 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 
 namespace Tutorial
 {
     /// <summary>
-    /// ÉQÅ[ÉÄÇàÍéûí‚é~Ç∑ÇÈ
+    /// „Ç≤„Éº„É†„Çí‰∏ÄÊôÇÂÅúÊ≠¢„Åô„Çã
     /// </summary>
     [System.Serializable]
     public class SetActiveObject : TutorialActionNode
     {
-        [SerializeField] GameObject[] activateObjects;
-        [SerializeField] GameObject[] deactivateObjects;
+        [SerializeField] string[] activateObjectKeys;
+        [SerializeField] string[] deactivateObjectKeys;
+
+        TutorialRuntimeContext context;
+
+        public override void Initialize(TutorialRuntimeContext context)
+        {
+            this.context = context;
+        }
 
         public override void Do()
         {
-            foreach(var obj in activateObjects)
+            foreach (string key in activateObjectKeys ?? System.Array.Empty<string>())
             {
-                obj?.SetActive(true);
+                context?.SetActive(key, true);
             }
 
-            foreach (var obj in deactivateObjects)
+            foreach (string key in deactivateObjectKeys ?? System.Array.Empty<string>())
             {
-                obj?.SetActive(false);
+                context?.SetActive(key, false);
             }
 
             next?.Do();

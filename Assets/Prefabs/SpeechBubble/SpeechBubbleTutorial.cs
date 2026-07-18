@@ -10,6 +10,11 @@ public class SpeechBubbleTutorial : SpeechBubbleAnimation
 
     public System.Action OnFinishAnimationListner;
 
+    public void SetEmotionAsset(EmotionAsset asset)
+    {
+        emotionAsset = asset;
+    }
+
     protected override void SetText(string text, SpeechBubbleConfig config)
     {
         tmp.text = text;

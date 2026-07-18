@@ -17,4 +17,14 @@ public class OptionDataSetter : MonoBehaviour
     {
         optionSetter?.SetOption(asset);
     }
+
+    public void ResetTutorialGuideCharacterType()
+    {
+        optionSetter?.ResetTutorialGuideCharacterType();
+    }
+
+    public void SetCurrentTutorialGuideCharacterType(TutorialGuideCharacterType tutorialGuideCharacterType)
+    {
+        optionSetter?.SetCurrentTutorialGuideCharacterType(tutorialGuideCharacterType);
+    }
 }

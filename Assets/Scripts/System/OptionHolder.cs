@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -453,6 +453,24 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
 
     #region 筐体設定
 
+    #region TutorialGuideCharacter
+
+    ReactiveProperty<TutorialGuideCharacterType> currentTutorialGuideCharacterType = new ReactiveProperty<TutorialGuideCharacterType>(TutorialGuideCharacterType.Shikiboo);
+    public IReadOnlyReactiveProperty<TutorialGuideCharacterType> CurrentTutorialGuideCharacterType => currentTutorialGuideCharacterType;
+    public void SetCurrentTutorialGuideCharacterType(TutorialGuideCharacterType tutorialGuideCharacterType)
+    {
+        if (currentTutorialGuideCharacterType.Value == tutorialGuideCharacterType) { return; }
+
+        currentTutorialGuideCharacterType.Value = tutorialGuideCharacterType;
+    }
+
+    public void ResetTutorialGuideCharacterType()
+    {
+        SetCurrentTutorialGuideCharacterType(TutorialGuideCharacterType.Shikiboo);
+    }
+
+    #endregion
+
     BodyTrackingSettings trackingSettings = new BodyTrackingSettings();
     public BodyTrackingSettings TrackingSettings => trackingSettings;
 
@@ -532,6 +550,8 @@ public interface IOptionGetter
 
     IReadOnlyReactiveProperty<TrackingMode> CurrentTrackingMode { get; }
 
+    IReadOnlyReactiveProperty<TutorialGuideCharacterType> CurrentTutorialGuideCharacterType { get; }
+
     BodyTrackingSettings TrackingSettings { get; }
 }
 
@@ -550,6 +570,10 @@ public interface IOptionSetter
     bool SetIsEnabledFastLate(bool isEnabled);
 
     void SetCurrentTrackingMode(TrackingMode trackingMode);
+
+    void SetCurrentTutorialGuideCharacterType(TutorialGuideCharacterType tutorialGuideCharacterType);
+
+    void ResetTutorialGuideCharacterType();
 
     BodyTrackingSettings TrackingSettings { get; }
 }
