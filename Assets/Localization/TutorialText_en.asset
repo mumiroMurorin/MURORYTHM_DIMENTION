@@ -130,6 +130,12 @@ MonoBehaviour:
     m_Localized: Next, choose a song you like and give it a try!
     m_Metadata:
       m_Items: []
+  - m_Id: 21604457893433344
+    m_Localized: 'Please select a character
+
+      from the tutorial.'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48533b201f7c9cb4c962852c06aecd43, type: 3}
+  m_Name: SelectTutorialGuideCharacter
+  m_EditorClassIdentifier: 
+  scene: 15
+  phaseStatusTitleScene: 0
+  phaseStatusLobbyScene: 0
+  phaseStatusSelectScene: 0
+  phaseStatusTutorialScene: 7
+  phaseStatusRhythmGameScene: 0
+  phaseStatusResultScene: 0
+  phaseStatusGameOverScene: 0
+  delaySeconds: 0.5
+  operationAssetGroups:
+  - coolTime: 0.2
+    operations:
+    - {fileID: 11400000, guid: 2dde82f25ba74f9ea0b692cc6b5cb609, type: 2}
+    - {fileID: 11400000, guid: d29b1081ac2d4997b38ac5c328c5a7b1, type: 2}
+    - {fileID: 11400000, guid: baa1f088d5384047b35ae0627ec8305a, type: 2}

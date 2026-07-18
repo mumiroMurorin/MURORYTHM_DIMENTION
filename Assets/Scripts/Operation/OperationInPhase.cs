@@ -45,6 +45,18 @@ public class OperationInPhase : ScriptableObject
     }
 
     #endregion
+    #region Tutorial
+
+    [ShowIf("scene", SceneTag.TutorialScene)]
+    [Label("対象フェーズ")]
+    [SerializeField] private PhaseStatusInTutorialScene phaseStatusTutorialScene;
+
+    public bool CheckCondition(PhaseStatusInTutorialScene phase)
+    {
+        return scene == SceneTag.TutorialScene && phase == phaseStatusTutorialScene;
+    }
+
+    #endregion
     #region RhythmGame
 
     [ShowIf("scene", SceneTag.RhythmGameScene)]

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Threading;
 
 namespace TransitionerInTutorialScene
 {
@@ -6,9 +7,15 @@ namespace TransitionerInTutorialScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInTutorialScene> phaseTransitionable;
         [SerializeField] TutorialGuideCharacterSelector selector;
+        [SerializeField] float delay = 0.5f;
+        [SerializeField] TextBoxController selectTutorialGuideCharacterTextBox;
+        [SerializeField] bool showSelectorPanel = false;
         [SerializeField] bool createDefaultSelectorWhenNull = true;
 
         readonly PhaseStatusInTutorialScene status = PhaseStatusInTutorialScene.SelectTutorialGuideCharacter;
+        CancellationTokenSource cts;
+        bool isSelecting;
+        bool hasTransitioned;
 
         bool IPhaseTransitionerInTutorialScene.ConditionChecker(PhaseStatusInTutorialScene status)
         {
@@ -18,6 +25,8 @@ namespace TransitionerInTutorialScene
         void IPhaseTransitionerInTutorialScene.Transition()
         {
             Debug.Log("[Transition] Transition to \"SelectTutorialGuideCharacter\"");
+            isSelecting = false;
+            hasTransitioned = false;
 
             if (selector == null && createDefaultSelectorWhenNull)
             {
@@ -30,7 +39,70 @@ namespace TransitionerInTutorialScene
                 return;
             }
 
-            selector.BeginSelect(TransitionNextPhase);
+            selector.BeginSelect(OnCharacterConfirmed, showSelectorPanel);
+
+            OpenSelectGuideCharacterWindow();
+        }
+
+        public void SelectCreationGuide()
+        {
+            SelectGuideCharacter(TutorialGuideCharacterType.Creation);
+        }
+
+        public void SelectShikibooGuide()
+        {
+            SelectGuideCharacter(TutorialGuideCharacterType.Shikiboo);
+        }
+
+        public void SelectDestructionGuide()
+        {
+            SelectGuideCharacter(TutorialGuideCharacterType.Destruction);
+        }
+
+        public void SelectGuideCharacter(TutorialGuideCharacterType characterType)
+        {
+            if (!isSelecting || hasTransitioned) { return; }
+
+            if (selector == null)
+            {
+                OnCharacterConfirmed();
+                return;
+            }
+
+            selector.SelectAndConfirm(characterType);
+        }
+
+        void OpenSelectGuideCharacterWindow()
+        {
+            cts?.CancelAndDispose();
+            cts = DelayUtility.Run(delay, () =>
+            {
+                if (selectTutorialGuideCharacterTextBox == null)
+                {
+                    isSelecting = true;
+                    return;
+                }
+
+                selectTutorialGuideCharacterTextBox.Open(() => { isSelecting = true; });
+            });
+
+            phaseTransitionable?.Value?.RegisterCts(cts);
+        }
+
+        void OnCharacterConfirmed()
+        {
+            if (hasTransitioned) { return; }
+
+            hasTransitioned = true;
+            isSelecting = false;
+
+            if (selectTutorialGuideCharacterTextBox != null)
+            {
+                selectTutorialGuideCharacterTextBox.Close(TransitionNextPhase);
+                return;
+            }
+
+            TransitionNextPhase();
         }
 
         void TransitionNextPhase()

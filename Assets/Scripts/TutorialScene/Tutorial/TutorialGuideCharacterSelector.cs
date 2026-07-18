@@ -31,12 +31,17 @@ public class TutorialGuideCharacterSelector : MonoBehaviour
 
     public void BeginSelect(Action onConfirmed)
     {
+        BeginSelect(onConfirmed, true);
+    }
+
+    public void BeginSelect(Action onConfirmed, bool visible)
+    {
         this.onConfirmed = onConfirmed;
         selectedCharacterType = optionGetter != null
             ? optionGetter.CurrentTutorialGuideCharacterType.Value
             : defaultCharacterType;
 
-        SetVisible(true);
+        SetVisible(visible);
         ApplySelection();
     }
 
@@ -59,6 +64,12 @@ public class TutorialGuideCharacterSelector : MonoBehaviour
     {
         selectedCharacterType = characterType;
         ApplySelection();
+    }
+
+    public void SelectAndConfirm(TutorialGuideCharacterType characterType)
+    {
+        Select(characterType);
+        Confirm();
     }
 
     public void Confirm()

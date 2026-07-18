@@ -99,6 +99,10 @@ MonoBehaviour:
     m_Key: Text21
     m_Metadata:
       m_Items: []
+  - m_Id: 21604457893433344
+    m_Key: Select_Tutorial_Character
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
