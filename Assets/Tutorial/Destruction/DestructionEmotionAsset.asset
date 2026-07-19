@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76363bf8ffbff664697e4214ab3710d8, type: 3}
+  m_Name: DestructionEmotionAsset
+  m_EditorClassIdentifier: 
+  emotionToSprites:
+  - emotion: 1
+    sprite: {fileID: 396081840, guid: 5b803290edf1da4448d0e04b0d3415fb, type: 3}
+  - emotion: 10
+    sprite: {fileID: -962658706, guid: cc17995bc389102479907e9a5445102a, type: 3}
+  - emotion: 11
+    sprite: {fileID: -1367866354, guid: 2834f93ead4f74f4795a3aadd3f8769b, type: 3}
+  - emotion: 20
+    sprite: {fileID: 34592535, guid: 697c4f81987b35348889041b69a851c0, type: 3}
+  - emotion: 30
+    sprite: {fileID: -1183400136, guid: a895d4486850c7646a09408f1451bbdb, type: 3}
+  - emotion: 40
+    sprite: {fileID: -282565258, guid: 3c1cc98807e05114097c2ee923646932, type: 3}

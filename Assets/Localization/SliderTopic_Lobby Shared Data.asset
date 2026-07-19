@@ -35,6 +35,22 @@ MonoBehaviour:
     m_Key: NextNote
     m_Metadata:
       m_Items: []
+  - m_Id: 616761458544641
+    m_Key: Tutorial Guide Creation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 616761458544642
+    m_Key: Tutorial Guide Destruction
+    m_Metadata:
+      m_Items: []
+  - m_Id: 616761458544643
+    m_Key: Tutorial Guide Shikiboo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 616761458544644
+    m_Key: Tutorial Guide Cancel
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

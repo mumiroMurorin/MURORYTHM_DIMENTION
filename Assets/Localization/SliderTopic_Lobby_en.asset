@@ -38,6 +38,22 @@ MonoBehaviour:
     m_Localized: Next
     m_Metadata:
       m_Items: []
+  - m_Id: 616761458544641
+    m_Localized: Creation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 616761458544642
+    m_Localized: Destruction
+    m_Metadata:
+      m_Items: []
+  - m_Id: 616761458544643
+    m_Localized: Shikiboo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 616761458544644
+    m_Localized: Cancel Tutorial
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

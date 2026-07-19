@@ -33,7 +33,7 @@ namespace TransitionerInTutorialScene
         /// </summary>
         private void TransitionNextPhase()
         {
-            phaseTransitionable.Value.TransitionPhase(PhaseStatusInTutorialScene.SelectTutorialGuideCharacter);
+            phaseTransitionable.Value.TransitionPhase(PhaseStatusInTutorialScene.LoadBody);
         }
     }
 

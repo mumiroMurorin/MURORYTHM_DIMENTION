@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 996c824c92d64957bcbf175ccdaa45a4, type: 3}
   m_Name: SelectGuide_Destruction_Unit
   m_EditorClassIdentifier: 
-  tag: 612
-  leftEdge: 11
-  rightEdge: 15
-  themeColor: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+  tag: 154
+  leftEdge: 0
+  rightEdge: 3
+  themeColor: {r: 1, g: 0.35, b: 0.3, a: 1}
   controllerRainbow: 0
-  controllerColor: {r: 0.6431373, g: 0.6431373, b: 0.6431373, a: 1}
-  textKey: Select Destruction
+  controllerColor: {r: 1, g: 0.35, b: 0.3, a: 1}
+  textKey: Tutorial Guide Destruction

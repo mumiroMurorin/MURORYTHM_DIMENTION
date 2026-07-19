@@ -12,18 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48533b201f7c9cb4c962852c06aecd43, type: 3}
   m_Name: SelectTutorialGuideCharacter
   m_EditorClassIdentifier: 
-  scene: 15
+  scene: 5
   phaseStatusTitleScene: 0
-  phaseStatusLobbyScene: 0
+  phaseStatusLobbyScene: 14
   phaseStatusSelectScene: 0
-  phaseStatusTutorialScene: 7
+  phaseStatusTutorialScene: 0
   phaseStatusRhythmGameScene: 0
   phaseStatusResultScene: 0
   phaseStatusGameOverScene: 0
   delaySeconds: 0.5
   operationAssetGroups:
-  - coolTime: 0.2
+  - coolTime: 0
     operations:
-    - {fileID: 11400000, guid: 2dde82f25ba74f9ea0b692cc6b5cb609, type: 2}
-    - {fileID: 11400000, guid: d29b1081ac2d4997b38ac5c328c5a7b1, type: 2}
-    - {fileID: 11400000, guid: baa1f088d5384047b35ae0627ec8305a, type: 2}
+    - {fileID: 11400000, guid: 78a5b528c4c24ca1a362a23328f20f6a, type: 2}
+    - {fileID: 11400000, guid: 8c7cc78a1d124027bbdcefa130c31a04, type: 2}
+    - {fileID: 11400000, guid: 50c0f90d923f46b3b15a2f739ae15fe5, type: 2}
+    - {fileID: 11400000, guid: e88e932167c34a56a1526aeefdd0498d, type: 2}

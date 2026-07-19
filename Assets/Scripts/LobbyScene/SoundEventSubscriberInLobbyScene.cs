@@ -22,5 +22,9 @@ public class SoundEventSubscriberInLobbyScene : MonoBehaviour
         operationDictionary?.RegisterOperation(OperationTag.Lobby_CautionPlaying2_Confirm, () => { SoundManager.Instance.PlaySE(SE_Type.AnyDecision); });
         operationDictionary?.RegisterOperation(OperationTag.Lobby_PlayTutorial, () => { SoundManager.Instance.PlaySE(SE_Type.AnyDecision); });
         operationDictionary?.RegisterOperation(OperationTag.Lobby_SkipTutorial, () => { SoundManager.Instance.PlaySE(SE_Type.AnyCancel); });
+        operationDictionary?.RegisterOperation(OperationTag.Lobby_SelectCreationGuide, () => { SoundManager.Instance.PlaySE(SE_Type.AnyDecision); });
+        operationDictionary?.RegisterOperation(OperationTag.Lobby_SelectShikibooGuide, () => { SoundManager.Instance.PlaySE(SE_Type.AnyDecision); });
+        operationDictionary?.RegisterOperation(OperationTag.Lobby_SelectDestructionGuide, () => { SoundManager.Instance.PlaySE(SE_Type.AnyDecision); });
+        operationDictionary?.RegisterOperation(OperationTag.Lobby_CancelTutorialGuide, () => { SoundManager.Instance.PlaySE(SE_Type.AnyCancel); });
     }
 }

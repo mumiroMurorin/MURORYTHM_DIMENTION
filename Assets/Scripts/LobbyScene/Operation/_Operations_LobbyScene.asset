@@ -17,5 +17,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a4f65f39dfbe4437bd6c5f0e1c1e9aa1, type: 2}
   - {fileID: 11400000, guid: b7d1db7192274d38b5d6c0402868f5a2, type: 2}
   - {fileID: 11400000, guid: c9cee92035524ad45b02fe680fb9e6e7, type: 2}
+  - {fileID: 11400000, guid: 366a02092d6e4cc4a8a15b45dd817305, type: 2}
   textTableReference:
     m_TableCollectionName: SliderTopic_Lobby

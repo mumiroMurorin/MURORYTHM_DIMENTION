@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 996c824c92d64957bcbf175ccdaa45a4, type: 3}
-  m_Name: SelectGuide_Shikiboo_Unit
+  m_Name: SelectGuide_Creation_Unit
   m_EditorClassIdentifier: 
-  tag: 611
-  leftEdge: 5
-  rightEdge: 10
-  themeColor: {r: 0.4, g: 0.8, b: 1, a: 1}
+  tag: 152
+  leftEdge: 8
+  rightEdge: 11
+  themeColor: {r: 0.35, g: 0.75, b: 1, a: 1}
   controllerRainbow: 0
-  controllerColor: {r: 0.4, g: 0.8, b: 1, a: 1}
-  textKey: Select Shikiboo
+  controllerColor: {r: 0.35, g: 0.75, b: 1, a: 1}
+  textKey: Tutorial Guide Creation

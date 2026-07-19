@@ -156,6 +156,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: hakai_Normal_02_1
+      rect:
+        serializedVersion: 2
+        x: 2177
+        y: 2198
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b9b5f4a1cd575d4c9dba9ccdd6977ee
+      internalID: 396081840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -168,6 +189,7 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       hakai_Normal_02_0: -13561726
+      hakai_Normal_02_1: 396081840
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

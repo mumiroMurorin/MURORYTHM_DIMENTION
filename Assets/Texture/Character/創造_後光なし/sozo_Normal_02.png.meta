@@ -144,7 +144,7 @@ TextureImporter:
         width: 2470
         height: 2125
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -152,6 +152,27 @@ TextureImporter:
       bones: []
       spriteID: ac5bff35bb5b390419665f20192d14df
       internalID: 738294965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sozo_Normal_02_1
+      rect:
+        serializedVersion: 2
+        x: 4877
+        y: 1933
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8544d3ba841ac5240830a35d71ccc97f
+      internalID: -790677465
       vertices: []
       indices: 
       edges: []
@@ -168,6 +189,7 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       sozo_Normal_02_0: 738294965
+      sozo_Normal_02_1: -790677465
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -12,6 +12,7 @@ namespace TransitionerInLobbyScene
         [SerializeField] SerializeInterface<IPhaseTransitionableInLobbyScene> phaseTransitionable;
         [SerializeField] OperationDictionary operationDictionary;
         [SerializeField] LobbySceneDataController dataController;
+        [SerializeField] OptionDataSetter optionDataSetter;
 
         readonly PhaseStatusInLobbyScene status = PhaseStatusInLobbyScene.LoadData;
 
@@ -41,12 +42,33 @@ namespace TransitionerInLobbyScene
 
         private void RegisterOperation()
         {
-            operationDictionary.RegisterOperation(OperationTag.Lobby_PlayTutorial, () => { TransitionFadeOutPhase(true); });
+            operationDictionary.RegisterOperation(OperationTag.Lobby_PlayTutorial, () => { TransitionSelectTutorialGuideCharacterPhase(); });
             operationDictionary.RegisterOperation(OperationTag.Lobby_SkipTutorial, () => { TransitionFadeOutPhase(false); });
+            operationDictionary.RegisterOperation(OperationTag.Lobby_SelectCreationGuide, () => { SelectTutorialGuideCharacter(TutorialGuideCharacterType.Creation); });
+            operationDictionary.RegisterOperation(OperationTag.Lobby_SelectShikibooGuide, () => { SelectTutorialGuideCharacter(TutorialGuideCharacterType.Shikiboo); });
+            operationDictionary.RegisterOperation(OperationTag.Lobby_SelectDestructionGuide, () => { SelectTutorialGuideCharacter(TutorialGuideCharacterType.Destruction); });
+            operationDictionary.RegisterOperation(OperationTag.Lobby_CancelTutorialGuide, () => { CancelTutorialGuideCharacterSelection(); });
             operationDictionary.RegisterOperation(OperationTag.Lobby_SelectJapanese, () => { SetLanguage(GameLanguage.Japanese); });
             operationDictionary.RegisterOperation(OperationTag.Lobby_SelectEnglish, () => { SetLanguage(GameLanguage.English); });
             operationDictionary.RegisterOperation(OperationTag.Lobby_CautionPlaying1_Confirm, () => { phaseTransitionable?.Value.TransitionPhase(PhaseStatusInLobbyScene.CautionPlaying2); });
             operationDictionary.RegisterOperation(OperationTag.Lobby_CautionPlaying2_Confirm, () => { phaseTransitionable?.Value.TransitionPhase(PhaseStatusInLobbyScene.ConfirmTutorial); });
+        }
+
+        private void TransitionSelectTutorialGuideCharacterPhase()
+        {
+            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInLobbyScene.SelectTutorialGuideCharacter);
+        }
+
+        private void SelectTutorialGuideCharacter(TutorialGuideCharacterType characterType)
+        {
+            optionDataSetter?.SetCurrentTutorialGuideCharacterType(characterType);
+            TransitionFadeOutPhase(true);
+        }
+
+        private void CancelTutorialGuideCharacterSelection()
+        {
+            optionDataSetter?.ResetTutorialGuideCharacterType();
+            TransitionFadeOutPhase(false);
         }
 
         private void TransitionFadeOutPhase(bool isPlayTutorial)

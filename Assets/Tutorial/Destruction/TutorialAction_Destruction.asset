@@ -1,0 +1,362 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36a90ea082d7d7449b9e33475e0d69d2, type: 3}
+  m_Name: TutorialAction_Destruction
+  m_EditorClassIdentifier: 
+  actions:
+  - rid: 4817692154666418184
+  - rid: 4817692173062897664
+  - rid: 4817692173062897665
+  - rid: 4817692173062897691
+  - rid: 4817692154666418188
+  - rid: 4817692173062897703
+  - rid: 4817692173062897666
+  - rid: 4817692173062897693
+  - rid: 4817692162781609984
+  - rid: 4817692162781609987
+  - rid: 4817692173062897694
+  - rid: 4817692162781609986
+  - rid: 4817692173062897705
+  - rid: 4817692173062897667
+  - rid: 4817692173062897697
+  - rid: 4817692173062897668
+  - rid: 4817692173062897669
+  - rid: 4817692173062897698
+  - rid: 4817692173062897670
+  - rid: 4817692173062897706
+  - rid: 4817692173062897672
+  - rid: 4817692173062897673
+  - rid: 4817692173062897676
+  - rid: 4817692173062897700
+  - rid: 4817692173062897674
+  - rid: 4817692173062897675
+  - rid: 4817692173062897678
+  - rid: 4817692173062897701
+  - rid: 4817692173062897679
+  - rid: 4817692173062897708
+  - rid: 4817692173062897683
+  - rid: 4817692173062897684
+  - rid: 4817692173062897702
+  - rid: 4817692173062897686
+  - rid: 4817692173062897685
+  - rid: 4817692173062897688
+  - rid: 4817692173062897689
+  - rid: 4817692173062897690
+  references:
+    version: 2
+    RefIds:
+    - rid: 4817692154666418184
+      type: {class: Wait, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        seconds: 0.5
+    - rid: 4817692154666418188
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text3
+        waitSeconds: 1.3
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 2.5
+          emotion: 1
+    - rid: 4817692162781609984
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text5
+        waitSeconds: 1.4
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 1.5
+          emotion: 1
+    - rid: 4817692162781609986
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text6
+        waitSeconds: 0.8
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 4
+          emotion: 1
+    - rid: 4817692162781609987
+      type: {class: Wait, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        seconds: 9
+    - rid: 4817692173062897664
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text1
+        waitSeconds: 0.8
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 6
+          emotion: 1
+    - rid: 4817692173062897665
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text2
+        waitSeconds: 0.8
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 8
+          emotion: 1
+    - rid: 4817692173062897666
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text4
+        waitSeconds: 1
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 4.9
+          emotion: 1
+    - rid: 4817692173062897667
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text7
+        waitSeconds: 0.8
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 5.1
+          emotion: 11
+    - rid: 4817692173062897668
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text8
+        waitSeconds: 2.5
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 2.7
+          emotion: 10
+    - rid: 4817692173062897669
+      type: {class: Wait, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        seconds: 6
+    - rid: 4817692173062897670
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text9
+        waitSeconds: 0.8
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 3.7
+          emotion: 1
+    - rid: 4817692173062897672
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text10
+        waitSeconds: 2
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 2.7
+          emotion: 1
+    - rid: 4817692173062897673
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text11
+        waitSeconds: 0.8
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 5.1
+          emotion: 1
+    - rid: 4817692173062897674
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text13
+        waitSeconds: 2.5
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 1.3
+          emotion: 10
+    - rid: 4817692173062897675
+      type: {class: Wait, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        seconds: 9.5
+    - rid: 4817692173062897676
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text12
+        waitSeconds: 0.8
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 6.5
+          emotion: 1
+    - rid: 4817692173062897678
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text14
+        waitSeconds: 2.5
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 0.9
+          emotion: 1
+    - rid: 4817692173062897679
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text15
+        waitSeconds: 0.8
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 3.6
+          emotion: 1
+    - rid: 4817692173062897683
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text16
+        waitSeconds: 0.8
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 5.9
+          emotion: 40
+    - rid: 4817692173062897684
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text17
+        waitSeconds: 2.5
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 3
+          emotion: 1
+    - rid: 4817692173062897685
+      type: {class: Wait, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        seconds: 10
+    - rid: 4817692173062897686
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text18
+        waitSeconds: 2.5
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 1.5
+          emotion: 10
+    - rid: 4817692173062897688
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text19
+        waitSeconds: 2.5
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 3.4
+          emotion: 40
+    - rid: 4817692173062897689
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text20
+        waitSeconds: 2.5
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 2.2
+          emotion: 1
+    - rid: 4817692173062897690
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text21
+        waitSeconds: 2.5
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 2
+          emotion: 10
+    - rid: 4817692173062897691
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys:
+        - FocusTouchNote
+        deactivateObjectKeys: []
+    - rid: 4817692173062897693
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys: []
+        deactivateObjectKeys:
+        - FocusTouchNote
+        - TouchMovie
+    - rid: 4817692173062897694
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys:
+        - FocusHoldNote
+        deactivateObjectKeys: []
+    - rid: 4817692173062897697
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys: []
+        deactivateObjectKeys:
+        - FocusHoldNote
+        - HoldMovie
+    - rid: 4817692173062897698
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys:
+        - FocusDynamicNote
+        deactivateObjectKeys: []
+    - rid: 4817692173062897700
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys: []
+        deactivateObjectKeys:
+        - FocusDynamicNote
+        - DynamicMovie
+    - rid: 4817692173062897701
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys:
+        - FocusSpaceHoldNote
+        deactivateObjectKeys: []
+    - rid: 4817692173062897702
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys: []
+        deactivateObjectKeys:
+        - FocusSpaceHoldNote
+        - SpaceHoldMovie
+    - rid: 4817692173062897703
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys:
+        - TouchMovie
+        deactivateObjectKeys: []
+    - rid: 4817692173062897705
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys:
+        - HoldMovie
+        deactivateObjectKeys: []
+    - rid: 4817692173062897706
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys:
+        - DynamicMovie
+        deactivateObjectKeys: []
+    - rid: 4817692173062897708
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys:
+        - SpaceHoldMovie
+        deactivateObjectKeys: []

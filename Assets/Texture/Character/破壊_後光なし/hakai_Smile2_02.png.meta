@@ -156,6 +156,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: hakai_Smile2_02_1
+      rect:
+        serializedVersion: 2
+        x: 2177
+        y: 2198
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c2e442945784ad459cac8c6b8f45792
+      internalID: -1367866354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -168,6 +189,7 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       hakai_Smile2_02_0: -2014765697
+      hakai_Smile2_02_1: -1367866354
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

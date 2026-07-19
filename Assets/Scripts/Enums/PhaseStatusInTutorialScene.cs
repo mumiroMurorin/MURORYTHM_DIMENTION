@@ -7,5 +7,4 @@
     Play = 4,
     FadeOut = 5,
     TransitionSelectScene = 6,
-    SelectTutorialGuideCharacter = 7,
 }

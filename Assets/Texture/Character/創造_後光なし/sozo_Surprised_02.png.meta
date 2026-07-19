@@ -144,7 +144,7 @@ TextureImporter:
         width: 2470
         height: 2125
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -152,6 +152,27 @@ TextureImporter:
       bones: []
       spriteID: d6f715e1325fbfd419a2de9d0bdb6b7f
       internalID: -1331061721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sozo_Surprised_02_1
+      rect:
+        serializedVersion: 2
+        x: 4877
+        y: 1933
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f942f16c531398d4aa5d4e3def083ef1
+      internalID: 880787466
       vertices: []
       indices: 
       edges: []
@@ -168,6 +189,7 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       sozo_Surprised_02_0: -1331061721
+      sozo_Surprised_02_1: 880787466
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
