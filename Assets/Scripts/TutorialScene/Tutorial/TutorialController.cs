@@ -40,15 +40,15 @@ public class TutorialController : MonoBehaviour, IDisposer
             .AddTo(this.gameObject);
     }
 
-    private TutorialActionNode[] ResolveActions()
+    private TutorialActionAsset ResolveActionAsset()
     {
         TutorialGuideCharacterData data = GetSelectedGuideCharacterData();
         if (data != null && data.TutorialActionAsset != null && data.TutorialActionAsset.Actions != null && data.TutorialActionAsset.Actions.Length > 0)
         {
-            return data.TutorialActionAsset.Actions;
+            return data.TutorialActionAsset;
         }
 
-        return defaultActionAsset?.Actions;
+        return defaultActionAsset;
     }
 
     private void InitializeGuideCharacter()
@@ -71,11 +71,11 @@ public class TutorialController : MonoBehaviour, IDisposer
         return guideCharacterDatabase?.Get(characterType);
     }
 
-    private void InitializeActions(TutorialActionNode[] targetActions)
+    private void InitializeActions(TutorialActionNode[] targetActions, TutorialActionAsset actionAsset)
     {
         if (targetActions == null || targetActions.Length == 0) { return; }
 
-        TutorialRuntimeContext context = new TutorialRuntimeContext(speechBubble, this, sceneObjectReferences);
+        TutorialRuntimeContext context = new TutorialRuntimeContext(speechBubble, this, sceneObjectReferences, actionAsset != null ? actionAsset.TextTableReference : default);
         foreach (TutorialActionNode action in targetActions)
         {
             action?.Initialize(context);
@@ -94,9 +94,10 @@ public class TutorialController : MonoBehaviour, IDisposer
 
     private void OnStartStage()
     {
-        runtimeActions = ResolveActions();
+        TutorialActionAsset actionAsset = ResolveActionAsset();
+        runtimeActions = actionAsset?.Actions;
         InitializeGuideCharacter();
-        InitializeActions(runtimeActions);
+        InitializeActions(runtimeActions, actionAsset);
         runtimeActions?[0]?.Do();
     }
 

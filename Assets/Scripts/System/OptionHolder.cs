@@ -451,11 +451,9 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     #endregion
 
 
-    #region 筐体設定
-
     #region TutorialGuideCharacter
 
-    ReactiveProperty<TutorialGuideCharacterType> currentTutorialGuideCharacterType = new ReactiveProperty<TutorialGuideCharacterType>(TutorialGuideCharacterType.Shikiboo);
+    ReactiveProperty<TutorialGuideCharacterType> currentTutorialGuideCharacterType = new ReactiveProperty<TutorialGuideCharacterType>(TutorialGuideCharacterType.Destruction);
     public IReadOnlyReactiveProperty<TutorialGuideCharacterType> CurrentTutorialGuideCharacterType => currentTutorialGuideCharacterType;
     public void SetCurrentTutorialGuideCharacterType(TutorialGuideCharacterType tutorialGuideCharacterType)
     {
@@ -470,6 +468,9 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     }
 
     #endregion
+
+
+    #region 筐体設定
 
     BodyTrackingSettings trackingSettings = new BodyTrackingSettings();
     public BodyTrackingSettings TrackingSettings => trackingSettings;

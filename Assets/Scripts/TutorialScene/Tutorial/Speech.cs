@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using UnityEngine.Localization.Settings;
+using UnityEngine.Localization.Tables;
 using UnityEngine.Serialization;
 
 namespace Tutorial
@@ -14,7 +15,7 @@ namespace Tutorial
         [SerializeField] float waitSeconds = 2.5f;
         [SerializeField] SpeechBubbleConfig config;
 
-        private const string TutorialTextTableName = "TutorialText";
+        private const string FallbackTutorialTextTableName = "TutorialText";
 
         private TutorialRuntimeContext context;
         private CancellationTokenSource textAnimationCts;
@@ -50,7 +51,13 @@ namespace Tutorial
                 return string.Empty;
             }
 
-            var localizedText = LocalizationSettings.StringDatabase.GetLocalizedString(TutorialTextTableName, textKey);
+            TableReference tableReference = context != null ? context.TextTableReference : default;
+            if (string.IsNullOrEmpty(tableReference.TableCollectionName))
+            {
+                tableReference = FallbackTutorialTextTableName;
+            }
+
+            var localizedText = LocalizationSettings.StringDatabase.GetLocalizedString(tableReference, textKey);
             return string.IsNullOrEmpty(localizedText) ? textKey : localizedText;
         }
 

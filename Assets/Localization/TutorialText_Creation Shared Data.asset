@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
-  m_Name: TutorialText Shared Data
+  m_Name: TutorialText_Creation Shared Data
   m_EditorClassIdentifier: 
-  m_TableCollectionName: TutorialText
-  m_TableCollectionNameGuidString: 4744716e667ce554588b8d1f31fc9458
+  m_TableCollectionName: TutorialText_Creation
+  m_TableCollectionNameGuidString: 7b7ea34a7f8d4629a0547171d755d165
   m_Entries:
   - m_Id: 137600815104
     m_Key: Text1

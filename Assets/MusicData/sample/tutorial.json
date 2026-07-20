@@ -1033,35 +1033,35 @@
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": 1.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": 1.0
         }
       ]
     },
@@ -1337,619 +1337,619 @@
         },
         {
           "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": -2.25
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": -2.25
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": -2.25
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": -2.25
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": -2.25
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": -2.25
+        },
+        {
+          "Bpm": 120.0,
           "SpeedRatio": 1.0
         },
         {
           "Bpm": 120.0,
           "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 1.0
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
-        },
-        {
-          "Bpm": 120.0,
-          "SpeedRatio": 0.001
         }
       ]
     },
@@ -2133,12 +2133,12 @@
             {
               "HoldNumber": 1,
               "Range": [
-                7,
                 8,
                 9,
                 10,
                 11,
-                12
+                12,
+                13
               ]
             }
           ]
@@ -2157,7 +2157,20 @@
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 1.0
+          "SpeedRatio": 1.0,
+          "HoldRelayData": [
+            {
+              "HoldNumber": 1,
+              "Range": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ]
+            }
+          ]
         },
         {
           "Bpm": 120.0,
@@ -2178,12 +2191,12 @@
             {
               "HoldNumber": 1,
               "Range": [
+                2,
+                3,
                 4,
                 5,
                 6,
-                7,
-                8,
-                9
+                7
               ]
             }
           ]
@@ -3109,35 +3122,35 @@
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": 1.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": 1.0
         }
       ]
     },
@@ -4412,35 +4425,35 @@
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.5
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.5
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.5
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.5
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.5
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": -2.5
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": 1.0
         },
         {
           "Bpm": 120.0,
-          "SpeedRatio": 0.001
+          "SpeedRatio": 1.0
         }
       ]
     },
@@ -4738,24 +4751,28 @@
           "TouchNoteData": [
             {
               "Range": [
+                0,
+                1,
+                2,
                 3,
                 4,
                 5,
                 6,
-                7,
-                8
+                7
               ]
             }
           ],
           "DynamicUpwardData": [
             {
               "Range": [
+                0,
+                1,
+                2,
                 3,
                 4,
                 5,
                 6,
-                7,
-                8
+                7
               ]
             }
           ],
@@ -4764,68 +4781,68 @@
               "HoldNumber": 3,
               "Vertices": [
                 {
-                  "x": -0.5821323,
-                  "y": -0.334668249
+                  "x": -0.511893034,
+                  "y": -0.330089629
                 },
                 {
-                  "x": -0.6996999,
-                  "y": -0.2560077
+                  "x": -0.6294606,
+                  "y": -0.251429081
                 },
                 {
-                  "x": -0.779206157,
-                  "y": -0.137593925
+                  "x": -0.708966851,
+                  "y": -0.1330153
                 },
                 {
-                  "x": -0.8062721,
-                  "y": 0.00196516514
+                  "x": -0.736032844,
+                  "y": 0.00654378533
                 },
                 {
-                  "x": -0.779206157,
-                  "y": 0.139832675
+                  "x": -0.708966851,
+                  "y": 0.1444113
                 },
                 {
-                  "x": -0.69885385,
-                  "y": 0.259938061
+                  "x": -0.628614545,
+                  "y": 0.264516681
                 },
                 {
-                  "x": -0.5762112,
-                  "y": 0.339444458
+                  "x": -0.5059719,
+                  "y": 0.344023079
                 },
                 {
-                  "x": -0.441727042,
-                  "y": 0.363973081
+                  "x": -0.371487767,
+                  "y": 0.3685517
                 },
                 {
-                  "x": -0.300254643,
-                  "y": 0.3380111
+                  "x": -0.230015367,
+                  "y": 0.3425897
                 },
                 {
-                  "x": -0.183754176,
-                  "y": 0.258246481
+                  "x": -0.1135149,
+                  "y": 0.2628251
                 },
                 {
-                  "x": -0.106785446,
-                  "y": 0.139832675
+                  "x": -0.03654617,
+                  "y": 0.1444113
                 },
                 {
-                  "x": -0.0771820247,
-                  "y": -0.00226387382
+                  "x": -0.006942749,
+                  "y": 0.00231474638
                 },
                 {
-                  "x": -0.105939358,
-                  "y": -0.140131325
+                  "x": -0.0357000828,
+                  "y": -0.1355527
                 },
                 {
-                  "x": -0.184600264,
-                  "y": -0.2576993
+                  "x": -0.114360988,
+                  "y": -0.2531207
                 },
                 {
-                  "x": -0.299630344,
-                  "y": -0.332130849
+                  "x": -0.229391068,
+                  "y": -0.327552229
                 },
                 {
-                  "x": -0.4374981,
-                  "y": -0.3634259
+                  "x": -0.367258817,
+                  "y": -0.3588473
                 }
               ]
             }
@@ -4972,6 +4989,855 @@
               ]
             }
           ]
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.001
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": -2.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": -2.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": -2.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": -2.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": -2.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": -2.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0,
+          "SpaceBreakData": [
+            {
+              "Vertices": [
+                {
+                  "x": -0.2499981,
+                  "y": -0.252314836
+                },
+                {
+                  "x": -0.2499981,
+                  "y": 0.247685164
+                },
+                {
+                  "x": 0.2500019,
+                  "y": 0.247685164
+                },
+                {
+                  "x": 0.2500019,
+                  "y": -0.252314836
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0,
+          "SpaceBreakData": [
+            {
+              "Vertices": [
+                {
+                  "x": -0.003024599,
+                  "y": 0.5400979
+                },
+                {
+                  "x": 0.116132043,
+                  "y": 0.166009292
+                },
+                {
+                  "x": 0.509104133,
+                  "y": 0.16317071
+                },
+                {
+                  "x": 0.190345123,
+                  "y": -0.0658963
+                },
+                {
+                  "x": 0.3092428,
+                  "y": -0.440390438
+                },
+                {
+                  "x": -0.007965691,
+                  "y": -0.207915962
+                },
+                {
+                  "x": -0.32458955,
+                  "y": -0.4340178
+                },
+                {
+                  "x": -0.203242749,
+                  "y": -0.06372763
+                },
+                {
+                  "x": -0.5007897,
+                  "y": 0.182873651
+                },
+                {
+                  "x": -0.127084389,
+                  "y": 0.166885749
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 1.0
         },
         {
           "Bpm": 120.0,

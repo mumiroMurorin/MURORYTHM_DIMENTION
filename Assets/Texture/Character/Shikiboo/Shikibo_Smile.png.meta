@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e8c9a46dc0a89bc4d9088c94de2fb246
+guid: 278203ab4efdec44297b50c6f2a111dd
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -134,7 +134,49 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Shikibo_Smile_0
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 546
+        width: 1867
+        height: 958
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63f3cdbdd9f82e74c82766fc7cfa9e88
+      internalID: 233181192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shikibo_Smile_1
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 545
+        width: 1200
+        height: 1200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adcf1bf8e3a611b49b627808a37a3e7f
+      internalID: 120202107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -145,7 +187,9 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Shikibo_Smile_0: 233181192
+      Shikibo_Smile_1: 120202107
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

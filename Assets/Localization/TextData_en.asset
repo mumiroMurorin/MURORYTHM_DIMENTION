@@ -34,6 +34,12 @@ MonoBehaviour:
     m_Localized: Important Notes Regarding the Controller
     m_Metadata:
       m_Items: []
+  - m_Id: 23609471475216384
+    m_Localized: 'Please select a character
+
+      from the tutorial.'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

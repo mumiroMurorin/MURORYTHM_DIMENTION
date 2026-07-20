@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
-
+using UnityEngine.Localization.Tables;
 namespace Tutorial
 {
     public enum TutorialActionType
@@ -28,10 +27,11 @@ namespace Tutorial
     {
         readonly Dictionary<string, GameObject> sceneObjects = new Dictionary<string, GameObject>();
 
-        public TutorialRuntimeContext(SpeechBubbleTutorial speechBubble, IDisposer disposer, TutorialSceneObjectReference[] objectReferences)
+        public TutorialRuntimeContext(SpeechBubbleTutorial speechBubble, IDisposer disposer, TutorialSceneObjectReference[] objectReferences, TableReference textTableReference)
         {
             SpeechBubble = speechBubble;
             Disposer = disposer;
+            TextTableReference = textTableReference;
 
             if (objectReferences == null) { return; }
 
@@ -44,6 +44,7 @@ namespace Tutorial
 
         public SpeechBubbleTutorial SpeechBubble { get; }
         public IDisposer Disposer { get; }
+        public TableReference TextTableReference { get; }
 
         public void SetActive(string key, bool active)
         {

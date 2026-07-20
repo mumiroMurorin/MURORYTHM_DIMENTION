@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8f915377c4e01a4ba9f1a03abb8459f, type: 3}
   m_Name: TutorialOptionAsset
   m_EditorClassIdentifier: 
-  noteSpeed: 40
+  noteSpeed: 80
   noteCurveRadius: 2000
   seVolume: 0.8
   bgmVolume: 0.8

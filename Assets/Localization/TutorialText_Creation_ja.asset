@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
-  m_Name: TutorialText_ja
+  m_Name: TutorialText_Creation_ja
   m_EditorClassIdentifier: 
   m_LocaleId:
     m_Code: ja
-  m_SharedData: {fileID: 11400000, guid: 4744716e667ce554588b8d1f31fc9458, type: 2}
+  m_SharedData: {fileID: 11400000, guid: 7b7ea34a7f8d4629a0547171d755d165, type: 2}
   m_Metadata:
     m_Items: []
   m_TableData:

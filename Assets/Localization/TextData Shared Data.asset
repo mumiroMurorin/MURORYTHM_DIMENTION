@@ -31,6 +31,10 @@ MonoBehaviour:
     m_Key: Playing Note2
     m_Metadata:
       m_Items: []
+  - m_Id: 23609471475216384
+    m_Key: Select Tutorial Character
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

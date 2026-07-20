@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36a90ea082d7d7449b9e33475e0d69d2, type: 3}
   m_Name: TutorialAction_Shikiboo
   m_EditorClassIdentifier: 
+  textTableReference:
+    m_TableCollectionName: TutorialText
   actions:
   - rid: 4817692154666418184
   - rid: 4817692173062897664
@@ -51,9 +53,14 @@ MonoBehaviour:
   - rid: 4817692173062897688
   - rid: 4817692173062897689
   - rid: 4817692173062897690
+  - rid: 509539424700989446
   references:
     version: 2
     RefIds:
+    - rid: 509539424700989446
+      type: {class: Wait, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        seconds: 30
     - rid: 4817692154666418184
       type: {class: Wait, ns: Tutorial, asm: Assembly-CSharp}
       data:
@@ -243,7 +250,7 @@ MonoBehaviour:
     - rid: 4817692173062897685
       type: {class: Wait, ns: Tutorial, asm: Assembly-CSharp}
       data:
-        seconds: 10
+        seconds: 100
     - rid: 4817692173062897686
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
