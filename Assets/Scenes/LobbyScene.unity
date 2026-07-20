@@ -2845,6 +2845,18 @@ PrefabInstance:
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1087935464230237925, guid: c26ac609d931e9e4dac97e0246bf50f8, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1867
+      objectReference: {fileID: 0}
+    - target: {fileID: 1087935464230237925, guid: c26ac609d931e9e4dac97e0246bf50f8, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 958
+      objectReference: {fileID: 0}
+    - target: {fileID: 2397336888057683681, guid: c26ac609d931e9e4dac97e0246bf50f8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 609414366, guid: 6be5f598a48178e4f8450b58c5568602, type: 3}
     - target: {fileID: 2397336888057683681, guid: c26ac609d931e9e4dac97e0246bf50f8, type: 3}
       propertyPath: m_Material
       value: 

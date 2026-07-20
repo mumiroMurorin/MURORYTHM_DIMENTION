@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterType: 10
   emotionAsset: {fileID: 11400000, guid: cde9a48b77eed8e40932a0f3d210d44a, type: 2}
-  tutorialActionAsset: {fileID: 11400000, guid: da2668df9df6514469e75ae77931f984, type: 2}
+  tutorialActionAsset: {fileID: 11400000, guid: 65bb59bea53fb9947958969950f667c8, type: 2}

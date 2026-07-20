@@ -47,11 +47,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b6c36bc84b8ee8640b622cafea3e20dd
-    m_Address: Music_catlife
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6c56172eaa34657409b2b7c6d8543148
     m_Address: Image_catlife
     m_ReadOnly: 0

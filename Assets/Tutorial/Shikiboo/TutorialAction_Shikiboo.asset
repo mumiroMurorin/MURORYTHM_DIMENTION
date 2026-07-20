@@ -51,16 +51,65 @@ MonoBehaviour:
   - rid: 4817692173062897686
   - rid: 4817692173062897685
   - rid: 4817692173062897688
+  - rid: 509539441809555464
+  - rid: 509539441809555465
+  - rid: 509539441809555466
+  - rid: 509539441809555467
+  - rid: 509539441809555468
+  - rid: 509539441809555463
   - rid: 4817692173062897689
   - rid: 4817692173062897690
-  - rid: 509539424700989446
   references:
     version: 2
     RefIds:
-    - rid: 509539424700989446
+    - rid: 509539441809555463
       type: {class: Wait, ns: Tutorial, asm: Assembly-CSharp}
       data:
-        seconds: 30
+        seconds: 8
+    - rid: 509539441809555464
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text20
+        waitSeconds: 2.5
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 2
+          emotion: 1
+    - rid: 509539441809555465
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys:
+        - SpaceBreakMovie
+        - FocusSpaceBreakNote
+        deactivateObjectKeys: []
+    - rid: 509539441809555466
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text21
+        waitSeconds: 4
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 4
+          emotion: 1
+    - rid: 509539441809555467
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys: []
+        deactivateObjectKeys:
+        - SpaceBreakMovie
+        - FocusSpaceBreakNote
+    - rid: 509539441809555468
+      type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        textKey: Text22
+        waitSeconds: 2
+        config:
+          fontSize: -1
+          fontColor: {r: 1, g: 1, b: 1, a: 1}
+          speechDuration: 1
+          emotion: 1
     - rid: 4817692154666418184
       type: {class: Wait, ns: Tutorial, asm: Assembly-CSharp}
       data:
@@ -250,7 +299,7 @@ MonoBehaviour:
     - rid: 4817692173062897685
       type: {class: Wait, ns: Tutorial, asm: Assembly-CSharp}
       data:
-        seconds: 100
+        seconds: 10
     - rid: 4817692173062897686
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
@@ -274,7 +323,7 @@ MonoBehaviour:
     - rid: 4817692173062897689
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
-        textKey: Text20
+        textKey: Text23
         waitSeconds: 2.5
         config:
           fontSize: -1
@@ -284,7 +333,7 @@ MonoBehaviour:
     - rid: 4817692173062897690
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
       data:
-        textKey: Text21
+        textKey: Text24
         waitSeconds: 2.5
         config:
           fontSize: -1

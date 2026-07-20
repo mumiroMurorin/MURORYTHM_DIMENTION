@@ -94,7 +94,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 602514247680
-    m_Localized: Last up, the <#ff3333>Space Hold</color>!
+    m_Localized: "Next up is this guy, \u201C<#ff3333>Space  Hold</color>\u201D!"
     m_Metadata:
       m_Items: []
   - m_Id: 626660855808
@@ -123,11 +123,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 769065865216
-    m_Localized: Alright! That's the end of the tutorial!
+    m_Localized: "And last but not least, this guy! It\u2019s \u201C<#ff3333>Space
+      Break</color>\u201D!"
     m_Metadata:
       m_Items: []
   - m_Id: 794550456320
+    m_Localized: 'Go all out and <#ff3333>swing your arms to break the notes</color>!
+
+      Any
+      move will do! Just go for it!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22392148592521216
+    m_Localized: Alright! That's the end of the tutorial!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22400182379180032
     m_Localized: Next, choose a song you like and give it a try!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22391931046555648
+    m_Localized: "Last notes\u2014here we go!"
     m_Metadata:
       m_Items: []
   references:

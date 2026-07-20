@@ -19,115 +19,125 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 137600815104
-    m_Localized: "Hey! I'm <#ff3333>Shikibo</color>,\nthe one in charge of this game's
-      tutorial! \nNice to meet you!"
+    m_Localized: "\u2026Hello. I\u2019m\n<#ff3333>Destruction</color>, and I\u2019ll
+      be guiding you through this game\u2019s tutorial."
     m_Metadata:
       m_Items: []
   - m_Id: 180038782976
-    m_Localized: 'Let''s get started by introducing the <#ff3333>notes</color> that
-      make up this game!
-
-      Without them, a rhythm game can''t even begin!'
+    m_Localized: "Let's get right to it\u2014I want you to understand the\n<#ff3333>notes</color>
+      that make up this game.\nThis is essential knowledge for rhythm games."
     m_Metadata:
       m_Items: []
   - m_Id: 200582483968
-    m_Localized: 'First up, the basics of rhythm games: the <#ff3333>Touch Note</color>!'
+    m_Localized: "First up is the basic element of rhythm games: \u201C<#ff3333>touch
+      notes</color>.\u201D"
     m_Metadata:
       m_Items: []
   - m_Id: 241414033408
-    m_Localized: 'When this note comes up, <#ffff00>touch it</color> in time with
-      the <#ff3333>yellow line</color>!
-
-      Just keep the rhythm and tap along!'
+    m_Localized: "When this comes up, <#ffff00>tap</color> in time with the <#ff3333>yellow
+      line</color>.\nI think it\u2019s best to try to tap in time with the rhythm
+      as much as possible."
     m_Metadata:
       m_Items: []
   - m_Id: 271579467776
-    m_Localized: Let's try it right away!
+    m_Localized: Shall we give it a try right away?
     m_Metadata:
       m_Items: []
   - m_Id: 305708519424
-    m_Localized: 'Next up: the <#ff3333>Hold Note</color>!'
+    m_Localized: "Next up are these notes... \u201C<#ff3333>Hold Notes</color>\u201D"
     m_Metadata:
       m_Items: []
   - m_Id: 343302066176
-    m_Localized: This one starts with a tap, then you just keep it <#ff3333>held
-      until the end</color>!
+    m_Localized: 'For this, just tap it once,
+
+      <#ff3333>then keep it pressed
+      until the end</color>.'
     m_Metadata:
       m_Items: []
   - m_Id: 374218280960
-    m_Localized: 'You don''t need to force your hand off at the end!
-
-      Let''s
-      give it a try!'
+    m_Localized: "Finally, there\u2019s no need to force yourself to let go.\nShall
+      we give it a try right away?"
     m_Metadata:
       m_Items: []
   - m_Id: 404954140672
-    m_Localized: OK! Next is the <#ff3333>Dynamic Note</color>!
+    m_Localized: "That's great. Next up is \u201C<#ff3333>Dynamic Notes</color>.\u201D"
     m_Metadata:
       m_Items: []
   - m_Id: 477247164416
-    m_Localized: 'After touching this one,
+    m_Localized: 'After you touch it,
 
-      move your hand dynamically!'
+      you move your hand dynamically.'
     m_Metadata:
       m_Items: []
   - m_Id: 504891822080
-    m_Localized: 'For example, after touching this one,
-
-      don''t be shy and
-      <#ff3333>raise your hand up</color>!'
+    m_Localized: "For example, with these notes, after you touch them,\ndon't be
+      shy\u2014<#ff3333>raise your hand</color>."
     m_Metadata:
       m_Items: []
   - m_Id: 514140262400
-    m_Localized: 'Dynamic notes can come from all kinds of directions!
+    m_Localized: 'Dynamic notes come from all sorts of directions.
 
-      Just
-      remember to <#ff3333>move your hand in that direction</color>.'
+      <#ff3333>Just
+      make a point of moving your hands in that direction</color>.'
     m_Metadata:
       m_Items: []
   - m_Id: 544976785408
-    m_Localized: Alright, let's try it!
+    m_Localized: Shall we give it a try?
     m_Metadata:
       m_Items: []
   - m_Id: 574009757696
-    m_Localized: See? Pretty easy, right?
+    m_Localized: "\u201CSee... it's easy, right?\u201D"
     m_Metadata:
       m_Items: []
   - m_Id: 602514247680
-    m_Localized: Last up, the <#ff3333>Space Hold</color>!
+    m_Localized: "Next up is this one: \u201C<#ff3333>Space Hold</color>.\u201D"
     m_Metadata:
       m_Items: []
   - m_Id: 626660855808
-    m_Localized: 'It''s a bit trickier, but float your hands in the air and
+    m_Localized: 'It''s a bit of a tricky feeling, but hold your hand in the air
 
-      <#ff3333>keep
-      your hand position aligned with the notes</color>!'
+      <#ff3333>and
+      keep it in position in sync with the notes</color>.'
     m_Metadata:
       m_Items: []
   - m_Id: 668532592640
-    m_Localized: 'Let''s watch a demonstration!
+    m_Localized: 'Take a look at the example.
 
-      It''s okay if your position
-      is a little off!'
+      It''s okay if it''s a little
+      off-center.'
     m_Metadata:
       m_Items: []
   - m_Id: 694956707840
-    m_Localized: Alright! Let's give it a shot!
+    m_Localized: Well, give it a try.
     m_Metadata:
       m_Items: []
   - m_Id: 742243291136
-    m_Localized: 'How''s that? It might be tough at first,
+    m_Localized: 'How''s it going? It might be tough at first, but
 
-      but you''ll get
-      used to it little by little.'
+      you''ll
+      get the hang of it little by little.'
     m_Metadata:
       m_Items: []
   - m_Id: 769065865216
-    m_Localized: Alright! That's the end of the tutorial!
+    m_Localized: "And this is the last one. \u201C<#ff3333>Space Break</color>.\u201D"
     m_Metadata:
       m_Items: []
   - m_Id: 794550456320
-    m_Localized: Next, choose a song you like and give it a try!
+    m_Localized: "Just swing your <#ff3333>arm as hard as you can at the notes to
+      destroy them</color>...!\nIt doesn't have to be just raising your arm\u2014a
+      motion like a slap works too."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22405564711399424
+    m_Localized: "Why don't you try playing your favorite song next\u2026?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22405557446864896
+    m_Localized: Here comes the final note.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 22405560961691648
+    m_Localized: "\u2026Okay. That wraps up the tutorial.\nGood job."
     m_Metadata:
       m_Items: []
   references:

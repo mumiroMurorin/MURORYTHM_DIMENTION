@@ -453,7 +453,7 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
 
     #region TutorialGuideCharacter
 
-    ReactiveProperty<TutorialGuideCharacterType> currentTutorialGuideCharacterType = new ReactiveProperty<TutorialGuideCharacterType>(TutorialGuideCharacterType.Destruction);
+    ReactiveProperty<TutorialGuideCharacterType> currentTutorialGuideCharacterType = new ReactiveProperty<TutorialGuideCharacterType>(TutorialGuideCharacterType.Shikiboo);
     public IReadOnlyReactiveProperty<TutorialGuideCharacterType> CurrentTutorialGuideCharacterType => currentTutorialGuideCharacterType;
     public void SetCurrentTutorialGuideCharacterType(TutorialGuideCharacterType tutorialGuideCharacterType)
     {
