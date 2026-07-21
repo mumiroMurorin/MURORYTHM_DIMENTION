@@ -9,14 +9,22 @@ public class InteractNoteEffect_DivineHoldStart : InteractNoteEffect
 
     protected override void SetEffect(INoteData noteDataOrigin)
     {
-        if (noteDataOrigin is not NoteData_DivineTouch noteData) { return; }
+        if (noteDataOrigin is not NoteData_DivineHoldStart noteData) { return; }
 
         // 光彩のセット
         foreach (int index in noteData.Range)
         {
-            if (index > touchLigts.Length) { continue; }
-            touchLigts[index]?.gameObject.SetActive(true);
-            touchLigts[index]?.material.DOFade(0, 0.4f).SetEase(Ease.InCubic);
+            if (index < 0 || index >= touchLigts.Length) { continue; }
+            MeshRenderer light = touchLigts[index];
+            if (light == null) { continue; }
+
+            light.gameObject.SetActive(true);
+            Material material = light.material;
+            DOTween.Kill(material);
+            Color color = material.color;
+            color.a = 1f;
+            material.color = color;
+            material.DOFade(0, 0.4f).SetEase(Ease.InCubic);
         }
 
         // パーティクルのセット

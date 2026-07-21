@@ -14,9 +14,17 @@ public class InteractNoteEffect_HoldStart : InteractNoteEffect
         // 光彩のセット
         foreach (int index in noteData.Range)
         {
-            if (index > HoldStartLigts.Length) { continue; }
-            HoldStartLigts[index]?.gameObject.SetActive(true);
-            HoldStartLigts[index]?.material.DOFade(0, 0.4f).SetEase(Ease.InCubic);
+            if (index < 0 || index >= HoldStartLigts.Length) { continue; }
+            MeshRenderer light = HoldStartLigts[index];
+            if (light == null) { continue; }
+
+            light.gameObject.SetActive(true);
+            Material material = light.material;
+            DOTween.Kill(material);
+            Color color = material.color;
+            color.a = 1f;
+            material.color = color;
+            material.DOFade(0, 0.4f).SetEase(Ease.InCubic);
         }
 
         // パーティクルのセット

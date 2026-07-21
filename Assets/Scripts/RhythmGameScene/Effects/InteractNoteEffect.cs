@@ -9,14 +9,15 @@ public abstract class InteractNoteEffect : MonoBehaviour
     [SerializeField] protected ParticleSystemToSetting[] particles;
 
     Action OnFinishParticle;
+    bool isReturnedToPool;
 
-    private void Start()
+    private void Awake()
     {
         if (particleEndCallback != null)
         {
             foreach (var c in particleEndCallback)
             {
-                c.OnStopParticleListner += OnFinishParticle;
+                c.OnStopParticleListner += OnStopParticle;
             }
         }
     }
@@ -27,16 +28,26 @@ public abstract class InteractNoteEffect : MonoBehaviour
         {
             foreach (var c in particleEndCallback)
             {
-                c.OnStopParticleListner -= OnFinishParticle;
+                c.OnStopParticleListner -= OnStopParticle;
             }
         }
     }
 
     public void SetEffect(INoteData noteData, Action returnToPool)
     {
-        OnFinishParticle = returnToPool; 
+        OnFinishParticle = returnToPool;
+        isReturnedToPool = false;
 
         SetEffect(noteData);
+    }
+
+    private void OnStopParticle()
+    {
+        // 複数のParticleEndCallbackがある場合でも、プールへの返却は一度だけにする
+        if (isReturnedToPool) { return; }
+
+        isReturnedToPool = true;
+        OnFinishParticle?.Invoke();
     }
 
     protected abstract void SetEffect(INoteData noteDataOrigin);
