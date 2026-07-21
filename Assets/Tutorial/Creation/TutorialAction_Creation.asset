@@ -51,6 +51,7 @@ MonoBehaviour:
   - rid: 4817692173062897686
   - rid: 4817692173062897685
   - rid: 4817692173062897688
+  - rid: 509539456288030723
   - rid: 509539441809555464
   - rid: 509539441809555465
   - rid: 509539441809555466
@@ -81,7 +82,6 @@ MonoBehaviour:
       data:
         activateObjectKeys:
         - SpaceBreakMovie
-        - FocusSpaceBreakNote
         deactivateObjectKeys: []
     - rid: 509539441809555466
       type: {class: Speech, ns: Tutorial, asm: Assembly-CSharp}
@@ -110,6 +110,12 @@ MonoBehaviour:
           fontColor: {r: 1, g: 1, b: 1, a: 1}
           speechDuration: 1
           emotion: 1
+    - rid: 509539456288030723
+      type: {class: SetActiveObject, ns: Tutorial, asm: Assembly-CSharp}
+      data:
+        activateObjectKeys:
+        - FocusSpaceBreakNote
+        deactivateObjectKeys: []
     - rid: 4817692154666418184
       type: {class: Wait, ns: Tutorial, asm: Assembly-CSharp}
       data:

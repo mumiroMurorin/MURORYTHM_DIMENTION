@@ -24,21 +24,17 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 180038782976
-    m_Localized: 'Let''s get started by introducing the <#ff3333>notes</color> that
-      make up this game!
-
-      Without them, a rhythm game can''t even begin!'
+    m_Localized: "Let's get started by introducing the \n<#ff3333>notes</color> that
+      make up this game!\nWithout them, a rhythm game can't even begin!"
     m_Metadata:
       m_Items: []
   - m_Id: 200582483968
-    m_Localized: 'First up, the basics of rhythm games: the <#ff3333>Touch Note</color>!'
+    m_Localized: "First up, the basics of rhythm games: the \n<#ff3333>Touch Note</color>!"
     m_Metadata:
       m_Items: []
   - m_Id: 241414033408
-    m_Localized: 'When this note comes up, <#ffff00>touch it</color> in time with
-      the <#ff3333>yellow line</color>!
-
-      Just keep the rhythm and tap along!'
+    m_Localized: "When this note comes up, \n<#ffff00>touch it</color> in time with
+      the <#ff3333>yellow line</color>!\nJust keep the rhythm and tap along!"
     m_Metadata:
       m_Items: []
   - m_Id: 271579467776
@@ -50,8 +46,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 343302066176
-    m_Localized: This one starts with a tap, then you just keep it <#ff3333>held
-      until the end</color>!
+    m_Localized: "This one starts with a tap, then you just keep it \n<#ff3333>held
+      until the end</color>!"
     m_Metadata:
       m_Items: []
   - m_Id: 374218280960
@@ -79,10 +75,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 514140262400
-    m_Localized: 'Dynamic notes can come from all kinds of directions!
-
-      Just
-      remember to <#ff3333>move your hand in that direction</color>.'
+    m_Localized: "Dynamic notes can come \nfrom all kinds of directions!\nJust remember
+      to <#ff3333>move your hand in that direction</color>."
     m_Metadata:
       m_Items: []
   - m_Id: 544976785408
@@ -98,10 +92,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 626660855808
-    m_Localized: 'It''s a bit trickier, but float your hands in the air and
-
-      <#ff3333>keep
-      your hand position aligned with the notes</color>!'
+    m_Localized: "It's a bit trickier, \nbut float your hands in the air and\n<#ff3333>keep
+      your hand position aligned with the notes</color>!"
     m_Metadata:
       m_Items: []
   - m_Id: 668532592640

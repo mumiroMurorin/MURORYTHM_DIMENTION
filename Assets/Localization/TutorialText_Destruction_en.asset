@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 137600815104
-    m_Localized: "\u2026Hello. I\u2019m\n<#ff3333>Destruction</color>, and I\u2019ll
+    m_Localized: "\u2026Hello. I\u2019m <#ff3333>Destruction</color>, \nand I\u2019ll
       be guiding you through this game\u2019s tutorial."
     m_Metadata:
       m_Items: []
@@ -35,7 +35,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 241414033408
     m_Localized: "When this comes up, <#ffff00>tap</color> in time with the <#ff3333>yellow
-      line</color>.\nI think it\u2019s best to try to tap in time with the rhythm
+      line</color>.\nI think it\u2019s best to try to tap in time \nwith the rhythm
       as much as possible."
     m_Metadata:
       m_Items: []
@@ -123,8 +123,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 794550456320
-    m_Localized: "Just swing your <#ff3333>arm as hard as you can at the notes to
-      destroy them</color>...!\nIt doesn't have to be just raising your arm\u2014a
+    m_Localized: "Just swing your \n<#ff3333>arm as hard as you can at the notes
+      to destroy them</color>...!\nIt doesn't have to be just raising your arm\n\u2014a
       motion like a slap works too."
     m_Metadata:
       m_Items: []

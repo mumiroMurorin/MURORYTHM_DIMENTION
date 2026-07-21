@@ -15,3 +15,4 @@ MonoBehaviour:
   characterType: 0
   emotionAsset: {fileID: 11400000, guid: 2d9a19a1c67f3f04aab4557242a47bf2, type: 2}
   tutorialActionAsset: {fileID: 11400000, guid: d39458c406f6464ea5e779ea84b96ce8, type: 2}
+  stageType: 102

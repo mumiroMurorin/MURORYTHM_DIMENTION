@@ -498,10 +498,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u3088\u3046\u3001\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\uFF01\n\u3042\u3042\u3042\u3042\u3042"
+  m_text: "\u3053\u3093\u306B\u3061\u306F\u2026\uFF01\u79C1\u306F\u3053\u306E\u30B2\u30FC\u30E0\u306E\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB\u3092\u62C5\u5F53\u3059\u308B\n<#ff3333>\u5275\u9020</color>\u3067\u3059\uFF01\u3088\u308D\u3057\u304F\u304A\u9858\u3044\u3057\u307E\u3059\u2026\uFF01"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 1cf04666e6d0d0d4ba22dc1d281b1934, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: f1e717da140c5794eaf6ba41a8b80bbf, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bbc17472500554744bf31f13284ecf01, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 30cc3fb07f943cb40a53bf03c301595c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -525,7 +525,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
+  m_fontSize: 50
   m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
@@ -537,7 +537,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 15
+  m_lineSpacing: -35
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0

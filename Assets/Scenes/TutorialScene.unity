@@ -1292,21 +1292,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 484755816}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac71c4749dd17d544a1ed61936989584, type: 3}
+  m_Script: {fileID: 11500000, guid: 74c5d6cc0b3a4c50a88c6dc0e9290c07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   stageParent: {fileID: 864898814}
-  stageTypeToPrefabs:
-  - stageType: 1
-    prefab: {fileID: 5766264691755906368, guid: 1769f518d8f2b3644a0283b1d4cebab4, type: 3}
-  - stageType: 100
-    prefab: {fileID: 5040811245919378688, guid: 2d4e8f42898cd694f843906369c6291e, type: 3}
-  - stageType: 101
-    prefab: {fileID: 5040811245919378688, guid: a98fc033bd8a87f4689d6415cc9225c4, type: 3}
-  - stageType: 102
-    prefab: {fileID: 5040811245919378688, guid: 953c51eb2f8459e4791e377e9164d5ae, type: 3}
-  - stageType: 200
-    prefab: {fileID: 5040811245919378688, guid: cc1ff57546ba1d944a915e39a55fb06d, type: 3}
+  stageTypeToPrefabDatabase: {fileID: 11400000, guid: e460b8c9ea8f42788f752f3542ba27ef, type: 2}
+  tutorialGuideCharacterDatabase: {fileID: 11400000, guid: 790adb5ef557fa54db23573458850574, type: 2}
 --- !u!114 &484755823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2235,7 +2226,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 120}
+  m_AnchoredPosition: {x: 0, y: -15}
   m_SizeDelta: {x: 960, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1046037784
@@ -2339,7 +2330,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 120}
+  m_AnchoredPosition: {x: 0, y: -15}
   m_SizeDelta: {x: 960, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1144592200
@@ -2529,7 +2520,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 120}
+  m_AnchoredPosition: {x: 0, y: -15}
   m_SizeDelta: {x: 960, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1312995643
@@ -2834,7 +2825,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 120}
+  m_AnchoredPosition: {x: 0, y: -15}
   m_SizeDelta: {x: 960, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1564241300
@@ -3198,7 +3189,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 120}
+  m_AnchoredPosition: {x: 0, y: -15}
   m_SizeDelta: {x: 960, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1687958268
@@ -4483,11 +4474,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 368539018044371949, guid: 153c1ace42da3344f98d5733f91d2cf2, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1210.01
+      value: 1632.22
       objectReference: {fileID: 0}
     - target: {fileID: 368539018044371949, guid: 153c1ace42da3344f98d5733f91d2cf2, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 169.01
+      value: 109.76
       objectReference: {fileID: 0}
     - target: {fileID: 368539018044371949, guid: 153c1ace42da3344f98d5733f91d2cf2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4523,7 +4514,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 368539018044371949, guid: 153c1ace42da3344f98d5733f91d2cf2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 300
+      value: 913
       objectReference: {fileID: 0}
     - target: {fileID: 368539018044371949, guid: 153c1ace42da3344f98d5733f91d2cf2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4545,6 +4536,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2978969379586864016, guid: 153c1ace42da3344f98d5733f91d2cf2, type: 3}
+      propertyPath: m_text
+      value: "Why don't you try playing your favorite song next\u2026?"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2978969379586864016, guid: 153c1ace42da3344f98d5733f91d2cf2, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 3425579581745898889, guid: 153c1ace42da3344f98d5733f91d2cf2, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -4555,19 +4554,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3425579581745898889, guid: 153c1ace42da3344f98d5733f91d2cf2, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 960.01
+      value: 1382.22
       objectReference: {fileID: 0}
     - target: {fileID: 3425579581745898889, guid: 153c1ace42da3344f98d5733f91d2cf2, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 129.01
+      value: 69.76
       objectReference: {fileID: 0}
     - target: {fileID: 3425579581745898889, guid: 153c1ace42da3344f98d5733f91d2cf2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 680.005
+      value: 891.11
       objectReference: {fileID: 0}
     - target: {fileID: 3425579581745898889, guid: 153c1ace42da3344f98d5733f91d2cf2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -84.505
+      value: -54.88
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

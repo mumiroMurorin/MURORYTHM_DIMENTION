@@ -911,17 +911,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageParent: {fileID: 864898814}
-  stageTypeToPrefabs:
-  - stageType: 1
-    prefab: {fileID: 5766264691755906368, guid: 1769f518d8f2b3644a0283b1d4cebab4, type: 3}
-  - stageType: 100
-    prefab: {fileID: 5040811245919378688, guid: 2d4e8f42898cd694f843906369c6291e, type: 3}
-  - stageType: 101
-    prefab: {fileID: 5040811245919378688, guid: a98fc033bd8a87f4689d6415cc9225c4, type: 3}
-  - stageType: 102
-    prefab: {fileID: 5040811245919378688, guid: 953c51eb2f8459e4791e377e9164d5ae, type: 3}
-  - stageType: 200
-    prefab: {fileID: 5040811245919378688, guid: cc1ff57546ba1d944a915e39a55fb06d, type: 3}
+  stageTypeToPrefabDatabase: {fileID: 11400000, guid: e460b8c9ea8f42788f752f3542ba27ef, type: 2}
 --- !u!114 &484755823
 MonoBehaviour:
   m_ObjectHideFlags: 0

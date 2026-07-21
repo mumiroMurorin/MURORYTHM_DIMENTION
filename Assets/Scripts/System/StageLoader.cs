@@ -1,70 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
+ï»¿using UnityEngine;
 using VContainer;
 
-public class StageLoader : MonoBehaviour
+public class StageLoader : StageLoaderBase
 {
-    [SerializeField] Transform stageParent;
-    [SerializeField] StageTypeToObject[] stageTypeToPrefabs;
-
-    IMusicDataGetter musicDataGetter;
-    
     [Inject]
     public void Constructor(IMusicDataGetter musicDataGetter)
     {
-        this.musicDataGetter = musicDataGetter;
+        SetMusicDataGetter(musicDataGetter);
     }
 
     private void Start()
     {
-        var obj = InstantiateStagePrefab(musicDataGetter.Music.Value.StageType);
-        if(obj == null) { return; }
-
-        obj.transform.SetParent(stageParent);
-
-        if(!obj.TryGetComponent(out IStageController stageController))
-        {
-            Debug.LogWarning($"ySystemzƒXƒe[ƒWƒIƒuƒWƒFƒNƒg‚ÉIStageController‚ªƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {obj.name}");
-            return;
-        }
-
-        stageController.Initialize(musicDataGetter);
+        LoadSelectedStage();
     }
 
-    private GameObject InstantiateStagePrefab(StageType stageType)
+    protected override bool TryGetStageType(out StageType stageType)
     {
-        if (stageTypeToPrefabs == null) 
+        stageType = default;
+
+        if (MusicDataGetter == null || MusicDataGetter.Music == null || MusicDataGetter.Music.Value == null)
         {
-            Debug.LogError($"ySystemzƒXƒe[ƒW”z—ñ‚Ì’·‚³‚ª0‚Å‚·");
-            return null; 
+            Debug.LogError("ã€Systemã€‘MusicDataGetterã‹ã‚‰StageTypeã‚’å–å¾—ã§ãã¾ã›ã‚“ã€‚");
+            return false;
         }
 
-        foreach (var pair in stageTypeToPrefabs)
-        {
-            GameObject obj = pair.CheckAndGetPrefab(stageType);
-
-            if (obj == null) { continue; }
-
-            // ŠY“–‚µ‚½‚çƒCƒ“ƒXƒ^ƒ“ƒX‰»‚µ‚Ä•Ô‚·
-            return Instantiate(obj, Vector3.zero, Quaternion.identity);
-        }
-
-        Debug.LogError($"ySystemzŠY“–‚·‚éStage‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ: {stageType}");
-        return null;
-    }
-
-    [Serializable]
-    private class StageTypeToObject
-    {
-        [SerializeField] StageType stageType;
-        [SerializeField] GameObject prefab;
-
-        public GameObject CheckAndGetPrefab(StageType type)
-        {
-            if(stageType != type) { return null; }
-            return prefab;
-        }
+        stageType = MusicDataGetter.Music.Value.StageType;
+        return true;
     }
 }

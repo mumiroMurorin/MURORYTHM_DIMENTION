@@ -19,12 +19,12 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 137600815104
-    m_Localized: "Hello\u2026! I\u2019m\n<#ff3333>Creation</color>, and I\u2019ll
-      be guiding you through this game\u2019s tutorial! Nice to meet you\u2026!"
+    m_Localized: "Hello\u2026! I\u2019m <#ff3333>Creation</color>, and I\u2019ll
+      be guiding you \nthrough this game\u2019s tutorial! Nice to meet you\u2026!"
     m_Metadata:
       m_Items: []
   - m_Id: 180038782976
-    m_Localized: "Without further ado, let me introduce the\n<#ff3333>notes</color>
+    m_Localized: "Without further ado, \nlet me introduce the <#ff3333>notes</color>
       that make up this game!\nThey\u2019re absolutely essential for playing rhythm 
       games!"
     m_Metadata:
@@ -34,11 +34,13 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 241414033408
-    m_Localized: 'When you see this note, please <#ffff00>tap</color> along with
-      the <#ff3333>yellow line</color>!
+    m_Localized: 'When you see this note,
 
-      It''s best to tap in time with the
-      rhythm!'
+      please <#ffff00>tap</color> along
+      with the <#ff3333>yellow line</color>!
+
+      It''s best to tap in time with
+      the rhythm!'
     m_Metadata:
       m_Items: []
   - m_Id: 271579467776
