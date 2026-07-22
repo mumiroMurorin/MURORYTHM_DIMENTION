@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2064485049643204070}
   - component: {fileID: -7189193357750488896}
+  - component: {fileID: 5874319041862445073}
   m_Layer: 0
   m_Name: NoteFactory_SpaceHoldMesh
   m_TagString: Untagged
@@ -48,6 +49,7 @@ MonoBehaviour:
   noteMeshPrefab: {fileID: 2776397303821155744, guid: 42c571f76ab05c044bc8723b01361e79, type: 3}
   shadowMeshPrefab: {fileID: 2776397303821155744, guid: d67e3e9a629c5614aad8aea2bda8e9e2, type: 3}
   shadowMaterial: {fileID: 2100000, guid: 6ab62f80e7d34b328c0d14dcf02e2f90, type: 2}
+  bulletTrailBuilder: {fileID: 5874319041862445073}
   meshDivisionNum: 10
   shadowDivisionNum: 24
   maxTriangleLength: 2
@@ -61,3 +63,23 @@ MonoBehaviour:
   shadowRadiusOffset: 0
   normalizeVerticesWinding: 1
   useClockwiseWinding: 1
+--- !u!114 &5874319041862445073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8581259717299761544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f747f98fdf14a54b8a38d0ba56ab2a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 8970386635920525042, guid: 8c03a035195ab8148976f885c7c7acb9, type: 3}
+  bulletParent: {fileID: 0}
+  spawnCenter: {x: 0, y: 55, z: 250}
+  normalizedPositionScale: {x: 250, y: 40, z: 1}
+  spawnInterval: {x: 0.125, y: 0.125, z: 0}
+  minSpawnDistance: 0.01
+  stayThreshold: 0.125
+  minChargeDuration: 0.2

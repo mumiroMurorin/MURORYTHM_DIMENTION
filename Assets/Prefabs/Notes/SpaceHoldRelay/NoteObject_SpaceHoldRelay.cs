@@ -173,7 +173,7 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
 /// <summary>
 /// (初期化に必要な変数も含む)ホールドメッシュノーツのデータ
 /// </summary>
-public class NoteData_SpaceHoldRelay : INoteData, IJudgableNoteData
+public class NoteData_SpaceHoldRelay : INoteData, IJudgableNoteData, ISpaceHoldBulletEffectNoteData
 {
     public NoteType NoteType => NoteType.SpaceHoldRelay;
 
@@ -182,6 +182,10 @@ public class NoteData_SpaceHoldRelay : INoteData, IJudgableNoteData
     public JudgementWindow JudgementWindow { get; set; }
 
     public Vector2[] Vertices { get; set; }
+
+    public int HoldNumber { get; set; }
+
+    public bool IsSpaceHoldEnd { get; set; }
 
     public List<TimeToVertices> TimeToVertices { get; set; }
 

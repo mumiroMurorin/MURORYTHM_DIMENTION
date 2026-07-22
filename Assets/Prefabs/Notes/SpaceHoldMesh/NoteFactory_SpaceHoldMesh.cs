@@ -12,6 +12,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
     [SerializeField] GameObject noteMeshPrefab;
     [SerializeField] GameObject shadowMeshPrefab;
     [SerializeField] Material shadowMaterial;
+    [SerializeField] SpaceHoldBulletTrailBuilder bulletTrailBuilder;
 
     [Header("meshの分割数")]
     [SerializeField] int meshDivisionNum = 10;
@@ -62,6 +63,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
 
         // 初期化
         note.Initialize(data);
+        bulletTrailBuilder?.Build(data, note.transform);
 
         return note;
     }
@@ -81,6 +83,7 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         data.JudgementRangeLineParent = this.transform;
         data.EnableJudgementRangeLine = enableJudgementRangeLine;
         data.StencilId = GetNextStencilId();
+        data.BulletTrailBuilder = bulletTrailBuilder;
 
         return data;
     }

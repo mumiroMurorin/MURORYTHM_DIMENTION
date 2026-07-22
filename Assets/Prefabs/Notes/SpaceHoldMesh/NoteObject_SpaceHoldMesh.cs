@@ -77,7 +77,12 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
         // 判定範囲の更新
         judgeRange = InterpolatePointsByDepth(noteData.DepthToVertices, GetCurrentDepth());
 
-        UpdateJudgementRangeView(judgeRange);
+        bool isInJudgementLineTiming = IsInJudgementLineTiming();
+        UpdateJudgementRangeView(judgeRange, isInJudgementLineTiming);
+        if (isVisibleByController && isInJudgementLineTiming)
+        {
+            noteData.BulletTrailBuilder?.UpdateVisibleBullets(noteData.HoldNumber, noteData.Timer.Time);
+        }
         UpdateHoldStatus();
     }
 
@@ -141,9 +146,9 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
         }
     }
 
-    private void UpdateJudgementRangeView(Vector2[] points)
+    private void UpdateJudgementRangeView(Vector2[] points, bool isInJudgementLineTiming)
     {
-        bool isVisible = isVisibleByController && IsInJudgementLineTiming();
+        bool isVisible = isVisibleByController && isInJudgementLineTiming;
         judgementRangeView?.UpdateRange(points, isVisible);
     }
 
@@ -176,6 +181,7 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
 
     private void OnDestroy()
     {
+        noteData?.BulletTrailBuilder?.Clear(noteData.HoldNumber);
         noteData?.MeshRendererAsset?.DestroyMaterialInstances();
     }
 
@@ -191,6 +197,10 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
 public class NoteData_SpaceHoldMesh : INoteData
 {
     public NoteType NoteType => NoteType.SpaceHoldMesh;
+
+    public int HoldNumber { get; set; }
+
+    public SpaceHoldBulletTrailBuilder BulletTrailBuilder { get; set; }
 
     public float Timing { get; set; }
 

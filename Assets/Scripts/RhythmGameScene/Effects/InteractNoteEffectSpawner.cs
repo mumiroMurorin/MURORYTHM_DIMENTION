@@ -48,7 +48,7 @@ public abstract class InteractNoteEffectSpawner : MonoBehaviour
     /// <returns></returns>
     public abstract bool ConditionChecker(NoteJudgementData judgementData);
 
-    public IInteractNoteEffectController Spawn(NoteJudgementData judgementData)
+    public virtual IInteractNoteEffectController Spawn(NoteJudgementData judgementData)
     {
         // ˆê’U–³‚©‚Á‚½‚ç•Ô‚·
         if (effectPool == null || effectPool.Count <= 0) { return null; }

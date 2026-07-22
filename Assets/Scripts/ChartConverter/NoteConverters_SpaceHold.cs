@@ -33,6 +33,8 @@ namespace ChartConvert
                 NoteData_SpaceHoldRelay noteData = new NoteData_SpaceHoldRelay
                 {
                     Vertices = noteOrigin.Vertices.Select(x=> x.ToVector2()).ToArray(),
+                    HoldNumber = noteOrigin.HoldNumber,
+                    IsSpaceHoldEnd = false,
                     TimeToVertices = timeToVertices,
                     Timing = timing
                 };
@@ -121,6 +123,8 @@ namespace ChartConvert
                 NoteData_SpaceHoldRelay noteData = new NoteData_SpaceHoldRelay
                 {
                     Vertices = noteOrigin.Vertices.Select(x=> x.ToVector2()).ToArray(),
+                    HoldNumber = noteOrigin.HoldNumber,
+                    IsSpaceHoldEnd = false,
                     TimeToVertices = holdNumberToVertices[noteOrigin.HoldNumber],
                     Timing = timing
                 };
@@ -291,6 +295,8 @@ namespace ChartConvert
                 NoteData_SpaceHoldRelay noteData = new NoteData_SpaceHoldRelay
                 {
                     Vertices = noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(),
+                    HoldNumber = noteOrigin.HoldNumber,
+                    IsSpaceHoldEnd = true,
                     TimeToVertices = holdNumberToVertices[noteOrigin.HoldNumber],
                     Timing = timing
                 };
@@ -449,7 +455,7 @@ namespace ChartConvert
                 }
 
                 numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToVertices(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray()));
-                onAddNoteData(GenerateNoteData_SpaceHoldMesh(numberToHoldMeshDataOrigin[noteOrigin.HoldNumber]));
+                onAddNoteData(GenerateNoteData_SpaceHoldMesh(noteOrigin.HoldNumber, numberToHoldMeshDataOrigin[noteOrigin.HoldNumber]));
             }
 
             return true;
@@ -460,11 +466,12 @@ namespace ChartConvert
         /// </summary>
         /// <param name="meshDataList"></param>
         /// <returns></returns>
-        private NoteData_SpaceHoldMesh GenerateNoteData_SpaceHoldMesh(List<TimeToVertices> timeToVertices)
+        private NoteData_SpaceHoldMesh GenerateNoteData_SpaceHoldMesh(int holdNumber, List<TimeToVertices> timeToVertices)
         {
             var noteData = new NoteData_SpaceHoldMesh();
             VertexCountNormalizer(timeToVertices, MESH_DIVISION_NUM);
 
+            noteData.HoldNumber = holdNumber;
             noteData.Timing = timeToVertices[0].Timing;
             noteData.TimeToVertices = timeToVertices;
 
@@ -567,7 +574,7 @@ namespace ChartConvert
                 }
 
                 numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToDetail(timing, noteOrigin.Vertices.Select(x => x.ToVector2()).ToArray(), true, bpm));
-                foreach(var note in GenerateNoteData_JudgementPoint(numberToHoldMeshDataOrigin[noteOrigin.HoldNumber])) 
+                foreach(var note in GenerateNoteData_JudgementPoint(noteOrigin.HoldNumber, numberToHoldMeshDataOrigin[noteOrigin.HoldNumber]))
                 {
                     onAddNoteData(note);
                 }
@@ -581,7 +588,7 @@ namespace ChartConvert
         /// </summary>
         /// <param name="meshDataList"></param>
         /// <returns></returns>
-        private List<NoteData_SpaceHoldRelayHidden> GenerateNoteData_JudgementPoint(List<TimeToDetail> timeToDetails)
+        private List<NoteData_SpaceHoldRelayHidden> GenerateNoteData_JudgementPoint(int holdNumber, List<TimeToDetail> timeToDetails)
         {
             var noteDatas = new List<NoteData_SpaceHoldRelayHidden>();
 
@@ -608,13 +615,13 @@ namespace ChartConvert
                 if (IsNearJudgementPoint(timeToDetails, count, mergin)) { continue; }
 
                 // ”»’è“_‚Ì’Ç‰Á
-                noteDatas.Add(ConvertNoteData(timeToVertices, count));
+                noteDatas.Add(ConvertNoteData(holdNumber, timeToVertices, count));
             }
 
             return noteDatas;
         }
 
-        private NoteData_SpaceHoldRelayHidden ConvertNoteData(List<TimeToVertices> timeToVertices, float time)
+        private NoteData_SpaceHoldRelayHidden ConvertNoteData(int holdNumber, List<TimeToVertices> timeToVertices, float time)
         {
             var noteData = new NoteData_SpaceHoldRelayHidden();
 
@@ -634,6 +641,8 @@ namespace ChartConvert
             }
 
             noteData.Timing = time;
+            noteData.HoldNumber = holdNumber;
+            noteData.IsSpaceHoldEnd = false;
             noteData.TimeToVertices = timeToVertices;
             noteData.Vertices = InterpolatePoints(backVertices.ToList(), nextVertices.ToList(), t, MESH_DIVISION_NUM).ToArray();
 
