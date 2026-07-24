@@ -6,7 +6,7 @@ using System;
 
 public class InteractNoteEffect_Touch : InteractNoteEffect
 {
-    [SerializeField] MeshRenderer[] touchLigts;
+    [SerializeField] MeshRenderer[] touchLights;
 
     protected override void SetEffect(INoteData noteDataOrigin)
     {
@@ -15,8 +15,8 @@ public class InteractNoteEffect_Touch : InteractNoteEffect
         // åıç ÇÃÉZÉbÉg
         foreach (int index in noteData.Range)
         {
-            if (index < 0 || index >= touchLigts.Length) { continue; }
-            MeshRenderer light = touchLigts[index];
+            if (index < 0 || index >= touchLights.Length) { continue; }
+            MeshRenderer light = touchLights[index];
             if (light == null) { continue; }
 
             light.gameObject.SetActive(true);

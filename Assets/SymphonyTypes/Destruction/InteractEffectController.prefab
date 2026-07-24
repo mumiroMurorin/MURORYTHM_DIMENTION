@@ -45,6 +45,7 @@ Transform:
   - {fileID: 7519324059486932468}
   - {fileID: 8832824925920267234}
   - {fileID: 6801894881653528282}
+  - {fileID: 977792078563339795}
   - {fileID: 3101432474665817131}
   - {fileID: 757795540268396447}
   - {fileID: 389061455889990983}
@@ -71,6 +72,7 @@ MonoBehaviour:
   - {fileID: 4096865185704370387}
   - {fileID: 5041927189461320367}
   - {fileID: 192826449180630141}
+  - {fileID: 6134147667280718040}
   - {fileID: 3585136404634361044}
   - {fileID: 6758661222180623946}
   - {fileID: 1348928729554075276}
@@ -592,6 +594,79 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cca2c61d0b37b248a30a5efbe5ebe9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &2325383865023551991
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3217530237588728887}
+    m_Modifications:
+    - target: {fileID: 1398145605877389100, guid: 20f66b992e5d04a48b89374e06c0e7aa, type: 3}
+      propertyPath: m_Name
+      value: EffectSpawner_HoldEndGroundFly
+      objectReference: {fileID: 0}
+    - target: {fileID: 3302472204600621028, guid: 20f66b992e5d04a48b89374e06c0e7aa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3302472204600621028, guid: 20f66b992e5d04a48b89374e06c0e7aa, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3302472204600621028, guid: 20f66b992e5d04a48b89374e06c0e7aa, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3302472204600621028, guid: 20f66b992e5d04a48b89374e06c0e7aa, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3302472204600621028, guid: 20f66b992e5d04a48b89374e06c0e7aa, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3302472204600621028, guid: 20f66b992e5d04a48b89374e06c0e7aa, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3302472204600621028, guid: 20f66b992e5d04a48b89374e06c0e7aa, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3302472204600621028, guid: 20f66b992e5d04a48b89374e06c0e7aa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3302472204600621028, guid: 20f66b992e5d04a48b89374e06c0e7aa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3302472204600621028, guid: 20f66b992e5d04a48b89374e06c0e7aa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 20f66b992e5d04a48b89374e06c0e7aa, type: 3}
+--- !u!4 &977792078563339795 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3302472204600621028, guid: 20f66b992e5d04a48b89374e06c0e7aa, type: 3}
+  m_PrefabInstance: {fileID: 2325383865023551991}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6134147667280718040 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8459363753700995375, guid: 20f66b992e5d04a48b89374e06c0e7aa, type: 3}
+  m_PrefabInstance: {fileID: 2325383865023551991}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbdf65d490d0cc64dab53e1903e70740, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &2832913692448823419

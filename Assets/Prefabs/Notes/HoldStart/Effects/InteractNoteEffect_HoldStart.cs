@@ -5,7 +5,7 @@ using DG.Tweening;
 
 public class InteractNoteEffect_HoldStart : InteractNoteEffect
 {
-    [SerializeField] MeshRenderer[] HoldStartLigts;
+    [SerializeField] MeshRenderer[] HoldStartLights;
 
     protected override void SetEffect(INoteData noteDataOrigin)
     {
@@ -14,8 +14,8 @@ public class InteractNoteEffect_HoldStart : InteractNoteEffect
         // åıç ÇÃÉZÉbÉg
         foreach (int index in noteData.Range)
         {
-            if (index < 0 || index >= HoldStartLigts.Length) { continue; }
-            MeshRenderer light = HoldStartLigts[index];
+            if (index < 0 || index >= HoldStartLights.Length) { continue; }
+            MeshRenderer light = HoldStartLights[index];
             if (light == null) { continue; }
 
             light.gameObject.SetActive(true);

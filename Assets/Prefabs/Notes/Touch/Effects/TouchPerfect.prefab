@@ -51,7 +51,7 @@ MonoBehaviour:
   - particle: {fileID: 1104552505036848998}
     emissionConstantCount: 10
     distanceUnit: 1
-  touchLigts:
+  touchLights:
   - {fileID: 6823542280905326013}
   - {fileID: 1986520553743067306}
   - {fileID: 836387286148461825}

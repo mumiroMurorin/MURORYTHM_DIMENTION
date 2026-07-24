@@ -15,4 +15,4 @@ MonoBehaviour:
   noteType: 16
   sounds:
   - judgement: 1000
-    audioClip: {fileID: 8300000, guid: cc50b564f4081b642ac646106cfcdc28, type: 3}
+    audioClip: {fileID: 8300000, guid: f15cafeaec8f893488228b89107ff7c3, type: 3}

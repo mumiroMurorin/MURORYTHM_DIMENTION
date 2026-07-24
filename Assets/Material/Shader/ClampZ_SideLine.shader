@@ -26,58 +26,79 @@ Shader "Custom/ClampZ_SideLine"
         }
         LOD 200
 
-        CGPROGRAM
-        #pragma surface surf Standard fullforwardshadows alpha:fade addshadow
-        #pragma target 3.0
-
-        sampler2D _MainTex;
-
-        struct Input
+        Pass
         {
-            float2 uv_MainTex;
-            float3 worldPos;
-        };
+            Tags { "LightMode" = "ForwardBase" }
+            Blend SrcAlpha OneMinusSrcAlpha
+            ZWrite Off
+            Cull Back
 
-        half _Glossiness;
-        half _Metallic;
-        fixed4 _Color;
-        fixed4 _SecondaryColor;
-        fixed4 _LineColor;
-        float _MinZ;
-        float _MaxZ;
-        float _LineDistanceFromEdge;
-        float _LineWidth;
-        float _LineIntensity;
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma target 3.0
 
-        UNITY_INSTANCING_BUFFER_START(Props)
-        UNITY_INSTANCING_BUFFER_END(Props)
+            #include "UnityCG.cginc"
 
-        float GetLineMask(float uvX, float targetX, float lineWidth)
-        {
-            float halfWidth = max(lineWidth * 0.5, 0.0001);
-            float distanceToLine = abs(uvX - targetX);
-            return saturate(1.0 - (distanceToLine / halfWidth));
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+
+            fixed4 _Color;
+            fixed4 _SecondaryColor;
+            fixed4 _LineColor;
+            float _MinZ;
+            float _MaxZ;
+            float _LineDistanceFromEdge;
+            float _LineWidth;
+            float _LineIntensity;
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float4 vertex : SV_POSITION;
+                float2 uv : TEXCOORD0;
+                float3 worldPos : TEXCOORD1;
+            };
+
+            float GetLineMask(float uvX, float targetX, float lineWidth)
+            {
+                float halfWidth = max(lineWidth * 0.5, 0.0001);
+                float distanceToLine = abs(uvX - targetX);
+                return saturate(1.0 - (distanceToLine / halfWidth));
+            }
+
+            v2f vert(appdata v)
+            {
+                v2f o;
+                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                return o;
+            }
+
+            fixed4 frag(v2f i) : SV_Target
+            {
+                float inRange = step(_MinZ, i.worldPos.z) * step(i.worldPos.z, _MaxZ);
+
+                fixed4 tint = lerp(_SecondaryColor, _Color, inRange);
+                fixed4 c = tex2D(_MainTex, i.uv) * tint;
+
+                float leftLine = GetLineMask(i.uv.x, _LineDistanceFromEdge, _LineWidth);
+                float rightLine = GetLineMask(i.uv.x, 1.0 - _LineDistanceFromEdge, _LineWidth);
+                float lineMask = saturate(max(leftLine, rightLine));
+
+                // ライト計算を行わず、元の色とライン発光だけで描画する
+                c.rgb += _LineColor.rgb * lineMask * _LineIntensity * c.a;
+                return c;
+            }
+            ENDCG
         }
-
-        void surf(Input IN, inout SurfaceOutputStandard o)
-        {
-            float inRange = step(_MinZ, IN.worldPos.z) * step(IN.worldPos.z, _MaxZ);
-
-            fixed4 tint = lerp(_SecondaryColor, _Color, inRange);
-            fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * tint;
-
-            float leftLine = GetLineMask(IN.uv_MainTex.x, _LineDistanceFromEdge, _LineWidth);
-            float rightLine = GetLineMask(IN.uv_MainTex.x, 1.0 - _LineDistanceFromEdge, _LineWidth);
-            float lineMask = saturate(max(leftLine, rightLine));
-
-            o.Albedo = c.rgb;
-            o.Metallic = _Metallic;
-            o.Smoothness = _Glossiness;
-            o.Alpha = c.a;
-            o.Emission = _LineColor.rgb * lineMask * _LineIntensity * c.a;
-        }
-        ENDCG
     }
 
-    FallBack "Standard"
+    FallBack Off
 }
