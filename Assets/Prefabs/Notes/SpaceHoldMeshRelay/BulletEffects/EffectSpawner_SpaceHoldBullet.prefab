@@ -47,4 +47,4 @@ MonoBehaviour:
   poolSize: 20
   effectPrefab: {fileID: 126402248424964810, guid: 8c03a035195ab8148976f885c7c7acb9, type: 3}
   parent: {fileID: 3970982331814220332}
-  fireDelayInterval: 0.01
+  fireDelayInterval: 0
