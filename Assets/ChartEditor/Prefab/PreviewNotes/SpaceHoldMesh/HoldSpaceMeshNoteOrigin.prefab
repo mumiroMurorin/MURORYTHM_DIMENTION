@@ -46,3 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshMaterialInside: {fileID: 2100000, guid: f0e82ed9653c7604a8c2a2eb1beea3a1, type: 2}
   meshMaterialOutside: {fileID: 2100000, guid: 8de6ef7ea1e5fff4297b6e2b40587367, type: 2}
+  meshMaterialOutlineInside: {fileID: 2100000, guid: 9879c1273ec156948bac4aedf50f876d, type: 2}
+  meshMaterialOutlineOutside: {fileID: 2100000, guid: 9879c1273ec156948bac4aedf50f876d, type: 2}
+  meshMaterialShadow: {fileID: 2100000, guid: 6ab62f80e7d34b328c0d14dcf02e2f90, type: 2}

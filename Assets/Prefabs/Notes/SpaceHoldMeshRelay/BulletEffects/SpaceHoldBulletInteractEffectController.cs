@@ -216,11 +216,7 @@ public class SpaceHoldBulletInteractEffectController : MonoBehaviour, IInteractN
     private void SetAnimatorTrigger(string triggerName)
     {
         if (string.IsNullOrEmpty(triggerName)) { return; }
-
-        if (animator == null)
-        {
-            animator = GetComponent<Animator>();
-        }
+        if(animator == null) { return; }
 
         animator?.SetTrigger(triggerName);
     }

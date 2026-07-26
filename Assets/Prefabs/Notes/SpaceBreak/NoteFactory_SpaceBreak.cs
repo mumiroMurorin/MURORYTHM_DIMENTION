@@ -83,9 +83,14 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     private NoteObject<NoteData_SpaceBreak> GenerateNoteInstance(NoteData_SpaceBreak data)
     {
         GameObject origin = Instantiate(noteObjectOriginPrefab);
+        bool shouldGenerateFragments = true;
+        if (origin.TryGetComponent(out NoteObjectPreview_SpaceBreak previewSpaceBreak))
+        {
+            shouldGenerateFragments = previewSpaceBreak.IsFragmentPrebuildEnabled;
+        }
 
         // ノーツオブジェクト(表)を生成
-        GameObject noteObj = GenerateMeshObject(data);
+        GameObject noteObj = GenerateMeshObject(data, shouldGenerateFragments);
         noteObj.transform.SetParent(origin.transform);
 
         // 影オブジェクトを生成
@@ -109,7 +114,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     /// <summary>
     /// ホールドのメッシュ部分の生成
     /// </summary>
-    private GameObject GenerateMeshObject(NoteData_SpaceBreak noteData)
+    private GameObject GenerateMeshObject(NoteData_SpaceBreak noteData, bool shouldGenerateFragments)
     {
         var obj = Instantiate(noteMeshPrefab);
 
@@ -128,7 +133,10 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
         // 成功演出のためにMeshを保存
         noteData.Mesh = mesh;
 
-        GenerateFlagments(obj, noteData);
+        if (shouldGenerateFragments)
+        {
+            GenerateFlagments(obj, noteData);
+        }
 
         if (mesh != null)
         {

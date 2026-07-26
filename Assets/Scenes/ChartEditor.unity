@@ -10611,7 +10611,6 @@ MonoBehaviour:
   - noteType: 33
     factory: {fileID: 1696779391}
   noteParent: {fileID: 777256151}
-  groundDeformer: {fileID: 777256150}
   timer:
     obj: {fileID: 1703776573}
 --- !u!1 &494745444
@@ -16717,7 +16716,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &736974450
 Light:
   m_ObjectHideFlags: 0
@@ -17731,17 +17730,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6885768125503207204, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
   m_PrefabInstance: {fileID: 777256148}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &777256150 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5072021793780670651, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
-  m_PrefabInstance: {fileID: 777256148}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 596018e53e94bfb4d9de7a811cb67477, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &777256151 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8274364278501930480, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}

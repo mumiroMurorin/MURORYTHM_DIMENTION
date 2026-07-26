@@ -84,6 +84,7 @@ MonoBehaviour:
   lineWidth: 0.25
   zOffset: -0.01
   normalizeRadius: 10
+  particle: {fileID: 0}
 --- !u!1 &8840368366467242802
 GameObject:
   m_ObjectHideFlags: 0
