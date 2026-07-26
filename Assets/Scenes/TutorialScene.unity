@@ -350,6 +350,8 @@ MonoBehaviour:
     - 
     - 
   difficulty: 0
+  symphonyTypeToData: {fileID: 11400000, guid: 429a5dca876a39743bd78706c233758b, type: 2}
+  tutorialGuideCharacterDatabase: {fileID: 11400000, guid: 790adb5ef557fa54db23573458850574, type: 2}
   optionAsset: {fileID: 11400000, guid: 77d8654a2a7d51e4b8e96e50ec87ff29, type: 2}
 --- !u!1 &216919893
 GameObject:

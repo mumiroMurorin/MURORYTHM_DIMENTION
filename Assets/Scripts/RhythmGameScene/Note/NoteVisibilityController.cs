@@ -98,6 +98,8 @@ public class NoteVisibilityController : MonoBehaviour
         float minDistance = currentDistance - visibleBehindDistance;
         float maxDistance = currentDistance + visibleAheadDistance;
 
+        UpdateVisibilityLocks(currentDistance);
+
         int candidateStartIndex = LowerBoundPrefixMaxEnd(minDistance);
         int candidateEndIndex = UpperBoundStart(maxDistance);
 
@@ -105,7 +107,8 @@ public class NoteVisibilityController : MonoBehaviour
         for (int i = candidateStartIndex; i < candidateEndIndex; i++)
         {
             INoteVisibilityTarget target = targets[i];
-            if (target.EndChartDistance >= minDistance &&
+            if (!target.IsVisibilityLocked &&
+                target.EndChartDistance >= minDistance &&
                 target.StartChartDistance <= maxDistance)
             {
                 nextVisibleTargets.Add(target);
@@ -143,6 +146,18 @@ public class NoteVisibilityController : MonoBehaviour
         HashSet<INoteVisibilityTarget> previousVisibleTargets = visibleTargets;
         visibleTargets = nextVisibleTargets;
         nextVisibleTargets = previousVisibleTargets;
+    }
+
+    private void UpdateVisibilityLocks(float currentDistance)
+    {
+        foreach (INoteVisibilityTarget target in targets)
+        {
+            if (target.IsVisibilityLocked) { continue; }
+            if (!target.ShouldLockVisibility(currentDistance)) { continue; }
+
+            target.LockVisibility();
+            visibleTargets.Remove(target);
+        }
     }
 
     private void RebuildPrefixMaxEndDistances()

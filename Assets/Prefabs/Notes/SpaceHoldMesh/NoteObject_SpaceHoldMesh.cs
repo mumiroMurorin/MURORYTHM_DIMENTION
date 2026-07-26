@@ -97,6 +97,11 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
         }
     }
 
+    public override bool ShouldLockVisibility(float currentDistance)
+    {
+        return currentDistance > EndChartDistance;
+    }
+
     /// <summary>
     /// 範囲内判定を更新する
     /// </summary>

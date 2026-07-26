@@ -8,12 +8,27 @@ public abstract class NoteObject<T> : MonoBehaviour, INoteVisibilityTarget where
 
     public float EndChartDistance { get; private set; }
 
+    public bool IsVisibilityLocked { get; private set; }
+
     virtual public void SetActive(bool isVisible)
     {
         foreach (Transform child in transform)
         {
             child.gameObject.SetActive(isVisible);
         }
+    }
+
+    public virtual bool ShouldLockVisibility(float currentDistance)
+    {
+        return false;
+    }
+
+    public void LockVisibility()
+    {
+        if (IsVisibilityLocked) { return; }
+
+        IsVisibilityLocked = true;
+        SetActive(false);
     }
 
     abstract public void Initialize(T data);

@@ -107,4 +107,10 @@ public interface INoteVisibilityTarget : INoteActivable
     float StartChartDistance { get; }
 
     float EndChartDistance { get; }
+
+    bool IsVisibilityLocked { get; }
+
+    bool ShouldLockVisibility(float currentDistance);
+
+    void LockVisibility();
 }

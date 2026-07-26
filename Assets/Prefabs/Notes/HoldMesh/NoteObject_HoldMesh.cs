@@ -81,6 +81,11 @@ public class NoteObject_HoldMesh : NoteObject<NoteData_HoldMesh>
         }
     }
 
+    public override bool ShouldLockVisibility(float currentDistance)
+    {
+        return currentDistance > EndChartDistance;
+    }
+
     /// <summary>
     /// ノーツを機能停止する
     /// </summary>
