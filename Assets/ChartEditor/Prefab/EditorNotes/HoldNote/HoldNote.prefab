@@ -300,8 +300,8 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3934986967309432180}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -496,7 +496,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noteObject: {fileID: 3734698064947245665}
   startMaterial: {fileID: 2100000, guid: a4b151adacf42b44bb604f1487afe6ee, type: 2}
-  diveineStartMaterial: {fileID: 2100000, guid: 5c23afbf5709da14eb9c5cfec6ee77b9, type: 2}
   relayMaterial: {fileID: 2100000, guid: ba085195bd480c04ca970305e72fe911, type: 2}
   endMaterial: {fileID: 2100000, guid: 2f53ffd128c8f7345aa1fdb26cfe1037, type: 2}
   meshMaterial: {fileID: 2100000, guid: 096c53fe127642e4fb33559b498a855c, type: 2}
@@ -524,6 +523,7 @@ MonoBehaviour:
   normalColor: {r: 0, g: 0.3137255, b: 1, a: 1}
   hiddenColor: {r: 0, g: 0.3137255, b: 1, a: 0.39215687}
   holdEndUnjudgeColor: {r: 0.6862745, g: 0, b: 1, a: 0.64705884}
+  holdStartDivineColor: {r: 1, g: 1, b: 0, a: 1}
 --- !u!114 &7717249748962354947
 MonoBehaviour:
   m_ObjectHideFlags: 0
