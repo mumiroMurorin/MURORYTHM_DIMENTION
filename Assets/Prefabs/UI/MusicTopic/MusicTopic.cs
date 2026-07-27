@@ -8,7 +8,7 @@ public abstract class MusicTopic : MonoBehaviour
 {
     [Header("コンポーネントの参照")]
     [SerializeField] protected TextMeshProUGUI title_tmp;
-    [SerializeField] protected TextMeshProUGUI composer_tmp;
+    [SerializeField] protected CreatorTextView creatorTextView;
     [SerializeField] protected TextMeshProUGUI diff_tmp;
     [SerializeField] protected TextMeshProUGUI level_tmp;
     [SerializeField] protected TextMeshProUGUI score_tmp;
@@ -35,7 +35,7 @@ public abstract class MusicTopic : MonoBehaviour
         // 楽曲名
         if(title_tmp != null) { title_tmp.text = data.MusicName; }
         // コンポーザー
-        if (composer_tmp != null) { composer_tmp.text = data.ComposerName; }
+        if (creatorTextView != null) { creatorTextView.SetCreators(data.ComposerName, data.OtherCreator); }
         // サムネ
         if (music_image != null) { music_image.sprite = data.MusicSprite; }
         // 楽曲テーマ

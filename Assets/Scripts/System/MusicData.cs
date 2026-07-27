@@ -13,6 +13,9 @@ public class MusicData
     [Header("コンポーザー")]
     [SerializeField] private string composer_name;
     public string ComposerName { get { return composer_name; } set { composer_name = value; } }
+    [Header("その他制作者")]
+    [SerializeField] private string[] other_creator = new string[0];
+    public string[] OtherCreator { get { return other_creator ?? new string[0]; } set { other_creator = value ?? new string[0]; } }
 
     [Header("サムネイル")]
     [SerializeField] private Sprite music_spr;

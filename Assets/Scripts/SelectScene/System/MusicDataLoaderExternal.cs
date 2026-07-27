@@ -165,6 +165,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         // データセット
         musicData.MusicName = info.MusicName;
         musicData.ComposerName = info.ComposerName;
+        musicData.OtherCreator = info.OtherCreator ?? new string[0];
         musicData.SetDifficulty(info.Difficulties);
 
         // ステージ
@@ -409,6 +410,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     {
         public string MusicName { get; set; }
         public string ComposerName { get; set; }
+        public string[] OtherCreator { get; set; }
         public string ChartDesigner { get; set; }
         public string SymphonyType { get; set; }
         public string StageType { get; set; }
