@@ -10524,6 +10524,7 @@ GameObject:
   m_Component:
   - component: {fileID: 477661683}
   - component: {fileID: 477661685}
+  - component: {fileID: 477661686}
   m_Layer: 0
   m_Name: ChartGenerator
   m_TagString: Untagged
@@ -10611,6 +10612,23 @@ MonoBehaviour:
   - noteType: 33
     factory: {fileID: 1696779391}
   noteParent: {fileID: 777256151}
+  timer:
+    obj: {fileID: 1703776573}
+  noteVisibilityController: {fileID: 477661686}
+--- !u!114 &477661686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477661682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b8a2f47f2b54a1498b1f580d47e0a9c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  visibleBehindDistance: 10
+  visibleAheadDistance: 256
   timer:
     obj: {fileID: 1703776573}
 --- !u!1 &494745444

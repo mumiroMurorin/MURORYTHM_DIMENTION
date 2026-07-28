@@ -23,6 +23,7 @@ namespace ChartEditor
         [Header("Factory Initialization")]
         [SerializeField] private Transform noteParent;
         [SerializeField] private SerializeInterface<ITimeGetter> timer;
+        [SerializeField] private PreviewNoteVisibilityController noteVisibilityController;
 
         private global::ChartData chartData;
         INoteSpawnDataOptionGetter optionHolder;
@@ -57,16 +58,22 @@ namespace ChartEditor
                 return;
             }
 
+            noteVisibilityController?.Clear();
+            noteVisibilityController?.Initialize(chartData.PositionGraph, optionHolder?.NoteSpeed.Value ?? 1f);
+
             foreach (var binding in noteFactories)
             {
                 SpawnEachType(binding, chartData, chartData.PositionGraph, OnSpawned);
             }
 
+            noteVisibilityController?.CompleteRegistration();
             callback?.Invoke();
         }
 
         public void DestroyChart()
         {
+            noteVisibilityController?.Clear();
+
             if (noteParent == null) { return; }
 
             for (int i = noteParent.childCount - 1; i >= 0; i--)
@@ -92,10 +99,12 @@ namespace ChartEditor
             }
         }
 
-        private void OnSpawned(GameObject noteObject)
+        private void OnSpawned(Component spawnedNote)
         {
+            GameObject noteObject = spawnedNote?.gameObject;
             if (noteObject == null || noteParent == null) { return; }
             noteObject.transform.SetParent(noteParent, true);
+            noteVisibilityController?.Register(spawnedNote);
         }
 
         private static void InitializeFactory(NoteFactoryBinding binding, NoteFactoryInitializingData data)
@@ -112,7 +121,7 @@ namespace ChartEditor
             initializeMethod.Invoke(binding.Factory, new object[] { data });
         }
 
-        private static void SpawnEachType(NoteFactoryBinding binding, global::ChartData chartData, INotePositionCalculator positionCalculator, Action<GameObject> onSpawned)
+        private static void SpawnEachType(NoteFactoryBinding binding, global::ChartData chartData, INotePositionCalculator positionCalculator, Action<Component> onSpawned)
         {
             if (binding == null || binding.Factory == null || chartData == null) { return; }
 
@@ -130,7 +139,7 @@ namespace ChartEditor
                     object spawned = spawnMethod.Invoke(binding.Factory, new object[] { noteData, positionCalculator });
                     if (spawned is Component c)
                     {
-                        onSpawned?.Invoke(c.gameObject);
+                        onSpawned?.Invoke(c);
                     }
                 }
                 catch (Exception ex)
