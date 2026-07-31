@@ -1,11 +1,8 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using Cysharp.Threading.Tasks;
-using System.Threading;
 using VContainer;
-using System;
 
 namespace ChartEditor
 {
@@ -13,12 +10,14 @@ namespace ChartEditor
     {
         [Header("Views")]
         [SerializeField] List<EditNoteTypeToToolView> toolViews;
-        [Space(10),Header("Ground")]
+        [Space(10), Header("Ground")]
         [SerializeField] List<ToolButtonToEditMode> toolButtonsOnGround_view;
         [SerializeField] ButtonView notesMirrorButton_view;
         [SerializeField] NotesMirror notesMirror_model;
         [Space(10), Header("Space")]
         [SerializeField] List<ToolButtonToEditMode> toolButtonsOnSpace_view;
+        [SerializeField] ButtonView spaceNotesMirrorButton_view;
+        [SerializeField] SpaceNotesMirror spaceNotesMirror_model;
         [Space(10), Header("Vertices")]
         [SerializeField] List<ToolButtonToEditMode> toolButtonsOnVertices_view;
         [SerializeField] VertexIndicesSliderButtonView slideClockwiseButton_view;
@@ -45,33 +44,29 @@ namespace ChartEditor
         void Start()
         {
             BindForEditView();
-
             SetEvent();
         }
 
         private void BindForEditView()
         {
-            // グラウンドツールボタン
             foreach (var button in toolButtonsOnGround_view)
             {
                 button.BindForDeploymentNoteType(dataGetter_model.CurrentEditMode, this.gameObject);
             }
 
-            // スペースツールボタン
             foreach (var button in toolButtonsOnSpace_view)
             {
                 button.BindForDeploymentNoteType(dataGetter_model.CurrentEditMode, this.gameObject);
             }
 
-            // メッシュツールボタン
             foreach (var button in toolButtonsOnVertices_view)
             {
                 button.BindForDeploymentNoteType(dataGetter_model.CurrentEditMode, this.gameObject);
             }
 
-            // ツールビューの更新
             dataGetter_model.EditNoteType
-                .Subscribe(type => {
+                .Subscribe(type =>
+                {
                     foreach (var view in toolViews)
                     {
                         view.CheckAndSetActiveToolView(type);
@@ -82,41 +77,52 @@ namespace ChartEditor
 
         private void SetEvent()
         {
-            // グラウンドツールボタン
             foreach (var button in toolButtonsOnGround_view)
             {
                 button.SetEvent(() => { dataSetter_model.SetEditMode(button.EditMode); });
             }
 
-            // ノーツを反転
-            notesMirrorButton_view.OnPushButtonListner += () => { notesMirror_model?.MirrorSelectingNotes(); };
+            if (notesMirrorButton_view != null)
+            {
+                notesMirrorButton_view.OnPushButtonListner += () => { notesMirror_model?.MirrorSelectingNotes(); };
+            }
 
-            // スペースツールボタン
             foreach (var button in toolButtonsOnSpace_view)
             {
                 button.SetEvent(() => { dataSetter_model.SetEditMode(button.EditMode); });
             }
 
-            // メッシュツールボタン
+            if (spaceNotesMirrorButton_view != null)
+            {
+                spaceNotesMirrorButton_view.OnPushButtonListner += () => { spaceNotesMirror_model?.MirrorSelectingSpaceNotes(); };
+            }
+
             foreach (var button in toolButtonsOnVertices_view)
             {
                 button.SetEvent(() => { dataSetter_model.SetEditMode(button.EditMode); });
             }
 
-            // 時計回りに要素番号をスライド
-            slideClockwiseButton_view.OnClickedListner += () => { verticesSlider_model.SlideIndices(-1); };
-            // 反時計回りに要素番号をスライド
-            slideCounterclockwiseButton_view.OnClickedListner += () => { verticesSlider_model.SlideIndices(+1); };
+            if (slideClockwiseButton_view != null)
+            {
+                slideClockwiseButton_view.OnClickedListner += () => { verticesSlider_model?.SlideIndices(-1); };
+            }
 
-            // X軸反転ボタン
-            mirrorXAxisButton_view.OnClickedListner += () => { verticesReverser_model?.ReverseXAxis(); };
-            // Y軸反転ボタン
-            mirrorYAxisButton_view.OnClickedListner += () => { verticesReverser_model?.ReverseYAxis(); };
+            if (slideCounterclockwiseButton_view != null)
+            {
+                slideCounterclockwiseButton_view.OnClickedListner += () => { verticesSlider_model?.SlideIndices(+1); };
+            }
+
+            if (mirrorXAxisButton_view != null)
+            {
+                mirrorXAxisButton_view.OnClickedListner += () => { verticesReverser_model?.ReverseXAxis(); };
+            }
+
+            if (mirrorYAxisButton_view != null)
+            {
+                mirrorYAxisButton_view.OnClickedListner += () => { verticesReverser_model?.ReverseYAxis(); };
+            }
         }
 
-        /// <summary>
-        /// ツールボタンの親
-        /// </summary>
         [Serializable]
         public class EditNoteTypeToToolView
         {
@@ -129,18 +135,14 @@ namespace ChartEditor
             }
         }
 
-        /// <summary>
-        /// ツールボタンに対するアクション他
-        /// </summary>
         [Serializable]
         public class ToolButtonToEditMode
         {
             [SerializeField] ChangeEditModeButtonView toolButton_view;
             [SerializeField] EditMode editMode;
 
-            public ChangeEditModeButtonView ToolButton_view { get { return toolButton_view; } }
-
-            public EditMode EditMode { get { return editMode; } }
+            public ChangeEditModeButtonView ToolButton_view => toolButton_view;
+            public EditMode EditMode => editMode;
 
             public void BindForDeploymentNoteType(IReadOnlyReactiveProperty<EditMode> reactiveProperty, GameObject gameObject)
             {
@@ -154,7 +156,5 @@ namespace ChartEditor
                 toolButton_view.OnClickedListner += action;
             }
         }
-
     }
-
 }
