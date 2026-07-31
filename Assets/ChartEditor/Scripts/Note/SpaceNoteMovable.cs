@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 using UniRx;
 using Cysharp.Threading.Tasks;
 using System.Threading;
@@ -13,9 +10,9 @@ namespace ChartEditor
     {
         [SerializeField] NoteObject noteObject;
 
-        [Tooltip("ˆÚ“®‚ÌƒAƒEƒgƒ‰ƒCƒ“F")]
-        [SerializeField] private ColorSetting outlineColorOnMove;
-        [Tooltip("ˆÚ“®•‚‚­‚‚³")]
+        [Tooltip("ç§»å‹•æ™‚ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è‰²")]
+        [SerializeField] ColorSetting outlineColorOnMove;
+        [Tooltip("ç§»å‹•æ™‚ã«æµ®ã‹ã›ã‚‹é«˜ã•")]
         [SerializeField] float addHeightOnMove = 1f;
 
         NoteObject IFreedomMovableObject.Note => noteObject;
@@ -30,26 +27,30 @@ namespace ChartEditor
 
         private async UniTask Bind(CancellationToken token)
         {
-            // ƒm[ƒgƒf[ƒ^‚ª‘¶İ‚·‚é‚Ü‚Å‘Ò‚Â
+            // ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ãŒè¨­å®šã•ã‚Œã‚‹ã¾ã§å¾…ã¤
             await UniTask.WaitUntil(() => noteObject.NoteData != null, cancellationToken: token);
 
-            // ƒm[ƒgƒf[ƒ^‚ª‘¶İ‚·‚é‚Ü‚Å‘Ò‚Â
+            // ã‚¢ãƒ‰ãƒ¬ã‚¹ãŒè¨­å®šã•ã‚Œã‚‹ã¾ã§å¾…ã¤
             await UniTask.WaitUntil(() => noteObject.NoteData.Address != null, cancellationToken: token);
 
-            // ƒAƒhƒŒƒX‚Ì•ÏX’Ê’m‚É‘Î‚µ‚ÄêŠ‚ÌXV
+            // ã‚¢ãƒ‰ãƒ¬ã‚¹å¤‰æ›´æ™‚ã«é…ç½®å…ˆã¸è¿½å¾“ã™ã‚‹
             noteObject.NoteData.Address.BarIndexRP
-                .Subscribe(_ => {
-                    OnChangeAddress(noteObject.NoteData.Address); })
+                .Subscribe(_ =>
+                {
+                    OnChangeAddress(noteObject.NoteData.Address);
+                })
                 .AddTo(this.gameObject);
 
             noteObject.NoteData.Address.SubDivisionIndexRP
-                .Subscribe(_ => {
-                    OnChangeAddress(noteObject.NoteData.Address); 
+                .Subscribe(_ =>
+                {
+                    OnChangeAddress(noteObject.NoteData.Address);
                 })
                 .AddTo(this.gameObject);
 
             noteObject.NoteData.Address.RangeRP.ObserveAdd()
-                .Subscribe(_ => {
+                .Subscribe(_ =>
+                {
                     OnChangeAddress(noteObject.NoteData.Address);
                 })
                 .AddTo(this.gameObject);
@@ -60,14 +61,13 @@ namespace ChartEditor
             noteObject.OutlineColors.Add(outlineColorOnMove);
             noteObject.SetCollidersActive(false);
 
-            // ’Ç‰Á‚·‚éƒxƒNƒgƒ‹‚ğ•Û‘¶
+            // ç§»å‹•ä¸­ã¯å°‘ã—æµ®ã‹ã›ã‚‹
             addPos = Vector3.up * addHeightOnMove;
             this.transform.position += addPos;
         }
 
         void IFreedomMovableObject.OnMove()
         {
-
         }
 
         void IFreedomMovableObject.OnMoveEnd()
@@ -75,24 +75,27 @@ namespace ChartEditor
             noteObject.OutlineColors.Remove(outlineColorOnMove);
             noteObject.SetCollidersActive(true);
 
-            // ’Ç‰Á‚µ‚½ƒxƒNƒgƒ‹•ªŒ³‚É–ß‚·
+            // ç§»å‹•é–‹å§‹æ™‚ã«è¶³ã—ãŸåˆ†ã‚’æˆ»ã™
             this.transform.position -= addPos;
             addPos = Vector3.zero;
         }
 
         /// <summary>
-        /// ƒAƒhƒŒƒX‚ªXV‚³‚ê‚½‚Ì“®ì
+        /// ã‚¢ãƒ‰ãƒ¬ã‚¹å¤‰æ›´æ™‚ã«ãƒãƒ¼ãƒ„ã®è¦ªä½ç½®ã¸è¿½å¾“ã™ã‚‹ã€‚
         /// </summary>
-        /// <param name="address"></param>
         private void OnChangeAddress(IReadOnlyAddressWithinRange address)
         {
             Transform parent = noteObject.GetParentTransformFunc(address);
-
-            if(parent == null) { return; }
+            if (parent == null) { return; }
 
             Vector3 pos = parent.position + addPos;
             this.transform.position = pos;
             this.transform.SetParent(parent);
+
+            if (TryGetComponent(out SpaceMeshController spaceMeshController))
+            {
+                spaceMeshController.RefreshVisualOriginFromAddress(addPos);
+            }
         }
 
         private void OnDestroy()
@@ -105,5 +108,4 @@ namespace ChartEditor
             }
         }
     }
-
 }

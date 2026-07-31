@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using Cysharp.Threading.Tasks;
 using System.Threading;
-using System.Linq;
 using MeshGenerate;
 
 namespace ChartEditor
@@ -25,8 +23,13 @@ namespace ChartEditor
 
         IVerticesControlableNoteData verticesData;
         MeshFilter centerMeshFilter;
-        List<DataToVertexObject> dataToObj = new List<DataToVertexObject>();
+        readonly List<DataToVertexObject> dataToObj = new List<DataToVertexObject>();
         CancellationTokenSource cts = new CancellationTokenSource();
+
+        Vector3 appliedOriginOffset;
+        Vector3 vertexObjParentBaseLocalPosition;
+        Vector3 colliderObjectBaseLocalPosition;
+        bool hasBaseLocalPosition;
 
         private void Start()
         {
@@ -36,32 +39,25 @@ namespace ChartEditor
 
         private async UniTask Bind(CancellationToken token)
         {
-            // ノートデータが存在するまで待つ
             await UniTask.WaitUntil(() => noteObject.NoteData != null, cancellationToken: token);
+            await UniTask.WaitUntil(() => noteObject.NoteData.Address != null, cancellationToken: token);
 
-            // IVerticesControlableNoteDataに変換
-            if (noteObject.NoteData is not IVerticesControlableNoteData) { return; }
-            verticesData = (IVerticesControlableNoteData)noteObject.NoteData;
+            if (noteObject.NoteData is not IVerticesControlableNoteData controlableNoteData) { return; }
+            verticesData = controlableNoteData;
 
-            // ObserveCountChanged()は初期化してくれないので、最初に購読
             for (int i = 0; i < verticesData.SpaceVertices.Vertices.Count; i++)
             {
-                var vertex = verticesData.SpaceVertices.Vertices[i];
-                OnAddVertex(vertex, i);
+                OnAddVertex(verticesData.SpaceVertices.Vertices[i], i);
             }
 
-            // 辺の変更通知に対してスケール更新
-            // 追加されたとき
             verticesData.SpaceVertices.Vertices.ObserveAdd()
                 .Subscribe(vertex => OnAddVertex(vertex.Value, vertex.Index))
                 .AddTo(this.gameObject);
 
-            // 削除されたとき
             verticesData.SpaceVertices.Vertices.ObserveRemove()
                 .Subscribe(vertex => OnRemoveVertex(vertex.Value))
                 .AddTo(this.gameObject);
 
-            // クリアされたとき
             verticesData.SpaceVertices.Vertices.ObserveReset()
                 .Subscribe(_ => OnClearVertex())
                 .AddTo(this.gameObject);
@@ -77,7 +73,7 @@ namespace ChartEditor
             var obj = Instantiate(vertexObject);
             if (!obj.TryGetComponent(out VertexObject vertexObj))
             {
-                Debug.LogWarning("【Vertex】オブジェクトにVertexObjectがアタッチされていません");
+                Debug.LogWarning("縲新ertex縲前bject does not have VertexObject attached.");
                 return;
             }
 
@@ -85,14 +81,14 @@ namespace ChartEditor
 
             vertexObj.gameObject.transform.SetParent(vertexObjParent);
             vertexObj.gameObject.transform.localPosition = Vector3.zero;
+            SetVertexObjectPosition(vertexObj, vertex.Position.Value);
             vertexObj.Initialize(
-                vertex, 
-                () => {
-                    UpdateMesh();
-                    UpdateColliderObjectScale();
-                },
+                vertex,
+                RefreshShape,
                 ConvertPositionOnChartGround
-                );
+            );
+
+            RefreshShape(false);
         }
 
         private void OnRemoveVertex(VertexData vertex)
@@ -100,15 +96,14 @@ namespace ChartEditor
             var dto = dataToObj.Find(v => v.Data == vertex);
             if (dto == null)
             {
-                Debug.LogWarning($"【Vertex】データに対応するオブジェクトが見つかりませんでした: {vertex.Position}");
+                Debug.LogWarning($"縲新ertex縲前bject matching data was not found: {vertex.Position}");
                 return;
             }
 
             dataToObj.Remove(dto);
             dto.Object.Destroy();
 
-            UpdateMesh();
-            UpdateColliderObjectScale();
+            RefreshShape();
         }
 
         private void OnClearVertex()
@@ -119,14 +114,9 @@ namespace ChartEditor
             }
 
             dataToObj.Clear();
-
-            UpdateMesh();
-            UpdateColliderObjectScale();
+            RefreshShape(false);
         }
 
-        /// <summary>
-        /// センターメッシュの生成
-        /// </summary>
         private void GenerateCenterMeshParent()
         {
             GameObject obj = new GameObject("CenterMesh");
@@ -139,20 +129,39 @@ namespace ChartEditor
             obj.transform.localPosition = Vector3.zero;
         }
 
-        /// <summary>
-        /// 形が変わった時などメッシュを更新する
-        /// </summary>
+        public void RefreshVisualOriginFromAddress()
+        {
+            RefreshVisualOriginFromAddress(Vector3.zero);
+        }
+
+        public void RefreshVisualOriginFromAddress(Vector3 extraLocalOffset)
+        {
+            UpdateVisualOrigin(false, extraLocalOffset);
+            UpdateColliderObjectScale();
+        }
+
+        private void RefreshShape()
+        {
+            RefreshShape(true);
+        }
+
+        private void RefreshShape(bool preserveCurrentExtraOffset)
+        {
+            UpdateMesh();
+            UpdateVisualOrigin(preserveCurrentExtraOffset);
+            UpdateColliderObjectScale();
+        }
+
         private void UpdateMesh()
         {
-            // センターメッシュ
             List<Vector3> positions = new List<Vector3>();
-            foreach(var pair in dataToObj)
+            foreach (var pair in dataToObj)
             {
                 Vector3 vertexPos = pair.Object.gameObject.transform.localPosition;
                 positions.Add(new Vector3(vertexPos.x, vertexPos.y, vertexPos.z));
             }
 
-            if(positions.Count < 3) { return; }
+            if (positions.Count < 3) { return; }
 
             Mesh centerMesh = MeshGenerator.GenerateMesh(positions);
             centerMeshFilter.mesh = centerMesh;
@@ -160,30 +169,91 @@ namespace ChartEditor
 
         private void UpdateColliderObjectScale()
         {
-            if(dataToObj.Count == 0) { return; }
+            if (dataToObj.Count == 0 || colliderObject == null) { return; }
+
+            EnsureBaseLocalPosition();
 
             Vector3 rightPos = Vector3.negativeInfinity;
             Vector3 leftPos = Vector3.positiveInfinity;
             foreach (var pair in dataToObj)
             {
                 Vector3 vertexPos = pair.Object.gameObject.transform.localPosition;
-                if(rightPos.x < vertexPos.x) { rightPos = vertexPos; }
-                if(leftPos.x > vertexPos.x) { leftPos = vertexPos; }
+                if (rightPos.x < vertexPos.x) { rightPos = vertexPos; }
+                if (leftPos.x > vertexPos.x) { leftPos = vertexPos; }
             }
 
-            colliderObject.transform.localScale = 
+            float width = rightPos.x - leftPos.x;
+            float centerX = leftPos.x + width / 2f;
+
+            colliderObject.transform.localScale =
                 new Vector3(
-                    rightPos.x - leftPos.x, 
-                    colliderObject.transform.localScale.y, 
+                    width,
+                    colliderObject.transform.localScale.y,
                     colliderObject.transform.localScale.z
                 );
 
             colliderObject.transform.localPosition =
                 new Vector3(
-                    leftPos.x + (rightPos.x - leftPos.x) / 2f,
-                    colliderObject.transform.localPosition.y,
-                    colliderObject.transform.localPosition.z
-                );
+                    centerX,
+                    colliderObjectBaseLocalPosition.y,
+                    colliderObjectBaseLocalPosition.z
+                ) - appliedOriginOffset;
+        }
+
+        private void UpdateVisualOrigin(bool preserveCurrentExtraOffset)
+        {
+            UpdateVisualOrigin(preserveCurrentExtraOffset, Vector3.zero);
+        }
+
+        private void UpdateVisualOrigin(bool preserveCurrentExtraOffset, Vector3 fallbackExtraOffset)
+        {
+            EnsureBaseLocalPosition();
+
+            Vector3 originOffset = CalculateVerticesBoundsCenter();
+            Vector3 extraOffset = fallbackExtraOffset;
+
+            if (preserveCurrentExtraOffset)
+            {
+                extraOffset = noteObject.transform.localPosition - appliedOriginOffset;
+            }
+
+            noteObject.transform.localPosition = extraOffset + originOffset;
+            vertexObjParent.localPosition = vertexObjParentBaseLocalPosition - originOffset;
+            appliedOriginOffset = originOffset;
+        }
+
+        private Vector3 CalculateVerticesBoundsCenter()
+        {
+            if (dataToObj.Count == 0) { return Vector3.zero; }
+
+            Vector3 min = Vector3.positiveInfinity;
+            Vector3 max = Vector3.negativeInfinity;
+
+            foreach (var pair in dataToObj)
+            {
+                Vector3 vertexPos = pair.Object.gameObject.transform.localPosition;
+                min = Vector3.Min(min, vertexPos);
+                max = Vector3.Max(max, vertexPos);
+            }
+
+            Vector3 center = (min + max) / 2f;
+            center.z = 0f;
+            return center;
+        }
+
+        private void SetVertexObjectPosition(VertexObject vertexObj, Vector2 normalizedPos)
+        {
+            Vector2 converted = ConvertPositionOnChartGround(normalizedPos);
+            vertexObj.transform.localPosition = new Vector3(converted.x, converted.y, vertexObj.transform.localPosition.z);
+        }
+
+        private void EnsureBaseLocalPosition()
+        {
+            if (hasBaseLocalPosition) { return; }
+
+            vertexObjParentBaseLocalPosition = vertexObjParent != null ? vertexObjParent.localPosition : Vector3.zero;
+            colliderObjectBaseLocalPosition = colliderObject != null ? colliderObject.transform.localPosition : Vector3.zero;
+            hasBaseLocalPosition = true;
         }
 
         private Vector2 ConvertPositionOnChartGround(Vector2 normalizedPos)
@@ -193,6 +263,10 @@ namespace ChartEditor
 
             return new Vector2(x, y);
         }
+
+        private void OnDestroy()
+        {
+            cts?.CancelAndDispose();
+        }
     }
 }
-
