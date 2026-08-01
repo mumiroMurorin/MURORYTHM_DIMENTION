@@ -31,6 +31,7 @@ public class ChartEnder : MonoBehaviour, IChartEnder
             .Where(count => count >= chartDataGetter.Chart.MaxCombo)
             .Subscribe(count =>
             {
+                Debug.Log(count);
                 callback?.Invoke();
             })
             .AddTo(this.gameObject);

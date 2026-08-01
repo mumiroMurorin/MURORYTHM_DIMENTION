@@ -236,7 +236,7 @@ MonoBehaviour:
     other_creator: []
     music_spr: {fileID: 21300000, guid: 1512ba05fa48cde48858c7f68c23594f, type: 3}
     theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
-    clip: {fileID: 8300000, guid: 993bb1f8d9375c04da5f17d29a0760de, type: 3}
+    clip: {fileID: 8300000, guid: b891a71a2062ce8468a8abd0905bf587, type: 3}
     sample_clip: {fileID: 8300000, guid: 6bb917bc6d659314c85522d193d72c5b, type: 3}
     symphonyType: 20
     stageType: 200
@@ -247,7 +247,7 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: MusicData/Altale/chart_master.json
+  chartFilePath: MusicData/sample/extremePlayer.json
   noteSpeed: 200
   groundRadius: 2000
   isAutoMode: 1
@@ -1073,14 +1073,6 @@ PrefabInstance:
     - target: {fileID: 3557880811985844621, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
       propertyPath: m_Name
       value: LoadingBody
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344308489783075046, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7003494081260383716, guid: 2c79997add5ce41419d1bdbbfbb2dfc9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

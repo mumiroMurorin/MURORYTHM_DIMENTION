@@ -71,8 +71,6 @@ MonoBehaviour:
     factory: {fileID: 447766252175255917}
   - noteType: 16
     factory: {fileID: 5591263360188100035}
-  - noteType: 16
-    factory: {fileID: 447766252175255917}
   - noteType: 11
     factory: {fileID: 9002473273156570169}
   - noteType: 12
