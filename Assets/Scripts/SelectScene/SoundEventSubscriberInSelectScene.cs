@@ -45,6 +45,11 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
         musicDataListGetter?.CurrentMusicData
             .Where(value => value != null)
             .Subscribe(value => {
+                if (value.SampleClip == null)
+                {
+                    Debug.LogWarning($"【Sound】SampleClipが設定されていないため、サンプルBGM再生をスキップします: {value.MusicName}");
+                    return;
+                }
                 soundManager.PlayBGM(value.SampleClip);
             })
             .AddTo(this.gameObject);

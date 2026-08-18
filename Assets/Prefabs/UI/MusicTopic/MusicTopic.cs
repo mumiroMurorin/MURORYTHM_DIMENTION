@@ -17,6 +17,7 @@ public abstract class MusicTopic : MonoBehaviour
     [SerializeField] protected Image music_image;
     [SerializeField] protected Image scoreLamp_image;
     [SerializeField] protected Image comboLamp_image;
+    [SerializeField] protected GameObject NoneChartNoteObj;
 
     [Header("“ïˆÕ“x•Ê”wŒi")]
     [SerializeField] DifficultyToSprite[] difficultyToBackGround;
@@ -113,6 +114,8 @@ public abstract class MusicTopic : MonoBehaviour
     {
         if (level != -1) { level_tmp.text = level.ToString(); }
         else { level_tmp.text = "-"; }
+
+        NoneChartNoteObj?.SetActive(level <= -1);
     }
 
     /// <summary>

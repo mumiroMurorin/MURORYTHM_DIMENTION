@@ -70,7 +70,7 @@ Material:
     - _OutlineSoftness: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
-    - _OutlineWidth: 0.25
+    - _OutlineWidth: 0.35
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
     - _ScaleRatioA: 0.8333333
@@ -84,8 +84,8 @@ Material:
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
+    - _StencilReadMask: 3
+    - _StencilWriteMask: 0
     - _TextureHeight: 8192
     - _TextureWidth: 8192
     - _UnderlayDilate: 0
