@@ -1,34 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class DynamicNoteAnimation : MonoBehaviour
 {
     [SerializeField] Renderer targetRenderer;
     [SerializeField] string bufferName = "_MainTex";
-    [Header("1ƒtƒŒ[ƒ€ŠÔ‚Ì“®‚«•")]
+    [Header("1ç§’é–“ã®UVç§»å‹•é‡")]
     [SerializeField] Vector2 speed;
 
+    Material targetMaterial;
     Vector2 currentOffset;
 
     private void Start()
     {
         if (targetRenderer == null) { return; }
 
-        currentOffset = targetRenderer.material.GetTextureOffset(bufferName);
+        targetMaterial = targetRenderer.material;
+        currentOffset = targetMaterial.GetTextureOffset(bufferName);
     }
 
     private void Update()
     {
-        if (targetRenderer == null) { return; }
+        if (targetMaterial == null) { return; }
 
-        // ˆÈ‘O‚ÌuFixedUpdate 1‰ñ‚ ‚½‚è‚ÌˆÚ“®—Êv‚ğ•Û‚Á‚½‚Ü‚ÜA•`‰æƒtƒŒ[ƒ€‚É‡‚í‚¹‚ÄŠŠ‚ç‚©‚Éi‚ß‚é
-        float fixedDeltaTime = Mathf.Max(Time.fixedDeltaTime, Mathf.Epsilon);
-        Vector2 frameSpeed = speed * (Time.deltaTime / fixedDeltaTime);
+        Vector2 frameOffset = speed * Time.deltaTime;
 
         currentOffset = new Vector2(
-            Mathf.Repeat(currentOffset.x + frameSpeed.x, 1f),
-            Mathf.Repeat(currentOffset.y + frameSpeed.y, 1f));
-        targetRenderer.material.SetTextureOffset(bufferName, currentOffset);
+            Mathf.Repeat(currentOffset.x + frameOffset.x, 1f),
+            Mathf.Repeat(currentOffset.y + frameOffset.y, 1f));
+        targetMaterial.SetTextureOffset(bufferName, currentOffset);
     }
 }
