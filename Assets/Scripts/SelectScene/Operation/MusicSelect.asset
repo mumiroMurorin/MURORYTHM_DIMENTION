@@ -16,6 +16,7 @@ MonoBehaviour:
   phaseStatusTitleScene: 0
   phaseStatusLobbyScene: 0
   phaseStatusSelectScene: 2
+  phaseStatusTutorialScene: 0
   phaseStatusRhythmGameScene: 0
   phaseStatusResultScene: 0
   phaseStatusGameOverScene: 0
@@ -24,11 +25,11 @@ MonoBehaviour:
   - coolTime: 0
     operations:
     - {fileID: 11400000, guid: f5682aefad3848fc951f6e667d5d6c99, type: 2}
-  - coolTime: 0.1
+  - coolTime: 0.175
     operations:
     - {fileID: 11400000, guid: 496c7e58d54f4190a54fed3272d34350, type: 2}
     - {fileID: 11400000, guid: cc51cf9bbf984722a9f2dd614631d1dd, type: 2}
-  - coolTime: 0.1
+  - coolTime: 0.125
     operations:
     - {fileID: 11400000, guid: a78950096bbd43a89a0515715ee361c3, type: 2}
     - {fileID: 11400000, guid: c8c5c53bdb39446782976d686a409c45, type: 2}

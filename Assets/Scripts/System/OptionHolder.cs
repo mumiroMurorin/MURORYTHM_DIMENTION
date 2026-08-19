@@ -33,10 +33,10 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
                 isChangable = SetIsEnabledFastLate(!IsEnabledFastLate.Value);
                 break;
             case OptionType.MainInfo:
-                isChangable = ChangeMainInfo();
+                isChangable = ChangeMainInfo(delta);
                 break;
             case OptionType.SubInfo:
-                isChangable = ChangeSubInfo();
+                isChangable = ChangeSubInfo(delta);
                 break;
             default:
                 isChangable = false;
@@ -313,32 +313,37 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     #region Info
 
     // メイン情報
+    static readonly InfoTypeMain[] mainInfoOrder = new[]
+    {
+        InfoTypeMain.None,
+        InfoTypeMain.Combo,
+        InfoTypeMain.ComboFC,
+        InfoTypeMain.ComboAP,
+        InfoTypeMain.ScoreRank,
+        InfoTypeMain.ScoreRankSubtraction,
+    };
+
     ReactiveProperty<InfoTypeMain> mainInfo = new ReactiveProperty<InfoTypeMain>(InfoTypeMain.ComboAP);
     public IReadOnlyReactiveProperty<InfoTypeMain> MainInfo => mainInfo;
-    public bool ChangeMainInfo()
+    public bool ChangeMainInfo(int delta)
     {
-        switch (mainInfo.Value)
+        return ChangeInfoValue(mainInfo, mainInfoOrder, delta);
+    }
+    bool ChangeInfoValue<T>(ReactiveProperty<T> info, T[] order, int delta)
+    {
+        if (delta == 0 || order.Length == 0) { return false; }
+
+        int currentIndex = Array.IndexOf(order, info.Value);
+        if (currentIndex < 0) { currentIndex = 0; }
+
+        int nextIndex = currentIndex;
+        int step = delta > 0 ? 1 : -1;
+        for (int i = 0; i < Mathf.Abs(delta); i++)
         {
-            case InfoTypeMain.None:
-                mainInfo.Value = InfoTypeMain.Combo;
-                break;
-            case InfoTypeMain.Combo:
-                mainInfo.Value = InfoTypeMain.ComboFC;
-                break;
-            case InfoTypeMain.ComboFC:
-                mainInfo.Value = InfoTypeMain.ComboAP;
-                break;
-            case InfoTypeMain.ComboAP:
-                mainInfo.Value = InfoTypeMain.ScoreRank;
-                break;
-            case InfoTypeMain.ScoreRank:
-                mainInfo.Value = InfoTypeMain.ScoreRankSubtraction;
-                break;
-            case InfoTypeMain.ScoreRankSubtraction:
-                mainInfo.Value = InfoTypeMain.None;
-                break;
+            nextIndex = (nextIndex + step + order.Length) % order.Length;
         }
 
+        info.Value = order[nextIndex];
         return true;
     }
     public void SetMainInfo(InfoTypeMain type)
@@ -369,30 +374,20 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     }
 
     // サブ情報
+    static readonly InfoTypeSub[] subInfoOrder = new[]
+    {
+        InfoTypeSub.None,
+        InfoTypeSub.ScoreAddition,
+        InfoTypeSub.ScoreSubtraction,
+        InfoTypeSub.ComboRank,
+        InfoTypeSub.Breakdown,
+    };
+
     ReactiveProperty<InfoTypeSub> subInfo = new ReactiveProperty<InfoTypeSub>(InfoTypeSub.Breakdown);
     public IReadOnlyReactiveProperty<InfoTypeSub> SubInfo => subInfo;
-    public bool ChangeSubInfo()
+    public bool ChangeSubInfo(int delta)
     {
-        switch (subInfo.Value)
-        {
-            case InfoTypeSub.None:
-                subInfo.Value = InfoTypeSub.ScoreAddition;
-                break;
-            case InfoTypeSub.ScoreAddition:
-                subInfo.Value = InfoTypeSub.ScoreSubtraction;
-                break;
-            case InfoTypeSub.ScoreSubtraction:
-                subInfo.Value = InfoTypeSub.ComboRank;
-                break;
-            case InfoTypeSub.ComboRank:
-                subInfo.Value = InfoTypeSub.Breakdown;
-                break;
-            case InfoTypeSub.Breakdown:
-                subInfo.Value = InfoTypeSub.None;
-                break;
-        }
-
-        return true;
+        return ChangeInfoValue(subInfo, subInfoOrder, delta);
     }
     public void SetSubInfo(InfoTypeSub type)
     {

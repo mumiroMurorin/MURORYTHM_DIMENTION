@@ -22,6 +22,9 @@ public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSet
     {
         optionList = new List<OptionType>(optionTypes);
     }
+
+    int ISelectSceneDataGetter.OptionCount => optionList.Count;
+
     OptionType ISelectSceneDataGetter.GetOptionType(int index)
     {
         if (index >= optionList.Count) { return OptionType.None; }
@@ -44,6 +47,8 @@ public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSet
 public interface ISelectSceneDataGetter
 {
     IReadOnlyReactiveProperty<int> CurrentOptionIndex { get; }
+
+    int OptionCount { get; }
 
     OptionType GetOptionType(int index);
 }

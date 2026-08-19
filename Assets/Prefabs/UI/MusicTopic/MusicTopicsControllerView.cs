@@ -12,6 +12,7 @@ namespace UIInSelectScene
         [SerializeField] MusicTopicController[] musicTopicUIs;
 
         bool isMoving;
+        bool isTopicSwapRequested;
 
         /// <summary>
         /// 選択楽曲変更
@@ -20,21 +21,41 @@ namespace UIInSelectScene
         /// <returns></returns>
         public async UniTask OnChangeSelectedMusic(int currentIndex, int previousIndex, IMusicDataListGetter dataGetter)
         {
-            int deltaValue = currentIndex - previousIndex;
+            int musicCount = dataGetter?.MusicDatasSorted?.Count ?? 0;
+            int lastIndex = musicCount - 1;
+            bool canLoop = musicCount > 1;
 
-            // 倍速
-            animator.SetFloat("MoveSpeedMagnitude", Mathf.Abs(deltaValue));
+            if (canLoop && previousIndex == lastIndex && currentIndex == 0)
+            {
+                await PlayMoveAnimation("RightLoop", currentIndex, dataGetter);
+                return;
+            }
+
+            if (canLoop && previousIndex == 0 && currentIndex == lastIndex)
+            {
+                await PlayMoveAnimation("LeftLoop", currentIndex, dataGetter);
+                return;
+            }
+
+            int deltaValue = currentIndex - previousIndex;
 
             for(int i = 0; i < Mathf.Abs(deltaValue); i++)
             {
-                if(deltaValue > 0) { animator.SetTrigger("Right"); }
-                else { animator.SetTrigger("Left"); }
-
-                isMoving = true;
-                await UniTask.WaitUntil(() => !isMoving);
-
-                SetMusicDatas(deltaValue > 0 ? previousIndex + i + 1 : previousIndex - i - 1, dataGetter);
+                int nextIndex = deltaValue > 0 ? previousIndex + i + 1 : previousIndex - i - 1;
+                await PlayMoveAnimation(deltaValue > 0 ? "Right" : "Left", nextIndex, dataGetter);
             }
+        }
+
+        private async UniTask PlayMoveAnimation(string triggerName, int nextIndex, IMusicDataListGetter dataGetter)
+        {
+            isMoving = true;
+            isTopicSwapRequested = false;
+            animator.SetTrigger(triggerName);
+
+            await UniTask.WaitUntil(() => isTopicSwapRequested);
+            SetMusicDatas(nextIndex, dataGetter);
+
+            await UniTask.WaitUntil(() => !isMoving);
         }
 
         /// <summary>
@@ -108,8 +129,21 @@ namespace UIInSelectScene
         /// <summary>
         /// アニメーション側から呼ばれる
         /// </summary>
+        public void OnRequestTopicSwap()
+        {
+            isTopicSwapRequested = true;
+        }
+
+        /// <summary>
+        /// アニメーション側から呼ばれる
+        /// </summary>
         public void OnFinishMoveAnimation()
         {
+            if (!isTopicSwapRequested)
+            {
+                isTopicSwapRequested = true;
+            }
+
             isMoving = false;
         }
     }
