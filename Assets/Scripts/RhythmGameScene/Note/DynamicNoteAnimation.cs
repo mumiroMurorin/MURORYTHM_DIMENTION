@@ -8,25 +8,33 @@ public class DynamicNoteAnimation : MonoBehaviour
     [SerializeField] Vector2 speed;
 
     Material targetMaterial;
-    Vector2 currentOffset;
+    ITimeGetter timer;
+    Vector2 initialOffset;
+
+    public void Initialize(ITimeGetter timer)
+    {
+        this.timer = timer;
+    }
 
     private void Start()
     {
         if (targetRenderer == null) { return; }
 
         targetMaterial = targetRenderer.material;
-        currentOffset = targetMaterial.GetTextureOffset(bufferName);
+        initialOffset = targetMaterial.GetTextureOffset(bufferName);
     }
 
     private void Update()
     {
         if (targetMaterial == null) { return; }
+        if (timer == null) { return; }
 
-        Vector2 frameOffset = speed * Time.deltaTime;
+        Vector2 offset = initialOffset + speed * timer.Time;
 
-        currentOffset = new Vector2(
-            Mathf.Repeat(currentOffset.x + frameOffset.x, 1f),
-            Mathf.Repeat(currentOffset.y + frameOffset.y, 1f));
-        targetMaterial.SetTextureOffset(bufferName, currentOffset);
+        targetMaterial.SetTextureOffset(
+            bufferName,
+            new Vector2(
+                Mathf.Repeat(offset.x, 1f),
+                Mathf.Repeat(offset.y, 1f)));
     }
 }

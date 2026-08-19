@@ -67,6 +67,7 @@ public class NoteFactory_DynamicGroundRightward : NoteFactory<NoteData_DynamicGr
 
         // ノーツオブジェクトを生成
         GameObject noteObj = GenerateNoteObject(data.Range.Length);
+        InitializeDynamicNoteAnimations(noteObj);
 
         // originにくっつける
         noteObj.transform.SetParent(origin.transform);
@@ -78,6 +79,16 @@ public class NoteFactory_DynamicGroundRightward : NoteFactory<NoteData_DynamicGr
         NoteObject<NoteData_DynamicGroundRightward> note = origin.GetComponent<NoteObject<NoteData_DynamicGroundRightward>>();
 
         return note;
+    }
+
+    private void InitializeDynamicNoteAnimations(GameObject noteObj)
+    {
+        if (noteObj == null) { return; }
+
+        foreach (var animation in noteObj.GetComponentsInChildren<DynamicNoteAnimation>(true))
+        {
+            animation.Initialize(timer);
+        }
     }
 
     /// <summary>

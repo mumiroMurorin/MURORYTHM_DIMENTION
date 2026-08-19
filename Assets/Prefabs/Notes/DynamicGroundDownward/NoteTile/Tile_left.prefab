@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetRenderer: {fileID: 2605130340312219771}
   bufferName: _MainTex
-  speed: {x: 0, y: 0.9}
+  speed: {x: 0, y: 1.1}
 --- !u!1 &6461698848557254820
 GameObject:
   m_ObjectHideFlags: 0

@@ -35,7 +35,6 @@ public class ChartData
         else if (noteData is IClippedJudgableNote) { MaxCombo++; }
 
         NoteNum++;
-        Debug.Log(MaxCombo);
 
         // 引数のデータのノーツリストが存在するか確認
         foreach (var noteList in allNoteDataLists)
