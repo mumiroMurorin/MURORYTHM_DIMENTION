@@ -5096,7 +5096,6 @@ MonoBehaviour:
   - sample.wav
   - sample.mp3
   - sample.ogg
-  fallbackMusicClip: {fileID: 0}
   fallbackSampleClip: {fileID: 0}
   fallbackJacketSprite: {fileID: 0}
   fallbackThemeSprite: {fileID: 0}

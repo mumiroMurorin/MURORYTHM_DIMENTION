@@ -11,22 +11,33 @@ public class ScrollingOverflowText : MonoBehaviour
     [SerializeField] float restartDelay = 0.8f;
     [SerializeField] float resetFadeDuration = 0.25f;
     [SerializeField] float edgePadding = 24f;
+    [SerializeField] int loopGapSpaces = 8;
     [SerializeField] bool addViewportMaskIfMissing = true;
     [SerializeField] bool scrollFromRightEdge = false;
 
     TextMeshProUGUI tmp;
     RectTransform textRect;
+    ContentSizeFitter contentSizeFitter;
     Vector2 defaultAnchoredPosition;
+    Vector2 defaultAnchorMin;
+    Vector2 defaultAnchorMax;
+    Vector2 defaultSizeDelta;
+    Vector2 defaultPivot;
     TextAlignmentOptions defaultAlignment;
     TextOverflowModes defaultOverflowMode;
     bool defaultEnableAutoSizing;
     bool defaultEnableWordWrapping;
+    bool defaultRichText;
+    bool defaultContentSizeFitterEnabled;
 
     string lastText;
+    string loopDisplayText;
     float lastViewportWidth;
     float lastPreferredWidth;
     float scrollStartX;
-    float scrollEndX;
+    float scrollStartTime;
+    float loopDistance;
+    float loopResetX;
     float delayTimer;
     bool isScrolling;
     bool isInitialized;
@@ -84,23 +95,8 @@ public class ScrollingOverflowText : MonoBehaviour
             return;
         }
 
-        if (delayTimer > 0f)
-        {
-            delayTimer -= Time.unscaledDeltaTime;
-            return;
-        }
-
         Vector2 pos = textRect.anchoredPosition;
-        pos.x -= scrollSpeed * Time.unscaledDeltaTime;
-
-        if (pos.x <= GetEndPositionX())
-        {
-            pos.x = GetEndPositionX();
-            textRect.anchoredPosition = pos;
-            BeginWaitAfterScroll();
-            return;
-        }
-
+        pos.x = GetScrollPositionX();
         textRect.anchoredPosition = pos;
     }
 
@@ -116,11 +112,13 @@ public class ScrollingOverflowText : MonoBehaviour
     {
         Initialize();
 
-        string currentText = tmp.text;
+        string currentText = GetSourceText();
         float currentViewportWidth = GetViewportWidth();
 
+        SetTextWithoutRefresh(currentText);
         tmp.enableAutoSizing = false;
         tmp.enableWordWrapping = false;
+        tmp.richText = true;
 
         isRefreshing = true;
         tmp.ForceMeshUpdate();
@@ -128,9 +126,10 @@ public class ScrollingOverflowText : MonoBehaviour
 
         float preferredWidth = tmp.preferredWidth;
         float overflowWidth = preferredWidth - currentViewportWidth;
+        bool isSameText = isScrolling && currentText == lastText;
+        float retainedScrollDistance = isSameText ? GetCurrentScrollDistance() : 0f;
         bool isSameLayout =
-            isScrolling &&
-            currentText == lastText &&
+            isSameText &&
             Mathf.Approximately(currentViewportWidth, lastViewportWidth) &&
             Mathf.Approximately(preferredWidth, lastPreferredWidth);
 
@@ -146,6 +145,8 @@ public class ScrollingOverflowText : MonoBehaviour
 
         if (isSameLayout)
         {
+            SetTextWithoutRefresh(loopDisplayText);
+            textRect.anchoredPosition = new Vector2(GetScrollPositionX(), defaultAnchoredPosition.y);
             return;
         }
 
@@ -154,14 +155,25 @@ public class ScrollingOverflowText : MonoBehaviour
             EnsureViewportMask();
         }
 
-        isScrolling = true;
-        scrollStartX = GetLeftEdgeAlignedPositionX(preferredWidth, currentViewportWidth);
-        scrollEndX = GetRightEdgeAlignedPositionX(preferredWidth, currentViewportWidth);
-        delayTimer = startDelay;
-
+        loopDisplayText = BuildLoopDisplayText(currentText);
         tmp.alignment = TextAlignmentOptions.Left;
         tmp.overflowMode = TextOverflowModes.Overflow;
-        textRect.anchoredPosition = new Vector2(GetStartPositionX(currentViewportWidth), defaultAnchoredPosition.y);
+        ApplyScrollingRectLayout();
+        SetTextWithoutRefresh(loopDisplayText);
+        ForceMeshUpdateWithoutRefresh();
+
+        isScrolling = true;
+        isWaitingAfterScroll = false;
+        isResetFadingOut = false;
+        isResetFadingIn = false;
+        scrollStartX = CalculateLeftAlignedStartPositionX();
+        loopDistance = CalculateLoopDistance(currentText);
+        loopResetX = scrollStartX - loopDistance;
+        scrollStartTime = GetStartTimeForRetainedScrollDistance(retainedScrollDistance);
+        delayTimer = 0f;
+
+        SetAlpha(1f);
+        textRect.anchoredPosition = new Vector2(GetScrollPositionX(), defaultAnchoredPosition.y);
     }
 
     private void StopScrolling()
@@ -172,12 +184,18 @@ public class ScrollingOverflowText : MonoBehaviour
         isResetFadingIn = false;
         delayTimer = 0f;
         scrollStartX = defaultAnchoredPosition.x;
-        scrollEndX = defaultAnchoredPosition.x;
+        scrollStartTime = 0f;
+        loopDistance = 0f;
+        loopResetX = defaultAnchoredPosition.x;
 
         tmp.alignment = defaultAlignment;
         tmp.overflowMode = defaultOverflowMode;
         tmp.enableAutoSizing = defaultEnableAutoSizing;
         tmp.enableWordWrapping = defaultEnableWordWrapping;
+        tmp.richText = defaultRichText;
+        SetTextWithoutRefresh(lastText);
+        loopDisplayText = null;
+        RestoreDefaultRectLayout();
         textRect.anchoredPosition = defaultAnchoredPosition;
         SetAlpha(1f);
     }
@@ -188,16 +206,23 @@ public class ScrollingOverflowText : MonoBehaviour
 
         tmp = GetComponent<TextMeshProUGUI>();
         textRect = (RectTransform)transform;
+        contentSizeFitter = GetComponent<ContentSizeFitter>();
         if (viewport == null && transform.parent != null)
         {
             viewport = transform.parent as RectTransform;
         }
 
         defaultAnchoredPosition = textRect.anchoredPosition;
+        defaultAnchorMin = textRect.anchorMin;
+        defaultAnchorMax = textRect.anchorMax;
+        defaultSizeDelta = textRect.sizeDelta;
+        defaultPivot = textRect.pivot;
         defaultAlignment = tmp.alignment;
         defaultOverflowMode = tmp.overflowMode;
         defaultEnableAutoSizing = tmp.enableAutoSizing;
         defaultEnableWordWrapping = tmp.enableWordWrapping;
+        defaultRichText = tmp.richText;
+        defaultContentSizeFitterEnabled = contentSizeFitter != null && contentSizeFitter.enabled;
         isInitialized = true;
     }
 
@@ -239,24 +264,39 @@ public class ScrollingOverflowText : MonoBehaviour
 
     private float GetStartPositionX(float currentViewportWidth)
     {
-        if (!scrollFromRightEdge) { return scrollStartX; }
-
-        return defaultAnchoredPosition.x + currentViewportWidth + edgePadding;
+        return scrollStartX;
     }
 
-    private float GetEndPositionX()
+    private float GetScrollPositionX()
     {
-        return scrollEndX;
+        if (loopDistance <= 0f || Time.time < scrollStartTime)
+        {
+            return scrollStartX;
+        }
+
+        float scrollDistance = Mathf.Repeat((Time.time - scrollStartTime) * scrollSpeed, loopDistance);
+        return scrollStartX - scrollDistance;
     }
 
-    private float GetLeftEdgeAlignedPositionX(float preferredWidth, float currentViewportWidth)
+    private float GetCurrentScrollDistance()
     {
-        return defaultAnchoredPosition.x + (preferredWidth - currentViewportWidth) * textRect.pivot.x;
+        if (loopDistance <= 0f || Time.time < scrollStartTime)
+        {
+            return 0f;
+        }
+
+        return Mathf.Repeat((Time.time - scrollStartTime) * scrollSpeed, loopDistance);
     }
 
-    private float GetRightEdgeAlignedPositionX(float preferredWidth, float currentViewportWidth)
+    private float GetStartTimeForRetainedScrollDistance(float retainedScrollDistance)
     {
-        return defaultAnchoredPosition.x - (preferredWidth - currentViewportWidth) * (1f - textRect.pivot.x);
+        if (loopDistance <= 0f || scrollSpeed <= 0f)
+        {
+            return Time.time;
+        }
+
+        float normalizedDistance = Mathf.Repeat(retainedScrollDistance, loopDistance);
+        return Time.time - normalizedDistance / scrollSpeed;
     }
 
     private void BeginResetFadeOut()
@@ -300,7 +340,8 @@ public class ScrollingOverflowText : MonoBehaviour
     private void ResetScrollPosition()
     {
         textRect.anchoredPosition = new Vector2(GetStartPositionX(lastViewportWidth), defaultAnchoredPosition.y);
-        delayTimer = startDelay;
+        scrollStartTime = Time.time;
+        delayTimer = 0f;
 
         if (resetFadeDuration <= 0f)
         {
@@ -328,5 +369,137 @@ public class ScrollingOverflowText : MonoBehaviour
         Color color = tmp.color;
         color.a = alpha;
         tmp.color = color;
+    }
+
+    private string GetSourceText()
+    {
+        if (!string.IsNullOrEmpty(loopDisplayText) && tmp.text == loopDisplayText)
+        {
+            return lastText;
+        }
+
+        return tmp.text;
+    }
+
+    private string BuildLoopDisplayText(string sourceText)
+    {
+        return $"{sourceText}{BuildLoopGap()}{sourceText}";
+    }
+
+    private string BuildLoopGap()
+    {
+        return new string(' ', Mathf.Max(0, loopGapSpaces));
+    }
+
+    private void SetTextWithoutRefresh(string text)
+    {
+        isRefreshing = true;
+        tmp.text = text;
+        isRefreshing = false;
+    }
+
+    private void ForceMeshUpdateWithoutRefresh()
+    {
+        isRefreshing = true;
+        tmp.ForceMeshUpdate();
+        isRefreshing = false;
+    }
+
+    private void ApplyScrollingRectLayout()
+    {
+        if (contentSizeFitter != null)
+        {
+            contentSizeFitter.enabled = false;
+        }
+
+        if (viewport == null || textRect.parent != viewport)
+        {
+            textRect.anchoredPosition = defaultAnchoredPosition;
+            return;
+        }
+
+        textRect.anchorMin = new Vector2(0f, defaultAnchorMin.y);
+        textRect.anchorMax = new Vector2(0f, defaultAnchorMax.y);
+        textRect.pivot = new Vector2(0f, defaultPivot.y);
+        textRect.sizeDelta = new Vector2(GetViewportWidth(), defaultSizeDelta.y);
+        textRect.anchoredPosition = new Vector2(0f, defaultAnchoredPosition.y);
+    }
+
+    private void RestoreDefaultRectLayout()
+    {
+        textRect.anchorMin = defaultAnchorMin;
+        textRect.anchorMax = defaultAnchorMax;
+        textRect.sizeDelta = defaultSizeDelta;
+        textRect.pivot = defaultPivot;
+
+        if (contentSizeFitter != null)
+        {
+            contentSizeFitter.enabled = defaultContentSizeFitterEnabled;
+        }
+    }
+
+    private float CalculateLeftAlignedStartPositionX()
+    {
+        if (!TryGetFirstVisibleCharacterLeftInTextParentSpace(out float characterLeftX))
+        {
+            return defaultAnchoredPosition.x;
+        }
+
+        float offsetToViewportLeft = GetViewportLeftInTextParentSpace() - characterLeftX;
+        return textRect.anchoredPosition.x + offsetToViewportLeft;
+    }
+
+    private float CalculateLoopDistance(string sourceText)
+    {
+        if (!TryGetFirstVisibleCharacterLeftInTextParentSpace(out float firstCharacterLeftX))
+        {
+            return lastPreferredWidth;
+        }
+
+        int secondTextStartIndex = sourceText.Length + Mathf.Max(0, loopGapSpaces);
+        if (!TryGetFirstVisibleCharacterLeftInTextParentSpace(secondTextStartIndex, out float secondCharacterLeftX))
+        {
+            return lastPreferredWidth;
+        }
+
+        return Mathf.Max(1f, secondCharacterLeftX - firstCharacterLeftX);
+    }
+
+    private bool TryGetFirstVisibleCharacterLeftInTextParentSpace(out float characterLeftX)
+    {
+        return TryGetFirstVisibleCharacterLeftInTextParentSpace(0, out characterLeftX);
+    }
+
+    private bool TryGetFirstVisibleCharacterLeftInTextParentSpace(int minSourceIndex, out float characterLeftX)
+    {
+        characterLeftX = 0f;
+        if (textRect.parent == null) { return false; }
+
+        TMP_TextInfo textInfo = tmp.textInfo;
+        for (int i = 0; i < textInfo.characterCount; i++)
+        {
+            TMP_CharacterInfo character = textInfo.characterInfo[i];
+            if (character.index < minSourceIndex) { continue; }
+            if (!character.isVisible) { continue; }
+
+            Vector3 characterLeftWorld = textRect.TransformPoint(character.bottomLeft);
+            characterLeftX = textRect.parent.InverseTransformPoint(characterLeftWorld).x;
+            return true;
+        }
+
+        return false;
+    }
+
+    private float GetViewportLeftInTextParentSpace()
+    {
+        RectTransform targetViewport = viewport != null ? viewport : textRect;
+        if (textRect.parent == null)
+        {
+            return targetViewport.rect.xMin;
+        }
+
+        Vector3[] corners = new Vector3[4];
+        targetViewport.GetWorldCorners(corners);
+        return textRect.parent.InverseTransformPoint(corners[0]).x;
     }
 }
