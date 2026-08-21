@@ -51,9 +51,9 @@ MonoBehaviour:
   meshDivisionNum: 10
   shadowDivisionNum: 24
   maxTriangleLength: 2
-  enableOutline: 1
+  enableOutline: 0
   enableJudgementRangeLine: 1
-  enableScreenSpaceOutlineTarget: 0
+  enableScreenSpaceOutlineTarget: 1
   screenSpaceOutlineLayerName: SpaceHoldScreenOutline
   minStencilId: 1
   maxStencilId: 255

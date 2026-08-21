@@ -247,7 +247,7 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: MusicData/Altale/chart_master.json
+  chartFilePath: MusicData/CalamityFortune/chart_master.json
   noteSpeed: 200
   groundRadius: 2000
   isAutoMode: 1
@@ -2032,18 +2032,6 @@ PrefabInstance:
       propertyPath: noteParent
       value: 
       objectReference: {fileID: 1010482526}
-    - target: {fileID: 797780899788562966, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
-      propertyPath: enableGroundLine
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5718480892716312342, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
-      propertyPath: enableOutline
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5718480892716312342, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
-      propertyPath: enableJudgementRangeLine
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6117056429854002331, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2083,10 +2071,6 @@ PrefabInstance:
     - target: {fileID: 6117056429854002331, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6869460142404363862, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
-      propertyPath: enableGroundLine
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7896517693994468305, guid: 03636baf80e62df4e9f9dc7fabb23a4d, type: 3}
       propertyPath: m_Name
@@ -2645,6 +2629,14 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 4300000, guid: 08953e67e03de9d4589c923839dca719, type: 3}
+    - target: {fileID: 3133619321405001732, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: enableOutline
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3133619321405001732, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: outlineColor.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3339430128778364906, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_ReceiveShadows
       value: 1

@@ -4,10 +4,13 @@ using MeshGenerate;
 
 public class SpaceHoldJudgementRangeMeshView : MonoBehaviour
 {
+    const int PriorityEffectsLayerFallback = 15;
+
     [SerializeField] bool showJudgementRange = true;
     [SerializeField] MeshFilter meshFilter;
     [SerializeField] MeshRenderer meshRenderer;
     [SerializeField] Material material;
+    [SerializeField] string layerName = "PriorityEffects";
     [SerializeField] float lineWidth = 0.05f;
     [SerializeField] float zOffset = -0.02f;
     [SerializeField] float normalizeRadius = 10f;
@@ -83,6 +86,7 @@ public class SpaceHoldJudgementRangeMeshView : MonoBehaviour
         lineTransform.position = Vector3.zero;
         lineTransform.rotation = Quaternion.identity;
         lineTransform.localScale = Vector3.one;
+        lineTransform.gameObject.layer = GetPriorityEffectsLayer();
 
         if (material != null)
         {
@@ -101,5 +105,11 @@ public class SpaceHoldJudgementRangeMeshView : MonoBehaviour
         {
             Destroy(currentMesh);
         }
+    }
+
+    private int GetPriorityEffectsLayer()
+    {
+        int layer = LayerMask.NameToLayer(layerName);
+        return layer >= 0 ? layer : PriorityEffectsLayerFallback;
     }
 }

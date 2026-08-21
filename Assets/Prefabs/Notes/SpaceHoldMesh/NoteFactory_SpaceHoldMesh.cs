@@ -182,6 +182,17 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
         MeshRenderer shadowMesh = GenerateShadowMeshObject(data, positionCalculator);
         shadowMesh.transform.SetParent(origin.transform);
 
+        MeshRenderer screenOutlineInsideMask = null;
+        MeshRenderer screenOutlineOutsideMask = null;
+        if (enableScreenSpaceOutlineTarget)
+        {
+            screenOutlineInsideMask = GenerateScreenSpaceOutlineMaskObject(data, true, positionCalculator);
+            screenOutlineInsideMask.transform.SetParent(origin.transform);
+
+            screenOutlineOutsideMask = GenerateScreenSpaceOutlineMaskObject(data, false, positionCalculator);
+            screenOutlineOutsideMask.transform.SetParent(origin.transform);
+        }
+
         NoteObject<NoteData_SpaceHoldMesh> note = origin.GetComponent<NoteObject<NoteData_SpaceHoldMesh>>();
 
         // 既存のSetMaterial呼び出しを維持するため、Renderer管理だけ4枚対応にする
@@ -190,7 +201,9 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
             mainOutsideMesh,
             insideOutlineMesh,
             outsideOutlineMesh,
-            shadowMesh);
+            shadowMesh,
+            screenOutlineInsideMask,
+            screenOutlineOutsideMask);
 
         if (enableScreenSpaceOutlineTarget)
         {
@@ -233,6 +246,16 @@ public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
             isMeshReverse,
             optionHolder.NoteCurveRadius.Value);
         meshFilter.mesh = mesh;
+
+        return meshRenderer;
+    }
+
+    private MeshRenderer GenerateScreenSpaceOutlineMaskObject(NoteData_SpaceHoldMesh noteData, bool isMeshReverse, INotePositionCalculator positionCalculator)
+    {
+        MeshRenderer meshRenderer = GenerateMeshObject(noteData, 0f, isMeshReverse, positionCalculator);
+        meshRenderer.name = isMeshReverse ? "ScreenOutlineInsideMask" : "ScreenOutlineOutsideMask";
+        meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        meshRenderer.receiveShadows = false;
 
         return meshRenderer;
     }

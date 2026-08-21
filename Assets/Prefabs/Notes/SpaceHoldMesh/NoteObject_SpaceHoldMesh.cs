@@ -229,23 +229,29 @@ public class HoldMeshRendererAsset
 {
     static readonly int StencilRefPropertyId = Shader.PropertyToID("_StencilRef");
     static readonly int ScreenOutlineIdColorPropertyId = Shader.PropertyToID("_ScreenOutlineIdColor");
+    const string ScreenOutlineMaskShaderName = "Hidden/SpaceHold/ScreenSpaceOutlineMask";
 
     public HoldMeshRendererAsset(
         MeshRenderer inside,
         MeshRenderer outside,
         MeshRenderer insideOutline,
         MeshRenderer outsideOutline,
-        MeshRenderer shadow)
+        MeshRenderer shadow,
+        MeshRenderer screenOutlineInsideMask,
+        MeshRenderer screenOutlineOutsideMask)
     {
         InsideRenderer = inside;
         OutsideRenderer = outside;
         InsideOutlineRenderer = insideOutline;
         OutsideOutlineRenderer = outsideOutline;
         ShadowRenderer = shadow;
+        ScreenOutlineInsideMaskRenderer = screenOutlineInsideMask;
+        ScreenOutlineOutsideMaskRenderer = screenOutlineOutsideMask;
     }
 
     int stencilId = -1;
     readonly Dictionary<Material, Material> stencilMaterialCache = new Dictionary<Material, Material>();
+    readonly Dictionary<Material, Material> screenOutlineMaskMaterialCache = new Dictionary<Material, Material>();
     readonly MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
 
     public MeshRenderer InsideRenderer { get; set; }
@@ -258,6 +264,10 @@ public class HoldMeshRendererAsset
 
     public MeshRenderer ShadowRenderer { get; set; }
 
+    public MeshRenderer ScreenOutlineInsideMaskRenderer { get; set; }
+
+    public MeshRenderer ScreenOutlineOutsideMaskRenderer { get; set; }
+
     public void SetMaterial(Material inside, Material outside, Material outlineInside, Material outlineOutside, Material shadow)
     {
         SetMaterialIfExists(InsideRenderer, inside);
@@ -265,6 +275,8 @@ public class HoldMeshRendererAsset
         SetMaterialIfExists(InsideOutlineRenderer, outlineInside);
         SetMaterialIfExists(OutsideOutlineRenderer, outlineOutside);
         SetMaterialIfExists(ShadowRenderer, shadow);
+        SetScreenOutlineMaskMaterialIfExists(ScreenOutlineInsideMaskRenderer, inside);
+        SetScreenOutlineMaskMaterialIfExists(ScreenOutlineOutsideMaskRenderer, outside);
     }
 
     public void SetStencilId(int id)
@@ -279,14 +291,20 @@ public class HoldMeshRendererAsset
 
     public void SetScreenSpaceOutlineTarget(Color idColor, int layer)
     {
-        ApplyScreenSpaceOutlineTargetIfExists(InsideRenderer, idColor, layer);
-        ApplyScreenSpaceOutlineTargetIfExists(OutsideRenderer, idColor, layer);
+        ApplyScreenSpaceOutlineTargetIfExists(ScreenOutlineInsideMaskRenderer, idColor, layer);
+        ApplyScreenSpaceOutlineTargetIfExists(ScreenOutlineOutsideMaskRenderer, idColor, layer);
     }
 
     private void SetMaterialIfExists(MeshRenderer meshRenderer, Material material)
     {
         if (meshRenderer == null) { return; }
         meshRenderer.sharedMaterial = GetStencilMaterial(material);
+    }
+
+    private void SetScreenOutlineMaskMaterialIfExists(MeshRenderer meshRenderer, Material material)
+    {
+        if (meshRenderer == null) { return; }
+        meshRenderer.sharedMaterial = GetScreenOutlineMaskMaterial(material);
     }
 
     private void ApplyStencilIdIfExists(MeshRenderer meshRenderer)
@@ -327,9 +345,31 @@ public class HoldMeshRendererAsset
         return material;
     }
 
+    private Material GetScreenOutlineMaskMaterial(Material source)
+    {
+        if (source == null) { return null; }
+
+        if (screenOutlineMaskMaterialCache.TryGetValue(source, out Material cachedMaterial))
+        {
+            return cachedMaterial;
+        }
+
+        Material material = new Material(source);
+        Shader maskShader = Shader.Find(ScreenOutlineMaskShaderName);
+        if (maskShader != null)
+        {
+            material.shader = maskShader;
+        }
+
+        screenOutlineMaskMaterialCache.Add(source, material);
+
+        return material;
+    }
+
     public void DestroyMaterialInstances()
     {
         ClearStencilMaterialCache();
+        ClearScreenOutlineMaskMaterialCache();
     }
 
     private void ClearStencilMaterialCache()
@@ -341,5 +381,16 @@ public class HoldMeshRendererAsset
         }
 
         stencilMaterialCache.Clear();
+    }
+
+    private void ClearScreenOutlineMaskMaterialCache()
+    {
+        foreach (Material material in screenOutlineMaskMaterialCache.Values)
+        {
+            if (material == null) { continue; }
+            Object.Destroy(material);
+        }
+
+        screenOutlineMaskMaterialCache.Clear();
     }
 }

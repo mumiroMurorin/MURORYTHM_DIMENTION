@@ -81,6 +81,7 @@ MonoBehaviour:
   meshFilter: {fileID: 6066666802898568270}
   meshRenderer: {fileID: 91298112961660618}
   material: {fileID: 2100000, guid: ec2749e8d8cdeec47b384e5c14cb6915, type: 2}
+  layerName: PriorityEffects
   lineWidth: 0.25
   zOffset: -0.01
   normalizeRadius: 10
@@ -96,7 +97,7 @@ GameObject:
   - component: {fileID: 5069610759618604533}
   - component: {fileID: 6066666802898568270}
   - component: {fileID: 91298112961660618}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: JudgementRangeLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}

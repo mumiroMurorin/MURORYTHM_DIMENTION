@@ -10,6 +10,7 @@ public class SpaceHoldScreenSpaceOutlineRenderer : MonoBehaviour
     [SerializeField] Shader allIdRenderShader;
     [SerializeField] Shader compositeShader;
     [SerializeField] Color outlineColor = Color.white;
+    [SerializeField] bool enableOccludedOutline = false;
     [SerializeField] Color occludedOutlineColor = new Color(1f, 1f, 1f, 0.25f);
     [SerializeField, Range(1, 4)] int outlineThickness = 1;
     [SerializeField, Range(1, 4)] int occludedOutlineThickness = 1;
@@ -53,7 +54,7 @@ public class SpaceHoldScreenSpaceOutlineRenderer : MonoBehaviour
         compositeMaterial.SetTexture("_VisibleOutlineTex", visibleOutlineTexture);
         compositeMaterial.SetTexture("_AllOutlineTex", allOutlineTexture);
         compositeMaterial.SetColor("_OutlineColor", outlineColor);
-        compositeMaterial.SetColor("_OccludedOutlineColor", occludedOutlineColor);
+        compositeMaterial.SetColor("_OccludedOutlineColor", enableOccludedOutline ? occludedOutlineColor : Color.clear);
         compositeMaterial.SetFloat("_OutlineThickness", outlineThickness);
         compositeMaterial.SetFloat("_OccludedOutlineThickness", occludedOutlineThickness);
         compositeMaterial.SetFloat("_DebugViewMode", (int)debugView);

@@ -6,7 +6,7 @@ Shader "Hidden/SpaceHold/ScreenSpaceOutlineComposite"
         _VisibleOutlineTex("Visible Outline Id Texture", 2D) = "black" {}
         _AllOutlineTex("All Outline Id Texture", 2D) = "black" {}
         _OutlineColor("Outline Color", Color) = (1,1,1,1)
-        _OccludedOutlineColor("Occluded Outline Color", Color) = (1,1,1,0.25)
+        _OccludedOutlineColor("Occluded Outline Color", Color) = (1,1,1,0)
         _OutlineThickness("Outline Thickness", Range(1, 4)) = 1
         _OccludedOutlineThickness("Occluded Outline Thickness", Range(1, 4)) = 1
         _DebugViewMode("Debug View Mode", Float) = 0
