@@ -112,15 +112,31 @@ public class InteractNoteEffect_SpaceHoldEndRingFly : MonoBehaviour, IInteractNo
             return;
         }
 
-        if (noteData is not ISpaceHoldBulletEffectNoteData { IsSpaceHoldEnd: true } spaceHoldEndData)
+        if (!TryGetSpaceHoldEndVertices(noteData, out Vector2[] vertices))
         {
             ReturnToPool();
             return;
         }
 
-        List<Vector3> ringPoints = BuildRingMesh(spaceHoldEndData.Vertices);
+        List<Vector3> ringPoints = BuildRingMesh(vertices);
         BuildTrailEmitters(ringPoints);
         curveRadius = GetCurveRadius(noteData);
+    }
+
+    bool TryGetSpaceHoldEndVertices(INoteData data, out Vector2[] vertices)
+    {
+        switch (data)
+        {
+            case NoteData_SpaceHoldRelay { IsSpaceHoldEnd: true } relay:
+                vertices = relay.Vertices;
+                return true;
+            case NoteData_SpaceHoldRelayHidden { IsSpaceHoldEnd: true } hidden:
+                vertices = hidden.Vertices;
+                return true;
+            default:
+                vertices = null;
+                return false;
+        }
     }
 
     public void Play()

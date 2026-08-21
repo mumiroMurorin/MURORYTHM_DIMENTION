@@ -4,6 +4,7 @@ using UnityEngine;
 public class NoteFactory_HoldRelayHidden : NoteFactory<NoteData_HoldRelayHidden>
 {
     [SerializeField] GameObject noteObjectOriginPrefab;
+    [SerializeField] NoteJudgementSettings judgementSettings;
 
     [Header("マスに応じたノーツタイル")]
     [SerializeField] GameObject singleTilePrefab;
@@ -51,6 +52,11 @@ public class NoteFactory_HoldRelayHidden : NoteFactory<NoteData_HoldRelayHidden>
         data.Timer = this.timer;
         data.JudgementRecorder = this.judgementRecorder;
         data.OptionGetter = optionHolder;
+        data.JudgementSettings = judgementSettings;
+        if (judgementSettings != null)
+        {
+            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow);
+        }
 
         return data;
     }
@@ -87,7 +93,8 @@ public class NoteFactory_HoldRelayHidden : NoteFactory<NoteData_HoldRelayHidden>
     private GameObject GenerateNoteObject(int size)
     {
         Vector3 pos, rot;
-        GameObject pre = new GameObject("NoteObjects");   //まとめ役のオブジェクト生成
+        GameObject pre = new GameObject("NoteObjects");
+        NoteLayerUtility.SetNotesLayer(pre);   //まとめ役のオブジェクト生成
 
         // 1マスずつ生成
         for (int i = 0; i < size; i++)

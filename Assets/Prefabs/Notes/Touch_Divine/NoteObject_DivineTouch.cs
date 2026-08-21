@@ -104,6 +104,8 @@ public class NoteData_DivineTouch : INoteData, IClippedJudgableNote
 
     public JudgementWindow JudgementWindow { get; set; }
 
+    public NoteJudgementSettings JudgementSettings { get; set; }
+
     public int[] Range { get; set; }
 
     public ISliderInputGetter SliderInput { get; set; }

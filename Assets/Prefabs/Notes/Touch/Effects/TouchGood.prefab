@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4333095269020809581}
   - component: {fileID: 4172424545537871909}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: TouchGood
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -542,7 +542,7 @@ GameObject:
   - component: {fileID: 1104552505036848998}
   - component: {fileID: 2572936590745173572}
   - component: {fileID: 732083244849564934}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

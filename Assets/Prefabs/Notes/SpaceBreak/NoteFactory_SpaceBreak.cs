@@ -11,6 +11,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     readonly float RADIUS = 10f;
 
     [SerializeField] GameObject noteObjectOriginPrefab;
+    [SerializeField] SpaceBreakJudgementSettings judgementSettings;
     [SerializeField] GameObject noteMeshPrefab;
     [SerializeField] GameObject noteShadowPrefab;
     [SerializeField] GameObject frangmentParentPrefab;
@@ -24,6 +25,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     [SerializeField] Material edgeMaterial;
     [Header("輪郭線の太さ")]
     [SerializeField] float edgeWidth = 0.05f;
+    [SerializeField] float edgeDepthOffset = 0f;
     [SerializeField] int shadowDivisionNum = 24;
     [SerializeField] float shadowRadiusOffset = 0.02f;
     [Header("地面線の太さ")]
@@ -71,6 +73,11 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
         data.Timer = this.timer;
         data.JudgementRecorder = this.judgementRecorder;
         data.OptionGetter = optionHolder;
+        data.JudgementSettings = judgementSettings;
+        if (judgementSettings != null)
+        {
+            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow);
+        }
 
         return data;
     }
@@ -117,6 +124,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     private GameObject GenerateMeshObject(NoteData_SpaceBreak noteData, bool shouldGenerateFragments)
     {
         var obj = Instantiate(noteMeshPrefab);
+        NoteLayerUtility.SetNotesLayer(obj);
 
         if (!obj.TryGetComponent(out MeshFilter meshFilter)) { meshFilter = obj.AddComponent<MeshFilter>(); }
         if (!obj.TryGetComponent(out MeshRenderer meshRenderer)) { meshRenderer = obj.AddComponent<MeshRenderer>(); }
@@ -150,6 +158,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     private MeshRenderer GenerateShadowMeshObject(NoteData_SpaceBreak noteData)
     {
         var obj = Instantiate(noteShadowPrefab);
+        NoteLayerUtility.SetNotesLayerRecursively(obj);
         obj.name = "SpaceBreakShadow";
 
         if (!obj.TryGetComponent(out MeshFilter meshFilter)) { meshFilter = obj.AddComponent<MeshFilter>(); }
@@ -177,6 +186,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     private MeshRenderer GenerateGroundLineObject(NoteData_SpaceBreak noteData)
     {
         var obj = new GameObject("SpaceBreakGroundLine");
+        NoteLayerUtility.SetNotesLayer(obj);
 
         MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
@@ -239,12 +249,13 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     private GameObject GenerateEdgeObject(List<Vector2> points)
     {
         var edgeParent = new GameObject("SpaceBreakEdge");
+        NoteLayerUtility.SetNotesLayer(edgeParent);
 
         float halfDepth = noteDepth * 0.5f;
         int baseRenderQueue = mainMaterial != null ? mainMaterial.renderQueue : 3002;
 
-        var backPoints = points.Select(p => new Vector3(p.x, p.y, halfDepth)).ToList();
-        var frontPoints = points.Select(p => new Vector3(p.x, p.y, -halfDepth)).ToList();
+        var backPoints = points.Select(p => new Vector3(p.x, p.y, halfDepth + edgeDepthOffset)).ToList();
+        var frontPoints = points.Select(p => new Vector3(p.x, p.y, -halfDepth - edgeDepthOffset)).ToList();
 
         CreateLineObject("SpaceBreakEdge_Back", backPoints, edgeParent.transform);
         CreateLineObject("SpaceBreakEdge_Front", frontPoints, edgeParent.transform);
@@ -255,6 +266,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     private void CreateLineObject(string name, List<Vector3> points, Transform parent)
     {
         var obj = new GameObject(name);
+        NoteLayerUtility.SetNotesLayer(obj);
         obj.transform.SetParent(parent, false);
 
         if (!obj.TryGetComponent(out MeshFilter meshFilter)) { meshFilter = obj.AddComponent<MeshFilter>(); }

@@ -15,6 +15,11 @@ public class NoteObject_SpaceHoldRelayHidden : NoteObject<NoteData_SpaceHoldRela
     Vector2[] judgeRange;
     bool isJudged;
 
+    private float JudgementMarginRadius =>
+        noteData?.JudgementSettings != null
+            ? noteData.JudgementSettings.JudgementMarginRadius
+            : judgementMarginRadius;
+
     /// <summary>
     /// 初期化
     /// </summary>
@@ -67,7 +72,7 @@ public class NoteObject_SpaceHoldRelayHidden : NoteObject<NoteData_SpaceHoldRela
         }
 
         // 判定時間内かつ枠内に手があるとき
-        bool isInRange = noteData.SpaceInput.IsInSpaceRange(judgeRange, judgementMarginRadius);
+        bool isInRange = noteData.SpaceInput.IsInSpaceRange(judgeRange, JudgementMarginRadius);
         if (!isInRange) { return; }
 
         var jae = noteData.JudgementWindow.GetJudgementAndError(noteData.Timer.Time, noteData.Timing);
@@ -171,13 +176,15 @@ public class NoteObject_SpaceHoldRelayHidden : NoteObject<NoteData_SpaceHoldRela
 /// <summary>
 /// (初期化に必要な変数も含む)ホールドメッシュノーツのデータ
 /// </summary>
-public class NoteData_SpaceHoldRelayHidden : INoteData, IJudgableNoteData, ISpaceHoldBulletEffectNoteData
+public class NoteData_SpaceHoldRelayHidden : INoteData, IJudgableNoteData
 {
     public NoteType NoteType => NoteType.SpaceHoldRelayHidden;
 
     public float Timing { get; set; }
 
     public JudgementWindow JudgementWindow { get; set; }
+
+    public SpaceHoldJudgementSettings JudgementSettings { get; set; }
 
     public Vector2[] Vertices { get; set; }
 
@@ -203,4 +210,3 @@ public class NoteData_SpaceHoldRelayHidden : INoteData, IJudgableNoteData, ISpac
 
     public INoteSpawnDataOptionGetter OptionGetter { get; set; }
 }
-

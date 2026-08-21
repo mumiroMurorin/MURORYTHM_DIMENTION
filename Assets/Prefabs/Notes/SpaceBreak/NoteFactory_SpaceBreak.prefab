@@ -48,11 +48,13 @@ MonoBehaviour:
   noteMeshPrefab: {fileID: 2776397303821155744, guid: d36ccc5adaa64c44a8f3b8dc451a606a, type: 3}
   noteShadowPrefab: {fileID: 2776397303821155744, guid: 20189091713bab4428e2887b42122bb3, type: 3}
   frangmentParentPrefab: {fileID: 8802166155806146273, guid: 52ad3084545c75346a7b4c6aee994849, type: 3}
+  judgementSettings: {fileID: 11400000, guid: 2bd6bb4f35b04cf28b2076245ad79f23, type: 2}
   noteDepth: 5
   fragmentAmount: 20
   mainMaterial: {fileID: 2100000, guid: 5e1ac61d7a7378b48903ef9390d8d112, type: 2}
   edgeMaterial: {fileID: 2100000, guid: 3df8e6f3a4f1ae242b54c9f0f0e9401e, type: 2}
   edgeWidth: 0.35
+  edgeDepthOffset: 0.01
   shadowDivisionNum: 24
   shadowRadiusOffset: 0.02
   enableGroundLine: 1

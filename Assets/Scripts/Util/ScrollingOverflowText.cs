@@ -35,7 +35,6 @@ public class ScrollingOverflowText : MonoBehaviour
     float lastViewportWidth;
     float lastPreferredWidth;
     float scrollStartX;
-    float scrollStartTime;
     float loopDistance;
     float loopResetX;
     float delayTimer;
@@ -126,10 +125,9 @@ public class ScrollingOverflowText : MonoBehaviour
 
         float preferredWidth = tmp.preferredWidth;
         float overflowWidth = preferredWidth - currentViewportWidth;
-        bool isSameText = isScrolling && currentText == lastText;
-        float retainedScrollDistance = isSameText ? GetCurrentScrollDistance() : 0f;
         bool isSameLayout =
-            isSameText &&
+            isScrolling &&
+            currentText == lastText &&
             Mathf.Approximately(currentViewportWidth, lastViewportWidth) &&
             Mathf.Approximately(preferredWidth, lastPreferredWidth);
 
@@ -169,7 +167,6 @@ public class ScrollingOverflowText : MonoBehaviour
         scrollStartX = CalculateLeftAlignedStartPositionX();
         loopDistance = CalculateLoopDistance(currentText);
         loopResetX = scrollStartX - loopDistance;
-        scrollStartTime = GetStartTimeForRetainedScrollDistance(retainedScrollDistance);
         delayTimer = 0f;
 
         SetAlpha(1f);
@@ -184,7 +181,6 @@ public class ScrollingOverflowText : MonoBehaviour
         isResetFadingIn = false;
         delayTimer = 0f;
         scrollStartX = defaultAnchoredPosition.x;
-        scrollStartTime = 0f;
         loopDistance = 0f;
         loopResetX = defaultAnchoredPosition.x;
 
@@ -269,34 +265,13 @@ public class ScrollingOverflowText : MonoBehaviour
 
     private float GetScrollPositionX()
     {
-        if (loopDistance <= 0f || Time.time < scrollStartTime)
+        if (loopDistance <= 0f)
         {
             return scrollStartX;
         }
 
-        float scrollDistance = Mathf.Repeat((Time.time - scrollStartTime) * scrollSpeed, loopDistance);
+        float scrollDistance = Mathf.Repeat(Time.time * scrollSpeed, loopDistance);
         return scrollStartX - scrollDistance;
-    }
-
-    private float GetCurrentScrollDistance()
-    {
-        if (loopDistance <= 0f || Time.time < scrollStartTime)
-        {
-            return 0f;
-        }
-
-        return Mathf.Repeat((Time.time - scrollStartTime) * scrollSpeed, loopDistance);
-    }
-
-    private float GetStartTimeForRetainedScrollDistance(float retainedScrollDistance)
-    {
-        if (loopDistance <= 0f || scrollSpeed <= 0f)
-        {
-            return Time.time;
-        }
-
-        float normalizedDistance = Mathf.Repeat(retainedScrollDistance, loopDistance);
-        return Time.time - normalizedDistance / scrollSpeed;
     }
 
     private void BeginResetFadeOut()
@@ -340,7 +315,6 @@ public class ScrollingOverflowText : MonoBehaviour
     private void ResetScrollPosition()
     {
         textRect.anchoredPosition = new Vector2(GetStartPositionX(lastViewportWidth), defaultAnchoredPosition.y);
-        scrollStartTime = Time.time;
         delayTimer = 0f;
 
         if (resetFadeDuration <= 0f)

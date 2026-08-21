@@ -16,6 +16,11 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
 
     NoteData_DynamicGroundDownward noteData;
     DynamicJudgementHandler dynamicJudgement;
+
+    private float JudgeMagnitude =>
+        noteData?.JudgementSettings != null
+            ? noteData.JudgementSettings.JudgeMagnitude
+            : judgeMagnitude;
     Judgement bestJudgement = Judgement.Miss;
     bool isJudged;
 
@@ -27,7 +32,7 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
     {
         noteData = data;
 
-        dynamicJudgement = new DynamicJudgementHandler(noteData.Range, JudgeVector, judgeMagnitude);
+        dynamicJudgement = new DynamicJudgementHandler(noteData.Range, JudgeVector, JudgeMagnitude);
     }
 
     private void Update()
@@ -156,6 +161,8 @@ public class NoteData_DynamicGroundDownward : INoteData, IJudgableNoteData
     public float Timing { get; set; }
 
     public JudgementWindow JudgementWindow { get; set; }
+
+    public DynamicNoteJudgementSettings JudgementSettings { get; set; }
 
     public int[] Range { get; set; }
 

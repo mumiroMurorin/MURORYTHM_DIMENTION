@@ -5,6 +5,7 @@ using UnityEngine;
 public class NoteFactory_DivineHoldStart : NoteFactory<NoteData_DivineHoldStart>
 {
     [SerializeField] GameObject noteObjectOriginPrefab;
+    [SerializeField] NoteJudgementSettings judgementSettings;
 
     [Header("Tiles")]
     [SerializeField] GameObject singleTilePrefab;
@@ -41,6 +42,11 @@ public class NoteFactory_DivineHoldStart : NoteFactory<NoteData_DivineHoldStart>
         data.Timer = timer;
         data.JudgementRecorder = judgementRecorder;
         data.OptionGetter = optionHolder;
+        data.JudgementSettings = judgementSettings;
+        if (judgementSettings != null)
+        {
+            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow);
+        }
         return data;
     }
 
@@ -57,6 +63,7 @@ public class NoteFactory_DivineHoldStart : NoteFactory<NoteData_DivineHoldStart>
     {
         Vector3 pos, rot;
         GameObject pre = new GameObject("NoteObjects");
+        NoteLayerUtility.SetNotesLayer(pre);
 
         for (int i = 0; i < size; i++)
         {

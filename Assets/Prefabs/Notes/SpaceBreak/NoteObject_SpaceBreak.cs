@@ -18,6 +18,16 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
     Judgement bestJudgement = Judgement.Miss;
     bool isJudged;
 
+    private float JudgementMarginRadius =>
+        noteData?.JudgementSettings != null
+            ? noteData.JudgementSettings.JudgementMarginRadius
+            : judgementMarginRadius;
+
+    private float JudgeMagnitude =>
+        noteData?.JudgementSettings != null
+            ? noteData.JudgementSettings.JudgeMagnitude
+            : judgeMagnitude;
+
     /// <summary>
     /// 初期化
     /// </summary>
@@ -73,10 +83,10 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
         }
 
         // 判定時間内かつ枠内に手があり、閾値を越えている場合
-        bool isInRangeRight = noteData.SpaceInput.IsInSpaceRange(noteData.Vertices, SpaceTrackingTag.RightHand, judgementMarginRadius);
-        bool isInRangeLeft = noteData.SpaceInput.IsInSpaceRange(noteData.Vertices, SpaceTrackingTag.LeftHand, judgementMarginRadius);
-        bool isOverThresholdRight = judgeMagnitude <= noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.RightHand).Value.magnitude;
-        bool isOverThresholdLeft = judgeMagnitude <= noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand).Value.magnitude;
+        bool isInRangeRight = noteData.SpaceInput.IsInSpaceRange(noteData.Vertices, SpaceTrackingTag.RightHand, JudgementMarginRadius);
+        bool isInRangeLeft = noteData.SpaceInput.IsInSpaceRange(noteData.Vertices, SpaceTrackingTag.LeftHand, JudgementMarginRadius);
+        bool isOverThresholdRight = JudgeMagnitude <= noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.RightHand).Value.magnitude;
+        bool isOverThresholdLeft = JudgeMagnitude <= noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand).Value.magnitude;
         
         if ((!isInRangeRight || !isOverThresholdRight) && (!isInRangeLeft || !isOverThresholdLeft)) { return; }
 
@@ -175,6 +185,8 @@ public class NoteData_SpaceBreak : INoteData, IJudgableNoteData
     public float Timing { get; set; }
 
     public JudgementWindow JudgementWindow { get; set; }
+
+    public SpaceBreakJudgementSettings JudgementSettings { get; set; }
 
     public Vector2[] Vertices { get; set; }
 

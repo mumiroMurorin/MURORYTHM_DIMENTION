@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noteObjectOriginPrefab: {fileID: 8224908405846241423, guid: b531c85a5cd893947a887baf4a64d7bc, type: 3}
+  judgementSettings: {fileID: 11400000, guid: 460d106390af4fcfa70442c9fdde9d65, type: 2}
   singleTilePrefab: {fileID: 2339287576743243002, guid: 565b7b2b5495f67419b933329fc4e400, type: 3}
   rightEdgeTilePrefab: {fileID: 2339287576743243002, guid: f88a382bc63ff194f900938a09cfde0e, type: 3}
   centerTilePrefab: {fileID: 2339287576743243002, guid: 3f86714782298c0458ec1d0a7c1bf0ef, type: 3}

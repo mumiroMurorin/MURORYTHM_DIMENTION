@@ -48,7 +48,6 @@ MonoBehaviour:
   noteMeshPrefab: {fileID: 2776397303821155744, guid: 42c571f76ab05c044bc8723b01361e79, type: 3}
   shadowMeshPrefab: {fileID: 2776397303821155744, guid: d67e3e9a629c5614aad8aea2bda8e9e2, type: 3}
   shadowMaterial: {fileID: 2100000, guid: 6ab62f80e7d34b328c0d14dcf02e2f90, type: 2}
-  bulletTrailBuilder: {fileID: 0}
   meshDivisionNum: 10
   shadowDivisionNum: 24
   maxTriangleLength: 2

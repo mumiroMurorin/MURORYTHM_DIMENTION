@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4246147503331253539}
   - component: {fileID: 4366772811187476307}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: judge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 2993335810231384405}
   - component: {fileID: 2440550546013783483}
   - component: {fileID: 2112256445054745092}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: JudgementEffectController_Dynamic
   m_TagString: Untagged
   m_Icon: {fileID: 0}

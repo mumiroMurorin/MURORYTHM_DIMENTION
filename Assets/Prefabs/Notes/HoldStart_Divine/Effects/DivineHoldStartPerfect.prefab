@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4333095269020809581}
   - component: {fileID: -5505857267849355242}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: DivineHoldStartPerfect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   - component: {fileID: 1549732070697751464}
   - component: {fileID: 5636159699562262929}
   - component: {fileID: 8416380620370836669}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4958,7 +4958,7 @@ GameObject:
   - component: {fileID: 1104552505036848998}
   - component: {fileID: 2572936590745173572}
   - component: {fileID: 8699623716234111518}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9868,7 +9868,7 @@ GameObject:
   - component: {fileID: 3764282963476811923}
   - component: {fileID: 979737587250577046}
   - component: {fileID: 5031455149224344769}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14763,7 +14763,7 @@ GameObject:
   - component: {fileID: 5515162702651761665}
   - component: {fileID: 4905052707585139459}
   - component: {fileID: 5939671036367142908}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}

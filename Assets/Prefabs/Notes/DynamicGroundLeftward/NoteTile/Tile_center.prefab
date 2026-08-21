@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3624387281460661979}
   - component: {fileID: 2599508049543709454}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Tile_center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 6976413664254953308}
   - component: {fileID: 8029895983358057858}
   - component: {fileID: 2605130340312219771}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Arc
   m_TagString: Untagged
   m_Icon: {fileID: 0}

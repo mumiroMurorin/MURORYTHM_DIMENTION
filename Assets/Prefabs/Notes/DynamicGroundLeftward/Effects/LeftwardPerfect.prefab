@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7553264470793597307}
   - component: {fileID: 8589264989650424651}
   - component: {fileID: 3389949789513227173}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: LeftwardPerfect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4942,7 +4942,7 @@ GameObject:
   - component: {fileID: 5056058443550098810}
   - component: {fileID: 5510485076178774563}
   - component: {fileID: 3661853224216430574}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Trails
   m_TagString: Untagged
   m_Icon: {fileID: 0}

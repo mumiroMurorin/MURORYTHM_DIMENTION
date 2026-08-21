@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3d9e54543c24a5bae8c8a908e0f1131, type: 3}
+  m_Name: DynamicGroundDownwardJudgementSettings
+  m_EditorClassIdentifier: 
+  judgementWindowObject: {fileID: 11400000, guid: 78afd811eb9c1a64aa716a69139f45c9, type: 2}
+  judgeMagnitude: 1.5

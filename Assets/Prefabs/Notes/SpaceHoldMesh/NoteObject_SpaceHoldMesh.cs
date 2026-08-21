@@ -79,10 +79,6 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
 
         bool isInJudgementLineTiming = IsInJudgementLineTiming();
         UpdateJudgementRangeView(judgeRange, isInJudgementLineTiming);
-        if (isVisibleByController && isInJudgementLineTiming)
-        {
-            noteData.BulletTrailBuilder?.UpdateVisibleBullets(noteData.HoldNumber, noteData.Timer.Time);
-        }
         UpdateHoldStatus();
     }
 
@@ -186,7 +182,6 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
 
     private void OnDestroy()
     {
-        noteData?.BulletTrailBuilder?.Clear(noteData.HoldNumber);
         noteData?.MeshRendererAsset?.DestroyMaterialInstances();
     }
 
@@ -204,8 +199,6 @@ public class NoteData_SpaceHoldMesh : INoteData
     public NoteType NoteType => NoteType.SpaceHoldMesh;
 
     public int HoldNumber { get; set; }
-
-    public SpaceHoldBulletTrailBuilder BulletTrailBuilder { get; set; }
 
     public float Timing { get; set; }
 

@@ -91,6 +91,7 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
     private GameObject GenerateMeshObject(NoteData_HoldMesh noteData, INotePositionCalculator positionCalculator)
     {
         var obj = Instantiate(noteMeshPrefab);
+        NoteLayerUtility.SetNotesLayerRecursively(obj);
         if (!obj.TryGetComponent(out MeshFilter meshFilter)) { meshFilter = obj.AddComponent<MeshFilter>(); }
         if (!obj.TryGetComponent(out MeshRenderer meshRenderer)) { meshRenderer = obj.AddComponent<MeshRenderer>(); }
 

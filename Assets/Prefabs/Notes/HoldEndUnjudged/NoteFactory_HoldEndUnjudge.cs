@@ -82,7 +82,8 @@ public class NoteFactory_HoldEndUnjudge : NoteFactory<NoteData_HoldEndUnjudge>
     private GameObject GenerateNoteObject(int size)
     {
         Vector3 pos, rot;
-        GameObject pre = new GameObject("NoteObjects");   //まとめ役のオブジェクト生成
+        GameObject pre = new GameObject("NoteObjects");
+        NoteLayerUtility.SetNotesLayer(pre);   //まとめ役のオブジェクト生成
 
         // 1マスずつ生成
         for (int i = 0; i < size; i++)

@@ -10,6 +10,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     readonly float RADIUS = 10f;
 
     [SerializeField] GameObject noteObjectOriginPrefab;
+    [SerializeField] SpaceHoldJudgementSettings judgementSettings;
     [Header("強調線の太さ")]
     [SerializeField] float enphasisLineWidth = 0.1f;
     [Header("メインメッシュのマテリアル")]
@@ -64,6 +65,11 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
         data.PositionCalculator = positionCalculator;
         data.NoteSpeed = optionHolder.NoteSpeed.Value;
         data.DepthToVertices = GenerateDepthToVertices(data.TimeToVertices, positionCalculator, data.NoteSpeed);
+        data.JudgementSettings = judgementSettings;
+        if (judgementSettings != null)
+        {
+            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow);
+        }
 
         return data;
     }
@@ -114,6 +120,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     private GameObject GenerateMeshObject(NoteData_SpaceHoldRelay noteData)
     {
         GameObject obj = new GameObject("Mesh");
+        NoteLayerUtility.SetNotesLayer(obj);
         MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
         var points = noteData.Vertices.Select(v => MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToList();
@@ -133,6 +140,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     private GameObject GeneratEmphasisLineObject(NoteData_SpaceHoldRelay noteData)
     {
         GameObject obj = new GameObject("EmphasisLine");
+        NoteLayerUtility.SetNotesLayer(obj);
         MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
         var points = noteData.Vertices.Select(v => MeshGenerator.Normalize(v, CENTER_PIVOT, RADIUS)).ToList();
@@ -154,6 +162,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     private GameObject GenerateGroundLineObject(NoteData_SpaceHoldRelay noteData)
     {
         GameObject obj = new GameObject("SpaceHoldRelayGroundLine");
+        NoteLayerUtility.SetNotesLayer(obj);
         MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = obj.AddComponent<MeshRenderer>();
 

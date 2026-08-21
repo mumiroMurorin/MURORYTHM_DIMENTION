@@ -28,7 +28,8 @@ public class InteractNoteEffectSpawner_SpaceHoldEndRingFly : InteractNoteEffectS
         if (judgementData == null) { return false; }
         if (judgementData.Judgement == Judgement.Miss) { return false; }
 
-        return judgementData.NoteData is ISpaceHoldBulletEffectNoteData { IsSpaceHoldEnd: true };
+        return judgementData.NoteData is NoteData_SpaceHoldRelay { IsSpaceHoldEnd: true }
+            or NoteData_SpaceHoldRelayHidden { IsSpaceHoldEnd: true };
     }
 
     protected override Vector3 CalcSpawnPos(NoteJudgementData judgementData)
