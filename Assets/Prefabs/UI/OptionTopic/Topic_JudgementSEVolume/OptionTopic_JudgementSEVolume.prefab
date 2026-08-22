@@ -140,6 +140,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e638d67f701e2346aa346fcfcd5d49c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  optionTextTable:
+    m_TableCollectionName: Option
+  optionNameKey: JudgementSEVolume_Name
+  optionDetailKey: JudgementSEVolume_Detail
+  optionNameText: {fileID: 6250528145718464123}
+  optionDetailText: {fileID: 5470536464791627407}
   volumeTmp: {fileID: 8602456643293969006}
   muteImage: {fileID: 2922967119377981193}
   speakerImage: {fileID: 5854004907156515902}

@@ -65,6 +65,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-en
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 125f82c08b76c0e429ea23cf8d031b1b
+    m_Address: InfoCircle_SelectScene_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 933627feae74407bb1b0e7eab02ae130
+    m_Address: Option_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: b8fa537890e222948b9f6e627f68749a, type: 2}
   m_SchemaSet:

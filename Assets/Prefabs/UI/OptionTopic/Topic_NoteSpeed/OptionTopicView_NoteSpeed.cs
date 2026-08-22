@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UIInSelectScene
 {
-    public class OptionTopicView_NoteSpeed : MonoBehaviour
+    public class OptionTopicView_NoteSpeed : OptionTopicViewBase
     {
         [SerializeField] TextMeshProUGUI noteSpeedTmp;
 

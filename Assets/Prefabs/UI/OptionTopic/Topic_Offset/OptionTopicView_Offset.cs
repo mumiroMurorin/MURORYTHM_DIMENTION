@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UIInSelectScene
 {
-    public class OptionTopicView_Offset : MonoBehaviour
+    public class OptionTopicView_Offset : OptionTopicViewBase
     {
         [SerializeField] TextMeshProUGUI offsetTmp;
 

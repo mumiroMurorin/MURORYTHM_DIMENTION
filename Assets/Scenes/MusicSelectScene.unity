@@ -1690,6 +1690,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 4300000, guid: 08953e67e03de9d4589c923839dca719, type: 3}
+    - target: {fileID: 1404685776779727055, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_TargetTexture
+      value: 
+      objectReference: {fileID: 8600000, guid: af148399c674c3b4886e0f974dd10a1f, type: 2}
     - target: {fileID: 2068690823415091526, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1706,6 +1710,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 4300000, guid: 08953e67e03de9d4589c923839dca719, type: 3}
+    - target: {fileID: 3181747958862314900, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
+      propertyPath: m_TargetTexture
+      value: 
+      objectReference: {fileID: 8600000, guid: af148399c674c3b4886e0f974dd10a1f, type: 2}
     - target: {fileID: 3372415423836619191, guid: 3a1dfc60adeb1da42aad59e4e6d46a7d, type: 3}
       propertyPath: timer.obj
       value: 
@@ -5800,6 +5808,10 @@ PrefabInstance:
     - target: {fileID: 549861122209026785, guid: 40d96574e37d08a4d92212b459308947, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1107638614686917155, guid: 40d96574e37d08a4d92212b459308947, type: 3}
+      propertyPath: localizedTextTable.m_TableCollectionName
+      value: InfoCircle_SelectScene
       objectReference: {fileID: 0}
     - target: {fileID: 3847265616953680964, guid: 40d96574e37d08a4d92212b459308947, type: 3}
       propertyPath: m_Name

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UIInSelectScene
 {
-    public class OptionTopicView_InfoSub : MonoBehaviour
+    public class OptionTopicView_InfoSub : OptionTopicViewBase
     {
         [SerializeField] TextMeshProUGUI tmp;
 

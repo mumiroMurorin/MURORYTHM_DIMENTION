@@ -62,6 +62,16 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 513abe55f4b14b7448fafa66d2caef13
+    m_Address: Assets/Localization/InfoCircle_SelectScene Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7caa4a8e1b94b778f0ce6399fd7857a
+    m_Address: Assets/Localization/Option Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: b8fa537890e222948b9f6e627f68749a, type: 2}
   m_SchemaSet:

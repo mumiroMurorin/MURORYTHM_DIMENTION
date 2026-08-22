@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.Localization.Settings;
+using UnityEngine.Localization.Tables;
 
 namespace UIInRhythmGameScene
 {
     public class MenuCircleView : MonoBehaviour
     {
         [SerializeField] PhaseToText[] phaseToTexts;
+        [SerializeField] TableReference localizedTextTable = "SliderTopic_MusicSelect";
         [SerializeField] DifficultyToTMPColorGradient[] difficultyToTMPColorGradients;
         [SerializeField] DifficultyToColor[] difficultyToColors;
         [SerializeField] Image[] changableColorImages;
@@ -16,7 +19,34 @@ namespace UIInRhythmGameScene
         [SerializeField] TextMeshProUGUI sortTagText;
         [SerializeField] TextMeshProUGUI subText;
 
+        PhaseStatusInSelectScene currentPhase;
+        bool hasCurrentPhase;
+
+        private void OnEnable()
+        {
+            LocalizationSettings.SelectedLocaleChanged += OnSelectedLocaleChanged;
+        }
+
+        private void OnDisable()
+        {
+            LocalizationSettings.SelectedLocaleChanged -= OnSelectedLocaleChanged;
+        }
+
         public void OnChangePhase(PhaseStatusInSelectScene phase)
+        {
+            currentPhase = phase;
+            hasCurrentPhase = true;
+            ApplyPhaseText(phase);
+        }
+
+        private void OnSelectedLocaleChanged(UnityEngine.Localization.Locale locale)
+        {
+            if (!hasCurrentPhase) { return; }
+
+            ApplyPhaseText(currentPhase);
+        }
+
+        private void ApplyPhaseText(PhaseStatusInSelectScene phase)
         {
             if (phaseToTexts != null)
             {
@@ -24,7 +54,7 @@ namespace UIInRhythmGameScene
                 {
                     if (t.CheckCondition(phase)) 
                     {
-                        t.Apply(mainText);
+                        t.Apply(mainText, localizedTextTable);
                         break;
                     }
                 }
@@ -76,15 +106,29 @@ namespace UIInRhythmGameScene
         {
             [SerializeField] PhaseStatusInSelectScene phase;
             [SerializeField] string text;
+            [SerializeField] string textKey;
 
             public bool CheckCondition(PhaseStatusInSelectScene phase)
             {
                 return this.phase == phase;
             }
 
-            public void Apply(TMP_Text tmp)
+            public void Apply(TMP_Text tmp, TableReference tableReference)
             {
-                tmp.text = text;
+                if (tmp == null) { return; }
+
+                tmp.text = ResolveText(tableReference);
+            }
+
+            private string ResolveText(TableReference tableReference)
+            {
+                if (string.IsNullOrWhiteSpace(textKey) || string.IsNullOrEmpty(tableReference.TableCollectionName))
+                {
+                    return text;
+                }
+
+                var localizedText = LocalizationSettings.StringDatabase.GetLocalizedString(tableReference, textKey);
+                return string.IsNullOrEmpty(localizedText) ? text : localizedText;
             }
         }
     }

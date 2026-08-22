@@ -127,6 +127,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 628b7240506bd904d870dff868531e64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  optionTextTable:
+    m_TableCollectionName: Option
+  optionNameKey: Offset_Name
+  optionDetailKey: Offset_Detail
+  optionNameText: {fileID: 4544412734710453425}
+  optionDetailText: {fileID: 2030491291821826173}
   offsetTmp: {fileID: 7004984884111467990}
 --- !u!114 &4424805755326820112
 MonoBehaviour:

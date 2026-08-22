@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UIInSelectScene
 {
-    public class OptionTopicView_JudgementSEVolume : MonoBehaviour
+    public class OptionTopicView_JudgementSEVolume : OptionTopicViewBase
     {
         [SerializeField] TextMeshProUGUI volumeTmp;
         [SerializeField] GameObject muteImage;

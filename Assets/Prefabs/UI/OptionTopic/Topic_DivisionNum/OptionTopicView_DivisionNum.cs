@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UIInSelectScene
 {
-    public class OptionTopicView_DivisionNum : MonoBehaviour
+    public class OptionTopicView_DivisionNum : OptionTopicViewBase
     {
         [SerializeField] TextMeshProUGUI divisionNumTmp;
 

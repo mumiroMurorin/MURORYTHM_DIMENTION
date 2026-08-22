@@ -140,6 +140,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d977402c7663965498c5fbb55fa9acb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  optionTextTable:
+    m_TableCollectionName: Option
+  optionNameKey: FastLate_Name
+  optionDetailKey: FastLate_Detail
+  optionNameText: {fileID: 6250528145718464123}
+  optionDetailText: {fileID: 5470536464791627407}
   tmp: {fileID: 8602456643293969006}
   normalSample: {fileID: 3338051037916765899}
   fastLateSample: {fileID: 2505617921314061669}

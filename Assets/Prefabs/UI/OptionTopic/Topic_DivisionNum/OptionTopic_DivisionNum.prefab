@@ -140,6 +140,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3196bd3594f7080429338c254bd12370, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  optionTextTable:
+    m_TableCollectionName: Option
+  optionNameKey: DivisionNum_Name
+  optionDetailKey: DivisionNum_Detail
+  optionNameText: {fileID: 6250528145718464123}
+  optionDetailText: {fileID: 5470536464791627407}
   divisionNumTmp: {fileID: 8602456643293969006}
 --- !u!1 &582135612783351540
 GameObject:

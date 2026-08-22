@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UIInSelectScene
 {
-    public class OptionTopicView_FastLate : MonoBehaviour
+    public class OptionTopicView_FastLate : OptionTopicViewBase
     {
         [SerializeField] TextMeshProUGUI tmp;
         [SerializeField] GameObject normalSample;
