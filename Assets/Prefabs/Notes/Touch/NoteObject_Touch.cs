@@ -33,8 +33,8 @@ public class NoteObject_Touch : NoteObject<NoteData_Touch>
             if (noteData.SliderInput == null) { break; }
             if (noteData.Timer == null) { break; }
 
-            noteData.SliderInput?.GetSliderInputReactiveProperty(index)
-                .Where(isTouch => isTouch)
+            noteData.SliderInput.OnSliderTouchDown
+                .Where(touchedIndex => touchedIndex == index)
                 .Where(_ => !isJudged)
                 // Good判定時間に含まれているとき判定
                 .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)

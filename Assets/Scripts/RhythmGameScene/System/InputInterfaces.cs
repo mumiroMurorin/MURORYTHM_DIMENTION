@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UniRx;
 
@@ -8,6 +9,8 @@ using UniRx;
 /// </summary>
 public interface ISliderInputGetter
 {
+    IObservable<int> OnSliderTouchDown { get; }
+
     IReadOnlyReactiveProperty<bool> GetSliderInputReactiveProperty(int index);
 }
 
@@ -64,6 +67,8 @@ public interface ISliderInputSetter
     public void Initialize();
 
     public void SetSliderInput(int index, bool isEnable);
+
+    public void NotifySliderTouchDown(int index);
 }
 
 public interface ISpaceInputSetter

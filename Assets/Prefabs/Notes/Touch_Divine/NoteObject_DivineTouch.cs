@@ -33,8 +33,8 @@ public class NoteObject_DivineTouch : NoteObject<NoteData_DivineTouch>
             if (noteData.SliderInput == null) { break; }
             if (noteData.Timer == null) { break; }
 
-            noteData.SliderInput?.GetSliderInputReactiveProperty(index)
-                .Where(isTouch => isTouch)
+            noteData.SliderInput.OnSliderTouchDown
+                .Where(touchedIndex => touchedIndex == index)
                 .Where(_ => !isJudged)
                 // Good”»’èŽžŠÔ‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚é‚Æ‚«”»’è
                 .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)

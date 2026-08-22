@@ -46,44 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   configs:
   - configName: SliderInputs
-    laneKeyCodes:
-    - keyCodes: 4a010000
-    - keyCodes: 4b010000
-    - keyCodes: 4c010000
-    - keyCodes: 4d010000
-    - keyCodes: 4e010000
-    - keyCodes: 4f010000
-    - keyCodes: 50010000
-    - keyCodes: 51010000
-    - keyCodes: 52010000
-    - keyCodes: 53010000
-    - keyCodes: 54010000
-    - keyCodes: 55010000
-    - keyCodes: 56010000
-    - keyCodes: 57010000
-    - keyCodes: 58010000
-    - keyCodes: 59010000
-    isActive: 0
-  - configName: KeyBoardInputs
-    laneKeyCodes:
-    - keyCodes: 31000000
-    - keyCodes: 32000000
-    - keyCodes: 33000000
-    - keyCodes: 34000000
-    - keyCodes: 71000000
-    - keyCodes: 77000000
-    - keyCodes: 65000000
-    - keyCodes: 72000000
-    - keyCodes: 35000000
-    - keyCodes: 36000000
-    - keyCodes: 37000000
-    - keyCodes: 38000000
-    - keyCodes: 74000000
-    - keyCodes: 79000000
-    - keyCodes: 75000000
-    - keyCodes: 69000000
-    isActive: 1
-  - configName: SliderInputs2
+    physicalKeyCodes: ea010000eb010000ec010000ed010000f2010000f3010000f4010000f5010000d6010000d7010000d8010000d9010000de010000df010000e0010000e1010000c2010000c3010000c4010000c5010000ca010000cb010000cc010000cd010000ae010000af010000b0010000b1010000b6010000b7010000b8010000b9010000
     laneKeyCodes:
     - keyCodes: ea010000eb010000
     - keyCodes: ec010000ed010000
@@ -101,4 +64,24 @@ MonoBehaviour:
     - keyCodes: b0010000b1010000
     - keyCodes: b6010000b7010000
     - keyCodes: b8010000b9010000
+    isActive: 1
+  - configName: KeyBoardInputs
+    physicalKeyCodes: 310000000d000000320000000000000033000000000000003400000000000000710000000000000077000000000000006500000000000000720000000000000035000000000000003600000000000000370000000000000038000000000000007400000000000000790000000000000075000000000000006900000000000000
+    laneKeyCodes:
+    - keyCodes: 31000000
+    - keyCodes: 32000000
+    - keyCodes: 33000000
+    - keyCodes: 34000000
+    - keyCodes: 71000000
+    - keyCodes: 77000000
+    - keyCodes: 65000000
+    - keyCodes: 72000000
+    - keyCodes: 35000000
+    - keyCodes: 36000000
+    - keyCodes: 37000000
+    - keyCodes: 38000000
+    - keyCodes: 74000000
+    - keyCodes: 79000000
+    - keyCodes: 75000000
+    - keyCodes: 69000000
     isActive: 1

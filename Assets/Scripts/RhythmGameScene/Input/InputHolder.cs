@@ -13,6 +13,8 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
 
     // スライダーからの入力
     ReactiveProperty<bool>[] sliderInput;
+    readonly Subject<int> onSliderTouchDown = new Subject<int>();
+    public System.IObservable<int> OnSliderTouchDown => onSliderTouchDown;
 
     // 空間入力(右手)
     ReactiveCollection<TimeToPos> rightHandInput = new ReactiveCollection<TimeToPos>();
@@ -43,10 +45,17 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
     /// <param name="index"></param>
     public void SetSliderInput(int index, bool isEnable)
     {
-        if (index >= SLIDER_MAX_COUNT) { Debug.LogWarning($"【Input】Out of range: {index}"); return; }
+        if (index < 0 || index >= SLIDER_MAX_COUNT) { Debug.LogWarning($"【Input】Out of range: {index}"); return; }
         if (sliderInput[index].Value == isEnable) { return; }
 
         sliderInput[index].Value = isEnable;
+    }
+
+    public void NotifySliderTouchDown(int index)
+    {
+        if (index < 0 || index >= SLIDER_MAX_COUNT) { Debug.LogWarning($"【Input】Out of range: {index}"); return; }
+
+        onSliderTouchDown.OnNext(index);
     }
 
     /// <summary>
@@ -130,7 +139,7 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
     /// <returns></returns>
     public IReadOnlyReactiveProperty<bool> GetSliderInputReactiveProperty(int index)
     {
-        if (index >= SLIDER_MAX_COUNT) { Debug.LogWarning($"【Input】Out of range: {index}"); return null; }
+        if (index < 0 || index >= SLIDER_MAX_COUNT) { Debug.LogWarning($"【Input】Out of range: {index}"); return null; }
 
         return sliderInput[index];
     }

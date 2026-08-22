@@ -33,8 +33,8 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
             if (noteData.SliderInput == null) { break; }
             if (noteData.Timer == null) { break; }
 
-            noteData.SliderInput?.GetSliderInputReactiveProperty(index)
-                .Where(isHoldStart => isHoldStart)
+            noteData.SliderInput.OnSliderTouchDown
+                .Where(touchedIndex => touchedIndex == index)
                 .Where(_ => !isJudged)
                 // Good”»’èŽžŠÔ‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚é‚Æ‚«”»’è
                 .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)

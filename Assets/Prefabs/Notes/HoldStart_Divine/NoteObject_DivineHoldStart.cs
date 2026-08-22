@@ -28,8 +28,8 @@ public class NoteObject_DivineHoldStart : NoteObject<NoteData_DivineHoldStart>
             if (noteData.SliderInput == null) { break; }
             if (noteData.Timer == null) { break; }
 
-            noteData.SliderInput?.GetSliderInputReactiveProperty(index)
-                .Where(isHoldStart => isHoldStart)
+            noteData.SliderInput.OnSliderTouchDown
+                .Where(touchedIndex => touchedIndex == index)
                 .Where(_ => !isJudged)
                 .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
                 .Where(_ => !noteData.OptionGetter.IsAutoMode)
