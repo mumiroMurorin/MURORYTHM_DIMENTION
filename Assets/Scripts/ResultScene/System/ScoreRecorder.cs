@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
+using UIInResultScene;
 
 public class ScoreRecorder : MonoBehaviour
 {
+    [SerializeField] ResultRankingListView rankingListView;
+
     IMusicDataGetter musicDataGetter;
     IScoreGetter scoreGetter;
 
@@ -39,5 +42,6 @@ public class ScoreRecorder : MonoBehaviour
 
         musicData.SetMusicRecord(difficulty, record);
         MusicRecordPersistence.SaveIfBetter(musicData, difficulty, record);
+        rankingListView?.ShowRanking(musicData, difficulty, record);
     }
 }

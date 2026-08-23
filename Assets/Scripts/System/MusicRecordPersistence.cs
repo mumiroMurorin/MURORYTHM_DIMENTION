@@ -7,6 +7,7 @@ using static JsonUtil.JsonWriter;
 public static class MusicRecordPersistence
 {
     const string FILE_NAME = "musicRecordBest.json";
+    const int MAX_RECORD_COUNT = 5;
 
     public static string MakeChartKey(string musicName, Difficulty difficulty)
     {
@@ -26,7 +27,7 @@ public static class MusicRecordPersistence
         foreach (Difficulty difficulty in System.Enum.GetValues(typeof(Difficulty)))
         {
             string chartKey = MakeChartKey(musicData.MusicName, difficulty);
-            var record = FindRecord(database, chartKey);
+            var record = FindBestRecord(database, chartKey);
             if (record == null) { continue; }
 
             var scoreRank = ScoreRankUtility.GetRankFromScore(record.score);
@@ -47,20 +48,13 @@ public static class MusicRecordPersistence
         string chartKey = MakeChartKey(musicData.MusicName, difficulty);
         var database = LoadDatabaseOrCreate();
 
-        var current = FindRecord(database, chartKey);
-        if (current != null && !IsBetterRecord(current, record))
-        {
-            return;
-        }
-
         var newRecord = new MusicRecordSaveData
         {
-            chartKey = chartKey,
             score = record.Score,
             comboRank = record.ComboRank,
         };
 
-        ReplaceRecord(database, newRecord);
+        AddRecord(database, chartKey, newRecord);
 
         if (!SaveDatabase(database))
         {
@@ -77,40 +71,84 @@ public static class MusicRecordPersistence
             return false;
         }
 
-        savedRecord = FindRecord(database, chartKey);
+        savedRecord = FindBestRecord(database, chartKey);
         return savedRecord != null;
     }
 
-    static bool IsBetterRecord(MusicRecordSaveData current, MusicRecord candidate)
+    public static bool TryGetSavedRecords(string chartKey, out IReadOnlyList<MusicRecordSaveData> savedRecords)
     {
-        if (candidate.Score > current.score) { return true; }
-        if (candidate.Score < current.score) { return false; }
+        savedRecords = null;
+        if (!TryLoadDatabase(out MusicRecordSaveDatabase database))
+        {
+            return false;
+        }
 
-        return candidate.ComboRank > current.comboRank;
+        var ranking = FindRanking(database, chartKey);
+        if (ranking == null || ranking.records == null || ranking.records.Count <= 0)
+        {
+            return false;
+        }
+
+        savedRecords = ranking.records;
+        return true;
     }
 
-    static MusicRecordSaveData FindRecord(MusicRecordSaveDatabase database, string chartKey)
+    static int CompareRecord(MusicRecordSaveData x, MusicRecordSaveData y)
+    {
+        if (x == null && y == null) { return 0; }
+        if (x == null) { return 1; }
+        if (y == null) { return -1; }
+        int scoreComparison = y.score.CompareTo(x.score);
+        if (scoreComparison != 0) { return scoreComparison; }
+
+        return y.comboRank.CompareTo(x.comboRank);
+    }
+
+    static MusicRecordSaveData FindBestRecord(MusicRecordSaveDatabase database, string chartKey)
+    {
+        var ranking = FindRanking(database, chartKey);
+        if (ranking == null || ranking.records == null || ranking.records.Count <= 0) { return null; }
+
+        return ranking.records[0];
+    }
+
+    static MusicRecordRankingSaveData FindRanking(MusicRecordSaveDatabase database, string chartKey)
     {
         if (database == null || database.records == null) { return null; }
 
         return database.records.Find(x => x != null && x.chartKey == chartKey);
     }
 
-    static void ReplaceRecord(MusicRecordSaveDatabase database, MusicRecordSaveData newRecord)
+    static void AddRecord(MusicRecordSaveDatabase database, string chartKey, MusicRecordSaveData newRecord)
     {
         if (database.records == null)
         {
-            database.records = new List<MusicRecordSaveData>();
+            database.records = new List<MusicRecordRankingSaveData>();
         }
 
-        int index = database.records.FindIndex(x => x != null && x.chartKey == newRecord.chartKey);
-        if (index >= 0)
+        var ranking = FindRanking(database, chartKey);
+        if (ranking == null)
         {
-            database.records[index] = newRecord;
-            return;
+            ranking = new MusicRecordRankingSaveData
+            {
+                chartKey = chartKey,
+                records = new List<MusicRecordSaveData>(),
+            };
+            database.records.Add(ranking);
         }
 
-        database.records.Add(newRecord);
+        if (ranking.records == null)
+        {
+            ranking.records = new List<MusicRecordSaveData>();
+        }
+
+        ranking.records.Add(newRecord);
+        ranking.records.Sort(CompareRecord);
+
+        if (ranking.records.Count > MAX_RECORD_COUNT)
+        {
+            ranking.records.RemoveRange(MAX_RECORD_COUNT, ranking.records.Count - MAX_RECORD_COUNT);
+        }
     }
 
     static MusicRecordSaveDatabase LoadDatabaseOrCreate()
@@ -138,12 +176,83 @@ public static class MusicRecordPersistence
             return false;
         }
 
+        if (NeedsLegacyMigration(database) && TryLoadLegacyDatabase(filePath, out var migratedDatabase))
+        {
+            database = migratedDatabase;
+            return true;
+        }
+
         if (database.records == null)
         {
-            database.records = new List<MusicRecordSaveData>();
+            database.records = new List<MusicRecordRankingSaveData>();
+        }
+
+        NormalizeDatabase(database);
+        return true;
+    }
+
+    static bool NeedsLegacyMigration(MusicRecordSaveDatabase database)
+    {
+        if (database == null || database.records == null) { return false; }
+        if (database.records.Count <= 0) { return false; }
+
+        return database.records.Exists(x => x != null && (x.records == null || x.records.Count <= 0));
+    }
+
+    static bool TryLoadLegacyDatabase(string filePath, out MusicRecordSaveDatabase database)
+    {
+        database = new MusicRecordSaveDatabase();
+        if (!TryLoadFromJsonFile(filePath, out LegacyMusicRecordSaveDatabase legacyDatabase))
+        {
+            return false;
+        }
+
+        if (legacyDatabase.records == null)
+        {
+            return true;
+        }
+
+        foreach (var legacyRecord in legacyDatabase.records)
+        {
+            if (legacyRecord == null || string.IsNullOrWhiteSpace(legacyRecord.chartKey)) { continue; }
+
+            AddRecord(
+                database,
+                legacyRecord.chartKey,
+                new MusicRecordSaveData
+                {
+                    score = legacyRecord.score,
+                    comboRank = legacyRecord.comboRank,
+                }
+            );
         }
 
         return true;
+    }
+
+    static void NormalizeDatabase(MusicRecordSaveDatabase database)
+    {
+        if (database == null) { return; }
+        if (database.records == null)
+        {
+            database.records = new List<MusicRecordRankingSaveData>();
+            return;
+        }
+
+        foreach (var ranking in database.records)
+        {
+            if (ranking == null) { continue; }
+            if (ranking.records == null)
+            {
+                ranking.records = new List<MusicRecordSaveData>();
+            }
+
+            ranking.records.Sort(CompareRecord);
+            if (ranking.records.Count > MAX_RECORD_COUNT)
+            {
+                ranking.records.RemoveRange(MAX_RECORD_COUNT, ranking.records.Count - MAX_RECORD_COUNT);
+            }
+        }
     }
 
     static bool SaveDatabase(MusicRecordSaveDatabase database)
@@ -155,5 +264,17 @@ public static class MusicRecordPersistence
     static string GetFilePath()
     {
         return Path.Combine(Application.persistentDataPath, FILE_NAME);
+    }
+
+    class LegacyMusicRecordSaveData
+    {
+        public string chartKey;
+        public int score;
+        public ComboRank comboRank;
+    }
+
+    class LegacyMusicRecordSaveDatabase
+    {
+        public List<LegacyMusicRecordSaveData> records;
     }
 }
