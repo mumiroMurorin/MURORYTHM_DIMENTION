@@ -31,19 +31,28 @@ namespace UIInResultScene
         void CreateItems(IReadOnlyList<MusicRecordSaveData> records, MusicRecord currentRecord)
         {
             bool currentPlayApplied = false;
-            int count = Mathf.Min(records.Count, MaxDisplayCount);
+            int displayCount = 0;
+            int currentRank = 0;
+            int previousScore = 0;
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < records.Count && displayCount < MaxDisplayCount; i++)
             {
                 var record = records[i];
                 if (record == null) { continue; }
+
+                displayCount++;
+                if (displayCount == 1 || record.score != previousScore)
+                {
+                    currentRank = displayCount;
+                }
+                previousScore = record.score;
 
                 bool isCurrentPlay = !currentPlayApplied
                     && record.score == currentRecord.Score
                     && record.comboRank == currentRecord.ComboRank;
 
                 var item = Instantiate(itemPrefab, contentRoot);
-                item.SetRankingData(i + 1, record.score, isCurrentPlay);
+                item.SetRankingData(currentRank, record.score, isCurrentPlay);
 
                 if (isCurrentPlay)
                 {
