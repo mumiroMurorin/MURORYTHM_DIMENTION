@@ -25,7 +25,7 @@ namespace UIInResultScene
 
             if (musicTitle_text && musicData.MusicName != null) { musicTitle_text.text = musicData.MusicName; }
             if (composer_text && musicData.ComposerName != null) { composer_text.text = musicData.ComposerName; }
-            if (otherCreator_text) { otherCreator_text.text = BuildOtherCreatorText(musicData.OtherCreator); }
+            if (otherCreator_text) { otherCreator_text.text = BuildOtherCreatorText(musicData.OtherCreator, musicData.ChartDesigner); }
             if (jacket_image && musicData.MusicSprite != null) { jacket_image.sprite = musicData.MusicSprite; }
 
             symphonyType = musicData.SymphonyType;
@@ -56,24 +56,31 @@ namespace UIInResultScene
             difficultyImage.sprite = sprite;
         }
 
-        private string BuildOtherCreatorText(string[] otherCreators)
+        private string BuildOtherCreatorText(string[] otherCreators, string chartDesigner)
         {
-            if (otherCreators == null || otherCreators.Length <= 0) { return string.Empty; }
-
             var builder = new StringBuilder();
-            foreach (string creator in otherCreators)
+            if (otherCreators != null)
             {
-                if (string.IsNullOrWhiteSpace(creator)) { continue; }
-
-                if (builder.Length > 0)
+                foreach (string creator in otherCreators)
                 {
-                    builder.Append(" / ");
+                    AppendCreatorText(builder, creator);
                 }
-
-                builder.Append(creator);
             }
 
+            AppendCreatorText(builder, string.IsNullOrWhiteSpace(chartDesigner) ? null : $"譜面制作者: {chartDesigner}");
             return builder.ToString();
+        }
+
+        private void AppendCreatorText(StringBuilder builder, string creator)
+        {
+            if (string.IsNullOrWhiteSpace(creator)) { return; }
+
+            if (builder.Length > 0)
+            {
+                builder.Append(" / ");
+            }
+
+            builder.Append(creator);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -38,7 +38,7 @@ public abstract class MusicTopic : MonoBehaviour
         // コンポーザー
         if (composer_tmp != null) { composer_tmp.text = data.ComposerName; }
         // その他制作者
-        if (otherCreator_tmp != null) { otherCreator_tmp.text = BuildOtherCreatorText(data.OtherCreator); }
+        if (otherCreator_tmp != null) { otherCreator_tmp.text = BuildOtherCreatorText(data.OtherCreator, data.ChartDesigner); }
         // サムネ
         if (music_image != null) { music_image.sprite = data.MusicSprite; }
         // 楽曲テーマ
@@ -129,23 +129,30 @@ public abstract class MusicTopic : MonoBehaviour
         this.gameObject.SetActive(isActive);
     }
 
-    protected string BuildOtherCreatorText(string[] otherCreators)
+    protected string BuildOtherCreatorText(string[] otherCreators, string chartDesigner)
     {
-        if (otherCreators == null || otherCreators.Length <= 0) { return string.Empty; }
-
         var builder = new StringBuilder();
-        foreach (string creator in otherCreators)
+        if (otherCreators != null)
         {
-            if (string.IsNullOrWhiteSpace(creator)) { continue; }
-
-            if (builder.Length > 0)
+            foreach (string creator in otherCreators)
             {
-                builder.Append(" / ");
+                AppendCreatorText(builder, creator);
             }
-
-            builder.Append(creator);
         }
 
+        AppendCreatorText(builder, string.IsNullOrWhiteSpace(chartDesigner) ? null : $"譜面制作者: {chartDesigner}");
         return builder.ToString();
+    }
+
+    protected void AppendCreatorText(StringBuilder builder, string creator)
+    {
+        if (string.IsNullOrWhiteSpace(creator)) { return; }
+
+        if (builder.Length > 0)
+        {
+            builder.Append(" / ");
+        }
+
+        builder.Append(creator);
     }
 }

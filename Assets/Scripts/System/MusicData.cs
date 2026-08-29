@@ -17,6 +17,10 @@ public class MusicData
     [SerializeField] private string[] other_creator = new string[0];
     public string[] OtherCreator { get { return other_creator ?? new string[0]; } set { other_creator = value ?? new string[0]; } }
 
+    [Header("•ˆ–Ê§ìÒ")]
+    [SerializeField] private string chart_designer;
+    public string ChartDesigner { get { return chart_designer; } set { chart_designer = value; } }
+
     [Header("ƒTƒ€ƒlƒCƒ‹")]
     [SerializeField] private Sprite music_spr;
     public Sprite MusicSprite { get { return music_spr; } set { music_spr = value; } }

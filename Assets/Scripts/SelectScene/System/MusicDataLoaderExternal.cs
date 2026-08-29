@@ -173,6 +173,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         musicData.MusicName = RemoveLineBreakSequences(info.MusicName);
         musicData.ComposerName = RemoveLineBreakSequences(info.ComposerName);
         musicData.OtherCreator = SanitizeCreatorNames(info.OtherCreator);
+        musicData.ChartDesigner = RemoveLineBreakSequences(info.ChartDesigner);
         musicData.SetDifficulty(info.Difficulties);
 
         // ステージ
