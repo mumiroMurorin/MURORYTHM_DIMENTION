@@ -30,6 +30,8 @@ public class SliderTopicTextsControllerView : MonoBehaviour
 
         foreach (var topic in sliderTopics)
         {
+            if (topic == null) { continue; }
+
             Destroy(topic.transform.gameObject);
         }
 
