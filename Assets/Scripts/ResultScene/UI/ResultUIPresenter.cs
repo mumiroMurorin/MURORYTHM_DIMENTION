@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -46,7 +46,7 @@ namespace UIInResultScene
 
         private void Initialize()
         {
-            // ƒe[ƒ}‰æ‘œ
+            // ãƒ†ãƒ¼ãƒžç”»åƒ
             if (themeImages != null)
             {
                 foreach (var image in themeImages)
@@ -63,7 +63,7 @@ namespace UIInResultScene
 
         private void Bind()
         {
-            // Šy‹Èƒf[ƒ^
+            // æ¥½æ›²ãƒ‡ãƒ¼ã‚¿
             musicDataGetter_model?.Music
                 .Subscribe(musicInfo_view.OnChangeMusicData)
                 .AddTo(this.gameObject);
@@ -72,7 +72,7 @@ namespace UIInResultScene
                 .Subscribe(musicInfo_view.OnChangeDifficulty)
                 .AddTo(this.gameObject);
 
-            // “ïˆÕ“xƒf[ƒ^
+            // é›£æ˜“åº¦ãƒ‡ãƒ¼ã‚¿
             musicDataGetter_model?.Music
                 .Subscribe(difficulty_view.OnChangeMusicData)
                 .AddTo(this.gameObject);
@@ -81,12 +81,12 @@ namespace UIInResultScene
                 .Subscribe(difficulty_view.OnChangeDifficulty)
                 .AddTo(this.gameObject);
 
-            // ƒXƒRƒAƒf[ƒ^
+            // ã‚¹ã‚³ã‚¢ãƒ‡ãƒ¼ã‚¿
             scoreGetter_model?.Score
                 .Subscribe(score_view.OnChangeScore)
                 .AddTo(this.gameObject);
 
-            // ƒXƒRƒAƒ‰ƒ“ƒNƒf[ƒ^
+            // ã‚¹ã‚³ã‚¢ãƒ©ãƒ³ã‚¯ãƒ‡ãƒ¼ã‚¿
             scoreGetter_model?.CurrentScoreRank
                 .Subscribe(score_view.OnChangeScoreRank)
                 .AddTo(this.gameObject);
@@ -95,7 +95,7 @@ namespace UIInResultScene
                 .Subscribe(scoreRank_view.OnChangeScoreRank)
                 .AddTo(this.gameObject);
 
-            // “à–óƒf[ƒ^
+            // å†…è¨³ãƒ‡ãƒ¼ã‚¿
             scoreGetter_model?.PerfectNum
                 .Subscribe(breakdown_view.OnChangePerfectCount)
                 .AddTo(this.gameObject);
@@ -112,7 +112,7 @@ namespace UIInResultScene
                 .Subscribe(breakdown_view.OnChangeMissCount)
                 .AddTo(this.gameObject);
 
-            // ’B¬
+            // é”æˆ
             scoreGetter_model?.CurrentComboRank
                 .Subscribe(achievement_view.OnChangeComboRank)
                 .AddTo(this.gameObject);
@@ -121,7 +121,7 @@ namespace UIInResultScene
                 .Subscribe(achievement_view.OnChangeScoreRank)
                 .AddTo(this.gameObject);
 
-            // ”wŒi
+            // èƒŒæ™¯
             musicDataGetter_model?.Music
                 .Where(data => data != null)
                 .Take(1)
@@ -131,12 +131,12 @@ namespace UIInResultScene
 
         private void BindForSliderUI()
         {
-            // ƒ^ƒbƒ`‚³‚ê‚½Žž‚ÌUI‹““®
+            // ã‚¿ãƒƒãƒã•ã‚ŒãŸæ™‚ã®UIæŒ™å‹•
             operationGetter_model?.Value.OnTouchSliderListner
                 .Subscribe(sliderUnitsController_view.OnTouchSlider)
                 .AddTo(this.gameObject);
 
-            // ‘€ì‚Ì’Ç‰Á
+            // æ“ä½œã®è¿½åŠ 
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveAdd()
                 .Subscribe(value => {
@@ -145,7 +145,7 @@ namespace UIInResultScene
                 })
                 .AddTo(this.gameObject);
 
-            // ‘€ì‚ÌˆêV
+            // æ“ä½œã®ä¸€æ–°
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveReset()
                 .Subscribe(_ => {
@@ -158,6 +158,12 @@ namespace UIInResultScene
         private void SetEvent()
         {
            
+        }
+
+        public void SetNewRecordActive(bool isScoreNewRecord, bool isScoreRankNewRecord)
+        {
+            score_view?.SetNewRecordActive(isScoreNewRecord);
+            scoreRank_view?.SetNewRecordActive(isScoreRankNewRecord);
         }
     }
 }

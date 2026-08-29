@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -9,6 +7,7 @@ namespace UIInResultScene
     {
         [SerializeField] ScoreRankTextMaterialPreset[] presets;
         [SerializeField] TextMeshProUGUI tmp;
+        [SerializeField] RectTransform newRecordRoot;
 
         public void OnChangeScoreRank(ScoreRank scoreRank)
         {
@@ -20,6 +19,13 @@ namespace UIInResultScene
 
                 preset.ApplyPreset(tmp, true);
             }
+        }
+
+        public void SetNewRecordActive(bool isActive)
+        {
+            if (newRecordRoot == null) { return; }
+
+            newRecordRoot.gameObject.SetActive(isActive);
         }
     }
 
