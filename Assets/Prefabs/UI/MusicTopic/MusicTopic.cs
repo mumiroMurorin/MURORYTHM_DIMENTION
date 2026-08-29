@@ -1,14 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
+ï»¿using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public abstract class MusicTopic : MonoBehaviour
 {
-    [Header("ƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌQÆ")]
+    [Header("ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‚ç…§")]
     [SerializeField] protected TextMeshProUGUI title_tmp;
-    [SerializeField] protected CreatorTextView creatorTextView;
+    [SerializeField] protected TextMeshProUGUI composer_tmp;
+    [SerializeField] protected TextMeshProUGUI otherCreator_tmp;
     [SerializeField] protected TextMeshProUGUI diff_tmp;
     [SerializeField] protected TextMeshProUGUI level_tmp;
     [SerializeField] protected TextMeshProUGUI score_tmp;
@@ -19,55 +19,57 @@ public abstract class MusicTopic : MonoBehaviour
     [SerializeField] protected Image comboLamp_image;
     [SerializeField] protected GameObject NoneChartNoteObj;
 
-    [Header("“ïˆÕ“x•Ê”wŒi")]
+    [Header("é›£æ˜“åº¦åˆ¥èƒŒæ™¯")]
     [SerializeField] DifficultyToSprite[] difficultyToBackGround;
-    [Header("ƒXƒRƒAƒ‰ƒ“ƒN•Êƒ‰ƒ“ƒv")]
+    [Header("ã‚¹ã‚³ã‚¢ãƒ©ãƒ³ã‚¯åˆ¥ãƒ©ãƒ³ãƒ—")]
     [SerializeField] ScoreRankToSprite[] rankToLampSprite;
-    [Header("ƒRƒ“ƒ{ƒ‰ƒ“ƒN•Êƒ‰ƒ“ƒv")]
+    [Header("ã‚³ãƒ³ãƒœãƒ©ãƒ³ã‚¯åˆ¥ãƒ©ãƒ³ãƒ—")]
     [SerializeField] ComboRankToSprite[] comboRankToLampSprite;
 
     /// <summary>
-    /// Šy‹Èƒf[ƒ^‚ÌƒZƒbƒg
+    /// æ¥½æ›²ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
     /// </summary>
     /// <param name="data"></param>
     /// <param name="difficulty"></param>
     public virtual void OnSetMusicTopic(MusicData data)
     {
-        // Šy‹È–¼
-        if(title_tmp != null) { title_tmp.text = data.MusicName; }
-        // ƒRƒ“ƒ|[ƒU[
-        if (creatorTextView != null) { creatorTextView.SetCreators(data.ComposerName, data.OtherCreator); }
-        // ƒTƒ€ƒl
+        // æ¥½æ›²å
+        if (title_tmp != null) { title_tmp.text = data.MusicName; }
+        // ã‚³ãƒ³ãƒãƒ¼ã‚¶ãƒ¼
+        if (composer_tmp != null) { composer_tmp.text = data.ComposerName; }
+        // ãã®ä»–åˆ¶ä½œè€…
+        if (otherCreator_tmp != null) { otherCreator_tmp.text = BuildOtherCreatorText(data.OtherCreator); }
+        // ã‚µãƒ ãƒ
         if (music_image != null) { music_image.sprite = data.MusicSprite; }
-        // Šy‹Èƒe[ƒ}
-        if (musicTheme_image!= null) { musicTheme_image.sprite = data.ThemeSprite; }
+        // æ¥½æ›²ãƒ†ãƒ¼ãƒ
+        if (musicTheme_image != null) { musicTheme_image.sprite = data.ThemeSprite; }
     }
 
     /// <summary>
-    /// “ïˆÕ“x‚ÌƒZƒbƒg
+    /// é›£æ˜“åº¦ã®ã‚»ãƒƒãƒˆ
     /// </summary>
     /// <param name="b"></param>
     public virtual void OnSetDifficulty(Difficulty difficulty, int level)
     {
-        // “ïˆÕ“x–¼
-        diff_tmp.text = difficulty.ToString().ToUpper(); //‘å•¶š‚É
+        // é›£æ˜“åº¦å
+        diff_tmp.text = difficulty.ToString().ToUpper(); //å¤§æ–‡å­—ã«
 
         UpdateBackGround(difficulty);
         UpdateLevel(level);
     }
 
     /// <summary>
-    /// ƒXƒRƒA‚ÌƒZƒbƒg
+    /// ã‚¹ã‚³ã‚¢ã®ã‚»ãƒƒãƒˆ
     /// </summary>
     /// <param name="record"></param>
     public virtual void OnSetScore(MusicRecord record)
     {
         if (record == null) { return; }
 
-        // ƒŒƒR[ƒh
+        // ãƒ¬ã‚³ãƒ¼ãƒ‰
         score_tmp.text = record.Score.ToString("N0");
 
-        // ƒXƒRƒAƒ‰ƒ“ƒv
+        // ã‚¹ã‚³ã‚¢ãƒ©ãƒ³ãƒ—
         scoreLamp_image.gameObject.SetActive(record.ScoreRank != ScoreRank.None);
         foreach (var spr in rankToLampSprite)
         {
@@ -78,7 +80,7 @@ public abstract class MusicTopic : MonoBehaviour
             }
         }
 
-        // ƒRƒ“ƒ{ƒ‰ƒ“ƒv
+        // ã‚³ãƒ³ãƒœãƒ©ãƒ³ãƒ—
         comboLamp_image.gameObject.SetActive(record.ComboRank != ComboRank.None && record.ComboRank != ComboRank.TrackComplete);
         foreach (var spr in comboRankToLampSprite)
         {
@@ -91,7 +93,7 @@ public abstract class MusicTopic : MonoBehaviour
     }
 
     /// <summary>
-    /// ˆø”‚©‚ç”wŒi‚ğ•ÏX
+    /// å¼•æ•°ã‹ã‚‰èƒŒæ™¯ã‚’å¤‰æ›´
     /// </summary>
     /// <param name="data"></param>
     protected void UpdateBackGround(Difficulty difficulty)
@@ -107,7 +109,7 @@ public abstract class MusicTopic : MonoBehaviour
     }
 
     /// <summary>
-    /// “ïˆÕ“x(ƒŒƒxƒ‹)‚ÌXV
+    /// é›£æ˜“åº¦(ãƒ¬ãƒ™ãƒ«)ã®æ›´æ–°
     /// </summary>
     /// <param name="level"></param>
     protected void UpdateLevel(int level)
@@ -119,11 +121,31 @@ public abstract class MusicTopic : MonoBehaviour
     }
 
     /// <summary>
-    /// •\¦”ñ•\¦Ø‚è‘Ö‚¦
+    /// è¡¨ç¤ºéè¡¨ç¤ºåˆ‡ã‚Šæ›¿ãˆ
     /// </summary>
     /// <param name="b"></param>
     public void SetObjActive(bool isActive)
     {
         this.gameObject.SetActive(isActive);
+    }
+
+    protected string BuildOtherCreatorText(string[] otherCreators)
+    {
+        if (otherCreators == null || otherCreators.Length <= 0) { return string.Empty; }
+
+        var builder = new StringBuilder();
+        foreach (string creator in otherCreators)
+        {
+            if (string.IsNullOrWhiteSpace(creator)) { continue; }
+
+            if (builder.Length > 0)
+            {
+                builder.Append(" / ");
+            }
+
+            builder.Append(creator);
+        }
+
+        return builder.ToString();
     }
 }

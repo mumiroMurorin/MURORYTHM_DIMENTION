@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -11,6 +10,7 @@ namespace UIInResultScene
         [SerializeField] SymphonyTypePresentationDatabase symphonyTypePresentationDatabase;
         [SerializeField] TextMeshProUGUI musicTitle_text;
         [SerializeField] TextMeshProUGUI composer_text;
+        [SerializeField] TextMeshProUGUI otherCreator_text;
         [SerializeField] Image jacket_image;
         [SerializeField] Image difficultyImage;
 
@@ -25,6 +25,7 @@ namespace UIInResultScene
 
             if (musicTitle_text && musicData.MusicName != null) { musicTitle_text.text = musicData.MusicName; }
             if (composer_text && musicData.ComposerName != null) { composer_text.text = musicData.ComposerName; }
+            if (otherCreator_text) { otherCreator_text.text = BuildOtherCreatorText(musicData.OtherCreator); }
             if (jacket_image && musicData.MusicSprite != null) { jacket_image.sprite = musicData.MusicSprite; }
 
             symphonyType = musicData.SymphonyType;
@@ -53,6 +54,26 @@ namespace UIInResultScene
             }
 
             difficultyImage.sprite = sprite;
+        }
+
+        private string BuildOtherCreatorText(string[] otherCreators)
+        {
+            if (otherCreators == null || otherCreators.Length <= 0) { return string.Empty; }
+
+            var builder = new StringBuilder();
+            foreach (string creator in otherCreators)
+            {
+                if (string.IsNullOrWhiteSpace(creator)) { continue; }
+
+                if (builder.Length > 0)
+                {
+                    builder.Append(" / ");
+                }
+
+                builder.Append(creator);
+            }
+
+            return builder.ToString();
         }
     }
 }

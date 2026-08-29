@@ -14,6 +14,8 @@ public class ScrollingOverflowText : MonoBehaviour
     [SerializeField] int loopGapSpaces = 8;
     [SerializeField] bool addViewportMaskIfMissing = true;
     [SerializeField] bool scrollFromRightEdge = false;
+    [SerializeField] bool forceLoop = false;
+    [SerializeField] int forceLoopRepeatCount = 5;
 
     TextMeshProUGUI tmp;
     RectTransform textRect;
@@ -135,7 +137,13 @@ public class ScrollingOverflowText : MonoBehaviour
         lastViewportWidth = currentViewportWidth;
         lastPreferredWidth = preferredWidth;
 
-        if (overflowWidth <= 0f)
+        if (string.IsNullOrWhiteSpace(currentText))
+        {
+            StopScrolling();
+            return;
+        }
+
+        if (!forceLoop && overflowWidth <= 0f)
         {
             StopScrolling();
             return;
@@ -357,7 +365,16 @@ public class ScrollingOverflowText : MonoBehaviour
 
     private string BuildLoopDisplayText(string sourceText)
     {
-        return $"{sourceText}{BuildLoopGap()}{sourceText}";
+        int repeatCount = forceLoop ? Mathf.Max(2, forceLoopRepeatCount) : 2;
+        string loopGap = BuildLoopGap();
+        string loopText = sourceText;
+
+        for (int i = 1; i < repeatCount; i++)
+        {
+            loopText += loopGap + sourceText;
+        }
+
+        return loopText;
     }
 
     private string BuildLoopGap()
