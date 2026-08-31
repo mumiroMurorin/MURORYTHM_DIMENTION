@@ -234,9 +234,14 @@ MonoBehaviour:
     music_name: Altale
     composer_name: "\u524A\u9664"
     other_creator: []
+    chart_designers:
+    - 
+    - 
+    - 
+    - 
     music_spr: {fileID: 21300000, guid: 1512ba05fa48cde48858c7f68c23594f, type: 3}
     theme_spr: {fileID: 21300000, guid: 3c06a8191248f7242929db1cddb0c309, type: 3}
-    clip: {fileID: 8300000, guid: 208648ff585d0534f89288210f0d80e1, type: 3}
+    clip: {fileID: 8300000, guid: 015896b2af4a8a04a95905417f694d54, type: 3}
     sample_clip: {fileID: 8300000, guid: 6bb917bc6d659314c85522d193d72c5b, type: 3}
     symphonyType: 20
     stageType: 200
@@ -247,7 +252,7 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: MusicData/CalamityFortune/chart_master.json
+  chartFilePath: MusicData/Aleph-0/chart_master.json
   noteSpeed: 200
   groundRadius: 2000
   isAutoMode: 1
