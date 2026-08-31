@@ -9,30 +9,31 @@ using VContainer;
 using System.IO;
 using System.Linq;
 using JsonUtil;
+using Newtonsoft.Json.Linq;
 
 public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
 {
-    [Header("Šy‹Èƒf[ƒ^‚ÌƒpƒX")]
-    [Tooltip("ƒf[ƒ^‚ª“ü‚Á‚Ä‚éƒtƒHƒ‹ƒ_–¼")]
+    [Header("ï¿½yï¿½Èƒfï¿½[ï¿½^ï¿½Ìƒpï¿½X")]
+    [Tooltip("ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½ï¿½")]
     [SerializeField] string dataFolderName;
-    [Tooltip("Šy‹Èƒf[ƒ^ƒtƒ@ƒCƒ‹–¼")]
+    [Tooltip("ï¿½yï¿½Èƒfï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] string musicInformationFileName = "information.json";
-    [Tooltip("Šy‹ÈƒWƒƒƒPƒbƒgƒtƒ@ƒCƒ‹–¼")]
+    [Tooltip("ï¿½yï¿½ÈƒWï¿½ï¿½ï¿½Pï¿½bï¿½gï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] string[] musicJacketFileNames = new string[] { "jacket.png", "jacket.jpg", "jacket.jpeg" };
-    [Tooltip("Šy‹Èƒe[ƒ}‰æ‘œƒtƒ@ƒCƒ‹–¼")]
+    [Tooltip("ï¿½yï¿½Èƒeï¿½[ï¿½}ï¿½æ‘œï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] string[] musicThemeImageFileNames = new string[] { "theme.png", "theme.jpg", "theme.jpeg" };
-    [Tooltip("Šy‹ÈƒI[ƒfƒBƒIƒtƒ@ƒCƒ‹–¼")]
+    [Tooltip("ï¿½yï¿½ÈƒIï¿½[ï¿½fï¿½Bï¿½Iï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] string[] musicClipFileNames = new string[] { "clip.wav", "clip.mp3", "clip.ogg" };
-    [Tooltip("Šy‹ÈƒTƒ“ƒvƒ‹ƒI[ƒfƒBƒIƒtƒ@ƒCƒ‹–¼")]
+    [Tooltip("ï¿½yï¿½ÈƒTï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Iï¿½[ï¿½fï¿½Bï¿½Iï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] string[] sampleClipFileNames = new string[] { "sample.wav", "sample.mp3", "sample.ogg" };
-    [Header("ƒtƒH[ƒ‹ƒoƒbƒN")]
-    [Tooltip("ƒTƒ“ƒvƒ‹ƒI[ƒfƒBƒIƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¢ê‡‚Ég—p‚·‚é‰¹Œ¹")]
+    [Header("ï¿½tï¿½Hï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½N")]
+    [Tooltip("ï¿½Tï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Iï¿½[ï¿½fï¿½Bï¿½Iï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½Égï¿½pï¿½ï¿½ï¿½é‰¹ï¿½ï¿½")]
     [SerializeField] AudioClip fallbackSampleClip;
-    [Tooltip("ƒWƒƒƒPƒbƒg‰æ‘œ‚ª‘¶İ‚µ‚È‚¢ê‡‚Ég—p‚·‚é‰æ‘œ")]
+    [Tooltip("ï¿½Wï¿½ï¿½ï¿½Pï¿½bï¿½gï¿½æ‘œï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½Égï¿½pï¿½ï¿½ï¿½ï¿½æ‘œ")]
     [SerializeField] Sprite fallbackJacketSprite;
-    [Tooltip("ƒe[ƒ}‰æ‘œ‚ª‘¶İ‚µ‚È‚¢ê‡‚Ég—p‚·‚é‰æ‘œ")]
+    [Tooltip("ï¿½eï¿½[ï¿½}ï¿½æ‘œï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½Égï¿½pï¿½ï¿½ï¿½ï¿½æ‘œ")]
     [SerializeField] Sprite fallbackThemeSprite;
-    [Tooltip("•ˆ–Êƒf[ƒ^–¼")]
+    [Tooltip("ï¿½ï¿½ï¿½Êƒfï¿½[ï¿½^ï¿½ï¿½")]
     [SerializeField] string chartFileNameEasy = "chart_easy.json";
     [SerializeField] string chartFileNameNormal = "chart_normal.json";
     [SerializeField] string chartFileNameHard = "chart_hard.json";
@@ -58,7 +59,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
 
     public void LoadMusicDataList(Action onFinishedAction)
     {
-        // Šù‚É“Ç‚İ‚Ü‚ê‚Ä‚¢‚éê‡(‘¼‚ÌƒV[ƒ“‚©‚ç—ˆ‚½)‚Í“Ç‚İ‚İˆ—‚ğ”ò‚Î‚·
+        // ï¿½ï¿½ï¿½É“Ç‚İï¿½ï¿½Ü‚ï¿½Ä‚ï¿½ï¿½ï¿½ê‡(ï¿½ï¿½ï¿½ÌƒVï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ç—ˆï¿½ï¿½ï¿½ï¿½)ï¿½Í“Ç‚İï¿½ï¿½İï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î‚ï¿½
         //if(dataGetter.MusicDatasSorted != null && dataGetter.MusicDatasSorted.Count > 0) 
         //{
         //    onFinishedAction.Invoke();
@@ -75,27 +76,27 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     {
         dataPath = Application.dataPath + "/" + dataFolderName;
 
-        // ƒtƒHƒ‹ƒ_ƒpƒX‚Ì‘¶İŠm”F
+        // ï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½pï¿½Xï¿½Ì‘ï¿½ï¿½İŠmï¿½F
         if (!Directory.Exists(dataPath))
         {
-            Debug.LogWarning("ySystemzw’è‚³‚ê‚½ƒtƒHƒ‹ƒ_‚ª‘¶İ‚µ‚Ü‚¹‚ñ: " + dataPath);
+            Debug.LogWarning("ï¿½ySystemï¿½zï¿½wï¿½è‚³ï¿½ê‚½ï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½: " + dataPath);
             return;
         }
 
-        // ƒTƒuƒtƒHƒ‹ƒ_‚ÌƒpƒXˆê——‚ğæ“¾‚µ‚Äˆê‚Â‚¸‚Âæ‚èo‚·
+        // ï¿½Tï¿½uï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½Ìƒpï¿½Xï¿½ê——ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Äˆï¿½Â‚ï¿½ï¿½Âï¿½ï¿½oï¿½ï¿½
         string[] subDirectories = Directory.GetDirectories(dataPath);
         List<UniTask<MusicData>> tasks = new List<UniTask<MusicData>>();
         MusicDataList musicDataList = new MusicDataList();
 
-        // ŠeƒTƒuƒtƒHƒ‹ƒ_‚ğƒ‹[ƒv
+        // ï¿½eï¿½Tï¿½uï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½[ï¿½v
         foreach (string dir in subDirectories)
         {
-            // ÅŒã”ö‚Ìu/v‚ªu\v‚É‚È‚Á‚¿‚á‚¤‚Ì‚Å’uŠ·
+            // ï¿½ÅŒï¿½ï¿½ï¿½Ìu/ï¿½vï¿½ï¿½ï¿½u\ï¿½vï¿½É‚È‚ï¿½ï¿½ï¿½ï¿½á‚¤ï¿½Ì‚Å’uï¿½ï¿½
             string normalizedPath = dir.Replace("\\", "/");
             tasks.Add(LoadMusicData(normalizedPath, token));
         }
 
-        // ‘S‚Ä‚Ìˆ—‚ªI‚í‚é‚Ü‚Å‘Ò‚¿
+        // ï¿½Sï¿½Ä‚Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½Ü‚Å‘Ò‚ï¿½
         MusicData[] results = await UniTask.WhenAll(tasks);
 
         foreach (var result in results)
@@ -110,19 +111,19 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     }
 
     /// <summary>
-    /// ƒfƒBƒŒƒNƒgƒŠ‚©‚çMusicData‚ğ¶¬‚µ‚Ä•Ô‚·
+    /// ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½MusicDataï¿½ğ¶ï¿½ï¿½ï¿½ï¿½Ä•Ô‚ï¿½
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
     private async UniTask<MusicData> LoadMusicData(string path, CancellationToken token)
     {
-        Debug.Log("ySystemzMusicDataƒ[ƒhŠJn:" + path);
+        Debug.Log("ï¿½ySystemï¿½zMusicDataï¿½ï¿½ï¿½[ï¿½hï¿½Jï¿½n:" + path);
 
         MusicData musicData = new MusicData();
-        // Šy‹Èî•ñ‚ÌƒZƒbƒg
+        // ï¿½yï¿½Èï¿½ï¿½ÌƒZï¿½bï¿½g
         if (!SetMusicInformation(musicData, path)) { return null; }
 
-        // Šy‹Èƒf[ƒ^‚ÌƒZƒbƒg
+        // ï¿½yï¿½Èƒfï¿½[ï¿½^ï¿½ÌƒZï¿½bï¿½g
         List<UniTask<bool>> tasks = new List<UniTask<bool>>
         {
             SetMusicClipFileAsync(musicData, path, token),
@@ -132,21 +133,21 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
             SetChartFileAsync(musicData, path, token)
         };
 
-        // ‘S‚Ä‚Ìˆ—‚ªI‚í‚é‚Ü‚Å‘Ò‚¿
+        // ï¿½Sï¿½Ä‚Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½Ü‚Å‘Ò‚ï¿½
         bool[] results = await UniTask.WhenAll(tasks);
 
-        // clip‚Í•K{A‚»‚êˆÈŠO‚ÍƒtƒH[ƒ‹ƒoƒbƒN‚Å“Ç‚İ‚ß‚é‚½‚ßA‚±‚±‚Å¸”s‚µ‚½ê‡‚Ì‚İœŠO‚·‚é
+        // clipï¿½Í•Kï¿½{ï¿½Aï¿½ï¿½ï¿½ï¿½ÈŠOï¿½Íƒtï¿½Hï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½Å“Ç‚İï¿½ï¿½ß‚é‚½ï¿½ßAï¿½ï¿½ï¿½ï¿½ï¿½Åï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Ì‚İï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½
         if(!results.All(x => x)) { return null; }
 
-        // ‹L˜^‚Ì“Ç‚İ‚İ
+        // ï¿½Lï¿½^ï¿½Ì“Ç‚İï¿½ï¿½ï¿½
         MusicRecordPersistence.LoadAndApply(musicData);
 
-        Debug.Log($"ySystemz{musicData.MusicName} ƒ[ƒhŠ®—¹: {path}");
+        Debug.Log($"ï¿½ySystemï¿½z{musicData.MusicName} ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½: {path}");
         return musicData;
     }
 
     /// <summary>
-    /// Šy‹Èî•ñ‚Ìæ“¾AƒZƒbƒg
+    /// ï¿½yï¿½Èï¿½ï¿½Ìæ“¾ï¿½Aï¿½Zï¿½bï¿½g
     /// </summary>
     /// <param name="musicData"></param>
     /// <param name="path"></param>
@@ -155,36 +156,36 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     {
         path = path + "/" + musicInformationFileName;
 
-        // ƒtƒ@ƒCƒ‹‚Ì‘¶İŠm”F
+        // ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì‘ï¿½ï¿½İŠmï¿½F
         if (!File.Exists(path))
         {
-            Debug.LogWarning("ySystemzw’è‚³‚ê‚½ƒtƒHƒ‹ƒ_‚ª‘¶İ‚µ‚Ü‚¹‚ñ: " + path);
+            Debug.LogWarning("ï¿½ySystemï¿½zï¿½wï¿½è‚³ï¿½ê‚½ï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½: " + path);
             return false;
         }
 
-        // Šy‹Èî•ñƒf[ƒ^‚Ì•ÏŠ·
+        // ï¿½yï¿½Èï¿½ï¿½fï¿½[ï¿½^ï¿½Ì•ÏŠï¿½
         if(!JsonLoader.TryLoadFromJsonFile(path, out MusicInformation info))
         {
-            Debug.LogWarning("ySystemzŠy‹Èî•ñƒtƒ@ƒCƒ‹‚Ì•ÏŠ·‚É¸”s‚µ‚Ü‚µ‚½: " + path);
+            Debug.LogWarning("ï¿½ySystemï¿½zï¿½yï¿½Èï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì•ÏŠï¿½ï¿½Éï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½: " + path);
             return false;
         }
 
-        // ƒf[ƒ^ƒZƒbƒg
+        // ï¿½fï¿½[ï¿½^ï¿½Zï¿½bï¿½g
         musicData.MusicName = RemoveLineBreakSequences(info.MusicName);
         musicData.ComposerName = RemoveLineBreakSequences(info.ComposerName);
         musicData.OtherCreator = SanitizeCreatorNames(info.OtherCreator);
-        musicData.ChartDesigner = RemoveLineBreakSequences(info.ChartDesigner);
+        musicData.ChartDesigners = SanitizeChartDesigners(info.ChartDesigner);
         musicData.SetDifficulty(info.Difficulties);
 
-        // ƒXƒe[ƒW
+        // ï¿½Xï¿½eï¿½[ï¿½W
         if(info.StageType == null || !Enum.TryParse<StageType>(info.StageType, ignoreCase: true, out var stageType))
-        { Debug.LogWarning($"ySystemzƒXƒe[ƒWî•ñ‚ª‚ ‚è‚Ü‚¹‚ñ: {path}"); }
+        { Debug.LogWarning($"ï¿½ySystemï¿½zï¿½Xï¿½eï¿½[ï¿½Wï¿½ï¿½ñ‚ª‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½: {path}"); }
         else
         { musicData.StageType = stageType; }
 
-        // ƒ^ƒCƒv
+        // ï¿½^ï¿½Cï¿½v
         if (info.SymphonyType == null || !Enum.TryParse<SymphonyType>(info.SymphonyType, ignoreCase: true, out var symphonyType))
-        { Debug.LogWarning($"ySystemzƒ^ƒCƒvî•ñ‚ª‚ ‚è‚Ü‚¹‚ñ: {path}"); }
+        { Debug.LogWarning($"ï¿½ySystemï¿½zï¿½^ï¿½Cï¿½vï¿½ï¿½ñ‚ª‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½: {path}"); }
         else
         { musicData.SymphonyType = symphonyType; }
 
@@ -215,8 +216,27 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
 
         return names;
     }
+
+    private string[] SanitizeChartDesigners(JToken chartDesignerToken)
+    {
+        string[] chartDesigners = new string[4];
+        if (chartDesignerToken == null || chartDesignerToken.Type != JTokenType.Array)
+        {
+            return chartDesigners;
+        }
+
+        var chartDesignerArray = (JArray)chartDesignerToken;
+        for (int i = 0; i < chartDesigners.Length && i < chartDesignerArray.Count; i++)
+        {
+            if (chartDesignerArray[i] == null || chartDesignerArray[i].Type == JTokenType.Null) { continue; }
+
+            chartDesigners[i] = RemoveLineBreakSequences(chartDesignerArray[i].ToString());
+        }
+
+        return chartDesigners;
+    }
     /// <summary>
-    /// ‹Èƒf[ƒ^‚Ìæ“¾AƒZƒbƒg(”ñ“¯Šú)
+    /// ï¿½Èƒfï¿½[ï¿½^ï¿½Ìæ“¾ï¿½Aï¿½Zï¿½bï¿½g(ï¿½ñ“¯Šï¿½)
     /// </summary>
     /// <param name="musicData"></param>
     /// <param name="path"></param>
@@ -224,13 +244,13 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     /// <returns></returns>
     private async UniTask<bool> SetMusicClipFileAsync(MusicData musicData, string path, CancellationToken token)
     {
-        // ƒŠƒXƒg‚É‚ ‚éƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”F
+        // ï¿½ï¿½ï¿½Xï¿½gï¿½É‚ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½é‚©ï¿½mï¿½F
         bool isFindPath = false;
         foreach(var fileName in musicClipFileNames)
         {
             string clipPath = path + "/" + fileName;
 
-            // ƒtƒHƒ‹ƒ_ƒpƒX‚Ì‘¶İŠm”F
+            // ï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½pï¿½Xï¿½Ì‘ï¿½ï¿½İŠmï¿½F
             if (File.Exists(clipPath))
             {
                 isFindPath = true;
@@ -239,21 +259,21 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
             }
         }
 
-        // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍŠy‹Èƒf[ƒ^‚Æ‚µ‚Ä“Ç‚İ‚Ü‚È‚¢
+        // ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍŠyï¿½Èƒfï¿½[ï¿½^ï¿½Æ‚ï¿½ï¿½Ä“Ç‚İï¿½ï¿½Ü‚È‚ï¿½
         if (!isFindPath)
         {
-            Debug.LogWarning("ySystemzŠy‹ÈƒI[ƒfƒBƒIƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¢‚½‚ßŠy‹È“Ç‚İ‚İ‚ğƒXƒLƒbƒv‚µ‚Ü‚·: " + path);
+            Debug.LogWarning("ï¿½ySystemï¿½zï¿½yï¿½ÈƒIï¿½[ï¿½fï¿½Bï¿½Iï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ßŠyï¿½È“Ç‚İï¿½ï¿½İ‚ï¿½Xï¿½Lï¿½bï¿½vï¿½ï¿½ï¿½Ü‚ï¿½: " + path);
             return false;
         }
 
-        // Šy‹È‚Ì“Ç‚İ‚İ
+        // ï¿½yï¿½È‚Ì“Ç‚İï¿½ï¿½ï¿½
         musicData.MusicClip = await AudioFileSelector.LoadAudioClip(path, token);
 
         return true;
     }
 
     /// <summary>
-    /// Šy‹ÈƒTƒ“ƒvƒ‹‚Ìæ“¾AƒZƒbƒg(”ñ“¯Šú)
+    /// ï¿½yï¿½ÈƒTï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Ìæ“¾ï¿½Aï¿½Zï¿½bï¿½g(ï¿½ñ“¯Šï¿½)
     /// </summary>
     /// <param name="musicData"></param>
     /// <param name="path"></param>
@@ -261,13 +281,13 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     /// <returns></returns>
     private async UniTask<bool> SetSampleClipFileAsync(MusicData musicData, string path, CancellationToken token)
     {
-        // ƒŠƒXƒg‚É‚ ‚éƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”F
+        // ï¿½ï¿½ï¿½Xï¿½gï¿½É‚ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½é‚©ï¿½mï¿½F
         bool isFindPath = false;
         foreach (var fileName in sampleClipFileNames)
         {
             string samplePath = path + "/" + fileName;
 
-            // ƒtƒHƒ‹ƒ_ƒpƒX‚Ì‘¶İŠm”F
+            // ï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½pï¿½Xï¿½Ì‘ï¿½ï¿½İŠmï¿½F
             if (File.Exists(samplePath))
             {
                 isFindPath = true;
@@ -276,22 +296,22 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
             }
         }
 
-        // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚ÍƒtƒH[ƒ‹ƒoƒbƒN‚ğg—p‚·‚é
+        // ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Íƒtï¿½Hï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½
         if (!isFindPath)
         {
-            Debug.LogWarning("ySystemzŠy‹ÈƒTƒ“ƒvƒ‹ƒI[ƒfƒBƒIƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¢‚½‚ßƒtƒH[ƒ‹ƒoƒbƒN‚ğg—p‚µ‚Ü‚·: " + path);
+            Debug.LogWarning("ï¿½ySystemï¿½zï¿½yï¿½ÈƒTï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Iï¿½[ï¿½fï¿½Bï¿½Iï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ßƒtï¿½Hï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½ï¿½gï¿½pï¿½ï¿½ï¿½Ü‚ï¿½: " + path);
             musicData.SampleClip = fallbackSampleClip;
             return true;
         }
 
-        // Šy‹È‚Ì“Ç‚İ‚İ
+        // ï¿½yï¿½È‚Ì“Ç‚İï¿½ï¿½ï¿½
         musicData.SampleClip = await AudioFileSelector.LoadAudioClip(path, token);
 
         return true;
     }
 
     /// <summary>
-    /// Šy‹ÈƒWƒƒƒPƒbƒg‚Ìæ“¾AƒZƒbƒg(”ñ“¯Šú)
+    /// ï¿½yï¿½ÈƒWï¿½ï¿½ï¿½Pï¿½bï¿½gï¿½Ìæ“¾ï¿½Aï¿½Zï¿½bï¿½g(ï¿½ñ“¯Šï¿½)
     /// </summary>
     /// <param name="musicData"></param>
     /// <param name="path"></param>
@@ -301,7 +321,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     {
         if (!TryFindFilePath(path, musicJacketFileNames, out var jacketPath))
         {
-            Debug.LogWarning("ySystemzŠy‹ÈƒWƒƒƒPƒbƒg‰æ‘œ‚ª‘¶İ‚µ‚È‚¢‚½‚ßƒtƒH[ƒ‹ƒoƒbƒN‚ğg—p‚µ‚Ü‚·: " + path);
+            Debug.LogWarning("ï¿½ySystemï¿½zï¿½yï¿½ÈƒWï¿½ï¿½ï¿½Pï¿½bï¿½gï¿½æ‘œï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ßƒtï¿½Hï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½ï¿½gï¿½pï¿½ï¿½ï¿½Ü‚ï¿½: " + path);
             musicData.MusicSprite = fallbackJacketSprite;
             return true;
         }
@@ -311,7 +331,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     }
 
     /// <summary>
-    /// Šy‹Èƒe[ƒ}‚Ìæ“¾AƒZƒbƒg(”ñ“¯Šú)
+    /// ï¿½yï¿½Èƒeï¿½[ï¿½}ï¿½Ìæ“¾ï¿½Aï¿½Zï¿½bï¿½g(ï¿½ñ“¯Šï¿½)
     /// </summary>
     /// <param name="musicData"></param>
     /// <param name="path"></param>
@@ -321,7 +341,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     {
         if (!TryFindFilePath(path, musicThemeImageFileNames, out var themeImagePath))
         {
-            Debug.LogWarning("ySystemzŠy‹Èƒe[ƒ}‰æ‘œ‚ª‘¶İ‚µ‚È‚¢‚½‚ßƒtƒH[ƒ‹ƒoƒbƒN‚ğg—p‚µ‚Ü‚·: " + path);
+            Debug.LogWarning("ï¿½ySystemï¿½zï¿½yï¿½Èƒeï¿½[ï¿½}ï¿½æ‘œï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ßƒtï¿½Hï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½Nï¿½ï¿½gï¿½pï¿½ï¿½ï¿½Ü‚ï¿½: " + path);
             musicData.ThemeSprite = fallbackThemeSprite;
             return true;
         }
@@ -348,7 +368,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     }
 
     /// <summary>
-    /// •ˆ–Êƒf[ƒ^(ƒpƒX)‚Ìæ“¾
+    /// ï¿½ï¿½ï¿½Êƒfï¿½[ï¿½^(ï¿½pï¿½X)ï¿½Ìæ“¾
     /// </summary>
     /// <param name="musicData"></param>
     /// <param name="path"></param>
@@ -356,7 +376,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     /// <returns></returns>
     private async UniTask<bool> SetChartFileAsync(MusicData musicData, string path, CancellationToken token)
     {
-        // ƒŠƒXƒg‚É‚ ‚éƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©Šm”F
+        // ï¿½ï¿½ï¿½Xï¿½gï¿½É‚ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½é‚©ï¿½mï¿½F
         string pathEasy = path + "/" + chartFileNameEasy;
         bool isExistEasy = musicData.GetDifficulty(Difficulty.Easy) >= 0;
         bool isExistNormal = musicData.GetDifficulty(Difficulty.Normal) >= 0;
@@ -366,7 +386,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         if (isExistEasy && File.Exists(pathEasy))
         {
             musicData.SetChartPath(Difficulty.Easy, pathEasy);
-            Debug.Log($"ySystemzEasy•ˆ–Êpath“Ç‚İ‚İ: {musicData.MusicName}");
+            Debug.Log($"ï¿½ySystemï¿½zEasyï¿½ï¿½ï¿½ï¿½pathï¿½Ç‚İï¿½ï¿½ï¿½: {musicData.MusicName}");
         }
         else
         {
@@ -377,7 +397,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         if (isExistNormal && File.Exists(pathNormal))
         {
             musicData.SetChartPath(Difficulty.Normal, pathNormal);
-            Debug.Log($"ySystemzNormal•ˆ–Êpath“Ç‚İ‚İ: {musicData.MusicName}");
+            Debug.Log($"ï¿½ySystemï¿½zNormalï¿½ï¿½ï¿½ï¿½pathï¿½Ç‚İï¿½ï¿½ï¿½: {musicData.MusicName}");
         }
         else
         {
@@ -388,7 +408,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         if (isExistHard && File.Exists(pathHard))
         {
             musicData.SetChartPath(Difficulty.Hard, pathHard);
-            Debug.Log($"ySystemzHard•ˆ–Êpath“Ç‚İ‚İ: {musicData.MusicName}");
+            Debug.Log($"ï¿½ySystemï¿½zHardï¿½ï¿½ï¿½ï¿½pathï¿½Ç‚İï¿½ï¿½ï¿½: {musicData.MusicName}");
         }
         else
         {
@@ -399,20 +419,20 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         if (isExistMaster && File.Exists(pathMaster))
         {
             musicData.SetChartPath(Difficulty.Master, pathMaster);
-            Debug.Log($"ySystemzMaster•ˆ–Êpath“Ç‚İ‚İ: {musicData.MusicName}");
+            Debug.Log($"ï¿½ySystemï¿½zMasterï¿½ï¿½ï¿½ï¿½pathï¿½Ç‚İï¿½ï¿½ï¿½: {musicData.MusicName}");
         }
         else
         {
             musicData.SetDifficulty(Difficulty.Master, -1);
         }
 
-        // –³—‚â‚è
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         await UniTask.Delay(1, cancellationToken: token);
         return true;
     }
 
     /// <summary>
-    /// Šy‹È‚Ìƒ[ƒh‚ğ”ñ“¯Šú‚Ås‚¤
+    /// ï¿½yï¿½È‚Ìƒï¿½ï¿½[ï¿½hï¿½ï¿½ñ“¯Šï¿½ï¿½Åsï¿½ï¿½
     /// </summary>
     /// <param name="onEndAction"></param>
     /// <param name="token"></param>
@@ -423,7 +443,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         {
             if (data.SampleClip == null)
             {
-                Debug.LogWarning($"ySystemzSampleClip‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¢‚½‚ß–‘Oƒ[ƒh‚ğƒXƒLƒbƒv‚µ‚Ü‚·: {data.MusicName}");
+                Debug.LogWarning($"ï¿½ySystemï¿½zSampleClipï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ßï¿½ï¿½Oï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½Xï¿½Lï¿½bï¿½vï¿½ï¿½ï¿½Ü‚ï¿½: {data.MusicName}");
                 continue;
             }
 
@@ -445,14 +465,14 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     }
 
     /// <summary>
-    /// Šy‹È–¼‚È‚Ç‚Ìî•ñ
+    /// ï¿½yï¿½È–ï¿½ï¿½È‚Ç‚Ìï¿½ï¿½
     /// </summary>
     public class MusicInformation
     {
         public string MusicName { get; set; }
         public string ComposerName { get; set; }
         public string[] OtherCreator { get; set; }
-        public string ChartDesigner { get; set; }
+        public JToken ChartDesigner { get; set; }
         public string SymphonyType { get; set; }
         public string StageType { get; set; }
         public int[] Difficulties { get; set; }

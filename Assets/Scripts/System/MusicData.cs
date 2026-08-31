@@ -6,46 +6,53 @@ using System;
 [System.Serializable]
 public class MusicData
 {
-    [Header("‹È–¼")]
+    [Header("Music Name")]
     [SerializeField] private string music_name;
     public string MusicName { get { return music_name; } set { music_name = value; } }
 
-    [Header("ƒRƒ“ƒ|[ƒU[")]
+    [Header("Composer")]
     [SerializeField] private string composer_name;
     public string ComposerName { get { return composer_name; } set { composer_name = value; } }
-    [Header("‚»‚Ì‘¼§ìÒ")]
+    [Header("Other Creators")]
     [SerializeField] private string[] other_creator = new string[0];
     public string[] OtherCreator { get { return other_creator ?? new string[0]; } set { other_creator = value ?? new string[0]; } }
 
-    [Header("•ˆ–Ê§ìÒ")]
-    [SerializeField] private string chart_designer;
-    public string ChartDesigner { get { return chart_designer; } set { chart_designer = value; } }
+    [Header("Chart Designers")]
+    [SerializeField] private string[] chart_designers = new string[4];
+    public string[] ChartDesigners { get { return chart_designers ?? new string[4]; } set { chart_designers = NormalizeDifficultyTexts(value); } }
+    public string GetChartDesigner(Difficulty difficulty)
+    {
+        int index = (int)difficulty;
+        if (chart_designers == null || index < 0 || index >= chart_designers.Length) { return string.Empty; }
 
-    [Header("ƒTƒ€ƒlƒCƒ‹")]
+        return chart_designers[index];
+    }
+
+    [Header("Jacket")]
     [SerializeField] private Sprite music_spr;
     public Sprite MusicSprite { get { return music_spr; } set { music_spr = value; } }
 
-    [Header("ƒe[ƒ}‰æ‘œ")]
+    [Header("Theme Image")]
     [SerializeField] private Sprite theme_spr;
     public Sprite ThemeSprite { get { return theme_spr; } set { theme_spr = value; } }
 
-    [Header("‰¹Šyƒtƒ@ƒCƒ‹")]
+    [Header("Music Clip")]
     [SerializeField] private AudioClip clip;
     public AudioClip MusicClip { get { return clip; } set { clip = value; } }
 
-    [Header("‹’®ƒtƒ@ƒCƒ‹")]
+    [Header("Sample Clip")]
     [SerializeField] private AudioClip sample_clip;
     public AudioClip SampleClip { get { return sample_clip; } set { sample_clip = value; } }
 
-    [Header("ƒVƒ“ƒtƒHƒj[ƒ^ƒCƒv")]
+    [Header("Symphony Type")]
     [SerializeField] SymphonyType symphonyType = SymphonyType.None;
     public SymphonyType SymphonyType { get { return symphonyType; } set { symphonyType = value; } }
 
-    [Header("ƒXƒe[ƒW")]
+    [Header("Stage")]
     [SerializeField] StageType stageType = StageType.CreationNoon;
     public StageType StageType { get { return stageType; } set { stageType = value; } }
 
-    [Header("“ïˆÕ“x")]
+    [Header("Difficulty")]
     [SerializeField] private int[] difficulties = new int[4];
     public int GetDifficulty(Difficulty name) { return difficulties[(int)name]; }
     public void SetDifficulty(int[] difficulties)
@@ -60,20 +67,33 @@ public class MusicData
         this.difficulties[(int)dif] = level;
     }
 
-    [Header("•ˆ–Ê")]
+    private string[] NormalizeDifficultyTexts(string[] values)
+    {
+        string[] result = new string[4];
+        if (values == null) { return result; }
+
+        for (int i = 0; i < result.Length && i < values.Length; i++)
+        {
+            result[i] = values[i];
+        }
+
+        return result;
+    }
+
+    [Header("Chart")]
     [SerializeField] private string[] chartPaths = new string[4];
     public string GetChartPath(Difficulty name) { return chartPaths[(int)name]; }
     public void SetChartPath(Difficulty diff, string chartPath)
     {
         if((int)diff >= chartPaths.Length || (int)diff < 0)
         {
-            Debug.LogError($"ySystemz’·‚³‚ª—LŒø‚Å‚Í‚ ‚è‚Ü‚¹‚ñ: {diff},{(int)diff}");
+            Debug.LogError($"[System] Invalid difficulty index: {diff},{(int)diff}");
             return;
         }
         chartPaths[(int)diff] = chartPath;
     }
 
-    // ƒXƒRƒA‹L˜^
+    // ã‚¹ã‚³ã‚¢è¨˜éŒ²
     DifficultyToRecord records;
     public MusicRecord GetMusicRecord(Difficulty dif) 
     {
@@ -83,18 +103,18 @@ public class MusicData
     }
     public void SetMusicRecord(Difficulty dif, MusicRecord newRecord) 
     {
-        // ‰ƒvƒŒƒC‚È‚çŒ‹‰Ê‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»
+        // åˆãƒ—ãƒ¬ã‚¤ãªã‚‰çµæœã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
         if (records == null)
         {
             records = new DifficultyToRecord();
         }
 
-        // ‰ƒvƒŒƒC‚È‚çŒ‹‰Ê‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»
+        // åˆãƒ—ãƒ¬ã‚¤ãªã‚‰çµæœã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
         if (records.GetRecord(dif) == MusicRecord.zero)
         {
             records.SetRecord(dif, newRecord);
         }
-        // ƒXƒRƒAXV
+        // ã‚¹ã‚³ã‚¢æ›´æ–°
         else
         {
             records.GetRecord(dif).UpdateHighScore(newRecord);

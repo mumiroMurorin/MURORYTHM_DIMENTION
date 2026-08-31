@@ -10,7 +10,6 @@ namespace UIInResultScene
         [SerializeField] SymphonyTypePresentationDatabase symphonyTypePresentationDatabase;
         [SerializeField] TextMeshProUGUI musicTitle_text;
         [SerializeField] TextMeshProUGUI composer_text;
-        [SerializeField] TextMeshProUGUI otherCreator_text;
         [SerializeField] Image jacket_image;
         [SerializeField] Image difficultyImage;
 
@@ -25,7 +24,6 @@ namespace UIInResultScene
 
             if (musicTitle_text && musicData.MusicName != null) { musicTitle_text.text = musicData.MusicName; }
             if (composer_text && musicData.ComposerName != null) { composer_text.text = musicData.ComposerName; }
-            if (otherCreator_text) { otherCreator_text.text = BuildOtherCreatorText(musicData.OtherCreator, musicData.ChartDesigner); }
             if (jacket_image && musicData.MusicSprite != null) { jacket_image.sprite = musicData.MusicSprite; }
 
             symphonyType = musicData.SymphonyType;
@@ -54,33 +52,6 @@ namespace UIInResultScene
             }
 
             difficultyImage.sprite = sprite;
-        }
-
-        private string BuildOtherCreatorText(string[] otherCreators, string chartDesigner)
-        {
-            var builder = new StringBuilder();
-            if (otherCreators != null)
-            {
-                foreach (string creator in otherCreators)
-                {
-                    AppendCreatorText(builder, creator);
-                }
-            }
-
-            AppendCreatorText(builder, string.IsNullOrWhiteSpace(chartDesigner) ? null : $"譜面制作者: {chartDesigner}");
-            return builder.ToString();
-        }
-
-        private void AppendCreatorText(StringBuilder builder, string creator)
-        {
-            if (string.IsNullOrWhiteSpace(creator)) { return; }
-
-            if (builder.Length > 0)
-            {
-                builder.Append(" / ");
-            }
-
-            builder.Append(creator);
         }
     }
 }

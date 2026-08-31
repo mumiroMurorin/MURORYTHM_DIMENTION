@@ -5,7 +5,7 @@ using TMPro;
 
 public abstract class MusicTopic : MonoBehaviour
 {
-    [Header("コンポーネントの参照")]
+    [Header("Component References")]
     [SerializeField] protected TextMeshProUGUI title_tmp;
     [SerializeField] protected TextMeshProUGUI composer_tmp;
     [SerializeField] protected TextMeshProUGUI otherCreator_tmp;
@@ -19,57 +19,63 @@ public abstract class MusicTopic : MonoBehaviour
     [SerializeField] protected Image comboLamp_image;
     [SerializeField] protected GameObject NoneChartNoteObj;
 
-    [Header("難易度別背景")]
+    protected MusicData currentMusicData;
+    protected Difficulty currentDifficulty;
+
+    [Header("Difficulty Background")]
     [SerializeField] DifficultyToSprite[] difficultyToBackGround;
-    [Header("スコアランク別ランプ")]
+    [Header("Score Rank Lamp")]
     [SerializeField] ScoreRankToSprite[] rankToLampSprite;
-    [Header("コンボランク別ランプ")]
+    [Header("Combo Rank Lamp")]
     [SerializeField] ComboRankToSprite[] comboRankToLampSprite;
 
     /// <summary>
-    /// 楽曲データのセット
+    /// Set music data.
     /// </summary>
     /// <param name="data"></param>
     /// <param name="difficulty"></param>
     public virtual void OnSetMusicTopic(MusicData data)
     {
-        // 楽曲名
+        currentMusicData = data;
+        // Music title
         if (title_tmp != null) { title_tmp.text = data.MusicName; }
-        // コンポーザー
+        // Composer
         if (composer_tmp != null) { composer_tmp.text = data.ComposerName; }
-        // その他制作者
-        if (otherCreator_tmp != null) { otherCreator_tmp.text = BuildOtherCreatorText(data.OtherCreator, data.ChartDesigner); }
-        // サムネ
+        // Other creators and chart designer
+        UpdateOtherCreatorText();
+        // Jacket
         if (music_image != null) { music_image.sprite = data.MusicSprite; }
-        // 楽曲テーマ
+        // Theme image
         if (musicTheme_image != null) { musicTheme_image.sprite = data.ThemeSprite; }
     }
 
     /// <summary>
-    /// 難易度のセット
+    /// Set difficulty data.
     /// </summary>
     /// <param name="b"></param>
     public virtual void OnSetDifficulty(Difficulty difficulty, int level)
     {
-        // 難易度名
-        diff_tmp.text = difficulty.ToString().ToUpper(); //大文字に
+        currentDifficulty = difficulty;
+        // Difficulty name
+        diff_tmp.text = difficulty.ToString().ToUpper();
 
         UpdateBackGround(difficulty);
         UpdateLevel(level);
+        UpdateOtherCreatorText();
     }
 
     /// <summary>
-    /// スコアのセット
+    /// Set score data.
     /// </summary>
     /// <param name="record"></param>
     public virtual void OnSetScore(MusicRecord record)
     {
         if (record == null) { return; }
 
-        // レコード
+        // Record
         score_tmp.text = record.Score.ToString("N0");
 
-        // スコアランプ
+        // Score lamp
         scoreLamp_image.gameObject.SetActive(record.ScoreRank != ScoreRank.None);
         foreach (var spr in rankToLampSprite)
         {
@@ -80,7 +86,7 @@ public abstract class MusicTopic : MonoBehaviour
             }
         }
 
-        // コンボランプ
+        // Combo lamp
         comboLamp_image.gameObject.SetActive(record.ComboRank != ComboRank.None && record.ComboRank != ComboRank.TrackComplete);
         foreach (var spr in comboRankToLampSprite)
         {
@@ -93,7 +99,7 @@ public abstract class MusicTopic : MonoBehaviour
     }
 
     /// <summary>
-    /// 引数から背景を変更
+    /// Update background from difficulty.
     /// </summary>
     /// <param name="data"></param>
     protected void UpdateBackGround(Difficulty difficulty)
@@ -109,7 +115,7 @@ public abstract class MusicTopic : MonoBehaviour
     }
 
     /// <summary>
-    /// 難易度(レベル)の更新
+    /// Update difficulty level.
     /// </summary>
     /// <param name="level"></param>
     protected void UpdateLevel(int level)
@@ -121,12 +127,22 @@ public abstract class MusicTopic : MonoBehaviour
     }
 
     /// <summary>
-    /// 表示非表示切り替え
+    /// Toggle visibility.
     /// </summary>
     /// <param name="b"></param>
     public void SetObjActive(bool isActive)
     {
         this.gameObject.SetActive(isActive);
+    }
+
+    protected void UpdateOtherCreatorText()
+    {
+        if (otherCreator_tmp == null || currentMusicData == null) { return; }
+
+        otherCreator_tmp.text = BuildOtherCreatorText(
+            currentMusicData.OtherCreator,
+            currentMusicData.GetChartDesigner(currentDifficulty)
+        );
     }
 
     protected string BuildOtherCreatorText(string[] otherCreators, string chartDesigner)
@@ -140,7 +156,7 @@ public abstract class MusicTopic : MonoBehaviour
             }
         }
 
-        AppendCreatorText(builder, string.IsNullOrWhiteSpace(chartDesigner) ? null : $"譜面制作者: {chartDesigner}");
+        AppendCreatorText(builder, string.IsNullOrWhiteSpace(chartDesigner) ? null : $"Chart Designer: {chartDesigner}");
         return builder.ToString();
     }
 
