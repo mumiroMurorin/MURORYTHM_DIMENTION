@@ -95,7 +95,12 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
 
     public override bool ShouldLockVisibility(float currentDistance)
     {
-        return currentDistance > EndChartDistance;
+        if (noteData == null) { return currentDistance > EndChartDistance; }
+        if (noteData.Timer == null) { return currentDistance > EndChartDistance; }
+        if (noteData.TimeToVertices == null || noteData.TimeToVertices.Count == 0) { return currentDistance > EndChartDistance; }
+
+        float endTiming = noteData.TimeToVertices[^1].Timing;
+        return noteData.Timer.Time > endTiming;
     }
 
     /// <summary>

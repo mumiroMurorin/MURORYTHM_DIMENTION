@@ -113,4 +113,6 @@ public interface INoteVisibilityTarget : INoteActivable
     bool ShouldLockVisibility(float currentDistance);
 
     void LockVisibility();
+
+    void UnlockVisibility();
 }

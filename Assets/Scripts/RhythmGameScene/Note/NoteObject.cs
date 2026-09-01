@@ -31,6 +31,13 @@ public abstract class NoteObject<T> : MonoBehaviour, INoteVisibilityTarget where
         SetActive(false);
     }
 
+    public void UnlockVisibility()
+    {
+        if (!IsVisibilityLocked) { return; }
+
+        IsVisibilityLocked = false;
+    }
+
     abstract public void Initialize(T data);
 
     /// <summary>

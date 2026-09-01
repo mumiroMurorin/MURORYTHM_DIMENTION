@@ -18,6 +18,8 @@ public class NoteVisibilityController : MonoBehaviour
     float visibleAheadDistance;
     bool isReady;
     bool requiresVisibilityRefresh;
+    float previousDistance;
+    bool hasPreviousDistance;
 
     /// <summary>
     /// 現在位置の計算に必要な参照を受け取る
@@ -41,6 +43,8 @@ public class NoteVisibilityController : MonoBehaviour
             visibleAheadDistance,
             0f,
             maxVisibleSpan - this.visibleBehindDistance);
+        previousDistance = 0f;
+        hasPreviousDistance = false;
         isReady = false;
     }
 
@@ -82,6 +86,8 @@ public class NoteVisibilityController : MonoBehaviour
         nextVisibleTargets.Clear();
         isReady = false;
         requiresVisibilityRefresh = false;
+        previousDistance = 0f;
+        hasPreviousDistance = false;
     }
 
     private void LateUpdate()
@@ -98,7 +104,10 @@ public class NoteVisibilityController : MonoBehaviour
         float minDistance = currentDistance - visibleBehindDistance;
         float maxDistance = currentDistance + visibleAheadDistance;
 
-        UpdateVisibilityLocks(currentDistance);
+        bool isMovingForward = !hasPreviousDistance || currentDistance >= previousDistance;
+        UpdateVisibilityLocks(currentDistance, isMovingForward);
+        previousDistance = currentDistance;
+        hasPreviousDistance = true;
 
         int candidateStartIndex = LowerBoundPrefixMaxEnd(minDistance);
         int candidateEndIndex = UpperBoundStart(maxDistance);
@@ -148,15 +157,25 @@ public class NoteVisibilityController : MonoBehaviour
         nextVisibleTargets = previousVisibleTargets;
     }
 
-    private void UpdateVisibilityLocks(float currentDistance)
+    private void UpdateVisibilityLocks(float currentDistance, bool isMovingForward)
     {
         foreach (INoteVisibilityTarget target in targets)
         {
-            if (target.IsVisibilityLocked) { continue; }
-            if (!target.ShouldLockVisibility(currentDistance)) { continue; }
+            if (isMovingForward)
+            {
+                if (target.IsVisibilityLocked) { continue; }
+                if (!target.ShouldLockVisibility(currentDistance)) { continue; }
 
-            target.LockVisibility();
-            visibleTargets.Remove(target);
+                target.LockVisibility();
+                visibleTargets.Remove(target);
+            }
+            else
+            {
+                if (!target.IsVisibilityLocked) { continue; }
+                if (target.ShouldLockVisibility(currentDistance)) { continue; }
+
+                target.UnlockVisibility();
+            }
         }
     }
 
