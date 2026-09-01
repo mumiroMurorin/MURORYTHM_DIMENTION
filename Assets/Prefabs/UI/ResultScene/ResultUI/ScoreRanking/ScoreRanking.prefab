@@ -509,10 +509,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RankingItem_2
       objectReference: {fileID: 0}
-    - target: {fileID: 7019054850883976988, guid: a276486eb0f9d6f4184c20e8b98200a8, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.000030517578
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -610,10 +606,6 @@ PrefabInstance:
     - target: {fileID: 5178814394535841862, guid: a276486eb0f9d6f4184c20e8b98200a8, type: 3}
       propertyPath: m_Name
       value: RankingItem_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7019054850883976988, guid: a276486eb0f9d6f4184c20e8b98200a8, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.000030517578
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -713,10 +705,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RankingItem
       objectReference: {fileID: 0}
-    - target: {fileID: 7019054850883976988, guid: a276486eb0f9d6f4184c20e8b98200a8, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.000030517578
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -814,10 +802,6 @@ PrefabInstance:
     - target: {fileID: 5178814394535841862, guid: a276486eb0f9d6f4184c20e8b98200a8, type: 3}
       propertyPath: m_Name
       value: RankingItem_3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7019054850883976988, guid: a276486eb0f9d6f4184c20e8b98200a8, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.000030517578
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
