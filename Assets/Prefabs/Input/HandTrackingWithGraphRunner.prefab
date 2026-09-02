@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5da564da19cb6b7d8e4f97f269edc5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _poolSize: 10
+  _poolSize: 2
 --- !u!114 &831904109300412995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,7 +126,7 @@ MonoBehaviour:
   imageSource: {fileID: 2749357015445240983}
   textureFramePool: {fileID: 6143560918863870316}
   graphRunner: {fileID: 831904109300412995}
-  runningMode: 1
+  runningMode: 0
   screen: {fileID: 0}
   width: 0
   height: 0
@@ -150,6 +150,6 @@ MonoBehaviour:
   useMediaPipeHandedness: 1
   invertMediaPipeHandedness: 0
   handednessScoreThreshold: 0.5
-  smoothInput: 1
+  smoothInput: 0
   smoothingSharpness: 24
   trackingLostTimeout: 0.2

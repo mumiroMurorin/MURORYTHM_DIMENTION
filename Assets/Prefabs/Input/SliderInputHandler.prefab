@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6974557688898039621}
   - component: {fileID: 7027494514981776746}
+  - component: {fileID: 5796672902755936238}
   m_Layer: 0
   m_Name: SliderInputHandler
   m_TagString: Untagged
@@ -39,7 +40,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 725189946168866810}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b13d70ff569c23940a0e9b935ea02394, type: 3}
   m_Name: 
@@ -84,4 +85,22 @@ MonoBehaviour:
     - keyCodes: 79000000
     - keyCodes: 75000000
     - keyCodes: 69000000
-    isActive: 1
+    isActive: 0
+  watchJoystickConnection: 1
+  joystickPollInterval: 1
+  joystickReconnectDelay: 0.5
+--- !u!114 &5796672902755936238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725189946168866810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d6819d3b5bc4f3fb41e9eec2cfa91a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  acceptAllConductusDevices: 1
+  resetInputWhenDeviceChanges: 1
+  logDeviceChanges: 1

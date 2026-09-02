@@ -62,6 +62,13 @@ node {
     back_edge: true
   }
   output_stream: "throttled_input_video"
+  node_options: {
+    [type.googleapis.com/mediapipe.FlowLimiterCalculatorOptions] {
+      max_in_flight: 1
+      max_in_queue: 0
+      in_flight_timeout: 0
+    }
+  }
 }
 
 node: {

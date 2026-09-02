@@ -430,6 +430,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HandTrackingForMediaPipe
       objectReference: {fileID: 0}
+    - target: {fileID: 8598237575735201152, guid: 1fd4b196df71a684b91683935d832888, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

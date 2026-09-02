@@ -48,6 +48,12 @@ namespace Mediapipe.Unity.Tutorial
         private bool isReady;
         private bool isStartRequested;
         private bool isGraphRunning;
+        private bool asyncCallbacksRegistered;
+
+        private readonly object asyncResultLock = new object();
+        private List<NormalizedLandmarkList> pendingLandmarkList;
+        private List<ClassificationList> pendingHandednessList;
+        private bool hasPendingLandmarks;
 
         private List<NormalizedLandmarkList> landmarkList;
         public List<NormalizedLandmarkList> LandmarkList => landmarkList;
@@ -87,6 +93,7 @@ namespace Mediapipe.Unity.Tutorial
             isReady = false;
             landmarkList = null;
             handednessList = null;
+            ClearPendingResults();
             ResultVersion = 0;
 
             if (!ValidateReferences()) { yield break; }
@@ -131,6 +138,7 @@ namespace Mediapipe.Unity.Tutorial
                 yield break;
             }
 
+            RegisterAsyncCallbacksIfNeeded();
             graphRunner.StartRun(imageSource);
             isGraphRunning = true;
             isReady = true;
@@ -149,7 +157,23 @@ namespace Mediapipe.Unity.Tutorial
 
             while (isReady)
             {
+                if (runningMode == RunningMode.Async)
+                {
+                    ApplyPendingAsyncResult();
+                }
+                else
+                {
+                    DrainLatestSynchronousResult();
+                }
+
                 if (processFrameInterval > 1 && Time.frameCount % processFrameInterval != 0)
+                {
+                    yield return waitForEndOfFrame;
+                    continue;
+                }
+
+                var currentWebCamTexture = imageSource.GetCurrentTexture() as WebCamTexture;
+                if (currentWebCamTexture != null && !currentWebCamTexture.didUpdateThisFrame)
                 {
                     yield return waitForEndOfFrame;
                     continue;
@@ -165,13 +189,6 @@ namespace Mediapipe.Unity.Tutorial
                 graphRunner.AddTextureFrameToInputStream(textureFrame);
 
                 yield return waitForEndOfFrame;
-
-                if (TryReadLandmarks(out var handLandmarks, out var handedness))
-                {
-                    landmarkList = handLandmarks;
-                    handednessList = handedness;
-                    ResultVersion++;
-                }
 
                 processedFrameCount++;
                 var now = Time.realtimeSinceStartup;
@@ -201,6 +218,89 @@ namespace Mediapipe.Unity.Tutorial
                 false);
 
             return hasValue && handLandmarks != null;
+        }
+
+        private void DrainLatestSynchronousResult()
+        {
+            List<NormalizedLandmarkList> latestLandmarks = null;
+            List<ClassificationList> latestHandedness = null;
+
+            for (var i = 0; i < 8; i++)
+            {
+                if (!TryReadLandmarks(out var nextLandmarks, out var nextHandedness)) { break; }
+                latestLandmarks = nextLandmarks;
+                latestHandedness = nextHandedness;
+            }
+
+            if (latestLandmarks == null) { return; }
+
+            landmarkList = latestLandmarks;
+            handednessList = latestHandedness;
+            ResultVersion++;
+        }
+
+        private void RegisterAsyncCallbacksIfNeeded()
+        {
+            if (runningMode != RunningMode.Async || asyncCallbacksRegistered) { return; }
+
+            graphRunner.OnHandLandmarksOutput += OnHandLandmarksOutput;
+            graphRunner.OnHandednessOutput += OnHandednessOutput;
+            asyncCallbacksRegistered = true;
+        }
+
+        private void UnregisterAsyncCallbacks()
+        {
+            if (!asyncCallbacksRegistered || graphRunner == null) { return; }
+
+            graphRunner.OnHandLandmarksOutput -= OnHandLandmarksOutput;
+            graphRunner.OnHandednessOutput -= OnHandednessOutput;
+            asyncCallbacksRegistered = false;
+        }
+
+        private void OnHandLandmarksOutput(object stream, OutputEventArgs<List<NormalizedLandmarkList>> eventArgs)
+        {
+            lock (asyncResultLock)
+            {
+                pendingLandmarkList = eventArgs.value;
+                hasPendingLandmarks = true;
+            }
+        }
+
+        private void OnHandednessOutput(object stream, OutputEventArgs<List<ClassificationList>> eventArgs)
+        {
+            lock (asyncResultLock)
+            {
+                pendingHandednessList = eventArgs.value;
+            }
+        }
+
+        private void ApplyPendingAsyncResult()
+        {
+            List<NormalizedLandmarkList> latestLandmarks;
+            List<ClassificationList> latestHandedness;
+
+            lock (asyncResultLock)
+            {
+                if (!hasPendingLandmarks) { return; }
+
+                latestLandmarks = pendingLandmarkList;
+                latestHandedness = pendingHandednessList;
+                hasPendingLandmarks = false;
+            }
+
+            landmarkList = latestLandmarks;
+            handednessList = latestHandedness;
+            ResultVersion++;
+        }
+
+        private void ClearPendingResults()
+        {
+            lock (asyncResultLock)
+            {
+                pendingLandmarkList = null;
+                pendingHandednessList = null;
+                hasPendingLandmarks = false;
+            }
         }
 
         private bool ValidateReferences()
@@ -267,18 +367,31 @@ namespace Mediapipe.Unity.Tutorial
                 trackingCoroutine = null;
             }
 
-            if (isGraphRunning && graphRunner != null)
+            try
             {
-                graphRunner.Stop();
-                isGraphRunning = false;
-            }
+                UnregisterAsyncCallbacks();
 
-            if (imageSource != null && imageSource.isPrepared)
+                if (isGraphRunning && graphRunner != null)
+                {
+                    graphRunner.Stop();
+                }
+            }
+            catch (Exception exception)
             {
-                imageSource.Stop();
+                Debug.LogWarning($"[MediaPipe] Failed to stop HandTrackingGraph cleanly: {exception}");
+            }
+            finally
+            {
+                isGraphRunning = false;
+
+                if (imageSource != null && imageSource.isPrepared)
+                {
+                    imageSource.Stop();
+                }
             }
 
             isReady = false;
+            ClearPendingResults();
         }
 
         private void OnDestroy()

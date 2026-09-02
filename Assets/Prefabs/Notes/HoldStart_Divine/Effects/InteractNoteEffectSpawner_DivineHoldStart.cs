@@ -6,7 +6,7 @@ public class InteractNoteEffectSpawner_DivineHoldStart : InteractNoteEffectSpawn
 {
     public override bool ConditionChecker(NoteJudgementData judgementData)
     {
-        return judgementData.NoteData.NoteType == NoteType.DivineTouch;
+        return judgementData.NoteData.NoteType == NoteType.DivineHoldStart;
     }
 
     protected override Vector3 CalcSpawnPos(NoteJudgementData judgementData)

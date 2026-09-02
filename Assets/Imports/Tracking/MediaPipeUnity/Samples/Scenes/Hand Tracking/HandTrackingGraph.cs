@@ -40,38 +40,38 @@ namespace Mediapipe.Unity.HandTracking
 
     public event EventHandler<OutputEventArgs<List<Detection>>> OnPalmDetectectionsOutput
     {
-      add => _palmDetectionsStream.AddListener(value);
-      remove => _palmDetectionsStream.RemoveListener(value);
+      add => _palmDetectionsStream?.AddListener(value);
+      remove => _palmDetectionsStream?.RemoveListener(value);
     }
 
     public event EventHandler<OutputEventArgs<List<NormalizedRect>>> OnHandRectsFromPalmDetectionsOutput
     {
-      add => _handRectsFromPalmDetectionsStream.AddListener(value);
-      remove => _handRectsFromPalmDetectionsStream.RemoveListener(value);
+      add => _handRectsFromPalmDetectionsStream?.AddListener(value);
+      remove => _handRectsFromPalmDetectionsStream?.RemoveListener(value);
     }
 
     public event EventHandler<OutputEventArgs<List<NormalizedLandmarkList>>> OnHandLandmarksOutput
     {
-      add => _handLandmarksStream.AddListener(value);
-      remove => _handLandmarksStream.RemoveListener(value);
+      add => _handLandmarksStream?.AddListener(value);
+      remove => _handLandmarksStream?.RemoveListener(value);
     }
 
     public event EventHandler<OutputEventArgs<List<LandmarkList>>> OnHandWorldLandmarksOutput
     {
-      add => _handWorldLandmarksStream.AddListener(value);
-      remove => _handWorldLandmarksStream.RemoveListener(value);
+      add => _handWorldLandmarksStream?.AddListener(value);
+      remove => _handWorldLandmarksStream?.RemoveListener(value);
     }
 
     public event EventHandler<OutputEventArgs<List<NormalizedRect>>> OnHandRectsFromLandmarksOutput
     {
-      add => _handRectsFromLandmarksStream.AddListener(value);
-      remove => _handRectsFromLandmarksStream.RemoveListener(value);
+      add => _handRectsFromLandmarksStream?.AddListener(value);
+      remove => _handRectsFromLandmarksStream?.RemoveListener(value);
     }
 
     public event EventHandler<OutputEventArgs<List<ClassificationList>>> OnHandednessOutput
     {
-      add => _handednessStream.AddListener(value);
-      remove => _handednessStream.RemoveListener(value);
+      add => _handednessStream?.AddListener(value);
+      remove => _handednessStream?.RemoveListener(value);
     }
 
     private const string _InputStreamName = "input_video";

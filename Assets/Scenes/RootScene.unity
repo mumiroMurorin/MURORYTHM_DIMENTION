@@ -2271,6 +2271,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firstIntervalSeconds: 0
+  syncWithMusic: 1
+  syncBgmType: 500
+  maxCountdownDeltaTime: 0.05
 --- !u!1001 &179835999
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -7,6 +7,14 @@ namespace UIInRootScene
 {
     public class TrackingModeDropDownView : MonoBehaviour
     {
+        private static readonly IReadOnlyList<TrackingMode> SelectableModes = new[]
+        {
+            TrackingMode.BodyTracking,
+            TrackingMode.HandTracking,
+            TrackingMode.LeapMotion,
+            TrackingMode.Kinect,
+        };
+
         [SerializeField] private TMP_Dropdown dropdown;
 
         public Action<TrackingMode> OnTrackingModeChangedListener { get; set; }
@@ -20,7 +28,6 @@ namespace UIInRootScene
             {
                 "Body Tracking",
                 "Hand Tracking",
-                "GraphRunner Hand",
                 "Leap Motion",
                 "Kinect",
             });
@@ -32,12 +39,30 @@ namespace UIInRootScene
         {
             if (dropdown == null) { return; }
 
-            dropdown.SetValueWithoutNotify((int)trackingMode);
+            if (trackingMode == TrackingMode.GraphRunnerHandTracking)
+            {
+                trackingMode = TrackingMode.HandTracking;
+            }
+
+            var index = IndexOfMode(trackingMode);
+            dropdown.SetValueWithoutNotify(index >= 0 ? index : 0);
         }
 
         private void OnValueChanged(int value)
         {
-            OnTrackingModeChangedListener?.Invoke((TrackingMode)value);
+            if (value < 0 || value >= SelectableModes.Count) { return; }
+
+            OnTrackingModeChangedListener?.Invoke(SelectableModes[value]);
+        }
+
+        private static int IndexOfMode(TrackingMode trackingMode)
+        {
+            for (var i = 0; i < SelectableModes.Count; i++)
+            {
+                if (SelectableModes[i] == trackingMode) { return i; }
+            }
+
+            return -1;
         }
     }
 }

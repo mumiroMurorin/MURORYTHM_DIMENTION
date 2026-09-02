@@ -57,7 +57,6 @@ public class SpaceInputHub : MonoBehaviour, ISpaceInputHub
         }
 
         bodyTrackingHandler?.Value?.Initialize(optionGetter);
-        handTrackingHandler?.Value?.Initialize(optionGetter);
         graphRunnerTrackingHandler?.Value?.Initialize(optionGetter);
         leapMotionHandler?.Value?.Initialize(optionGetter);
         kinectHandler?.Value?.Initialize(optionGetter);
@@ -131,7 +130,7 @@ public class SpaceInputHub : MonoBehaviour, ISpaceInputHub
         return trackingMode switch
         {
             TrackingMode.BodyTracking => bodyTrackingHandler?.Value,
-            TrackingMode.HandTracking => handTrackingHandler?.Value,
+            TrackingMode.HandTracking => graphRunnerTrackingHandler?.Value,
             TrackingMode.GraphRunnerHandTracking => graphRunnerTrackingHandler?.Value,
             TrackingMode.LeapMotion => leapMotionHandler?.Value,
             TrackingMode.Kinect => kinectHandler?.Value,

@@ -29,7 +29,9 @@ namespace Mediapipe.Unity.Tutorial
         [Header("FPS")]
         [SerializeField] private int _fps;
         [Header("Process Frame Interval")]
-        [SerializeField, Min(1)] private int _processFrameInterval = 2;
+        [SerializeField, Min(1)] private int _processFrameInterval = 1;
+
+        [SerializeField, Min(1)] private int _maxResultsToDrainPerFrame = 8;
 
         private ReactiveProperty<int> fps = new ReactiveProperty<int>();
         public IReadOnlyReactiveProperty<int> CameraFps => fps;
@@ -157,14 +159,19 @@ namespace Mediapipe.Unity.Tutorial
                 return;
             }
 
-            _graph = new CalculatorGraph(_configAsset.text);
+            var graphConfig = CalculatorGraphConfig.Parser.ParseFromTextFormat(_configAsset.text);
+            var handLandmarksPresenceStream = graphConfig.AddPacketPresenceCalculator("hand_landmarks");
+            _graph = new CalculatorGraph(graphConfig);
             if (_graph == null)
             {
                 Debug.LogError("[MediaPipe] Failed to initialize CalculatorGraph.");
                 return;
             }
 
-            handLandmarksStream = new OutputStream<NormalizedLandmarkListVectorPacket, List<NormalizedLandmarkList>>(_graph, "hand_landmarks");
+            handLandmarksStream = new OutputStream<NormalizedLandmarkListVectorPacket, List<NormalizedLandmarkList>>(
+                _graph,
+                "hand_landmarks",
+                handLandmarksPresenceStream);
             handLandmarksStream.StartPolling().AssertOk();
 
             var sidePacket = new SidePacket();
@@ -188,10 +195,20 @@ namespace Mediapipe.Unity.Tutorial
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
+            var lastFpsUpdateTime = Time.realtimeSinceStartup;
+            var processedFrameCount = 0;
+
             while (true)
             {
                 if (_processFrameInterval > 1 && Time.frameCount % _processFrameInterval != 0)
                 {
+                    await UniTask.WaitForEndOfFrame(token);
+                    continue;
+                }
+
+                if (!_webCamTexture.Value.didUpdateThisFrame)
+                {
+                    DrainLatestLandmarks();
                     await UniTask.WaitForEndOfFrame(token);
                     continue;
                 }
@@ -202,21 +219,36 @@ namespace Mediapipe.Unity.Tutorial
                 using var imageFramePacket = new ImageFramePacket(imageFrame, new Timestamp(currentTimestamp));
 
                 _graph.AddPacketToInputStream("input_video", imageFramePacket).AssertOk();
-                float start = Time.realtimeSinceStartup;
+                processedFrameCount++;
+                DrainLatestLandmarks();
+
+                var now = Time.realtimeSinceStartup;
+                var elapsed = now - lastFpsUpdateTime;
+                if (elapsed >= 1f)
+                {
+                    _fps = Mathf.RoundToInt(processedFrameCount / elapsed);
+                    if (fps.Value != _fps) { fps.Value = _fps; }
+                    processedFrameCount = 0;
+                    lastFpsUpdateTime = now;
+                }
 
                 await UniTask.WaitForEndOfFrame(token);
+            }
+        }
 
-                float end = Time.realtimeSinceStartup;
-                float deltaTime = end - start;
-                _fps = deltaTime > 0 ? (int)(1f / deltaTime) : 0;
-                if (fps.Value != _fps) { fps.Value = _fps; }
+        private void DrainLatestLandmarks()
+        {
+            List<NormalizedLandmarkList> latestLandmarks = null;
 
-                if (handLandmarksStream.TryGetNext(out var LandMarks))
-                {
-                    if (LandMarks == null) { continue; }
+            for (var i = 0; i < _maxResultsToDrainPerFrame; i++)
+            {
+                if (!handLandmarksStream.TryGetNext(out var nextLandmarks, false)) { break; }
+                if (nextLandmarks != null) { latestLandmarks = nextLandmarks; }
+            }
 
-                    landmarkList = LandMarks;
-                }
+            if (latestLandmarks != null)
+            {
+                landmarkList = latestLandmarks;
             }
         }
 

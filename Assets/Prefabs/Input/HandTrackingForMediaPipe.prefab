@@ -65,4 +65,5 @@ MonoBehaviour:
   _width: 0
   _height: 0
   _fps: 0
-  _processFrameInterval: 2
+  _processFrameInterval: 1
+  _maxResultsToDrainPerFrame: 8
