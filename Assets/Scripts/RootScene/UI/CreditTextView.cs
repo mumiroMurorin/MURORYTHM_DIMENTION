@@ -28,6 +28,24 @@ public class CreditTextView : MonoBehaviour
 
     private void Start()
     {
+        StartCreditText();
+    }
+
+    public void SetCreditTexts(string[] texts)
+    {
+        if (texts == null || texts.Length == 0)
+        {
+            return;
+        }
+
+        creditTexts = texts;
+        StartCreditText();
+    }
+
+    private void StartCreditText()
+    {
+        StopCreditText();
+
         if (creditTexts == null || creditTexts.Length == 0)
         {
             if (creditText != null)
@@ -44,6 +62,11 @@ public class CreditTextView : MonoBehaviour
     }
 
     private void OnDisable()
+    {
+        StopCreditText();
+    }
+
+    private void StopCreditText()
     {
         if (playCoroutine != null)
         {

@@ -11,17 +11,9 @@ public class SliderInputSetter : MonoBehaviour
     [Header("Key bindings")]
     [SerializeField] private KeyCodeConfig[] configs;
 
-    [Header("Hot plug")]
-    [SerializeField] private bool watchJoystickConnection = true;
-    [SerializeField, Min(0.1f)] private float joystickPollInterval = 1f;
-    [SerializeField, Min(0f)] private float joystickReconnectDelay = 0.5f;
-
     private ISliderInputSetter sliderInputSetter;
     private readonly List<KeyBinding> keyBindings = new List<KeyBinding>();
     private readonly bool[] sliderSwitches = new bool[SliderMaxCount];
-    private string[] joystickNames = Array.Empty<string>();
-    private float nextJoystickPollTime;
-    private float pendingJoystickRefreshTime = -1f;
 
     [Inject]
     public void Inject(ISliderInputSetter inputSetter)
@@ -36,14 +28,11 @@ public class SliderInputSetter : MonoBehaviour
 
     private void Start()
     {
-        joystickNames = Input.GetJoystickNames();
         RebuildKeyBindings();
     }
 
     private void Update()
     {
-        UpdateJoystickConnection();
-
         Array.Clear(sliderSwitches, 0, sliderSwitches.Length);
 
         foreach (var binding in keyBindings)
@@ -63,56 +52,6 @@ public class SliderInputSetter : MonoBehaviour
             sliderInputSetter?.SetSliderInput(i, sliderSwitches[i]);
         }
 
-    }
-
-    private void UpdateJoystickConnection()
-    {
-        if (!watchJoystickConnection) { return; }
-
-        var now = Time.unscaledTime;
-        if (now >= nextJoystickPollTime)
-        {
-            nextJoystickPollTime = now + joystickPollInterval;
-            var currentNames = Input.GetJoystickNames();
-
-            if (!AreJoystickNamesEqual(joystickNames, currentNames))
-            {
-                joystickNames = currentNames;
-                pendingJoystickRefreshTime = now + joystickReconnectDelay;
-            }
-        }
-
-        if (pendingJoystickRefreshTime < 0f || now < pendingJoystickRefreshTime) { return; }
-
-        pendingJoystickRefreshTime = -1f;
-        ResetSliderInputs();
-        Input.ResetInputAxes();
-        RebuildKeyBindings();
-        Debug.Log($"[Input] Joystick connection changed. Rebuilt slider bindings: {string.Join(", ", joystickNames)}");
-    }
-
-    private void ResetSliderInputs()
-    {
-        Array.Clear(sliderSwitches, 0, sliderSwitches.Length);
-
-        for (var i = 0; i < SliderMaxCount; i++)
-        {
-            sliderInputSetter?.SetSliderInput(i, false);
-        }
-    }
-
-    private static bool AreJoystickNamesEqual(string[] a, string[] b)
-    {
-        if (ReferenceEquals(a, b)) { return true; }
-        if (a == null || b == null) { return false; }
-        if (a.Length != b.Length) { return false; }
-
-        for (var i = 0; i < a.Length; i++)
-        {
-            if (!string.Equals(a[i], b[i], StringComparison.Ordinal)) { return false; }
-        }
-
-        return true;
     }
 
     private void RebuildKeyBindings()
