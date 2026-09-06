@@ -17,6 +17,7 @@ public class NoteFactory_DivineHoldStart : NoteFactory<NoteData_DivineHoldStart>
     ISliderInputGetter sliderInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
+    Difficulty currentDifficulty = Difficulty.Normal;
     Transform noteParent;
 
     public override void Initialize(NoteFactoryInitializingData initializingData)
@@ -26,6 +27,7 @@ public class NoteFactory_DivineHoldStart : NoteFactory<NoteData_DivineHoldStart>
         sliderInputGetter = initializingData.SliderInputGetter;
         judgementRecorder = initializingData.JudgementRecorder;
         timer = initializingData.Timer;
+        currentDifficulty = initializingData.Difficulty;
     }
 
     public override NoteObject<NoteData_DivineHoldStart> Spawn(NoteData_DivineHoldStart data, INotePositionCalculator positionCalculator)
@@ -45,7 +47,7 @@ public class NoteFactory_DivineHoldStart : NoteFactory<NoteData_DivineHoldStart>
         data.JudgementSettings = judgementSettings;
         if (judgementSettings != null)
         {
-            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow);
+            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow, currentDifficulty);
         }
         return data;
     }

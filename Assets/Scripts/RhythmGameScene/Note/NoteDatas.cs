@@ -12,6 +12,8 @@ public class NoteFactoryInitializingData
 {
     public INoteSpawnDataOptionGetter OptionHolder { get; set; }
 
+    public Difficulty Difficulty { get; set; } = Difficulty.Normal;
+
     public ISliderInputGetter SliderInputGetter { get; set; }
 
     public ISpaceInputGetter SpaceInputGetter { get; set; }
@@ -116,15 +118,63 @@ public class NoteTypeToJudgementWindow
 {
     [SerializeField] NoteType noteType;
     [SerializeField] JudgementWindowObject judgementWindowObject;
+    [SerializeField] DifficultyToJudgementWindow[] difficultyJudgementWindows;
 
     public JudgementWindow CheckAndGetJudgementWindow(NoteType noteType)
     {
+        return CheckAndGetJudgementWindow(noteType, Difficulty.Normal);
+    }
+
+    public JudgementWindow CheckAndGetJudgementWindow(NoteType noteType, Difficulty difficulty)
+    {
         if(this.noteType == noteType)
         {
+            JudgementWindow difficultyWindow = FindJudgementWindow(difficulty);
+            if (difficultyWindow != null) { return difficultyWindow; }
+            if (judgementWindowObject == null) { return null; }
+            if (judgementWindowObject.JudgementWindow == null) { return null; }
+
             return judgementWindowObject.JudgementWindow;
         }
 
         return null;
+    }
+
+    private JudgementWindow FindJudgementWindow(Difficulty difficulty)
+    {
+        if (difficultyJudgementWindows == null) { return null; }
+
+        for (int i = 0; i < difficultyJudgementWindows.Length; i++)
+        {
+            DifficultyToJudgementWindow data = difficultyJudgementWindows[i];
+            if (data == null) { continue; }
+            if (!data.CheckCondition(difficulty)) { continue; }
+
+            return data.JudgementWindow;
+        }
+
+        return null;
+    }
+}
+
+[System.Serializable]
+public class DifficultyToJudgementWindow
+{
+    [SerializeField] Difficulty difficulty;
+    [SerializeField] JudgementWindowObject judgementWindowObject;
+
+    public JudgementWindow JudgementWindow
+    {
+        get
+        {
+            if (judgementWindowObject == null) { return null; }
+            return judgementWindowObject.JudgementWindow;
+        }
+    }
+
+    public bool CheckCondition(Difficulty difficulty)
+    {
+        return this.difficulty == difficulty;
     }
 }
 

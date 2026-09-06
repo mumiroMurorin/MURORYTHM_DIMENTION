@@ -13,3 +13,8 @@ MonoBehaviour:
   m_Name: DivineHoldStartJudgementSettings
   m_EditorClassIdentifier: 
   judgementWindowObject: {fileID: 11400000, guid: 9254b7fd30081f14a886e467130f0b7e, type: 2}
+  difficultyJudgementWindows:
+  - difficulty: 1
+    judgementWindowObject: {fileID: 11400000, guid: 426b7eb645d5f5c4a8d437c9efc2dcc8, type: 2}
+  - difficulty: 0
+    judgementWindowObject: {fileID: 11400000, guid: 426b7eb645d5f5c4a8d437c9efc2dcc8, type: 2}

@@ -40,4 +40,41 @@ public class NoteJudgementSettingsCatalog : ScriptableObject
     public SpaceBreakJudgementSettings SpaceBreak => spaceBreak;
     public SpaceHoldJudgementSettings SpaceHoldRelay => spaceHoldRelay;
     public SpaceHoldJudgementSettings SpaceHoldRelayHidden => spaceHoldRelayHidden;
+
+    public NoteJudgementSettings GetJudgementSettings(NoteType noteType)
+    {
+        switch (noteType)
+        {
+            case NoteType.Touch:
+                return touch;
+            case NoteType.DivineTouch:
+                return divineTouch;
+            case NoteType.HoldStart:
+                return holdStart;
+            case NoteType.DivineHoldStart:
+                return divineHoldStart;
+            case NoteType.HoldRelay:
+                return holdRelay;
+            case NoteType.HoldRelayHidden:
+                return holdRelayHidden;
+            case NoteType.HoldEnd:
+                return holdEnd;
+            case NoteType.DynamicGroundUpward:
+                return dynamicGroundUpward;
+            case NoteType.DynamicGroundDownward:
+                return dynamicGroundDownward;
+            case NoteType.DynamicGroundLeftward:
+                return dynamicGroundLeftward;
+            case NoteType.DynamicGroundRightward:
+                return dynamicGroundRightward;
+            case NoteType.SpaceBreak:
+                return spaceBreak;
+            case NoteType.SpaceHoldRelay:
+                return spaceHoldRelay;
+            case NoteType.SpaceHoldRelayHidden:
+                return spaceHoldRelayHidden;
+            default:
+                return null;
+        }
+    }
 }

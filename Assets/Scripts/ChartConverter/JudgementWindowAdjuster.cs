@@ -19,6 +19,11 @@ namespace ChartConvert
         /// <param name="judgementWindows"></param>
         public void AdjustJudgementWindow(ChartData chartData, List<NoteTypeToJudgementWindow> judgementWindows)
         {
+            AdjustJudgementWindow(chartData, judgementWindows, Difficulty.Normal);
+        }
+
+        public void AdjustJudgementWindow(ChartData chartData, List<NoteTypeToJudgementWindow> judgementWindows, Difficulty difficulty)
+        {
             List<IJudgableNoteData> judgableList = new List<IJudgableNoteData>();
             List<IClippedJudgableNote> clippedJudgableList = new List<IClippedJudgableNote>();
 
@@ -39,10 +44,10 @@ namespace ChartConvert
             foreach (var judgableData in judgableList)
             {
                 // îªíËògÇÃéÊìæ
-                var window = GetJudgementWindow(judgableData.NoteType, judgementWindows);
+                var window = GetJudgementWindow(judgableData.NoteType, judgementWindows, difficulty);
                 if (window == null) { continue; }
 
-                judgableData.JudgementWindow = window;
+                judgableData.JudgementWindow = window.Copy();
             }
 
             // çÌÇËîªíËéùÇøÇ…îªíËògÇó^Ç¶ÇÈ
@@ -53,13 +58,51 @@ namespace ChartConvert
                 var clippedData = clippedJudgableList[i];
 
                 // îªíËògÇÃéÊìæ
-                var window = GetJudgementWindow(clippedData.NoteType, judgementWindows);
+                var window = GetJudgementWindow(clippedData.NoteType, judgementWindows, difficulty);
                 if (window == null) { continue; }
 
                 // ÉfÉBÅ[ÉvÉRÉsÅ[
                 clippedJudgableList[i].JudgementWindow = window.Copy();
 
                 // îªíËÇçÌÇÈ
+                ClipJudementWindow(clippedJudgableList, i);
+            }
+        }
+
+
+        public void AdjustJudgementWindow(ChartData chartData, NoteJudgementSettingsCatalog judgementSettingsCatalog, Difficulty difficulty)
+        {
+            List<IJudgableNoteData> judgableList = new List<IJudgableNoteData>();
+            List<IClippedJudgableNote> clippedJudgableList = new List<IClippedJudgableNote>();
+
+            foreach (var noteDataList in chartData.AllNoteDataLists)
+            {
+                foreach (var note in noteDataList)
+                {
+                    if (note is IJudgableNoteData) { judgableList.AddRange(noteDataList.OfType<IJudgableNoteData>().ToList()); }
+                    else if(note is IClippedJudgableNote) { clippedJudgableList.AddRange(noteDataList.OfType<IClippedJudgableNote>().ToList()); }
+                    break;
+                }
+            }
+
+            foreach (var judgableData in judgableList)
+            {
+                var window = GetJudgementWindow(judgableData.NoteType, judgementSettingsCatalog, difficulty);
+                if (window == null) { continue; }
+
+                judgableData.JudgementWindow = window.Copy();
+            }
+
+            clippedJudgableList.Sort((a, b) => a.Timing.CompareTo(b.Timing));
+            for (int i = 0; i < clippedJudgableList.Count; i++)
+            {
+                var clippedData = clippedJudgableList[i];
+
+                var window = GetJudgementWindow(clippedData.NoteType, judgementSettingsCatalog, difficulty);
+                if (window == null) { continue; }
+
+                clippedJudgableList[i].JudgementWindow = window.Copy();
+
                 ClipJudementWindow(clippedJudgableList, i);
             }
         }
@@ -72,15 +115,53 @@ namespace ChartConvert
         /// <returns></returns>
         private JudgementWindow GetJudgementWindow(NoteType targetType, List<NoteTypeToJudgementWindow> judgementWindows)
         {
+            return GetJudgementWindow(targetType, judgementWindows, Difficulty.Normal);
+        }
+
+        private JudgementWindow GetJudgementWindow(NoteType targetType, List<NoteTypeToJudgementWindow> judgementWindows, Difficulty difficulty)
+        {
+            if (judgementWindows == null)
+            {
+                Debug.LogWarning($"[System] Judgement window list is not assigned.");
+                return null;
+            }
+
             // îªíËògÇÃéÊìæ
             foreach (var windowType in judgementWindows)
             {
-                var window = windowType.CheckAndGetJudgementWindow(targetType);
+                if (windowType == null) { continue; }
+
+                var window = windowType.CheckAndGetJudgementWindow(targetType, difficulty);
                 if (window != null) { return window; }
             }
 
-            Debug.LogWarning($"ÅySystemÅz{targetType}Ç…äYìñÇ∑ÇÈîªíËògÇ™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÇ≈ÇµÇΩ");
+            Debug.LogWarning($"[System] Judgement window was not found: {targetType} / {difficulty}");
             return null;
+        }
+
+
+        private JudgementWindow GetJudgementWindow(NoteType targetType, NoteJudgementSettingsCatalog judgementSettingsCatalog, Difficulty difficulty)
+        {
+            if (judgementSettingsCatalog == null)
+            {
+                Debug.LogWarning($"[System] Judgement settings catalog is not assigned.");
+                return null;
+            }
+
+            NoteJudgementSettings judgementSettings = judgementSettingsCatalog.GetJudgementSettings(targetType);
+            if (judgementSettings == null)
+            {
+                Debug.LogWarning($"[System] Judgement settings was not found: {targetType} / {difficulty}");
+                return null;
+            }
+
+            JudgementWindow window = judgementSettings.CreateJudgementWindowOrDefault(difficulty, null);
+            if (window == null)
+            {
+                Debug.LogWarning($"[System] Judgement window was not found: {targetType} / {difficulty}");
+            }
+
+            return window;
         }
 
         private void ClipJudementWindow(List<IClippedJudgableNote> sortedList, int index)

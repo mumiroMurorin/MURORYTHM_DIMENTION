@@ -7,7 +7,7 @@ using static JudgementUtil.SpacaHold.SpaceHoldJudgement;
 
 public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
 {
-    [SerializeField] float judgementMarginRadius = 0.25f;
+    [SerializeField, UnityEngine.Serialization.FormerlySerializedAs("judgementMarginRadius")] float judgementMarginRadiusFallback = 0.25f;
 
     NoteData_SpaceHoldRelay noteData;
 
@@ -18,7 +18,7 @@ public class NoteObject_SpaceHoldRelay : NoteObject<NoteData_SpaceHoldRelay>
     private float JudgementMarginRadius =>
         noteData?.JudgementSettings != null
             ? noteData.JudgementSettings.JudgementMarginRadius
-            : judgementMarginRadius;
+            : judgementMarginRadiusFallback;
 
     /// <summary>
     /// 初期化

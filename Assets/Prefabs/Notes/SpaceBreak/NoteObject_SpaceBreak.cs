@@ -7,8 +7,8 @@ using static JudgementUtil.SpacaHold.SpaceHoldJudgement;
 
 public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
 {
-    [SerializeField] float judgementMarginRadius = 0.25f;
-    [SerializeField] float judgeMagnitude;
+    [SerializeField, UnityEngine.Serialization.FormerlySerializedAs("judgementMarginRadius")] float judgementMarginRadiusFallback = 0.25f;
+    [SerializeField, UnityEngine.Serialization.FormerlySerializedAs("judgeMagnitude")] float judgeMagnitudeFallback;
     [Header("Shadow Material")]
     [SerializeField] Material shadowMaterialDefault;
     [SerializeField] Material shadowMaterialJudged;
@@ -21,12 +21,12 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
     private float JudgementMarginRadius =>
         noteData?.JudgementSettings != null
             ? noteData.JudgementSettings.JudgementMarginRadius
-            : judgementMarginRadius;
+            : judgementMarginRadiusFallback;
 
     private float JudgeMagnitude =>
         noteData?.JudgementSettings != null
             ? noteData.JudgementSettings.JudgeMagnitude
-            : judgeMagnitude;
+            : judgeMagnitudeFallback;
 
     /// <summary>
     /// 初期化

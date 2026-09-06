@@ -85,7 +85,7 @@ MonoBehaviour:
     - keyCodes: 79000000
     - keyCodes: 75000000
     - keyCodes: 69000000
-    isActive: 0
+    isActive: 1
   watchJoystickConnection: 1
   joystickPollInterval: 1
   joystickReconnectDelay: 0.5

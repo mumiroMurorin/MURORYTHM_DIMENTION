@@ -29,6 +29,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
     [SerializeField] private float visibleAheadDistance = 100f;
 
     private IChartDataGetter chartDataGetter;
+    private IMusicDataGetter musicDataGetter;
     private INoteSpawnDataOptionGetter spawnDataOptionHolder;
     private ISliderInputGetter sliderInputGetter;
     private ISpaceInputGetter spaceInputGetter;
@@ -37,6 +38,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
     [Inject]
     public void Constructor(
         IChartDataGetter chartDataGetter,
+        IMusicDataGetter musicDataGetter,
         INoteSpawnDataOptionGetter spawnDataOptionHolder,
         ISliderInputGetter sliderInputGetter,
         ISpaceInputGetter spaceInputGetter,
@@ -44,6 +46,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         IOptionGetter optionGetter)
     {
         this.chartDataGetter = chartDataGetter;
+        this.musicDataGetter = musicDataGetter;
         this.spawnDataOptionHolder = spawnDataOptionHolder;
         this.sliderInputGetter = sliderInputGetter;
         this.spaceInputGetter = spaceInputGetter;
@@ -76,6 +79,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         NoteFactoryInitializingData data = new NoteFactoryInitializingData
         {
             NoteParent = noteParent,
+            Difficulty = musicDataGetter != null ? musicDataGetter.Difficulty.Value : Difficulty.Normal,
             OptionHolder = spawnDataOptionHolder,
             SliderInputGetter = sliderInputGetter,
             SpaceInputGetter = spaceInputGetter,
@@ -92,6 +96,8 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
 
     public void Generate(Action callback = null)
     {
+        Initialize();
+
         if (chartDataGetter == null || chartDataGetter.Chart == null)
         {
             Debug.LogWarning("[ChartGenerator] Chart data is null.");

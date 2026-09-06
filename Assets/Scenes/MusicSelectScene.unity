@@ -2750,37 +2750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65a952ffd76088d47976f149b89a2dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  judgementWindows:
-  - noteType: 1
-    judgementWindowObject: {fileID: 11400000, guid: 4ef97b9b8b205ff488e3d27f8a6968a2, type: 2}
-  - noteType: 2
-    judgementWindowObject: {fileID: 11400000, guid: c1aec93dc27b82a428acabf92d6fbe1f, type: 2}
-  - noteType: 10
-    judgementWindowObject: {fileID: 11400000, guid: 50243d4898730a045b5e5c80573281e3, type: 2}
-  - noteType: 16
-    judgementWindowObject: {fileID: 11400000, guid: 9254b7fd30081f14a886e467130f0b7e, type: 2}
-  - noteType: 16
-    judgementWindowObject: {fileID: 11400000, guid: 50243d4898730a045b5e5c80573281e3, type: 2}
-  - noteType: 11
-    judgementWindowObject: {fileID: 11400000, guid: 4ecc59df7df2e52419c57bee7dd32b64, type: 2}
-  - noteType: 12
-    judgementWindowObject: {fileID: 11400000, guid: 19fbd92f28aca3b4fa6dd075268f4727, type: 2}
-  - noteType: 13
-    judgementWindowObject: {fileID: 11400000, guid: b9f5b7b6e7609c548b89204c9e65df87, type: 2}
-  - noteType: 30
-    judgementWindowObject: {fileID: 11400000, guid: 3ad8923ad7d83de449c95693237905bc, type: 2}
-  - noteType: 31
-    judgementWindowObject: {fileID: 11400000, guid: 78afd811eb9c1a64aa716a69139f45c9, type: 2}
-  - noteType: 32
-    judgementWindowObject: {fileID: 11400000, guid: eb609c9cdcce50b4cab18a54ce452a6a, type: 2}
-  - noteType: 33
-    judgementWindowObject: {fileID: 11400000, guid: cc8f6e43c53cc9745a07fec9257c8b62, type: 2}
-  - noteType: 21
-    judgementWindowObject: {fileID: 11400000, guid: 4f393f844a7eb6649822cdbf3dbb00a8, type: 2}
-  - noteType: 22
-    judgementWindowObject: {fileID: 11400000, guid: 909121e8c4a5a7049a635199a0768117, type: 2}
-  - noteType: 25
-    judgementWindowObject: {fileID: 11400000, guid: 6c3c524e75e2fe84b8628ede94caefe3, type: 2}
+  judgementSettingsCatalog: {fileID: 11400000, guid: 8dac4f0ed34b42c8a98cccf24e75830c, type: 2}
 --- !u!114 &874170456
 MonoBehaviour:
   m_ObjectHideFlags: 0

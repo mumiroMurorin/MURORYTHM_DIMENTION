@@ -17,6 +17,7 @@ public class NoteFactory_DynamicGroundDownward : NoteFactory<NoteData_DynamicGro
     ISpaceInputGetter spaceInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
+    Difficulty currentDifficulty = Difficulty.Normal;
     Transform noteParent;
 
     public override void Initialize(NoteFactoryInitializingData initializingData)
@@ -26,6 +27,7 @@ public class NoteFactory_DynamicGroundDownward : NoteFactory<NoteData_DynamicGro
         this.spaceInputGetter = initializingData.SpaceInputGetter;
         this.judgementRecorder = initializingData.JudgementRecorder;
         this.timer = initializingData.Timer;
+        this.currentDifficulty = initializingData.Difficulty;
     }
 
     public override NoteObject<NoteData_DynamicGroundDownward> Spawn(NoteData_DynamicGroundDownward data, INotePositionCalculator positionCalculator)
@@ -56,7 +58,7 @@ public class NoteFactory_DynamicGroundDownward : NoteFactory<NoteData_DynamicGro
         data.JudgementSettings = judgementSettings;
         if (judgementSettings != null)
         {
-            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow);
+            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow, currentDifficulty);
         }
 
         return data;

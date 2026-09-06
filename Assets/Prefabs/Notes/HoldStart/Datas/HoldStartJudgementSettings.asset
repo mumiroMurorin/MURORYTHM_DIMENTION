@@ -13,3 +13,8 @@ MonoBehaviour:
   m_Name: HoldStartJudgementSettings
   m_EditorClassIdentifier: 
   judgementWindowObject: {fileID: 11400000, guid: 50243d4898730a045b5e5c80573281e3, type: 2}
+  difficultyJudgementWindows:
+  - difficulty: 1
+    judgementWindowObject: {fileID: 11400000, guid: 403389179afab2149af843ea96065fa1, type: 2}
+  - difficulty: 0
+    judgementWindowObject: {fileID: 11400000, guid: 403389179afab2149af843ea96065fa1, type: 2}

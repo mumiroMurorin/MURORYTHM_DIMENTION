@@ -13,3 +13,8 @@ MonoBehaviour:
   m_Name: TouchJudgementSettings
   m_EditorClassIdentifier: 
   judgementWindowObject: {fileID: 11400000, guid: 4ef97b9b8b205ff488e3d27f8a6968a2, type: 2}
+  difficultyJudgementWindows:
+  - difficulty: 1
+    judgementWindowObject: {fileID: 11400000, guid: 98d9b32e4ced3e049bd7e7374b8cda35, type: 2}
+  - difficulty: 0
+    judgementWindowObject: {fileID: 11400000, guid: 98d9b32e4ced3e049bd7e7374b8cda35, type: 2}

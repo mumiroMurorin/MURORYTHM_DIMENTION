@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 381f0af99864ef24282b31c9f0f70b1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  judgementMarginRadius: 0.15
+  judgementMarginRadius: 0.3
   judgementMarginTime: 0.15
-  firstMarginTime: 0.1
+  firstMarginTime: 0.2
   meshMaterialDefaultInside: {fileID: 2100000, guid: f0e82ed9653c7604a8c2a2eb1beea3a1, type: 2}
   meshMaterialDefaultOutside: {fileID: 2100000, guid: 8de6ef7ea1e5fff4297b6e2b40587367, type: 2}
   meshMaterialDefaultOutlineInside: {fileID: 2100000, guid: 9879c1273ec156948bac4aedf50f876d, type: 2}
@@ -85,7 +85,6 @@ MonoBehaviour:
   lineWidth: 0.25
   zOffset: -0.01
   normalizeRadius: 10
-  particle: {fileID: 0}
 --- !u!1 &8840368366467242802
 GameObject:
   m_ObjectHideFlags: 0

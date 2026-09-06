@@ -13,6 +13,8 @@ public class NoteObject_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh>
     [SerializeField] float judgementMarginRadius = 0.25f;
     [SerializeField] float judgementMarginTime = 0.1f;
     [SerializeField] float firstMarginTime = 0.1f;
+
+    [Space(25)]
     [Header("meshのマテリアル(未判定時)")]
     [SerializeField] Material meshMaterialDefaultInside;
     [SerializeField] Material meshMaterialDefaultOutside;

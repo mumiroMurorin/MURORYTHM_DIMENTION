@@ -44,4 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a06f92ead1f36a4db6c0144af9f8064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  judgementMarginRadius: 0.25
+  judgementMarginRadiusFallback: 0.3

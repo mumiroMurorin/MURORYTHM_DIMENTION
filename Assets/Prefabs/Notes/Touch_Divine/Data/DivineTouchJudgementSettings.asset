@@ -13,3 +13,8 @@ MonoBehaviour:
   m_Name: DivineTouchJudgementSettings
   m_EditorClassIdentifier: 
   judgementWindowObject: {fileID: 11400000, guid: c1aec93dc27b82a428acabf92d6fbe1f, type: 2}
+  difficultyJudgementWindows:
+  - difficulty: 1
+    judgementWindowObject: {fileID: 11400000, guid: 883bb0fe106afce408ed43e0c332a789, type: 2}
+  - difficulty: 0
+    judgementWindowObject: {fileID: 11400000, guid: 883bb0fe106afce408ed43e0c332a789, type: 2}

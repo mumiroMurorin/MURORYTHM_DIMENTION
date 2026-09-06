@@ -8,7 +8,8 @@ using System;
 
 public class ChartLoaderJson : MonoBehaviour, IChartLoader
 {
-    [SerializeField] List<NoteTypeToJudgementWindow> judgementWindows;
+    [SerializeField] NoteJudgementSettingsCatalog judgementSettingsCatalog;
+    Difficulty currentDifficulty = Difficulty.Normal;
 
     [Inject] IMusicDataGetter musicDataGetter;
     [Inject] INoteSpawnDataOptionGetter optionGetter;
@@ -27,6 +28,7 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
     void IChartLoader.LoadChart(Action callback)
     {
         Difficulty difficulty = musicDataGetter.Difficulty.Value;
+        currentDifficulty = difficulty;
         ChartData chartData = LoadChartData(musicDataGetter.Music.Value.GetChartPath(difficulty));
 
         chartDataSetter.SetChartData(chartData);
@@ -35,6 +37,7 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
 
     void IChartLoader.LoadChart(TextAsset jsonFile, Action callback)
     {
+        currentDifficulty = musicDataGetter != null ? musicDataGetter.Difficulty.Value : Difficulty.Normal;
         ChartData chartData = LoadChartData(jsonFile);
 
         chartDataSetter.SetChartData(chartData);
@@ -62,7 +65,7 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
 
         // îªíËògÇÃí≤êÆ
         JudgementWindowAdjuster judgementWindowAdjuster = new JudgementWindowAdjuster();
-        judgementWindowAdjuster.AdjustJudgementWindow(chart, judgementWindows);
+        AdjustJudgementWindow(judgementWindowAdjuster, chart);
 
 
         return chart;
@@ -83,9 +86,20 @@ public class ChartLoaderJson : MonoBehaviour, IChartLoader
 
         // îªíËògÇÃí≤êÆ
         JudgementWindowAdjuster judgementWindowAdjuster = new JudgementWindowAdjuster();
-        judgementWindowAdjuster.AdjustJudgementWindow(chart, judgementWindows);
+        AdjustJudgementWindow(judgementWindowAdjuster, chart);
 
 
         return chart;
+    }
+
+    private void AdjustJudgementWindow(JudgementWindowAdjuster judgementWindowAdjuster, ChartData chart)
+    {
+        if (judgementSettingsCatalog == null)
+        {
+            Debug.LogWarning("[System] Judgement settings catalog is not assigned.");
+            return;
+        }
+
+        judgementWindowAdjuster.AdjustJudgementWindow(chart, judgementSettingsCatalog, currentDifficulty);
     }
 }

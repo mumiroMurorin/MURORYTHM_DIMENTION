@@ -8,7 +8,8 @@ using System;
 
 public class ChartLoaderJsonInSelectScene : MonoBehaviour, IChartLoader
 {
-    [SerializeField] List<NoteTypeToJudgementWindow> judgementWindows;
+    [SerializeField] NoteJudgementSettingsCatalog judgementSettingsCatalog;
+    [SerializeField] Difficulty previewDifficulty = Difficulty.Normal;
 
     [Inject] INoteSpawnDataOptionGetter optionGetter;
 
@@ -53,7 +54,7 @@ public class ChartLoaderJsonInSelectScene : MonoBehaviour, IChartLoader
 
         // îªíËògÇÃí≤êÆ
         JudgementWindowAdjuster judgementWindowAdjuster = new JudgementWindowAdjuster();
-        judgementWindowAdjuster.AdjustJudgementWindow(chart, judgementWindows);
+        AdjustJudgementWindow(judgementWindowAdjuster, chart);
 
 
         return chart;
@@ -74,9 +75,20 @@ public class ChartLoaderJsonInSelectScene : MonoBehaviour, IChartLoader
 
         // îªíËògÇÃí≤êÆ
         JudgementWindowAdjuster judgementWindowAdjuster = new JudgementWindowAdjuster();
-        judgementWindowAdjuster.AdjustJudgementWindow(chart, judgementWindows);
+        AdjustJudgementWindow(judgementWindowAdjuster, chart);
 
 
         return chart;
+    }
+
+    private void AdjustJudgementWindow(JudgementWindowAdjuster judgementWindowAdjuster, ChartData chart)
+    {
+        if (judgementSettingsCatalog == null)
+        {
+            Debug.LogWarning("[System] Judgement settings catalog is not assigned.");
+            return;
+        }
+
+        judgementWindowAdjuster.AdjustJudgementWindow(chart, judgementSettingsCatalog, previewDifficulty);
     }
 }

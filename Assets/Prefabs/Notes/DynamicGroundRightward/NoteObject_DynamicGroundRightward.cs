@@ -10,7 +10,7 @@ public class NoteObject_DynamicGroundRightward : NoteObject<NoteData_DynamicGrou
 {
     Vector3 JudgeVector => Vector3.right;
 
-    [SerializeField] float judgeMagnitude;
+    [SerializeField, UnityEngine.Serialization.FormerlySerializedAs("judgeMagnitude")] float judgeMagnitudeFallback;
     
     NoteData_DynamicGroundRightward noteData;
     DynamicJudgementHandler dynamicJudgement;
@@ -18,7 +18,7 @@ public class NoteObject_DynamicGroundRightward : NoteObject<NoteData_DynamicGrou
     private float JudgeMagnitude =>
         noteData?.JudgementSettings != null
             ? noteData.JudgementSettings.JudgeMagnitude
-            : judgeMagnitude;
+            : judgeMagnitudeFallback;
     Judgement bestJudgement = Judgement.Miss;
     bool isJudged;
 
