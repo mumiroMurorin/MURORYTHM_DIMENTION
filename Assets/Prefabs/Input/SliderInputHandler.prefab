@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6974557688898039621}
-  - component: {fileID: 7027494514981776746}
   - component: {fileID: 5796672902755936238}
   m_Layer: 0
   m_Name: SliderInputHandler
@@ -33,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7027494514981776746
+--- !u!114 &5796672902755936238
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,12 +41,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 725189946168866810}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b13d70ff569c23940a0e9b935ea02394, type: 3}
+  m_Script: {fileID: 11500000, guid: 3d6819d3b5bc4f3fb41e9eec2cfa91a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   configs:
   - configName: KeyBoardInputs
-    physicalKeyCodes: 310000000d000000320000000000000033000000000000003400000000000000710000000000000077000000000000006500000000000000720000000000000035000000000000003600000000000000370000000000000038000000000000007400000000000000790000000000000075000000000000006900000000000000
+    physicalKeyCodes: 3100000000000000320000000000000033000000000000003400000000000000710000000000000077000000000000006500000000000000720000000000000035000000000000003600000000000000370000000000000038000000000000007400000000000000790000000000000075000000000000006900000000000000
     laneKeyCodes:
     - keyCodes: 31000000
     - keyCodes: 32000000
@@ -66,18 +65,6 @@ MonoBehaviour:
     - keyCodes: 75000000
     - keyCodes: 69000000
     isActive: 1
---- !u!114 &5796672902755936238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 725189946168866810}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d6819d3b5bc4f3fb41e9eec2cfa91a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   acceptAllConductusDevices: 1
   resetInputWhenDeviceChanges: 1
   logDeviceChanges: 1
