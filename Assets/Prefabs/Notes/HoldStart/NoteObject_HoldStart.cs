@@ -78,9 +78,8 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
         else { judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing); }
 
         var judgementData = new NoteJudgementData(this.noteData, judgement, noteData.Timer.Time - noteData.Timing);
-        noteData.JudgementRecorder?.RecordJudgement(judgementData);
-
         SoundManager.Instance.PlaySE(noteData.NoteType, judgement);
+        noteData.JudgementRecorder?.RecordJudgement(judgementData);
         isJudged = true;
     }
 

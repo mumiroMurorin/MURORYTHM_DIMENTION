@@ -244,6 +244,7 @@ MonoBehaviour:
   handObject: {fileID: 1735210880141169051}
   verticalLineObj: {fileID: 7450891125942189781}
   horizontalLineObj: {fileID: 1619321274031976808}
+  smoothingTime: 0.05
 --- !u!1 &7450891125942189781
 GameObject:
   m_ObjectHideFlags: 0

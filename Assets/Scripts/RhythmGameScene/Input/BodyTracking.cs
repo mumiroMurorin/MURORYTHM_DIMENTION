@@ -8,6 +8,7 @@ using static WebCamUtils;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UniRx;
+using UnityEngine.Serialization;
 using Stopwatch = System.Diagnostics.Stopwatch; // for Timestamp
 
 namespace Mediapipe.Unity.Tutorial
@@ -25,7 +26,14 @@ namespace Mediapipe.Unity.Tutorial
         [Header("Height")]
         [SerializeField] private int _height;
         [Header("FPS")]
-        [SerializeField] private int _fps;
+        [FormerlySerializedAs("_fps")]
+        [SerializeField, Min(1)] private int _requestedFps = 60;
+
+        [Header("Latency")]
+        [SerializeField] private bool _smoothLandmarks;
+        [SerializeField] private bool _enableSegmentation;
+
+        private int RequestedFps => _requestedFps > 0 ? _requestedFps : 60;
 
         private ReactiveProperty<int> fps = new ReactiveProperty<int>();
         public IReadOnlyReactiveProperty<int> CameraFps => fps;
@@ -91,11 +99,19 @@ namespace Mediapipe.Unity.Tutorial
             var isSurpported = await CheckIfTextureStartedAsync(webCamDevice.name, settings.CameraWidth.Value, settings.CameraHeight.Value, token);
             if (isSurpported)
             {
-                _webCamTexture.Value = new WebCamTexture(webCamDevice.name, settings.CameraWidth.Value, settings.CameraHeight.Value);
+                _webCamTexture.Value = new WebCamTexture(
+                    webCamDevice.name,
+                    settings.CameraWidth.Value,
+                    settings.CameraHeight.Value,
+                    RequestedFps);
             }
             else
             {
-                _webCamTexture.Value = new WebCamTexture(webCamDevice.name, _width, _height);
+                _webCamTexture.Value = new WebCamTexture(
+                    webCamDevice.name,
+                    _width,
+                    _height,
+                    RequestedFps);
             }
 
             _webCamTexture.Value.Play();
@@ -155,14 +171,19 @@ namespace Mediapipe.Unity.Tutorial
                 return;
             }
 
-            _graph = new CalculatorGraph(_configAsset.text);
+            var graphConfig = CalculatorGraphConfig.Parser.ParseFromTextFormat(_configAsset.text);
+            var poseLandmarksPresenceStream = graphConfig.AddPacketPresenceCalculator("pose_landmarks");
+            _graph = new CalculatorGraph(graphConfig);
             if (_graph == null)
             {
                 Debug.LogError("[MediaPipe] Failed to initialize CalculatorGraph.");
                 return;
             }
 
-            poseLandmarksStream = new OutputStream<NormalizedLandmarkListPacket, NormalizedLandmarkList>(_graph, "pose_landmarks");
+            poseLandmarksStream = new OutputStream<NormalizedLandmarkListPacket, NormalizedLandmarkList>(
+                _graph,
+                "pose_landmarks",
+                poseLandmarksPresenceStream);
             poseLandmarksStream.StartPolling().AssertOk();
 
             var sidePacket = new SidePacket();
@@ -170,9 +191,9 @@ namespace Mediapipe.Unity.Tutorial
             sidePacket.Emplace("input_rotation", new IntPacket(0));
             sidePacket.Emplace("input_horizontally_flipped", new BoolPacket(settings.IsHorizontallyFlipped.Value));
             sidePacket.Emplace("input_vertically_flipped", new BoolPacket(settings.IsVerticallyFlipped.Value));
-            sidePacket.Emplace("smooth_landmarks", new BoolPacket(true));
-            sidePacket.Emplace("enable_segmentation", new BoolPacket(true));
-            sidePacket.Emplace("smooth_segmentation", new BoolPacket(true));
+            sidePacket.Emplace("smooth_landmarks", new BoolPacket(_smoothLandmarks));
+            sidePacket.Emplace("enable_segmentation", new BoolPacket(_enableSegmentation));
+            sidePacket.Emplace("smooth_segmentation", new BoolPacket(false));
             sidePacket.Emplace("output_rotation", new IntPacket(0));
             sidePacket.Emplace("output_horizontally_flipped", new BoolPacket(false));
             sidePacket.Emplace("output_vertically_flipped", new BoolPacket(false));
@@ -191,30 +212,69 @@ namespace Mediapipe.Unity.Tutorial
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
+            var lastFpsUpdateTime = Time.realtimeSinceStartup;
+            var processedFrameCount = 0;
+
             while (true)
             {
+                DrainLatestPoseLandmarks();
+
+                if (_webCamTexture.Value == null || !_webCamTexture.Value.didUpdateThisFrame)
+                {
+                    UpdateProcessedFps(ref lastFpsUpdateTime, ref processedFrameCount);
+                    await UniTask.Yield(PlayerLoopTiming.Update, token);
+                    continue;
+                }
+
                 _inputTexture.SetPixels32(_webCamTexture.Value.GetPixels32(_pixelData));
                 using var imageFrame = new ImageFrame(ImageFormat.Types.Format.Srgba, _width, _height, _width * 4, _inputTexture.GetRawTextureData<byte>());
                 var currentTimestamp = stopwatch.ElapsedTicks / (System.TimeSpan.TicksPerMillisecond / 1000);
                 using var imageFramePacket = new ImageFramePacket(imageFrame, new Timestamp(currentTimestamp));
 
                 _graph.AddPacketToInputStream("input_video", imageFramePacket).AssertOk();
-                float start = Time.realtimeSinceStartup;
+                processedFrameCount++;
+                UpdateProcessedFps(ref lastFpsUpdateTime, ref processedFrameCount);
 
-                await UniTask.WaitForEndOfFrame(token);
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
+            }
+        }
 
-                float end = Time.realtimeSinceStartup;
-                float deltaTime = end - start;
-                _fps = deltaTime > 0 ? (int)(1f / deltaTime) : 0;
-                fps.Value = _fps;
+        private void DrainLatestPoseLandmarks()
+        {
+            NormalizedLandmarkList latestLandmarks = null;
 
-                if (poseLandmarksStream.TryGetNext(out var LandMarks))
+            while (poseLandmarksStream != null &&
+                   poseLandmarksStream.TryGetNext(out var nextLandmarks, false))
+            {
+                if (nextLandmarks != null)
                 {
-                    if (LandMarks == null) { continue; }
-
-                    landmarkList = LandMarks;
+                    latestLandmarks = nextLandmarks;
                 }
             }
+
+            if (latestLandmarks != null)
+            {
+                landmarkList = latestLandmarks;
+            }
+        }
+
+        private void UpdateProcessedFps(ref float lastUpdateTime, ref int processedFrameCount)
+        {
+            var now = Time.realtimeSinceStartup;
+            var elapsed = now - lastUpdateTime;
+            if (elapsed < 1f)
+            {
+                return;
+            }
+
+            var currentFps = Mathf.RoundToInt(processedFrameCount / elapsed);
+            if (fps.Value != currentFps)
+            {
+                fps.Value = currentFps;
+            }
+
+            processedFrameCount = 0;
+            lastUpdateTime = now;
         }
 
         // Load a model file.

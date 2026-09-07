@@ -117,9 +117,8 @@ public class NoteObject_DynamicGroundLeftward : NoteObject<NoteData_DynamicGroun
     private void SendJudgementData()
     {
         var judgementData = new NoteJudgementData(this.noteData, bestJudgement, noteData.Timer.Time - noteData.Timing);
-        noteData.JudgementRecorder?.RecordJudgement(judgementData);
-
         SoundManager.Instance.PlaySE(noteData.NoteType, bestJudgement);
+        noteData.JudgementRecorder?.RecordJudgement(judgementData);
         isJudged = true;
     }
 

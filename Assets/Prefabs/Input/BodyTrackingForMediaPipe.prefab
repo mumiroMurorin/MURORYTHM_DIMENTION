@@ -63,4 +63,6 @@ MonoBehaviour:
   _configAsset: {fileID: 4900000, guid: 5199c62ac0186dac28358b2ef639ef9b, type: 3}
   _width: 0
   _height: 0
-  _fps: 0
+  _requestedFps: 60
+  _smoothLandmarks: 0
+  _enableSegmentation: 0
