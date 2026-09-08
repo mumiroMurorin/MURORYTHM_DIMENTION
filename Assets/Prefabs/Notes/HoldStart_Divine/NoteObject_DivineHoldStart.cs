@@ -1,5 +1,6 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UniRx;
 
@@ -28,18 +29,24 @@ public class NoteObject_DivineHoldStart : NoteObject<NoteData_DivineHoldStart>
             if (noteData.SliderInput == null) { break; }
             if (noteData.Timer == null) { break; }
 
-            noteData.SliderInput.OnSliderTouchDown
-                .Where(touchedIndex => touchedIndex == index)
-                .Where(_ => !isJudged)
-                .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
-                .Where(_ => !noteData.OptionGetter.IsAutoMode)
-                .Subscribe(_ =>
-                {
-                    NormalJudge();
-                    SetDisable();
-                })
-                .AddTo(this.gameObject);
+            BindJudgementTrigger(noteData.SliderInput.OnSliderTouchDown, index);
+            BindJudgementTrigger(noteData.SliderInput.OnSliderTouchUp, index);
         }
+    }
+
+    private void BindJudgementTrigger(IObservable<int> sliderEvent, int index)
+    {
+        sliderEvent
+            .Where(touchedIndex => touchedIndex == index)
+            .Where(_ => !isJudged)
+            .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
+            .Where(_ => !noteData.OptionGetter.IsAutoMode)
+            .Subscribe(_ =>
+            {
+                NormalJudge();
+                SetDisable();
+            })
+            .AddTo(this.gameObject);
     }
 
     private void Update()

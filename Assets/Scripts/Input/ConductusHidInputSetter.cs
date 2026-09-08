@@ -81,6 +81,11 @@ public class ConductusHidInputSetter : MonoBehaviour
             {
                 sliderInputSetter?.NotifySliderTouchDown(i);
             }
+
+            if (!sliderInputs[i] && previousSliderInputs[i])
+            {
+                sliderInputSetter?.NotifySliderTouchUp(i);
+            }
         }
     }
 

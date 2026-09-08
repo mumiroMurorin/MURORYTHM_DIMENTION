@@ -6,86 +6,40 @@
       "DivisionNum": 4,
       "SubDivisionDatas": [
         {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        }
-      ]
-    },
-    {
-      "BeatCount": 4,
-      "BeatUnit": 4.0,
-      "DivisionNum": 4,
-      "SubDivisionDatas": [
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
           "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0,
           "TouchNoteData": [
             {
               "Range": [
@@ -98,25 +52,32 @@
           ]
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         }
       ]
     },
@@ -127,6 +88,7 @@
       "SubDivisionDatas": [
         {
           "Bpm": 120.0,
+          "SpeedRatio": 0.0,
           "TouchNoteData": [
             {
               "Range": [
@@ -137,30 +99,38 @@
               ]
             }
           ]
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
         },
         {
           "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0,
           "TouchNoteData": [
             {
               "Range": [
@@ -173,25 +143,32 @@
           ]
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         }
       ]
     },
@@ -202,6 +179,7 @@
       "SubDivisionDatas": [
         {
           "Bpm": 120.0,
+          "SpeedRatio": 0.0,
           "TouchNoteData": [
             {
               "Range": [
@@ -212,30 +190,38 @@
               ]
             }
           ]
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
-        },
-        {
-          "Bpm": 120.0
         },
         {
           "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0,
           "TouchNoteData": [
             {
               "Range": [
@@ -248,25 +234,123 @@
           ]
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         },
         {
-          "Bpm": 120.0
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        }
+      ]
+    },
+    {
+      "BeatCount": 4,
+      "BeatUnit": 4.0,
+      "DivisionNum": 4,
+      "SubDivisionDatas": [
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0,
+          "TouchNoteData": [
+            {
+              "Range": [
+                6,
+                7,
+                8,
+                9
+              ]
+            }
+          ]
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
+        },
+        {
+          "Bpm": 120.0,
+          "SpeedRatio": 0.0
         }
       ]
     }

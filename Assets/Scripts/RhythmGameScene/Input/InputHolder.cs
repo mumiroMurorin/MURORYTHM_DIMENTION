@@ -15,6 +15,8 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
     ReactiveProperty<bool>[] sliderInput;
     readonly Subject<int> onSliderTouchDown = new Subject<int>();
     public System.IObservable<int> OnSliderTouchDown => onSliderTouchDown;
+    readonly Subject<int> onSliderTouchUp = new Subject<int>();
+    public System.IObservable<int> OnSliderTouchUp => onSliderTouchUp;
 
     // 空間入力(右手)
     ReactiveCollection<TimeToPos> rightHandInput = new ReactiveCollection<TimeToPos>();
@@ -56,6 +58,13 @@ public class InputHolder : ISliderInputSetter, ISpaceInputSetter, ISliderInputGe
         if (index < 0 || index >= SLIDER_MAX_COUNT) { Debug.LogWarning($"【Input】Out of range: {index}"); return; }
 
         onSliderTouchDown.OnNext(index);
+    }
+
+    public void NotifySliderTouchUp(int index)
+    {
+        if (index < 0 || index >= SLIDER_MAX_COUNT) { Debug.LogWarning($"【Input】Out of range: {index}"); return; }
+
+        onSliderTouchUp.OnNext(index);
     }
 
     /// <summary>

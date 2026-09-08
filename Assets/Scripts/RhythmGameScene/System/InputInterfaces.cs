@@ -11,6 +11,8 @@ public interface ISliderInputGetter
 {
     IObservable<int> OnSliderTouchDown { get; }
 
+    IObservable<int> OnSliderTouchUp { get; }
+
     IReadOnlyReactiveProperty<bool> GetSliderInputReactiveProperty(int index);
 }
 
@@ -69,6 +71,8 @@ public interface ISliderInputSetter
     public void SetSliderInput(int index, bool isEnable);
 
     public void NotifySliderTouchDown(int index);
+
+    public void NotifySliderTouchUp(int index);
 }
 
 public interface ISpaceInputSetter
