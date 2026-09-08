@@ -452,8 +452,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 419807e2a7e84d929244b1d32f9d3b8a, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   dataFolderName: CreditData
   creditFileName: credit.json
   creditTextView: {fileID: 87458971}
@@ -984,6 +984,7 @@ MonoBehaviour:
   - {fileID: 1011381634}
   - {fileID: 398712844}
   - {fileID: 1141935284}
+  - {fileID: 810599505}
 --- !u!1 &1011381634
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ MonoBehaviour:
   noteSpeed: 80
   noteCurveRadius: 2000
   seVolume: 0.8
+  judgementSeVolume: 0.8
   bgmVolume: 0.8
   offset: 0
   divisionNum: 4

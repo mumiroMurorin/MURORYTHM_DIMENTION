@@ -58,6 +58,7 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
         SetNoteCurveRadius(asset.NoteCurveRadius);
         SetOffsetMs(asset.Offset);
         SetSEVolume(asset.SeVolume);
+        SetJudgementSeVolume(asset.JudgementSeVolume);
         SetBGMVolume(asset.BgmVolume);
         SetDivisionNum(asset.DivisionNum);
         SetIsEnabledFastLate(asset.IsEnabledFastLate);
