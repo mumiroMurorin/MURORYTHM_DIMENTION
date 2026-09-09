@@ -9,7 +9,7 @@ public class SkyBoxChanger : MonoBehaviour
 
     [Header("変更後のSkyBox")]
     [SerializeField] Material nextSky;
-    [SerializeField] Cubemap nextCubemap;
+    [SerializeField, HideInInspector] Cubemap nextCubemap;
 
     [Header("回転設定")]
     [SerializeField] int initialRotation;
@@ -28,10 +28,11 @@ public class SkyBoxChanger : MonoBehaviour
     public void ChangeSkyBoxTrigger()
     {
         RenderSettings.skybox = nextSky;
-        RenderSettings.defaultReflectionMode = UnityEngine.Rendering.DefaultReflectionMode.Custom;
-        RenderSettings.customReflectionTexture = nextCubemap;
+        RenderSettings.defaultReflectionMode = UnityEngine.Rendering.DefaultReflectionMode.Skybox;
+        RenderSettings.customReflectionTexture = null;
         currentRotation = initialRotation;
         ApplySkyboxRotation();
+        DynamicGI.UpdateEnvironment();
         isSetupSkybox = true;
     }
 

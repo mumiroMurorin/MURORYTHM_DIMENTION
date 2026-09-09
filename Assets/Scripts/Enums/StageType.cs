@@ -6,4 +6,5 @@
     CreationEvening = 102,
     CreationMathematics = 110,
     Destruction = 200,
+    DestructionJirai = 210,
 }
