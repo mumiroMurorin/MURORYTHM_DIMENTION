@@ -15,7 +15,9 @@ namespace TransitionerInSelectScene
         [SerializeField] MusicDataListController musicDataListController;
         [SerializeField] OptionDataListController optionDataListController;
         [SerializeField] MusicDataSetter musicDataSetter;
+        [SerializeField] OptionDataSetter optionDataSetter;
         [SerializeField] InteractNoteEffectControllerInOption interactNoteEffectControllerInOption;
+        [SerializeField] TextBoxController firstPlayOptionGuideTextBox;
 
         readonly PhaseStatusInSelectScene status = PhaseStatusInSelectScene.LoadData;
 
@@ -63,6 +65,8 @@ namespace TransitionerInSelectScene
         {
             // 楽曲選択
             operationDictionary.RegisterOperation(OperationTag.Select_SelectMusic, () => { TransitionDetailSelect(); });
+            operationDictionary.RegisterOperation(OperationTag.Select_FirstPlayOptionGuide_Confirm, () => { ConfirmFirstPlayOptionGuide(); });
+            operationDictionary.RegisterOperation(OperationTag.Select_FirstPlayOptionGuide_DummyOption, () => { });
             operationDictionary.RegisterOperation(OperationTag.Select_MoveLeft, () => { musicDataListController?.MoveMusicTopic(-1); });
             operationDictionary.RegisterOperation(OperationTag.Select_MoveRight, () => { musicDataListController?.MoveMusicTopic(+1); });
             operationDictionary.RegisterOperation(OperationTag.Select_UpDifficulty, () => { ChangeDifficulty(+1); });
@@ -83,8 +87,34 @@ namespace TransitionerInSelectScene
 
         private void TransitionDetailSelect()
         {
+            if (IsFirstPlayOptionGuideRequired())
+            {
+                phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.FirstPlayOptionGuide);
+                return;
+            }
+
             if (musicDataListController.IsPlayableMusicOnCurrentSelecting()) { phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.DetailSelect); }
             else { phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.DetailSelect_UnStartable); }
+        }
+
+
+        private void ConfirmFirstPlayOptionGuide()
+        {
+            optionDataSetter?.SetFirstPlayGuideRequired(false);
+
+            // 初回ガイドのTextBoxを閉じてから、本来の楽曲詳細フェーズへ戻す
+            if (firstPlayOptionGuideTextBox != null)
+            {
+                firstPlayOptionGuideTextBox.Close(TransitionDetailSelect);
+                return;
+            }
+
+            TransitionDetailSelect();
+        }
+
+        private bool IsFirstPlayOptionGuideRequired()
+        {
+            return optionDataSetter != null && optionDataSetter.IsFirstPlayGuideRequired();
         }
 
         /// <summary>
@@ -110,6 +140,7 @@ namespace TransitionerInSelectScene
         {
             musicDataSetter.DataSetter.SetDifficulty(musicDataListController.Getter.Difficulty.Value);
             musicDataSetter.DataSetter.SetMusicData(musicDataListController.Getter.CurrentMusicData.Value);
+            optionDataSetter?.SetFirstPlayGuideRequired(false);
 
             phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.FadeOut);
         }

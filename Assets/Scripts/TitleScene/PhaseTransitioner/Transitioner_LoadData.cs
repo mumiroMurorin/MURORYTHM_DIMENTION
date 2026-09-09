@@ -70,6 +70,7 @@ namespace TransitionerInTitleScene
         /// </summary>
         private void TransitionGameStartPhase()
         {
+            optionDataSetter?.SetFirstPlayGuideRequired(true);
             phaseTransitionable?.Value.TransitionPhase(PhaseStatusInTitleScene.GameStart);
         }
 

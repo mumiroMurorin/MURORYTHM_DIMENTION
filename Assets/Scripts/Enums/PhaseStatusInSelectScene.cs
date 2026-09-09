@@ -9,4 +9,6 @@
     FadeOut,
     TransitionRhythmGameScene,
     TransitionRootScene,
+    FirstPlayOptionGuide,
+    FirstPlayOptionGuide_Operation,
 }

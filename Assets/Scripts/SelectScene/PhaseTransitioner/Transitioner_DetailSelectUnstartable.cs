@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using VContainer;
+Ôªøusing UnityEngine;
 
 namespace TransitionerInSelectScene
 {
@@ -16,9 +13,7 @@ namespace TransitionerInSelectScene
 
         void IPhaseTransitionerInSelectScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"DetailSelectUnstartable\"");
-
-
+            Debug.Log("„ÄêTransition„ÄëTransition to \"DetailSelectUnstartable\"");
         }
     }
 }

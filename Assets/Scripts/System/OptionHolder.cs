@@ -447,6 +447,20 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     #endregion
 
 
+    #region FirstPlayGuide
+
+    ReactiveProperty<bool> isFirstPlayGuideRequired = new ReactiveProperty<bool>(true);
+    public IReadOnlyReactiveProperty<bool> IsFirstPlayGuideRequired => isFirstPlayGuideRequired;
+    public void SetFirstPlayGuideRequired(bool isRequired)
+    {
+        if (isFirstPlayGuideRequired.Value == isRequired) { return; }
+
+        isFirstPlayGuideRequired.Value = isRequired;
+    }
+
+    #endregion
+
+
     #region TutorialGuideCharacter
 
     ReactiveProperty<TutorialGuideCharacterType> currentTutorialGuideCharacterType = new ReactiveProperty<TutorialGuideCharacterType>(TutorialGuideCharacterType.Creation);
@@ -547,6 +561,8 @@ public interface IOptionGetter
 
     IReadOnlyReactiveProperty<TrackingMode> CurrentTrackingMode { get; }
 
+    IReadOnlyReactiveProperty<bool> IsFirstPlayGuideRequired { get; }
+
     IReadOnlyReactiveProperty<TutorialGuideCharacterType> CurrentTutorialGuideCharacterType { get; }
 
     BodyTrackingSettings TrackingSettings { get; }
@@ -567,6 +583,8 @@ public interface IOptionSetter
     bool SetIsEnabledFastLate(bool isEnabled);
 
     void SetCurrentTrackingMode(TrackingMode trackingMode);
+
+    void SetFirstPlayGuideRequired(bool isRequired);
 
     void SetCurrentTutorialGuideCharacterType(TutorialGuideCharacterType tutorialGuideCharacterType);
 

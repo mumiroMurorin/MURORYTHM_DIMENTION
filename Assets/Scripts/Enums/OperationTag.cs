@@ -16,6 +16,8 @@ public enum OperationTag
     Select_MoveLeft = 221,
     Select_UpDifficulty = 230,
     Select_DownDifficulty = 231,
+    Select_FirstPlayOptionGuide_Confirm = 240,
+    Select_FirstPlayOptionGuide_DummyOption = 241,
     Select_Detail_StartMusic = 250,
     Select_Detail_UnStartableMusic = 251,
     Select_Detail_BackSelectMusic = 260,

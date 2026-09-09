@@ -66,6 +66,10 @@ MonoBehaviour:
     m_Localized: Select Music
     m_Metadata:
       m_Items: []
+  - m_Id: 1604390993920
+    m_Localized: OK
+    m_Metadata:
+      m_Items: []
   - m_Id: 1418461564928
     m_Localized: Difficulty Up
     m_Metadata:

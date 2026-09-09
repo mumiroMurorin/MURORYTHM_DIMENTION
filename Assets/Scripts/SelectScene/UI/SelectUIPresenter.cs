@@ -64,7 +64,11 @@ namespace UIInSelectScene
             // Šy‹È‚Ì‘I‘ð(Œˆ’è)
             phaseStatusGetter_model?.Value.PhaseStatus
                 .Pairwise()
-                .Where(pair => (pair.Current == PhaseStatusInSelectScene.DetailSelect || pair.Current == PhaseStatusInSelectScene.DetailSelect_UnStartable) && pair.Previous == PhaseStatusInSelectScene.MusicSelect)
+                .Where(pair =>
+                    (pair.Current == PhaseStatusInSelectScene.DetailSelect ||
+                     pair.Current == PhaseStatusInSelectScene.DetailSelect_UnStartable ||
+                     pair.Current == PhaseStatusInSelectScene.FirstPlayOptionGuide) &&
+                    pair.Previous == PhaseStatusInSelectScene.MusicSelect)
                 .Subscribe(_ => musicTopicsController_view.OnSelectMusic())
                 .AddTo(this.gameObject);
 

@@ -35,6 +35,10 @@ MonoBehaviour:
     m_Key: Select Tutorial Character
     m_Metadata:
       m_Items: []
+  - m_Id: 42269246677700608
+    m_Key: FirstOptionGuide
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

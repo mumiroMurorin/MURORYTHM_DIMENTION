@@ -71,7 +71,11 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
         // 楽曲トピックの選択
         phaseStatusGetter?.Value.PhaseStatus
             .Pairwise()
-            .Where(pair => (pair.Current == PhaseStatusInSelectScene.DetailSelect || pair.Current == PhaseStatusInSelectScene.DetailSelect_UnStartable) && pair.Previous == PhaseStatusInSelectScene.MusicSelect)
+            .Where(pair =>
+                    (pair.Current == PhaseStatusInSelectScene.DetailSelect ||
+                     pair.Current == PhaseStatusInSelectScene.DetailSelect_UnStartable ||
+                     pair.Current == PhaseStatusInSelectScene.FirstPlayOptionGuide) &&
+                    pair.Previous == PhaseStatusInSelectScene.MusicSelect)
             .Subscribe(_ => soundManager.PlaySE(SE_Type.SelectMusic))
             .AddTo(this.gameObject);
     }

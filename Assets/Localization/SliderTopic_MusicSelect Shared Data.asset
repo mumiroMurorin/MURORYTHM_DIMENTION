@@ -63,6 +63,10 @@ MonoBehaviour:
     m_Key: Select_SelectMusic
     m_Metadata:
       m_Items: []
+  - m_Id: 1604390993920
+    m_Key: FirstPlayOptionGuide_Confirm
+    m_Metadata:
+      m_Items: []
   - m_Id: 1418461564928
     m_Key: UpDifficulty
     m_Metadata:
