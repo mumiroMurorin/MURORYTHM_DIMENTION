@@ -4,5 +4,6 @@
     CreationNoon = 100,
     CreationNight = 101,
     CreationEvening = 102,
+    CreationMathematics = 110,
     Destruction = 200,
 }

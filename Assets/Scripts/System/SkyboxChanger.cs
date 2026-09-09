@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class SkyBoxChanger : MonoBehaviour
 {
     [SerializeField] bool playOnAwake;
 
-    [Header("ïœçXå„ÇÃSkyBox")]
+    [Header("Â§âÊõ¥Âæå„ÅÆSkyBox")]
     [SerializeField] Material nextSky;
     [SerializeField] Cubemap nextCubemap;
 
-    [Header("âÒì]ê›íË")]
+    [Header("ÂõûËª¢Ë®≠ÂÆö")]
+    [SerializeField] int initialRotation;
+    [FormerlySerializedAs("legacyRotationSpeed")]
+    [FormerlySerializedAs("rotationSpeed")]
     [SerializeField] float rotationSpeed = 1f;
 
     bool isSetupSkybox;
@@ -26,6 +30,8 @@ public class SkyBoxChanger : MonoBehaviour
         RenderSettings.skybox = nextSky;
         RenderSettings.defaultReflectionMode = UnityEngine.Rendering.DefaultReflectionMode.Custom;
         RenderSettings.customReflectionTexture = nextCubemap;
+        currentRotation = initialRotation;
+        ApplySkyboxRotation();
         isSetupSkybox = true;
     }
 
@@ -36,6 +42,14 @@ public class SkyBoxChanger : MonoBehaviour
 
         currentRotation += rotationSpeed * Time.deltaTime;
         currentRotation %= 360f;
+
+        ApplySkyboxRotation();
+    }
+
+    void ApplySkyboxRotation()
+    {
+        if (RenderSettings.skybox == null) { return; }
+        if (!RenderSettings.skybox.HasProperty("_Rotation")) { return; }
 
         RenderSettings.skybox.SetFloat("_Rotation", currentRotation);
     }
