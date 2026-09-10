@@ -7,5 +7,5 @@
     CreationMathematics = 110,
     Destruction = 200,
     DestructionJirai = 210,
-    MyRoom = 510,
+    CyberRoom = 510,
 }
