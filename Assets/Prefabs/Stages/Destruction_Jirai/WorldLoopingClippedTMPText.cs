@@ -4,6 +4,7 @@ using UnityEngine;
 public class WorldLoopingClippedTMPText : MonoBehaviour
 {
     [SerializeField] TextMeshPro primaryText;
+    [SerializeField] Shader clipShader;
     [SerializeField] Transform clipRoot;
     [SerializeField] Vector2 clipCenterOffset;
     [SerializeField] Vector2 clipSize = new Vector2(8f, 2f);
@@ -24,9 +25,8 @@ public class WorldLoopingClippedTMPText : MonoBehaviour
     float loopDistance;
     bool isLooping;
 
-    static readonly int ClipCenterId = Shader.PropertyToID("_ClipCenter");
-    static readonly int ClipRightId = Shader.PropertyToID("_ClipRight");
-    static readonly int ClipUpId = Shader.PropertyToID("_ClipUp");
+    static readonly int ClipWorldToLocalId = Shader.PropertyToID("_ClipWorldToLocal");
+    static readonly int ClipCenterOffsetId = Shader.PropertyToID("_ClipCenterOffset");
     static readonly int ClipSizeId = Shader.PropertyToID("_ClipSize");
     static readonly int ClipSoftnessId = Shader.PropertyToID("_ClipSoftness");
 
@@ -62,7 +62,7 @@ public class WorldLoopingClippedTMPText : MonoBehaviour
             secondaryText.text = value;
             ApplyTextSettings(secondaryText);
             secondaryText.ForceMeshUpdate();
-            secondaryText.transform.localPosition = isLooping ? primaryInitialLocalPosition + new Vector3(loopDistance, 0f, 0f) : primaryInitialLocalPosition;
+            secondaryText.transform.localPosition = isLooping ? GetSecondaryInitialLocalPosition() : primaryInitialLocalPosition;
             secondaryText.gameObject.SetActive(isLooping);
         }
 
@@ -103,12 +103,22 @@ public class WorldLoopingClippedTMPText : MonoBehaviour
 
         Vector3 localPosition = target.transform.localPosition;
         localPosition.x -= delta;
-        if (localPosition.x <= -loopDistance)
+        if (delta >= 0f && localPosition.x <= -loopDistance)
         {
             localPosition.x += loopDistance * 2f;
         }
+        else if (delta < 0f && localPosition.x >= loopDistance)
+        {
+            localPosition.x -= loopDistance * 2f;
+        }
 
         target.transform.localPosition = localPosition;
+    }
+
+    Vector3 GetSecondaryInitialLocalPosition()
+    {
+        float direction = loopSpeed >= 0f ? 1f : -1f;
+        return primaryInitialLocalPosition + new Vector3(loopDistance * direction, 0f, 0f);
     }
 
     void CachePrimaryInitialLocalPosition()
@@ -154,7 +164,9 @@ public class WorldLoopingClippedTMPText : MonoBehaviour
 
     Material CreateTextMaterial(TextMeshPro target)
     {
-        Shader shader = Shader.Find("Notes/Stages/WorldTMPHorizontalClip");
+        Shader shader = clipShader != null
+            ? clipShader
+            : Shader.Find("Notes/Stages/WorldTMPHorizontalClip");
         if (shader == null)
         {
             Debug.LogWarning("[WorldLoopingClippedTMPText] Clip shader is not found: Notes/Stages/WorldTMPHorizontalClip");
@@ -215,9 +227,8 @@ public class WorldLoopingClippedTMPText : MonoBehaviour
 
         targetRenderer.GetPropertyBlock(propertyBlock);
         Transform root = ClipRoot;
-        propertyBlock.SetVector(ClipCenterId, ClipCenter);
-        propertyBlock.SetVector(ClipRightId, root.right);
-        propertyBlock.SetVector(ClipUpId, root.up);
+        propertyBlock.SetMatrix(ClipWorldToLocalId, root.worldToLocalMatrix);
+        propertyBlock.SetVector(ClipCenterOffsetId, clipCenterOffset);
         propertyBlock.SetVector(ClipSizeId, clipSize);
         propertyBlock.SetVector(ClipSoftnessId, clipSoftness);
         targetRenderer.SetPropertyBlock(propertyBlock);

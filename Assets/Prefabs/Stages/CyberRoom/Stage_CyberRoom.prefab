@@ -794,7 +794,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u6DF7\u6C8C\u3092\u8D8A\u3048\u3057\u6211\u3089\u304C\u795E\u8056\u306A\u308B\u8ABF\u5F8B\u4E3B\u3092\u8B83\u3048\u3088"
+  m_text: APOCALYPSE LEVEL 12
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bbc17472500554744bf31f13284ecf01, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 4d7d4f36002097743b0e9ea89becae1e, type: 2}
@@ -1407,12 +1407,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   primaryText: {fileID: 6128978107847878525}
+  clipShader: {fileID: 4800000, guid: 571b2cff25a762a40bbca545e6c3785f, type: 3}
   clipRoot: {fileID: 4631578760465408128}
-  clipCenterOffset: {x: -11, y: 0}
-  clipSize: {x: 42, y: 10}
+  clipCenterOffset: {x: -12, y: 0}
+  clipSize: {x: 44, y: 10}
   clipSoftness: {x: 0.05, y: 0.05}
   loopIfOverflow: 1
-  loopSpeed: 1
+  loopSpeed: -1
   loopGap: 2
   drawClipGizmo: 1
   clipGizmoColor: {r: 0, g: 0.8, b: 1, a: 0.8}
@@ -1896,6 +1897,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   primaryText: {fileID: 9078482620119231816}
+  clipShader: {fileID: 4800000, guid: 571b2cff25a762a40bbca545e6c3785f, type: 3}
   clipRoot: {fileID: 8261108869191479963}
   clipCenterOffset: {x: 10, y: 0}
   clipSize: {x: 40, y: 10}
@@ -2370,7 +2372,7 @@ Transform:
   m_GameObject: {fileID: 9059209074039762924}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.5591929, z: 0, w: 0.8290376}
-  m_LocalPosition: {x: 22, y: 3, z: 27}
+  m_LocalPosition: {x: 22.3, y: 3, z: 26.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
