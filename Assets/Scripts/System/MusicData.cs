@@ -120,4 +120,14 @@ public class MusicData
             records.GetRecord(dif).UpdateHighScore(newRecord);
         }
     }
+
+    public void OverwriteMusicRecord(Difficulty dif, MusicRecord record)
+    {
+        if (records == null)
+        {
+            records = new DifficultyToRecord();
+        }
+
+        records.SetRecord(dif, record ?? MusicRecord.zero);
+    }
 }

@@ -2508,6 +2508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   primaryText: {fileID: 9078482620119231816}
+  clipShader: {fileID: 4800000, guid: 571b2cff25a762a40bbca545e6c3785f, type: 3}
   clipRoot: {fileID: 8261108869191479963}
   clipCenterOffset: {x: 10, y: 0}
   clipSize: {x: 40, y: 10}

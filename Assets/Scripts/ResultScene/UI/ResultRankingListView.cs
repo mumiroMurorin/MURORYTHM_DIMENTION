@@ -11,12 +11,11 @@ namespace UIInResultScene
         [SerializeField] Transform contentRoot;
         [SerializeField] bool clearExistingChildren = true;
 
-        public void ShowRanking(MusicData musicData, Difficulty difficulty, MusicRecord currentRecord)
+        public void ShowRanking(MusicData musicData, Difficulty difficulty, MusicRecord currentRecord = null)
         {
             ClearItems();
 
             if (musicData == null) { return; }
-            if (currentRecord == null) { return; }
             if (itemPrefab == null || contentRoot == null) { return; }
 
             string chartKey = MusicRecordPersistence.MakeChartKey(musicData.MusicName, difficulty);
@@ -47,7 +46,8 @@ namespace UIInResultScene
                 }
                 previousScore = record.score;
 
-                bool isCurrentPlay = !currentPlayApplied
+                bool isCurrentPlay = currentRecord != null
+                    && !currentPlayApplied
                     && record.score == currentRecord.Score
                     && record.comboRank == currentRecord.ComboRank;
 

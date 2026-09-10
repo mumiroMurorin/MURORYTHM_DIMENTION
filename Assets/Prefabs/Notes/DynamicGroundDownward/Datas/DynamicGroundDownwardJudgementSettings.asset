@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: DynamicGroundDownwardJudgementSettings
   m_EditorClassIdentifier: 
   judgementWindowObject: {fileID: 11400000, guid: 78afd811eb9c1a64aa716a69139f45c9, type: 2}
-  judgeMagnitude: 1.5
+  difficultyJudgementWindows: []
+  judgeMagnitude: 2

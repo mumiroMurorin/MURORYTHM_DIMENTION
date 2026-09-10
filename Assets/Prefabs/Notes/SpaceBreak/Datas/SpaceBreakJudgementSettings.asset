@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: SpaceBreakJudgementSettings
   m_EditorClassIdentifier: 
   judgementWindowObject: {fileID: 11400000, guid: 6c3c524e75e2fe84b8628ede94caefe3, type: 2}
+  difficultyJudgementWindows: []
   judgementMarginRadius: 0.3
-  judgeMagnitude: 1
+  judgeMagnitude: 1.75

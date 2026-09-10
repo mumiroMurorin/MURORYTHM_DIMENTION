@@ -93,6 +93,43 @@ public static class MusicRecordPersistence
         return true;
     }
 
+    public static bool TryDeleteRecord(string chartKey, int score, ComboRank comboRank, out MusicRecordSaveData bestRecord)
+    {
+        bestRecord = null;
+        if (string.IsNullOrWhiteSpace(chartKey)) { return false; }
+        if (!TryLoadDatabase(out MusicRecordSaveDatabase database)) { return false; }
+
+        var ranking = FindRanking(database, chartKey);
+        if (ranking == null || ranking.records == null) { return false; }
+
+        int removeIndex = ranking.records.FindIndex(record =>
+            record != null
+            && record.score == score
+            && record.comboRank == comboRank);
+
+        if (removeIndex < 0) { return false; }
+
+        ranking.records.RemoveAt(removeIndex);
+        ranking.records.Sort(CompareRecord);
+
+        if (ranking.records.Count <= 0)
+        {
+            database.records.Remove(ranking);
+        }
+        else
+        {
+            bestRecord = ranking.records[0];
+        }
+
+        if (!SaveDatabase(database))
+        {
+            Debug.LogWarning($"[MusicRecordPersistence] Delete save failed: {chartKey}");
+            return false;
+        }
+
+        return true;
+    }
+
     static int CompareRecord(MusicRecordSaveData x, MusicRecordSaveData y)
     {
         if (x == null && y == null) { return 0; }

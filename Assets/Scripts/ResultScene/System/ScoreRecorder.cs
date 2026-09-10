@@ -9,6 +9,10 @@ public class ScoreRecorder : MonoBehaviour
 
     IMusicDataGetter musicDataGetter;
     IScoreGetter scoreGetter;
+    MusicData recordedMusicData;
+    Difficulty recordedDifficulty;
+    MusicRecord recordedRecord;
+    bool hasRecordedRecord;
 
     [Inject]
     public void Construct(IScoreGetter scoreGetter, IMusicDataGetter musicDataGetter)
@@ -42,8 +46,40 @@ public class ScoreRecorder : MonoBehaviour
 
         musicData.SetMusicRecord(difficulty, record);
         MusicRecordPersistence.SaveIfBetter(musicData, difficulty, record);
+        recordedMusicData = musicData;
+        recordedDifficulty = difficulty;
+        recordedRecord = record;
+        hasRecordedRecord = true;
         resultUIPresenter?.SetNewRecordActive(newRecordState.IsScoreNewRecord, newRecordState.IsScoreRankNewRecord);
         rankingListView?.ShowRanking(musicData, difficulty, record);
+    }
+
+    public void DeleteCurrentPlayRecord()
+    {
+        if (!hasRecordedRecord) { return; }
+        if (recordedMusicData == null || recordedRecord == null) { return; }
+        if (string.IsNullOrWhiteSpace(recordedMusicData.MusicName)) { return; }
+
+        string chartKey = MusicRecordPersistence.MakeChartKey(recordedMusicData.MusicName, recordedDifficulty);
+        if (!MusicRecordPersistence.TryDeleteRecord(
+            chartKey,
+            recordedRecord.Score,
+            recordedRecord.ComboRank,
+            out var bestRecord))
+        {
+            return;
+        }
+
+        var bestMusicRecord = MusicRecord.zero;
+        if (bestRecord != null)
+        {
+            var scoreRank = ScoreRankUtility.GetRankFromScore(bestRecord.score);
+            bestMusicRecord = new MusicRecord(bestRecord.score, scoreRank, bestRecord.comboRank, JudgementToCount.zero);
+        }
+
+        recordedMusicData.OverwriteMusicRecord(recordedDifficulty, bestMusicRecord);
+        rankingListView?.ShowRanking(recordedMusicData, recordedDifficulty);
+        hasRecordedRecord = false;
     }
 
     NewRecordState GetNewRecordState(MusicData musicData, Difficulty difficulty, int score, ScoreRank scoreRank)

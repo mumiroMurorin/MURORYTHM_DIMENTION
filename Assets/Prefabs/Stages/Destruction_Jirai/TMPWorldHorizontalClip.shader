@@ -83,9 +83,7 @@ Shader "Notes/Stages/WorldTMPHorizontalClip"
         _CullMode           ("Cull Mode", Float) = 0
         _ColorMask          ("Color Mask", Float) = 15
 
-        _ClipCenter         ("World Clip Center", Vector) = (0,0,0,0)
-        _ClipRight          ("World Clip Right", Vector) = (1,0,0,0)
-        _ClipUp             ("World Clip Up", Vector) = (0,1,0,0)
+        _ClipCenterOffset   ("Clip Center Offset", Vector) = (0,0,0,0)
         _ClipSize           ("World Clip Size", Vector) = (8,2,0,0)
         _ClipSoftness       ("World Clip Softness", Vector) = (0.05,0.05,0,0)
     }
@@ -122,9 +120,11 @@ Shader "Notes/Stages/WorldTMPHorizontalClip"
             #pragma target 3.0
             #pragma vertex VertShader
             #pragma fragment PixShader
-            #pragma shader_feature __ BEVEL_ON
-            #pragma shader_feature __ UNDERLAY_ON UNDERLAY_INNER
-            #pragma shader_feature __ GLOW_ON
+            // Materials switch to this shader at runtime, so player builds cannot
+            // infer which TMP feature variants are required from material assets.
+            #pragma multi_compile __ BEVEL_ON
+            #pragma multi_compile __ UNDERLAY_ON UNDERLAY_INNER
+            #pragma multi_compile __ GLOW_ON
 
             #pragma multi_compile __ UNITY_UI_CLIP_RECT
             #pragma multi_compile __ UNITY_UI_ALPHACLIP
@@ -134,9 +134,8 @@ Shader "Notes/Stages/WorldTMPHorizontalClip"
             #include "../../../TextMesh Pro/Shaders/TMPro_Properties.cginc"
             #include "../../../TextMesh Pro/Shaders/TMPro.cginc"
 
-            float4 _ClipCenter;
-            float4 _ClipRight;
-            float4 _ClipUp;
+            float4x4 _ClipWorldToLocal;
+            float4 _ClipCenterOffset;
             float4 _ClipSize;
             float4 _ClipSoftness;
 
@@ -248,10 +247,7 @@ Shader "Notes/Stages/WorldTMPHorizontalClip"
 
             float GetWorldClipAlpha(float3 worldPos)
             {
-                float3 clipRight = normalize(_ClipRight.xyz);
-                float3 clipUp = normalize(_ClipUp.xyz);
-                float3 toPixel = worldPos - _ClipCenter.xyz;
-                float2 clipPosition = float2(dot(toPixel, clipRight), dot(toPixel, clipUp));
+                float2 clipPosition = mul(_ClipWorldToLocal, float4(worldPos, 1.0)).xy - _ClipCenterOffset.xy;
                 float2 halfSize = max(_ClipSize.xy * 0.5, 0.0001);
                 float2 softness = max(_ClipSoftness.xy, 0.0001);
                 float2 remain = halfSize - abs(clipPosition);
