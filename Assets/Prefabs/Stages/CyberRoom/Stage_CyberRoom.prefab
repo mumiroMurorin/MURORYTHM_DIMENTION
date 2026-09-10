@@ -1408,8 +1408,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   primaryText: {fileID: 6128978107847878525}
   clipRoot: {fileID: 4631578760465408128}
-  clipCenterOffset: {x: -10, y: 0}
-  clipSize: {x: 40, y: 10}
+  clipCenterOffset: {x: -11, y: 0}
+  clipSize: {x: 42, y: 10}
   clipSoftness: {x: 0.05, y: 0.05}
   loopIfOverflow: 1
   loopSpeed: 1

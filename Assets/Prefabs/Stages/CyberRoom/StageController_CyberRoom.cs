@@ -123,7 +123,7 @@ public class StageController_CyberRoom : MonoBehaviour, IStageController
         }
 
         SymphonyType symphonyType = musicData != null ? musicData.SymphonyType : SymphonyType.None;
-        string masterDifficultyText = symphonyTypePresentationDatabase?.GetMasterDifficultyText(symphonyType);
+        string masterDifficultyText = symphonyTypePresentationDatabase?.GetMasterDifficultyText(symphonyType).ToUpper();
         if (!string.IsNullOrEmpty(masterDifficultyText))
         {
             return masterDifficultyText;
