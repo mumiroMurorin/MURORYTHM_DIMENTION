@@ -43,6 +43,13 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
             : data.Timing;
         float endDistance = positionCalculator.GetPosition(endTiming) * optionHolder.NoteSpeed.Value;
         SetTransform(note, startDistance, endDistance);
+        LongNoteMeshVisibility.Attach(
+            note,
+            startDistance,
+            optionHolder.NoteCurveRadius.Value,
+            timer,
+            positionCalculator,
+            optionHolder.NoteSpeed.Value);
 
         // 初期化
         note.Initialize(data);

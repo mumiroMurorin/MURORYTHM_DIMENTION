@@ -10,6 +10,7 @@ public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSet
     // オプションリスト
     List<OptionType> optionList = new List<OptionType>() { 
          OptionType.NoteSpeed,
+         OptionType.NoteCurveRadius,
          OptionType.Offset,
          OptionType.DivisionNum,
          OptionType.IsEnabledFastLate,

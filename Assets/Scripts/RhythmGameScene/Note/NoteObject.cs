@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class NoteObject<T> : MonoBehaviour, INoteVisibilityTarget where T : INoteData
+public abstract class NoteObject<T> : MonoBehaviour, INoteVisibilityTarget, INoteRangeVisibilityTarget where T : INoteData
 {
     public float StartChartDistance { get; private set; }
 
     public float EndChartDistance { get; private set; }
 
     public bool IsVisibilityLocked { get; private set; }
+
+    LongNoteMeshVisibility longNoteMeshVisibility;
 
     virtual public void SetActive(bool isVisible)
     {
@@ -36,6 +38,16 @@ public abstract class NoteObject<T> : MonoBehaviour, INoteVisibilityTarget where
         if (!IsVisibilityLocked) { return; }
 
         IsVisibilityLocked = false;
+    }
+
+    public void SetVisibleRange(float minDistance, float maxDistance)
+    {
+        if (longNoteMeshVisibility == null)
+        {
+            longNoteMeshVisibility = GetComponent<LongNoteMeshVisibility>();
+        }
+
+        longNoteMeshVisibility?.SetVisibleRange(minDistance, maxDistance);
     }
 
     abstract public void Initialize(T data);

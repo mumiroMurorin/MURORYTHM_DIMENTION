@@ -20,6 +20,9 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
             case OptionType.NoteSpeed:
                 isChangable = AddNoteSpeed(delta);
                 break;
+            case OptionType.NoteCurveRadius:
+                isChangable = AddNoteCurveRadius(delta);
+                break;
             case OptionType.Offset:
                 isChangable = AddOffset(delta);
                 break;
@@ -107,15 +110,30 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
 
     #region NoteCurveRadius
 
-    const float MAX_NOTE_CURVE_RADIUS = 10000f;
-    const float MIN_NOTE_CURVE_RADIUS = 10f;
+    const float MAX_NOTE_CURVE_RADIUS = 2000f;
+    const float MIN_NOTE_CURVE_RADIUS = 400f;
+    const float NOTE_CURVE_RADIUS_STEP = 200f;
 
     // 【ノーツ軌道】ノーツが進行する円弧の半径
     ReactiveProperty<float> noteCurveRadius = new ReactiveProperty<float>(2000f);
     public IReadOnlyReactiveProperty<float> NoteCurveRadius => noteCurveRadius;
+    public int NoteCurveRadiusDisplay => Mathf.RoundToInt(noteCurveRadius.Value);
     public void SetNoteCurveRadius(float radius)
     {
         noteCurveRadius.Value = Mathf.Clamp(radius, MIN_NOTE_CURVE_RADIUS, MAX_NOTE_CURVE_RADIUS);
+    }
+
+    bool AddNoteCurveRadius(int delta)
+    {
+        if (delta == 0) { return false; }
+        if (noteCurveRadius.Value >= MAX_NOTE_CURVE_RADIUS && delta > 0) { return false; }
+        if (noteCurveRadius.Value <= MIN_NOTE_CURVE_RADIUS && delta < 0) { return false; }
+
+        noteCurveRadius.Value = Mathf.Clamp(
+            noteCurveRadius.Value + delta * NOTE_CURVE_RADIUS_STEP,
+            MIN_NOTE_CURVE_RADIUS,
+            MAX_NOTE_CURVE_RADIUS);
+        return true;
     }
 
     #endregion
@@ -488,6 +506,7 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     #endregion
 }
 
+
 public interface INoteSpawnDataOptionGetter
 {
     IReadOnlyReactiveProperty<float> NoteSpeed { get; }
@@ -530,6 +549,8 @@ public interface IOptionGetter
     IReadOnlyReactiveProperty<float> NoteCurveRadius { get; }
 
     float NoteSpeedDisplay { get; }
+
+    int NoteCurveRadiusDisplay { get; }
 
     IReadOnlyReactiveProperty<float> OffsetMs { get; }
 
@@ -592,5 +613,3 @@ public interface IOptionSetter
 
     BodyTrackingSettings TrackingSettings { get; }
 }
-
-

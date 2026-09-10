@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using VContainer;
+using Deform;
 
 public class GroundOptionSetter : MonoBehaviour
 {
     [SerializeField] GameObject[] divisionLines;
+    [SerializeField] BendDeformer bendDeformer;
 
     IOptionGetter optionGetter;
 
@@ -25,6 +27,10 @@ public class GroundOptionSetter : MonoBehaviour
     {
         optionGetter?.GroundDivisionNum
             .Subscribe(SetDivisionLines)
+            .AddTo(this.gameObject);
+
+        optionGetter?.NoteCurveRadius
+            .Subscribe(SetBendAngle)
             .AddTo(this.gameObject);
     }
 
@@ -47,5 +53,21 @@ public class GroundOptionSetter : MonoBehaviour
                 divisionLines[i].SetActive(false);
             }
         }
+    }
+
+    private void SetBendAngle(float radius)
+    {
+        if (bendDeformer == null) { return; }
+
+        float bendLength = Mathf.Abs(bendDeformer.Top - bendDeformer.Bottom);
+        float factor = Mathf.Abs(bendDeformer.Factor);
+        if (bendLength <= Mathf.Epsilon || factor <= Mathf.Epsilon) { return; }
+
+        float direction = bendDeformer.Angle > 0f ? 1f : -1f;
+        bendDeformer.Angle = direction
+            * bendLength
+            / Mathf.Max(radius, 0.01f)
+            * Mathf.Rad2Deg
+            / factor;
     }
 }

@@ -74,6 +74,14 @@ MonoBehaviour:
     m_Localized: "Switches the information shown small\nduring gameplay"
     m_Metadata:
       m_Items: []
+  - m_Id: 2020000000014
+    m_Localized: "Note Path Radius"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2020000000015
+    m_Localized: "Adjusts the curvature of the note path\nLarger values make the path straighter"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
