@@ -27,3 +27,5 @@ MonoBehaviour:
     prefab: {fileID: 5040811245919378688, guid: cc1ff57546ba1d944a915e39a55fb06d, type: 3}
   - stageType: 210
     prefab: {fileID: 5040811245919378688, guid: b00163d5f201baa4184ab36208a1c7cb, type: 3}
+  - stageType: 510
+    prefab: {fileID: 5040811245919378688, guid: fcddfc874a9439641a9820b76ce060c6, type: 3}

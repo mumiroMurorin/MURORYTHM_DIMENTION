@@ -122,7 +122,9 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
         // Šy‹ÈŠm”F‚É–ß‚é
         phaseStatusGetter?.Value.PhaseStatus
             .Pairwise()
-            .Where(pair => pair.Current == PhaseStatusInSelectScene.DetailSelect && pair.Previous == PhaseStatusInSelectScene.MusicOption)
+            .Where(pair => pair.Previous == PhaseStatusInSelectScene.MusicOption &&
+                           (pair.Current == PhaseStatusInSelectScene.DetailSelect ||
+                            pair.Current == PhaseStatusInSelectScene.DetailSelect_UnStartable))
             .Subscribe(_ => soundManager.PlaySE(SE_Type.BackTopic1))
             .AddTo(this.gameObject);
 
