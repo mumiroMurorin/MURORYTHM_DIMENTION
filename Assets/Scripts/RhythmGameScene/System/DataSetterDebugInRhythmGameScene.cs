@@ -15,6 +15,7 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
     [SerializeField] string chartFilePath;
     [SerializeField] float noteSpeed;
     [SerializeField] float groundRadius = 2000f;
+    [SerializeField] float noteVisibleDistance = 200;
     [SerializeField] bool isAutoMode;
     [SerializeField] bool isFastLateEnabled;
 
@@ -57,6 +58,7 @@ public class DataSetterDebugInRhythmGameScene : MonoBehaviour
         spawnDataSetter.SetNoteSpeed(noteSpeed);
         spawnDataSetter.SetAutoMode(isAutoMode);
         optionSetter.SetIsEnabledFastLate(isFastLateEnabled);
+        spawnDataSetter.SetNoteVisibleDistance(noteVisibleDistance);
         spawnDataSetter.SetNoteCurveRadius(groundRadius);
         
 #endif

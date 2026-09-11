@@ -23,6 +23,9 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
             case OptionType.NoteCurveRadius:
                 isChangable = AddNoteCurveRadius(delta);
                 break;
+            case OptionType.NoteVisibleDistance:
+                isChangable = AddNoteVisibleDistance(delta);
+                break;
             case OptionType.Offset:
                 isChangable = AddOffset(delta);
                 break;
@@ -59,6 +62,7 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     {
         SetNoteSpeed(asset.NoteSpeed);
         SetNoteCurveRadius(asset.NoteCurveRadius);
+        SetNoteVisibleDistance(asset.NoteVisibleDistance);
         SetOffsetMs(asset.Offset);
         SetSEVolume(asset.SeVolume);
         SetJudgementSeVolume(asset.JudgementSeVolume);
@@ -133,6 +137,37 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
             noteCurveRadius.Value + delta * NOTE_CURVE_RADIUS_STEP,
             MIN_NOTE_CURVE_RADIUS,
             MAX_NOTE_CURVE_RADIUS);
+        return true;
+    }
+
+    #endregion
+
+
+    #region NoteVisibleDistance
+
+    const float MAX_NOTE_VISIBLE_DISTANCE = 200f;
+    const float MIN_NOTE_VISIBLE_DISTANCE = 20f;
+    const float NOTE_VISIBLE_DISTANCE_STEP = 10f;
+
+    // 判定位置より奥側に表示するノーツの距離
+    ReactiveProperty<float> noteVisibleDistance = new ReactiveProperty<float>(200f);
+    public IReadOnlyReactiveProperty<float> NoteVisibleDistance => noteVisibleDistance;
+    public int NoteVisibleDistanceDisplay => Mathf.RoundToInt(noteVisibleDistance.Value);
+    public void SetNoteVisibleDistance(float distance)
+    {
+        noteVisibleDistance.Value = Mathf.Clamp(
+            distance,
+            MIN_NOTE_VISIBLE_DISTANCE,
+            MAX_NOTE_VISIBLE_DISTANCE);
+    }
+
+    bool AddNoteVisibleDistance(int delta)
+    {
+        if (delta == 0) { return false; }
+        if (noteVisibleDistance.Value >= MAX_NOTE_VISIBLE_DISTANCE && delta > 0) { return false; }
+        if (noteVisibleDistance.Value <= MIN_NOTE_VISIBLE_DISTANCE && delta < 0) { return false; }
+
+        SetNoteVisibleDistance(noteVisibleDistance.Value + delta * NOTE_VISIBLE_DISTANCE_STEP);
         return true;
     }
 
@@ -526,6 +561,8 @@ public interface INoteSpawnDataOptionSetter
 
     void SetNoteCurveRadius(float radius);
 
+    void SetNoteVisibleDistance(float distance);
+
     void SetOffsetMs(float offset);
 
     void SetAutoMode(bool isAutoMode);
@@ -548,9 +585,13 @@ public interface IOptionGetter
 
     IReadOnlyReactiveProperty<float> NoteCurveRadius { get; }
 
+    IReadOnlyReactiveProperty<float> NoteVisibleDistance { get; }
+
     float NoteSpeedDisplay { get; }
 
     int NoteCurveRadiusDisplay { get; }
+
+    int NoteVisibleDistanceDisplay { get; }
 
     IReadOnlyReactiveProperty<float> OffsetMs { get; }
 

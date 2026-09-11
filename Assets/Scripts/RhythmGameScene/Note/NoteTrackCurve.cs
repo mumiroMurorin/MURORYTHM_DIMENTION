@@ -8,6 +8,7 @@ using UnityEngine;
 public static class NoteTrackCurve
 {
     const float MIN_RADIUS = 0.01f;
+    const float TRACK_SURFACE_OFFSET = 10f;
 
     /// <summary>
     /// 【円弧上の位置】判定位置を原点として、奥側ほど上昇する座標を返す
@@ -16,11 +17,12 @@ public static class NoteTrackCurve
     {
         float safeRadius = Mathf.Max(radius, MIN_RADIUS);
         float angle = distance / safeRadius;
+        float originRadius = Mathf.Max(safeRadius - TRACK_SURFACE_OFFSET, MIN_RADIUS);
 
         return new Vector3(
             0f,
-            safeRadius * (1f - Mathf.Cos(angle)),
-            safeRadius * Mathf.Sin(angle));
+            originRadius * (1f - Mathf.Cos(angle)),
+            originRadius * Mathf.Sin(angle));
     }
 
     /// <summary>
@@ -54,7 +56,8 @@ public static class NoteTrackCurve
         float safeRadius = Mathf.Max(radius, MIN_RADIUS);
         float angle = distance / safeRadius;
         Quaternion rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.right);
-        Vector3 pivot = new Vector3(0f, safeRadius, 0f);
+        float originRadius = Mathf.Max(safeRadius - TRACK_SURFACE_OFFSET, MIN_RADIUS);
+        Vector3 pivot = new Vector3(0f, originRadius, 0f);
 
         target.localRotation = rotation;
         target.localPosition = pivot - rotation * pivot;
@@ -69,11 +72,12 @@ public static class NoteTrackCurve
         float angle = vertex.z / safeRadius;
         float cos = Mathf.Cos(angle);
         float sin = Mathf.Sin(angle);
+        float originRadius = Mathf.Max(safeRadius - TRACK_SURFACE_OFFSET, MIN_RADIUS);
 
         return new Vector3(
             vertex.x,
-            safeRadius + (vertex.y - safeRadius) * cos,
-            (safeRadius - vertex.y) * sin);
+            originRadius * (1f - cos) + vertex.y * cos,
+            (originRadius - vertex.y) * sin);
     }
 
     /// <summary>

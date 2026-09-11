@@ -259,6 +259,7 @@ MonoBehaviour:
   chartFilePath: MusicData/Aleph-0/chart_master.json
   noteSpeed: 200
   groundRadius: 250
+  noteVisibleDistance: 100
   isAutoMode: 1
   isFastLateEnabled: 1
 --- !u!1 &234263431

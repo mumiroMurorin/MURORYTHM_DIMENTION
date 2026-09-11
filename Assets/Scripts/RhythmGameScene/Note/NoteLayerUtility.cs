@@ -3,6 +3,7 @@ using UnityEngine;
 public static class NoteLayerUtility
 {
     public const int NotesLayer = 11;
+    public const int DefaultNoteSortingOrder = 30;
 
     public static void SetNotesLayer(GameObject target)
     {
@@ -22,6 +23,19 @@ public static class NoteLayerUtility
         }
 
         SetNotesLayerRecursively(target.transform);
+    }
+
+    public static void SetSortingOrderRecursively(GameObject target, int sortingOrder)
+    {
+        if (target == null)
+        {
+            return;
+        }
+
+        foreach (Renderer renderer in target.GetComponentsInChildren<Renderer>(true))
+        {
+            renderer.sortingOrder = sortingOrder;
+        }
     }
 
     private static void SetNotesLayerRecursively(Transform target)

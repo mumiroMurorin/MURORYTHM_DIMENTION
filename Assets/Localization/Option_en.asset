@@ -92,6 +92,14 @@ MonoBehaviour:
     m_Localized: Adjusts path curvature. Higher values make it straighter.
     m_Metadata:
       m_Items: []
+  - m_Id: 2020000000016
+    m_Localized: Visibility Range
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2020000000017
+    m_Localized: Adjusts note and ground visibility distance. Higher values show them farther away.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

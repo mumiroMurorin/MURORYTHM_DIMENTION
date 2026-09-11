@@ -26,10 +26,15 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
     [SerializeField] private Transform noteParent;
     [SerializeField] private SerializeInterface<ITimeGetter> timer;
 
+    [Header("Note Visibility")]
+    [SerializeField] private NoteVisibilityController noteVisibilityController;
+    [SerializeField] private float visibleBehindDistance = 5f;
+
     private INoteSpawnDataOptionGetter spawnDataOptionHolder;
     private ISliderInputGetter sliderInputGetter;
     private ISpaceInputGetter spaceInputGetter;
     private IJudgementRecorder judgementRecorder;
+    private IOptionGetter optionGetter;
 
     private readonly List<GameObject> noteObjects = new List<GameObject>();
 
@@ -45,6 +50,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
         this.sliderInputGetter = sliderInputGetter;
         this.spaceInputGetter = spaceInputGetter;
         this.judgementRecorder = judgementRecorder;
+        this.optionGetter = optionGetter;
     }
 
     private void Awake()
@@ -95,10 +101,22 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
         }
 
         INotePositionCalculator positionCalculator = new PositionGraphOption();
+        EnsureVisibilityController();
+        noteVisibilityController.Clear();
+        noteVisibilityController.Initialize(
+            timer.Value,
+            positionCalculator,
+            spawnDataOptionHolder.NoteSpeed.Value,
+            spawnDataOptionHolder.NoteCurveRadius.Value,
+            visibleBehindDistance,
+            optionGetter?.NoteVisibleDistance.Value ?? 100f);
+
         foreach (var binding in noteFactories)
         {
             SpawnEachType(binding, chartController.ChartData, positionCalculator, OnSpawned);
         }
+
+        noteVisibilityController.CompleteRegistration();
 
         callback?.Invoke();
     }
@@ -116,10 +134,24 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
         noteObjects.Clear();
     }
 
-    private void OnSpawned(GameObject noteObject)
+    private void OnSpawned(Component spawnedNote)
     {
-        if (noteObject == null) { return; }
-        noteObjects.Add(noteObject);
+        if (spawnedNote == null) { return; }
+        noteObjects.Add(spawnedNote.gameObject);
+        noteVisibilityController.Register(spawnedNote);
+    }
+
+    private void EnsureVisibilityController()
+    {
+        if (noteVisibilityController == null)
+        {
+            noteVisibilityController = GetComponent<NoteVisibilityController>();
+        }
+
+        if (noteVisibilityController == null)
+        {
+            noteVisibilityController = gameObject.AddComponent<NoteVisibilityController>();
+        }
     }
 
     private static void InitializeFactory(NoteFactoryBinding binding, NoteFactoryInitializingData data)
@@ -136,7 +168,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
         initializeMethod.Invoke(binding.Factory, new object[] { data });
     }
 
-    private static void SpawnEachType(NoteFactoryBinding binding, global::ChartData chartData, INotePositionCalculator positionCalculator, Action<GameObject> onSpawned)
+    private static void SpawnEachType(NoteFactoryBinding binding, global::ChartData chartData, INotePositionCalculator positionCalculator, Action<Component> onSpawned)
     {
         if (binding == null || binding.Factory == null || chartData == null) { return; }
 
@@ -154,7 +186,7 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
                 object spawned = spawnMethod.Invoke(binding.Factory, new object[] { noteData, positionCalculator });
                 if (spawned is Component c)
                 {
-                    onSpawned?.Invoke(c.gameObject);
+                    onSpawned?.Invoke(c);
                 }
             }
             catch (Exception ex)

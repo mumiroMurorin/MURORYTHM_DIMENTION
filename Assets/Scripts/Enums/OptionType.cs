@@ -3,6 +3,7 @@
     None = 0,
     NoteSpeed = 10,
     NoteCurveRadius = 15,
+    NoteVisibleDistance = 17,
     Offset = 20,
     DivisionNum = 25,
     MasterVolume = 30,

@@ -351,6 +351,8 @@ MonoBehaviour:
   - {fileID: 4113362037294376289}
   - {fileID: 4560745843444503924}
   bendDeformer: {fileID: 5072021793780670651}
+  groundObjectRoot: {fileID: 6739560253289270843}
+  visibleDistancePadding: 0
 --- !u!1 &4254772969911991885
 GameObject:
   m_ObjectHideFlags: 0

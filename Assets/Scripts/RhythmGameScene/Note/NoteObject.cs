@@ -66,6 +66,8 @@ public abstract class NoteObject<T> : MonoBehaviour, INoteVisibilityTarget, INot
     /// </summary>
     public void SetPosition(float startDistance, float endDistance, float radius)
     {
+        NoteLayerUtility.SetSortingOrderRecursively(gameObject, NoteLayerUtility.DefaultNoteSortingOrder);
+
         // 逆方向のソフランでも表示区間として扱えるよう、小さい方を開始距離とする
         StartChartDistance = Mathf.Min(startDistance, endDistance);
         EndChartDistance = Mathf.Max(startDistance, endDistance);

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noteSpeed: 80
   noteCurveRadius: 2000
+  noteVisibleDistance: 200
   seVolume: 0.8
   judgementSeVolume: 0.8
   bgmVolume: 0.8

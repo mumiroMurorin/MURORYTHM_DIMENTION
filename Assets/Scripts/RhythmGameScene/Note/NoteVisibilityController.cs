@@ -8,6 +8,7 @@ public class NoteVisibilityController : MonoBehaviour
 {
     readonly List<INoteVisibilityTarget> targets = new();
     readonly List<float> prefixMaxEndDistances = new();
+    readonly Dictionary<INoteVisibilityTarget, float> pointNoteAheadInsets = new();
     HashSet<INoteVisibilityTarget> visibleTargets = new();
     HashSet<INoteVisibilityTarget> nextVisibleTargets = new();
 
@@ -57,6 +58,7 @@ public class NoteVisibilityController : MonoBehaviour
 
         target.SetActive(false);
         targets.Add(target);
+        pointNoteAheadInsets[target] = GetPointNoteAheadInset(spawnedNote, target);
     }
 
     /// <summary>
@@ -82,6 +84,7 @@ public class NoteVisibilityController : MonoBehaviour
 
         targets.Clear();
         prefixMaxEndDistances.Clear();
+        pointNoteAheadInsets.Clear();
         visibleTargets.Clear();
         nextVisibleTargets.Clear();
         isReady = false;
@@ -116,9 +119,10 @@ public class NoteVisibilityController : MonoBehaviour
         for (int i = candidateStartIndex; i < candidateEndIndex; i++)
         {
             INoteVisibilityTarget target = targets[i];
+            float targetMaxDistance = maxDistance - pointNoteAheadInsets[target];
             if (!target.IsVisibilityLocked &&
                 target.EndChartDistance >= minDistance &&
-                target.StartChartDistance <= maxDistance)
+                target.StartChartDistance <= targetMaxDistance)
             {
                 nextVisibleTargets.Add(target);
             }
@@ -234,5 +238,38 @@ public class NoteVisibilityController : MonoBehaviour
         if (target is not Component component || component == null) { return; }
 
         target.SetActive(isVisible);
+    }
+
+    private static float GetPointNoteAheadInset(Component component, INoteVisibilityTarget target)
+    {
+        if (!Mathf.Approximately(target.StartChartDistance, target.EndChartDistance)) { return 0f; }
+
+        Transform targetTransform = component.transform;
+        float maxLocalZ = 0f;
+
+        foreach (MeshFilter meshFilter in component.GetComponentsInChildren<MeshFilter>(true))
+        {
+            Mesh mesh = meshFilter.sharedMesh;
+            if (mesh == null) { continue; }
+
+            Bounds bounds = mesh.bounds;
+            Matrix4x4 meshToTarget = targetTransform.worldToLocalMatrix * meshFilter.transform.localToWorldMatrix;
+
+            for (int x = -1; x <= 1; x += 2)
+            {
+                for (int y = -1; y <= 1; y += 2)
+                {
+                    for (int z = -1; z <= 1; z += 2)
+                    {
+                        Vector3 corner = bounds.center + Vector3.Scale(
+                            bounds.extents,
+                            new Vector3(x, y, z));
+                        maxLocalZ = Mathf.Max(maxLocalZ, meshToTarget.MultiplyPoint3x4(corner).z);
+                    }
+                }
+            }
+        }
+
+        return maxLocalZ;
     }
 }

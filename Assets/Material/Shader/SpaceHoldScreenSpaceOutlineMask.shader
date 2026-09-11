@@ -8,6 +8,9 @@ Shader "Hidden/SpaceHold/ScreenSpaceOutlineMask"
         _MinZ("Visible Range Min Z", Float) = -20.0
         _MaxZ("Visible Range Max Z", Float) = 187.0
         _ScreenOutlineIdColor("Screen Outline Id Color", Color) = (1,1,1,1)
+        [HideInInspector] _TrackClipEnabled("Track Clip Enabled", Float) = 0
+        [HideInInspector] _TrackVisibleMin("Track Visible Min", Float) = 0
+        [HideInInspector] _TrackVisibleMax("Track Visible Max", Float) = 100
     }
 
     SubShader

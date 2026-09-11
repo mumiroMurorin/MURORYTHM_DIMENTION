@@ -26,7 +26,6 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
 
     [Header("Note Visibility")]
     [SerializeField] private float visibleBehindDistance = 5f;
-    [SerializeField] private float visibleAheadDistance = 100f;
 
     private IChartDataGetter chartDataGetter;
     private IMusicDataGetter musicDataGetter;
@@ -34,6 +33,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
     private ISliderInputGetter sliderInputGetter;
     private ISpaceInputGetter spaceInputGetter;
     private IJudgementRecorder judgementRecorder;
+    private IOptionGetter optionGetter;
 
     [Inject]
     public void Constructor(
@@ -51,6 +51,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         this.sliderInputGetter = sliderInputGetter;
         this.spaceInputGetter = spaceInputGetter;
         this.judgementRecorder = judgementRecorder;
+        this.optionGetter = optionGetter;
     }
 
     private void Awake()
@@ -118,7 +119,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
             spawnDataOptionHolder.NoteSpeed.Value,
             spawnDataOptionHolder.NoteCurveRadius.Value,
             visibleBehindDistance,
-            visibleAheadDistance);
+            optionGetter?.NoteVisibleDistance.Value ?? 100f);
 
         // 各ノーツについて生成
         foreach (var binding in noteFactories)

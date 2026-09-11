@@ -925,6 +925,8 @@ MonoBehaviour:
     prefab: {fileID: 511264936851410521, guid: 5d9bcefabf2816d43aa021ea365d03c6, type: 3}
   - optionType: 15
     prefab: {fileID: 511264936851410521, guid: bd83d87e55f6420b8ed303b46026a12d, type: 3}
+  - optionType: 17
+    prefab: {fileID: 511264936851410521, guid: 18c3ae7b6232462eb93b76a50dd0ab33, type: 3}
   - optionType: 20
     prefab: {fileID: 511264936851410521, guid: 937fd4f192952cb4db8292c3bc874d53, type: 3}
   - optionType: 40

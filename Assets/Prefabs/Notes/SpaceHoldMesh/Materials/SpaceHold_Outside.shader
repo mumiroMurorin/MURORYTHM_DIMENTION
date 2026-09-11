@@ -8,6 +8,9 @@ Shader "Notes/SpaceHold/SpaceHold_Outside"
 
         _MinZ("Visible Range Min Z", Float) = -20.0
         _MaxZ("Visible Range Max Z", Float) = 187.0
+        [HideInInspector] _TrackClipEnabled("Track Clip Enabled", Float) = 0
+        [HideInInspector] _TrackVisibleMin("Track Visible Min", Float) = 0
+        [HideInInspector] _TrackVisibleMax("Track Visible Max", Float) = 100
 
         _PingPongIntensityMin("PingPong Intensity Min", Range(0, 5)) = 0.8
         _PingPongIntensityMax("PingPong Intensity Max", Range(0, 5)) = 1.2
@@ -51,6 +54,7 @@ Shader "Notes/SpaceHold/SpaceHold_Outside"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float2 trackVisibility : TEXCOORD1;
             };
 
             struct v2f
@@ -59,6 +63,7 @@ Shader "Notes/SpaceHold/SpaceHold_Outside"
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
                 float3 worldPos : TEXCOORD2;
+                float trackDistance : TEXCOORD3;
             };
 
             sampler2D _MainTex;
@@ -67,6 +72,9 @@ Shader "Notes/SpaceHold/SpaceHold_Outside"
             fixed4 _SecondaryColor;
             float _MinZ;
             float _MaxZ;
+            float _TrackClipEnabled;
+            float _TrackVisibleMin;
+            float _TrackVisibleMax;
             float _PingPongIntensityMin;
             float _PingPongIntensityMax;
             float _PingPongDuration;
@@ -77,12 +85,19 @@ Shader "Notes/SpaceHold/SpaceHold_Outside"
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                o.trackDistance = v.trackVisibility.x;
                 UNITY_TRANSFER_FOG(o, o.vertex);
                 return o;
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
+                if (_TrackClipEnabled > 0.5)
+                {
+                    clip(i.trackDistance - _TrackVisibleMin);
+                    clip(_TrackVisibleMax - i.trackDistance);
+                }
+
                 fixed4 col = tex2D(_MainTex, i.uv);
 
                 float inRange = step(_MinZ, i.worldPos.z) * step(i.worldPos.z, _MaxZ);
@@ -123,6 +138,7 @@ Shader "Notes/SpaceHold/SpaceHold_Outside"
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float2 uv : TEXCOORD0;
+                float2 trackVisibility : TEXCOORD1;
             };
 
             struct v2f
@@ -130,6 +146,7 @@ Shader "Notes/SpaceHold/SpaceHold_Outside"
                 V2F_SHADOW_CASTER;
                 float2 uv : TEXCOORD1;
                 float3 worldPos : TEXCOORD2;
+                float trackDistance : TEXCOORD3;
             };
 
             sampler2D _MainTex;
@@ -138,18 +155,28 @@ Shader "Notes/SpaceHold/SpaceHold_Outside"
             fixed4 _SecondaryColor;
             float _MinZ;
             float _MaxZ;
+            float _TrackClipEnabled;
+            float _TrackVisibleMin;
+            float _TrackVisibleMax;
 
             v2f vertShadow(appdata v)
             {
                 v2f o;
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                o.trackDistance = v.trackVisibility.x;
                 TRANSFER_SHADOW_CASTER_NORMALOFFSET(o)
                 return o;
             }
 
             float4 fragShadow(v2f i) : SV_Target
             {
+                if (_TrackClipEnabled > 0.5)
+                {
+                    clip(i.trackDistance - _TrackVisibleMin);
+                    clip(_TrackVisibleMax - i.trackDistance);
+                }
+
                 fixed alpha = tex2D(_MainTex, i.uv).a;
                 float inRange = step(_MinZ, i.worldPos.z) * step(i.worldPos.z, _MaxZ);
 

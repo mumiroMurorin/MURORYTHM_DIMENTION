@@ -10,6 +10,9 @@ Shader "Custom/ClampZ_SideLine"
 
         _MinZ("Visible Range Min Z", Float) = 0.0
         _MaxZ("Visible Range Max Z", Float) = 1.0
+        [HideInInspector] _TrackClipEnabled("Track Clip Enabled", Float) = 0.0
+        [HideInInspector] _TrackVisibleMin("Track Visible Min", Float) = 0.0
+        [HideInInspector] _TrackVisibleMax("Track Visible Max", Float) = 100.0
 
         _LineColor("Line Color", Color) = (1,1,1,1)
         _LineDistanceFromEdge("Line Distance From Edge", Range(0,0.5)) = 0.08
@@ -48,6 +51,9 @@ Shader "Custom/ClampZ_SideLine"
             fixed4 _LineColor;
             float _MinZ;
             float _MaxZ;
+            float _TrackClipEnabled;
+            float _TrackVisibleMin;
+            float _TrackVisibleMax;
             float _LineDistanceFromEdge;
             float _LineWidth;
             float _LineIntensity;
@@ -56,6 +62,7 @@ Shader "Custom/ClampZ_SideLine"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float2 trackVisibility : TEXCOORD1;
             };
 
             struct v2f
@@ -63,6 +70,7 @@ Shader "Custom/ClampZ_SideLine"
                 float4 vertex : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 float3 worldPos : TEXCOORD1;
+                float trackDistance : TEXCOORD2;
             };
 
             float GetLineMask(float uvX, float targetX, float lineWidth)
@@ -78,11 +86,18 @@ Shader "Custom/ClampZ_SideLine"
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                o.trackDistance = v.trackVisibility.x;
                 return o;
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
+                if (_TrackClipEnabled > 0.5)
+                {
+                    clip(i.trackDistance - _TrackVisibleMin);
+                    clip(_TrackVisibleMax - i.trackDistance);
+                }
+
                 float inRange = step(_MinZ, i.worldPos.z) * step(i.worldPos.z, _MaxZ);
 
                 fixed4 tint = lerp(_SecondaryColor, _Color, inRange);

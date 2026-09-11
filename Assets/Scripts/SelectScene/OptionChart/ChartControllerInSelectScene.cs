@@ -69,6 +69,12 @@ public class ChartControllerInSelectScene : MonoBehaviour
             .Subscribe(_ => RestartChart())
             .AddTo(this.gameObject);
 
+        // 表示範囲の変更時は新しい描画距離でプレビューを作り直す
+        optionGetter?.NoteVisibleDistance
+            .Skip(1)
+            .Subscribe(_ => RestartChart())
+            .AddTo(this.gameObject);
+
         // 譜面終了時リセット
         chartEnder?.Value?.BindOnEndChart(() => RestartChart());
     }

@@ -103,6 +103,36 @@ namespace ChartEditor
 
         #endregion
 
+        #region NoteVisibleDistance
+
+        const float MAX_NOTE_VISIBLE_DISTANCE = 200f;
+        const float MIN_NOTE_VISIBLE_DISTANCE = 20f;
+        const float NOTE_VISIBLE_DISTANCE_STEP = 10f;
+
+        // 判定位置より奥側に表示するノーツの距離
+        ReactiveProperty<float> noteVisibleDistance = new ReactiveProperty<float>(100f);
+        public IReadOnlyReactiveProperty<float> NoteVisibleDistance => noteVisibleDistance;
+        public int NoteVisibleDistanceDisplay => Mathf.RoundToInt(noteVisibleDistance.Value);
+        public void SetNoteVisibleDistance(float distance)
+        {
+            noteVisibleDistance.Value = Mathf.Clamp(
+                distance,
+                MIN_NOTE_VISIBLE_DISTANCE,
+                MAX_NOTE_VISIBLE_DISTANCE);
+        }
+
+        bool AddNoteVisibleDistance(int delta)
+        {
+            if (delta == 0) { return false; }
+            if (noteVisibleDistance.Value >= MAX_NOTE_VISIBLE_DISTANCE && delta > 0) { return false; }
+            if (noteVisibleDistance.Value <= MIN_NOTE_VISIBLE_DISTANCE && delta < 0) { return false; }
+
+            SetNoteVisibleDistance(noteVisibleDistance.Value + delta * NOTE_VISIBLE_DISTANCE_STEP);
+            return true;
+        }
+
+        #endregion
+
         #region Offset オフセット
 
         const float MAX_OFFSET = 1000f;

@@ -3,6 +3,9 @@ Shader "Hidden/SpaceHold/ScreenSpaceOutlineCoverageAlways"
     Properties
     {
         _CoverageStep("Coverage Step", Float) = 0.01
+        [HideInInspector] _TrackClipEnabled("Track Clip Enabled", Float) = 0
+        [HideInInspector] _TrackVisibleMin("Track Visible Min", Float) = 0
+        [HideInInspector] _TrackVisibleMax("Track Visible Max", Float) = 100
     }
 
     SubShader
@@ -30,11 +33,15 @@ Shader "Hidden/SpaceHold/ScreenSpaceOutlineCoverageAlways"
             float _CoverageStep;
             float _MinZ;
             float _MaxZ;
+            float _TrackClipEnabled;
+            float _TrackVisibleMin;
+            float _TrackVisibleMax;
 
             struct appdata
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float2 trackVisibility : TEXCOORD1;
             };
 
             struct v2f
@@ -42,6 +49,7 @@ Shader "Hidden/SpaceHold/ScreenSpaceOutlineCoverageAlways"
                 float4 vertex : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 float3 worldPos : TEXCOORD1;
+                float trackDistance : TEXCOORD2;
             };
 
             v2f vert(appdata v)
@@ -50,11 +58,18 @@ Shader "Hidden/SpaceHold/ScreenSpaceOutlineCoverageAlways"
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                o.trackDistance = v.trackVisibility.x;
                 return o;
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
+                if (_TrackClipEnabled > 0.5)
+                {
+                    clip(i.trackDistance - _TrackVisibleMin);
+                    clip(_TrackVisibleMax - i.trackDistance);
+                }
+
                 fixed alpha = tex2D(_MainTex, i.uv).a;
                 float inRange = step(_MinZ, i.worldPos.z) * step(i.worldPos.z, _MaxZ);
                 fixed tintAlpha = lerp(_SecondaryColor.a, _Color.a, inRange);

@@ -12,6 +12,7 @@ public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSet
          OptionType.NoteSpeed,
          OptionType.Offset,
          OptionType.NoteCurveRadius,
+         OptionType.NoteVisibleDistance,
          OptionType.DivisionNum,
          OptionType.IsEnabledFastLate,
          OptionType.MainInfo,

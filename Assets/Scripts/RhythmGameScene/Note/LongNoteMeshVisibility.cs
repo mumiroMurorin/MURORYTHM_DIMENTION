@@ -19,9 +19,14 @@ public sealed class LongNoteMeshVisibility : MonoBehaviour
     ITimeGetter timer;
     INotePositionCalculator positionCalculator;
     float noteSpeed;
+    float originDistance;
     float visibleBehindDistance;
     float visibleAheadDistance;
     bool isExternallyManaged;
+
+    static readonly int TrackClipEnabledId = Shader.PropertyToID("_TrackClipEnabled");
+    static readonly int TrackVisibleMinId = Shader.PropertyToID("_TrackVisibleMin");
+    static readonly int TrackVisibleMaxId = Shader.PropertyToID("_TrackVisibleMax");
 
     public static void Attach(
         Component note,
@@ -63,6 +68,12 @@ public sealed class LongNoteMeshVisibility : MonoBehaviour
             chunk.Renderer.enabled =
                 chunk.MaxDistance >= minDistance &&
                 chunk.MinDistance <= maxDistance;
+
+            chunk.Renderer.GetPropertyBlock(propertyBlock);
+            propertyBlock.SetFloat(TrackClipEnabledId, 1f);
+            propertyBlock.SetFloat(TrackVisibleMinId, minDistance - originDistance);
+            propertyBlock.SetFloat(TrackVisibleMaxId, maxDistance - originDistance);
+            chunk.Renderer.SetPropertyBlock(propertyBlock);
         }
     }
 
@@ -77,6 +88,7 @@ public sealed class LongNoteMeshVisibility : MonoBehaviour
         this.timer = timer;
         this.positionCalculator = positionCalculator;
         this.noteSpeed = noteSpeed;
+        this.originDistance = originDistance;
         isExternallyManaged = false;
         propertyBlock ??= new MaterialPropertyBlock();
 
@@ -130,7 +142,17 @@ public sealed class LongNoteMeshVisibility : MonoBehaviour
 
         float minTrackDistance = trackCoordinates.Min(x => x.x);
         float maxTrackDistance = trackCoordinates.Max(x => x.x);
-        if (maxTrackDistance - minTrackDistance <= chunkLength) { return; }
+        if (maxTrackDistance - minTrackDistance <= chunkLength)
+        {
+            chunks.Add(new RendererChunk
+            {
+                Renderer = sourceRenderer,
+                StyleSource = sourceRenderer,
+                MinDistance = originDistance + minTrackDistance,
+                MaxDistance = originDistance + maxTrackDistance
+            });
+            return;
+        }
 
         int[] sourceTriangles = sourceMesh.triangles;
         Dictionary<int, List<int>> trianglesByChunk = new();
