@@ -152,6 +152,14 @@ public class NoteVisibilityController : MonoBehaviour
             }
         }
 
+        foreach (INoteVisibilityTarget target in nextVisibleTargets)
+        {
+            if (target is INoteRangeVisibilityTarget rangeVisibilityTarget)
+            {
+                rangeVisibilityTarget.SetVisibleRange(minDistance, maxDistance);
+            }
+        }
+
         HashSet<INoteVisibilityTarget> previousVisibleTargets = visibleTargets;
         visibleTargets = nextVisibleTargets;
         nextVisibleTargets = previousVisibleTargets;

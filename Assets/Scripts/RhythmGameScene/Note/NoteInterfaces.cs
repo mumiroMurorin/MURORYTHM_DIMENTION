@@ -116,3 +116,8 @@ public interface INoteVisibilityTarget : INoteActivable
 
     void UnlockVisibility();
 }
+
+public interface INoteRangeVisibilityTarget
+{
+    void SetVisibleRange(float minDistance, float maxDistance);
+}

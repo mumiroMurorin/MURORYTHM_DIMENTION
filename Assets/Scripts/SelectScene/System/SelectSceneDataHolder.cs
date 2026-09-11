@@ -7,10 +7,11 @@ using UniRx;
 
 public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSetter
 {
-    // ƒIƒvƒVƒ‡ƒ“ƒŠƒXƒg
+    // ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½g
     List<OptionType> optionList = new List<OptionType>() { 
          OptionType.NoteSpeed,
          OptionType.Offset,
+         OptionType.NoteCurveRadius,
          OptionType.DivisionNum,
          OptionType.IsEnabledFastLate,
          OptionType.MainInfo,
@@ -34,7 +35,7 @@ public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSet
     }
 
 
-    // ‘I‘ðƒIƒvƒVƒ‡ƒ“ƒCƒ“ƒfƒbƒNƒX
+    // ï¿½Iï¿½ï¿½ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½X
     ReactiveProperty<int> optionIndexSelected = new ReactiveProperty<int>(0);
     IReadOnlyReactiveProperty<int> ISelectSceneDataGetter.CurrentOptionIndex => optionIndexSelected;
     void ISelectSceneDataSetter.SetOptionIndex(int value)

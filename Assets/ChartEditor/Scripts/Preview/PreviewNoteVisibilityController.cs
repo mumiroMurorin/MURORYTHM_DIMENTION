@@ -16,13 +16,21 @@ namespace ChartEditor
 
         INotePositionCalculator positionCalculator;
         float noteSpeed = 1f;
+        float effectiveVisibleBehindDistance;
+        float effectiveVisibleAheadDistance;
         bool isReady;
         bool requiresVisibilityRefresh;
 
-        public void Initialize(INotePositionCalculator positionCalculator, float noteSpeed)
+        public void Initialize(INotePositionCalculator positionCalculator, float noteSpeed, float curveRadius)
         {
             this.positionCalculator = positionCalculator;
             this.noteSpeed = noteSpeed;
+            float maxVisibleSpan = Mathf.Max(0f, 2f * Mathf.PI * curveRadius - 0.01f);
+            effectiveVisibleBehindDistance = Mathf.Clamp(visibleBehindDistance, 0f, maxVisibleSpan);
+            effectiveVisibleAheadDistance = Mathf.Clamp(
+                visibleAheadDistance,
+                0f,
+                maxVisibleSpan - effectiveVisibleBehindDistance);
             targets.Clear();
             prefixMaxEndDistances.Clear();
             visibleTargets.Clear();
@@ -73,8 +81,8 @@ namespace ChartEditor
             if (!isReady || timer == null || timer.Value == null || positionCalculator == null) { return; }
 
             float currentDistance = positionCalculator.GetPosition(timer.Value.Time) * noteSpeed;
-            float minDistance = currentDistance - visibleBehindDistance;
-            float maxDistance = currentDistance + visibleAheadDistance;
+            float minDistance = currentDistance - effectiveVisibleBehindDistance;
+            float maxDistance = currentDistance + effectiveVisibleAheadDistance;
 
             int candidateStartIndex = LowerBoundPrefixMaxEnd(minDistance);
             int candidateEndIndex = UpperBoundStart(maxDistance);
@@ -113,6 +121,14 @@ namespace ChartEditor
                     {
                         SetTargetVisible(target, true);
                     }
+                }
+            }
+
+            foreach (INoteVisibilityTarget target in nextVisibleTargets)
+            {
+                if (target is INoteRangeVisibilityTarget rangeVisibilityTarget)
+                {
+                    rangeVisibilityTarget.SetVisibleRange(minDistance, maxDistance);
                 }
             }
 

@@ -59,7 +59,10 @@ namespace ChartEditor
             }
 
             noteVisibilityController?.Clear();
-            noteVisibilityController?.Initialize(chartData.PositionGraph, optionHolder?.NoteSpeed.Value ?? 1f);
+            noteVisibilityController?.Initialize(
+                chartData.PositionGraph,
+                optionHolder?.NoteSpeed.Value ?? 1f,
+                optionHolder?.NoteCurveRadius.Value ?? 2000f);
 
             foreach (var binding in noteFactories)
             {

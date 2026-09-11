@@ -25,6 +25,7 @@ namespace MeshGenerate
             List<int> triangles = new List<int>();
             List<Vector3> vertices = new List<Vector3>();
             List<Vector2> uvs = new List<Vector2>();
+            List<Vector2> trackUVs = new List<Vector2>();
             float currentStartZ = 0;
             float maxLength = speed * (posCalc.GetPosition(timeToRanges[^1].Timing) - posCalc.GetPosition(timeToRanges[0].Timing));
             int currentMeshIndex = 0;
@@ -76,6 +77,8 @@ namespace MeshGenerate
                     List<Vector2> uvListEnd = GetUVPositionList(verticesEnd, indexEnd, endLeftDiv, endRightDiv + 1f, maxLength);
                     uvs.AddRange(uvListStart);
                     uvs.AddRange(uvListEnd);
+                    trackUVs.AddRange(verticesStart.Select(v => new Vector2(v.z, 0f)));
+                    trackUVs.AddRange(verticesEnd.Select(v => new Vector2(v.z, 0f)));
 
                     // トライアングルインデックスを生成、代入
                     triangles.AddRange(MeshGenerator.GenerateTriangles(currentMeshIndex, verticesStart.Count, verticesEnd.Count, false));
@@ -93,6 +96,7 @@ namespace MeshGenerate
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
             mesh.uv = uvs.ToArray();
+            mesh.uv2 = trackUVs.ToArray();
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 
@@ -1037,6 +1041,7 @@ namespace MeshGenerate
             List<Vector3> vertices = new List<Vector3>();
             List<int> triangles = new List<int>();
             List<Vector2> uvs = new List<Vector2>();
+            List<Vector2> trackUVs = new List<Vector2>();
             float currentStartZ = 0f;
             int currentMeshIndex = 0;
             float totalDepth = depthToVertices[^1].Depth - depthToVertices[0].Depth;
@@ -1059,6 +1064,10 @@ namespace MeshGenerate
                     vertices.AddRange(verticesB);
                     uvs.AddRange(GetShadowUVs(verticesA, totalDepth));
                     uvs.AddRange(GetShadowUVs(verticesB, totalDepth));
+                    float trackDistanceA = Mathf.Lerp(startOutline[0].z, endOutline[0].z, tA);
+                    float trackDistanceB = Mathf.Lerp(startOutline[0].z, endOutline[0].z, tB);
+                    trackUVs.AddRange(Enumerable.Repeat(new Vector2(trackDistanceA, 0f), verticesA.Count));
+                    trackUVs.AddRange(Enumerable.Repeat(new Vector2(trackDistanceB, 0f), verticesB.Count));
                     triangles.AddRange(MeshGenerator.GenerateTriangles(currentMeshIndex, verticesA.Count, verticesB.Count, false));
 
                     currentMeshIndex += verticesA.Count + verticesB.Count;
@@ -1070,6 +1079,7 @@ namespace MeshGenerate
             mesh.SetVertices(vertices);
             mesh.SetTriangles(triangles, 0);
             mesh.SetUVs(0, uvs);
+            mesh.SetUVs(1, trackUVs);
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
             return mesh;
