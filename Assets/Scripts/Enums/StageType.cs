@@ -5,6 +5,7 @@
     CreationNight = 101,
     CreationEvening = 102,
     CreationMathematics = 110,
+    CreationHill = 120,
     Destruction = 200,
     DestructionJirai = 210,
     CyberRoom = 510,
