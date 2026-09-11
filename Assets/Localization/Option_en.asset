@@ -19,67 +19,77 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 2020000000000
-    m_Localized: "Note Speed"
+    m_Localized: Note Speed
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000001
-    m_Localized: "Speed at which notes fall"
+    m_Localized: Speed at which notes fall
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000002
-    m_Localized: "Offset"
+    m_Localized: Offset
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000003
-    m_Localized: "Adjusts note timing\nUse + if late, - if early"
+    m_Localized: 'Adjusts note timing
+
+      Use + if late, - if early'
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000004
-    m_Localized: "Ground Divisions"
+    m_Localized: Ground Divisions
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000005
-    m_Localized: "Divides the note ground with guide lines\n"
+    m_Localized: 'Divides the note ground with guide lines
+
+'
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000006
-    m_Localized: "Judgement SE Volume"
+    m_Localized: Judgement SE Volume
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000007
-    m_Localized: "Adjusts judgement sound volume"
+    m_Localized: Adjusts judgement sound volume
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000008
-    m_Localized: "Fast/Late Display"
+    m_Localized: Fast/Late Display
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000009
-    m_Localized: "Shows Fast/Late on judgements\n"
+    m_Localized: 'Shows Fast/Late on judgements
+
+'
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000010
-    m_Localized: "Main Info"
+    m_Localized: Main Info
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000011
-    m_Localized: "Switches the information shown large\nduring gameplay"
+    m_Localized: 'Switches the information shown large
+
+      during gameplay'
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000012
-    m_Localized: "Sub Info"
+    m_Localized: Sub Info
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000013
-    m_Localized: "Switches the information shown small\nduring gameplay"
+    m_Localized: 'Switches the information shown small
+
+      during gameplay'
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000014
-    m_Localized: "Note Path Radius"
+    m_Localized: Note Path Radius
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000015
-    m_Localized: "Adjusts the curvature of the note path\nLarger values make the path straighter"
+    m_Localized: Adjusts path curvature. Higher values make it straighter.
     m_Metadata:
       m_Items: []
   references:

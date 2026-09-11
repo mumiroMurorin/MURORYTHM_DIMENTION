@@ -258,7 +258,7 @@ MonoBehaviour:
   difficulty: 3
   chartFilePath: MusicData/Aleph-0/chart_master.json
   noteSpeed: 200
-  groundRadius: 2000
+  groundRadius: 250
   isAutoMode: 1
   isFastLateEnabled: 1
 --- !u!1 &234263431
