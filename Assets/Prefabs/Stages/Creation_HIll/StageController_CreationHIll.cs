@@ -6,121 +6,114 @@ public class StageController_CreationHill : MonoBehaviour, IStageController
 {
     [SerializeField] SymphonyTypePresentationDatabase symphonyTypePresentationDatabase;
 
-    [Header("タイトルテキスト設定")]
+    [Header("Title Text")]
     [SerializeField] WorldLoopingClippedTMPText titleText;
+    [SerializeField] string titleComposerSeparator = " / ";
 
-    [Header("難易度テキスト設定")]
-    [SerializeField] TextMeshPro difficultyText;
+    [Header("Difficulty Level Loop Text")]
+    [SerializeField] WorldLoopingClippedTMPText difficultyLevelText;
 
-    [Header("レベルテキスト設定")]
-    [SerializeField] TextMeshPro levelText;
-
-    [Header("テキスト描画順設定")]
+    [Header("Text Render Queue")]
     [SerializeField] bool overrideTextRenderQueue;
     [SerializeField] int titleTextRenderQueue = 3000;
-    [SerializeField] int difficultyTextRenderQueue = 3000;
-    [SerializeField] int levelTextRenderQueue = 3000;
+    [SerializeField] int difficultyLevelTextRenderQueue = 3000;
 
-    [Header("ジャケット設定")]
-    [SerializeField] SpriteRenderer jacketSpriteRenderer;
-    [SerializeField] Image jacketImage;
+    [Header("Theme Images")]
+    [SerializeField] Image[] themeImages;
+
+    [Header("Jacket Images")]
+    [SerializeField] Image[] jacketImages;
 
     void IStageController.Initialize(IMusicDataGetter musicDataGetter)
     {
         if (musicDataGetter == null || musicDataGetter.Music == null || musicDataGetter.Music.Value == null)
         {
-            Debug.LogWarning("[StageControllerDestructionJirai] MusicDataGetter is not set.");
+            Debug.LogWarning("[StageController_Hill] MusicDataGetter is not set.");
             return;
         }
 
         MusicData musicData = musicDataGetter.Music.Value;
         Difficulty difficulty = musicDataGetter.Difficulty != null ? musicDataGetter.Difficulty.Value : Difficulty.Normal;
+        string difficultyTextValue = GetDifficultyText(musicData, difficulty);
+        string levelTextValue = GetLevelText(musicData, difficulty);
 
-        // シーン上に配置済みの表示コンポーネントへ、曲データだけを流し込む。
-        SetTitleText(musicData.MusicName);
-        SetDifficultyText(GetDifficultyText(musicData, difficulty));
-        SetLevelText(GetLevelText(musicData, difficulty));
+        SetTitleText(GetTitleText(musicData));
+        SetDifficultyLevelText(GetDifficultyLevelText(difficultyTextValue, levelTextValue));
         ApplyTextRenderQueue();
 
-        // ジャケットはSpriteRenderer / UI Imageのどちらでも受けられるようにする。
-        SetJacket(musicData.MusicSprite);
+        SetImages(themeImages, musicData.ThemeSprite);
+        SetImages(jacketImages, musicData.MusicSprite);
     }
 
     void SetTitleText(string text)
     {
         if (titleText == null)
         {
-            Debug.LogWarning("[StageControllerDestructionJirai] Title text controller is not set.");
+            Debug.LogWarning("[StageController_Hill] Title text controller is not set.");
             return;
         }
 
         titleText.SetText(text);
     }
 
-    void SetDifficultyText(string text)
+    void SetDifficultyLevelText(string text)
     {
-        if (difficultyText == null)
+        if (difficultyLevelText == null)
         {
-            Debug.LogWarning("[StageControllerDestructionJirai] Difficulty TextMeshPro is not set.");
             return;
         }
 
-        difficultyText.text = text;
-    }
-
-    void SetLevelText(string text)
-    {
-        if (levelText == null)
-        {
-            Debug.LogWarning("[StageControllerDestructionJirai] Level TextMeshPro is not set.");
-            return;
-        }
-
-        levelText.text = text;
+        difficultyLevelText.SetText(text);
     }
 
     void ApplyTextRenderQueue()
     {
         if (!overrideTextRenderQueue) { return; }
 
-        // タイトルはループ用コピーが内部生成されるため、専用Controller側からまとめて反映する。
         if (titleText != null)
         {
             titleText.SetRenderQueue(titleTextRenderQueue);
         }
 
-        ApplyRenderQueue(difficultyText, difficultyTextRenderQueue);
-        ApplyRenderQueue(levelText, levelTextRenderQueue);
+        if (difficultyLevelText != null)
+        {
+            difficultyLevelText.SetRenderQueue(difficultyLevelTextRenderQueue);
+        }
     }
 
-    void ApplyRenderQueue(TextMeshPro target, int renderQueue)
+    void SetImages(Image[] images, Sprite sprite)
     {
-        if (target == null)
+        if (images == null)
         {
             return;
         }
 
-        Material material = target.fontMaterial;
-        if (material == null)
+        foreach (Image image in images)
         {
-            return;
-        }
+            if (image == null)
+            {
+                continue;
+            }
 
-        material.renderQueue = renderQueue;
-        target.UpdateMeshPadding();
+            image.sprite = sprite;
+        }
     }
 
-    void SetJacket(Sprite sprite)
+    string GetTitleText(MusicData musicData)
     {
-        if (jacketSpriteRenderer != null)
+        if (musicData == null)
         {
-            jacketSpriteRenderer.sprite = sprite;
+            return string.Empty;
         }
 
-        if (jacketImage != null)
+        string title = musicData.MusicName ?? string.Empty;
+        string composer = musicData.ComposerName ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(composer))
         {
-            jacketImage.sprite = sprite;
+            return title;
         }
+
+        return $"{title}{titleComposerSeparator}{composer}";
     }
 
     string GetDifficultyText(MusicData musicData, Difficulty difficulty)
@@ -131,13 +124,13 @@ public class StageController_CreationHill : MonoBehaviour, IStageController
         }
 
         SymphonyType symphonyType = musicData != null ? musicData.SymphonyType : SymphonyType.None;
-        string masterDifficultyText = symphonyTypePresentationDatabase?.GetMasterDifficultyText(symphonyType);
+        string masterDifficultyText = symphonyTypePresentationDatabase?.GetMasterDifficultyText(symphonyType).ToUpper();
         if (!string.IsNullOrEmpty(masterDifficultyText))
         {
             return masterDifficultyText;
         }
 
-        Debug.LogWarning($"[StageControllerDestructionJirai] Master difficulty text is not set: {symphonyType}");
+        Debug.LogWarning($"[StageController_Hill] Master difficulty text is not set: {symphonyType}");
         return Difficulty.Master.ToString().ToUpper();
     }
 
@@ -152,4 +145,18 @@ public class StageController_CreationHill : MonoBehaviour, IStageController
         return level >= 0 ? level.ToString() : string.Empty;
     }
 
+    string GetDifficultyLevelText(string difficultyTextValue, string levelTextValue)
+    {
+        if (string.IsNullOrWhiteSpace(levelTextValue))
+        {
+            return difficultyTextValue ?? string.Empty;
+        }
+
+        if (string.IsNullOrWhiteSpace(difficultyTextValue))
+        {
+            return levelTextValue;
+        }
+
+        return $"{difficultyTextValue}  LEVEL {levelTextValue}";
+    }
 }
