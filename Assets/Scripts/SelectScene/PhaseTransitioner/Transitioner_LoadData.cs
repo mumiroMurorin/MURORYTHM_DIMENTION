@@ -66,7 +66,7 @@ namespace TransitionerInSelectScene
             // Šy‹È‘I‘ð
             operationDictionary.RegisterOperation(OperationTag.Select_SelectMusic, () => { TransitionDetailSelect(); });
             operationDictionary.RegisterOperation(OperationTag.Select_FirstPlayOptionGuide_Confirm, () => { ConfirmFirstPlayOptionGuide(); });
-            operationDictionary.RegisterOperation(OperationTag.Select_FirstPlayOptionGuide_DummyOption, () => { });
+            operationDictionary.RegisterOperation(OperationTag.Select_FirstPlayOptionGuide_DummyOption, OpenOptionFromFirstPlayGuide);
             operationDictionary.RegisterOperation(OperationTag.Select_MoveLeft, () => { musicDataListController?.MoveMusicTopic(-1); });
             operationDictionary.RegisterOperation(OperationTag.Select_MoveRight, () => { musicDataListController?.MoveMusicTopic(+1); });
             operationDictionary.RegisterOperation(OperationTag.Select_UpDifficulty, () => { ChangeDifficulty(+1); });
@@ -110,6 +110,24 @@ namespace TransitionerInSelectScene
             }
 
             TransitionDetailSelect();
+        }
+
+        private void OpenOptionFromFirstPlayGuide()
+        {
+            optionDataSetter?.SetFirstPlayGuideRequired(false);
+
+            if (firstPlayOptionGuideTextBox != null)
+            {
+                firstPlayOptionGuideTextBox.Close(TransitionMusicOption);
+                return;
+            }
+
+            TransitionMusicOption();
+        }
+
+        private void TransitionMusicOption()
+        {
+            phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.MusicOption);
         }
 
         private bool IsFirstPlayOptionGuideRequired()
