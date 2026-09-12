@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class StageControllerMovie : MonoBehaviour, IStageController
+public class StageControllerMovie : StageController
 {
-    void IStageController.Initialize(IMusicDataGetter musicDataGetter)
+    protected override void InitializeStage(MusicData musicData, Difficulty difficulty)
     {
 
     }

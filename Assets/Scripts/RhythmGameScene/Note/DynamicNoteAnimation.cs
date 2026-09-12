@@ -14,17 +14,36 @@ public class DynamicNoteAnimation : MonoBehaviour
     public void Initialize(ITimeGetter timer)
     {
         this.timer = timer;
+        EnsureMaterial();
+        ApplyCurrentOffset();
     }
 
     private void Start()
     {
-        if (targetRenderer == null) { return; }
+        EnsureMaterial();
+        ApplyCurrentOffset();
+    }
+
+    private void OnEnable()
+    {
+        EnsureMaterial();
+        ApplyCurrentOffset();
+    }
+
+    private void Update()
+    {
+        ApplyCurrentOffset();
+    }
+
+    private void EnsureMaterial()
+    {
+        if (targetMaterial != null || targetRenderer == null) { return; }
 
         targetMaterial = targetRenderer.material;
         initialOffset = targetMaterial.GetTextureOffset(bufferName);
     }
 
-    private void Update()
+    private void ApplyCurrentOffset()
     {
         if (targetMaterial == null) { return; }
         if (timer == null) { return; }

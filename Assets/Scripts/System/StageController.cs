@@ -1,57 +1,78 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class StageController : MonoBehaviour, IStageController
+public abstract class StageController : MonoBehaviour, IStageController
 {
-    [SerializeField] CharacterSpawner characterSpawner;
-    [SerializeField] SymphonyTypePresentationDatabase symphonyTypePresentationDatabase;
-
-    [Header("タイトルオブジェクト設定")]
-    [SerializeField] FlyingTextSettings titleSettings;
-    [SerializeField] OutlineSettings titleOutline;
-    [SerializeField] Transform titleParent;
-
-    [Header("難易度オブジェクト設定")]
-    [SerializeField] FlyingTextSettings difficultySettings;
-    [SerializeField] OutlineSettings difficultyOutline;
-    [SerializeField] Transform difficultyParent;
+    [SerializeField] protected SymphonyTypePresentationDatabase symphonyTypePresentationDatabase;
 
     public void Initialize(IMusicDataGetter musicDataGetter)
     {
-        // タイトルオブジェクトのスポーン
-        var titleObj = characterSpawner.SpawnCharacter(musicDataGetter.Music.Value.MusicName, titleSettings);
-        titleObj.transform.SetParent(titleParent);
-        titleObj.transform.localPosition = Vector3.zero;
-        titleObj.transform.localEulerAngles = Vector3.zero;
-        titleOutline.ApplyOutline(titleObj);
+        if (musicDataGetter == null || musicDataGetter.Music == null || musicDataGetter.Music.Value == null)
+        {
+            Debug.LogWarning($"[{GetType().Name}] MusicDataGetter is not set.");
+            return;
+        }
 
-        // 難易度オブジェクトのスポーン
-        string difString = GetDifficultyText(musicDataGetter);
+        MusicData musicData = musicDataGetter.Music.Value;
+        Difficulty difficulty = musicDataGetter.Difficulty != null
+            ? musicDataGetter.Difficulty.Value
+            : Difficulty.Normal;
 
-        var diffObj = characterSpawner.SpawnCharacter(difString, difficultySettings);
-        diffObj.transform.SetParent(difficultyParent);
-        diffObj.transform.localPosition = Vector3.zero;
-        diffObj.transform.localEulerAngles = Vector3.zero;
-        difficultyOutline.ApplyOutline(diffObj);
+        InitializeStage(musicData, difficulty);
     }
 
-    private string GetDifficultyText(IMusicDataGetter musicDataGetter)
+    protected abstract void InitializeStage(MusicData musicData, Difficulty difficulty);
+
+    protected string GetTitleText(MusicData musicData, string separator = " / ")
     {
-        if (musicDataGetter.Difficulty.Value != Difficulty.Master)
+        if (musicData == null) { return string.Empty; }
+
+        string title = musicData.MusicName ?? string.Empty;
+        string composer = musicData.ComposerName ?? string.Empty;
+        return string.IsNullOrWhiteSpace(composer) ? title : $"{title}{separator}{composer}";
+    }
+
+    protected string GetDifficultyText(MusicData musicData, Difficulty difficulty)
+    {
+        if (difficulty != Difficulty.Master)
         {
-            return musicDataGetter.Difficulty.Value.ToString().ToUpper();
+            return difficulty.ToString().ToUpper();
         }
 
-        SymphonyType symphonyType = musicDataGetter.Music.Value.SymphonyType;
-        string masterDifficultyText = symphonyTypePresentationDatabase?.GetMasterDifficultyText(symphonyType);
-        if (!string.IsNullOrEmpty(masterDifficultyText))
+        SymphonyType symphonyType = musicData != null ? musicData.SymphonyType : SymphonyType.None;
+        string text = symphonyTypePresentationDatabase?.GetMasterDifficultyText(symphonyType);
+        if (!string.IsNullOrWhiteSpace(text))
         {
-            return masterDifficultyText;
+            return text.ToUpper();
         }
 
-        Debug.LogWarning($"[StageController] Master difficulty text is not set: {symphonyType}");
+        Debug.LogWarning($"[{GetType().Name}] Master difficulty text is not set: {symphonyType}");
         return Difficulty.Master.ToString().ToUpper();
+    }
+
+    protected static string GetLevelText(MusicData musicData, Difficulty difficulty)
+    {
+        if (musicData == null) { return string.Empty; }
+
+        int level = musicData.GetDifficulty(difficulty);
+        return level >= 0 ? level.ToString() : string.Empty;
+    }
+
+    protected static string GetDifficultyLevelText(string difficultyText, string levelText)
+    {
+        if (string.IsNullOrWhiteSpace(levelText)) { return difficultyText ?? string.Empty; }
+        if (string.IsNullOrWhiteSpace(difficultyText)) { return levelText; }
+        return $"{difficultyText}  LEVEL {levelText}";
+    }
+
+    protected static void SetImages(Image[] images, Sprite sprite)
+    {
+        if (images == null) { return; }
+
+        foreach (Image image in images)
+        {
+            if (image != null) { image.sprite = sprite; }
+        }
     }
 }
 

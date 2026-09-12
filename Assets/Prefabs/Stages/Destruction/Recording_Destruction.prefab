@@ -9888,7 +9888,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5040811245919378688}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4da7a6ed549af0140bbeab4a79ae1ab1, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d49375ce6934ad7a6a5e7c58d6b54f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   characterSpawner: {fileID: 8787467329146251009}
@@ -9909,6 +9909,8 @@ MonoBehaviour:
       m_Bits: 0
     renderEvent: 0
   titleParent: {fileID: 8584946085390859700}
+  titleComposerSeparator: ' / '
+  titleVisibleCharacterCount: 12
   difficultySettings:
     defaultMaterial: {fileID: 2100000, guid: 3abf473d50106f44c9611c2c76fd9a91, type: 2}
     edgeMaterial: {fileID: 2100000, guid: 32b24f24a51006641bc6feba2dfbdb01, type: 2}
@@ -9926,6 +9928,12 @@ MonoBehaviour:
       m_Bits: 0
     renderEvent: 0
   difficultyParent: {fileID: 6058017373863161027}
+  difficultyVisibleCharacterCount: 12
+  characterSpacing: 0
+  loopInterval: 0.4
+  transitionDuration: 0.18
+  transitionYOffset: 2
+  jacketImages: []
 --- !u!114 &2888482871050711660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9938,8 +9946,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7533c17e74554324daca3b6d86d3b140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playOnAwake: 0
   nextSky: {fileID: 2100000, guid: ac57c48be1793e84688ebf76dacde3fc, type: 2}
   nextCubemap: {fileID: 8900000, guid: 762f22ba43541df4e95e0e7126e8d96c, type: 3}
+  initialRotation: 0
+  rotationSpeed: 1
 --- !u!114 &8787467329146251009
 MonoBehaviour:
   m_ObjectHideFlags: 0

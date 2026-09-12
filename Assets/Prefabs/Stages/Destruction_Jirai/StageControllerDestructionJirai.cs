@@ -2,10 +2,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StageControllerDestructionJirai : MonoBehaviour, IStageController
+public class StageControllerDestructionJirai : StageController
 {
-    [SerializeField] SymphonyTypePresentationDatabase symphonyTypePresentationDatabase;
-
     [Header("タイトルテキスト設定")]
     [SerializeField] WorldLoopingClippedTMPText titleText;
 
@@ -25,17 +23,8 @@ public class StageControllerDestructionJirai : MonoBehaviour, IStageController
     [SerializeField] SpriteRenderer jacketSpriteRenderer;
     [SerializeField] Image jacketImage;
 
-    void IStageController.Initialize(IMusicDataGetter musicDataGetter)
+    protected override void InitializeStage(MusicData musicData, Difficulty difficulty)
     {
-        if (musicDataGetter == null || musicDataGetter.Music == null || musicDataGetter.Music.Value == null)
-        {
-            Debug.LogWarning("[StageControllerDestructionJirai] MusicDataGetter is not set.");
-            return;
-        }
-
-        MusicData musicData = musicDataGetter.Music.Value;
-        Difficulty difficulty = musicDataGetter.Difficulty != null ? musicDataGetter.Difficulty.Value : Difficulty.Normal;
-
         // シーン上に配置済みの表示コンポーネントへ、曲データだけを流し込む。
         SetTitleText(musicData.MusicName);
         SetDifficultyText(GetDifficultyText(musicData, difficulty));
@@ -121,35 +110,6 @@ public class StageControllerDestructionJirai : MonoBehaviour, IStageController
         {
             jacketImage.sprite = sprite;
         }
-    }
-
-    string GetDifficultyText(MusicData musicData, Difficulty difficulty)
-    {
-        if (difficulty != Difficulty.Master)
-        {
-            return difficulty.ToString().ToUpper();
-        }
-
-        SymphonyType symphonyType = musicData != null ? musicData.SymphonyType : SymphonyType.None;
-        string masterDifficultyText = symphonyTypePresentationDatabase?.GetMasterDifficultyText(symphonyType);
-        if (!string.IsNullOrEmpty(masterDifficultyText))
-        {
-            return masterDifficultyText;
-        }
-
-        Debug.LogWarning($"[StageControllerDestructionJirai] Master difficulty text is not set: {symphonyType}");
-        return Difficulty.Master.ToString().ToUpper();
-    }
-
-    string GetLevelText(MusicData musicData, Difficulty difficulty)
-    {
-        if (musicData == null)
-        {
-            return string.Empty;
-        }
-
-        int level = musicData.GetDifficulty(difficulty);
-        return level >= 0 ? level.ToString() : string.Empty;
     }
 
 }

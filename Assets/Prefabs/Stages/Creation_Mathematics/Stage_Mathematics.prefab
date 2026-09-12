@@ -120,7 +120,7 @@ Transform:
   m_GameObject: {fileID: 1101872995062134418}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.5475632, z: 0, w: 0.83676434}
-  m_LocalPosition: {x: -28.06, y: 2, z: 22.62}
+  m_LocalPosition: {x: -28.06, y: 4, z: 22.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1101872995062134418}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0c7b4000b65a344a98677f21cf8ab05, type: 3}
   m_Name: 
@@ -355,7 +355,7 @@ Transform:
   m_GameObject: {fileID: 4049414345141436555}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.5475632, z: 0, w: 0.83676434}
-  m_LocalPosition: {x: 28.06, y: 7, z: 22.62}
+  m_LocalPosition: {x: 28.06, y: 4, z: 22.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -368,7 +368,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4049414345141436555}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0c7b4000b65a344a98677f21cf8ab05, type: 3}
   m_Name: 
@@ -425,45 +425,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 5040811245919378688}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4da7a6ed549af0140bbeab4a79ae1ab1, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d49375ce6934ad7a6a5e7c58d6b54f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterSpawner: {fileID: 8787467329146251009}
   symphonyTypePresentationDatabase: {fileID: 11400000, guid: 429a5dca876a39743bd78706c233758b, type: 2}
+  characterSpawner: {fileID: 8787467329146251009}
   titleSettings:
-    defaultMaterial: {fileID: 2100000, guid: 3abf473d50106f44c9611c2c76fd9a91, type: 2}
-    edgeMaterial: {fileID: 2100000, guid: 32b24f24a51006641bc6feba2dfbdb01, type: 2}
+    defaultMaterial: {fileID: 2100000, guid: 6abbc620d2f068a4f80029484da06711, type: 2}
+    edgeMaterial: {fileID: 2100000, guid: 6abbc620d2f068a4f80029484da06711, type: 2}
     fontNumber: 0
     defaultSize: 5
     defaultDepth: 0.25
     textAnchor: 3
-  titleOutline:
-    color: {r: 1, g: 1, b: 1, a: 0.47058824}
-    width: 3
-    resources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
-    flags: 0
-    ignoreRayerMask:
-      serializedVersion: 2
-      m_Bits: 0
-    renderEvent: 16
   titleParent: {fileID: 8584946085390859700}
+  titleComposerSeparator: ' - '
+  titleVisibleCharacterCount: 9
   difficultySettings:
-    defaultMaterial: {fileID: 2100000, guid: 3abf473d50106f44c9611c2c76fd9a91, type: 2}
-    edgeMaterial: {fileID: 2100000, guid: 32b24f24a51006641bc6feba2dfbdb01, type: 2}
+    defaultMaterial: {fileID: 2100000, guid: 6abbc620d2f068a4f80029484da06711, type: 2}
+    edgeMaterial: {fileID: 2100000, guid: 6abbc620d2f068a4f80029484da06711, type: 2}
     fontNumber: 0
     defaultSize: 4
     defaultDepth: 0.25
     textAnchor: 5
-  difficultyOutline:
-    color: {r: 1, g: 1, b: 1, a: 0.47058824}
-    width: 3
-    resources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
-    flags: 0
-    ignoreRayerMask:
-      serializedVersion: 2
-      m_Bits: 0
-    renderEvent: 16
   difficultyParent: {fileID: 6058017373863161027}
+  difficultyVisibleCharacterCount: 9
+  characterSpacing: 0.5
+  loopInterval: 1
+  transitionDuration: 0.8
+  transitionYOffset: 6
+  jacketImages: []
 --- !u!114 &8787467329146251009
 MonoBehaviour:
   m_ObjectHideFlags: 0

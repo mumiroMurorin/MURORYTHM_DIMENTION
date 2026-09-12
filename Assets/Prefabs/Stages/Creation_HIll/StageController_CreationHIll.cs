@@ -1,11 +1,8 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StageController_CreationHill : MonoBehaviour, IStageController
+public class StageController_CreationHill : StageController
 {
-    [SerializeField] SymphonyTypePresentationDatabase symphonyTypePresentationDatabase;
-
     [Header("Title Text")]
     [SerializeField] WorldLoopingClippedTMPText titleText;
     [SerializeField] string titleComposerSeparator = " / ";
@@ -24,20 +21,12 @@ public class StageController_CreationHill : MonoBehaviour, IStageController
     [Header("Jacket Images")]
     [SerializeField] Image[] jacketImages;
 
-    void IStageController.Initialize(IMusicDataGetter musicDataGetter)
+    protected override void InitializeStage(MusicData musicData, Difficulty difficulty)
     {
-        if (musicDataGetter == null || musicDataGetter.Music == null || musicDataGetter.Music.Value == null)
-        {
-            Debug.LogWarning("[StageController_Hill] MusicDataGetter is not set.");
-            return;
-        }
-
-        MusicData musicData = musicDataGetter.Music.Value;
-        Difficulty difficulty = musicDataGetter.Difficulty != null ? musicDataGetter.Difficulty.Value : Difficulty.Normal;
         string difficultyTextValue = GetDifficultyText(musicData, difficulty);
         string levelTextValue = GetLevelText(musicData, difficulty);
 
-        SetTitleText(GetTitleText(musicData));
+        SetTitleText(GetTitleText(musicData, titleComposerSeparator));
         SetDifficultyLevelText(GetDifficultyLevelText(difficultyTextValue, levelTextValue));
         ApplyTextRenderQueue();
 
@@ -81,82 +70,4 @@ public class StageController_CreationHill : MonoBehaviour, IStageController
         }
     }
 
-    void SetImages(Image[] images, Sprite sprite)
-    {
-        if (images == null)
-        {
-            return;
-        }
-
-        foreach (Image image in images)
-        {
-            if (image == null)
-            {
-                continue;
-            }
-
-            image.sprite = sprite;
-        }
-    }
-
-    string GetTitleText(MusicData musicData)
-    {
-        if (musicData == null)
-        {
-            return string.Empty;
-        }
-
-        string title = musicData.MusicName ?? string.Empty;
-        string composer = musicData.ComposerName ?? string.Empty;
-        if (string.IsNullOrWhiteSpace(composer))
-        {
-            return title;
-        }
-
-        return $"{title}{titleComposerSeparator}{composer}";
-    }
-
-    string GetDifficultyText(MusicData musicData, Difficulty difficulty)
-    {
-        if (difficulty != Difficulty.Master)
-        {
-            return difficulty.ToString().ToUpper();
-        }
-
-        SymphonyType symphonyType = musicData != null ? musicData.SymphonyType : SymphonyType.None;
-        string masterDifficultyText = symphonyTypePresentationDatabase?.GetMasterDifficultyText(symphonyType).ToUpper();
-        if (!string.IsNullOrEmpty(masterDifficultyText))
-        {
-            return masterDifficultyText;
-        }
-
-        Debug.LogWarning($"[StageController_Hill] Master difficulty text is not set: {symphonyType}");
-        return Difficulty.Master.ToString().ToUpper();
-    }
-
-    string GetLevelText(MusicData musicData, Difficulty difficulty)
-    {
-        if (musicData == null)
-        {
-            return string.Empty;
-        }
-
-        int level = musicData.GetDifficulty(difficulty);
-        return level >= 0 ? level.ToString() : string.Empty;
-    }
-
-    string GetDifficultyLevelText(string difficultyTextValue, string levelTextValue)
-    {
-        if (string.IsNullOrWhiteSpace(levelTextValue))
-        {
-            return difficultyTextValue ?? string.Empty;
-        }
-
-        if (string.IsNullOrWhiteSpace(difficultyTextValue))
-        {
-            return levelTextValue;
-        }
-
-        return $"{difficultyTextValue}  LEVEL {levelTextValue}";
-    }
 }

@@ -46,11 +46,15 @@ namespace UIInRootScene
 
         public void OnChangeRightHandVelocity(Vector3 velocity)
         {
+            if (velocity == Vector3.zero) { return; }
+
             velocityRightTmp.text = velocity.ToString();
         }
 
         public void OnChangeLeftHandVelocity(Vector3 velocity)
         {
+            if (velocity == Vector3.zero) { return; }
+
             velocityLeftTmp.text = velocity.ToString();
         }
 

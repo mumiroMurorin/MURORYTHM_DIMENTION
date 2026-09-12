@@ -58,12 +58,14 @@ public class ScrollingOverflowText : MonoBehaviour
     {
         Initialize();
         TMPro_EventManager.TEXT_CHANGED_EVENT.Add(OnTextChanged);
+        Canvas.preWillRenderCanvases += RefreshBeforeCanvasRender;
         QueueRefresh();
     }
 
     private void OnDisable()
     {
         TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(OnTextChanged);
+        Canvas.preWillRenderCanvases -= RefreshBeforeCanvasRender;
     }
 
     private void Update()
@@ -103,10 +105,7 @@ public class ScrollingOverflowText : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (!isRefreshQueued) { return; }
-
-        isRefreshQueued = false;
-        Refresh();
+        ProcessQueuedRefresh();
     }
 
     public void Refresh()
@@ -264,6 +263,27 @@ public class ScrollingOverflowText : MonoBehaviour
     private void QueueRefresh()
     {
         isRefreshQueued = true;
+    }
+
+    private void RefreshBeforeCanvasRender()
+    {
+        if (!isActiveAndEnabled) { return; }
+        if (!isInitialized) { Initialize(); }
+
+        if (GetSourceText() != lastText)
+        {
+            QueueRefresh();
+        }
+
+        ProcessQueuedRefresh();
+    }
+
+    private void ProcessQueuedRefresh()
+    {
+        if (!isRefreshQueued || isRefreshing) { return; }
+
+        isRefreshQueued = false;
+        Refresh();
     }
 
     private float GetStartPositionX(float currentViewportWidth)

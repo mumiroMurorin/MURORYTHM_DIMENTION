@@ -248,7 +248,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 015896b2af4a8a04a95905417f694d54, type: 3}
     sample_clip: {fileID: 8300000, guid: 6bb917bc6d659314c85522d193d72c5b, type: 3}
     symphonyType: 10
-    stageType: 120
+    stageType: 100
     difficulties: 0000000000000000000000007a000000
     chartPaths:
     - 
@@ -256,10 +256,10 @@ MonoBehaviour:
     - 
     - 
   difficulty: 3
-  chartFilePath: MusicData/Aleph-0/chart_master.json
-  noteSpeed: 200
+  chartFilePath: MusicData/CalamityFortune/chart_master.json
+  noteSpeed: 100
   groundRadius: 2000
-  noteVisibleDistance: 200
+  noteVisibleDistance: 100
   isAutoMode: 1
   isFastLateEnabled: 1
 --- !u!1 &234263431

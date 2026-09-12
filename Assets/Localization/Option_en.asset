@@ -97,7 +97,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2020000000017
-    m_Localized: Adjusts note and ground visibility distance. Higher values show them farther away.
+    m_Localized: Adjusts note view distance. Higher values show notes farther away.
     m_Metadata:
       m_Items: []
   references:

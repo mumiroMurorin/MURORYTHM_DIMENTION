@@ -112,7 +112,7 @@ public class SpaceInputHub : MonoBehaviour, ISpaceInputHub
             return;
         }
 
-        var currentTime = timer?.Value != null ? timer.Value.Time : 0f;
+        var currentTime = timer?.Value != null ? timer.Value.Time : Time.unscaledTime;
         var trackingSettings = optionGetter?.TrackingSettings;
         var rightHandPos = SpaceInputNormalizer.NormalizeUsedVector2(handler.RightHandPos.Value, trackingSettings);
         var leftHandPos = SpaceInputNormalizer.NormalizeUsedVector2(handler.LeftHandPos.Value, trackingSettings);
