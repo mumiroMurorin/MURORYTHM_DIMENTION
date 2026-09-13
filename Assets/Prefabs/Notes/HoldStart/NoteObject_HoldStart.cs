@@ -104,7 +104,7 @@ public class NoteData_HoldStart : INoteData, IClippedJudgableNote
 
     public JudgementWindow JudgementWindow { get; set; }
 
-    public NoteJudgementSettings JudgementSettings { get; set; }
+    public NoteJudgementConfig JudgementSettings { get; set; }
 
     public int[] Range { get; set; }
 

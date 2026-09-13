@@ -159,7 +159,7 @@ public class NoteData_DynamicGroundLeftward : INoteData, IJudgableNoteData
 
     public JudgementWindow JudgementWindow { get; set; }
 
-    public DynamicNoteJudgementSettings JudgementSettings { get; set; }
+    public DynamicNoteJudgementConfig JudgementSettings { get; set; }
 
     public int[] Range { get; set; }
 

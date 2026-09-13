@@ -1,47 +1,77 @@
-using NaughtyAttributes;
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "ScriptableObject/Note Judgement Settings/Catalog", fileName = "NoteJudgementSettingsCatalog")]
 public class NoteJudgementSettingsCatalog : ScriptableObject
 {
+    [Header("Difficulty Profiles")]
+    [SerializeField] NoteJudgementSettingsProfile easy = new NoteJudgementSettingsProfile();
+    [SerializeField] NoteJudgementSettingsProfile normal = new NoteJudgementSettingsProfile();
+    [SerializeField] NoteJudgementSettingsProfile hard = new NoteJudgementSettingsProfile();
+    [SerializeField] NoteJudgementSettingsProfile master = new NoteJudgementSettingsProfile();
+
+    public NoteJudgementConfig GetJudgementSettings(NoteType noteType, Difficulty difficulty)
+    {
+        return GetProfile(difficulty)?.GetJudgementSettings(noteType);
+    }
+
+    public T GetJudgementSettings<T>(NoteType noteType, Difficulty difficulty)
+        where T : NoteJudgementConfig
+    {
+        T settings = GetJudgementSettings(noteType, difficulty) as T;
+        if (settings == null)
+        {
+            Debug.LogWarning($"[System] Judgement settings type mismatch: {noteType} / {difficulty} / {typeof(T).Name}", this);
+        }
+
+        return settings;
+    }
+
+    NoteJudgementSettingsProfile GetProfile(Difficulty difficulty)
+    {
+        switch (difficulty)
+        {
+            case Difficulty.Easy:
+                return easy;
+            case Difficulty.Normal:
+                return normal;
+            case Difficulty.Hard:
+                return hard;
+            case Difficulty.Master:
+                return master;
+            default:
+                Debug.LogWarning($"[System] Unknown difficulty '{difficulty}'. Normal judgement settings will be used.", this);
+                return normal;
+        }
+    }
+}
+
+[Serializable]
+public class NoteJudgementSettingsProfile
+{
     [Header("Touch")]
-    [SerializeField, Expandable] TouchJudgementSettings touch;
-    [SerializeField, Expandable] DefaultNoteJudgementSettings divineTouch;
+    [SerializeField] NoteJudgementConfig touch = new NoteJudgementConfig();
+    [SerializeField] NoteJudgementConfig divineTouch = new NoteJudgementConfig();
 
     [Header("Hold")]
-    [SerializeField, Expandable] DefaultNoteJudgementSettings holdStart;
-    [SerializeField, Expandable] DefaultNoteJudgementSettings divineHoldStart;
-    [SerializeField, Expandable] DefaultNoteJudgementSettings holdRelay;
-    [SerializeField, Expandable] DefaultNoteJudgementSettings holdRelayHidden;
-    [SerializeField, Expandable] DefaultNoteJudgementSettings holdEnd;
+    [SerializeField] NoteJudgementConfig holdStart = new NoteJudgementConfig();
+    [SerializeField] NoteJudgementConfig divineHoldStart = new NoteJudgementConfig();
+    [SerializeField] NoteJudgementConfig holdRelay = new NoteJudgementConfig();
+    [SerializeField] NoteJudgementConfig holdRelayHidden = new NoteJudgementConfig();
+    [SerializeField] NoteJudgementConfig holdEnd = new NoteJudgementConfig();
 
     [Header("Dynamic")]
-    [SerializeField, Expandable] DynamicNoteJudgementSettings dynamicGroundUpward;
-    [SerializeField, Expandable] DynamicNoteJudgementSettings dynamicGroundDownward;
-    [SerializeField, Expandable] DynamicNoteJudgementSettings dynamicGroundLeftward;
-    [SerializeField, Expandable] DynamicNoteJudgementSettings dynamicGroundRightward;
+    [SerializeField] DynamicNoteJudgementConfig dynamicGroundUpward = new DynamicNoteJudgementConfig();
+    [SerializeField] DynamicNoteJudgementConfig dynamicGroundDownward = new DynamicNoteJudgementConfig();
+    [SerializeField] DynamicNoteJudgementConfig dynamicGroundLeftward = new DynamicNoteJudgementConfig();
+    [SerializeField] DynamicNoteJudgementConfig dynamicGroundRightward = new DynamicNoteJudgementConfig();
 
     [Header("Space")]
-    [SerializeField, Expandable] SpaceBreakJudgementSettings spaceBreak;
-    [SerializeField, Expandable] SpaceHoldJudgementSettings spaceHoldRelay;
-    [SerializeField, Expandable] SpaceHoldJudgementSettings spaceHoldRelayHidden;
+    [SerializeField] SpaceBreakJudgementConfig spaceBreak = new SpaceBreakJudgementConfig();
+    [SerializeField] SpaceHoldJudgementConfig spaceHoldRelay = new SpaceHoldJudgementConfig();
+    [SerializeField] SpaceHoldJudgementConfig spaceHoldRelayHidden = new SpaceHoldJudgementConfig();
 
-    public TouchJudgementSettings Touch => touch;
-    public DefaultNoteJudgementSettings DivineTouch => divineTouch;
-    public DefaultNoteJudgementSettings HoldStart => holdStart;
-    public DefaultNoteJudgementSettings DivineHoldStart => divineHoldStart;
-    public DefaultNoteJudgementSettings HoldRelay => holdRelay;
-    public DefaultNoteJudgementSettings HoldRelayHidden => holdRelayHidden;
-    public DefaultNoteJudgementSettings HoldEnd => holdEnd;
-    public DynamicNoteJudgementSettings DynamicGroundUpward => dynamicGroundUpward;
-    public DynamicNoteJudgementSettings DynamicGroundDownward => dynamicGroundDownward;
-    public DynamicNoteJudgementSettings DynamicGroundLeftward => dynamicGroundLeftward;
-    public DynamicNoteJudgementSettings DynamicGroundRightward => dynamicGroundRightward;
-    public SpaceBreakJudgementSettings SpaceBreak => spaceBreak;
-    public SpaceHoldJudgementSettings SpaceHoldRelay => spaceHoldRelay;
-    public SpaceHoldJudgementSettings SpaceHoldRelayHidden => spaceHoldRelayHidden;
-
-    public NoteJudgementSettings GetJudgementSettings(NoteType noteType)
+    public NoteJudgementConfig GetJudgementSettings(NoteType noteType)
     {
         switch (noteType)
         {
@@ -77,4 +107,46 @@ public class NoteJudgementSettingsCatalog : ScriptableObject
                 return null;
         }
     }
+}
+
+[Serializable]
+public class NoteJudgementConfig
+{
+    [SerializeField] JudgementWindow judgementWindow = new JudgementWindow();
+
+    public JudgementWindow CreateJudgementWindowOrDefault(JudgementWindow fallback)
+    {
+        return judgementWindow != null ? judgementWindow.Copy() : fallback;
+    }
+
+    public JudgementWindow CreateJudgementWindowIfMissing(JudgementWindow current)
+    {
+        return current ?? CreateJudgementWindowOrDefault(null);
+    }
+}
+
+[Serializable]
+public class DynamicNoteJudgementConfig : NoteJudgementConfig
+{
+    [SerializeField] float judgeMagnitude = 1f;
+
+    public float JudgeMagnitude => judgeMagnitude;
+}
+
+[Serializable]
+public class SpaceBreakJudgementConfig : NoteJudgementConfig
+{
+    [SerializeField] float judgementMarginRadius = 0.25f;
+    [SerializeField] float judgeMagnitude = 1f;
+
+    public float JudgementMarginRadius => judgementMarginRadius;
+    public float JudgeMagnitude => judgeMagnitude;
+}
+
+[Serializable]
+public class SpaceHoldJudgementConfig : NoteJudgementConfig
+{
+    [SerializeField] float judgementMarginRadius = 0.25f;
+
+    public float JudgementMarginRadius => judgementMarginRadius;
 }

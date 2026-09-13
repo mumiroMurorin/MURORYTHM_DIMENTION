@@ -321,6 +321,15 @@ MonoBehaviour:
   titleParent: {fileID: 8584946085390859700}
   titleComposerSeparator: ' - '
   titleVisibleCharacterCount: 9
+  titleOutline:
+    color: {r: 1, g: 1, b: 1, a: 0.47058824}
+    width: 3
+    resources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
+    flags: 0
+    ignoreRayerMask:
+      serializedVersion: 2
+      m_Bits: 0
+    renderEvent: 16
   difficultySettings:
     defaultMaterial: {fileID: 2100000, guid: 218c1ad4666b77e498910625ed372637, type: 2}
     edgeMaterial: {fileID: 2100000, guid: 218c1ad4666b77e498910625ed372637, type: 2}
@@ -330,9 +339,27 @@ MonoBehaviour:
     textAnchor: 5
   difficultyParent: {fileID: 6058017373863161027}
   difficultyVisibleCharacterCount: 9
+  difficultyOutline:
+    color: {r: 1, g: 1, b: 1, a: 0.47058824}
+    width: 3
+    resources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
+    flags: 0
+    ignoreRayerMask:
+      serializedVersion: 2
+      m_Bits: 0
+    renderEvent: 16
+  outlineColors:
+  - difficulty: 0
+    color: {r: 0.22321707, g: 1, b: 0.1273585, a: 0.47058824}
+  - difficulty: 1
+    color: {r: 1, g: 0.9196864, b: 0.1745283, a: 0.47058824}
+  - difficulty: 2
+    color: {r: 1, g: 0.28773582, b: 0.28773582, a: 0.47058824}
+  - difficulty: 3
+    color: {r: 0.8651361, g: 0.15566039, b: 1, a: 0.47058824}
   characterSpacing: 0.5
-  loopInterval: 1
-  transitionDuration: 0.8
+  loopInterval: 0.4
+  transitionDuration: 0.5
   transitionYOffset: 6
   jacketImages: []
 --- !u!114 &8787467329146251009

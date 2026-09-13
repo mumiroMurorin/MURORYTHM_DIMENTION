@@ -10,7 +10,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     readonly float RADIUS = 10f;
 
     [SerializeField] GameObject noteObjectOriginPrefab;
-    [SerializeField] SpaceHoldJudgementSettings judgementSettings;
+    SpaceHoldJudgementConfig judgementSettings;
     [Header("強調線の太さ")]
     [SerializeField] float enphasisLineWidth = 0.1f;
     [Header("メインメッシュのマテリアル")]
@@ -26,7 +26,6 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
     ISpaceInputGetter spaceInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
-    Difficulty currentDifficulty = Difficulty.Normal;
     Transform noteParent;
 
     public override void Initialize(NoteFactoryInitializingData initializingData)
@@ -36,7 +35,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
         this.spaceInputGetter = initializingData.SpaceInputGetter;
         this.judgementRecorder = initializingData.JudgementRecorder;
         this.timer = initializingData.Timer;
-        this.currentDifficulty = initializingData.Difficulty;
+        judgementSettings = initializingData.GetJudgementSettings<SpaceHoldJudgementConfig>(NoteType.SpaceHoldRelay);
     }
 
     public override NoteObject<NoteData_SpaceHoldRelay> Spawn(NoteData_SpaceHoldRelay data, INotePositionCalculator positionCalculator)
@@ -70,7 +69,7 @@ public class NoteFactory_SpaceHoldRelay : NoteFactory<NoteData_SpaceHoldRelay>
         data.JudgementSettings = judgementSettings;
         if (judgementSettings != null)
         {
-            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow, currentDifficulty);
+            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow);
         }
 
         return data;

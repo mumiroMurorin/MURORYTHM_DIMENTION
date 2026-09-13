@@ -11,7 +11,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     readonly float RADIUS = 10f;
 
     [SerializeField] GameObject noteObjectOriginPrefab;
-    [SerializeField] SpaceBreakJudgementSettings judgementSettings;
+    SpaceBreakJudgementConfig judgementSettings;
     [SerializeField] GameObject noteMeshPrefab;
     [SerializeField] GameObject noteShadowPrefab;
     [SerializeField] GameObject frangmentParentPrefab;
@@ -37,7 +37,6 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
     ISpaceInputGetter spaceInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
-    Difficulty currentDifficulty = Difficulty.Normal;
     Transform noteParent;
 
     public override void Initialize(NoteFactoryInitializingData initializingData)
@@ -47,7 +46,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
         this.spaceInputGetter = initializingData.SpaceInputGetter;
         this.judgementRecorder = initializingData.JudgementRecorder;
         this.timer = initializingData.Timer;
-        this.currentDifficulty = initializingData.Difficulty;
+        judgementSettings = initializingData.GetJudgementSettings<SpaceBreakJudgementConfig>(NoteType.SpaceBreak);
     }
 
     public override NoteObject<NoteData_SpaceBreak> Spawn(NoteData_SpaceBreak data, INotePositionCalculator positionCalculator)
@@ -78,7 +77,7 @@ public class NoteFactory_SpaceBreak : NoteFactory<NoteData_SpaceBreak>
         data.JudgementSettings = judgementSettings;
         if (judgementSettings != null)
         {
-            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow, currentDifficulty);
+            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow);
         }
 
         return data;

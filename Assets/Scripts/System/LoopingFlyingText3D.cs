@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
+using UnityFx.Outline;
 
 public sealed class LoopingFlyingText3D : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public sealed class LoopingFlyingText3D : MonoBehaviour
         public Renderer[] Renderers;
         public Material[][] Materials;
         public FadeProperty[][] FadeProperties;
+        public OutlineBehaviour Outline;
+        public Color OutlineColor;
         public float VisualMinX;
         public float Width;
     }
@@ -32,6 +35,8 @@ public sealed class LoopingFlyingText3D : MonoBehaviour
     float loopInterval;
     float transitionDuration;
     float transitionYOffset;
+    OutlineSettings outlineSettings;
+    Color? outlineColor;
     int windowStart;
     Coroutine loopCoroutine;
 
@@ -42,7 +47,9 @@ public sealed class LoopingFlyingText3D : MonoBehaviour
         float characterSpacing,
         float interval,
         float duration,
-        float yOffset)
+        float yOffset,
+        OutlineSettings outline,
+        Color? color)
     {
         characterSpawner = spawner;
         textSettings = settings;
@@ -51,6 +58,8 @@ public sealed class LoopingFlyingText3D : MonoBehaviour
         loopInterval = Mathf.Max(0f, interval);
         transitionDuration = Mathf.Max(0.01f, duration);
         transitionYOffset = Mathf.Abs(yOffset);
+        outlineSettings = outline;
+        outlineColor = color;
     }
 
     public void SetText(string text)
@@ -185,12 +194,20 @@ public sealed class LoopingFlyingText3D : MonoBehaviour
 
         GetVisualXBounds(glyphObject, renderers, out float visualMinX, out float width);
 
+        Color appliedOutlineColor = outlineColor
+            ?? (outlineSettings != null ? outlineSettings.Color : Color.clear);
+        OutlineBehaviour outline = outlineSettings != null
+            ? outlineSettings.ApplyOutline(glyphObject, appliedOutlineColor)
+            : null;
+
         return new Glyph
         {
             Object = glyphObject,
             Renderers = renderers,
             Materials = rendererMaterials,
             FadeProperties = fadeProperties,
+            Outline = outline,
+            OutlineColor = appliedOutlineColor,
             VisualMinX = visualMinX,
             Width = width
         };
@@ -348,6 +365,13 @@ public sealed class LoopingFlyingText3D : MonoBehaviour
 
     static void SetAlpha(Glyph glyph, float alpha)
     {
+        if (glyph.Outline != null)
+        {
+            Color color = glyph.OutlineColor;
+            color.a *= alpha;
+            glyph.Outline.OutlineColor = color;
+        }
+
         for (int rendererIndex = 0; rendererIndex < glyph.Renderers.Length; rendererIndex++)
         {
             Material[] materials = glyph.Materials[rendererIndex];

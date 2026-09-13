@@ -12,17 +12,487 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf725288e984bd984047277c39fb2fb, type: 3}
   m_Name: NoteJudgementSettingsCatalog
   m_EditorClassIdentifier: 
-  touch: {fileID: 11400000, guid: 7f38aef8dbb94ce5b2466a37d9a211e0, type: 2}
-  divineTouch: {fileID: 11400000, guid: 460d106390af4fcfa70442c9fdde9d65, type: 2}
-  holdStart: {fileID: 11400000, guid: 934981d5196543ccbee01f9f8121753e, type: 2}
-  divineHoldStart: {fileID: 11400000, guid: 72ef4bb04492490a82b7524a5c0f1e40, type: 2}
-  holdRelay: {fileID: 11400000, guid: a91d1862fb6a4006b246ed5158cb88a7, type: 2}
-  holdRelayHidden: {fileID: 11400000, guid: 64c8812671d74307b8543c1024c5c96a, type: 2}
-  holdEnd: {fileID: 11400000, guid: 617f81d7ed724aedb4facd7745d8989a, type: 2}
-  dynamicGroundUpward: {fileID: 11400000, guid: f6e2523f63fb43c6b709de30a1c9b6c2, type: 2}
-  dynamicGroundDownward: {fileID: 11400000, guid: 087b5024fd6949be8afca7117ba48bcf, type: 2}
-  dynamicGroundLeftward: {fileID: 11400000, guid: 45f6c66a54a9400ca9c29297903e64c8, type: 2}
-  dynamicGroundRightward: {fileID: 11400000, guid: a7a921d6922a4dd3a317bf9a9e8a82c5, type: 2}
-  spaceBreak: {fileID: 11400000, guid: 2bd6bb4f35b04cf28b2076245ad79f23, type: 2}
-  spaceHoldRelay: {fileID: 11400000, guid: 08c4597f9745496fbd851de6068d6f34, type: 2}
-  spaceHoldRelayHidden: {fileID: 11400000, guid: 59ddc9fa98f749c1958080d3c3622aa0, type: 2}
+  easy:
+    touch:
+      judgementWindow:
+        perfectWindow_faster: 0.0667
+        perfectWindow_latter: 0.0667
+        greatWindow_faster: 0.1
+        greatWindow_latter: 0.1
+        goodWindow_faster: 0.1334
+        goodWindow_latter: 0.1334
+    divineTouch:
+      judgementWindow:
+        perfectWindow_faster: 0.13334
+        perfectWindow_latter: 0.13334
+        greatWindow_faster: 0.13334
+        greatWindow_latter: 0.13334
+        goodWindow_faster: 0.13334
+        goodWindow_latter: 0.13334
+    holdStart:
+      judgementWindow:
+        perfectWindow_faster: 0.0667
+        perfectWindow_latter: 0.0667
+        greatWindow_faster: 0.1
+        greatWindow_latter: 0.1
+        goodWindow_faster: 0.1334
+        goodWindow_latter: 0.1334
+    divineHoldStart:
+      judgementWindow:
+        perfectWindow_faster: 0.13334
+        perfectWindow_latter: 0.13334
+        greatWindow_faster: 0.13334
+        greatWindow_latter: 0.13334
+        goodWindow_faster: 0.13334
+        goodWindow_latter: 0.13334
+    holdRelay:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    holdRelayHidden:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    holdEnd:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    dynamicGroundUpward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 10
+    dynamicGroundDownward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 10
+    dynamicGroundLeftward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 10
+    dynamicGroundRightward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 10
+    spaceBreak:
+      judgementWindow:
+        perfectWindow_faster: 0.3
+        perfectWindow_latter: 0.3
+        greatWindow_faster: 0.3
+        greatWindow_latter: 0.3
+        goodWindow_faster: 0.3
+        goodWindow_latter: 0.3
+      judgementMarginRadius: 0.3
+      judgeMagnitude: 10
+    spaceHoldRelay:
+      judgementWindow:
+        perfectWindow_faster: 0.1666666
+        perfectWindow_latter: 0.1666666
+        greatWindow_faster: 0.2
+        greatWindow_latter: 0.2
+        goodWindow_faster: 0.3
+        goodWindow_latter: 0.3
+      judgementMarginRadius: 0.3
+    spaceHoldRelayHidden:
+      judgementWindow:
+        perfectWindow_faster: 0.1666666
+        perfectWindow_latter: 0.1666666
+        greatWindow_faster: 0.2
+        greatWindow_latter: 0.2
+        goodWindow_faster: 0.3
+        goodWindow_latter: 0.3
+      judgementMarginRadius: 0.3
+  normal:
+    touch:
+      judgementWindow:
+        perfectWindow_faster: 0.0667
+        perfectWindow_latter: 0.0667
+        greatWindow_faster: 0.1
+        greatWindow_latter: 0.1
+        goodWindow_faster: 0.1334
+        goodWindow_latter: 0.1334
+    divineTouch:
+      judgementWindow:
+        perfectWindow_faster: 0.13334
+        perfectWindow_latter: 0.13334
+        greatWindow_faster: 0.13334
+        greatWindow_latter: 0.13334
+        goodWindow_faster: 0.13334
+        goodWindow_latter: 0.13334
+    holdStart:
+      judgementWindow:
+        perfectWindow_faster: 0.0667
+        perfectWindow_latter: 0.0667
+        greatWindow_faster: 0.1
+        greatWindow_latter: 0.1
+        goodWindow_faster: 0.1334
+        goodWindow_latter: 0.1334
+    divineHoldStart:
+      judgementWindow:
+        perfectWindow_faster: 0.13334
+        perfectWindow_latter: 0.13334
+        greatWindow_faster: 0.13334
+        greatWindow_latter: 0.13334
+        goodWindow_faster: 0.13334
+        goodWindow_latter: 0.13334
+    holdRelay:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    holdRelayHidden:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    holdEnd:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    dynamicGroundUpward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 10
+    dynamicGroundDownward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 10
+    dynamicGroundLeftward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 10
+    dynamicGroundRightward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 10
+    spaceBreak:
+      judgementWindow:
+        perfectWindow_faster: 0.3
+        perfectWindow_latter: 0.3
+        greatWindow_faster: 0.3
+        greatWindow_latter: 0.3
+        goodWindow_faster: 0.3
+        goodWindow_latter: 0.3
+      judgementMarginRadius: 0.3
+      judgeMagnitude: 10
+    spaceHoldRelay:
+      judgementWindow:
+        perfectWindow_faster: 0.1666666
+        perfectWindow_latter: 0.1666666
+        greatWindow_faster: 0.2
+        greatWindow_latter: 0.2
+        goodWindow_faster: 0.3
+        goodWindow_latter: 0.3
+      judgementMarginRadius: 0.3
+    spaceHoldRelayHidden:
+      judgementWindow:
+        perfectWindow_faster: 0.1666666
+        perfectWindow_latter: 0.1666666
+        greatWindow_faster: 0.2
+        greatWindow_latter: 0.2
+        goodWindow_faster: 0.3
+        goodWindow_latter: 0.3
+      judgementMarginRadius: 0.3
+  hard:
+    touch:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    divineTouch:
+      judgementWindow:
+        perfectWindow_faster: 0.1
+        perfectWindow_latter: 0.1
+        greatWindow_faster: 0.1
+        greatWindow_latter: 0.1
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    holdStart:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    divineHoldStart:
+      judgementWindow:
+        perfectWindow_faster: 0.1
+        perfectWindow_latter: 0.1
+        greatWindow_faster: 0.1
+        greatWindow_latter: 0.1
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    holdRelay:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    holdRelayHidden:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    holdEnd:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    dynamicGroundUpward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 12.5
+    dynamicGroundDownward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 12.5
+    dynamicGroundLeftward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 12.5
+    dynamicGroundRightward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 12.5
+    spaceBreak:
+      judgementWindow:
+        perfectWindow_faster: 0.3
+        perfectWindow_latter: 0.3
+        greatWindow_faster: 0.3
+        greatWindow_latter: 0.3
+        goodWindow_faster: 0.3
+        goodWindow_latter: 0.3
+      judgementMarginRadius: 0.3
+      judgeMagnitude: 12.5
+    spaceHoldRelay:
+      judgementWindow:
+        perfectWindow_faster: 0.1666666
+        perfectWindow_latter: 0.1666666
+        greatWindow_faster: 0.2
+        greatWindow_latter: 0.2
+        goodWindow_faster: 0.3
+        goodWindow_latter: 0.3
+      judgementMarginRadius: 0.3
+    spaceHoldRelayHidden:
+      judgementWindow:
+        perfectWindow_faster: 0.1666666
+        perfectWindow_latter: 0.1666666
+        greatWindow_faster: 0.2
+        greatWindow_latter: 0.2
+        goodWindow_faster: 0.3
+        goodWindow_latter: 0.3
+      judgementMarginRadius: 0.3
+  master:
+    touch:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    divineTouch:
+      judgementWindow:
+        perfectWindow_faster: 0.1
+        perfectWindow_latter: 0.1
+        greatWindow_faster: 0.1
+        greatWindow_latter: 0.1
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    holdStart:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    divineHoldStart:
+      judgementWindow:
+        perfectWindow_faster: 0.1
+        perfectWindow_latter: 0.1
+        greatWindow_faster: 0.1
+        greatWindow_latter: 0.1
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    holdRelay:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    holdRelayHidden:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    holdEnd:
+      judgementWindow:
+        perfectWindow_faster: 0.0334
+        perfectWindow_latter: 0.0334
+        greatWindow_faster: 0.0667
+        greatWindow_latter: 0.0667
+        goodWindow_faster: 0.1
+        goodWindow_latter: 0.1
+    dynamicGroundUpward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 12.5
+    dynamicGroundDownward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 12.5
+    dynamicGroundLeftward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 12.5
+    dynamicGroundRightward:
+      judgementWindow:
+        perfectWindow_faster: 0.3333333
+        perfectWindow_latter: 0.3333333
+        greatWindow_faster: 0.3333333
+        greatWindow_latter: 0.33333334
+        goodWindow_faster: 0.3333333
+        goodWindow_latter: 0.3333333
+      judgeMagnitude: 12.5
+    spaceBreak:
+      judgementWindow:
+        perfectWindow_faster: 0.3
+        perfectWindow_latter: 0.3
+        greatWindow_faster: 0.3
+        greatWindow_latter: 0.3
+        goodWindow_faster: 0.3
+        goodWindow_latter: 0.3
+      judgementMarginRadius: 0.3
+      judgeMagnitude: 12.5
+    spaceHoldRelay:
+      judgementWindow:
+        perfectWindow_faster: 0.1666666
+        perfectWindow_latter: 0.1666666
+        greatWindow_faster: 0.2
+        greatWindow_latter: 0.2
+        goodWindow_faster: 0.3
+        goodWindow_latter: 0.3
+      judgementMarginRadius: 0.3
+    spaceHoldRelayHidden:
+      judgementWindow:
+        perfectWindow_faster: 0.1666666
+        perfectWindow_latter: 0.1666666
+        greatWindow_faster: 0.2
+        greatWindow_latter: 0.2
+        goodWindow_faster: 0.3
+        goodWindow_latter: 0.3
+      judgementMarginRadius: 0.3

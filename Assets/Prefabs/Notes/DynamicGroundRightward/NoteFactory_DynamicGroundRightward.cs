@@ -5,7 +5,7 @@ using UnityEngine;
 public class NoteFactory_DynamicGroundRightward : NoteFactory<NoteData_DynamicGroundRightward>
 {
     [SerializeField] GameObject noteObjectOriginPrefab;
-    [SerializeField] DynamicNoteJudgementSettings judgementSettings;
+    DynamicNoteJudgementConfig judgementSettings;
 
     [Header("マスに応じたノーツタイル")]
     [SerializeField] GameObject singleTilePrefab;
@@ -17,7 +17,6 @@ public class NoteFactory_DynamicGroundRightward : NoteFactory<NoteData_DynamicGr
     ISpaceInputGetter spaceInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
-    Difficulty currentDifficulty = Difficulty.Normal;
     Transform noteParent;
 
     public override void Initialize(NoteFactoryInitializingData initializingData)
@@ -27,7 +26,7 @@ public class NoteFactory_DynamicGroundRightward : NoteFactory<NoteData_DynamicGr
         this.spaceInputGetter = initializingData.SpaceInputGetter;
         this.judgementRecorder = initializingData.JudgementRecorder;
         this.timer = initializingData.Timer;
-        this.currentDifficulty = initializingData.Difficulty;
+        judgementSettings = initializingData.GetJudgementSettings<DynamicNoteJudgementConfig>(NoteType.DynamicGroundRightward);
     }
 
     public override NoteObject<NoteData_DynamicGroundRightward> Spawn(NoteData_DynamicGroundRightward data, INotePositionCalculator positionCalculator)
@@ -58,7 +57,7 @@ public class NoteFactory_DynamicGroundRightward : NoteFactory<NoteData_DynamicGr
         data.JudgementSettings = judgementSettings;
         if (judgementSettings != null)
         {
-            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow, currentDifficulty);
+            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow);
         }
 
         return data;

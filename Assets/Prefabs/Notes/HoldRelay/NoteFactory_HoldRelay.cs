@@ -5,7 +5,7 @@ using UnityEngine;
 public class NoteFactory_HoldRelay : NoteFactory<NoteData_HoldRelay>
 {
     [SerializeField] GameObject noteObjectOriginPrefab;
-    [SerializeField] NoteJudgementSettings judgementSettings;
+    NoteJudgementConfig judgementSettings;
 
     [Header("マスに応じたノーツタイル")]
     [SerializeField] GameObject singleTilePrefab;
@@ -17,7 +17,6 @@ public class NoteFactory_HoldRelay : NoteFactory<NoteData_HoldRelay>
     ISliderInputGetter sliderInputGetter;
     IJudgementRecorder judgementRecorder;
     ITimeGetter timer;
-    Difficulty currentDifficulty = Difficulty.Normal;
     Transform noteParent;
 
     public override void Initialize(NoteFactoryInitializingData initializingData)
@@ -27,7 +26,7 @@ public class NoteFactory_HoldRelay : NoteFactory<NoteData_HoldRelay>
         this.sliderInputGetter = initializingData.SliderInputGetter;
         this.judgementRecorder = initializingData.JudgementRecorder;
         this.timer = initializingData.Timer;
-        this.currentDifficulty = initializingData.Difficulty;
+        judgementSettings = initializingData.GetJudgementSettings<NoteJudgementConfig>(NoteType.HoldRelay);
     }
 
     public override NoteObject<NoteData_HoldRelay> Spawn(NoteData_HoldRelay data, INotePositionCalculator positionCalculator)
@@ -58,7 +57,7 @@ public class NoteFactory_HoldRelay : NoteFactory<NoteData_HoldRelay>
         data.JudgementSettings = judgementSettings;
         if (judgementSettings != null)
         {
-            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow, currentDifficulty);
+            data.JudgementWindow = judgementSettings.CreateJudgementWindowIfMissing(data.JudgementWindow);
         }
 
         return data;

@@ -21,6 +21,8 @@ namespace ChartEditor
         [SerializeField] private NoteFactoryBinding[] noteFactories;
 
         [Header("Factory Initialization")]
+        [SerializeField] private NoteJudgementSettingsCatalog judgementSettingsCatalog;
+        [SerializeField] private Difficulty previewDifficulty = Difficulty.Normal;
         [SerializeField] private Transform noteParent;
         [SerializeField] private SerializeInterface<ITimeGetter> timer;
         [SerializeField] private PreviewNoteVisibilityController noteVisibilityController;
@@ -90,6 +92,8 @@ namespace ChartEditor
             NoteFactoryInitializingData data = new NoteFactoryInitializingData
             {
                 NoteParent = noteParent,
+                Difficulty = previewDifficulty,
+                JudgementSettingsCatalog = judgementSettingsCatalog,
                 OptionHolder = optionHolder ?? null,
                 Timer = timer.Value,
                 JudgementRecorder = null

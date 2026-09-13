@@ -143,7 +143,7 @@ public class NoteData_HoldEnd : INoteData, IJudgableNoteData
 
     public JudgementWindow JudgementWindow { get; set; }
 
-    public NoteJudgementSettings JudgementSettings { get; set; }
+    public NoteJudgementConfig JudgementSettings { get; set; }
 
     public int[] Range { get; set; }
 

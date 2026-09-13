@@ -14,6 +14,8 @@ public class NoteFactoryInitializingData
 
     public Difficulty Difficulty { get; set; } = Difficulty.Normal;
 
+    public NoteJudgementSettingsCatalog JudgementSettingsCatalog { get; set; }
+
     public ISliderInputGetter SliderInputGetter { get; set; }
 
     public ISpaceInputGetter SpaceInputGetter { get; set; }
@@ -23,6 +25,11 @@ public class NoteFactoryInitializingData
     public IJudgementRecorder JudgementRecorder { get; set; }
 
     public Transform NoteParent { get; set; }
+
+    public T GetJudgementSettings<T>(NoteType noteType) where T : NoteJudgementConfig
+    {
+        return JudgementSettingsCatalog?.GetJudgementSettings<T>(noteType, Difficulty);
+    }
 }
 
 /// <summary>

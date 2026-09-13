@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   judgementWindowObject: {fileID: 11400000, guid: 3ad8923ad7d83de449c95693237905bc, type: 2}
   difficultyJudgementWindows: []
-  judgeMagnitude: 2
+  judgeMagnitude: 17.5

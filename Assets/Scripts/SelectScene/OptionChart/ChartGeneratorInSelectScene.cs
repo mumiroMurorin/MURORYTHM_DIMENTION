@@ -23,6 +23,8 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
     [SerializeField] private NoteFactoryBinding[] noteFactories;
 
     [Header("Factory Initialization")]
+    [SerializeField] private NoteJudgementSettingsCatalog judgementSettingsCatalog;
+    [SerializeField] private Difficulty previewDifficulty = Difficulty.Normal;
     [SerializeField] private Transform noteParent;
     [SerializeField] private SerializeInterface<ITimeGetter> timer;
 
@@ -69,6 +71,8 @@ public class ChartGeneratorInSelectScene : MonoBehaviour, IChartGenerator
         NoteFactoryInitializingData data = new NoteFactoryInitializingData
         {
             NoteParent = noteParent,
+            Difficulty = previewDifficulty,
+            JudgementSettingsCatalog = judgementSettingsCatalog,
             OptionHolder = spawnDataOptionHolder,
             SliderInputGetter = sliderInputGetter,
             SpaceInputGetter = spaceInputGetter,

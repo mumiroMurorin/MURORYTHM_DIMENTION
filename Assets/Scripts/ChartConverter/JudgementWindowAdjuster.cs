@@ -148,14 +148,14 @@ namespace ChartConvert
                 return null;
             }
 
-            NoteJudgementSettings judgementSettings = judgementSettingsCatalog.GetJudgementSettings(targetType);
+            NoteJudgementConfig judgementSettings = judgementSettingsCatalog.GetJudgementSettings(targetType, difficulty);
             if (judgementSettings == null)
             {
                 Debug.LogWarning($"[System] Judgement settings was not found: {targetType} / {difficulty}");
                 return null;
             }
 
-            JudgementWindow window = judgementSettings.CreateJudgementWindowOrDefault(difficulty, null);
+            JudgementWindow window = judgementSettings.CreateJudgementWindowOrDefault(null);
             if (window == null)
             {
                 Debug.LogWarning($"[System] Judgement window was not found: {targetType} / {difficulty}");

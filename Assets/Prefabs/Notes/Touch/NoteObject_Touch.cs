@@ -102,7 +102,7 @@ public class NoteData_Touch : INoteData, IClippedJudgableNote
 
     public JudgementWindow JudgementWindow { get; set; }
 
-    public TouchJudgementSettings JudgementSettings { get; set; }
+    public NoteJudgementConfig JudgementSettings { get; set; }
 
     public int[] Range { get; set; }
 

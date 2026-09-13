@@ -186,7 +186,7 @@ public class NoteData_SpaceBreak : INoteData, IJudgableNoteData
 
     public JudgementWindow JudgementWindow { get; set; }
 
-    public SpaceBreakJudgementSettings JudgementSettings { get; set; }
+    public SpaceBreakJudgementConfig JudgementSettings { get; set; }
 
     public Vector2[] Vertices { get; set; }
 

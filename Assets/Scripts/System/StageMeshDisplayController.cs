@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public sealed class StageMeshDisplayController : StageController
@@ -10,11 +11,17 @@ public sealed class StageMeshDisplayController : StageController
     [SerializeField] Transform titleParent;
     [SerializeField] string titleComposerSeparator = " / ";
     [Min(1)] [SerializeField] int titleVisibleCharacterCount = 12;
+    [SerializeField] OutlineSettings titleOutline;
 
     [Header("Difficulty Mesh")]
     [SerializeField] FlyingTextSettings difficultySettings;
     [SerializeField] Transform difficultyParent;
     [Min(1)] [SerializeField] int difficultyVisibleCharacterCount = 12;
+    [SerializeField] OutlineSettings difficultyOutline;
+
+    [Header("Outline Colors By Difficulty")]
+    [FormerlySerializedAs("difficultyOutlineColors")]
+    [SerializeField] DifficultyToColor[] outlineColors;
 
     [Header("Loop Animation")]
     [Tooltip("Value added to each character mesh width.")]
@@ -28,11 +35,15 @@ public sealed class StageMeshDisplayController : StageController
 
     protected override void InitializeStage(MusicData musicData, Difficulty difficulty)
     {
+        Color? outlineColor = GetOutlineColor(difficulty);
+
         SetLoopingText(
             titleParent,
             GetTitleText(musicData, titleComposerSeparator) + " ",
             titleSettings,
-            titleVisibleCharacterCount);
+            titleVisibleCharacterCount,
+            titleOutline,
+            outlineColor);
 
         string difficultyAndLevel = GetDifficultyLevelText(
             GetDifficultyText(musicData, difficulty),
@@ -41,7 +52,9 @@ public sealed class StageMeshDisplayController : StageController
             difficultyParent,
             difficultyAndLevel,
             difficultySettings,
-            difficultyVisibleCharacterCount);
+            difficultyVisibleCharacterCount,
+            difficultyOutline,
+            outlineColor);
 
         SetImages(jacketImages, musicData.MusicSprite);
     }
@@ -50,7 +63,9 @@ public sealed class StageMeshDisplayController : StageController
         Transform parent,
         string text,
         FlyingTextSettings settings,
-        int visibleCount)
+        int visibleCount,
+        OutlineSettings outline,
+        Color? outlineColor)
     {
         if (parent == null || characterSpawner == null)
         {
@@ -71,7 +86,24 @@ public sealed class StageMeshDisplayController : StageController
             characterSpacing,
             loopInterval,
             transitionDuration,
-            transitionYOffset);
+            transitionYOffset,
+            outline,
+            outlineColor);
         view.SetText(text);
+    }
+
+    Color? GetOutlineColor(Difficulty difficulty)
+    {
+        if (outlineColors == null) { return null; }
+
+        foreach (DifficultyToColor item in outlineColors)
+        {
+            if (item != null && item.CheckCondition(difficulty))
+            {
+                return item.Color;
+            }
+        }
+
+        return null;
     }
 }

@@ -22,7 +22,7 @@ MonoBehaviour:
   phaseStatusGameOverScene: 0
   delaySeconds: 0.1
   operationAssetGroups:
-  - coolTime: 0
+  - coolTime: 0.75
     operations:
     - {fileID: 11400000, guid: 2c30f3a8bf5e420c894ea36dbf80263a, type: 2}
     - {fileID: 11400000, guid: 8fc20d99ce9e41f0a7b6f495b6cf21b8, type: 2}

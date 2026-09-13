@@ -24,15 +24,30 @@ public class OutlineSettings
     [SerializeField] LayerMask ignoreRayerMask = -1;
     [SerializeField] CameraEvent renderEvent;
 
-    public void ApplyOutline(GameObject obj)
+    public Color Color => color;
+
+    public OutlineBehaviour ApplyOutline(GameObject obj)
     {
-        OutlineBehaviour outline = obj.AddComponent<OutlineBehaviour>();
+        return ApplyOutline(obj, color);
+    }
+
+    public OutlineBehaviour ApplyOutline(GameObject obj, Color outlineColor)
+    {
+        if (obj == null) { return null; }
+
+        OutlineBehaviour outline = obj.GetComponent<OutlineBehaviour>();
+        if (outline == null)
+        {
+            outline = obj.AddComponent<OutlineBehaviour>();
+        }
+
         outline.OutlineResources = resources;
-        outline.OutlineColor = color;
+        outline.OutlineColor = outlineColor;
         outline.OutlineWidth = width;
         outline.OutlineRenderMode = flags;
         outline.Camera = Camera.main;
         outline.IgnoreLayerMask = ignoreRayerMask;
         outline.RenderEvent = renderEvent;
+        return outline;
     }
 }

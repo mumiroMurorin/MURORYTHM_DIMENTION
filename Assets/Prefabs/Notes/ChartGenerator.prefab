@@ -62,6 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2408c48d4c03e7349aa0fa3ba558f309, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  judgementSettingsCatalog: {fileID: 11400000, guid: 8dac4f0ed34b42c8a98cccf24e75830c, type: 2}
   noteFactories:
   - noteType: 1
     factory: {fileID: 7912421021829642430}

@@ -3648,6 +3648,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chartController: {fileID: 874170454}
+  judgementSettingsCatalog: {fileID: 11400000, guid: 8dac4f0ed34b42c8a98cccf24e75830c, type: 2}
+  previewDifficulty: 1
   noteFactories:
   - noteType: 1
     factory: {fileID: 1062598425}

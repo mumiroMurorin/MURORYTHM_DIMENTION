@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Clips:
   - m_Version: 1
     m_Start: 0
-    m_ClipIn: 0.32330206582943605
-    m_Asset: {fileID: 8399899102384406763}
-    m_Duration: 2.466666666666667
+    m_ClipIn: 0.31666666666666665
+    m_Asset: {fileID: 4188231454557925200}
+    m_Duration: 1.7833333333333334
     m_TimeScale: 1
     m_ParentTrack: {fileID: 3158332803999153839}
     m_EaseInDuration: 0
@@ -117,7 +117,7 @@ MonoBehaviour:
     volume: 1
     stereoPan: 0
     spatialBlend: 0
---- !u!114 &8399899102384406763
+--- !u!114 &4188231454557925200
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}

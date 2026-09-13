@@ -10772,6 +10772,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd795f01cdd68e4da5eb49cc0730ad4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  judgementSettingsCatalog: {fileID: 11400000, guid: 8dac4f0ed34b42c8a98cccf24e75830c, type: 2}
+  previewDifficulty: 1
   noteFactories:
   - noteType: 1
     factory: {fileID: 1993005663}

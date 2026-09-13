@@ -184,7 +184,7 @@ public class NoteData_SpaceHoldRelayHidden : INoteData, IJudgableNoteData
 
     public JudgementWindow JudgementWindow { get; set; }
 
-    public SpaceHoldJudgementSettings JudgementSettings { get; set; }
+    public SpaceHoldJudgementConfig JudgementSettings { get; set; }
 
     public Vector2[] Vertices { get; set; }
 

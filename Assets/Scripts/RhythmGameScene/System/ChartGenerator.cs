@@ -20,6 +20,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
     [SerializeField] private NoteFactoryBinding[] noteFactories;
 
     [Header("Factory Initialization")]
+    [SerializeField] private NoteJudgementSettingsCatalog judgementSettingsCatalog;
     [SerializeField] private Transform noteParent;
     [SerializeField] private SerializeInterface<ITimeGetter> timer;
     [SerializeField] private NoteVisibilityController noteVisibilityController;
@@ -81,6 +82,7 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         {
             NoteParent = noteParent,
             Difficulty = musicDataGetter != null ? musicDataGetter.Difficulty.Value : Difficulty.Normal,
+            JudgementSettingsCatalog = judgementSettingsCatalog,
             OptionHolder = spawnDataOptionHolder,
             SliderInputGetter = sliderInputGetter,
             SpaceInputGetter = spaceInputGetter,

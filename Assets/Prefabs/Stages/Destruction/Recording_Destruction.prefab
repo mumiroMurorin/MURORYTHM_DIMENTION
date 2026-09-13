@@ -9848,7 +9848,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1897564283913293730}
-  - component: {fileID: 4567329826136805108}
   - component: {fileID: 2888482871050711660}
   - component: {fileID: 8787467329146251009}
   m_Layer: 0
@@ -9879,61 +9878,6 @@ Transform:
   - {fileID: 6058017373863161027}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4567329826136805108
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5040811245919378688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d49375ce6934ad7a6a5e7c58d6b54f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterSpawner: {fileID: 8787467329146251009}
-  titleSettings:
-    defaultMaterial: {fileID: 2100000, guid: 3abf473d50106f44c9611c2c76fd9a91, type: 2}
-    edgeMaterial: {fileID: 2100000, guid: 32b24f24a51006641bc6feba2dfbdb01, type: 2}
-    fontNumber: 0
-    defaultSize: 5
-    defaultDepth: 0.25
-    textAnchor: 3
-  titleOutline:
-    color: {r: 1, g: 1, b: 1, a: 0.47058824}
-    width: 3
-    resources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
-    flags: 0
-    ignoreRayerMask:
-      serializedVersion: 2
-      m_Bits: 0
-    renderEvent: 0
-  titleParent: {fileID: 8584946085390859700}
-  titleComposerSeparator: ' / '
-  titleVisibleCharacterCount: 12
-  difficultySettings:
-    defaultMaterial: {fileID: 2100000, guid: 3abf473d50106f44c9611c2c76fd9a91, type: 2}
-    edgeMaterial: {fileID: 2100000, guid: 32b24f24a51006641bc6feba2dfbdb01, type: 2}
-    fontNumber: 0
-    defaultSize: 4
-    defaultDepth: 0.25
-    textAnchor: 5
-  difficultyOutline:
-    color: {r: 1, g: 1, b: 1, a: 0.47058824}
-    width: 3
-    resources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
-    flags: 0
-    ignoreRayerMask:
-      serializedVersion: 2
-      m_Bits: 0
-    renderEvent: 0
-  difficultyParent: {fileID: 6058017373863161027}
-  difficultyVisibleCharacterCount: 12
-  characterSpacing: 0
-  loopInterval: 0.4
-  transitionDuration: 0.18
-  transitionYOffset: 2
-  jacketImages: []
 --- !u!114 &2888482871050711660
 MonoBehaviour:
   m_ObjectHideFlags: 0
