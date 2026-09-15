@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -27,6 +27,8 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
         noteData?.JudgementSettings != null
             ? noteData.JudgementSettings.JudgeMagnitude
             : judgeMagnitudeFallback;
+    private float SpaceActionJudgeMagnitudeMultiplier =>
+        noteData?.OptionGetter?.SpaceActionJudgeMagnitudeMultiplier.Value ?? 1f;
 
     /// <summary>
     /// 初期化
@@ -85,8 +87,8 @@ public class NoteObject_SpaceBreak : NoteObject<NoteData_SpaceBreak>
         // 判定時間内かつ枠内に手があり、閾値を越えている場合
         bool isInRangeRight = noteData.SpaceInput.IsInSpaceRange(noteData.Vertices, SpaceTrackingTag.RightHand, JudgementMarginRadius);
         bool isInRangeLeft = noteData.SpaceInput.IsInSpaceRange(noteData.Vertices, SpaceTrackingTag.LeftHand, JudgementMarginRadius);
-        bool isOverThresholdRight = JudgeMagnitude <= noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.RightHand).Value.magnitude;
-        bool isOverThresholdLeft = JudgeMagnitude <= noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand).Value.magnitude;
+        bool isOverThresholdRight = JudgeMagnitude * SpaceActionJudgeMagnitudeMultiplier <= noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.RightHand).Value.magnitude;
+        bool isOverThresholdLeft = JudgeMagnitude * SpaceActionJudgeMagnitudeMultiplier <= noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand).Value.magnitude;
         
         if ((!isInRangeRight || !isOverThresholdRight) && (!isInRangeLeft || !isOverThresholdLeft)) { return; }
 

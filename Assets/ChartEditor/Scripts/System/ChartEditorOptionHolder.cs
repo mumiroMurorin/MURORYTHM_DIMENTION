@@ -133,6 +133,23 @@ namespace ChartEditor
 
         #endregion
 
+        #region SpaceActionJudgeMagnitudeMultiplier
+
+        const float MAX_SPACE_ACTION_JUDGE_MAGNITUDE_MULTIPLIER = 5f;
+        const float MIN_SPACE_ACTION_JUDGE_MAGNITUDE_MULTIPLIER = 0.1f;
+
+        ReactiveProperty<float> spaceActionJudgeMagnitudeMultiplier = new ReactiveProperty<float>(1f);
+        public IReadOnlyReactiveProperty<float> SpaceActionJudgeMagnitudeMultiplier => spaceActionJudgeMagnitudeMultiplier;
+        public void SetSpaceActionJudgeMagnitudeMultiplier(float multiplier)
+        {
+            spaceActionJudgeMagnitudeMultiplier.Value = Mathf.Clamp(
+                multiplier,
+                MIN_SPACE_ACTION_JUDGE_MAGNITUDE_MULTIPLIER,
+                MAX_SPACE_ACTION_JUDGE_MAGNITUDE_MULTIPLIER);
+        }
+
+        #endregion
+
         #region Offset オフセット
 
         const float MAX_OFFSET = 1000f;

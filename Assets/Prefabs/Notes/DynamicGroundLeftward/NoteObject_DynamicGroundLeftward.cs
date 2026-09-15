@@ -19,6 +19,8 @@ public class NoteObject_DynamicGroundLeftward : NoteObject<NoteData_DynamicGroun
         noteData?.JudgementSettings != null
             ? noteData.JudgementSettings.JudgeMagnitude
             : judgeMagnitudeFallback;
+    private float SpaceActionJudgeMagnitudeMultiplier =>
+        noteData?.OptionGetter?.SpaceActionJudgeMagnitudeMultiplier.Value ?? 1f;
     Judgement bestJudgement = Judgement.Miss;
     bool isJudged;
 
@@ -30,7 +32,7 @@ public class NoteObject_DynamicGroundLeftward : NoteObject<NoteData_DynamicGroun
     {
         noteData = data;
 
-        dynamicJudgement = new DynamicJudgementHandler(noteData.Range, JudgeVector, JudgeMagnitude);
+        dynamicJudgement = new DynamicJudgementHandler(noteData.Range, JudgeVector, JudgeMagnitude * SpaceActionJudgeMagnitudeMultiplier);
     }
 
     private void Update()

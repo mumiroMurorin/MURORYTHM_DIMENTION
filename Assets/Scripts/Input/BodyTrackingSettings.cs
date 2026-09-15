@@ -4,12 +4,12 @@ using UnityEngine;
 using UniRx;
 
 /// <summary>
-/// ƒgƒ‰ƒbƒLƒ“ƒO‚ÉŠÖ‚·‚éİ’è€–Ú‚Ü‚Æ‚ßƒNƒ‰ƒX
+/// ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã«é–¢ã™ã‚‹è¨­å®šé …ç›®ã¾ã¨ã‚ã‚¯ãƒ©ã‚¹
 /// </summary>
 [System.Serializable]
 public class BodyTrackingSettings
 {
-    // ƒJƒƒ‰‰ğ‘œ“x
+    // ã‚«ãƒ¡ãƒ©è§£åƒåº¦
     ReactiveProperty<int> cameraWidth = new ReactiveProperty<int>(640);
     public IReadOnlyReactiveProperty<int> CameraWidth => cameraWidth;
     public void SetCameraWidth(int width)
@@ -24,11 +24,11 @@ public class BodyTrackingSettings
         cameraHeight.Value = height;
     }
 
-    // ƒJƒƒ‰”Ô†
+    // ã‚«ãƒ¡ãƒ©ç•ªå·
     public int CameraIndex { get; set; }
 
 
-    // ƒgƒ‰ƒbƒLƒ“ƒO‚Ì¶‰E”½“]
+    // ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã®å·¦å³åè»¢
     ReactiveProperty<bool> isHorizontallyFlipped = new ReactiveProperty<bool>();
     public IReadOnlyReactiveProperty<bool> IsHorizontallyFlipped => isHorizontallyFlipped;
     public void SetIsHorizontallyFlipped(bool isFlipped)
@@ -36,7 +36,7 @@ public class BodyTrackingSettings
         isHorizontallyFlipped.Value = isFlipped;
     }
 
-    // è‚Ì¶‰E¯•Ê”½“]
+    // æ‰‹ã®å·¦å³è­˜åˆ¥åè»¢
     ReactiveProperty<bool> isHandFlipped = new ReactiveProperty<bool>();
     public IReadOnlyReactiveProperty<bool> IsHandFlipped => isHandFlipped;
     public void SetIsHandFlipped(bool isFlipped)
@@ -44,7 +44,7 @@ public class BodyTrackingSettings
         isHandFlipped.Value = isFlipped;
     }
 
-    // ƒgƒ‰ƒbƒLƒ“ƒO‚Ìã‰º”½“]
+    // ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã®ä¸Šä¸‹åè»¢
     ReactiveProperty<bool> isVerticallyFlipped = new ReactiveProperty<bool>();
     public IReadOnlyReactiveProperty<bool> IsVerticallyFlipped => isVerticallyFlipped;
     public void SetIsVerticallyFlipped(bool isFlipped)
@@ -52,7 +52,7 @@ public class BodyTrackingSettings
         isVerticallyFlipped.Value = isFlipped;
     }
 
-    // â‘Ì^‚ñ’†(7”Ô‚Æ8”Ô‚ÌŠÔ)
+    // ç­ä½“çœŸã‚“ä¸­(7ç•ªã¨8ç•ªã®é–“)
     ReactiveProperty<Vector3> controllerLowerCenter = new ReactiveProperty<Vector3>(Vector3.zero);
     public IReadOnlyReactiveProperty<Vector3> ControllerLowerCenter => controllerLowerCenter;
     public void SetControllerLowerCenter(Vector3 pos)
@@ -60,7 +60,7 @@ public class BodyTrackingSettings
         controllerLowerCenter.Value = pos;
     }
 
-    // â‘Ì¶’[(0”Ô)
+    // ç­ä½“å·¦ç«¯(0ç•ª)
     ReactiveProperty<Vector3> controllerLeftEdge = new ReactiveProperty<Vector3>(Vector3.zero);
     public IReadOnlyReactiveProperty<Vector3> ControllerLeftEdge => controllerLeftEdge;
     public void SetControllerLeftEdge(Vector3 pos)
@@ -68,7 +68,7 @@ public class BodyTrackingSettings
         controllerLeftEdge.Value = pos;
     }
 
-    // â‘Ì‰E’[(15”Ô)
+    // ç­ä½“å³ç«¯(15ç•ª)
     ReactiveProperty<Vector3> controllerRightEdge = new ReactiveProperty<Vector3>(Vector3.zero);
     public IReadOnlyReactiveProperty<Vector3> ControllerRightEdge => controllerRightEdge;
     public void SetControllerRightEdge(Vector3 pos)
@@ -77,7 +77,7 @@ public class BodyTrackingSettings
     }
 
     /// <summary>
-    /// •Û‘¶—pƒNƒ‰ƒX‚©‚ç“Ç‚İ‚İ
+    /// ä¿å­˜ç”¨ã‚¯ãƒ©ã‚¹ã‹ã‚‰èª­ã¿è¾¼ã¿
     /// </summary>
     /// <param name="dto"></param>
     public void SetFromDTO(BodyTrackingSettingsDTO dto)
@@ -97,19 +97,20 @@ public class BodyTrackingSettings
 }
 
 /// <summary>
-/// ƒgƒ‰ƒbƒLƒ“ƒO‚ÉŠÖ‚·‚éİ’è€–Ú‚Ü‚Æ‚ßƒNƒ‰ƒX
+/// ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã«é–¢ã™ã‚‹è¨­å®šé …ç›®ã¾ã¨ã‚ã‚¯ãƒ©ã‚¹
 /// </summary>
 [System.Serializable]
 public class BodyTrackingSettingsDTO
 {
     public BodyTrackingSettingsDTO() { }
 
-    public BodyTrackingSettingsDTO(BodyTrackingSettings settings, TrackingMode trackingMode)
+    public BodyTrackingSettingsDTO(BodyTrackingSettings settings, TrackingMode trackingMode, float spaceActionJudgeMagnitudeMultiplier)
     {
         this.cameraWidth = settings.CameraWidth.Value;
         this.cameraHeight = settings.CameraHeight.Value;
         this.cameraIndex = settings.CameraIndex;
         this.trackingMode = trackingMode;
+        this.spaceActionJudgeMagnitudeMultiplier = spaceActionJudgeMagnitudeMultiplier;
         this.isHorizontallyFlipped = settings.IsHorizontallyFlipped.Value;
         this.isHandFlipped = settings.IsHandFlipped.Value;
         this.isVerticallyFlipped = settings.IsVerticallyFlipped.Value;
@@ -123,22 +124,23 @@ public class BodyTrackingSettingsDTO
 
     public int cameraIndex;
     public TrackingMode trackingMode = TrackingMode.BodyTracking;
+    public float spaceActionJudgeMagnitudeMultiplier = 1f;
 
-    // ƒgƒ‰ƒbƒLƒ“ƒO‚Ì¶‰E”½“]
+    // ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã®å·¦å³åè»¢
     public bool isHorizontallyFlipped;
 
-    // è‚Ì¶‰E¯•Ê”½“]
+    // æ‰‹ã®å·¦å³è­˜åˆ¥åè»¢
     public bool isHandFlipped;
 
-    // ƒgƒ‰ƒbƒLƒ“ƒO‚Ì¶‰E¯•Ê”½“]
+    // ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã®å·¦å³è­˜åˆ¥åè»¢
     public bool isVerticallyFlipped;
 
-    // ƒRƒ“ƒgƒ[ƒ‰^‚ñ’†(7”Ô‚Æ8”Ô‚ÌŠÔ)
+    // ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©çœŸã‚“ä¸­(7ç•ªã¨8ç•ªã®é–“)
     public SimpleVector3 controllerLowerCenter;
 
-    // ƒRƒ“ƒgƒ[ƒ‰¶’[(0”Ô)
+    // ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©å·¦ç«¯(0ç•ª)
     public SimpleVector3 controllerLeftEdge;
 
-    // ƒRƒ“ƒgƒ[ƒ‰‰E’[(15”Ô)
+    // ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©å³ç«¯(15ç•ª)
     public SimpleVector3 controllerRightEdge;
 }

@@ -19,6 +19,7 @@ namespace UIInRootScene
         [SerializeField] ControllerPositionSettingView controllerRightEdgeSetting_view;
         [SerializeField] ControllerPositionSettingView controllerLowerCenterSetting_view;
         [SerializeField] CameraSettingsView cameraSettings_view;
+        [SerializeField] SpaceActionJudgeMagnitudeSettingView spaceActionJudgeMagnitudeSetting_view;
         [SerializeField] GameObject cameraImage_view;
         [SerializeField] ButtonView backMusicSelectSceneButton_view;
         [SerializeField] ButtonView hiddenUIButton_view;
@@ -48,6 +49,7 @@ namespace UIInRootScene
             Bind();
             SetEvent();
             trackingModeDropDown_view?.OnChangeTrackingMode(optionGetter_model?.CurrentTrackingMode.Value ?? TrackingMode.BodyTracking);
+            spaceActionJudgeMagnitudeSetting_view?.OnChangeMultiplier(optionGetter_model?.SpaceActionJudgeMagnitudeMultiplier.Value ?? 1f);
             cameraSettings_view?.RefreshResolutionOptions(
                 optionGetter_model?.TrackingSettings.CameraIndex ?? 0,
                 optionGetter_model?.TrackingSettings.CameraWidth.Value ?? -1,
@@ -139,6 +141,14 @@ namespace UIInRootScene
             optionGetter_model?.CurrentTrackingMode
                 .Subscribe(trackingModeDropDown_view.OnChangeTrackingMode)
                 .AddTo(this.gameObject);
+
+            // DynamicノーツとSpaceBreakの速度判定閾値倍率
+            if (spaceActionJudgeMagnitudeSetting_view != null)
+            {
+                optionGetter_model?.SpaceActionJudgeMagnitudeMultiplier
+                    .Subscribe(spaceActionJudgeMagnitudeSetting_view.OnChangeMultiplier)
+                    .AddTo(this.gameObject);
+            }
         }
 
         private void SetEvent()
@@ -208,6 +218,15 @@ namespace UIInRootScene
                 optionSetter_model?.SetCurrentTrackingMode(mode);
                 phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.Reload);
             };
+
+            // DynamicノーツとSpaceBreakの速度判定閾値倍率
+            if (spaceActionJudgeMagnitudeSetting_view != null)
+            {
+                spaceActionJudgeMagnitudeSetting_view.OnChangeMultiplierListener += (multiplier) =>
+                {
+                    optionSetter_model?.SetSpaceActionJudgeMagnitudeMultiplier(multiplier);
+                };
+            }
 
             // セレクトシーンに戻る
             backMusicSelectSceneButton_view.OnPushButtonListner += () => { phaseTransitioner_model?.Value.TransitionPhase(PhaseStatusInRootScene.TransitionSelectScene); };

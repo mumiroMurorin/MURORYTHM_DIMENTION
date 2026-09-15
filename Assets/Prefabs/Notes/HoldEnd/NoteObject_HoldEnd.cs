@@ -7,7 +7,7 @@ using JudgementUtil.Hold;
 using System.Linq;
 
 /// <summary>
-/// ƒ^ƒbƒ`ƒm[ƒc‚ÉƒAƒ^ƒbƒ`‚³‚ê‚éƒNƒ‰ƒX
+/// ã‚¿ãƒƒãƒãƒãƒ¼ãƒ„ã«ã‚¢ã‚¿ãƒƒãƒã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 public class NoteObject_HoldEnd : NoteObject<NoteData_HoldEnd>
 {
@@ -18,7 +18,7 @@ public class NoteObject_HoldEnd : NoteObject<NoteData_HoldEnd>
     Judgement bestJudgement = Judgement.Miss;
 
     /// <summary>
-    /// ‰Šú‰»
+    /// åˆæœŸåŒ–
     /// </summary>
     /// <param name="data"></param>
     public override void Initialize(NoteData_HoldEnd data)
@@ -30,7 +30,7 @@ public class NoteObject_HoldEnd : NoteObject<NoteData_HoldEnd>
     {
         if (noteData == null) { return; }
 
-        // ”»’èŠÔ‰ß‚¬‚Ä‚é‚Æ‚«
+        // åˆ¤å®šæ™‚é–“éãã¦ã‚‹ã¨ã
         if (noteData.JudgementWindow.IsPassJudgementRange(noteData.Timer.Time, noteData.Timing))
         {
             SendJudgementData();
@@ -38,7 +38,7 @@ public class NoteObject_HoldEnd : NoteObject<NoteData_HoldEnd>
             return;
         }
 
-        // ”»’èŠÔ“à‚Å‚È‚¢‚Æ‚«
+        // åˆ¤å®šæ™‚é–“å†…ã§ãªã„ã¨ã
         if (!IsInJudgementRange()) { return; }
 
         if (!noteData.OptionGetter.IsAutoMode) { NormalJudgement(); }
@@ -46,47 +46,49 @@ public class NoteObject_HoldEnd : NoteObject<NoteData_HoldEnd>
     }
 
     /// <summary>
-    /// ”»’è
+    /// åˆ¤å®š
     /// </summary>
     private void NormalJudgement()
     {
-        // ”»’è”ÍˆÍ‚ÌXV
-        // ‘O”»’è
+        // åˆ¤å®šç¯„å›²ã®æ›´æ–°
+        // å‰åˆ¤å®š
         if (noteData.Timing >= noteData.Timer.Time)
         {
             judgeRange = HoldJudgement.GetJudgeRange(noteData.TimeToRanges, noteData.Timer.Time);
         }
-        // Œã‚ë”»’èA”»’èŠÔ‚ÌƒŒƒ“ƒW‚ğƒL[ƒv
+        // å¾Œã‚åˆ¤å®šã€åˆ¤å®šæ™‚é–“æ™‚ã®ãƒ¬ãƒ³ã‚¸ã‚’ã‚­ãƒ¼ãƒ—
         else
         {
             judgeRange = noteData.Range.ToList();
         }
 
-        // ”»’èŠÔ“à‚©‚ÂƒXƒ‰ƒCƒ_[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é‚Æ‚«
+        // æ—©ã‚ã«Perfectã‚’ç¢ºä¿ã—ã¦ã„ã‚‹å ´åˆã€åˆ¤å®šæ™‚åˆ»åˆ°é”ã§ç¢ºå®šã™ã‚‹
+        if (TrySendReservedPerfectJudgement()) { return; }
+
+        // åˆ¤å®šæ™‚é–“å†…ã‹ã¤ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼ãŒæŠ¼ã•ã‚Œã¦ã„ã‚‹ã¨ã
         if (GroundJudgement.IsTouchingSlider(noteData.SliderInput, judgeRange.ToArray()))
         {
-            // ‹L˜^‚µ‚½”»’è‚æ‚è‚¢‚¢”»’è‚¾‚Á‚½‚Æ‚«”»’è‚ÌXV
+            // è¨˜éŒ²ã—ãŸåˆ¤å®šã‚ˆã‚Šã„ã„åˆ¤å®šã ã£ãŸã¨ãåˆ¤å®šã®æ›´æ–°
             Judgement currentJudgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing);
             if ((int)bestJudgement < (int)currentJudgement)
             {
                 bestJudgement = currentJudgement;
             }
 
-            // Å‚”»’è‚Ì‚Æ‚«Šm’è
-            if (bestJudgement == Judgement.Perfect && noteData.Timing <= noteData.Timer.Time)
+            // æœ€é«˜åˆ¤å®šã®ã¨ãç¢ºå®š
+            if (TrySendReservedPerfectJudgement())
             {
-                SendJudgementData();
-                SetDisable();
+                return;
             }
         }
     }
 
     /// <summary>
-    /// ƒI[ƒg”»’è
+    /// ã‚ªãƒ¼ãƒˆåˆ¤å®š
     /// </summary>
     private void AutoJudgement()
     {
-        // Å‚”»’è‚Ì‚Æ‚«Šm’è
+        // æœ€é«˜åˆ¤å®šã®ã¨ãç¢ºå®š
         if (noteData.Timing > noteData.Timer.Time) { return; }
 
         bestJudgement = Judgement.Perfect;
@@ -95,7 +97,7 @@ public class NoteObject_HoldEnd : NoteObject<NoteData_HoldEnd>
     }
 
     /// <summary>
-    /// ”»’èƒf[ƒ^‚ğ‘—M
+    /// åˆ¤å®šãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡
     /// </summary>
     private void SendJudgementData()
     {
@@ -107,7 +109,7 @@ public class NoteObject_HoldEnd : NoteObject<NoteData_HoldEnd>
     }
 
     /// <summary>
-    /// ƒm[ƒc‚ğ‹@”\’â~‚·‚é
+    /// ãƒãƒ¼ãƒ„ã‚’æ©Ÿèƒ½åœæ­¢ã™ã‚‹
     /// </summary>
     private void SetDisable()
     {
@@ -115,8 +117,19 @@ public class NoteObject_HoldEnd : NoteObject<NoteData_HoldEnd>
         // Destroy(this.gameObject);
     }
 
+
+    private bool TrySendReservedPerfectJudgement()
+    {
+        if (bestJudgement != Judgement.Perfect) { return false; }
+        if (noteData.Timing > noteData.Timer.Time) { return false; }
+
+        SendJudgementData();
+        SetDisable();
+        return true;
+    }
+
     /// <summary>
-    /// ”»’è”ÍˆÍ“à‚©’²‚×‚é
+    /// åˆ¤å®šç¯„å›²å†…ã‹èª¿ã¹ã‚‹
     /// </summary>
     /// <returns></returns>
     private bool IsInJudgementRange()
@@ -133,7 +146,7 @@ public class NoteObject_HoldEnd : NoteObject<NoteData_HoldEnd>
 }
 
 /// <summary>
-/// (‰Šú‰»‚É•K—v‚È•Ï”‚àŠÜ‚Ş)ƒz[ƒ‹ƒhI“_ƒm[ƒc‚Ìƒf[ƒ^
+/// (åˆæœŸåŒ–ã«å¿…è¦ãªå¤‰æ•°ã‚‚å«ã‚€)ãƒ›ãƒ¼ãƒ«ãƒ‰çµ‚ç‚¹ãƒãƒ¼ãƒ„ã®ãƒ‡ãƒ¼ã‚¿
 /// </summary>
 public class NoteData_HoldEnd : INoteData, IJudgableNoteData
 {

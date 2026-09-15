@@ -71,6 +71,7 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
         SetIsEnabledFastLate(asset.IsEnabledFastLate);
         SetMainInfo(asset.MainInfo);
         SetSubInfo(asset.SubInfo);
+        SetSpaceActionJudgeMagnitudeMultiplier(asset.SpaceActionJudgeMagnitudeMultiplier);
     }
 
     /// <summary>
@@ -474,6 +475,26 @@ public class OptionHolder : INoteSpawnDataOptionGetter, INoteSpawnDataOptionSett
     #endregion
 
 
+    #region SpaceActionJudgeMagnitudeMultiplier
+
+    const float MAX_SPACE_ACTION_JUDGE_MAGNITUDE_MULTIPLIER = 5f;
+    const float MIN_SPACE_ACTION_JUDGE_MAGNITUDE_MULTIPLIER = 0.1f;
+
+    // DynamicノーツとSpaceBreakの速度判定閾値に掛ける倍率
+    ReactiveProperty<float> spaceActionJudgeMagnitudeMultiplier = new ReactiveProperty<float>(1f);
+    public IReadOnlyReactiveProperty<float> SpaceActionJudgeMagnitudeMultiplier => spaceActionJudgeMagnitudeMultiplier;
+    public int SpaceActionJudgeMagnitudeMultiplierDisplay => Mathf.RoundToInt(spaceActionJudgeMagnitudeMultiplier.Value * 100f);
+    public void SetSpaceActionJudgeMagnitudeMultiplier(float multiplier)
+    {
+        spaceActionJudgeMagnitudeMultiplier.Value = Mathf.Clamp(
+            multiplier,
+            MIN_SPACE_ACTION_JUDGE_MAGNITUDE_MULTIPLIER,
+            MAX_SPACE_ACTION_JUDGE_MAGNITUDE_MULTIPLIER);
+    }
+
+    #endregion
+
+
     #region Cheat
 
     ReactiveProperty<bool> isAutoMode = new ReactiveProperty<bool>();
@@ -550,6 +571,8 @@ public interface INoteSpawnDataOptionGetter
 
     IReadOnlyReactiveProperty<float> OffsetMs { get; }
 
+    IReadOnlyReactiveProperty<float> SpaceActionJudgeMagnitudeMultiplier { get; }
+
     IReadOnlyReactiveProperty<bool> IsAutoModeRP { get; }
 
     bool IsAutoMode { get; }
@@ -566,6 +589,8 @@ public interface INoteSpawnDataOptionSetter
     void SetOffsetMs(float offset);
 
     void SetAutoMode(bool isAutoMode);
+
+    void SetSpaceActionJudgeMagnitudeMultiplier(float multiplier);
 }
 
 public interface IVolumeGetter
@@ -609,6 +634,10 @@ public interface IOptionGetter
 
     int JudgementSEVolumeDisplay { get; }
 
+    IReadOnlyReactiveProperty<float> SpaceActionJudgeMagnitudeMultiplier { get; }
+
+    int SpaceActionJudgeMagnitudeMultiplierDisplay { get; }
+
     IReadOnlyReactiveProperty<bool> IsEnabledFastLate { get; }
     string EnabledFastLateDisplay { get; }
 
@@ -645,6 +674,8 @@ public interface IOptionSetter
     bool SetIsEnabledFastLate(bool isEnabled);
 
     void SetCurrentTrackingMode(TrackingMode trackingMode);
+
+    void SetSpaceActionJudgeMagnitudeMultiplier(float multiplier);
 
     void SetFirstPlayGuideRequired(bool isRequired);
 

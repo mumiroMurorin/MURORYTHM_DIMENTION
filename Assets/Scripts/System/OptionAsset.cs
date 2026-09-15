@@ -16,6 +16,7 @@ public class OptionAsset : ScriptableObject
     [SerializeField] bool isEnabledFastLate = false;
     [SerializeField] InfoTypeMain mainInfo = InfoTypeMain.Combo;
     [SerializeField] InfoTypeSub subInfo = InfoTypeSub.None;
+    [SerializeField] float spaceActionJudgeMagnitudeMultiplier = 1f;
 
     public float NoteSpeed { get { return noteSpeed; } }
     public float NoteCurveRadius { get { return noteCurveRadius > 0f ? noteCurveRadius : 2000f; } }
@@ -28,4 +29,5 @@ public class OptionAsset : ScriptableObject
     public bool IsEnabledFastLate { get { return isEnabledFastLate; } }
     public InfoTypeMain MainInfo { get { return mainInfo; } }
     public InfoTypeSub SubInfo { get { return subInfo; } }
+    public float SpaceActionJudgeMagnitudeMultiplier { get { return spaceActionJudgeMagnitudeMultiplier > 0f ? spaceActionJudgeMagnitudeMultiplier : 1f; } }
 }

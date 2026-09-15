@@ -20,7 +20,7 @@ public class BodyTrackingSettingsLoader : MonoBehaviour
     }
 
     /// <summary>
-    /// BodyTrackingSettings‚Ìƒ[ƒh
+    /// BodyTrackingSettingsã®ãƒ­ãƒ¼ãƒ‰
     /// </summary>
     public void LoadBodyTrackingSettings()
     {
@@ -28,19 +28,20 @@ public class BodyTrackingSettingsLoader : MonoBehaviour
 
         if (!IsExistFile())
         {
-            Debug.Log("ySystemzBodyTrackingSettings‚Ìƒtƒ@ƒCƒ‹‚Í‚ ‚è‚Ü‚¹‚ñ");
+            Debug.Log("ã€Systemã€‘BodyTrackingSettingsã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã‚ã‚Šã¾ã›ã‚“");
             return;
         }
 
         if (!Load(out BodyTrackingSettingsDTO dto))
         {
-            Debug.LogWarning("ySystemzBodyTrackingSettings‚Ìƒ[ƒh‚É¸”s‚µ‚Ü‚µ‚½");
+            Debug.LogWarning("ã€Systemã€‘BodyTrackingSettingsã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ã¾ã—ãŸ");
             return;
         }
 
         optionGetter.TrackingSettings.SetFromDTO(dto);
         optionSetter?.SetCurrentTrackingMode(dto.trackingMode);
-        Debug.Log("ySystemzBodyTrackingSettings‚Ìƒ[ƒh‚É¬Œ÷");
+        optionSetter?.SetSpaceActionJudgeMagnitudeMultiplier(dto.spaceActionJudgeMagnitudeMultiplier > 0f ? dto.spaceActionJudgeMagnitudeMultiplier : 1f);
+        Debug.Log("ã€Systemã€‘BodyTrackingSettingsã®ãƒ­ãƒ¼ãƒ‰ã«æˆåŠŸ");
     }
 }
 
@@ -53,7 +54,10 @@ public static class BodyTrackingSettingsConverter
         if (optionGetter == null) { return false; }
 
         string filePath = Path.Combine(Application.persistentDataPath, FILE_NAME);
-        var settings = new BodyTrackingSettingsDTO(optionGetter.TrackingSettings, optionGetter.CurrentTrackingMode.Value);
+        var settings = new BodyTrackingSettingsDTO(
+            optionGetter.TrackingSettings,
+            optionGetter.CurrentTrackingMode.Value,
+            optionGetter.SpaceActionJudgeMagnitudeMultiplier.Value);
 
         return TrySaveToJsonFile(settings, filePath);
     }
