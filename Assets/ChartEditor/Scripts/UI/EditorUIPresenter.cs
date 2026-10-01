@@ -34,6 +34,7 @@ namespace ChartEditor
         [SerializeField] SwitchLayerButtonView switchLayerButton_view;
         [SerializeField] NoteSpeedSliderView noteSpeedSlider_view;
         [SerializeField] SliderView seVolumeSlider_view;
+        [SerializeField] ComboView combo_view;
 
         [Header("Models")]
         [SerializeField] ChartDataExporter chartDataExporter_model;
@@ -81,14 +82,22 @@ namespace ChartEditor
 
         private void BindForOther()
         {
-            // Šy‹È‘I‘ð‚Ì‰ÂŽ‹•s‰ÂŽ‹
+            // ç·ãƒŽãƒ¼ãƒ„æ•°ã®å¤‰æ›´
+            if (combo_view != null)
+            {
+                dataGetter_model?.TotalNoteCount
+                    .Subscribe(combo_view.OnChangeTotalNoteCount)
+                    .AddTo(this.gameObject);
+            }
+
+            // æ¥½æ›²é¸æŠžã®å¯è¦–ä¸å¯è¦–
             dataGetter_model?.PlayMode
                 .Subscribe(musicBrowseButton_view.OnChangePlayMode)
                 .AddTo(this.gameObject);
 
-            // ƒIƒtƒZƒbƒgƒtƒB[ƒ‹ƒh‚ÌƒCƒ“ƒ^ƒ‰ƒNƒg‰Â•s‰Â
-            // ƒGƒNƒXƒ|[ƒgƒtƒB[ƒ‹ƒh‚ÌƒCƒ“ƒ^ƒ‰ƒNƒg‰Â•s‰Â
-            // à–¾‘ƒ{ƒ^ƒ“‚ÌƒCƒ“ƒ^ƒ‰ƒNƒg‰Â•s‰Â
+            // ã‚ªãƒ•ã‚»ãƒƒãƒˆãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆå¯ä¸å¯
+            // ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆå¯ä¸å¯
+            // èª¬æ˜Žæ›¸ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆå¯ä¸å¯
             dataGetter_model?.PlayMode
                 .Subscribe(value => { 
                     offsetInputField_view?.OnChangePlayMode(value);
@@ -100,62 +109,62 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
 
-            // ƒIƒtƒZƒbƒg‚Ì•ÏX
+            // ã‚ªãƒ•ã‚»ãƒƒãƒˆã®å¤‰æ›´
             dataGetter_model?.Offset
                 .Subscribe(offsetInputField_view.OnChangeFloatValue)
                 .AddTo(this.gameObject);
 
-            // ƒŒ[ƒ“•ªŠ„”‚Ì•ÏX
+            // ãƒ¬ãƒ¼ãƒ³åˆ†å‰²æ•°ã®å¤‰æ›´
             optionGetter?.LaneDivisionNum
                 .Subscribe(changeLaneDivNumButton_view.OnLaneDivNumChanged)
                 .AddTo(this.gameObject);
 
-            // ƒXƒNƒ[ƒ‹Š´“x
+            // ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«æ„Ÿåº¦
             optionGetter?.ScrollSensitivity
                 .Subscribe(scrollSensitivitySlider_view.OnValueChanged)
                 .AddTo(this.gameObject);
 
-            // ƒm[ƒcƒXƒs[ƒh
+            // ãƒŽãƒ¼ãƒ„ã‚¹ãƒ”ãƒ¼ãƒ‰
             noteSpawnDataOptionGetter?.NoteSpeed
                 .Subscribe(noteSpeedSlider_view.OnValueChanged)
                 .AddTo(this.gameObject);
 
-            // SE‰¹—Ê
+            // SEéŸ³é‡
             optionGetter?.JudgementSEVolume
                 .Subscribe(seVolumeSlider_view.OnValueChanged)
                 .AddTo(this.gameObject);
 
-            // Šy‹È‚Ì•ÏX
+            // æ¥½æ›²ã®å¤‰æ›´
             dataGetter_model?.Music
                 .Subscribe(musicName_view.OnChangeMusic)
                 .AddTo(this.gameObject);
 
-            // à–¾•¶‚Ì•\Ž¦
+            // èª¬æ˜Žæ–‡ã®è¡¨ç¤º
             dataGetter_model?.CurrentEditMode
                 .Subscribe(description_view.OnChangeEditMode)
                 .AddTo(this.gameObject);
 
-            // à–¾‘‚Ì•\Ž¦A”ñ•\Ž¦
+            // èª¬æ˜Žæ›¸ã®è¡¨ç¤ºã€éžè¡¨ç¤º
             dataGetter_model?.CurrentEditMode
                 .Subscribe(explanation_view.OnChangeEditMode)
                 .AddTo(this.gameObject);
 
-            // ‰ð‘œ“x‚Ì•ÏX
+            // è§£åƒåº¦ã®å¤‰æ›´
             optionGetter?.Resolution
                 .Subscribe(screenSizeDropDown_view.OnChangeResolution)
                 .AddTo(this.gameObject);
 
-            // ƒŒƒCƒ„[•ÏXƒ{ƒ^ƒ“‚ÌƒCƒ“ƒ^ƒ‰ƒNƒg‰Â•s‰Â
+            // ãƒ¬ã‚¤ãƒ¤ãƒ¼å¤‰æ›´ãƒœã‚¿ãƒ³ã®ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆå¯ä¸å¯
             dataGetter_model?.CurrentEditMode
                 .Subscribe(switchLayerButton_view.OnChangeEditMode)
                 .AddTo(this.gameObject);
 
-            // ƒŒƒCƒ„[•ÏXƒ{ƒ^ƒ“‚ÌXV
+            // ãƒ¬ã‚¤ãƒ¤ãƒ¼å¤‰æ›´ãƒœã‚¿ãƒ³ã®æ›´æ–°
             dataGetter_model?.EditNoteType
                 .Subscribe(switchLayerButton_view.OnChangeEditNoteType)
                 .AddTo(this.gameObject);
 
-            // ƒLƒƒƒ“ƒoƒX‚ÌXV
+            // ã‚­ãƒ£ãƒ³ãƒã‚¹ã®æ›´æ–°
             dataGetter_model?.EditNoteType
                 .Subscribe(ActivateCanvas)
                 .AddTo(this.gameObject);
@@ -163,7 +172,7 @@ namespace ChartEditor
 
         private void BindForRhythmConfig()
         {
-            // ƒŠƒYƒ€ƒRƒ“ƒtƒBƒO(¬ßü)‚ÌƒNƒŠƒbƒN
+            // ãƒªã‚ºãƒ ã‚³ãƒ³ãƒ•ã‚£ã‚°(å°ç¯€ç·š)ã®ã‚¯ãƒªãƒƒã‚¯
             dataGetter_model?.CurrentEditMode
                 .Where(mode => mode == EditMode.EditingBarConfig)
                 .Subscribe(value =>
@@ -175,7 +184,7 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
 
-            // ƒŠƒYƒ€ƒRƒ“ƒtƒBƒO(•ªü)‚ÌƒNƒŠƒbƒN
+            // ãƒªã‚ºãƒ ã‚³ãƒ³ãƒ•ã‚£ã‚°(åˆ†ç·š)ã®ã‚¯ãƒªãƒƒã‚¯
             dataGetter_model?.CurrentEditMode
                 .Where(mode => mode == EditMode.EditingSubDivisionConfig)
                 .Subscribe(value =>
@@ -187,7 +196,7 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
 
-            // ƒŠƒYƒ€ƒRƒ“ƒtƒBƒO(¬ßü)‚ð•Â‚¶‚é
+            // ãƒªã‚ºãƒ ã‚³ãƒ³ãƒ•ã‚£ã‚°(å°ç¯€ç·š)ã‚’é–‰ã˜ã‚‹
             dataGetter_model?.CurrentEditMode
                 .Pairwise()
                 .Where(pair => pair.Previous == EditMode.EditingBarConfig)
@@ -198,7 +207,7 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
 
-            // ƒŠƒYƒ€ƒRƒ“ƒtƒBƒO(•ªü)‚ð•Â‚¶‚é
+            // ãƒªã‚ºãƒ ã‚³ãƒ³ãƒ•ã‚£ã‚°(åˆ†ç·š)ã‚’é–‰ã˜ã‚‹
             dataGetter_model?.CurrentEditMode
                 .Pairwise()
                 .Where(pair => pair.Previous == EditMode.EditingSubDivisionConfig)
@@ -212,46 +221,46 @@ namespace ChartEditor
 
         private void SetEvent()
         {
-            // ‹È‘I‘ðƒ{ƒ^ƒ“
+            // æ›²é¸æŠžãƒœã‚¿ãƒ³
             musicBrowseButton_view.OnClickedListner += BrowseAudioFile;
 
-            // ƒIƒtƒZƒbƒgƒtƒB[ƒ‹ƒh
+            // ã‚ªãƒ•ã‚»ãƒƒãƒˆãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
             offsetInputField_view.OnFloatValueChangedListner += dataSetter.SetOffset;
 
-            // ƒŒ[ƒ“•ªŠ„”
+            // ãƒ¬ãƒ¼ãƒ³åˆ†å‰²æ•°
             changeLaneDivNumButton_view.OnPushButtonListner += () => optionSetter.SetLaneDivisionNum(true);
 
-            // ƒXƒNƒ[ƒ‹Š´“x
+            // ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«æ„Ÿåº¦
             scrollSensitivitySlider_view.OnSliderChangedListener += optionSetter.SetScrollSensitivity;
 
-            // SEƒ{ƒŠƒ…[ƒ€
+            // SEãƒœãƒªãƒ¥ãƒ¼ãƒ 
             seVolumeSlider_view.OnSliderChangedListener += optionSetter.SetJudgementSEVolume;
 
-            // ƒGƒNƒXƒ|[ƒgƒ{ƒ^ƒ“
+            // ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆãƒœã‚¿ãƒ³
             exportButton_view.OnClickedListner += chartDataExporter_model.ExportNewFile;
 
-            // ƒCƒ“ƒ|[ƒgƒ{ƒ^ƒ“
+            // ã‚¤ãƒ³ãƒãƒ¼ãƒˆãƒœã‚¿ãƒ³
             importButton_view.OnClickedListner += chartDataImporter_model.Import;
             
-            // •ˆ–Ê‰„’·ƒ{ƒ^ƒ“
+            // è­œé¢å»¶é•·ãƒœã‚¿ãƒ³
             chartExtendButton_view.OnClickedListner += () => laneExtender_model.ChangeChartLength(1);
 
-            // •ˆ–Êk¬ƒ{ƒ^ƒ“
+            // è­œé¢ç¸®å°ãƒœã‚¿ãƒ³
             chartShortenButton_view.OnClickedListner += () => laneExtender_model.ChangeChartLength(-1);
 
-            // ‰ð‘œ“x•ÏXƒ{ƒ^ƒ“
+            // è§£åƒåº¦å¤‰æ›´ãƒœã‚¿ãƒ³
             screenSizeDropDown_view.OnChangeValueListner += (resolution) => optionSetter.SetResolution(resolution);
 
-            // ƒŠƒYƒ€ƒRƒ“ƒtƒBƒO
+            // ãƒªã‚ºãƒ ã‚³ãƒ³ãƒ•ã‚£ã‚°
             rhythmConfigBar_view.OnClickedApplyButtonListner += () => configEditor_model.CloseConfig();
             rhythmConfigSubDivision_view.OnClickedApplyButtonListner += () => configEditor_model.CloseConfig();
 
-            // ƒŒƒCƒ„[•ÏXƒ{ƒ^ƒ“
+            // ãƒ¬ã‚¤ãƒ¤ãƒ¼å¤‰æ›´ãƒœã‚¿ãƒ³
             switchLayerButton_view.OnClickCloseButtonListner += () => {
                 dataSetter.SwitchEditNoteType();
             };
 
-            // ƒm[ƒgƒXƒs[ƒh•ÏX
+            // ãƒŽãƒ¼ãƒˆã‚¹ãƒ”ãƒ¼ãƒ‰å¤‰æ›´
             noteSpeedSlider_view.OnNoteSpeedApplyListener += (value) =>
             {
                 noteSpawnDataOptionSetter.SetNoteSpeed(value);
@@ -260,12 +269,12 @@ namespace ChartEditor
 
             explanationButton_view.OnClickedListner += () => dataSetter.SetEditMode(EditMode.Explanation);
 
-            // à–¾‘‚ð•Â‚¶‚é
+            // èª¬æ˜Žæ›¸ã‚’é–‰ã˜ã‚‹
             explanation_view.OnClickCloseButtonListner += () => dataSetter.SetEditMode(EditMode.None);
         }
 
         /// <summary>
-        /// Šy‹Èƒtƒ@ƒCƒ‹‚ðƒZƒbƒg
+        /// æ¥½æ›²ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚»ãƒƒãƒˆ
         /// </summary>
         private async void BrowseAudioFile()
         {

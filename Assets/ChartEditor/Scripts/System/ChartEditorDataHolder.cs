@@ -8,13 +8,13 @@ namespace ChartEditor
 {
     public class ChartEditorDataHolder : IChartEditorDataGetter, IChartEditorDataSetter
     {
-        #region Chart •ˆ–ÊŠÖŒW
+        #region Chart è­œé¢é–¢ä¿‚
 
         ReactiveProperty<ChartData> chartData = new ReactiveProperty<ChartData>();
         public IReadOnlyReactiveProperty<ChartData> ChartData => chartData;
         public void SetChartData(ChartData chartData)
         {
-            // ƒŠƒZƒbƒg
+            // ãƒªã‚»ãƒƒãƒˆ
             if (this.chartData != null && this.chartData.Value != null && this.chartData.Value.BarDatas != null) 
             { 
                 this.chartData.Value.RemoveBar(this.chartData.Value.BarDatas.Count);
@@ -34,7 +34,7 @@ namespace ChartEditor
             else if(delta < 0) { chartData.Value.RemoveBar(Mathf.Abs(delta)); }
         }
 
-        // •ˆ–Ê’·‚³
+        // è­œé¢é•·ã•
         ReactiveProperty<float> chartSeconds = new ReactiveProperty<float>(0);
         public IReadOnlyReactiveProperty<float> ChartSeconds => chartSeconds;
         public void SetChartSeconds(float seconds)
@@ -43,11 +43,19 @@ namespace ChartEditor
             chartSeconds.Value = seconds;
         }
 
+        // ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨ãƒ‡ãƒ¼ã‚¿ã«å¤‰æ›ã—ãŸéš›ã®ã€å®Ÿéš›ã«åˆ¤å®šã•ã‚Œã‚‹ç·ãƒãƒ¼ãƒ„æ•°
+        ReactiveProperty<int> totalNoteCount = new ReactiveProperty<int>(0);
+        public IReadOnlyReactiveProperty<int> TotalNoteCount => totalNoteCount;
+        public void SetTotalNoteCount(int count)
+        {
+            totalNoteCount.Value = Mathf.Max(0, count);
+        }
+
         #endregion
 
-        #region EditMode ƒGƒfƒBƒbƒgƒ‚[ƒhŠÖŒW
+        #region EditMode ã‚¨ãƒ‡ã‚£ãƒƒãƒˆãƒ¢ãƒ¼ãƒ‰é–¢ä¿‚
 
-        // ƒGƒfƒBƒbƒgƒ‚[ƒh
+        // ã‚¨ãƒ‡ã‚£ãƒƒãƒˆãƒ¢ãƒ¼ãƒ‰
         ReactiveProperty<EditMode> currentEditMode = new ReactiveProperty<EditMode>(EditMode.None);
         IReadOnlyReactiveProperty<EditMode> IChartEditorDataGetter.CurrentEditMode => currentEditMode;
         void IChartEditorDataSetter.SetEditMode(EditMode editMode) 
@@ -58,7 +66,7 @@ namespace ChartEditor
             //Debug.Log($"Change Edit Mode: {currentEditMode.Value}"); 
         }
 
-        // •ÒWƒm[ƒcƒ^ƒCƒv
+        // ç·¨é›†ãƒãƒ¼ãƒ„ã‚¿ã‚¤ãƒ—
         ReactiveProperty<EditNoteType> editNoteType = new ReactiveProperty<EditNoteType>(EditNoteType.Ground);
         IReadOnlyReactiveProperty<EditNoteType> IChartEditorDataGetter.EditNoteType => editNoteType;
         public void SetEditNoteType(EditNoteType editNoteType)
@@ -91,9 +99,9 @@ namespace ChartEditor
 
         #endregion
 
-        #region ƒm[ƒcƒf[ƒ^ŠÖŒW
+        #region ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿é–¢ä¿‚
 
-        // ”z’u’†‚Ìƒm[ƒcƒ^ƒCƒv
+        // é…ç½®ä¸­ã®ãƒãƒ¼ãƒ„ã‚¿ã‚¤ãƒ—
         ReactiveProperty<DeploymentNoteType> deploymentNoteType = new ReactiveProperty<DeploymentNoteType>(ChartEditor.DeploymentNoteType.Touch);
         IReadOnlyReactiveProperty<DeploymentNoteType> IChartEditorDataGetter.DeploymentNoteType => deploymentNoteType;
         readonly Dictionary<EditNoteType, DeploymentNoteType> editNoteTypeToCachedNoteType = new Dictionary<EditNoteType, DeploymentNoteType>();
@@ -113,7 +121,7 @@ namespace ChartEditor
         {
             editNoteTypeToCachedNoteType[editType] = noteType;
         }
-        // ƒCƒ“ƒ^ƒ‰ƒNƒg‚³‚ê‚Ä‚¢‚éƒRƒ‰ƒCƒ_[‚½‚¿
+        // ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆã•ã‚Œã¦ã„ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ãŸã¡
         ReactiveCollection<IInteractableCollider> interactableColliders = new ReactiveCollection<IInteractableCollider>();
         public IReadOnlyReactiveCollection<IInteractableCollider> InteractableColliders => interactableColliders;
         public T GetInteractableCollider<T>() where T : IInteractableCollider
@@ -136,25 +144,25 @@ namespace ChartEditor
             }
         }
 
-        // ƒAƒhƒŒƒX ¨ ”z’uêŠ
+        // ã‚¢ãƒ‰ãƒ¬ã‚¹ â†’ é…ç½®å ´æ‰€
         //Dictionary<IReadOnlyAddressInChart, Transform> addressToTransform = new Dictionary<IReadOnlyAddressInChart, Transform>();
         //public bool RegisterAddress(IReadOnlyAddressInChart address,Transform transform)
         //{
         //    if(addressToTransform.TryAdd(address, transform)) { return true; }
 
-        //    Debug.LogError($"ySystemzŠù‚É“o˜^‚³‚ê‚½ƒAƒhƒŒƒX‚Å‚·: {address}");
+        //    Debug.LogError($"ã€Systemã€‘æ—¢ã«ç™»éŒ²ã•ã‚ŒãŸã‚¢ãƒ‰ãƒ¬ã‚¹ã§ã™: {address}");
         //    return false;
         //}
         //public bool RemoveAddress(IReadOnlyAddressInChart address)
         //{
         //    if (addressToTransform.Remove(address)) { return true; }
-        //    Debug.LogError($"ySystemzƒAƒhƒŒƒX‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {address}");
+        //    Debug.LogError($"ã€Systemã€‘ã‚¢ãƒ‰ãƒ¬ã‚¹ãŒç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“: {address}");
         //    return false;
         //}
         //public Transform GetDeployableTransform(IReadOnlyAddressInChart address) 
         //{
         //    if (addressToTransform.TryGetValue(address, out var transform)) { return transform; }
-        //    Debug.LogError($"ySystemzw’è‚³‚ê‚½ƒAƒhƒŒƒX‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: {address}");
+        //    Debug.LogError($"ã€Systemã€‘æŒ‡å®šã•ã‚ŒãŸã‚¢ãƒ‰ãƒ¬ã‚¹ã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ: {address}");
         //    return null;
         //}
         //public void ClearAddressToTransform()
@@ -164,7 +172,7 @@ namespace ChartEditor
 
         #endregion
 
-        #region PlayMode ƒvƒŒƒCƒ‚[ƒhŠÖŒW
+        #region PlayMode ãƒ—ãƒ¬ã‚¤ãƒ¢ãƒ¼ãƒ‰é–¢ä¿‚
 
         ReactiveProperty<PlayMode> playMode = new ReactiveProperty<PlayMode>(PlayMode.Stop);
         IReadOnlyReactiveProperty<PlayMode> IChartEditorDataGetter.PlayMode => playMode;
@@ -177,7 +185,7 @@ namespace ChartEditor
 
         #endregion
 
-        #region PlaybackProgress Ä¶ˆÊ’u
+        #region PlaybackProgress å†ç”Ÿä½ç½®
 
         ReactiveProperty<float> playbackProgress = new ReactiveProperty<float>(0);
         IReadOnlyReactiveProperty<float> IChartEditorDataGetter.PlaybackProgress => playbackProgress;
@@ -189,7 +197,7 @@ namespace ChartEditor
 
         #endregion
 
-        #region Music Ä¶‰¹Šy
+        #region Music å†ç”ŸéŸ³æ¥½
 
         ReactiveProperty<AudioClip> music = new ReactiveProperty<AudioClip>();
         IReadOnlyReactiveProperty<AudioClip> IChartEditorDataGetter.Music => music;
@@ -201,7 +209,7 @@ namespace ChartEditor
 
         #endregion
 
-        #region Offset ƒIƒtƒZƒbƒg
+        #region Offset ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 
         ReactiveProperty<float> offset = new ReactiveProperty<float>(0);
         IReadOnlyReactiveProperty<float> IChartEditorDataGetter.Offset => offset;
@@ -219,6 +227,8 @@ namespace ChartEditor
         IReadOnlyReactiveProperty<ChartData> ChartData { get; }
 
         IReadOnlyReactiveProperty<float> ChartSeconds { get; }
+
+        IReadOnlyReactiveProperty<int> TotalNoteCount { get; }
 
         IReadOnlyReactiveProperty<EditMode> CurrentEditMode { get; }
 
@@ -248,6 +258,8 @@ namespace ChartEditor
         public void SetChartData(ChartData chartData);
 
         public void SetChartSeconds(float seconds);
+
+        void SetTotalNoteCount(int count);
 
         void SetEditMode(EditMode editMode);
 

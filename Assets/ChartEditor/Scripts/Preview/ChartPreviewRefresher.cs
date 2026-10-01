@@ -14,13 +14,18 @@ namespace ChartEditor
 
         INoteSpawnDataOptionGetter optionHolder;
         IChartEditorDataGetter dataGetter;
+        IChartEditorDataSetter dataSetter;
         CancellationTokenSource refreshPreviewCts;
 
         [Inject]
-        public void Constructor(INoteSpawnDataOptionGetter optionHolder, IChartEditorDataGetter dataGetter)
+        public void Constructor(
+            INoteSpawnDataOptionGetter optionHolder,
+            IChartEditorDataGetter dataGetter,
+            IChartEditorDataSetter dataSetter)
         {
             this.optionHolder = optionHolder;
             this.dataGetter = dataGetter;
+            this.dataSetter = dataSetter;
         }
 
         public async UniTask RefreshPreviewFromEditorDataAsync()
@@ -82,6 +87,9 @@ namespace ChartEditor
 
             ChartImporterForRhythmGame importer = new ChartImporterForRhythmGame();
             global::ChartData chartData = importer.Import(savedChartData, optionHolder);
+
+            // 表示用Meshを除き、実際に判定対象となるノーツ数をモデルへ反映する
+            dataSetter?.SetTotalNoteCount(chartData?.MaxCombo ?? 0);
 
             previewGenerator.SetChartData(chartData);
             groundController.SetChartData(chartData);
