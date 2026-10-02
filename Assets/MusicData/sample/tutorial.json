@@ -1147,12 +1147,14 @@
           "TouchNoteData": [
             {
               "Range": [
+                4,
                 5,
                 6,
                 7,
                 8,
                 9,
-                10
+                10,
+                11
               ]
             }
           ]
@@ -1312,13 +1314,17 @@
         {
           "Bpm": 120.0,
           "SpeedRatio": 1.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 4,
                 5,
                 6,
-                7
+                7,
+                8,
+                9,
+                10,
+                11
               ]
             }
           ]
@@ -3233,7 +3239,7 @@
         {
           "Bpm": 120.0,
           "SpeedRatio": 1.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 5,
@@ -3328,7 +3334,7 @@
         {
           "Bpm": 120.0,
           "SpeedRatio": 1.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 8,
@@ -4536,7 +4542,7 @@
         {
           "Bpm": 120.0,
           "SpeedRatio": 1.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 5,
@@ -4748,7 +4754,7 @@
         {
           "Bpm": 120.0,
           "SpeedRatio": 1.0,
-          "TouchNoteData": [
+          "DivineTouchData": [
             {
               "Range": [
                 0,
