@@ -107,7 +107,6 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
         // デバッグ用
         //Debug.Log($"【Judgement】判定 {judgementData.NoteData.NoteType}: {judgementData.Judgement}");
 
-        UpdateComboRank();
         noteJudgementDatas.Add(judgementData);
 
         // スコアの更新・判定数の更新
@@ -147,6 +146,9 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
                 combo.Value = 0;
                 break;
         }
+
+        // 判定数を更新した後に評価する (先に評価すると今回の判定が反映されない)
+        UpdateComboRank();
     }
 }
 
