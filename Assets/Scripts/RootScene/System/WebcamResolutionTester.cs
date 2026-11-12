@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
@@ -6,12 +6,12 @@ using System.Threading;
 
 public class WebcamResolutionTester : MonoBehaviour
 {
-    public string deviceName = null; // null ‚È‚çƒfƒtƒHƒ‹ƒg‚ÌƒJƒƒ‰
+    public string deviceName = null; // null ãªã‚‰ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚«ãƒ¡ãƒ©
     
     WebCamTexture currentTexture;
     CancellationTokenSource cts = new CancellationTokenSource();
 
-    // ‚æ‚­‚ ‚é‰ğ‘œ“xƒŠƒXƒg
+    // ã‚ˆãã‚ã‚‹è§£åƒåº¦ãƒªã‚¹ãƒˆ
     [SerializeField] Vector2Int[] testResolutions = new Vector2Int[]
     {
         new Vector2Int(1920, 1080),
@@ -25,7 +25,7 @@ public class WebcamResolutionTester : MonoBehaviour
         // CheckAllResolutionsAsync(cts.Token).Forget();
     }
 
-    // —^‚¦‚ç‚ê‚½ƒfƒoƒCƒX–¼‚Æ‰ğ‘œ“xƒŠƒXƒg‚Å‹N“®‚ğƒ`ƒFƒbƒN
+    // ä¸ãˆã‚‰ã‚ŒãŸãƒ‡ãƒã‚¤ã‚¹åã¨è§£åƒåº¦ãƒªã‚¹ãƒˆã§èµ·å‹•ã‚’ãƒã‚§ãƒƒã‚¯
     public async UniTask CheckAllResolutionsAsync(CancellationToken cancellationToken)
     {
         foreach (var resolution in testResolutions)
@@ -38,7 +38,7 @@ public class WebcamResolutionTester : MonoBehaviour
                 resolution.y,
                 cancellationToken);
 
-            Debug.Log($"yCameraz{resolution.x}x{resolution.y}: {result}");
+            Debug.Log($"ã€Cameraã€‘{resolution.x}x{resolution.y}: {result}");
         }
     }
 

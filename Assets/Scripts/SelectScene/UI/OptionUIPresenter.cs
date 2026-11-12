@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -25,18 +25,18 @@ namespace UIInSelectScene
 
         private void BindOptionTopic()
         {
-            // ƒIƒvƒVƒ‡ƒ“‚Ì‘I‘ğ
+            // ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®é¸æŠ
             phaseStatusGetter_model?.Value.PhaseStatus
                 .Where(status => status == PhaseStatusInSelectScene.MusicOption)
                 .Subscribe(_ => {
-                    // ƒIƒvƒVƒ‡ƒ“ƒgƒsƒbƒN‚ÌƒZƒbƒg
+                    // ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒˆãƒ”ãƒƒã‚¯ã®ã‚»ãƒƒãƒˆ
                     int index = selectSceneDataGetter_model.CurrentOptionIndex.Value;
                     optionTopicController_view.SetOptionDatas(index, selectSceneDataGetter_model);
                     optionTopicController_view.OnSelectOption();
                 })
                 .AddTo(this.gameObject);
 
-            // ƒIƒvƒVƒ‡ƒ“‚©‚ç–ß‚é
+            // ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‹ã‚‰æˆ»ã‚‹
             phaseStatusGetter_model?.Value.PhaseStatus
                 .Pairwise()
                 .Where(pair => pair.Previous == PhaseStatusInSelectScene.MusicOption && (pair.Current == PhaseStatusInSelectScene.DetailSelect || pair.Current == PhaseStatusInSelectScene.DetailSelect_UnStartable))
@@ -45,11 +45,11 @@ namespace UIInSelectScene
                 })
                 .AddTo(this.gameObject);
 
-            // ƒgƒsƒbƒN‚ÌˆÚ“®
+            // ãƒˆãƒ”ãƒƒã‚¯ã®ç§»å‹•
             selectSceneDataGetter_model?.CurrentOptionIndex
                 .Pairwise()
                 .Subscribe(pair => {
-                    // ƒgƒsƒbƒN‚ÌXV
+                    // ãƒˆãƒ”ãƒƒã‚¯ã®æ›´æ–°
                     _ = optionTopicController_view.OnChangeSelectedOption(pair.Current, pair.Previous, selectSceneDataGetter_model);
                 })
                 .AddTo(this.gameObject);

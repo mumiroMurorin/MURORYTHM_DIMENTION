@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -42,7 +42,7 @@ namespace ChartEditor
                     Screen.SetResolution(1920, 1080, true);
                     break;
                 default:
-                    Debug.LogWarning($"ySystemz‘Î‰‚·‚é‰ğ‘œ“x‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {resolution}");
+                    Debug.LogWarning($"ã€Systemã€‘å¯¾å¿œã™ã‚‹è§£åƒåº¦ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“: {resolution}");
                     break;
             }
         }

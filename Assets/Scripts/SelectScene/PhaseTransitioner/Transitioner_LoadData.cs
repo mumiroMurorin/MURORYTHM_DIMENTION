@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -28,13 +28,13 @@ namespace TransitionerInSelectScene
 
         void IPhaseTransitionerInSelectScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"LoadData\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"LoadData\"");
 
             RegisterOperation();
 
             bool[] isCompletedTask = new bool[1];
 
-            // Šy‹Èƒf[ƒ^ƒŠƒXƒg‚Ì“Ç‚İ‚İ‚ÆƒZƒbƒg
+            // æ¥½æ›²ãƒ‡ãƒ¼ã‚¿ãƒªã‚¹ãƒˆã®èª­ã¿è¾¼ã¿ã¨ã‚»ãƒƒãƒˆ
             if (!musicDataListLoader.Value.CheckLoadedMusicDatas()) 
             {
                 musicDataListLoader.Value.LoadMusicDataList(() => {
@@ -63,7 +63,7 @@ namespace TransitionerInSelectScene
 
         private void RegisterOperation()
         {
-            // Šy‹È‘I‘ğ
+            // æ¥½æ›²é¸æŠ
             operationDictionary.RegisterOperation(OperationTag.Select_SelectMusic, () => { TransitionDetailSelect(); });
             operationDictionary.RegisterOperation(OperationTag.Select_FirstPlayOptionGuide_Confirm, () => { ConfirmFirstPlayOptionGuide(); });
             operationDictionary.RegisterOperation(OperationTag.Select_FirstPlayOptionGuide_DummyOption, OpenOptionFromFirstPlayGuide);
@@ -72,12 +72,12 @@ namespace TransitionerInSelectScene
             operationDictionary.RegisterOperation(OperationTag.Select_UpDifficulty, () => { ChangeDifficulty(+1); });
             operationDictionary.RegisterOperation(OperationTag.Select_DownDifficulty, () => { ChangeDifficulty(-1); });
 
-            // Ú×Šm”F
+            // è©³ç´°ç¢ºèª
             operationDictionary.RegisterOperation(OperationTag.Select_Detail_BackSelectMusic, () => { phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.MusicSelect); });
             operationDictionary.RegisterOperation(OperationTag.Select_Detail_StartMusic, () => { StartMusic(); });
             operationDictionary.RegisterOperation(OperationTag.Select_Detail_OpenOption, () => { phaseTransitionable?.Value.TransitionPhase(PhaseStatusInSelectScene.MusicOption); });
 
-            // ƒIƒvƒVƒ‡ƒ“
+            // ã‚ªãƒ—ã‚·ãƒ§ãƒ³
             operationDictionary.RegisterOperation(OperationTag.Select_Option_BackMusicDetail, () => { TransitionDetailSelect(); });
             operationDictionary.RegisterOperation(OperationTag.Select_Option_PlusValue, () => { optionDataListController?.ChangeTopicValue(+1); });
             operationDictionary.RegisterOperation(OperationTag.Select_Option_MinusValue, () => { optionDataListController?.ChangeTopicValue(-1); });
@@ -102,7 +102,7 @@ namespace TransitionerInSelectScene
         {
             optionDataSetter?.SetFirstPlayGuideRequired(false);
 
-            // ‰‰ñƒKƒCƒh‚ÌTextBox‚ğ•Â‚¶‚Ä‚©‚çA–{—ˆ‚ÌŠy‹ÈÚ×ƒtƒF[ƒY‚Ö–ß‚·
+            // åˆå›ã‚¬ã‚¤ãƒ‰ã®TextBoxã‚’é–‰ã˜ã¦ã‹ã‚‰ã€æœ¬æ¥ã®æ¥½æ›²è©³ç´°ãƒ•ã‚§ãƒ¼ã‚ºã¸æˆ»ã™
             if (firstPlayOptionGuideTextBox != null)
             {
                 firstPlayOptionGuideTextBox.Close(TransitionDetailSelect);
@@ -136,7 +136,7 @@ namespace TransitionerInSelectScene
         }
 
         /// <summary>
-        /// “ïˆÕ“x•ÏX
+        /// é›£æ˜“åº¦å¤‰æ›´
         /// </summary>
         /// <param name="delta"></param>
         private void ChangeDifficulty(int delta)
@@ -152,7 +152,7 @@ namespace TransitionerInSelectScene
         }
 
         /// <summary>
-        /// ƒvƒŒƒCŠy‹È‚ÌƒZƒbƒg‚ÆƒtƒF[ƒYˆÚ“®
+        /// ãƒ—ãƒ¬ã‚¤æ¥½æ›²ã®ã‚»ãƒƒãƒˆã¨ãƒ•ã‚§ãƒ¼ã‚ºç§»å‹•
         /// </summary>
         private void StartMusic()
         {

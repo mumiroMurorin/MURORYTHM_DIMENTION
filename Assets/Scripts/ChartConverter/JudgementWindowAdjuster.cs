@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -8,12 +8,12 @@ using System;
 namespace ChartConvert
 {
     /// <summary>
-    /// ”»’è’²®
+    /// åˆ¤å®šèª¿æ•´
     /// </summary>
     public class JudgementWindowAdjuster
     {
         /// <summary>
-        /// •ˆ–Êƒf[ƒ^‚Ì’†‚Å”»’è˜g‚ğd—l‚É]‚Á‚Ä’²®‚·‚é
+        /// è­œé¢ãƒ‡ãƒ¼ã‚¿ã®ä¸­ã§åˆ¤å®šæ ã‚’ä»•æ§˜ã«å¾“ã£ã¦èª¿æ•´ã™ã‚‹
         /// </summary>
         /// <param name="chartData"></param>
         /// <param name="judgementWindows"></param>
@@ -27,44 +27,44 @@ namespace ChartConvert
             List<IJudgableNoteData> judgableList = new List<IJudgableNoteData>();
             List<IClippedJudgableNote> clippedJudgableList = new List<IClippedJudgableNote>();
 
-            // ƒm[ƒcƒf[ƒ^‚Ì’†‚©‚ç”»’è‚¿‚ğæ‚èo‚·
+            // ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿ã®ä¸­ã‹ã‚‰åˆ¤å®šæŒã¡ã‚’å–ã‚Šå‡ºã™
             foreach (var noteDataList in chartData.AllNoteDataLists)
             {
                 foreach (var note in noteDataList)
                 {
-                    // ”»’è‚¿ƒm[ƒc‚¾‚Á‚½‚çæ‚èo‚·
+                    // åˆ¤å®šæŒã¡ãƒãƒ¼ãƒ„ã ã£ãŸã‚‰å–ã‚Šå‡ºã™
                     if (note is IJudgableNoteData) { judgableList.AddRange(noteDataList.OfType<IJudgableNoteData>().ToList()); }
-                    // í‚è”»’è‚¿ƒm[ƒc‚¾‚Á‚½‚çæ‚èo‚·
+                    // å‰Šã‚Šåˆ¤å®šæŒã¡ãƒãƒ¼ãƒ„ã ã£ãŸã‚‰å–ã‚Šå‡ºã™
                     else if(note is IClippedJudgableNote) { clippedJudgableList.AddRange(noteDataList.OfType<IClippedJudgableNote>().ToList()); }
                     break;
                 }
             }
 
-            // ”»’è‚¿‚É”»’è˜g‚ğ—^‚¦‚é
+            // åˆ¤å®šæŒã¡ã«åˆ¤å®šæ ã‚’ä¸ãˆã‚‹
             foreach (var judgableData in judgableList)
             {
-                // ”»’è˜g‚Ìæ“¾
+                // åˆ¤å®šæ ã®å–å¾—
                 var window = GetJudgementWindow(judgableData.NoteType, judgementWindows, difficulty);
                 if (window == null) { continue; }
 
                 judgableData.JudgementWindow = window.Copy();
             }
 
-            // í‚è”»’è‚¿‚É”»’è˜g‚ğ—^‚¦‚é
-            // ƒ\[ƒg
+            // å‰Šã‚Šåˆ¤å®šæŒã¡ã«åˆ¤å®šæ ã‚’ä¸ãˆã‚‹
+            // ã‚½ãƒ¼ãƒˆ
             clippedJudgableList.Sort((a, b) => a.Timing.CompareTo(b.Timing));
             for (int i = 0; i < clippedJudgableList.Count; i++)
             {
                 var clippedData = clippedJudgableList[i];
 
-                // ”»’è˜g‚Ìæ“¾
+                // åˆ¤å®šæ ã®å–å¾—
                 var window = GetJudgementWindow(clippedData.NoteType, judgementWindows, difficulty);
                 if (window == null) { continue; }
 
-                // ƒfƒB[ƒvƒRƒs[
+                // ãƒ‡ã‚£ãƒ¼ãƒ—ã‚³ãƒ”ãƒ¼
                 clippedJudgableList[i].JudgementWindow = window.Copy();
 
-                // ”»’è‚ğí‚é
+                // åˆ¤å®šã‚’å‰Šã‚‹
                 ClipJudementWindow(clippedJudgableList, i);
             }
         }
@@ -108,7 +108,7 @@ namespace ChartConvert
         }
 
         /// <summary>
-        /// ‚»‚Ìƒm[ƒc‚Ì”»’è˜g‚ğ•Ô‚·
+        /// ãã®ãƒãƒ¼ãƒ„ã®åˆ¤å®šæ ã‚’è¿”ã™
         /// </summary>
         /// <param name="targetType"></param>
         /// <param name="judgementWindows"></param>
@@ -126,7 +126,7 @@ namespace ChartConvert
                 return null;
             }
 
-            // ”»’è˜g‚Ìæ“¾
+            // åˆ¤å®šæ ã®å–å¾—
             foreach (var windowType in judgementWindows)
             {
                 if (windowType == null) { continue; }
@@ -166,33 +166,33 @@ namespace ChartConvert
 
         private void ClipJudementWindow(List<IClippedJudgableNote> sortedList, int index)
         {
-            if (sortedList.Count <= index) { Debug.LogError($"ySystemz”ÍˆÍŠO‚Å‚·: {index}"); }
+            if (sortedList.Count <= index) { Debug.LogError($"ã€Systemã€‘ç¯„å›²å¤–ã§ã™: {index}"); }
 
             IClippedJudgableNote targetNote = sortedList[index];
             JudgementWindow targetWindow = targetNote.JudgementWindow;
 
-            // ‘O”»’è‚ğí‚é
+            // å‰åˆ¤å®šã‚’å‰Šã‚‹
             int i = index;
             while (true)
             {
-                // Å‰‚Ìƒm[ƒc‚È‚ç‚¨‚µ‚Ü‚¢
+                // æœ€åˆã®ãƒãƒ¼ãƒ„ãªã‚‰ãŠã—ã¾ã„
                 if (--i < 0) { break; }
 
                 IClippedJudgableNote previousNote = sortedList[i];
 
-                // ƒm[ƒc‚ªŠ®‘S”í‚è‚Ìê‡‚Í–ß‚·
+                // ãƒãƒ¼ãƒ„ãŒå®Œå…¨è¢«ã‚Šã®å ´åˆã¯æˆ»ã™
                 if(targetNote.Timing == previousNote.Timing) { continue; }
 
-                // ”»’è˜g‚ª”í‚ç‚È‚­‚È‚Á‚½‚ç‚¨‚µ‚Ü‚¢
-                float startJudgement = targetNote.Timing - targetWindow.GoodWindowFaster;    // ‘O”»’è’[
+                // åˆ¤å®šæ ãŒè¢«ã‚‰ãªããªã£ãŸã‚‰ãŠã—ã¾ã„
+                float startJudgement = targetNote.Timing - targetWindow.GoodWindowFaster;    // å‰åˆ¤å®šç«¯
                 float previousEndJudgement = previousNote.Timing + previousNote.JudgementWindow.GoodWindowLatter;
                 float cover = previousEndJudgement - startJudgement;
                 if (cover < 0) { break; }
 
-                // ƒŒ[ƒ“‚ª”í‚Á‚Ä‚È‚©‚Á‚½‚ç–ß‚·
+                // ãƒ¬ãƒ¼ãƒ³ãŒè¢«ã£ã¦ãªã‹ã£ãŸã‚‰æˆ»ã™
                 if (!targetNote.Range.Intersect(previousNote.Range).Any()) { continue; }
 
-                // ‚±‚Ìƒm[ƒc‚Ì‘O”»’è‚ğí‚èA‘Oƒm[ƒc‚ÌŒã‚ë”»’è‚àí‚é
+                // ã“ã®ãƒãƒ¼ãƒ„ã®å‰åˆ¤å®šã‚’å‰Šã‚Šã€å‰ãƒãƒ¼ãƒ„ã®å¾Œã‚åˆ¤å®šã‚‚å‰Šã‚‹
                 targetWindow.ClipWindow(cover / 2f, true);
                 previousNote.JudgementWindow.ClipWindow(cover / 2f, false);
             }

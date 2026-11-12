@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -24,7 +24,7 @@ public class Lab : MonoBehaviour
 
 public static class TunnelMeshGenerator
 {
-    // Å‘åŒö–ñ”
+    // æœ€å¤§å…¬ç´„æ•°
     static int GCD(int a, int b)
     {
         while (b != 0)
@@ -36,14 +36,14 @@ public static class TunnelMeshGenerator
         return a;
     }
 
-    // Å¬Œö”{”
+    // æœ€å°å…¬å€æ•°
     static int LCM(int a, int b)
     {
         return a / GCD(a, b) * b;
     }
 
     /// <summary>
-    /// shape ‚Ìü’·‚É‚¨‚¯‚éŠe’¸“_‚Ì fraction (0`1) ‚ğŒvZB
+    /// shape ã®å‘¨é•·ã«ãŠã‘ã‚‹å„é ‚ç‚¹ã® fraction (0ï½1) ã‚’è¨ˆç®—ã€‚
     /// </summary>
     static List<float> ComputeFractions(List<Vector2> shape)
     {
@@ -68,7 +68,7 @@ public static class TunnelMeshGenerator
     }
 
     /// <summary>
-    /// shape ‚ğw’è‚Ì fractions ‚É]‚Á‚ÄÄƒTƒ“ƒvƒŠƒ“ƒOB
+    /// shape ã‚’æŒ‡å®šã® fractions ã«å¾“ã£ã¦å†ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°ã€‚
     /// </summary>
     static List<Vector2> SampleByFractions(List<Vector2> shape, List<float> fractions)
     {
@@ -104,10 +104,10 @@ public static class TunnelMeshGenerator
     }
 
     /// <summary>
-    /// frontShape/backShape ‚ğ Z •ûŒü‚É‰Ÿ‚µo‚µ‚Äƒgƒ“ƒlƒ‹ƒƒbƒVƒ…‚ğ¶¬B
-    /// ˆÙ‚È‚é’¸“_”‚Å‚àŠŠ‚ç‚©‚É‚Â‚È‚ª‚èA‚©‚ÂÅ’áƒTƒ“ƒvƒ‹”ˆÈã‚Ì•ªŠ„‚ğ•ÛØ‚µ‚Ü‚·B
+    /// frontShape/backShape ã‚’ Z æ–¹å‘ã«æŠ¼ã—å‡ºã—ã¦ãƒˆãƒ³ãƒãƒ«ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ç”Ÿæˆã€‚
+    /// ç•°ãªã‚‹é ‚ç‚¹æ•°ã§ã‚‚æ»‘ã‚‰ã‹ã«ã¤ãªãŒã‚Šã€ã‹ã¤æœ€ä½ã‚µãƒ³ãƒ—ãƒ«æ•°ä»¥ä¸Šã®åˆ†å‰²ã‚’ä¿è¨¼ã—ã¾ã™ã€‚
     /// </summary>
-    /// <param name="minSampleCount">fraction ‚ÌÅ’á”i0 ˆÈ‰º‚ÅŒ³’¸“_‚Ì‚İj</param>
+    /// <param name="minSampleCount">fraction ã®æœ€ä½æ•°ï¼ˆ0 ä»¥ä¸‹ã§å…ƒé ‚ç‚¹ã®ã¿ï¼‰</param>
     public static Mesh GenerateTunnelMesh(
         List<Vector2> frontShape,
         List<Vector2> backShape,
@@ -120,16 +120,16 @@ public static class TunnelMeshGenerator
         if (frontShape.Count < 2 || backShape.Count < 2)
             throw new ArgumentException("Each shape must have at least 2 points");
 
-        // Œ³’¸“_‚Ì fraction
+        // å…ƒé ‚ç‚¹ã® fraction
         var fracF = ComputeFractions(frontShape);
         var fracB = ComputeFractions(backShape);
 
-        // union Š‚Â sort
+        // union ä¸”ã¤ sort
         var allFrac = fracF.Concat(fracB)
                            .Distinct()
                            .OrderBy(f => f)
                            .ToList();
-        // Å’áƒTƒ“ƒvƒ‹”‚ğ–‚½‚·
+        // æœ€ä½ã‚µãƒ³ãƒ—ãƒ«æ•°ã‚’æº€ãŸã™
         if (minSampleCount > 1 && allFrac.Count < minSampleCount)
         {
             var even = Enumerable.Range(0, minSampleCount)
@@ -141,12 +141,12 @@ public static class TunnelMeshGenerator
                              .ToList();
         }
 
-        // ƒTƒ“ƒvƒŠƒ“ƒO
+        // ã‚µãƒ³ãƒ—ãƒªãƒ³ã‚°
         var frontS = SampleByFractions(frontShape, allFrac);
         var backS = SampleByFractions(backShape, allFrac);
         int n = allFrac.Count;
 
-        // ƒƒbƒVƒ…\’z
+        // ãƒ¡ãƒƒã‚·ãƒ¥æ§‹ç¯‰
         var verts = new Vector3[n * 2];
         var tris = new List<int>(n * 6);
 
@@ -156,7 +156,7 @@ public static class TunnelMeshGenerator
             verts[i + n] = new Vector3(backS[i].x, backS[i].y, depth);
         }
 
-        // ŠO‘¤
+        // å¤–å´
         for (int i = 0; i < n; i++)
         {
             int ni = (i + 1) % n;
@@ -182,13 +182,13 @@ public static class TunnelMeshGenerator
     List<Vector3> fromPolygon,
     List<Vector3> toPolygon,
     float zOffset = 5f,
-    int interpolateSteps = 20 // •ªŠ„”
+    int interpolateSteps = 20 // åˆ†å‰²æ•°
 )
     {
         int fromCount = fromPolygon.Count;
         int toCount = toPolygon.Count;
 
-        // ‘Î‰“_‚ğ“¯”‚É•âŠ®
+        // å¯¾å¿œç‚¹ã‚’åŒæ•°ã«è£œå®Œ
         int maxCount = Mathf.Max(fromCount, toCount);
         var fromPoints = ResamplePolygon(fromPolygon, maxCount);
         var toPoints = ResamplePolygon(toPolygon, maxCount);
@@ -196,7 +196,7 @@ public static class TunnelMeshGenerator
         List<Vector3> vertices = new List<Vector3>();
         List<int> triangles = new List<int>();
 
-        // ’f–Ê‚²‚Æ‚ÉüŒ`•âŠÔ‚µ‚ÄƒƒbƒVƒ…‚ğì‚é
+        // æ–­é¢ã”ã¨ã«ç·šå½¢è£œé–“ã—ã¦ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ä½œã‚‹
         for (int i = 0; i <= interpolateSteps; i++)
         {
             float t = i / (float)interpolateSteps;
@@ -211,7 +211,7 @@ public static class TunnelMeshGenerator
             }
         }
 
-        // OŠpŒ`\¬
+        // ä¸‰è§’å½¢æ§‹æˆ
         for (int i = 0; i < interpolateSteps; i++)
         {
             int baseIndex = i * maxCount;

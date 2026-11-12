@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -8,7 +8,7 @@ using System;
 namespace ChartEditor
 {
     /// <summary>
-    /// ƒXƒy[ƒXƒz[ƒ‹ƒh‚Ì’¸“_ƒŠƒXƒg
+    /// ã‚¹ãƒšãƒ¼ã‚¹ãƒ›ãƒ¼ãƒ«ãƒ‰ã®é ‚ç‚¹ãƒªã‚¹ãƒˆ
     /// </summary>
     public class SpaceVertices
     {
@@ -20,7 +20,7 @@ namespace ChartEditor
             new Vector2(0.25f, -0.5f)
         };
 
-        // ’¸“_ƒŠƒXƒg
+        // é ‚ç‚¹ãƒªã‚¹ãƒˆ
         ReactiveCollection<VertexData> vertices = new ReactiveCollection<VertexData>();
         public IReadOnlyReactiveCollection<VertexData> Vertices => vertices;
 
@@ -31,12 +31,12 @@ namespace ChartEditor
 
         public void AddVertex(VertexData addVertex)
         {
-            // V‹K’Ç‰Á
+            // æ–°è¦è¿½åŠ 
             if(addVertex.VertexIndex == -1)
             {
                 InsertVertexNearByNearestIndex(addVertex);
             }
-            // Undo‚ÅŒ³‚Ìƒf[ƒ^‚ª‘¶İ‚·‚é‚Æ‚«
+            // Undoã§å…ƒã®ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ã¨ã
             else
             {
                 InsertVertexAfterSpecific(addVertex, addVertex.VertexIndex);
@@ -44,7 +44,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ’¸“_‚ÌV‹K’Ç‰Á
+        /// é ‚ç‚¹ã®æ–°è¦è¿½åŠ 
         /// </summary>
         /// <param name="addVertex"></param>
         private void InsertVertexNearByNearestIndex(VertexData addVertex)
@@ -56,7 +56,7 @@ namespace ChartEditor
                 return;
             }
 
-            // 1”Ô–Ú‚É‹ß‚¢’¸“_‚ğŒ©‚Â‚¯‚é
+            // 1ç•ªç›®ã«è¿‘ã„é ‚ç‚¹ã‚’è¦‹ã¤ã‘ã‚‹
             int nearestIndex = 0;
             float nearestSqrMagnitude = addVertex.GetSqrMagnitude(vertices[0]);
 
@@ -64,7 +64,7 @@ namespace ChartEditor
             {
                 var v = vertices[i];
                 float magnitude = addVertex.GetSqrMagnitude(v);
-                // ‹——£’Z‚¢‚Ì”­Œ©IXVI
+                // è·é›¢çŸ­ã„ã®ç™ºè¦‹ï¼æ›´æ–°ï¼
                 if (magnitude < nearestSqrMagnitude)
                 {
                     nearestIndex = i;
@@ -72,11 +72,11 @@ namespace ChartEditor
                 }
             }
 
-            // Å‚à‹ß‚¢’¸“_‚Ì‘OŒã‚ÅA‚æ‚è’Ç‰Á’¸“_‚Æ‹ß‚¢’¸“_‚ğ’²‚×‚é
+            // æœ€ã‚‚è¿‘ã„é ‚ç‚¹ã®å‰å¾Œã§ã€ã‚ˆã‚Šè¿½åŠ é ‚ç‚¹ã¨è¿‘ã„é ‚ç‚¹ã‚’èª¿ã¹ã‚‹
             var backVertex = vertices[(nearestIndex + vertices.Count - 1) % vertices.Count];
             var nextVertex = vertices[(nearestIndex + 1) % vertices.Count];
 
-            // ’¸“_‚Ì’Ç‰Á 
+            // é ‚ç‚¹ã®è¿½åŠ  
             if (addVertex.GetSqrMagnitude(nextVertex) < addVertex.GetSqrMagnitude(backVertex))
             {
                 vertices.Insert(nearestIndex + 1, addVertex);
@@ -90,7 +90,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ’¸“_‚ÌÄ’Ç‰Á
+        /// é ‚ç‚¹ã®å†è¿½åŠ 
         /// </summary>
         /// <param name="addVertex"></param>
         /// <param name="backVertex"></param>
@@ -98,7 +98,7 @@ namespace ChartEditor
         {
             if(index < 0 || index > vertices.Count) 
             {
-                Debug.LogWarning($"yVerticeszindex‚ª”ÍˆÍŠO‚Ì‚½‚ßV‹K’Ç‰Á‚µ‚Ü‚·: {index}/{vertices.Count}");
+                Debug.LogWarning($"ã€Verticesã€‘indexãŒç¯„å›²å¤–ã®ãŸã‚æ–°è¦è¿½åŠ ã—ã¾ã™: {index}/{vertices.Count}");
                 InsertVertexNearByNearestIndex(addVertex);
                 return;
             }
@@ -108,7 +108,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ’¸“_ƒCƒ“ƒfƒbƒNƒX‚ğXV
+        /// é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’æ›´æ–°
         /// </summary>
         private void UpdateVertexIndex()
         {
@@ -188,7 +188,7 @@ namespace ChartEditor
                 vertex.SetPosition(pos);
             }
 
-            // ‡”Ô‚ğ‹t“]‚³‚¹‚é
+            // é †ç•ªã‚’é€†è»¢ã•ã›ã‚‹
             vertices.ReverseElements();
             UpdateVertexIndex();
         }
@@ -200,7 +200,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ƒXƒy[ƒXƒz[ƒ‹ƒh‚Ì’¸“_
+    /// ã‚¹ãƒšãƒ¼ã‚¹ãƒ›ãƒ¼ãƒ«ãƒ‰ã®é ‚ç‚¹
     /// </summary>
     public class VertexData
     {
@@ -216,13 +216,13 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ³‹K‰»Œã‚Ì’¸“_À•W
+        /// æ­£è¦åŒ–å¾Œã®é ‚ç‚¹åº§æ¨™
         /// </summary>
         ReactiveProperty<Vector2> position = new ReactiveProperty<Vector2>();
         public IReadOnlyReactiveProperty<Vector2> Position => position;
         public void SetPosition(Vector2 pos)
         {
-            // ’PˆÊ‰~ã‚É”z’u‚³‚ê‚é‚æ‚¤‚É³‹K‰»
+            // å˜ä½å††ä¸Šã«é…ç½®ã•ã‚Œã‚‹ã‚ˆã†ã«æ­£è¦åŒ–
             pos = pos.ClampToUnitCircle();
 
             position.Value = pos;
@@ -334,7 +334,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ƒGƒfƒBƒbƒgƒ‚[ƒhˆê——
+    /// ã‚¨ãƒ‡ã‚£ãƒƒãƒˆãƒ¢ãƒ¼ãƒ‰ä¸€è¦§
     /// </summary>
     public enum EditMode
     {
@@ -373,7 +373,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ƒGƒfƒBƒbƒgƒm[ƒcƒ^ƒCƒv
+    /// ã‚¨ãƒ‡ã‚£ãƒƒãƒˆãƒãƒ¼ãƒ„ã‚¿ã‚¤ãƒ—
     /// </summary>
     public enum EditNoteType
     {
@@ -384,7 +384,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ‰¹ŠyÄ¶ƒ‚[ƒh
+    /// éŸ³æ¥½å†ç”Ÿãƒ¢ãƒ¼ãƒ‰
     /// </summary>
     public enum PlayMode
     {
@@ -393,7 +393,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ƒCƒ“ƒfƒbƒNƒX‚ğ–¾¦“I‚ÉéŒ¾‚µ‚È‚¢‚±‚Æ
+    /// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’æ˜ç¤ºçš„ã«å®£è¨€ã—ãªã„ã“ã¨
     /// </summary>
     public enum Resolution
     {
@@ -403,7 +403,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ”z’uƒm[ƒcˆê——
+    /// é…ç½®ãƒãƒ¼ãƒ„ä¸€è¦§
     /// </summary>
     public enum DeploymentNoteType
     {

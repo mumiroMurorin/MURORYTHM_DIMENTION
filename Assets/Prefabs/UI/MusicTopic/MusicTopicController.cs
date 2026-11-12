@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +6,7 @@ using TMPro;
 
 public class MusicTopicController : MonoBehaviour
 {
-    [Header("ƒ^ƒCƒv•ÊƒgƒsƒbƒNUIƒIƒuƒWƒFƒNƒg")]
+    [Header("ã‚¿ã‚¤ãƒ—åˆ¥ãƒˆãƒ”ãƒƒã‚¯UIã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ")]
     [SerializeField] SymphonyTypePresentationDatabase symphonyTypePresentationDatabase;
     [SerializeField] Transform topicParent;
     [SerializeField] float subTopicScale = 0.6f;
@@ -21,7 +21,7 @@ public class MusicTopicController : MonoBehaviour
     }
 
     /// <summary>
-    /// Šy‹Èƒf[ƒ^‚ÌƒZƒbƒg
+    /// æ¥½æ›²ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
     /// </summary>
     /// <param name="data"></param>
     /// <param name="difficulty"></param>
@@ -32,7 +32,7 @@ public class MusicTopicController : MonoBehaviour
     }
 
     /// <summary>
-    /// “ïˆÕ“x‚ÌƒZƒbƒg
+    /// é›£æ˜“åº¦ã®ã‚»ãƒƒãƒˆ
     /// </summary>
     /// <param name="b"></param>
     public void SetDifficulty(Difficulty difficulty)
@@ -42,7 +42,7 @@ public class MusicTopicController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒgƒsƒbƒN‚ÌXV
+    /// ãƒˆãƒ”ãƒƒã‚¯ã®æ›´æ–°
     /// </summary>
     /// <param name="data"></param>
     /// <param name="difficulty"></param>
@@ -59,7 +59,7 @@ public class MusicTopicController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒgƒsƒbƒN‚ÌØ‚è‘Ö‚¦
+    /// ãƒˆãƒ”ãƒƒã‚¯ã®åˆ‡ã‚Šæ›¿ãˆ
     /// </summary>
     /// <param name="symphonyType"></param>
     /// <returns></returns>
@@ -87,7 +87,7 @@ public class MusicTopicController : MonoBehaviour
     }
 
     /// <summary>
-    /// ‘S‘®«•ª‚ÌƒgƒsƒbƒN‚ğeƒIƒuƒWƒFƒNƒg”z‰º‚É¶¬
+    /// å…¨å±æ€§åˆ†ã®ãƒˆãƒ”ãƒƒã‚¯ã‚’è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ä¸‹ã«ç”Ÿæˆ
     /// </summary>
     private void GenerateTopicsIfNeeded()
     {
@@ -133,7 +133,7 @@ public class MusicTopicController : MonoBehaviour
     }
 
     /// <summary>
-    /// MainMusicTopicParˆÈŠO‚ÍŠù‘¶Topic‚É‡‚í‚¹‚Ä¬‚³‚­¶¬
+    /// MainMusicTopicParä»¥å¤–ã¯æ—¢å­˜Topicã«åˆã‚ã›ã¦å°ã•ãç”Ÿæˆ
     /// </summary>
     /// <returns></returns>
     private Vector3 GetGeneratedTopicScale()
@@ -147,7 +147,7 @@ public class MusicTopicController : MonoBehaviour
     }
 
     /// <summary>
-    /// •\¦”ñ•\¦Ø‚è‘Ö‚¦
+    /// è¡¨ç¤ºéè¡¨ç¤ºåˆ‡ã‚Šæ›¿ãˆ
     /// </summary>
     /// <param name="b"></param>
     public void SetObjActive(bool isActive)

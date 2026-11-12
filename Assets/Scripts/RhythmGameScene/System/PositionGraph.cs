@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,10 +35,10 @@ public class PositionGraph : INotePositionCalculator
     private readonly List<TimeSegment> segments = new();
 
     /// <summary>
-    /// ŠÔ‹æŠÔ‚ÆŒX‚«‚ğ“o˜^iŒÄ‚Ño‚µ‡•s–âj
+    /// æ™‚é–“åŒºé–“ã¨å‚¾ãã‚’ç™»éŒ²ï¼ˆå‘¼ã³å‡ºã—é †ä¸å•ï¼‰
     /// </summary>
-    /// <param name="startTime">ƒXƒ^[ƒg•b</param>
-    /// <param name="slope">ŒX‚«</param>
+    /// <param name="startTime">ã‚¹ã‚¿ãƒ¼ãƒˆç§’</param>
+    /// <param name="slope">å‚¾ã</param>
     public void AddSegment(float startTime, float slope)
     {
         segments.Add(new TimeSegment(startTime, slope));
@@ -47,11 +47,11 @@ public class PositionGraph : INotePositionCalculator
     }
 
     /// <summary>
-    /// ‹æŠÔ‚ğŒn—ñ‡‚É•À‚×A—İÏ‹——£‚ğÄŒvZ
+    /// åŒºé–“ã‚’æ™‚ç³»åˆ—é †ã«ä¸¦ã¹ã€ç´¯ç©è·é›¢ã‚’å†è¨ˆç®—
     /// </summary>
     private void Rebuild()
     {
-        // ŠÔ‡‚Éƒ\[ƒg
+        // æ™‚é–“é †ã«ã‚½ãƒ¼ãƒˆ
         segments.Sort((x, y) => x.StartTime.CompareTo(y.StartTime));
 
         float pos = 0f;
@@ -66,11 +66,11 @@ public class PositionGraph : INotePositionCalculator
     }
 
     /// <summary>
-    /// t‚ÌˆÊ’u(z)‚ğ•Ô‚·
+    /// æ™‚åˆ»tã®ä½ç½®(z)ã‚’è¿”ã™
     /// </summary>
     public float GetPosition(float t)
     {
-        // Å‰‚Ì‹æŠÔˆÈ‘O
+        // æœ€åˆã®åŒºé–“ä»¥å‰
         if (segments.Count > 0 && t < segments[0].StartTime)
         {
             var last = segments[0];
@@ -85,7 +85,7 @@ public class PositionGraph : INotePositionCalculator
             }
         }
 
-        // ÅŒã‚Ì‹æŠÔˆÈ~
+        // æœ€å¾Œã®åŒºé–“ä»¥é™
         if (segments.Count > 0 && t >= segments[^1].EndTime)
         {
             var last = segments[^1];
@@ -97,12 +97,12 @@ public class PositionGraph : INotePositionCalculator
 }
 
 /// <summary>
-/// ƒIƒvƒVƒ‡ƒ“‚ÌƒfƒBƒXƒvƒŒƒC“™‚Ég—p
+/// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ç­‰ã«ä½¿ç”¨
 /// </summary>
 public class PositionGraphOption : INotePositionCalculator
 {
     /// <summary>
-    /// í‚ÉˆêŸŠÖ” y = x ‚ğ•Ô‚·
+    /// å¸¸ã«ä¸€æ¬¡é–¢æ•° y = x ã‚’è¿”ã™
     /// </summary>
     /// <param name="t"></param>
     /// <returns></returns>

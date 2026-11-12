@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -8,7 +8,7 @@ using UniRx;
 
 public abstract class InputHandlerForSlider : MonoBehaviour, IInputHandler
 {
-    [Header("ƒ^ƒbƒ`Œã‚ÌƒN[ƒ‹ƒ^ƒCƒ€")]
+    [Header("ã‚¿ãƒƒãƒå¾Œã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ ")]
     [SerializeField] float invalidSeconds = 0.02f;
 
     ISliderInputGetter sliderInputGetter;
@@ -23,7 +23,7 @@ public abstract class InputHandlerForSlider : MonoBehaviour, IInputHandler
 
     private void Update()
     {
-        // ‘€ì–³ŒøŽžŠÔ‚ÌXV
+        // æ“ä½œç„¡åŠ¹æ™‚é–“ã®æ›´æ–°
         if (invalidSeconds > invalidCount) { invalidCount += Time.deltaTime; }
 
         EachUpdate();
@@ -41,13 +41,13 @@ public abstract class InputHandlerForSlider : MonoBehaviour, IInputHandler
         foreach (int index in indices)
         {
             sliderInputGetter.GetSliderInputReactiveProperty(index)
-                // Å‰‚©‚çƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚é‚Æ‚«‚ÌŒë“®ì–hŽ~
+                // æœ€åˆã‹ã‚‰ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ã‚‹ã¨ãã®èª¤å‹•ä½œé˜²æ­¢
                 .Skip(1)
-                // ƒ^ƒbƒ`‚³‚ê‚½Žž
+                // ã‚¿ãƒƒãƒã•ã‚ŒãŸæ™‚
                 .Where(value => value)
-                // –³ŒøŽžŠÔ‚ð‰ß‚¬‚Ä‚¢‚é‚Æ‚«
+                // ç„¡åŠ¹æ™‚é–“ã‚’éŽãŽã¦ã„ã‚‹ã¨ã
                 .Where(_ => invalidSeconds <= invalidCount)
-                // ŽÀs‚ÆƒJƒEƒ“ƒg‚ÌƒŠƒZƒbƒg
+                // å®Ÿè¡Œã¨ã‚«ã‚¦ãƒ³ãƒˆã®ãƒªã‚»ãƒƒãƒˆ
                 .Subscribe(_ =>
                 {
                     callback.Invoke();

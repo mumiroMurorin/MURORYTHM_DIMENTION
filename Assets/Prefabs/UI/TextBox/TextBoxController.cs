@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -70,7 +70,7 @@ public class TextBoxController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒI[ƒvƒ“ƒAƒjƒ[ƒVƒ‡ƒ“‚ªI—¹‚µ‚½‚Æ‚«ƒAƒjƒ[ƒVƒ‡ƒ“‚©‚çŒÄ‚Î‚ê‚é
+    /// ã‚ªãƒ¼ãƒ—ãƒ³ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒçµ‚äº†ã—ãŸã¨ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‹ã‚‰å‘¼ã°ã‚Œã‚‹
     /// </summary>
     public void OnFinishOpen()
     {
@@ -78,7 +78,7 @@ public class TextBoxController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒNƒ[ƒYƒAƒjƒ[ƒVƒ‡ƒ“‚ªI—¹‚µ‚½‚Æ‚«ƒAƒjƒ[ƒVƒ‡ƒ“‚©‚çŒÄ‚Î‚ê‚é
+    /// ã‚¯ãƒ­ãƒ¼ã‚ºã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒçµ‚äº†ã—ãŸã¨ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‹ã‚‰å‘¼ã°ã‚Œã‚‹
     /// </summary>
     public void OnFinishClose()
     {

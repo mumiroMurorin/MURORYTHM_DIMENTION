@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,11 +32,11 @@ public static class Vector2Extensions
 
     public static Vector2 ClampToUnitCircle(this Vector2 pos)
     {
-        // magnitudei’·‚³j‚ª1ˆÈ‰º‚È‚ç‚»‚Ì‚Ü‚Ü•Ô‚·
+        // magnitudeï¼ˆé•·ã•ï¼‰ãŒ1ä»¥ä¸‹ãªã‚‰ãã®ã¾ã¾è¿”ã™
         if (pos.sqrMagnitude <= 1f)
             return pos;
 
-        // ’PˆÊƒxƒNƒgƒ‹‚É³‹K‰»‚µA’·‚³1‚Ì‰~üã‚É§ŒÀ
+        // å˜ä½ãƒ™ã‚¯ãƒˆãƒ«ã«æ­£è¦åŒ–ã—ã€é•·ã•1ã®å††å‘¨ä¸Šã«åˆ¶é™
         return pos.normalized;
     }
 
@@ -71,7 +71,7 @@ public static class Vector2Extensions
         Vector2 dirA = a - center;
         Vector2 dirB = b - center;
 
-        // -180`180“x
+        // -180ï½180åº¦
         float angle = Vector2.SignedAngle(dirA, dirB);
         return angle;
     }
@@ -97,25 +97,25 @@ public static class Vector2Extensions
 
     public static Vector2 Mirror(this Vector2 point, Vector2 linePointA, Vector2 linePointB)
     {
-        // ü•ª‚Ì•ûŒüƒxƒNƒgƒ‹i³‹K‰»j
+        // ç·šåˆ†ã®æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ï¼ˆæ­£è¦åŒ–ï¼‰
         Vector2 lineDir = (linePointB - linePointA).normalized;
 
-        // ü•ªã‚ÌpointA‚©‚ç‚ÌƒxƒNƒgƒ‹
+        // ç·šåˆ†ä¸Šã®pointAã‹ã‚‰ã®ãƒ™ã‚¯ãƒˆãƒ«
         Vector2 fromAtoPoint = point - linePointA;
 
-        // ü•ª‚Ö‚ÌË‰e“_iƒxƒNƒgƒ‹j
+        // ç·šåˆ†ã¸ã®å°„å½±ç‚¹ï¼ˆãƒ™ã‚¯ãƒˆãƒ«ï¼‰
         Vector2 projection = Vector2.Dot(fromAtoPoint, lineDir) * lineDir;
 
-        // Ë‰e“_‚Ìƒ[ƒ‹ƒhÀ•W
+        // å°„å½±ç‚¹ã®ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™
         Vector2 foot = linePointA + projection;
 
-        // ‘ÎÌ“_ = Ë‰e“_‚ğ’†S‚É”½“]
+        // å¯¾ç§°ç‚¹ = å°„å½±ç‚¹ã‚’ä¸­å¿ƒã«åè»¢
         return foot * 2 - point;
     }
 }
 
 /// <summary>
-/// Jsonƒtƒ@ƒCƒ‹‚ÉƒVƒŠƒAƒ‰ƒCƒY‚µ‚â‚·‚¢Vector2
+/// Jsonãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºã—ã‚„ã™ã„Vector2
 /// </summary>
 [System.Serializable]
 public class SimpleVector2
@@ -135,7 +135,7 @@ public class SimpleVector2
 }
 
 /// <summary>
-/// Jsonƒtƒ@ƒCƒ‹‚ÉƒVƒŠƒAƒ‰ƒCƒY‚µ‚â‚·‚¢Vector3
+/// Jsonãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºã—ã‚„ã™ã„Vector3
 /// </summary>
 [System.Serializable]
 public class SimpleVector3

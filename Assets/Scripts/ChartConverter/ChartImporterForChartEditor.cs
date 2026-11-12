@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -8,7 +8,7 @@ using System;
 namespace ChartConvert 
 {
     /// <summary>
-    /// ChartDataOrigin ¨ ChartEditor (ŠO•”ƒtƒ@ƒCƒ‹‚©‚ç•ˆ–ÊƒGƒfƒBƒ^‚ÉƒCƒ“ƒ|[ƒg)
+    /// ChartDataOrigin â†’ ChartEditor (å¤–éƒ¨ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰è­œé¢ã‚¨ãƒ‡ã‚£ã‚¿ã«ã‚¤ãƒ³ãƒãƒ¼ãƒˆ)
     /// </summary>
     public class ChartImporterForChartEditor
     {
@@ -20,13 +20,13 @@ namespace ChartConvert
         {
             bool isSucceed = true;
 
-            // ‰Šú‰»
+            // åˆæœŸåŒ–
             Initialize();
 
             dataSetter.SetOffset(dataOrigin.OffsetMs);
             chartData.AddBar(dataOrigin.BarDatas.Count);
 
-            // •ªü‚ğˆê‚Â‚¸‚Âæ‚èo‚·
+            // åˆ†ç·šã‚’ä¸€ã¤ãšã¤å–ã‚Šå‡ºã™
             for (int i = 0; i < dataOrigin.BarDatas.Count; i++)
             {
                 var bar = dataOrigin.BarDatas[i];
@@ -34,15 +34,15 @@ namespace ChartConvert
                 if (!SetDataFromBarData(bar, chartData.BarDatas[i], chartData.AddNote)) { isSucceed = false; }
             }
 
-            if (isSucceed) { Debug.Log("yConverterz•ˆ–Êƒf[ƒ^‚Ì•ÏŠ·¬Œ÷"); }
-            else { Debug.LogWarning("yConverterz•ˆ–Êƒf[ƒ^‚Ì•ÏŠ·¸”sBƒƒO‚ğŠm‚©‚ß‚Ä‚­‚¾‚³‚¢"); }
+            if (isSucceed) { Debug.Log("ã€Converterã€‘è­œé¢ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›æˆåŠŸ"); }
+            else { Debug.LogWarning("ã€Converterã€‘è­œé¢ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›å¤±æ•—ã€‚ãƒ­ã‚°ã‚’ç¢ºã‹ã‚ã¦ãã ã•ã„"); }
 
             return isSucceed;
         }
 
         private void Initialize()
         {
-            // ‚±‚±‚É•ÏŠ·ŠÖ”‚ğ‹Lq‚µ‚Ä‚¢‚­
+            // ã“ã“ã«å¤‰æ›é–¢æ•°ã‚’è¨˜è¿°ã—ã¦ã„ã
             unchainConverters = new List<IUnchainedNoteConvertable>()
             {
                 new TouchNoteConverter(),
@@ -79,7 +79,7 @@ namespace ChartConvert
         {
             bool isSucceed = true;
 
-            // ”qA•ªŠ„”‚Ìæ“¾
+            // æ‹å­ã€åˆ†å‰²æ•°ã®å–å¾—
             int beatCount = barDataOrigin.BeatCount;
             float beatUnit = barDataOrigin.BeatUnit;
             int divNum = barDataOrigin.DivisionNum;
@@ -88,7 +88,7 @@ namespace ChartConvert
             dataInChartEditor.SetBeatUnit(beatUnit);
             dataInChartEditor.SetDivisionNum(divNum);
 
-            // ¬ßƒf[ƒ^‚ğˆê‚Âˆê‚Âæ‚èo‚µ‚Äƒf[ƒ^‚ğ‘ã“ü
+            // å°ç¯€ãƒ‡ãƒ¼ã‚¿ã‚’ä¸€ã¤ä¸€ã¤å–ã‚Šå‡ºã—ã¦ãƒ‡ãƒ¼ã‚¿ã‚’ä»£å…¥
             for (int i = 0; i < barDataOrigin.SubDivisionDatas.Count; i++)
             {
                 var sub = barDataOrigin.SubDivisionDatas[i];
@@ -103,11 +103,11 @@ namespace ChartConvert
         {
             bool isSucceed = true;
 
-            // bpm‚ÌƒZƒbƒg
+            // bpmã®ã‚»ãƒƒãƒˆ
             dataInChartEditor.SetBpm(dataOrigin.Bpm);
             dataInChartEditor.SetSpeedRatio(dataOrigin.SpeedRatio);
 
-            // ˆê‚Â‚¸‚Âæ‚èo‚µ‚Ä•ÏŠ·
+            // ä¸€ã¤ãšã¤å–ã‚Šå‡ºã—ã¦å¤‰æ›
             foreach (var converter in unchainConverters)
             {
                 isSucceed &= converter.AddDataForEditorData(dataOrigin, dataInChartEditor, onAddNoteData);

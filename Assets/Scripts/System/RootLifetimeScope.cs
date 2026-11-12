@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -10,7 +10,7 @@ public class RootLifetimeScope : LifetimeScope
     {
         base.Configure(builder);
 
-        // “ü—ÍŠÖŒW
+        // å…¥åŠ›é–¢ä¿‚
         builder.Register<InputHolder>(Lifetime.Singleton)
             .AsSelf()
             .As<ISliderInputSetter>()
@@ -18,7 +18,7 @@ public class RootLifetimeScope : LifetimeScope
             .As<ISliderInputGetter>()
             .As<ISpaceInputGetter>();
 
-        // ƒIƒvƒVƒ‡ƒ“
+        // ã‚ªãƒ—ã‚·ãƒ§ãƒ³
         builder.Register<OptionHolder>(Lifetime.Singleton)
             .AsSelf()
             .As<INoteSpawnDataOptionGetter>()
@@ -27,20 +27,20 @@ public class RootLifetimeScope : LifetimeScope
             .As<IOptionSetter>()
             .As<IVolumeGetter>();
 
-        // ƒXƒRƒA
+        // ã‚¹ã‚³ã‚¢
         builder.Register<ScoreHolder>(Lifetime.Singleton)
             .AsSelf()
             .As<IJudgementRecorder>()
             .As<IScoreGetter>()
             .As<IScoreSetter>();
 
-        // Šy‹Èƒf[ƒ^
+        // æ¥½æ›²ãƒ‡ãƒ¼ã‚¿
         builder.Register<MusicDataHolder>(Lifetime.Singleton)
             .AsSelf()
             .As<IMusicDataGetter>()
             .As<IMusicDataSetter>();
 
-        // Šy‹Èƒf[ƒ^ƒŠƒXƒg
+        // æ¥½æ›²ãƒ‡ãƒ¼ã‚¿ãƒªã‚¹ãƒˆ
         builder.Register<MusicDataListHolder>(Lifetime.Singleton)
             .AsSelf()
             .As<IMusicDataListGetter>()

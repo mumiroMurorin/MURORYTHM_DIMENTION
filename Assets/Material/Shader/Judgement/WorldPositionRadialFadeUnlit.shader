@@ -1,4 +1,4 @@
-Shader "Custom/Judgement/WorldPositionRadialFadeUnlit"
+﻿Shader "Custom/Judgement/WorldPositionRadialFadeUnlit"
 {
     Properties
     {

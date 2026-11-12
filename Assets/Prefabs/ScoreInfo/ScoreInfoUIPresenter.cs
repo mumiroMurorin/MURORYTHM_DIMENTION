@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -10,14 +10,14 @@ public class ScoreInfoUIPresenter : MonoBehaviour
     [Inject] IOptionGetter optionGetter_model;
     [Inject] IScoreGetter scoreGetter_model;
 
-    [Header("======== ƒƒCƒ“î•ñ ========")]
+    [Header("======== ãƒ¡ã‚¤ãƒ³æƒ…å ± ========")]
     [SerializeField] Combo_View[] combo_view;
     [SerializeField] ScoreRank_View scoreRank_view;
     [SerializeField] ScoreRank_View scoreRankSubtraction_view;
     
     [SerializeField] InfoTypeMainToGameObject[] mainInfos;
 
-    [Header("======== ƒTƒuî•ñ ========")]
+    [Header("======== ã‚µãƒ–æƒ…å ± ========")]
     [SerializeField] ComboRank_View comboRankSub_view;
     [SerializeField] Score_View scoreSub_view;
     [SerializeField] Score_View scoreSubtractionSub_view;
@@ -35,7 +35,7 @@ public class ScoreInfoUIPresenter : MonoBehaviour
         if (optionGetter_model == null) { return; }
         if (scoreGetter_model == null) { return; }
 
-        // ========== •\Ž¦î•ñ ==========
+        // ========== è¡¨ç¤ºæƒ…å ± ==========
         optionGetter_model.MainInfo
             .Subscribe(type => { 
                 foreach (var obj in mainInfos)
@@ -54,7 +54,7 @@ public class ScoreInfoUIPresenter : MonoBehaviour
             })
             .AddTo(this.gameObject);
 
-        // ========== ƒRƒ“ƒ{” ========== 
+        // ========== ã‚³ãƒ³ãƒœæ•° ========== 
         scoreGetter_model?.Combo
             .Subscribe(combo => { 
                 foreach (var view in combo_view) 
@@ -64,17 +64,17 @@ public class ScoreInfoUIPresenter : MonoBehaviour
             })
             .AddTo(this.gameObject);
 
-        // ========== ƒXƒRƒAƒ‰ƒ“ƒN (‰ÁŽZ) ==========
+        // ========== ã‚¹ã‚³ã‚¢ãƒ©ãƒ³ã‚¯ (åŠ ç®—) ==========
         scoreGetter_model?.CurrentScoreRank
             .Subscribe(scoreRank_view.OnChangeScoreRank)
             .AddTo(this.gameObject);
 
-        // ========== ƒXƒRƒAƒ‰ƒ“ƒN (Œ¸ŽZ) ==========
+        // ========== ã‚¹ã‚³ã‚¢ãƒ©ãƒ³ã‚¯ (æ¸›ç®—) ==========
         scoreGetter_model?.CurrentScoreRankSubtraction
             .Subscribe(scoreRankSubtraction_view.OnChangeScoreRank)
             .AddTo(this.gameObject);
 
-        // ========== ƒRƒ“ƒ{ƒ‰ƒ“ƒN ========== 
+        // ========== ã‚³ãƒ³ãƒœãƒ©ãƒ³ã‚¯ ========== 
         scoreGetter_model?.CurrentComboRank
             .Subscribe(rank => {
                 foreach (var view in combo_view)
@@ -88,7 +88,7 @@ public class ScoreInfoUIPresenter : MonoBehaviour
             .Subscribe(comboRankSub_view.OnChangeComboRank)
             .AddTo(this.gameObject);
 
-        // ========== ƒXƒRƒA (‰ÁŽZ) ==========
+        // ========== ã‚¹ã‚³ã‚¢ (åŠ ç®—) ==========
         scoreGetter_model?.Score
             .Subscribe(scoreSub_view.OnChangeScore)
             .AddTo(this.gameObject);
@@ -97,7 +97,7 @@ public class ScoreInfoUIPresenter : MonoBehaviour
             .Subscribe(scoreSub_view.OnChangeScoreRank)
             .AddTo(this.gameObject);
 
-        // ========== ƒXƒRƒA (Œ¸ŽZ) ==========
+        // ========== ã‚¹ã‚³ã‚¢ (æ¸›ç®—) ==========
         scoreGetter_model?.ScoreSubtraction
             .Subscribe(scoreSubtractionSub_view.OnChangeScore)
             .AddTo(this.gameObject);
@@ -106,7 +106,7 @@ public class ScoreInfoUIPresenter : MonoBehaviour
             .Subscribe(scoreSubtractionSub_view.OnChangeScoreRank)
             .AddTo(this.gameObject);
 
-        // ========== “à–ó ==========
+        // ========== å†…è¨³ ==========
         scoreGetter_model.PerfectNum
             .Subscribe(breakdown_view.OnChangePerfectCount)
             .AddTo(this.gameObject);

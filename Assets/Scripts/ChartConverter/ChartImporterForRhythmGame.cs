@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -8,11 +8,11 @@ using System;
 namespace ChartConvert
 {
     /// <summary>
-    /// ChartDataOrigin ¨ ‰¹ƒQ[ 
+    /// ChartDataOrigin â†’ éŸ³ã‚²ãƒ¼ 
     /// </summary>
     public class ChartImporterForRhythmGame
     {
-        // ‚±‚±‚É•ÏŠ·ŠÖ”‚ğ‹Lq‚µ‚Ä‚¢‚­
+        // ã“ã“ã«å¤‰æ›é–¢æ•°ã‚’è¨˜è¿°ã—ã¦ã„ã
         List<IUnchainDataToRhythmGameConvertable> unChainConverters = new List<IUnchainDataToRhythmGameConvertable>();
         List<IHoldDataToRhythmGameConvertable> holdConverters = new List<IHoldDataToRhythmGameConvertable>();
         List<ISpaceHoldDataToRhythmGameConvertable> spaceHoldConverters = new List<ISpaceHoldDataToRhythmGameConvertable>();
@@ -28,23 +28,23 @@ namespace ChartConvert
 
             var chartData = new ChartData();
 
-            // ƒm[ƒgƒf[ƒ^‚ÌƒZƒbƒg
+            // ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
             isSucceed &= SetNoteData(originData, chartData.AddNoteData, 
                 new CalcTimingClass(originData.OffsetMs, optionHolder.OffsetMs.Value));
 
-            // •ˆ–Ê”{‘¬ƒf[ƒ^‚ÌƒZƒbƒg
+            // è­œé¢å€é€Ÿãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
             isSucceed &= SetSpeedRatioData(originData, chartData.AddSpeedRatioData, 
                 new CalcTimingClass(originData.OffsetMs, optionHolder.OffsetMs.Value));
 
-            if (isSucceed) { Debug.Log("yConverterz•ˆ–Êƒf[ƒ^‚Ì•ÏŠ·¬Œ÷"); }
-            else { Debug.LogWarning("yConverterz•ˆ–Êƒf[ƒ^‚Ì•ÏŠ·¸”sBƒƒO‚ğŠm‚©‚ß‚Ä‚­‚¾‚³‚¢"); }
+            if (isSucceed) { Debug.Log("ã€Converterã€‘è­œé¢ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›æˆåŠŸ"); }
+            else { Debug.LogWarning("ã€Converterã€‘è­œé¢ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›å¤±æ•—ã€‚ãƒ­ã‚°ã‚’ç¢ºã‹ã‚ã¦ãã ã•ã„"); }
 
             return chartData;
         }
 
         private void Initialize()
         {
-            // ‚±‚±‚É•ÏŠ·ŠÖ”‚ğ‹Lq‚µ‚Ä‚¢‚­
+            // ã“ã“ã«å¤‰æ›é–¢æ•°ã‚’è¨˜è¿°ã—ã¦ã„ã
             unChainConverters = new List<IUnchainDataToRhythmGameConvertable>()
             {
                 new TouchNoteConverter(),
@@ -83,7 +83,7 @@ namespace ChartConvert
         }
 
         /// <summary>
-        /// ƒm[ƒcƒf[ƒ^‚ÌƒZƒbƒg
+        /// ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
         /// </summary>
         /// <param name="originData"></param>
         /// <param name="onAddNoteData"></param>
@@ -93,7 +93,7 @@ namespace ChartConvert
         {
             bool isSucceed = true;
 
-            // •ªü‚ğˆê‚Â‚¸‚Âæ‚èo‚·
+            // åˆ†ç·šã‚’ä¸€ã¤ãšã¤å–ã‚Šå‡ºã™
             foreach (var bar in originData.BarDatas)
             {
                 isSucceed &= SetDataFromBarData(bar, onAddNoteData, calcTiming);
@@ -103,7 +103,7 @@ namespace ChartConvert
         }
 
         /// <summary>
-        /// ¬ßƒf[ƒ^‚©‚ç•ªßƒf[ƒ^‚ğ’Šo‚µ‚Äƒm[ƒcƒf[ƒ^‚É•ÏŠ·
+        /// å°ç¯€ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰åˆ†ç¯€ãƒ‡ãƒ¼ã‚¿ã‚’æŠ½å‡ºã—ã¦ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿ã«å¤‰æ›
         /// </summary>
         /// <param name="barDataOrigin"></param>
         /// <param name="chartData"></param>
@@ -112,12 +112,12 @@ namespace ChartConvert
         {
             bool isSucceed = true;
 
-            // ”qA•ªŠ„”‚Ìæ“¾
+            // æ‹å­ã€åˆ†å‰²æ•°ã®å–å¾—
             int beatCount = barDataOrigin.BeatCount;
             float beatUnit = barDataOrigin.BeatUnit;
             int divNum = barDataOrigin.DivisionNum;
 
-            // ¬ßƒf[ƒ^‚ğˆê‚Âˆê‚Âæ‚èo‚µ‚Äƒf[ƒ^‚ğ‘ã“ü
+            // å°ç¯€ãƒ‡ãƒ¼ã‚¿ã‚’ä¸€ã¤ä¸€ã¤å–ã‚Šå‡ºã—ã¦ãƒ‡ãƒ¼ã‚¿ã‚’ä»£å…¥
             foreach (var sub in barDataOrigin.SubDivisionDatas)
             {
                 float bpm = sub.Bpm;
@@ -135,7 +135,7 @@ namespace ChartConvert
         }
 
         /// <summary>
-        /// •ªßƒf[ƒ^‚©‚çƒm[ƒcƒf[ƒ^‚Éˆê‚Âˆê‚Â•ÏŠ·
+        /// åˆ†ç¯€ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿ã«ä¸€ã¤ä¸€ã¤å¤‰æ›
         /// </summary>
         /// <param name="dataOrigin"></param>
         /// <param name="chartData"></param>
@@ -145,8 +145,8 @@ namespace ChartConvert
         {
             bool isSucceed = true;
 
-            // ˆê‚Â‚¸‚Âæ‚èo‚µ‚Ä•ÏŠ·
-            // ƒ^ƒbƒ`Œn
+            // ä¸€ã¤ãšã¤å–ã‚Šå‡ºã—ã¦å¤‰æ›
+            // ã‚¿ãƒƒãƒç³»
             foreach (var converter in unChainConverters)
             {
                 if (!converter.AddDataForGameData(dataOrigin, onAddNoteData, secondsPassed))
@@ -155,7 +155,7 @@ namespace ChartConvert
                 }
             }
 
-            // ƒz[ƒ‹ƒhŒn
+            // ãƒ›ãƒ¼ãƒ«ãƒ‰ç³»
             foreach (var converter in holdConverters)
             {
                 if (!converter.AddDataForGameData(dataOrigin, onAddNoteData, secondsPassed, chainNumberToRanges)) 
@@ -164,7 +164,7 @@ namespace ChartConvert
                 }
             }
 
-            // ƒXƒy[ƒXƒz[ƒ‹ƒhŒn
+            // ã‚¹ãƒšãƒ¼ã‚¹ãƒ›ãƒ¼ãƒ«ãƒ‰ç³»
             foreach (var converter in spaceHoldConverters)
             {
                 if (!converter.AddDataForGameData(dataOrigin, onAddNoteData, secondsPassed, chainNumberToVertices))
@@ -177,7 +177,7 @@ namespace ChartConvert
         }
 
         /// <summary>
-        /// ƒXƒs[ƒh”{—¦‚Ì•ÏŠ·
+        /// ã‚¹ãƒ”ãƒ¼ãƒ‰å€ç‡ã®å¤‰æ›
         /// </summary>
         /// <param name="barDataOrigin"></param>
         /// <param name="onSpeedRatioDataListner"></param>
@@ -188,7 +188,7 @@ namespace ChartConvert
 
             foreach (var bar in originData.BarDatas)
             {
-                // ”qA•ªŠ„”‚Ìæ“¾
+                // æ‹å­ã€åˆ†å‰²æ•°ã®å–å¾—
                 int beatCount = bar.BeatCount;
                 float beatUnit = bar.BeatUnit;
                 int divNum = bar.DivisionNum;
@@ -202,7 +202,7 @@ namespace ChartConvert
                     onAddSpeedRatioData(new SpeedRatioData(sub.SpeedRatio, timing));
                     calcTiming.AddTiming(beatUnit, divNum, bpm);
 
-                    // ‘O‚Ì”{—¦‚ğ•Û‘¶
+                    // å‰ã®å€ç‡ã‚’ä¿å­˜
                     previousRatio = sub.SpeedRatio;
                 }
             }
@@ -212,7 +212,7 @@ namespace ChartConvert
     }
 
     /// <summary>
-    /// ƒm[ƒc‚ª—¬‚ê‚Ä‚­‚éŠÔ‚ğŒvZ‚·‚éƒNƒ‰ƒX
+    /// ãƒãƒ¼ãƒ„ãŒæµã‚Œã¦ãã‚‹æ™‚é–“ã‚’è¨ˆç®—ã™ã‚‹ã‚¯ãƒ©ã‚¹
     /// </summary>
     public class CalcTimingClass
     {
@@ -227,13 +227,13 @@ namespace ChartConvert
 
         public float AddTiming(float beatUnit, float divNum, float bpm)
         {
-            // 1•ªß‚ÌŠÔ[sec]
-            // = 1•bŠÔ‚É‘Å‚½‚ê‚é4•ª‰¹•„‚Ì” * (BeatUnit / 4f) / •ªŠ„”
-            // = (60f / 1•ªŠÔ‚É‘Å‚½‚ê‚é4•ª‰¹•„‚Ì”(BPM)) * (4f / BeatUnit) / •ªŠ„”  
+            // 1åˆ†ç¯€ã®æ™‚é–“[sec]
+            // = 1ç§’é–“ã«æ‰“ãŸã‚Œã‚‹4åˆ†éŸ³ç¬¦ã®æ•° * (BeatUnit / 4f) / åˆ†å‰²æ•°
+            // = (60f / 1åˆ†é–“ã«æ‰“ãŸã‚Œã‚‹4åˆ†éŸ³ç¬¦ã®æ•°(BPM)) * (4f / BeatUnit) / åˆ†å‰²æ•°  
             float subDivisionSeconds = (60f / bpm) * (4f / beatUnit) / divNum;
 
-            // Ÿ‚Ì•ªß‚ÌŠÔ[sec]
-            // = Œo‰ßŠÔ[sec] + 1•ªß‚ÌŠÔ[sec]
+            // æ¬¡ã®åˆ†ç¯€ã®æ™‚é–“[sec]
+            // = çµŒéæ™‚é–“[sec] + 1åˆ†ç¯€ã®æ™‚é–“[sec]
             timePassedSec += subDivisionSeconds;
             return timePassedSec;
         }

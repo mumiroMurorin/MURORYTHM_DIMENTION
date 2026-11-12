@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -64,7 +64,7 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // •ÒWƒŒƒCƒ„[‚ª•ÏX‚³‚ê‚½Aƒ‚[ƒh‚ğ•ÏX‚·‚é
+            // ç·¨é›†ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå¤‰æ›´ã•ã‚ŒãŸæ™‚ã€ãƒ¢ãƒ¼ãƒ‰ã‚’å¤‰æ›´ã™ã‚‹
             dataGetter?.EditNoteType
                 .Subscribe(type => {
                     switch (type)
@@ -76,7 +76,7 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
 
-            // •ÒW’†ƒƒbƒVƒ…ƒIƒuƒWƒFƒNƒg‚ª•Ï‚í‚Á‚½‚Æ‚«
+            // ç·¨é›†ä¸­ãƒ¡ãƒƒã‚·ãƒ¥ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒå¤‰ã‚ã£ãŸã¨ã
             notesGetter?.EditingVertices
                 .Subscribe(note =>
                 {
@@ -91,7 +91,7 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
 
-            // ƒŒ[ƒ“•ªŠ„ü‚Ì•\¦
+            // ãƒ¬ãƒ¼ãƒ³åˆ†å‰²ç·šã®è¡¨ç¤º
             optionGetter?.LaneDivisionNum
                 .Subscribe(SetLaneDivisionLine)
                 .AddTo(this.gameObject);
@@ -101,27 +101,27 @@ namespace ChartEditor
         {
             if(vertices == null) { return; }
 
-            // ObserveCountChanged()‚Í‰Šú‰»‚µ‚Ä‚­‚ê‚È‚¢‚Ì‚ÅAÅ‰‚Éw“Ç
+            // ObserveCountChanged()ã¯åˆæœŸåŒ–ã—ã¦ãã‚Œãªã„ã®ã§ã€æœ€åˆã«è³¼èª­
             for (int i = 0; i < vertices.Vertices.Count; i++) 
             {
                 var vertex = vertices.Vertices[i];
                 OnAddVertex(vertex, i);
             }
 
-            // ’¸“_‚Ì•ÏX’Ê’m‚É‘Î‚µ‚ÄƒXƒP[ƒ‹XV
-            // ’Ç‰Á‚³‚ê‚½‚Æ‚«
+            // é ‚ç‚¹ã®å¤‰æ›´é€šçŸ¥ã«å¯¾ã—ã¦ã‚¹ã‚±ãƒ¼ãƒ«æ›´æ–°
+            // è¿½åŠ ã•ã‚ŒãŸã¨ã
             vertices.Vertices.ObserveAdd()
                 .Subscribe(vertex => OnAddVertex(vertex.Value, vertex.Index))
                 .AddTo(this.gameObject)
                 .AddTo(disposableForBindForVertices);
 
-            // íœ‚³‚ê‚½‚Æ‚«
+            // å‰Šé™¤ã•ã‚ŒãŸã¨ã
             vertices.Vertices.ObserveRemove()
                 .Subscribe(vertex => OnRemoveVertex(vertex.Value))
                 .AddTo(this.gameObject)
                 .AddTo(disposableForBindForVertices);
 
-            // ƒNƒŠƒA‚³‚ê‚½‚Æ‚«
+            // ã‚¯ãƒªã‚¢ã•ã‚ŒãŸã¨ã
             vertices.Vertices.ObserveReset()
                 .Subscribe(_ => OnClearVertex())
                 .AddTo(this.gameObject)
@@ -133,7 +133,7 @@ namespace ChartEditor
             var obj = Instantiate(vertexObject);
             if (!obj.TryGetComponent(out VertexObject vertexObj))
             {
-                Debug.LogWarning("yVertexzƒIƒuƒWƒFƒNƒg‚ÉVertexObject‚ªƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+                Debug.LogWarning("ã€Vertexã€‘ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«VertexObjectãŒã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ã¾ã›ã‚“");
                 return;
             }
 
@@ -158,7 +158,7 @@ namespace ChartEditor
             if (!notesSetter.RemoveVertexDataToObject(vertex)) { return; }
             if (obj == null) { return; }
 
-            // ƒIƒuƒWƒFƒNƒg‚Ìíœ
+            // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‰Šé™¤
             if (obj != null && obj.gameObject.TryGetComponent(out IDestroyableVertex destroyable)) { destroyable.OnDestroy(); }
 
             onRemoveVertex?.OnNext(Unit.Default);
@@ -172,7 +172,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ’¸“_ƒIƒuƒWƒFƒNƒg‚ÌƒCƒ“ƒfƒbƒNƒX‡F‚ğXV‚·‚é
+        /// é ‚ç‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹é †è‰²ã‚’æ›´æ–°ã™ã‚‹
         /// </summary>
         private void UpdateVertexColor()
         {
@@ -189,7 +189,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ³‹K‰»‚³‚ê‚½”’l ¨ ƒ`ƒƒ[ƒgƒGƒfƒBƒ^ã‚ÌWorldPos
+        /// æ­£è¦åŒ–ã•ã‚ŒãŸæ•°å€¤ â†’ ãƒãƒ£ãƒ¼ãƒˆã‚¨ãƒ‡ã‚£ã‚¿ä¸Šã®WorldPos
         /// </summary>
         /// <param name="normalizedPos"></param>
         /// <returns></returns>
@@ -202,7 +202,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒ`ƒƒ[ƒgƒGƒfƒBƒ^ã‚ÌWorldPos ¨ ³‹K‰»‚³‚ê‚½”’l
+        /// ãƒãƒ£ãƒ¼ãƒˆã‚¨ãƒ‡ã‚£ã‚¿ä¸Šã®WorldPos â†’ æ­£è¦åŒ–ã•ã‚ŒãŸæ•°å€¤
         /// </summary>
         /// <param name="worldPos"></param>
         /// <returns></returns>
@@ -213,7 +213,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ’¸“_ƒIƒuƒWƒFƒNƒg‚Æƒf[ƒ^‚ÌíœAƒNƒŠƒA
+        /// é ‚ç‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ãƒ‡ãƒ¼ã‚¿ã®å‰Šé™¤ã€ã‚¯ãƒªã‚¢
         /// </summary>
         private void ResetVerticesPreview()
         {
@@ -223,7 +223,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ’¸“_ƒf[ƒ^‚Éw“Ç‚³‚ê‚½ƒR[ƒ‹ƒoƒbƒN‚ğÌ‚Ä‚é
+        /// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ã«è³¼èª­ã•ã‚ŒãŸã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’æ¨ã¦ã‚‹
         /// </summary>
         private void DisposeBindForVerticesData()
         {
@@ -232,7 +232,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// •ªŠ„ü‚Ì•\¦”ñ•\¦
+        /// åˆ†å‰²ç·šã®è¡¨ç¤ºéè¡¨ç¤º
         /// </summary>
         /// <param name="divNum"></param>
         private void SetLaneDivisionLine(int divNum)

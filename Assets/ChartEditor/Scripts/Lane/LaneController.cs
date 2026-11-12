@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -36,24 +36,24 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // ƒOƒ‰ƒEƒ“ƒh’·‚³XV
+            // ã‚°ãƒ©ã‚¦ãƒ³ãƒ‰é•·ã•æ›´æ–°
             dataGetter?.ChartSeconds
                 .Subscribe(seconds => UpdateGroundLength(seconds, optionGetter.ChartViewScale.Value))
                 .AddTo(this.gameObject);
 
-            // Šg‘å—¦
+            // æ‹¡å¤§ç‡
             optionGetter?.ChartViewScale
                 .Subscribe(scale => UpdateGroundLength(dataGetter.ChartSeconds.Value, scale))
                 .AddTo(this.gameObject);
 
-            // ƒŒ[ƒ“•ªŠ„ü‚Ì•\¦
+            // ãƒ¬ãƒ¼ãƒ³åˆ†å‰²ç·šã®è¡¨ç¤º
             optionGetter?.LaneDivisionNum
                 .Subscribe(SetLaneDivisionLine)
                 .AddTo(this.gameObject);
         }
 
         /// <summary>
-        /// ƒOƒ‰ƒEƒ“ƒh’·‚ğ’²®
+        /// ã‚°ãƒ©ã‚¦ãƒ³ãƒ‰é•·ã‚’èª¿æ•´
         /// </summary>
         /// <param name="chartSeconds"></param>
         /// <param name="viewScale"></param>
@@ -61,19 +61,19 @@ namespace ChartEditor
         {
             float chartLength = viewScale * chartSeconds;
 
-            // ƒOƒ‰ƒEƒ“ƒh’·‚ÌƒZƒbƒg
+            // ã‚°ãƒ©ã‚¦ãƒ³ãƒ‰é•·ã®ã‚»ãƒƒãƒˆ
             groundParent.transform.localScale = new Vector3(
                 groundParent.transform.localScale.x,
                 groundParent.transform.localScale.y,
                 chartLength);
 
-            // •ªŠ„ü‚ÌƒZƒbƒg
+            // åˆ†å‰²ç·šã®ã‚»ãƒƒãƒˆ
             laneDivisionLineParent.transform.localScale = new Vector3(
                 laneDivisionLineParent.transform.localScale.x,
                 laneDivisionLineParent.transform.localScale.y,
                 chartLength);
 
-            // •ªŠ„ƒŒƒCƒ„[ƒIƒuƒWƒFƒNƒg’·‚ÌƒZƒbƒg
+            // åˆ†å‰²ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé•·ã®ã‚»ãƒƒãƒˆ
             divisionLayerObjParent.transform.localScale = new Vector3(
                 divisionLayerObjParent.transform.localScale.x,
                 divisionLayerObjParent.transform.localScale.y,
@@ -81,7 +81,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// •ªŠ„ü‚Ì•\¦”ñ•\¦
+        /// åˆ†å‰²ç·šã®è¡¨ç¤ºéè¡¨ç¤º
         /// </summary>
         /// <param name="divNum"></param>
         private void SetLaneDivisionLine(int divNum)

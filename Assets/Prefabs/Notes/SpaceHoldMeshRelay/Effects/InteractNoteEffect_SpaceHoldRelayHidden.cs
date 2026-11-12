@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -9,7 +9,7 @@ public class InteractNoteEffect_SpaceHoldRelayHidden : InteractNoteEffect
     {
         if (noteDataOrigin is not NoteData_SpaceHoldRelayHidden noteData) { return; }
 
-        // ƒp[ƒeƒBƒNƒ‹‚ÌƒZƒbƒg
+        // ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã®ã‚»ãƒƒãƒˆ
         foreach (var particle in particles)
         {
             particle.Stop();

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -21,12 +21,12 @@ namespace ChartEditor
 
         public void ChangeChartLength(int delta)
         {
-            // ‰„’·
+            // å»¶é•·
             if(delta > 0)
             {
                 ExtendChart(delta);
             }
-            // ’Zk
+            // çŸ­ç¸®
             else
             {
                 ShortenChart(Mathf.Abs(delta));
@@ -34,30 +34,30 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// •ˆ–Ê‚Ì‰„’·
+        /// è­œé¢ã®å»¶é•·
         /// </summary>
         /// <param name="length"></param>
         private void ExtendChart(int length)
         {
-            // ‰„’·
+            // å»¶é•·
             Record(() => {
                 dataSetter.ChangeChartLength(length);
             },
-            // ’Zk
+            // çŸ­ç¸®
             () => {
                 dataSetter.ChangeChartLength(-length);
             });
         }
 
         /// <summary>
-        /// •ˆ–Ê‚Ì’Zk
+        /// è­œé¢ã®çŸ­ç¸®
         /// </summary>
         /// <param name="length"></param>
         private void ShortenChart(int length)
         {
             if (dataGetter.ChartData.Value.BarDatas.Count <= 0) { return; }
 
-            // Á‚·ƒm[ƒc‚ğ‹L˜^
+            // æ¶ˆã™ãƒãƒ¼ãƒ„ã‚’è¨˜éŒ²
             int count = dataGetter.ChartData.Value.BarDatas.Count;
             var destroyNoteList = new List<IDeployableNoteData>();
 
@@ -72,15 +72,15 @@ namespace ChartEditor
                 }
             }
 
-            // ’Zk
+            // çŸ­ç¸®
             Record(() => {
                 dataSetter.ChangeChartLength(-length);
             },
-            // ‰„’·
+            // å»¶é•·
             () => {
                 dataSetter.ChangeChartLength(length);
 
-                // ƒm[ƒc‚ğ’Ç‰Á
+                // ãƒãƒ¼ãƒ„ã‚’è¿½åŠ 
                 foreach(var note in destroyNoteList)
                 {
                     dataGetter.ChartData.Value.AddNote(note);

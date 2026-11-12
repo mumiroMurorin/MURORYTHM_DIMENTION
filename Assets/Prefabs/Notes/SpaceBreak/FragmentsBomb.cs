@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
@@ -6,7 +6,7 @@ using System.Threading;
 
 public class FragmentsBomb : MonoBehaviour
 {
-    [Header("”š”­ŠÖŒW")]
+    [Header("çˆ†ç™ºé–¢ä¿‚")]
     [SerializeField] float startSize = 0.75f;
     [SerializeField] float minForce;
     [SerializeField] float maxForce;
@@ -16,7 +16,7 @@ public class FragmentsBomb : MonoBehaviour
     [SerializeField] float extraGravityMultiplier = 8f;
     [SerializeField] bool applyExtraGravity = true;
 
-    [Header("íœ‚Ü‚Å‚ÌŠÔ")]
+    [Header("å‰Šé™¤ã¾ã§ã®æ™‚é–“")]
     [SerializeField] float lifeTime;
 
     List<Rigidbody> childrenRb = new List<Rigidbody>();

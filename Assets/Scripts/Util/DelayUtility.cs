@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -6,11 +6,11 @@ using UnityEngine;
 public static class DelayUtility
 {
     /// <summary>
-    /// n•bŒã‚É callback ‚ğÀs‚·‚éiƒLƒƒƒ“ƒZƒ‹‰Â”\j
+    /// nç§’å¾Œã« callback ã‚’å®Ÿè¡Œã™ã‚‹ï¼ˆã‚­ãƒ£ãƒ³ã‚»ãƒ«å¯èƒ½ï¼‰
     /// </summary>
-    /// <param name="seconds">‘Ò‹@•b”</param>
-    /// <param name="callback">ŒÄ‚Ño‚·ˆ—</param>
-    /// <param name="token">ƒLƒƒƒ“ƒZƒ‹ƒg[ƒNƒ“</param>
+    /// <param name="seconds">å¾…æ©Ÿç§’æ•°</param>
+    /// <param name="callback">å‘¼ã³å‡ºã™å‡¦ç†</param>
+    /// <param name="token">ã‚­ãƒ£ãƒ³ã‚»ãƒ«ãƒˆãƒ¼ã‚¯ãƒ³</param>
     public static async UniTask InvokeAfterSeconds(float seconds, Action callback, CancellationToken token, bool ignoreTimeScale)
     {
         try
@@ -20,12 +20,12 @@ public static class DelayUtility
         }
         catch (OperationCanceledException)
         {
-            Debug.Log("InvokeAfterSeconds: ƒLƒƒƒ“ƒZƒ‹‚³‚ê‚Ü‚µ‚½");
+            Debug.Log("InvokeAfterSeconds: ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚Œã¾ã—ãŸ");
         }
     }
 
     /// <summary>
-    /// n•bŒã‚É callback ‚ğÀs‚·‚éƒ^ƒXƒN‚ğŠJn‚µA‚»‚ÌƒLƒƒƒ“ƒZƒ‹ƒg[ƒNƒ“ƒ\[ƒX‚ğ•Ô‚·
+    /// nç§’å¾Œã« callback ã‚’å®Ÿè¡Œã™ã‚‹ã‚¿ã‚¹ã‚¯ã‚’é–‹å§‹ã—ã€ãã®ã‚­ãƒ£ãƒ³ã‚»ãƒ«ãƒˆãƒ¼ã‚¯ãƒ³ã‚½ãƒ¼ã‚¹ã‚’è¿”ã™
     /// </summary>
     public static CancellationTokenSource Run(float seconds, Action callback, bool ignoreTimeScale = false)
     {

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -22,7 +22,7 @@ namespace ChartEditor
             SetNoteType(data.NoteType);
         }
 
-        // ƒm[ƒgƒ^ƒCƒv
+        // ãƒãƒ¼ãƒˆã‚¿ã‚¤ãƒ—
         ReactiveProperty<DeploymentNoteType> noteType = new ReactiveProperty<DeploymentNoteType>(DeploymentNoteType.Touch);
         public DeploymentNoteType NoteType
         {
@@ -35,7 +35,7 @@ namespace ChartEditor
             if (noteType != DeploymentNoteType.Touch &&
                 noteType != DeploymentNoteType.DivineTouch)
             {
-                Debug.LogWarning($"yNotezTouchNote‚Í {noteType} ‚É‘Î‰‚µ‚Ä‚¢‚Ü‚¹‚ñ");
+                Debug.LogWarning($"ã€Noteã€‘TouchNoteã¯ {noteType} ã«å¯¾å¿œã—ã¦ã„ã¾ã›ã‚“");
                 return;
             }
 

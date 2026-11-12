@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -29,7 +29,7 @@ namespace ChartEditor
 
         private void LateUpdate()
         {
-            // ”z’uƒ‚[ƒh‚Ì‚İ
+            // é…ç½®ãƒ¢ãƒ¼ãƒ‰ã®ã¿
             if (dataGetter.CurrentEditMode.Value != EditMode.SpaceMove &&
                 dataGetter.CurrentEditMode.Value != EditMode.SpaceMoving) { return; }
 
@@ -39,33 +39,33 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒNƒŠƒbƒN‚³‚ê‚½
+        /// ã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸæ™‚
         /// </summary>
         private void StartMovingNotes()
         {
             Initialize();
 
-            // “®‚©‚¹‚éƒIƒuƒWƒFƒNƒg‚Å‚È‚¯‚ê‚Î•Ô‚·
+            // å‹•ã‹ã›ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã‘ã‚Œã°è¿”ã™
             var collider = dataGetter.GetInteractableCollider<IFreedomMovableCollider>();
             var movableObject = collider?.Note;
 
             if (collider == null) { return; }
             if (movableObject == null) { return; }
 
-            // Šî€‚Æ‚È‚éƒNƒŠƒbƒN‚³‚ê‚½ƒm[ƒcî•ñ‚ğ•Û‘¶
+            // åŸºæº–ã¨ãªã‚‹ã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸãƒãƒ¼ãƒ„æƒ…å ±ã‚’ä¿å­˜
             baseAddress = new AddressInChart(movableObject.Note.NoteData.Address);
             previousAddress = new List<NoteDataToAddress>();
 
-            // •¡”‘I‘ğ‚³‚ê‚½ƒIƒuƒWƒFƒNƒg‚©‚ç“®‚©‚¹‚é‚â‚Â‚ğæ‚èo‚·
+            // è¤‡æ•°é¸æŠã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰å‹•ã‹ã›ã‚‹ã‚„ã¤ã‚’å–ã‚Šå‡ºã™
             foreach (var data in notesGetter.SelectingNotes)
             {
                 var obj = notesGetter.GetNoteObject(data);
                 if (!obj.TryGetComponent(out IFreedomMovableObject movable)) { continue; }
 
-                // ƒm[ƒcƒIƒuƒWƒFƒNƒg‘¤‚Ì“®ì
+                // ãƒãƒ¼ãƒ„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå´ã®å‹•ä½œ
                 movable.OnMoveStart();
 
-                // ·•ª‚ğ•Û‘¶
+                // å·®åˆ†ã‚’ä¿å­˜
                 var subDelta = dataGetter.ChartData.Value.GetSubdivisionDelta(new AddressInChart(movable.Note.NoteData.Address), baseAddress);
                 movableAndDelta.TryAdd(movable, subDelta);
                 previousAddress.Add(new NoteDataToAddress(data, data.Address));
@@ -78,15 +78,15 @@ namespace ChartEditor
         {
             if (movableAndDelta == null || movableAndDelta.Count == 0) { return; }
 
-            // ƒJ[ƒ\ƒ‹‰º‚Ìeæ“¾
+            // ã‚«ãƒ¼ã‚½ãƒ«ä¸‹ã®è¦ªå–å¾—
             var deployable = dataGetter.GetInteractableCollider<IFreedomDeployableCollider>();
             if (deployable == null) { return; }
             if (lastLocation == deployable) { return; }
 
-            // ÅV”z’uêŠ‚ÌXV
+            // æœ€æ–°é…ç½®å ´æ‰€ã®æ›´æ–°
             lastLocation = deployable;
 
-            // ƒAƒhƒŒƒX‚ÌˆÚ“®
+            // ã‚¢ãƒ‰ãƒ¬ã‚¹ã®ç§»å‹•
             foreach (var pair in movableAndDelta)
             {
                 var newAddress = dataGetter.ChartData.Value.AddressAddition(deployable.Address, pair.Value);
@@ -96,7 +96,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒm[ƒg‚ğw’è‚³‚ê‚½ƒAƒhƒŒƒX‚ÉˆÚ“®‚³‚¹‚é
+        /// ãƒãƒ¼ãƒˆã‚’æŒ‡å®šã•ã‚ŒãŸã‚¢ãƒ‰ãƒ¬ã‚¹ã«ç§»å‹•ã•ã›ã‚‹
         /// </summary>
         /// <param name="movableObject"></param>
         /// <param name="newAddress"></param>
@@ -109,7 +109,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒNƒŠƒbƒNI—¹(ˆÚ“®I—¹)
+        /// ã‚¯ãƒªãƒƒã‚¯çµ‚äº†æ™‚(ç§»å‹•çµ‚äº†æ™‚)
         /// </summary>
         private void EndMoveNote()
         {
@@ -123,7 +123,7 @@ namespace ChartEditor
                 currentAddress.Add(new NoteDataToAddress(noteData, noteData.Address));
             }
 
-            // ˆÚ“®‚ğI‚¦‚½‚Æ‚«‚Í‚¶‚ß‚Ä“o˜^
+            // ç§»å‹•ã‚’çµ‚ãˆãŸã¨ãã¯ã˜ã‚ã¦ç™»éŒ²
             var previousAddressCopy = new List<NoteDataToAddress>(previousAddress);
             RecordNotesMoving(previousAddressCopy, currentAddress);
 
@@ -133,7 +133,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ‰Šú‰»
+        /// åˆæœŸåŒ–
         /// </summary>
         private void Initialize()
         {

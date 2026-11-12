@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +17,7 @@ namespace UIInSelectScene
 
         private void Start()
         {
-            // í‚É‚¿‚å‚Á‚Æ—h‚ç‚·‚©
+            // å¸¸ã«ã¡ã‚‡ã£ã¨æºã‚‰ã™ã‹
             doShakeBuilder.ApplyShake(backGroundObj.transform);
         }
 
@@ -25,13 +25,13 @@ namespace UIInSelectScene
         {
             if(backGroundImage == null) { return; }
 
-            // ƒtƒF[ƒhƒAƒEƒgi“§–¾‚É‚·‚éj
+            // ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆï¼ˆé€æ˜ã«ã™ã‚‹ï¼‰
             backGroundImage.DOColor(Color.black, changeDuration / 2).OnComplete(() =>
             {
-                // ƒXƒvƒ‰ƒCƒg‚ğ•ÏX
+                // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚’å¤‰æ›´
                 backGroundImage.sprite = musicData.ThemeSprite;
 
-                // ƒtƒF[ƒhƒCƒ“iŒ³‚Ì“§–¾“x‚É–ß‚·j
+                // ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ï¼ˆå…ƒã®é€æ˜åº¦ã«æˆ»ã™ï¼‰
                 backGroundImage.DOColor(Color.white, changeDuration / 2);
             });
         }

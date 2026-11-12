@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
@@ -18,7 +18,7 @@ namespace TransitionerInLobbyScene
 
         void IPhaseTransitionerInLobbyScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"ConfirmTutorial_Operation\"");
+            Debug.Log("„ÄêTransition„ÄëTransition to \"ConfirmTutorial_Operation\"");
 
         }
     }

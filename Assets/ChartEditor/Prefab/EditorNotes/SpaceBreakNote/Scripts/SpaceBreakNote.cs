@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,7 +24,7 @@ namespace ChartEditor
             SpaceVertices.SetVertices(data.SpaceVertices.Vertices.Select(x => new VertexData(x)).ToList());
         }
 
-        // ƒm[ƒgƒ^ƒCƒv
+        // ãƒãƒ¼ãƒˆã‚¿ã‚¤ãƒ—
         ReactiveProperty<DeploymentNoteType> noteType = new ReactiveProperty<DeploymentNoteType>(DeploymentNoteType.SpaceBreak);
         public DeploymentNoteType NoteType {
             get { return noteType.Value; }
@@ -34,14 +34,14 @@ namespace ChartEditor
         public void SetNoteType(DeploymentNoteType noteType)
         {
             this.noteType.Value = noteType;
-            //Debug.LogWarning($"yNotezSpaceHoldNote‚Í {noteType} ‚É‘Î‰‚µ‚Ä‚¢‚Ü‚¹‚ñ");
+            //Debug.LogWarning($"ã€Noteã€‘SpaceHoldNoteã¯ {noteType} ã«å¯¾å¿œã—ã¦ã„ã¾ã›ã‚“");
             return;
         }
 
-        // ’¸“_
+        // é ‚ç‚¹
         public SpaceVertices SpaceVertices { get; private set; } = new SpaceVertices();
 
-        // ƒAƒhƒŒƒX
+        // ã‚¢ãƒ‰ãƒ¬ã‚¹
         AddressWithinRange address;
         public IReadOnlyAddressWithinRange Address => address;
         public void SetAddress(IReadOnlyAddressWithinRange address)

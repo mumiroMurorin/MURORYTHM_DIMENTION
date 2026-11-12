@@ -1,4 +1,4 @@
-Shader "Custom/GlintEffectWithImageColor"
+ï»¿Shader "Custom/GlintEffectWithImageColor"
 {
     Properties
     {
@@ -8,7 +8,7 @@ Shader "Custom/GlintEffectWithImageColor"
         _GlintWidth("Glint Width", Range(0.01, 1)) = 0.2
         _Angle("Glint Angle (Degrees)", Range(0,360)) = 45
 
-            // --- ’Ç‰Á: UI‚ÌMask‚É‘Î‰‚·‚é‚½‚ß‚Ì•W€ƒvƒƒpƒeƒB ---
+            // --- è¿½åŠ : UIã®Maskã«å¯¾å¿œã™ã‚‹ãŸã‚ã®æ¨™æº–ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ ---
             _StencilComp("Stencil Comparison", Float) = 8
             _Stencil("Stencil ID", Float) = 0
             _StencilOp("Stencil Operation", Float) = 0
@@ -29,7 +29,7 @@ Shader "Custom/GlintEffectWithImageColor"
                 "CanUseSpriteAtlas" = "True"
             }
 
-            // --- C³: ŒÅ’è’l‚Å‚Í‚È‚­ƒvƒƒpƒeƒB‚ğg—p‚·‚é‚æ‚¤‚É•ÏX ---
+            // --- ä¿®æ­£: å›ºå®šå€¤ã§ã¯ãªããƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ä½¿ç”¨ã™ã‚‹ã‚ˆã†ã«å¤‰æ›´ ---
             Stencil
             {
                 Ref[_Stencil]
@@ -44,7 +44,7 @@ Shader "Custom/GlintEffectWithImageColor"
             Cull Off
             Lighting Off
             ZWrite Off
-            // ’Ç‰Á: ƒJƒ‰[ƒ}ƒXƒNİ’èiUI‚Ì•W€“®ì‚É‡‚í‚¹‚é‚½‚ßj
+            // è¿½åŠ : ã‚«ãƒ©ãƒ¼ãƒã‚¹ã‚¯è¨­å®šï¼ˆUIã®æ¨™æº–å‹•ä½œã«åˆã‚ã›ã‚‹ãŸã‚ï¼‰
             ColorMask[_ColorMask]
 
             Pass
@@ -89,7 +89,7 @@ Shader "Custom/GlintEffectWithImageColor"
                     fixed4 col = tex2D(_MainTex, i.uv);
                     col *= i.color;
 
-                    // --- ‘O‰ñ‚ÌC³ƒƒWƒbƒNi‚»‚Ì‚Ü‚ÜˆÛj ---
+                    // --- å‰å›ã®ä¿®æ­£ãƒ­ã‚¸ãƒƒã‚¯ï¼ˆãã®ã¾ã¾ç¶­æŒï¼‰ ---
                     float2 centeredUV = i.uv - float2(0.5, 0.5);
                     float rad = radians(_Angle);
                     float2 dir = float2(cos(rad), sin(rad));

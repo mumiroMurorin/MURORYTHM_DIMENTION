@@ -1,10 +1,10 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ChartDataHolder : IChartDataSetter, IChartDataGetter
 {
-    // •ˆ–Êƒf[ƒ^
+    // è­œé¢ãƒ‡ãƒ¼ã‚¿
     ChartData chart;
     ChartData IChartDataGetter.Chart { get { return chart; } }
 

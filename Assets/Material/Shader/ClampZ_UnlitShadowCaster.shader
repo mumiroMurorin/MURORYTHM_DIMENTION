@@ -1,4 +1,4 @@
-Shader "Custom/ClampZ_UnlitShadowCaster"
+﻿Shader "Custom/ClampZ_UnlitShadowCaster"
 {
     Properties
     {

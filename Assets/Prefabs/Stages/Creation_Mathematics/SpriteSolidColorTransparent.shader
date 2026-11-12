@@ -1,4 +1,4 @@
-Shader "Custom/SpriteSolidColorTransparent"
+﻿Shader "Custom/SpriteSolidColorTransparent"
 {
     Properties
     {

@@ -1,4 +1,4 @@
-public enum PhaseStatusInLobbyScene
+﻿public enum PhaseStatusInLobbyScene
 {
     LoadData = 0,
     FadeIn = 1,

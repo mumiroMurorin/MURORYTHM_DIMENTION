@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class MaterialAnimation : MonoBehaviour
 {
@@ -19,7 +19,7 @@ public class MaterialAnimation : MonoBehaviour
             material = GetComponent<Renderer>().material;
         }
 
-        // ƒXƒvƒ‰ƒCƒgƒV[ƒg‚ÌUVƒXƒP[ƒ‹‚ğİ’è
+        // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚·ãƒ¼ãƒˆã®UVã‚¹ã‚±ãƒ¼ãƒ«ã‚’è¨­å®š
         textureScale = new Vector2(1f / columns, 1f / rows);
         material.SetTextureScale("_MainTex", textureScale);
 
@@ -33,11 +33,11 @@ public class MaterialAnimation : MonoBehaviour
         {
             frameTime = 1f / frameRate;
 
-            // ƒtƒŒ[ƒ€‚ği‚ß‚é
+            // ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’é€²ã‚ã‚‹
             if (!isReverse) { currentFrame = (currentFrame + 1) % (rows * columns); }
             else { currentFrame = (currentFrame + (rows * columns - 2)) % (rows * columns); }
 
-            // UVƒIƒtƒZƒbƒg‚ğŒvZ‚µ‚Ä“K—p
+            // UVã‚ªãƒ•ã‚»ãƒƒãƒˆã‚’è¨ˆç®—ã—ã¦é©ç”¨
             int row = currentFrame / columns;
             int column = currentFrame % columns;
             Vector2 offset = new Vector2(column * textureScale.x, 1f - textureScale.y - row * textureScale.y);

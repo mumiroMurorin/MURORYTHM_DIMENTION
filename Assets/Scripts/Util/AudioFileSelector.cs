@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.Networking;
 using SFB;
 using System.IO;
@@ -41,7 +41,7 @@ public static class AudioFileSelector
             {
                 AudioClip clip = DownloadHandlerAudioClip.GetContent(www);
 
-                // ƒtƒ@ƒCƒ‹–¼‚ğæ“¾‚µ‚Ä AudioClip ‚Éİ’è
+                // ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å¾—ã—ã¦ AudioClip ã«è¨­å®š
                 string fileName = Path.GetFileNameWithoutExtension(path);
                 clip.name = fileName;
 

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -30,7 +30,7 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // ”{—¦‚Ì•ÏX
+            // å€ç‡ã®å¤‰æ›´
             optionGetter?.ChartViewScale
                 .Subscribe(scale => {
                     UpdateChartLength(chartEditorDataGetter.ChartSeconds.Value, scale);
@@ -39,17 +39,17 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
 
-            // Ä¶ˆÊ’u
+            // å†ç”Ÿä½ç½®
             chartEditorDataGetter?.PlaybackProgress
                 .Subscribe(MoveCamera)
                 .AddTo(this.gameObject);
 
-            // ƒIƒtƒZƒbƒg
+            // ã‚ªãƒ•ã‚»ãƒƒãƒˆ
             chartEditorDataGetter?.Offset
                 .Subscribe(ChangeCameraOffset)
                 .AddTo(this.gameObject);
 
-            // •ˆ–Ê’·‚³‚ª•Ï‚í‚Á‚½
+            // è­œé¢é•·ã•ãŒå¤‰ã‚ã£ãŸæ™‚
             chartEditorDataGetter?.ChartSeconds
                 .Subscribe(seconds => {
                     UpdateChartLength(seconds, optionGetter.ChartViewScale.Value);
@@ -58,7 +58,7 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
 
-            // ƒGƒfƒBƒ^ƒm[ƒcƒ‚[ƒh•ÏX‚ÌÛƒJƒƒ‰ƒIƒ“ƒIƒtØ‚è‘Ö‚¦
+            // ã‚¨ãƒ‡ã‚£ã‚¿ãƒãƒ¼ãƒ„ãƒ¢ãƒ¼ãƒ‰å¤‰æ›´ã®éš›ã‚«ãƒ¡ãƒ©ã‚ªãƒ³ã‚ªãƒ•åˆ‡ã‚Šæ›¿ãˆ
             chartEditorDataGetter?.EditNoteType
                 .Subscribe(mode => {
                     setActiveObject.SetActive(mode == EditNoteType.Ground || mode == EditNoteType.Space);
@@ -67,7 +67,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// •ˆ–Ê‚Ì’·‚³‚ÌXV
+        /// è­œé¢ã®é•·ã•ã®æ›´æ–°
         /// </summary>
         /// <param name="music"></param>
         /// <param name="scale"></param>
@@ -77,7 +77,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒJƒƒ‰‹“_‚ÌˆÚ“®
+        /// ã‚«ãƒ¡ãƒ©è¦–ç‚¹ã®ç§»å‹•
         /// </summary>
         private void MoveCamera(float ratio)
         {
@@ -89,7 +89,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒIƒtƒZƒbƒg‚É‘Î‰‚µ‚½ƒJƒƒ‰ˆÊ’u‚Ì’²®
+        /// ã‚ªãƒ•ã‚»ãƒƒãƒˆã«å¯¾å¿œã—ãŸã‚«ãƒ¡ãƒ©ä½ç½®ã®èª¿æ•´
         /// </summary>
         private void ChangeCameraOffset(float offset)
         {

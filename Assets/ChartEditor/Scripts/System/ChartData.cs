@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -8,7 +8,7 @@ using System;
 namespace ChartEditor
 {
     /// <summary>
-    /// •ªü‚Ìƒf[ƒ^
+    /// åˆ†ç·šã®ãƒ‡ãƒ¼ã‚¿
     /// </summary>
     public class SubDivisionDataInBeat : ISubDivisionDataGetter
     {
@@ -28,28 +28,28 @@ namespace ChartEditor
         public int SubDivisionIndex { get; }
         public SubdivisionConfig SubConfig { get { return new SubdivisionConfig(this.bpm.Value, this.speedRatio.Value); } }
 
-        // Ground”z’uêŠ
+        // Groundé…ç½®å ´æ‰€
         Transform[] placementLocation;
         public void SetPlacementLocation(Transform[] locates)
         {
             placementLocation = locates;
         }
 
-        // ’ˆ”z’uêŠ
+        // å®™é…ç½®å ´æ‰€
         Transform spaceLocation;
         public void SetSpaceLocation(Transform locate)
         {
             spaceLocation = locate;
         }
 
-        #region ƒm[ƒcƒf[ƒ^
+        #region ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿
 
         /// <summary>
-        /// ‚»‚Ì•ªü‚É”z’u‚³‚ê‚½ƒm[ƒc‚Ìƒf[ƒ^
+        /// ãã®åˆ†ç·šã«é…ç½®ã•ã‚ŒãŸãƒãƒ¼ãƒ„ã®ãƒ‡ãƒ¼ã‚¿
         /// </summary>
         ReactiveCollection<IDeployableNoteData> noteDatas = new ReactiveCollection<IDeployableNoteData>();
         /// <summary>
-        /// ƒm[ƒc‚Ì’Ç‰ÁAíœ‚ÌŠÄ‹—p
+        /// ãƒãƒ¼ãƒ„ã®è¿½åŠ ã€å‰Šé™¤ã®ç›£è¦–ç”¨
         /// </summary>
         public IReadOnlyReactiveCollection<IDeployableNoteData> NoteDatas => noteDatas;
 
@@ -65,16 +65,16 @@ namespace ChartEditor
 
         public Transform GetPlacementLocation(AddressInChart address)
         {
-            // ’ˆ”z’uêŠ
+            // å®™é…ç½®å ´æ‰€
             if (address.SliderIndex == SPACE_LOCATION_INDEX)
             {
                 return spaceLocation;
             }
 
-            // ƒOƒ‰ƒEƒ“ƒh”z’uêŠ
+            // ã‚°ãƒ©ã‚¦ãƒ³ãƒ‰é…ç½®å ´æ‰€
             if (address.SliderIndex > 15)
             {
-                Debug.LogError($"ySystemz’l‚ª15‚ğ’´‚¦‚Ä‚¢‚Ü‚·: {address.SliderIndex}");
+                Debug.LogError($"ã€Systemã€‘å€¤ãŒ15ã‚’è¶…ãˆã¦ã„ã¾ã™: {address.SliderIndex}");
                 return null;
             }
 
@@ -89,7 +89,7 @@ namespace ChartEditor
         const float BPM_MAX = 500f;
 
         /// <summary>
-        /// BPM•Ï‰»
+        /// BPMå¤‰åŒ–
         /// </summary>
         ReactiveProperty<float> bpm = new ReactiveProperty<float>();
         public IReadOnlyReactiveProperty<float> Bpm => bpm;
@@ -107,7 +107,7 @@ namespace ChartEditor
         const float SPEEDRATIO_MAX = 100f;
 
         /// <summary>
-        /// ƒXƒs[ƒh”{—¦•Ï‰»
+        /// ã‚¹ãƒ”ãƒ¼ãƒ‰å€ç‡å¤‰åŒ–
         /// </summary>
         ReactiveProperty<float> speedRatio = new ReactiveProperty<float>();
         public IReadOnlyReactiveProperty<float> SpeedRatio => speedRatio;
@@ -120,7 +120,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ¬ß‚Ìƒf[ƒ^
+    /// å°ç¯€ã®ãƒ‡ãƒ¼ã‚¿
     /// </summary>
     public class BarDataInChart : IBarDataGetter
     {
@@ -137,11 +137,11 @@ namespace ChartEditor
         public int BarIndex { get; set; }
 
         /// <summary>
-        /// ¬ß“à‚Ì•ªüƒf[ƒ^
+        /// å°ç¯€å†…ã®åˆ†ç·šãƒ‡ãƒ¼ã‚¿
         /// </summary>
         ReactiveCollection<SubDivisionDataInBeat> subDivisionDatas = new ReactiveCollection<SubDivisionDataInBeat>();
         /// <summary>
-        /// •ªü‚Ì‘ã“üAƒNƒŠƒA‚ÌŠÄ‹
+        /// åˆ†ç·šã®ä»£å…¥ã€ã‚¯ãƒªã‚¢ã®ç›£è¦–
         /// </summary>
         public IReadOnlyReactiveCollection<SubDivisionDataInBeat> SubDivisionDatas => subDivisionDatas;
         public void SetSubDivisionDatas(List<SubDivisionDataInBeat> subDivisionDatas)
@@ -162,21 +162,21 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// •ªü‚Ì”‚ÌXV
+        /// åˆ†ç·šã®æ•°ã®æ›´æ–°
         /// </summary>
-        /// <param name="beatCount">n•ª‚Ì</param>
-        /// <param name="beatUnit">m”q</param>
+        /// <param name="beatCount">nåˆ†ã®</param>
+        /// <param name="beatUnit">mæ‹å­</param>
         private void UpdateSubDivisionData(int beatCount, int divNum, SubdivisionConfig subConfigOrigin = null)
         {
             if (beatCount <= 0) { return; }
             if (divNum <= 0) { return; }
             if (subConfigOrigin == null && this.subDivisionDatas.Count == 0) { return; }
 
-            // •ªüİ’è‚ÍÅ‰‚ÌƒRƒ“ƒtƒBƒO‚ğg‚¤
+            // åˆ†ç·šè¨­å®šã¯æœ€åˆã®ã‚³ãƒ³ãƒ•ã‚£ã‚°ã‚’ä½¿ã†
             if (subConfigOrigin == null) { subConfigOrigin = this.subDivisionDatas[0].SubConfig; }
 
-            // V‹KƒZƒbƒg
-            // ƒJƒEƒ“ƒg” * •ªŠ„”‚ª•ªü‚Ì”
+            // æ–°è¦ã‚»ãƒƒãƒˆ
+            // ã‚«ã‚¦ãƒ³ãƒˆæ•° * åˆ†å‰²æ•°ãŒåˆ†ç·šã®æ•°
             var subDivisionDatas = new List<SubDivisionDataInBeat>();
             for (int i = 0; i < beatCount * divNum; i++) 
             {
@@ -196,12 +196,12 @@ namespace ChartEditor
             return subDivisionDatas[address.SubDivisionIndex].GetPlacementLocation(address);
         }
 
-        #region ‚»‚Ì‘¼ƒf[ƒ^
+        #region ãã®ä»–ãƒ‡ãƒ¼ã‚¿
 
         public BarConfig BarConfig { get { return new BarConfig(this.beatCount.Value, this.beatUnit.Value, this.divisionNum.Value); } }
 
         /// <summary>
-        /// n/m”q‚Ìn
+        /// n/mæ‹å­ã®n
         /// </summary>
         ReactiveProperty<int> beatCount = new ReactiveProperty<int>();
         public IReadOnlyReactiveProperty<int> BeatCount => beatCount;
@@ -215,7 +215,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// n/m”q‚Ìm
+        /// n/mæ‹å­ã®m
         /// </summary>
         ReactiveProperty<float> beatUnit = new ReactiveProperty<float>();
         public IReadOnlyReactiveProperty<float> BeatUnit => beatUnit;
@@ -228,7 +228,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// •ªŠ„” (Z•ªŠ„)
+        /// åˆ†å‰²æ•° (ã€‡åˆ†å‰²)
         /// </summary>
         ReactiveProperty<int> divisionNum = new ReactiveProperty<int>();
         public IReadOnlyReactiveProperty<int> DivisionNum => divisionNum;
@@ -245,7 +245,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ƒGƒfƒBƒ^—p•ˆ–Êƒf[ƒ^
+    /// ã‚¨ãƒ‡ã‚£ã‚¿ç”¨è­œé¢ãƒ‡ãƒ¼ã‚¿
     /// </summary>
     public class ChartData
     {
@@ -272,20 +272,20 @@ namespace ChartEditor
         ReactiveCollection<BarDataInChart> barDatas = new ReactiveCollection<BarDataInChart>();
 
         /// <summary>
-        /// BPM‚ª•ÏX‚³‚ê‚½ (ˆø”‚Í¬ßIndex‚Æ•ªüIndex)
+        /// BPMãŒå¤‰æ›´ã•ã‚ŒãŸæ™‚ (å¼•æ•°ã¯å°ç¯€Indexã¨åˆ†ç·šIndex)
         /// </summary>
         Subject<(int,int)> OnChangeBPM = new Subject<(int, int)>();
         public IObservable<(int, int)> OnChangeBPMListener => OnChangeBPM;
 
         /// <summary>
-        /// ¬ßƒf[ƒ^‚ª’Ç‰Á‚³‚ê‚½
+        /// å°ç¯€ãƒ‡ãƒ¼ã‚¿ãŒè¿½åŠ ã•ã‚ŒãŸæ™‚
         /// </summary>
         Subject<int> OnAddBarData = new Subject<int>();
         public IObservable<int> OnAddBarDataListener => OnAddBarData;
 
 
         /// <summary>
-        /// •ˆ–Ê“à‚Ì‘S¬ßƒf[ƒ^
+        /// è­œé¢å†…ã®å…¨å°ç¯€ãƒ‡ãƒ¼ã‚¿
         /// </summary>
         public IReadOnlyReactiveCollection<BarDataInChart> BarDatas => barDatas;
 
@@ -298,7 +298,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// “Á’è‚Ì•ªü‚©‚çŒã‚ÌBPM‚ğˆêŠ‡‚Å•ÏX‚·‚é
+        /// ç‰¹å®šã®åˆ†ç·šã‹ã‚‰å¾Œã®BPMã‚’ä¸€æ‹¬ã§å¤‰æ›´ã™ã‚‹
         /// </summary>
         /// <param name="subDivisionData"></param>
         private void SetBpm(int barIndex, int subIndex, float bpm)
@@ -316,7 +316,7 @@ namespace ChartEditor
 
                     var subData = barData.SubDivisionDatas[j];
 
-                    // ˆá‚¤BPM‚É‚È‚Á‚½‚çØ‚é
+                    // é•ã†BPMã«ãªã£ãŸã‚‰åˆ‡ã‚‹
                     if (previousBpm != subData.Bpm.Value) { isBreak = true; break; }
 
                     subData.SetBpm(bpm);
@@ -329,7 +329,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// “Á’è‚Ì•ªü‚©‚çŒã‚ÌƒXƒs[ƒh”{—¦‚ğˆêŠ‡‚Å•ÏX‚·‚é
+        /// ç‰¹å®šã®åˆ†ç·šã‹ã‚‰å¾Œã®ã‚¹ãƒ”ãƒ¼ãƒ‰å€ç‡ã‚’ä¸€æ‹¬ã§å¤‰æ›´ã™ã‚‹
         /// </summary>
         /// <param name="subDivisionData"></param>
         private void SetSpeedRatio(int barIndex, int subIndex, float speedRatio)
@@ -346,7 +346,7 @@ namespace ChartEditor
 
                     var subData = barData.SubDivisionDatas[j];
 
-                    // ˆá‚¤ƒXƒs[ƒh”{—¦‚É‚È‚Á‚½‚çØ‚é
+                    // é•ã†ã‚¹ãƒ”ãƒ¼ãƒ‰å€ç‡ã«ãªã£ãŸã‚‰åˆ‡ã‚‹
                     if (previousRatio != subData.SpeedRatio.Value) { return; }
 
                     subData.SetSpeedRatio(speedRatio);
@@ -355,7 +355,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ¬ßü‚Ìİ’è•ÏX
+        /// å°ç¯€ç·šã®è¨­å®šå¤‰æ›´
         /// </summary>
         /// <param name="barIndex"></param>
         /// <param name="beatCount"></param>
@@ -365,10 +365,10 @@ namespace ChartEditor
         {
             BarDataInChart barData = barDatas[barIndex];
 
-            // ’l‚ª•Ï‚í‚ç‚È‚©‚Á‚½ê‡‚Í‰½‚à‚µ‚È‚¢
+            // å€¤ãŒå¤‰ã‚ã‚‰ãªã‹ã£ãŸå ´åˆã¯ä½•ã‚‚ã—ãªã„
             if(barData.BeatCount.Value == config.BeatCount && barData.BeatUnit.Value == config.BeatUnit && barData.DivisionNum.Value == config.DivisionNum) { return; }
 
-            // ƒm[ƒc‚ğíœ
+            // ãƒãƒ¼ãƒ„ã‚’å‰Šé™¤
             for (int i = 0; i < barData.SubDivisionDatas.Count; i++)
             {
                 var subData = barData.SubDivisionDatas[i];
@@ -381,14 +381,14 @@ namespace ChartEditor
                 }
             }
 
-            // ƒf[ƒ^‚ğƒZƒbƒg‚µ‚Ä¬ßü“à‚Ìƒf[ƒ^‚ğƒAƒbƒvƒf[ƒg
+            // ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã—ã¦å°ç¯€ç·šå†…ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
             barData.SetBeatCount(config.BeatCount);
             barData.SetBeatUnit(config.BeatUnit);
             barData.SetDivisionNum(config.DivisionNum);
         }
 
         /// <summary>
-        /// ¬ßü‚Ì’Ç‰Á
+        /// å°ç¯€ç·šã®è¿½åŠ 
         /// </summary>
         /// <param name="length"></param>
         public void AddBar(int length)
@@ -397,7 +397,7 @@ namespace ChartEditor
             float speedRatio = DEFAULT_SPEEDRATIO;
             int barDataCount = BarDatas.Count;
 
-            // ‰Šú’l‚Ìã‘‚«
+            // åˆæœŸå€¤ã®ä¸Šæ›¸ã
             if (BarDatas.Count > 0) 
             { 
                 bpm = BarDatas.Last().SubDivisionDatas.Last().Bpm.Value; 
@@ -416,7 +416,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ¬ßü‚Ìíœ
+        /// å°ç¯€ç·šã®å‰Šé™¤
         /// </summary>
         /// <param name="length"></param>
         public void RemoveBar(int length)
@@ -424,11 +424,11 @@ namespace ChartEditor
             int barCount = BarDatas.Count;
             for (int i = barCount - 1; i >= Mathf.Max(barCount - length, 0); i--)
             {
-                // •ªü‚ğ‘S•”Á‚·
+                // åˆ†ç·šã‚’å…¨éƒ¨æ¶ˆã™
                 var barData = barDatas[i];
                 for (int j = barData.SubDivisionDatas.Count - 1; j >= 0 ; j--)
                 {
-                    // ƒm[ƒg‚à‘S•”Á‚·
+                    // ãƒãƒ¼ãƒˆã‚‚å…¨éƒ¨æ¶ˆã™
                     var subData = barData.SubDivisionDatas[j];
                     int noteCount = subData.NoteDatas.Count;
                     for (int k = 0; k < noteCount; k++)
@@ -448,7 +448,7 @@ namespace ChartEditor
         {
             if (address.BarIndex >= barDatas.Count)
             {
-                // Debug.LogError($"ySystemz’l‚ª¬ßü‚Ì”‚ğ’´‚¦‚Ä‚¢‚Ü‚·: {address.BarIndex}");
+                // Debug.LogError($"ã€Systemã€‘å€¤ãŒå°ç¯€ç·šã®æ•°ã‚’è¶…ãˆã¦ã„ã¾ã™: {address.BarIndex}");
                 return null;
             }
 
@@ -459,11 +459,11 @@ namespace ChartEditor
         #region NotesOperation
 
         /// <summary>
-        /// ƒm[ƒc‚ğ’Ç‰Á‚·‚é
+        /// ãƒãƒ¼ãƒ„ã‚’è¿½åŠ ã™ã‚‹
         /// </summary>
         public void AddNote(IDeployableNoteData noteData)
         {
-            // V‚½‚ÈêŠ‚É’Ç‰Á
+            // æ–°ãŸãªå ´æ‰€ã«è¿½åŠ 
             var address = noteData.Address;
 
             if (!IsExistAddressInChart(new AddressInChart(address))) { return; }
@@ -475,7 +475,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒm[ƒc‚ğíœ‚·‚é
+        /// ãƒãƒ¼ãƒ„ã‚’å‰Šé™¤ã™ã‚‹
         /// </summary>
         public void RemoveNote(IDeployableNoteData noteData)
         {
@@ -487,29 +487,29 @@ namespace ChartEditor
 
             if (!subDivision.RemoveNote(noteData))
             {
-                Debug.LogError($"yíœzíœ‚É¸”s‚µ‚Ü‚µ‚½:\n{address}");
+                Debug.LogError($"ã€å‰Šé™¤ã€‘å‰Šé™¤ã«å¤±æ•—ã—ã¾ã—ãŸ:\n{address}");
             }
             else
             {
                 OnRemoveNoteListener?.Invoke(noteData);
 
-                Debug.Log($"yíœz:\n{address}");
+                Debug.Log($"ã€å‰Šé™¤ã€‘:\n{address}");
             }
         }
 
         /// <summary>
-        /// ƒm[ƒc‚ÌêŠ‚ğˆÚ“®‚³‚¹‚é
+        /// ãƒãƒ¼ãƒ„ã®å ´æ‰€ã‚’ç§»å‹•ã•ã›ã‚‹
         /// </summary>
         /// <param name="noteData"></param>
         /// <param name="newAddress"></param>
         /// <returns></returns>
         public bool ChangeNoteAddress(IDeployableNoteData noteData, AddressInChart oldAddress, AddressInChart newAddress)
         {
-            // ŒÃ‚¢êŠ‚©‚çíœ
+            // å¤ã„å ´æ‰€ã‹ã‚‰å‰Šé™¤
             var oldSubDivision = BarDatas[oldAddress.BarIndex].SubDivisionDatas[oldAddress.SubDivisionIndex];
             if (!oldSubDivision.RemoveNote(noteData))
             {
-                Debug.LogError($"yˆÚ“®zíœ‚É¸”s‚µ‚Ü‚µ‚½\n ŠY“–‚·‚éƒm[ƒc‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
+                Debug.LogError($"ã€ç§»å‹•ã€‘å‰Šé™¤ã«å¤±æ•—ã—ã¾ã—ãŸ\n è©²å½“ã™ã‚‹ãƒãƒ¼ãƒ„ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“");
                 return false;
             }
 
@@ -534,7 +534,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒAƒhƒŒƒXŠÔ‚Ì‹——£(•ªü‚Ì”)‚ğ•Ô‚·
+        /// ã‚¢ãƒ‰ãƒ¬ã‚¹é–“ã®è·é›¢(åˆ†ç·šã®æ•°)ã‚’è¿”ã™
         /// </summary>
         /// <param name="addressA"></param>
         /// <param name="AddressB"></param>
@@ -565,7 +565,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒAƒhƒŒƒX‚É•ªü”‚ğ‘«‚·
+        /// ã‚¢ãƒ‰ãƒ¬ã‚¹ã«åˆ†ç·šæ•°ã‚’è¶³ã™
         /// </summary>
         /// <param name="address"></param>
         /// <param name="delta"></param>
@@ -579,13 +579,13 @@ namespace ChartEditor
                 {
                     var barData = BarDatas[i];
 
-                    // 0‚É‚È‚Á‚½‚çI‚í‚è
+                    // 0ã«ãªã£ãŸã‚‰çµ‚ã‚ã‚Š
                     if (subdivisionDelta == 0) { break; }
 
-                    // ¬ß1ŒÂ‰z‚¦‚é‚Æ‚«
+                    // å°ç¯€1å€‹è¶Šãˆã‚‹ã¨ã
                     if (barData.SubDivisionDatas.Count <= copy.SubDivisionIndex + subdivisionDelta)
                     {
-                        // ’[‚ğ’´‚¦‚é‚Æ‚«
+                        // ç«¯ã‚’è¶…ãˆã‚‹ã¨ã
                         if (i + 1 >= BarDatas.Count)
                         {
                             copy.SetSubDivisionIndex(barData.SubDivisionDatas.Count - 1);
@@ -597,7 +597,7 @@ namespace ChartEditor
                         copy.SetBarIndex(copy.BarIndex + 1);
                         copy.SetSubDivisionIndex(0);
                     }
-                    // ‚±‚Ì¬ß‚É‚ ‚é‚Æ‚«
+                    // ã“ã®å°ç¯€ã«ã‚ã‚‹ã¨ã
                     else
                     {
                         copy.SetSubDivisionIndex(copy.SubDivisionIndex + subdivisionDelta);
@@ -609,13 +609,13 @@ namespace ChartEditor
             {
                 for (int i = copy.BarIndex; i < BarDatas.Count; i--)
                 {
-                    // 0‚É‚È‚Á‚½‚çI‚í‚è
+                    // 0ã«ãªã£ãŸã‚‰çµ‚ã‚ã‚Š
                     if (subdivisionDelta == 0) { break; }
 
-                    // ¬ß1ŒÂ‰z‚¦‚é‚Æ‚«
+                    // å°ç¯€1å€‹è¶Šãˆã‚‹ã¨ã
                     if (copy.SubDivisionIndex + subdivisionDelta < 0)
                     {
-                        // ’[‚ğ’´‚¦‚é‚Æ‚«
+                        // ç«¯ã‚’è¶…ãˆã‚‹ã¨ã
                         if (i - 1 < 0)
                         {
                             copy.SetSubDivisionIndex(0);
@@ -628,7 +628,7 @@ namespace ChartEditor
                         copy.SetBarIndex(copy.BarIndex - 1);
                         copy.SetSubDivisionIndex(barDataBack.SubDivisionDatas.Count - 1);
                     }
-                    // ‚±‚Ì¬ß‚É‚ ‚é‚Æ‚«
+                    // ã“ã®å°ç¯€ã«ã‚ã‚‹ã¨ã
                     else
                     {
                         copy.SetSubDivisionIndex(copy.SubDivisionIndex + subdivisionDelta);

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// シーンをまたいで保持されるシングルトンの基底クラス。

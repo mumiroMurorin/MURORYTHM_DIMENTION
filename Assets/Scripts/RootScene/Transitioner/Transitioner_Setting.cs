@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -19,7 +19,7 @@ namespace TransitionerInRootScene
 
         void IPhaseTransitionerInRootScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"OptionSetting\"");
+            Debug.Log("„ÄêTransition„ÄëTransition to \"OptionSetting\"");
         }
     }
 

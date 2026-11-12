@@ -1,10 +1,10 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
 /// <summary>
-/// ƒ^ƒbƒ`ƒm[ƒc‚ÉƒAƒ^ƒbƒ`‚³‚ê‚éƒNƒ‰ƒX
+/// ã‚¿ãƒƒãƒãƒãƒ¼ãƒ„ã«ã‚¢ã‚¿ãƒƒãƒã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
 {
@@ -13,7 +13,7 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
     bool isJudged;
 
     /// <summary>
-    /// ‰Šú‰»
+    /// åˆæœŸåŒ–
     /// </summary>
     /// <param name="data"></param>
     public override void Initialize(NoteData_HoldStart data)
@@ -27,7 +27,7 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
     {
         if (noteData == null) { return; }
 
-        // ¬Œ÷”»’è
+        // æˆåŠŸåˆ¤å®š
         foreach (int index in noteData.Range)
         {
             if (noteData.SliderInput == null) { break; }
@@ -36,7 +36,7 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
             noteData.SliderInput.OnSliderTouchDown
                 .Where(touchedIndex => touchedIndex == index)
                 .Where(_ => !isJudged)
-                // Good”»’èŠÔ‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚é‚Æ‚«”»’è
+                // Goodåˆ¤å®šæ™‚é–“ã«å«ã¾ã‚Œã¦ã„ã‚‹ã¨ãåˆ¤å®š
                 .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
                 .Where(_ => !noteData.OptionGetter.IsAutoMode)
                 .Subscribe(_ =>
@@ -50,7 +50,7 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
 
     private void Update()
     {
-        // ƒI[ƒgƒ‚[ƒh
+        // ã‚ªãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰æ™‚
         if (noteData.OptionGetter.IsAutoMode && noteData.Timing <= noteData.Timer.Time)
         {
             NormalJudge();
@@ -58,7 +58,7 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
             return;
         }
 
-        // ƒ~ƒX‚Á‚½
+        // ãƒŸã‚¹ã£ãŸæ™‚
         if (noteData.JudgementWindow.IsPassJudgementRange(noteData.Timer.Time, noteData.Timing))
         {
             NormalJudge();
@@ -68,11 +68,11 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
 
 
     /// <summary>
-    /// ”»’è
+    /// åˆ¤å®š
     /// </summary>
     private void NormalJudge()
     {
-        // ”»’è‚ğ“¾‚é
+        // åˆ¤å®šã‚’å¾—ã‚‹
         Judgement judgement;
         if (noteData.OptionGetter.IsAutoMode) { judgement = Judgement.Perfect; }
         else { judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing); }
@@ -84,7 +84,7 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
     }
 
     /// <summary>
-    /// ƒm[ƒc‚ğ‹@”\’â~‚·‚é
+    /// ãƒãƒ¼ãƒ„ã‚’æ©Ÿèƒ½åœæ­¢ã™ã‚‹
     /// </summary>
     private void SetDisable()
     {
@@ -94,7 +94,7 @@ public class NoteObject_HoldStart : NoteObject<NoteData_HoldStart>
 }
 
 /// <summary>
-/// (‰Šú‰»‚É•K—v‚È•Ï”‚àŠÜ‚Ş)ƒz[ƒ‹ƒhn“_ƒm[ƒc‚Ìƒf[ƒ^
+/// (åˆæœŸåŒ–ã«å¿…è¦ãªå¤‰æ•°ã‚‚å«ã‚€)ãƒ›ãƒ¼ãƒ«ãƒ‰å§‹ç‚¹ãƒãƒ¼ãƒ„ã®ãƒ‡ãƒ¼ã‚¿
 /// </summary>
 public class NoteData_HoldStart : INoteData, IClippedJudgableNote
 {

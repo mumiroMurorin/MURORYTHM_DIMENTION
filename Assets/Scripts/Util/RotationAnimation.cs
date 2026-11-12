@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -14,10 +14,10 @@ public class RotationAnimation : MonoBehaviour
         float direction = isClockwise ? 1f : -1f;
         Vector3 rotationPerLoop = rotationAxis.normalized * 360f * direction;
 
-        // Œ»İ‚Ìƒ[ƒJƒ‹‰ñ“]‚©‚ç‘Š‘Î“I‚É‰ñ“]‚µ‘±‚¯‚é
+        // ç¾åœ¨ã®ãƒ­ãƒ¼ã‚«ãƒ«å›è»¢ã‹ã‚‰ç›¸å¯¾çš„ã«å›è»¢ã—ç¶šã‘ã‚‹
         transform.DOLocalRotate(rotationPerLoop, duration, RotateMode.Fast)
-            .SetRelative(true)                // ‘Š‘Î‰ñ“]‚ÅÏ‚İd‚Ë‚é
-            .SetEase(Ease.Linear)            // “™‘¬‰ñ“]
-            .SetLoops(-1, LoopType.Restart); // –³ŒÀƒ‹[ƒv
+            .SetRelative(true)                // ç›¸å¯¾å›è»¢ã§ç©ã¿é‡ã­ã‚‹
+            .SetEase(Ease.Linear)            // ç­‰é€Ÿå›è»¢
+            .SetLoops(-1, LoopType.Restart); // ç„¡é™ãƒ«ãƒ¼ãƒ—
     }
 }

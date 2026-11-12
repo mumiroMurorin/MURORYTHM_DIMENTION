@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -51,10 +51,10 @@ public class MusicPlayerInRhythmGameScene : MonoBehaviour, IMusicPlayerInRhythmG
 
     private async UniTask LoadMusicAsync(AudioClip clip, Action onEndLoading, CancellationToken token)
     { 
-        // ‚È‚¢ê‡‚Í•Ô‚·
+        // ãªã„å ´åˆã¯è¿”ã™
         if(clip == null) { onEndLoading.Invoke(); }
 
-        // Šy‹È‚Ì–‘O“Ç‚İ‚İ
+        // æ¥½æ›²ã®äº‹å‰èª­ã¿è¾¼ã¿
         clip.LoadAudioData();
         await UniTask.WaitUntil(() => clip.loadState == AudioDataLoadState.Loaded, cancellationToken: token);
 
@@ -64,12 +64,12 @@ public class MusicPlayerInRhythmGameScene : MonoBehaviour, IMusicPlayerInRhythmG
     }
 
     /// <summary>
-    /// Šy‹È‚ÌÄ¶
+    /// æ¥½æ›²ã®å†ç”Ÿ
     /// </summary>
     public void PlayMusic()
     {
-        if (musicDataGetter == null) { Debug.LogWarning("ySystemz musicDataGetter‚ªƒZƒbƒg‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ"); return; }
-        if (musicDataGetter.Music.Value == null) { Debug.LogWarning("ySystemz Šy‹È‚ªƒZƒbƒg‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ"); return; }
+        if (musicDataGetter == null) { Debug.LogWarning("ã€Systemã€‘ musicDataGetterãŒã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã¾ã›ã‚“"); return; }
+        if (musicDataGetter.Music.Value == null) { Debug.LogWarning("ã€Systemã€‘ æ¥½æ›²ãŒã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã¾ã›ã‚“"); return; }
 
         SoundManager.Instance.PlayBGM(BGM_Type.MusicTrack, loopFlg: false, isFadeout: false);
     }

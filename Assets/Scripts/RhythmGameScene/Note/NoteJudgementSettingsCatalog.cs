@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "ScriptableObject/Note Judgement Settings/Catalog", fileName = "NoteJudgementSettingsCatalog")]

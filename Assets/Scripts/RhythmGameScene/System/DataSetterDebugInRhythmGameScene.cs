@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -6,7 +6,7 @@ using System.Linq;
 
 public class DataSetterDebugInRhythmGameScene : MonoBehaviour
 {
-    [Header("ƒfƒoƒbƒOƒ‚[ƒh")]
+    [Header("ãƒ‡ãƒãƒƒã‚°ãƒ¢ãƒ¼ãƒ‰")]
     [SerializeField] bool isDebugMode;
 
     [SerializeField] MusicData musicData_debug;

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -10,7 +10,7 @@ namespace TransitionerInRhythmGameScene
         [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
         [SerializeField] SerializeInterface<ITimeController> timer;
 
-        [Tooltip("ƒtƒF[ƒY‘JˆÚ‚Ü‚Å‚ÌŠÔ")]
+        [Tooltip("ãƒ•ã‚§ãƒ¼ã‚ºé·ç§»ã¾ã§ã®æ™‚é–“")]
         [SerializeField] float waitDuration = 0.5f;
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.Play;
@@ -22,17 +22,17 @@ namespace TransitionerInRhythmGameScene
 
         void IPhaseTransitionerInRhythmGameScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"Play\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"Play\"");
 
             _ = DelayedExecutor.ExecuteAfterDelay(waitDuration, StartRhythmGame);
         }
 
         /// <summary>
-        /// ‰¹ƒQ[‚ÌŠJn
+        /// éŸ³ã‚²ãƒ¼ã®é–‹å§‹
         /// </summary>
         private void StartRhythmGame()
         {
-            // ‚ği‚ß‚é
+            // æ™‚ã‚’é€²ã‚ã‚‹
             timer?.Value.StartTimer();
         }
     }

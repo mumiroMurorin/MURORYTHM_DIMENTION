@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -21,8 +21,8 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ‚»‚Ì“_‚Ìˆø”‚Ìƒf[ƒ^‘ã“ü
-        /// bpmˆÈŠO -1 ‚Å”ñ•\¦
+        /// ãã®æ™‚ç‚¹ã®å¼•æ•°ã®ãƒ‡ãƒ¼ã‚¿ä»£å…¥
+        /// bpmä»¥å¤– -1 ã§éè¡¨ç¤º
         /// </summary>
         /// <param name="bpm"></param>
         /// <param name="beatCount"></param>
@@ -30,19 +30,19 @@ namespace ChartEditor
         /// <param name="divNum"></param>
         public void SetDataOnUI(BarConfig barConfig)
         {
-            // •\¦”ñ•\¦
+            // è¡¨ç¤ºéè¡¨ç¤º
             beatCountField.interactable = barConfig.BeatCount != -1 || barConfig.BeatUnit != -1;
             beatUnitField.interactable = barConfig.BeatUnit != -1;
             divisionNumField.interactable = barConfig.DivisionNum != -1;
 
-            // ”’l‚ÌƒZƒbƒg
+            // æ•°å€¤ã®ã‚»ãƒƒãƒˆ
             beatCountField.text = barConfig.BeatCount == -1 || barConfig.BeatUnit == -1 ? "" : barConfig.BeatCount.ToString();
             beatUnitField.text = barConfig.BeatCount == -1 || barConfig.BeatUnit == -1 ? "" : barConfig.BeatUnit.ToString();
             divisionNumField.text = barConfig.DivisionNum == -1 ? "" : barConfig.DivisionNum.ToString();
         }
 
         /// <summary>
-        /// ¬ßü‚É‘Î‚·‚éƒf[ƒ^‚ÌƒZƒbƒg
+        /// å°ç¯€ç·šã«å¯¾ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
         /// </summary>
         /// <param name="barData"></param>
         public void SetData(Action<BarConfig> setBarConfig)
@@ -51,24 +51,24 @@ namespace ChartEditor
             float beatUnit = 1;
             int divNum = 1;
 
-            // BeatCount‚ÌƒZƒbƒg
+            // BeatCountã®ã‚»ãƒƒãƒˆ
             if (string.IsNullOrWhiteSpace(beatCountField.text) || !int.TryParse(beatCountField.text, out beatCount))
             {
-                Debug.Log($"BeatUnit‚É—LŒø‚È”š‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢: {beatCountField.text}");
+                Debug.Log($"BeatUnitã«æœ‰åŠ¹ãªæ•°å­—ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„: {beatCountField.text}");
                 return;
             }
 
-            // BeatUnit‚ÌƒZƒbƒg
+            // BeatUnitã®ã‚»ãƒƒãƒˆ
             if (string.IsNullOrWhiteSpace(beatUnitField.text) || !float.TryParse(beatUnitField.text, out beatUnit)) 
             {
-                Debug.Log($"BeatUnit‚É—LŒø‚È”š‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢: {beatUnitField.text}");
+                Debug.Log($"BeatUnitã«æœ‰åŠ¹ãªæ•°å­—ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„: {beatUnitField.text}");
                 return;
             }
 
-            // DivisionNum‚ÌƒZƒbƒg
+            // DivisionNumã®ã‚»ãƒƒãƒˆ
             if (string.IsNullOrWhiteSpace(divisionNumField.text) || !int.TryParse(divisionNumField.text, out divNum))
             {
-                Debug.Log($"DivisionNum‚É—LŒø‚È”š‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢: {divisionNumField.text}");
+                Debug.Log($"DivisionNumã«æœ‰åŠ¹ãªæ•°å­—ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„: {divisionNumField.text}");
                 return;
             }
 

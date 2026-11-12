@@ -1,4 +1,4 @@
-using Tutorial;
+﻿using Tutorial;
 using UnityEngine;
 using UnityEngine.Localization.Tables;
 [CreateAssetMenu(fileName = "TutorialActionAsset", menuName = "ScriptableObject/Tutorial/TutorialActionAsset")]

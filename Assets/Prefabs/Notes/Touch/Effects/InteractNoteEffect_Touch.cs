@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -12,7 +12,7 @@ public class InteractNoteEffect_Touch : InteractNoteEffect
     {
         if (noteDataOrigin is not NoteData_Touch noteData) { return; }
 
-        // ŒõÊ‚ÌƒZƒbƒg
+        // å…‰å½©ã®ã‚»ãƒƒãƒˆ
         foreach (int index in noteData.Range)
         {
             if (index < 0 || index >= touchLights.Length) { continue; }
@@ -28,7 +28,7 @@ public class InteractNoteEffect_Touch : InteractNoteEffect
             material.DOFade(0, 0.4f).SetEase(Ease.InCubic);
         }
 
-        // ƒp[ƒeƒBƒNƒ‹‚ÌƒZƒbƒg
+        // ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã®ã‚»ãƒƒãƒˆ
         foreach (var particle in particles)
         {
             particle.ApplyGroundShapeSetting(noteData.Range[0], noteData.Range.Length);

@@ -1,4 +1,4 @@
-using ChartConvert;
+﻿using ChartConvert;
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;

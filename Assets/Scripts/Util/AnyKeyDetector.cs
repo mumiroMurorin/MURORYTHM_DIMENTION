@@ -1,4 +1,4 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using System;
 
 public class AnyKeyDetector : MonoBehaviour
@@ -18,7 +18,7 @@ public class AnyKeyDetector : MonoBehaviour
             {
                 if (Input.GetKeyDown(keyCode))
                 {
-                    Debug.Log($"âüÇ≥ÇÍÇΩÉLÅ[: {keyCode}");
+                    Debug.Log($"Êäº„Åï„Çå„Åü„Ç≠„Éº: {keyCode}");
                 }
             }
         }

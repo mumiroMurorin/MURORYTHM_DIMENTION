@@ -1,4 +1,4 @@
-using UIInResultScene;
+﻿using UIInResultScene;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SymphonyTypePresentationData", menuName = "ScriptableObject/SymphonyTypePresentationData")]

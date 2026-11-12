@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -9,7 +9,7 @@ using TransitionerInRhythmGameScene;
 public class ChartEnder : MonoBehaviour, IChartEnder
 {
     [SerializeField] float delaySeconds = 0f;
-    [Header("ƒtƒF[ƒY‘JˆÚŠÇ—")]
+    [Header("ãƒ•ã‚§ãƒ¼ã‚ºé·ç§»ç®¡ç†")]
     [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
 
     IScoreGetter scoreGetter;
@@ -24,7 +24,7 @@ public class ChartEnder : MonoBehaviour, IChartEnder
 
     void IChartEnder.BindOnEndChart(Action callback)
     {
-        // •ˆ–ÊI—¹ˆ—‚ğw“Ç
+        // è­œé¢çµ‚äº†å‡¦ç†ã‚’è³¼èª­
         scoreGetter.NoteJudgementDatas
             .ObserveCountChanged()
             .Delay(System.TimeSpan.FromSeconds(delaySeconds))

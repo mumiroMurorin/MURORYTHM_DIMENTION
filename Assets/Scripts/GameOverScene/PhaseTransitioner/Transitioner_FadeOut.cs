@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
@@ -23,16 +23,16 @@ namespace TransitionerInGameOverScene
 
         void IPhaseTransitionerInGameOverScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"FadeOut\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"FadeOut\"");
 
-            // ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
-            // ƒRƒ“ƒeƒBƒjƒ…[A”wŒi‚ğƒVƒ“ƒtƒHƒj[ƒ^ƒCƒvd—l‚É
+            // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿ
+            // ã‚³ãƒ³ãƒ†ã‚£ãƒ‹ãƒ¥ãƒ¼æ™‚ã€èƒŒæ™¯ã‚’ã‚·ãƒ³ãƒ•ã‚©ãƒ‹ãƒ¼ã‚¿ã‚¤ãƒ—ä»•æ§˜ã«
             if (dataController.DataGetter.IsContinue.Value)
             {
                 fadeController?.FadeOut(musicDataGetter?.DataGetter, 
                     () => { TransitionNextPhase(PhaseStatusInGameOverScene.TransitionSelectScene); });
             }
-            // ƒQ[ƒ€I—¹AƒfƒtƒHƒ‹ƒg”wŒi‚ÅƒtƒF[ƒhƒAƒEƒg
+            // ã‚²ãƒ¼ãƒ çµ‚äº†æ™‚ã€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆèƒŒæ™¯ã§ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
             else
             {
                 fadeController?.FadeOut(() => { TransitionNextPhase(PhaseStatusInGameOverScene.TransitionTitleScene); });
@@ -40,7 +40,7 @@ namespace TransitionerInGameOverScene
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase(PhaseStatusInGameOverScene phase)
         {

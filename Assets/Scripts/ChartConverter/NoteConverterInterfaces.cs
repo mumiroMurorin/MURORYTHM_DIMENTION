@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -7,10 +7,10 @@ using System;
 
 namespace ChartConvert
 {
-    // ƒm[ƒc•ÏŠ·ŠÖ”
+    // ãƒãƒ¼ãƒ„å¤‰æ›é–¢æ•°
 
     /// <summary>
-    /// ChartEditor.NoteData‚ğ•ÏŠ·‚µ‚ÄSubDivisionDataOrigin‚É‚Ô‚¿‚Ş
+    /// ChartEditor.NoteDataã‚’å¤‰æ›ã—ã¦SubDivisionDataOriginã«ã¶ã¡è¾¼ã‚€
     /// </summary>
     public interface IUnchainDataToRhythmGameConvertable
     {

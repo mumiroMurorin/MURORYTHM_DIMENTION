@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -24,7 +24,7 @@ namespace TransitionerInRhythmGameScene
 
         void IPhaseTransitionerInRhythmGameScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"Retry\"");
+            Debug.Log("„ÄêTransition„ÄëTransition to \"Retry\"");
             LoadSceneAsync(cts.Token).Forget();
         }
 

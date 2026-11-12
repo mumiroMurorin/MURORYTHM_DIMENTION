@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -27,7 +27,7 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // ƒGƒfƒBƒ^ƒm[ƒcƒ‚[ƒh•ÏX‚ÌÛƒJƒƒ‰ƒIƒ“ƒIƒtØ‚è‘Ö‚¦
+            // ã‚¨ãƒ‡ã‚£ã‚¿ãƒŽãƒ¼ãƒ„ãƒ¢ãƒ¼ãƒ‰å¤‰æ›´ã®éš›ã‚«ãƒ¡ãƒ©ã‚ªãƒ³ã‚ªãƒ•åˆ‡ã‚Šæ›¿ãˆ
             chartEditorDataGetter?.EditNoteType
                 .Subscribe(mode => {
                     viewCameraParent.SetActive(mode == EditNoteType.Vertices);

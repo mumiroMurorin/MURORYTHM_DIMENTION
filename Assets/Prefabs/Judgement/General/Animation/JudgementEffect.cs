@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -29,16 +29,16 @@ public class JudgementEffect : MonoBehaviour, IJudgementEffectController
     {
         if (mainCamera == null) { return; }
 
-        // ƒJƒƒ‰‚Ì•ûŒü‚ğŒvZ
+        // ã‚«ãƒ¡ãƒ©ã®æ–¹å‘ã‚’è¨ˆç®—
         Vector3 directionToCamera = transform.position - mainCamera.transform.position;
 
-        // Y²‚Ì‰ñ“]‚Ì‚İ‚ğl—¶
+        // Yè»¸ã®å›è»¢ã®ã¿ã‚’è€ƒæ…®
         directionToCamera.x = 0;
 
         Quaternion currentRotation = transform.rotation;
 
-        // ‰ñ“]‚ğ“K—p
-        if (directionToCamera.sqrMagnitude > 0.01f) // ’·‚³‚ª‚Ù‚Úƒ[ƒ‚Å‚È‚¢‚©Šm”F
+        // å›è»¢ã‚’é©ç”¨
+        if (directionToCamera.sqrMagnitude > 0.01f) // é•·ã•ãŒã»ã¼ã‚¼ãƒ­ã§ãªã„ã‹ç¢ºèª
         {
             Quaternion targetRotation = Quaternion.LookRotation(directionToCamera);
             transform.rotation = Quaternion.Euler(
@@ -99,7 +99,7 @@ public class JudgementEffect : MonoBehaviour, IJudgementEffectController
 
         public bool CheckCondition(Judgement judgement, float error = 0f)
         {
-            // FastLate•\¦–³‚µ‚Ì‚Æ‚«
+            // FastLateè¡¨ç¤ºç„¡ã—ã®ã¨ã
             if (error == 0f && fastLate == FastLate.None) { return this.judgement == judgement; }
             else if (error == 0f) { return false; }
 

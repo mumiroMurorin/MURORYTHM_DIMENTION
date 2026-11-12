@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TransitionerInResultScene;
@@ -12,7 +12,7 @@ public class InputHandlerForKeyboardInResultScene : InputHandlerForKeyboard
 
     protected override void EachUpdate()
     {
-        // Ctrl + Z‚ÅƒŠƒgƒ‰ƒC
+        // Ctrl + Zã§ãƒªãƒˆãƒ©ã‚¤
         if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Z)) { Retry(); }
 
         if (IsDeleteCurrentScoreShortcutDown()) { DeleteCurrentScore(); }

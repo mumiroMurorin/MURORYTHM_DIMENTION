@@ -1,11 +1,11 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UniRx;
 
 /// <summary>
-/// ƒ^ƒbƒ`ƒm[ƒc‚ÉƒAƒ^ƒbƒ`‚³‚ê‚éƒNƒ‰ƒX
+/// ã‚¿ãƒƒãƒãƒãƒ¼ãƒ„ã«ã‚¢ã‚¿ãƒƒãƒã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 public class NoteObject_DivineTouch : NoteObject<NoteData_DivineTouch>
 {
@@ -14,7 +14,7 @@ public class NoteObject_DivineTouch : NoteObject<NoteData_DivineTouch>
     bool isJudged;
 
     /// <summary>
-    /// ‰Šú‰»
+    /// åˆæœŸåŒ–
     /// </summary>
     /// <param name="data"></param>
     public override void Initialize(NoteData_DivineTouch data)
@@ -28,7 +28,7 @@ public class NoteObject_DivineTouch : NoteObject<NoteData_DivineTouch>
     {
         if (noteData == null) { return; }
 
-        // ¬Œ÷”»’è
+        // æˆåŠŸåˆ¤å®š
         foreach (int index in noteData.Range)
         {
             if (noteData.SliderInput == null) { break; }
@@ -44,7 +44,7 @@ public class NoteObject_DivineTouch : NoteObject<NoteData_DivineTouch>
         sliderEvent
             .Where(touchedIndex => touchedIndex == index)
             .Where(_ => !isJudged)
-            // Good”»’èŠÔ‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚é‚Æ‚«”»’è
+            // Goodåˆ¤å®šæ™‚é–“ã«å«ã¾ã‚Œã¦ã„ã‚‹ã¨ãåˆ¤å®š
             .Where(_ => noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing) != Judgement.None)
             .Where(_ => !noteData.OptionGetter.IsAutoMode)
             .Subscribe(_ =>
@@ -57,7 +57,7 @@ public class NoteObject_DivineTouch : NoteObject<NoteData_DivineTouch>
 
     private void Update()
     {
-        // ƒI[ƒgƒ‚[ƒh
+        // ã‚ªãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰æ™‚
         if (noteData.OptionGetter.IsAutoMode && noteData.Timing <= noteData.Timer.Time)
         {
             NormalJudge();
@@ -74,11 +74,11 @@ public class NoteObject_DivineTouch : NoteObject<NoteData_DivineTouch>
     }
 
     /// <summary>
-    /// ”»’è
+    /// åˆ¤å®š
     /// </summary>
     private void NormalJudge()
     {
-        // ”»’è‚ğ“¾‚é
+        // åˆ¤å®šã‚’å¾—ã‚‹
         Judgement judgement;
         if (noteData.OptionGetter.IsAutoMode) { judgement = Judgement.Perfect; }
         else { judgement = noteData.JudgementWindow.GetJudgement(noteData.Timer.Time, noteData.Timing); }
@@ -90,7 +90,7 @@ public class NoteObject_DivineTouch : NoteObject<NoteData_DivineTouch>
     }
 
     /// <summary>
-    /// ƒm[ƒc‚ğ‹@”\’â~‚·‚é
+    /// ãƒãƒ¼ãƒ„ã‚’æ©Ÿèƒ½åœæ­¢ã™ã‚‹
     /// </summary>
     private void SetDisable()
     {
@@ -100,7 +100,7 @@ public class NoteObject_DivineTouch : NoteObject<NoteData_DivineTouch>
 }
 
 /// <summary>
-/// (‰Šú‰»‚É•K—v‚È•Ï”‚àŠÜ‚Ş)ƒ^ƒbƒ`ƒm[ƒc‚Ìƒf[ƒ^
+/// (åˆæœŸåŒ–ã«å¿…è¦ãªå¤‰æ•°ã‚‚å«ã‚€)ã‚¿ãƒƒãƒãƒãƒ¼ãƒ„ã®ãƒ‡ãƒ¼ã‚¿
 /// </summary>
 public class NoteData_DivineTouch : INoteData, IClippedJudgableNote
 {

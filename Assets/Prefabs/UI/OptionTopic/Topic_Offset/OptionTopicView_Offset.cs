@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -15,10 +15,10 @@ namespace UIInSelectScene
             string str = "";
             float fontSize = offsetTmp.fontSize;
 
-            // ³‚Ì”‚Ì‚Æ‚«+‚ğ“ª‚É‚Â‚¯‚é
+            // æ­£ã®æ•°ã®ã¨ã+ã‚’é ­ã«ã¤ã‘ã‚‹
             if (offset > 0) { str = $"<size={fontSize / 1.5f}>+</size>" + offset.ToString(); }
             else if (offset < 0) { str = $"<size={fontSize / 1.5f}>-</size>" + Mathf.Abs(offset).ToString(); }
-            else { str = $"<size={fontSize / 1.5f}>}</size={fontSize}>0"; }
+            else { str = $"<size={fontSize / 1.5f}>Â±</size={fontSize}>0"; }
 
             offsetTmp.text = str;
         }

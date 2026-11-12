@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using VContainer;
 using UnityEngine;
@@ -25,7 +25,7 @@ public class JudgementEffectController : MonoBehaviour
 
     private void Bind()
     {
-        // ‹L˜^‚ðŠÄŽ‹A‘‚¦ŽŸ‘æƒGƒtƒFƒNƒg‚ð”­¶‚³‚¹‚é
+        // è¨˜éŒ²ã‚’ç›£è¦–ã€å¢—ãˆæ¬¡ç¬¬ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç™ºç”Ÿã•ã›ã‚‹
         scoreGetter.NoteJudgementDatas
             .ObserveAdd()
             .Subscribe(value => SpawnEffect(value.Value))

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -8,7 +8,7 @@ using System;
 namespace ChartConvert
 {
     /// <summary>
-    /// ChartEditor ¨ ChartDataOrigin (ŠO•”ƒtƒ@ƒCƒ‹‚ÉƒGƒNƒXƒ|[ƒg)
+    /// ChartEditor â†’ ChartDataOrigin (å¤–éƒ¨ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ)
     /// </summary>
     public class ChartExporter
     {
@@ -20,13 +20,13 @@ namespace ChartConvert
         {
             Initialize();
 
-            // Å‰‚É•ÏŠ·
+            // æœ€åˆã«å¤‰æ›
             return ConvertChartDataOrigin(chartData, offset);
         }
 
         private void Initialize()
         {
-            // ‚±‚±‚É•ÏŠ·ŠÖ”‚ğ‹Lq‚µ‚Ä‚¢‚­
+            // ã“ã“ã«å¤‰æ›é–¢æ•°ã‚’è¨˜è¿°ã—ã¦ã„ã
             unchainConverters = new List<IUnchainedNoteConvertable>()
             {
                 new TouchNoteConverter(),
@@ -70,31 +70,31 @@ namespace ChartConvert
             bool isSucceed = true;
             ChartDataOrigin chartDataOrigin = new ChartDataOrigin();
 
-            // ƒIƒtƒZƒbƒg
+            // ã‚ªãƒ•ã‚»ãƒƒãƒˆ
             chartDataOrigin.OffsetMs = offset;
             chartDataOrigin.BarDatas = new List<BarDataOrigin>();
 
             if (chartData == null) { return chartDataOrigin; }
             if (chartData.BarDatas == null) { return chartDataOrigin; }
 
-            // •ˆ–Ê‚©‚ç¬ß‚ğˆê‚Â‚¸‚Âæ‚èo‚·
+            // è­œé¢ã‹ã‚‰å°ç¯€ã‚’ä¸€ã¤ãšã¤å–ã‚Šå‡ºã™
             foreach (var bar in chartData.BarDatas)
             {
                 BarDataOrigin barDataOrigin = new BarDataOrigin();
                 if (!SetBarData(bar, barDataOrigin)) { isSucceed = false; }
 
-                // ƒf[ƒ^ƒZƒbƒg
+                // ãƒ‡ãƒ¼ã‚¿ã‚»ãƒƒãƒˆ
                 chartDataOrigin.BarDatas.Add(barDataOrigin);
             }
 
-            if (isSucceed) { Debug.Log("yConverterz•ˆ–Êƒf[ƒ^‚Ì•ÏŠ·¬Œ÷"); }
-            else { Debug.LogWarning("yConverterz•ˆ–Êƒf[ƒ^‚Ì•ÏŠ·¸”sBƒƒO‚ğŠm‚©‚ß‚Ä‚­‚¾‚³‚¢"); }
+            if (isSucceed) { Debug.Log("ã€Converterã€‘è­œé¢ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›æˆåŠŸ"); }
+            else { Debug.LogWarning("ã€Converterã€‘è­œé¢ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›å¤±æ•—ã€‚ãƒ­ã‚°ã‚’ç¢ºã‹ã‚ã¦ãã ã•ã„"); }
 
             return chartDataOrigin;
         }
 
         /// <summary>
-        /// ”qƒf[ƒ^‚ğ•ÏŠ·‚µ‚Ä‘ã“ü‚·‚é
+        /// æ‹å­ãƒ‡ãƒ¼ã‚¿ã‚’å¤‰æ›ã—ã¦ä»£å…¥ã™ã‚‹
         /// </summary>
         /// <param name="barDataInEditor"></param>
         /// <param name="barDataOrigin"></param>
@@ -102,21 +102,21 @@ namespace ChartConvert
         {
             bool isSucceed = true;
 
-            // ”q
+            // æ‹å­
             barDataOrigin.BeatCount = barDataInEditor.BeatCount.Value;
             barDataOrigin.BeatUnit = barDataInEditor.BeatUnit.Value;
 
-            // •ªŠ„”
+            // åˆ†å‰²æ•°
             barDataOrigin.DivisionNum = barDataInEditor.DivisionNum.Value;
 
             barDataOrigin.SubDivisionDatas = new List<SubDivisionDataOrigin>();
-            // ”qƒf[ƒ^‚©‚ç•ªß‚ğˆê‚Â‚¸‚Âæ‚èo‚·
+            // æ‹å­ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰åˆ†ç¯€ã‚’ä¸€ã¤ãšã¤å–ã‚Šå‡ºã™
             foreach (var subDivision in barDataInEditor.SubDivisionDatas)
             {
                 SubDivisionDataOrigin subDataOrigin = new SubDivisionDataOrigin();
                 if (!SetSubDivisionData(subDivision, subDataOrigin)) { isSucceed = false; }
 
-                // ƒf[ƒ^’Ç‰Á
+                // ãƒ‡ãƒ¼ã‚¿è¿½åŠ 
                 barDataOrigin.SubDivisionDatas.Add(subDataOrigin);
             }
 
@@ -124,47 +124,47 @@ namespace ChartConvert
         }
 
         /// <summary>
-        /// •ªßƒf[ƒ^‚ğ•ÏŠ·‚µ‚Ä‘ã“ü‚·‚é
+        /// åˆ†ç¯€ãƒ‡ãƒ¼ã‚¿ã‚’å¤‰æ›ã—ã¦ä»£å…¥ã™ã‚‹
         /// </summary>
         /// <param name="dataInEditor"></param>
         /// <param name="dataOrigin"></param>
         private bool SetSubDivisionData(ISubDivisionDataGetter dataInEditor, SubDivisionDataOrigin dataOrigin)
         {
-            // BPMAƒXƒs[ƒh”{—¦‚ÌƒZƒbƒg
+            // BPMã€ã‚¹ãƒ”ãƒ¼ãƒ‰å€ç‡ã®ã‚»ãƒƒãƒˆ
             dataOrigin.Bpm = dataInEditor.Bpm.Value;
             dataOrigin.SpeedRatio = dataInEditor.SpeedRatio.Value;
 
-            // •ÏŠ·‚É¬Œ÷‚µ‚½‚©‚Ì”»’è
+            // å¤‰æ›ã«æˆåŠŸã—ãŸã‹ã®åˆ¤å®š
             bool isSucceed = true;
 
-            // ƒm[ƒcƒf[ƒ^‚ğˆê‚Â‚¸‚Âæ‚èo‚µ‚Ä
+            // ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿ã‚’ä¸€ã¤ãšã¤å–ã‚Šå‡ºã—ã¦
             foreach (var noteData in dataInEditor.NoteDatas)
             {
                 if (noteData == null) { continue; }
                 bool isSucceedLocal = false;
 
-                // •ÏŠ·ŠÖ”‚Å•ÏŠ·o—ˆ‚é‚©‘“–‚½‚è(•’Ê‚Ìƒm[ƒc)
+                // å¤‰æ›é–¢æ•°ã§å¤‰æ›å‡ºæ¥ã‚‹ã‹ç·å½“ãŸã‚Š(æ™®é€šã®ãƒãƒ¼ãƒ„)
                 foreach (var converter in unchainConverters)
                 {
                     isSucceedLocal |= converter.AddDataForOrigin(noteData, dataOrigin);
                 }
 
-                // •ÏŠ·ŠÖ”‚Å•ÏŠ·o—ˆ‚é‚©‘“–‚½‚è(ƒz[ƒ‹ƒhƒm[ƒc)
+                // å¤‰æ›é–¢æ•°ã§å¤‰æ›å‡ºæ¥ã‚‹ã‹ç·å½“ãŸã‚Š(ãƒ›ãƒ¼ãƒ«ãƒ‰ãƒãƒ¼ãƒ„)
                 foreach (var converter in holdConverters)
                 {
                     isSucceedLocal |= converter.AddDataForOrigin(noteData, dataOrigin);
                 }
 
-                // •ÏŠ·ŠÖ”‚Å•ÏŠ·o—ˆ‚é‚©‘“–‚½‚è(ƒX‚Ø[ƒXƒz[ƒ‹ƒhƒm[ƒc)
+                // å¤‰æ›é–¢æ•°ã§å¤‰æ›å‡ºæ¥ã‚‹ã‹ç·å½“ãŸã‚Š(ã‚¹ãºãƒ¼ã‚¹ãƒ›ãƒ¼ãƒ«ãƒ‰ãƒãƒ¼ãƒ„)
                 foreach (var converter in spaceHoldConverters)
                 {
                     isSucceedLocal |= converter.AddDataForOrigin(noteData, dataOrigin);
                 }
 
-                // •ÏŠ·¬Œ÷”»’è
+                // å¤‰æ›æˆåŠŸåˆ¤å®š
                 if (!isSucceedLocal)
                 {
-                    Debug.LogWarning($"yConverterzƒm[ƒcƒf[ƒ^‚Ì•ÏŠ·‚É¸”s‚µ‚Ü‚µ‚½: {noteData.Address}, {noteData.NoteType}");
+                    Debug.LogWarning($"ã€Converterã€‘ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›ã«å¤±æ•—ã—ã¾ã—ãŸ: {noteData.Address}, {noteData.NoteType}");
                     isSucceed = false;
                 }
             }

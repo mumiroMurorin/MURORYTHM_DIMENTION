@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
@@ -24,7 +24,7 @@ namespace TransitionerInLobbyScene
 
         void IPhaseTransitionerInLobbyScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"ConfirmTutorial\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"ConfirmTutorial\"");
 
             previousTopicTextBox?.Close(OpenConfirmTutorialWindow);
         }
@@ -40,7 +40,7 @@ namespace TransitionerInLobbyScene
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase()
         {

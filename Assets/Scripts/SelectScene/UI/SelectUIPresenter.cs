@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -36,32 +36,32 @@ namespace UIInSelectScene
 
         private void BindMusicTopic()
         {
-            // Šy‹ÈƒŠƒXƒg‚ªŠù‚É‚ ‚Á‚½AŠy‹ÈƒŠƒXƒg‚ğXV‚·‚é
+            // æ¥½æ›²ãƒªã‚¹ãƒˆãŒæ—¢ã«ã‚ã£ãŸæ™‚ã€æ¥½æ›²ãƒªã‚¹ãƒˆã‚’æ›´æ–°ã™ã‚‹
             if(musicDataListGetter_model?.MusicDatasSorted.Count > 0)
             {
                 int index = musicDataListGetter_model.CurrentMusicIndex.Value;
                 musicTopicsController_view.SetMusicDatas(index, musicDataListGetter_model);
             }
 
-            // Šy‹ÈƒŠƒXƒg‚ÌXV
+            // æ¥½æ›²ãƒªã‚¹ãƒˆã®æ›´æ–°
             musicDataListGetter_model?.MusicDatasSorted.ObserveCountChanged()
                 .Subscribe(_ => {
-                    // ƒgƒsƒbƒN‚ÌXV
+                    // ãƒˆãƒ”ãƒƒã‚¯ã®æ›´æ–°
                     int index = musicDataListGetter_model.CurrentMusicIndex.Value;
                     musicTopicsController_view.SetMusicDatas(index, musicDataListGetter_model);
                 })
                 .AddTo(this.gameObject);
 
-            // ƒgƒsƒbƒN‚ÌˆÚ“®
+            // ãƒˆãƒ”ãƒƒã‚¯ã®ç§»å‹•
             musicDataListGetter_model?.CurrentMusicIndex
                 .Pairwise()
                 .Subscribe(pair => { 
-                    // ƒgƒsƒbƒN‚ÌXV
+                    // ãƒˆãƒ”ãƒƒã‚¯ã®æ›´æ–°
                     _ = musicTopicsController_view.OnChangeSelectedMusic(pair.Current, pair.Previous, musicDataListGetter_model);
                 })
                 .AddTo(this.gameObject);
 
-            // Šy‹È‚Ì‘I‘ğ(Œˆ’è)
+            // æ¥½æ›²ã®é¸æŠ(æ±ºå®š)
             phaseStatusGetter_model?.Value.PhaseStatus
                 .Pairwise()
                 .Where(pair =>
@@ -72,18 +72,18 @@ namespace UIInSelectScene
                 .Subscribe(_ => musicTopicsController_view.OnSelectMusic())
                 .AddTo(this.gameObject);
 
-            // Šy‹È‘I‘ğ‚É–ß‚é
+            // æ¥½æ›²é¸æŠã«æˆ»ã‚‹
             phaseStatusGetter_model?.Value.PhaseStatus
                 .Where(status => status == PhaseStatusInSelectScene.MusicSelect)
                 .Subscribe(_ => musicTopicsController_view.OnBackSelectPhase())
                 .AddTo(this.gameObject);
 
-            // “ïˆÕ“x‚Ì•ÏX
+            // é›£æ˜“åº¦ã®å¤‰æ›´
             musicDataListGetter_model?.Difficulty
                 .Subscribe(musicTopicsController_view.OnChangeDifficulty)
                 .AddTo(this.gameObject);
 
-            // ƒIƒvƒVƒ‡ƒ“‚Ì‘I‘ğ
+            // ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®é¸æŠ
             phaseStatusGetter_model?.Value.PhaseStatus
                 .Where(status => status == PhaseStatusInSelectScene.MusicOption)
                 .Subscribe(_ => { 
@@ -91,7 +91,7 @@ namespace UIInSelectScene
                 })
                 .AddTo(this.gameObject);
 
-            // ƒIƒvƒVƒ‡ƒ“‚©‚ç–ß‚é
+            // ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‹ã‚‰æˆ»ã‚‹
             phaseStatusGetter_model?.Value.PhaseStatus
                 .Pairwise()
                 .Where(pair => pair.Previous == PhaseStatusInSelectScene.MusicOption && (pair.Current == PhaseStatusInSelectScene.DetailSelect || pair.Current == PhaseStatusInSelectScene.DetailSelect_UnStartable))
@@ -102,12 +102,12 @@ namespace UIInSelectScene
 
         private void BindSliderUI()
         {
-            // ƒ^ƒbƒ`‚³‚ê‚½‚ÌUI‹““®
+            // ã‚¿ãƒƒãƒã•ã‚ŒãŸæ™‚ã®UIæŒ™å‹•
             operationGetter_model?.Value.OnTouchSliderListner
                 .Subscribe(sliderUnitsController_view.OnTouchSlider)
                 .AddTo(this.gameObject);
 
-            // ‘€ì‚Ì’Ç‰Á
+            // æ“ä½œã®è¿½åŠ 
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveAdd()
                 .Subscribe(value =>
@@ -117,7 +117,7 @@ namespace UIInSelectScene
                 })
                 .AddTo(this.gameObject);
 
-            // ‘€ì‚ÌˆêV
+            // æ“ä½œã®ä¸€æ–°
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveReset()
                 .Subscribe(_ =>
@@ -130,10 +130,10 @@ namespace UIInSelectScene
 
         private void BindOther()
         {
-            // ‘I‘ğŠy‹È‚Ì•ÏX
+            // é¸æŠæ¥½æ›²ã®å¤‰æ›´
             musicDataListGetter_model?.CurrentMusicData
                 .Subscribe(value => {
-                    // ”wŒi‚ÌXV
+                    // èƒŒæ™¯ã®æ›´æ–°
                     backGroundController_view.OnChangeMusicTopic(musicDataListGetter_model.CurrentMusicData.Value);
                 })
                 .AddTo(this.gameObject);

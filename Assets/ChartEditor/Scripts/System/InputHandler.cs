@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -12,15 +12,15 @@ namespace ChartEditor
     {
         [SerializeField] KeyCode playKey = KeyCode.Space;
 
-        [Header("ƒ}ƒEƒXŠÖŒW")]
-        [Tooltip("Šg‘åk¬‚ÌŠ´“x")]
+        [Header("ãƒã‚¦ã‚¹é–¢ä¿‚")]
+        [Tooltip("æ‹¡å¤§ç¸®å°ã®æ„Ÿåº¦")]
         [SerializeField] float scalingSensitivity = 0.1f;
-        [Tooltip("Ä¶ˆÊ’uˆÚ“®‚ÌŠ´“xŠî€(z/scroll)")]
+        [Tooltip("å†ç”Ÿä½ç½®ç§»å‹•ã®æ„Ÿåº¦åŸºæº–(z/scroll)")]
         [SerializeField] float moveSensitivityMax = 0.01f;
-        [Header("ƒVƒ‡[ƒgƒJƒbƒgƒL[")]
+        [Header("ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼")]
         [SerializeField] EditModeToKeycode[] editModeShortCutKeys;
 
-        [Tooltip("•ˆ–ÊƒGƒNƒXƒ|[ƒg")]
+        [Tooltip("è­œé¢ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ")]
         [SerializeField] ChartDataExporter chartDataExporter;
 
         IChartEditorDataSetter dataSetter;
@@ -63,13 +63,13 @@ namespace ChartEditor
         {
             var scroll = Input.mouseScrollDelta.y;
 
-            // Šy‹ÈÄ¶
+            // æ¥½æ›²å†ç”Ÿ
             if (Input.GetKeyDown(playKey)) { OperateMusicPlay(); }
-            // ƒXƒP[ƒ‹•ÏX
+            // ã‚¹ã‚±ãƒ¼ãƒ«å¤‰æ›´
             if (Input.GetKey(KeyCode.LeftControl) && Mathf.Abs(scroll) > 0.01f) { OperateChartViewScale(scroll); }
-            // •ˆ–ÊƒXƒNƒ[ƒ‹
+            // è­œé¢ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«
             if (!Input.GetKey(KeyCode.LeftControl) && Mathf.Abs(scroll) > 0.01f) { OperatePlaybackProgress(scroll); }
-            // •Û‘¶
+            // ä¿å­˜
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.S)) { SaveChart(); }
             // Undo
             if (Input.GetKey(KeyCode.LeftControl) && !Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Z)) { Undo(); }
@@ -78,34 +78,34 @@ namespace ChartEditor
             // Move editing vertices along the connected SpaceHold chain
             if (Input.GetKeyDown(KeyCode.UpArrow)) { verticesChainNavigator?.MoveToNext(); }
             if (Input.GetKeyDown(KeyCode.DownArrow)) { verticesChainNavigator?.MoveToPrevious(); }
-            // ƒVƒ‡[ƒgƒJƒbƒgƒL[
+            // ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚­ãƒ¼
             CheckAndDoShortCutKey();
         }
 
         /// <summary>
-        /// Šg‘å—¦‚Ì‘€ì
+        /// æ‹¡å¤§ç‡ã®æ“ä½œ
         /// </summary>
         private void OperateChartViewScale(float delta)
         {
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(scaleIgnoreModes)) { return; }
-            // ƒJ[ƒ\ƒ‹‚ªUIã‚É‚ ‚é‚Æ‚«‚Í•Ô‚·
+            // ã‚«ãƒ¼ã‚½ãƒ«ãŒUIä¸Šã«ã‚ã‚‹ã¨ãã¯è¿”ã™
             //if (EventSystem.current.IsPointerOverGameObject()) { return; }
 
             optionSetter?.SetChartViewScale(optionGetter.ChartViewScale.Value + delta * scalingSensitivity);
         }
 
         /// <summary>
-        /// Ä¶ˆÊ’u‚Ì‘€ì
+        /// å†ç”Ÿä½ç½®ã®æ“ä½œ
         /// </summary>
         private void OperatePlaybackProgress(float delta)
         {
-            // Ä¶’†‚Í‘€ì‚ğó‚¯•t‚¯‚È‚¢
+            // å†ç”Ÿä¸­ã¯æ“ä½œã‚’å—ã‘ä»˜ã‘ãªã„
             if (dataGetter.PlayMode.Value == PlayMode.Play) { return; }
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(playIgnoreModes)) { return; }
-            // ƒJ[ƒ\ƒ‹‚ªUIã‚É‚ ‚é‚Æ‚«‚Í•Ô‚·
+            // ã‚«ãƒ¼ã‚½ãƒ«ãŒUIä¸Šã«ã‚ã‚‹ã¨ãã¯è¿”ã™
             if (EventSystem.current.IsPointerOverGameObject() && dataGetter.CurrentEditMode.Value != EditMode.Preview) { return; }
 
-            // ƒXƒNƒ[ƒ‹Š´“x‚Æ•ˆ–Ê’·‚³‚É‚æ‚Á‚Ä•Ï‚¦‚é
+            // ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«æ„Ÿåº¦ã¨è­œé¢é•·ã•ã«ã‚ˆã£ã¦å¤‰ãˆã‚‹
             float chartSeconds = dataGetter.ChartSeconds.Value;
             float groundLength = chartSeconds * optionGetter.ChartViewScale.Value;
             float movementPerScroll = moveSensitivityMax * optionGetter.ScrollSensitivity.Value;
@@ -115,7 +115,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// Šy‹ÈÄ¶/’â~‚Ì‘€ì
+        /// æ¥½æ›²å†ç”Ÿ/åœæ­¢ã®æ“ä½œ
         /// </summary>
         private void OperateMusicPlay()
         {

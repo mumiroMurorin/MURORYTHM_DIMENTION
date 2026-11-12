@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -19,7 +19,7 @@ namespace TransitionerInResultScene
 
         void IPhaseTransitionerInResultScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"LoadData\"");
+            Debug.Log("„ÄêTransition„ÄëTransition to \"LoadData\"");
 
             SoundManager.Instance.PlayBGM(BGM_Type.Result);
             RegisterOperation();

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,12 +11,12 @@ public class LogItem : MonoBehaviour
     [SerializeField] Image backGround;
     [SerializeField] float displayDuration = 3f;
 
-    [Header("”wŒiF")]
-    [Tooltip("’Êí")]
+    [Header("èƒŒæ™¯è‰²")]
+    [Tooltip("é€šå¸¸æ™‚")]
     [SerializeField] Color generalColor;
-    [Tooltip("Œx")]
+    [Tooltip("è­¦å‘Šæ™‚")]
     [SerializeField] Color warningColor;
-    [Tooltip("ƒGƒ‰[")]
+    [Tooltip("ã‚¨ãƒ©ãƒ¼æ™‚")]
     [SerializeField] Color errorColor;
 
     CancellationTokenSource cts;
@@ -28,14 +28,14 @@ public class LogItem : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒf[ƒ^ƒZƒbƒg
+    /// ãƒ‡ãƒ¼ã‚¿ã‚»ãƒƒãƒˆ
     /// </summary>
     /// <param name="logData"></param>
     public void SetLogData(LogData logData)
     {
         tmp.text = logData.Logtext;
 
-        // ”wŒiF‚Ìİ’è
+        // èƒŒæ™¯è‰²ã®è¨­å®š
         switch (logData.LogType)
         {
             case LogType.Log:

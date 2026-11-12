@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
@@ -28,12 +28,12 @@ namespace TransitionerInGameOverScene
 
         void IPhaseTransitionerInGameOverScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"Animation\"");
+            Debug.Log("„ÄêTransition„ÄëTransition to \"Animation\"");
 
             phaseTransitionable?.Value?.RegisterCts(cts);
             textBoxController?.Close();
 
-            // ÉRÉìÉeÉBÉjÉÖÅ[
+            // „Ç≥„É≥„ÉÜ„Ç£„Éã„É•„Éº
             if (dataController.DataGetter.IsContinue.Value) 
             {
                 characterAnimationControllersBinder?.OnContinueSelected();
@@ -41,7 +41,7 @@ namespace TransitionerInGameOverScene
                 cts?.CancelAndDispose();
                 cts = DelayUtility.Run(afterContinueDelaySeconds, () => phaseTransitionable.Value.TransitionPhase(PhaseStatusInGameOverScene.FadeOut));
             }
-            // ÉQÅ[ÉÄèIóπ
+            // „Ç≤„Éº„É†ÁµÇ‰∫Ü
             else
             {
                 characterAnimationControllersBinder?.OnFinishSelected();

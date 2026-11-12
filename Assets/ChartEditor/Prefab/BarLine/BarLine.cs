@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -12,7 +12,7 @@ namespace ChartEditor
         [SerializeField] SubdivisionLineInfoView subInfo_view;
         
         /// <summary>
-        /// ¬ßüã‚Ìƒf[ƒ^XV
+        /// å°ç¯€ç·šä¸Šã®ãƒ‡ãƒ¼ã‚¿æ›´æ–°
         /// </summary>
         /// <param name="barData"></param>
         public override void SetBarNumber(int barNumber)
@@ -22,7 +22,7 @@ namespace ChartEditor
 
         public override void OnChangeBpm(float bpm, float backBpm)
         {
-            //// ‘Oƒf[ƒ^‚Æ“¯‚¶bpm‚Ì‚Í•\¦‚µ‚È‚¢
+            //// å‰ãƒ‡ãƒ¼ã‚¿ã¨åŒã˜bpmã®æ™‚ã¯è¡¨ç¤ºã—ãªã„
             //bpm = bpm != backBpm ? bpm : -1;
             subInfo_view.SetBPM(bpm);
         }
@@ -34,21 +34,21 @@ namespace ChartEditor
 
         public override void OnChangeBeatCount(int beatCount, int backCount)
         {
-            //// ‘Oƒf[ƒ^‚Æ“¯‚¶beatCount‚Ì‚Í•\¦‚µ‚È‚¢
+            //// å‰ãƒ‡ãƒ¼ã‚¿ã¨åŒã˜beatCountã®æ™‚ã¯è¡¨ç¤ºã—ãªã„
             //beatCount = beatCount != backCount ? beatCount : -1;
             barInfo_view.SetBeatCount(beatCount);
         }
 
         public override void OnChangeBeatUnit(float beatUnit, float backUnit)
         {
-            //// ‘Oƒf[ƒ^‚Æ“¯‚¶beatUnit‚Ì‚Í•\¦‚µ‚È‚¢
+            //// å‰ãƒ‡ãƒ¼ã‚¿ã¨åŒã˜beatUnitã®æ™‚ã¯è¡¨ç¤ºã—ãªã„
             //beatUnit = beatUnit != backUnit ? beatUnit : -1;
             barInfo_view.SetBeatUnit(beatUnit);
         }
 
         public override void OnChangeDivisionNum(int divNum, int backNum)
         {
-            //// ‘Oƒf[ƒ^‚Æ“¯‚¶divNum‚Ì‚Í•\¦‚µ‚È‚¢
+            //// å‰ãƒ‡ãƒ¼ã‚¿ã¨åŒã˜divNumã®æ™‚ã¯è¡¨ç¤ºã—ãªã„
             //divNum = divNum != backNum ? divNum : -1;
             barInfo_view.SetDivisionNum(divNum);
         }

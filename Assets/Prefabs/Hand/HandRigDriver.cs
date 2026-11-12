@@ -1,20 +1,20 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class FingerBoneMap
 {
-    public Transform bone;         // Unity‘¤‚Ìƒ{[ƒ“
-    public int mediapipeIndexA;    // MediaPipe Joint ID (‹N“_)
-    public int mediapipeIndexB;    // MediaPipe Joint ID (Œü‚©‚¤æ)
+    public Transform bone;         // Unityå´ã®ãƒœãƒ¼ãƒ³
+    public int mediapipeIndexA;    // MediaPipe Joint ID (èµ·ç‚¹)
+    public int mediapipeIndexB;    // MediaPipe Joint ID (å‘ã‹ã†å…ˆ)
 }
 
 public class HandRigDriver : MonoBehaviour
 {
     [SerializeField] FingerBoneMap[] boneMaps;
 
-    // MediaPipe‚©‚ç“n‚³‚ê‚éƒ[ƒ‹ƒhÀ•Wi—áF21ŠÖßj
+    // MediaPipeã‹ã‚‰æ¸¡ã•ã‚Œã‚‹ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ï¼ˆä¾‹ï¼š21é–¢ç¯€ï¼‰
     public Mediapipe.NormalizedLandmarkList MediapipeWorldPoints { private get; set; }
 
     void Update()

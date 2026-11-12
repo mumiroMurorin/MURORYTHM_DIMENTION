@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JsonUtil;
@@ -37,22 +37,22 @@ public class ChartLoaderJsonInSelectScene : MonoBehaviour, IChartLoader
     {
         if (path == null || path == "")
         {
-            Debug.LogError("ySystemzJsonƒtƒ@ƒCƒ‹ƒpƒX‚ªQÆ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.LogError("ã€Systemã€‘Jsonãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ãŒå‚ç…§ã•ã‚Œã¦ã„ã¾ã›ã‚“");
             return null;
         }
 
-        // Jsonƒf[ƒ^‚Ì•ÏŠ·
+        // Jsonãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›
         if (!JsonLoader.TryLoadFromJsonFile(path, out ChartDataOrigin chartDataOrigin)) 
         {
-            // ¸”s
+            // å¤±æ•—
             return null;
         }
 
-        // •ˆ–Êƒf[ƒ^‚Ì•ÏŠ·
+        // è­œé¢ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›
         ChartImporterForRhythmGame chartImporter = new ChartImporterForRhythmGame();
         ChartData chart = chartImporter.Import(chartDataOrigin, optionGetter);
 
-        // ”»’è˜g‚Ì’²®
+        // åˆ¤å®šæ ã®èª¿æ•´
         JudgementWindowAdjuster judgementWindowAdjuster = new JudgementWindowAdjuster();
         AdjustJudgementWindow(judgementWindowAdjuster, chart);
 
@@ -62,18 +62,18 @@ public class ChartLoaderJsonInSelectScene : MonoBehaviour, IChartLoader
 
     public ChartData LoadChartData(TextAsset jsonFile)
     {
-        // Jsonƒf[ƒ^‚Ì•ÏŠ·
+        // Jsonãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›
         if (!JsonLoader.TryLoadFromTextAsset(jsonFile, out ChartDataOrigin chartDataOrigin))
         {
-            // ¸”s
+            // å¤±æ•—
             return null;
         }
 
-        // •ˆ–Êƒf[ƒ^‚Ì•ÏŠ·
+        // è­œé¢ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›
         ChartImporterForRhythmGame chartImporter = new ChartImporterForRhythmGame();
         ChartData chart = chartImporter.Import(chartDataOrigin, optionGetter);
 
-        // ”»’è˜g‚Ì’²®
+        // åˆ¤å®šæ ã®èª¿æ•´
         JudgementWindowAdjuster judgementWindowAdjuster = new JudgementWindowAdjuster();
         AdjustJudgementWindow(judgementWindowAdjuster, chart);
 

@@ -1,4 +1,4 @@
-Shader "UI/Cyber Horizontal Line Noise"
+﻿Shader "UI/Cyber Horizontal Line Noise"
 {
     Properties
     {

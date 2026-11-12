@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -9,7 +9,7 @@ public class InteractNoteEffectr_HoldRelayHidden : InteractNoteEffect
     {
         if (noteDataOrigin is not NoteData_HoldRelayHidden noteData) { return; }
 
-        // ƒp[ƒeƒBƒNƒ‹‚ÌƒZƒbƒg
+        // ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã®ã‚»ãƒƒãƒˆ
         foreach (var particle in particles)
         {
             particle.ApplyGroundShapeSetting(noteData.Range[0], noteData.Range.Length);

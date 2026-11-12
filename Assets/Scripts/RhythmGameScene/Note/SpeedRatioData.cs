@@ -1,11 +1,11 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 /// <summary>
-/// ƒXƒs[ƒh”{—¦(ƒ\ƒtƒ‰ƒ“)ƒf[ƒ^
-/// •ˆ–Êƒf[ƒ^(ChartData)‚É‘g‚İ‚Ü‚ê‚é
+/// ã‚¹ãƒ”ãƒ¼ãƒ‰å€ç‡(ã‚½ãƒ•ãƒ©ãƒ³)ãƒ‡ãƒ¼ã‚¿
+/// è­œé¢ãƒ‡ãƒ¼ã‚¿(ChartData)ã«çµ„ã¿è¾¼ã¾ã‚Œã‚‹
 /// </summary>
 public class SpeedRatioData
 {

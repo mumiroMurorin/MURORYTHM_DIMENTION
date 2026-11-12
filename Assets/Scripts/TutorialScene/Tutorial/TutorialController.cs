@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using VContainer;
 using System.Collections.Generic;
 using UniRx;
@@ -32,7 +32,7 @@ public class TutorialController : MonoBehaviour, IDisposer
 
     private void Initialize()
     {
-        // ƒQ[ƒ€‚ÌÅ‰‚¾‚¯ŽÀs
+        // ã‚²ãƒ¼ãƒ ã®æœ€åˆã ã‘å®Ÿè¡Œ
         timer?.Value.TimeRP
             .Where(time => 0 < time)
             .Take(1)
@@ -86,7 +86,7 @@ public class TutorialController : MonoBehaviour, IDisposer
             targetActions[i]?.SetNextNode(targetActions[i + 1]);
         }
 
-        // ÅŒã‚ÉƒR[ƒ‹ƒoƒbƒNŠÖ”‚ðŒÄ‚Ô
+        // æœ€å¾Œã«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã‚’å‘¼ã¶
         targetActions.Last()?.SetNextNode(new Callback(() => {
             OnFinishTutorialListener?.Invoke();
         }));

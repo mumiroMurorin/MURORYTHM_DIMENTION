@@ -1,4 +1,4 @@
-Shader "Custom/StencilMaskWriter"
+﻿Shader "Custom/StencilMaskWriter"
 {
     Properties
     {

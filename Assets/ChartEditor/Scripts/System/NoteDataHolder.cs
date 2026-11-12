@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -11,7 +11,7 @@ namespace ChartEditor
 
         #region Note
 
-        // ‘I‘ğ’†ƒm[ƒc
+        // é¸æŠä¸­ãƒãƒ¼ãƒ„
         ReactiveCollection<IDeployableNoteData> selectingNotes = new ReactiveCollection<IDeployableNoteData>();
         public IReadOnlyReactiveCollection<IDeployableNoteData> SelectingNotes => selectingNotes;
         public bool TryAddSelectingNotes(IDeployableNoteData data)
@@ -43,11 +43,11 @@ namespace ChartEditor
         }
 
 
-        // ”z’uƒm[ƒc•
+        // é…ç½®ãƒãƒ¼ãƒ„å¹…
         public int DeployNoteSize { get; set; } = 3;
         
 
-        // ƒm[ƒgƒf[ƒ^ ¨ ƒm[ƒgƒIƒuƒWƒFƒNƒg
+        // ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ â†’ ãƒãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
         ReactiveCollection<DataToNoteObject> dataToNoteObject = new ReactiveCollection<DataToNoteObject>();
         public IReadOnlyReactiveCollection<DataToNoteObject> DataToNoteObject => dataToNoteObject;
         public void AddDataToNoteObject(IDeployableNoteData data, NoteObject obj)
@@ -59,7 +59,7 @@ namespace ChartEditor
             var dto = dataToNoteObject.FirstOrDefault(n => n.Data == data);
             if (dto == null)
             {
-                Debug.LogWarning($"yNotezƒf[ƒ^‚É‘Î‰‚·‚éƒIƒuƒWƒFƒNƒg‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: {data.Address}");
+                Debug.LogWarning($"ã€Noteã€‘ãƒ‡ãƒ¼ã‚¿ã«å¯¾å¿œã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ: {data.Address}");
                 return false;
             }
 
@@ -85,16 +85,16 @@ namespace ChartEditor
 
         #region ChainNote
 
-        // Ú‘±ƒf[ƒ^
+        // æ¥ç¶šãƒ‡ãƒ¼ã‚¿
         Dictionary<int, SortedChainNoteDataList> indexToChainNoteDataList = new Dictionary<int, SortedChainNoteDataList>();
         public void AddChainNote(IChainNoteData addNote)
         {
-            // ŠÜ‚Ü‚ê‚Ä‚¢‚é‚Æ‚«
+            // å«ã¾ã‚Œã¦ã„ã‚‹ã¨ã
             if (indexToChainNoteDataList.TryGetValue(addNote.ChainIndex.Value, out var list)) 
             {
                 list.AddChainNoteData(addNote);
             }
-            // V‹K‚Ì‚Æ‚«
+            // æ–°è¦ã®ã¨ã
             else
             {
                 var addList = new SortedChainNoteDataList();
@@ -104,17 +104,17 @@ namespace ChartEditor
         }
         public bool RemoveChainNote(IChainNoteData addNote)
         {
-            // ŠÜ‚Ü‚ê‚Ä‚È‚¢‚Æ‚«
+            // å«ã¾ã‚Œã¦ãªã„ã¨ã
             if (!indexToChainNoteDataList.TryGetValue(addNote.ChainIndex.Value, out var list)) { return false; }
             bool b = list.RemoveChainNoteData(addNote);
 
-            // ‹ó‚Á‚Û‚É‚È‚Á‚½‚çÁ‚·
+            // ç©ºã£ã½ã«ãªã£ãŸã‚‰æ¶ˆã™
             if(list.ChainNoteList.Count == 0) { indexToChainNoteDataList.Remove(addNote.ChainIndex.Value); }
             return b;
         }
         public SortedChainNoteDataList GetChainNoteList(int index)
         {
-            // ŠÜ‚Ü‚ê‚Ä‚¢‚é‚Æ‚«
+            // å«ã¾ã‚Œã¦ã„ã‚‹ã¨ã
             if (indexToChainNoteDataList.TryGetValue(index, out var list)) { return list; }
             else { return null; }
         }
@@ -143,7 +143,7 @@ namespace ChartEditor
 
         #region Vertex
 
-        // •ÒW’†‚Ì’¸“_‚ ‚èƒIƒuƒWƒFƒNƒg
+        // ç·¨é›†ä¸­ã®é ‚ç‚¹ã‚ã‚Šã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
         ReactiveProperty<IVerticesControlableNoteData> editingVertices = new ReactiveProperty<IVerticesControlableNoteData>();
         public IReadOnlyReactiveProperty<IVerticesControlableNoteData> EditingVertices => editingVertices;
         public void SetEditingVertices(IVerticesControlableNoteData data)
@@ -152,7 +152,7 @@ namespace ChartEditor
             editingVertices.Value = data;
         }
 
-        // ’¸“_ƒf[ƒ^ ¨ ’¸“_ƒIƒuƒWƒFƒNƒg
+        // é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ â†’ é ‚ç‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
         ReactiveCollection<DataToVertexObject> dataToVertexObject = new ReactiveCollection<DataToVertexObject>();
         public IReadOnlyReactiveCollection<DataToVertexObject> DataToVertexObject => dataToVertexObject;
         public VertexObject GetVertexObject(VertexData data) { return dataToVertexObject.FirstOrDefault(x => x.Data == data)?.Object; }
@@ -165,7 +165,7 @@ namespace ChartEditor
             var dto = dataToVertexObject.FirstOrDefault(n => n.Data == data);
             if (dto == null)
             {
-                Debug.LogWarning($"yVertexzƒf[ƒ^‚É‘Î‰‚·‚éƒIƒuƒWƒFƒNƒg‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: {data.Position}");
+                Debug.LogWarning($"ã€Vertexã€‘ãƒ‡ãƒ¼ã‚¿ã«å¯¾å¿œã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ: {data.Position}");
                 return false;
             }
 
@@ -217,7 +217,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// Address‡‚Éƒ\[ƒg‚³‚ê‚é‚±‚Æ‚ª•ÛØ‚³‚ê‚½ChainNoteDataList
+    /// Addressé †ã«ã‚½ãƒ¼ãƒˆã•ã‚Œã‚‹ã“ã¨ãŒä¿è¨¼ã•ã‚ŒãŸChainNoteDataList
     /// </summary>
     public class SortedChainNoteDataList
     {
@@ -226,7 +226,7 @@ namespace ChartEditor
 
         public void AddChainNoteData(IChainNoteData addData)
         {
-            // ‘}“ü‚·‚éƒCƒ“ƒfƒbƒNƒX‚ğ’²‚×‚é
+            // æŒ¿å…¥ã™ã‚‹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’èª¿ã¹ã‚‹
             int insertIndex = 0;
             for(insertIndex = 0; insertIndex < chainNoteList.Count; insertIndex++)
             {

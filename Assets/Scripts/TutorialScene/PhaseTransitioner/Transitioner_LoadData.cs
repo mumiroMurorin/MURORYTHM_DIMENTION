@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -27,24 +27,24 @@ namespace TransitionerInTutorialScene
 
         void IPhaseTransitionerInTutorialScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"LoadData\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"LoadData\"");
 
-            // ƒgƒ‰ƒbƒLƒ“ƒOƒZƒbƒeƒBƒ“ƒO“Ç‚İ‚İ
+            // ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã‚»ãƒƒãƒ†ã‚£ãƒ³ã‚°èª­ã¿è¾¼ã¿
             trackingSettingsLoader?.LoadBodyTrackingSettings();
 
-            // ƒXƒRƒAƒŠƒZƒbƒg
+            // ã‚¹ã‚³ã‚¢ãƒªã‚»ãƒƒãƒˆ
             scoreResetter?.Value.ResetScore();
 
-            // ŠÔƒŠƒZƒbƒg
+            // æ™‚é–“ãƒªã‚»ãƒƒãƒˆ
             timeController?.Value.ResetTimer();
 
-            // Šy‹È‚Ì“Ç‚İ‚İ
+            // æ¥½æ›²ã®èª­ã¿è¾¼ã¿
             musicPlayer?.Value.LoadMusic(() => { 
                 isLoadedMusic = true;
                 if (CheckTransitionable()) { TransitionNextPhase(); }
             });
 
-            // •ˆ–Ê‚Ì“Ç‚İ‚İ
+            // è­œé¢ã®èª­ã¿è¾¼ã¿
             chartLoader?.Value.LoadChart(chartFile, () =>
             {
                 isLoadedChart = true;
@@ -58,7 +58,7 @@ namespace TransitionerInTutorialScene
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase()
         {

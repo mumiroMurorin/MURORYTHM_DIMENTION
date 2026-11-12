@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -9,7 +9,7 @@ namespace ChartEditor
     public class NoteDeployable : MonoBehaviour, IDeployableObject
     {
         [SerializeField] NoteObject noteObject;
-        [Tooltip("”z’u‚ÌƒAƒEƒgƒ‰ƒCƒ“F")]
+        [Tooltip("é…ç½®æ™‚ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è‰²")]
         [SerializeField] private ColorSetting outlineColorOnDeploying;
         [SerializeField] private Renderer noteRenderer;
 
@@ -23,7 +23,7 @@ namespace ChartEditor
             this.gameObject.SetActive(false);
             noteObject.SetCollidersActive(false);
 
-            // ƒAƒEƒgƒ‰ƒCƒ“‚Ìİ’è
+            // ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ã®è¨­å®š
             noteObject.OutlineColors.Add(outlineColorOnDeploying);
 
             noteObject.NoteData = noteData;
@@ -33,7 +33,7 @@ namespace ChartEditor
 
         void IDeployableObject.OnDeploy()
         {
-            // ƒAƒEƒgƒ‰ƒCƒ“‚ğÁ‚·
+            // ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ã‚’æ¶ˆã™
             noteObject.OutlineColors.Remove(outlineColorOnDeploying);
 
             noteRenderer.material.color *= new Color(1, 1, 1, 2f);
@@ -42,8 +42,8 @@ namespace ChartEditor
 
         void IDeployableObject.OnMove(Transform parent)
         {
-            // eƒIƒuƒWƒFƒNƒg‚É‡‚í‚¹‚½ˆÊ’u’²®
-            // ‚Ü‚¾İ’u‚µ‚Ä‚¢‚È‚¢‚Ì‚Åˆø”‚ÌTransform‚ğQÆ
+            // è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«åˆã‚ã›ãŸä½ç½®èª¿æ•´
+            // ã¾ã è¨­ç½®ã—ã¦ã„ãªã„ã®ã§å¼•æ•°ã®Transformã‚’å‚ç…§
             Vector3 pos = parent.position;
             this.transform.position = pos;
             this.transform.SetParent(parent);

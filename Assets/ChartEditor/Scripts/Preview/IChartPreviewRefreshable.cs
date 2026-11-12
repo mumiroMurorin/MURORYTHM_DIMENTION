@@ -1,4 +1,4 @@
-using ChartConvert;
+﻿using ChartConvert;
 using Cysharp.Threading.Tasks;
 
 namespace ChartEditor

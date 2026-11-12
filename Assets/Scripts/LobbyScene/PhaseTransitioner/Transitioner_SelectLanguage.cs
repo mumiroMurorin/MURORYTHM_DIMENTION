@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 namespace TransitionerInLobbyScene
 {
@@ -16,13 +16,13 @@ namespace TransitionerInLobbyScene
 
         void IPhaseTransitionerInLobbyScene.Transition()
         {
-            Debug.Log("yTransitionz Transition to SelectLanguage");
+            Debug.Log("ã€Transitionã€‘ Transition to SelectLanguage");
 
             textBoxController?.Open(TransitionNextPhase);
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase()
         {

@@ -1,4 +1,4 @@
-Shader "Custom/StencilMaskedUnlitTransparent"
+﻿Shader "Custom/StencilMaskedUnlitTransparent"
 {
     Properties
     {

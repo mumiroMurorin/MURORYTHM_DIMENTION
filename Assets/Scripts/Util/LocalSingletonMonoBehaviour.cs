@@ -1,8 +1,8 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class LocalSingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
 {
-    // ƒVƒ“ƒOƒ‹ƒgƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+    // ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
     private static T instance;
 
     public static T Instance
@@ -11,12 +11,12 @@ public class LocalSingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehavi
         {
             if (instance == null)
             {
-                // ƒV[ƒ““à‚©‚çƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğŒŸõ
+                // ã‚·ãƒ¼ãƒ³å†…ã‹ã‚‰ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ¤œç´¢
                 instance = FindObjectOfType<T>();
 
                 if (instance == null)
                 {
-                    // ƒCƒ“ƒXƒ^ƒ“ƒX‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡AV‚µ‚¢ƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğì¬
+                    // ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆã€æ–°ã—ã„ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
                     GameObject singletonObject = new GameObject();
                     instance = singletonObject.AddComponent<T>();
                     singletonObject.name = typeof(T).ToString() + " (Singleton)";
@@ -26,7 +26,7 @@ public class LocalSingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehavi
         }
     }
 
-    // Awakeƒƒ\ƒbƒh‚Åd•¡ƒCƒ“ƒXƒ^ƒ“ƒX‚ğƒ`ƒFƒbƒN
+    // Awakeãƒ¡ã‚½ãƒƒãƒ‰ã§é‡è¤‡ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ãƒã‚§ãƒƒã‚¯
     protected virtual void Awake()
     {
         if (instance == null)

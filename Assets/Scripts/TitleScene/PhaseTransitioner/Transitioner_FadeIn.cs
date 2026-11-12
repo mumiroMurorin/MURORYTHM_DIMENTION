@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
@@ -21,14 +21,14 @@ namespace TransitionerInTitleScene
 
         void IPhaseTransitionerInTitleScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"FadeIn\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"FadeIn\"");
 
-            // ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
+            // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿ
             fadeController?.FadeIn(TransitionNextPhase);
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase()
         {

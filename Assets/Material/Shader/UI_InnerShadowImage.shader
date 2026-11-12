@@ -1,4 +1,4 @@
-Shader "UI/InnerShadowImage"
+﻿Shader "UI/InnerShadowImage"
 {
     Properties
     {

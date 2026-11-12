@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class AudioSpectrumVisualizer : MonoBehaviour
 {
@@ -29,10 +29,10 @@ public class AudioSpectrumVisualizer : MonoBehaviour
         {
             if (!source.isPlaying) { continue; }
 
-            // ü”g”ƒf[ƒ^‚ğæ“¾
+            // å‘¨æ³¢æ•°ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—
             source.GetSpectrumData(spectrumData, 0, fftWindow);
 
-            // Šeƒo[‚É‘Î‚µ‚Ä‚‚³‚ğ”½‰f
+            // å„ãƒãƒ¼ã«å¯¾ã—ã¦é«˜ã•ã‚’åæ˜ 
             for (int i = 0; i < bars.Length; i++)
             {
                 //int index = Mathf.FloorToInt(i * (spectrumData.Length / (float)bars.Length));
@@ -40,7 +40,7 @@ public class AudioSpectrumVisualizer : MonoBehaviour
                 float intensity = spectrumData[index] * heightMultiplier;
 
                 Vector3 scale = bars[i].localScale;
-                scale.y = Mathf.Lerp(scale.y, Mathf.Clamp(intensity, 0.05f, 10f), 0.5f); // •½ŠŠ‰»
+                scale.y = Mathf.Lerp(scale.y, Mathf.Clamp(intensity, 0.05f, 10f), 0.5f); // å¹³æ»‘åŒ–
                 bars[i].localScale = scale;
             }
         }

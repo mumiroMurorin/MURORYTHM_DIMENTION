@@ -1,4 +1,4 @@
-Shader "Custom/TransparentShadowReceive" {
+﻿Shader "Custom/TransparentShadowReceive" {
     Properties{
         _Color("Color", Color) = (0, 0, 0, 1)
         [HideInInspector] _GroundClipEnabled("Ground Clip Enabled", Float) = 0

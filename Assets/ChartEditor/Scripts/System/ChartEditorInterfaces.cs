@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -7,19 +7,19 @@ using UniRx;
 namespace ChartEditor
 {
     /// <summary>
-    /// ƒŒ[ƒ“‚É”z’u‚Å‚«‚é
+    /// ãƒ¬ãƒ¼ãƒ³ã«é…ç½®ã§ãã‚‹
     /// </summary>
     public interface ILaneDeployable
     {
         /// <summary>
-        /// ”z’u
+        /// é…ç½®
         /// </summary>
         /// <param name="pos"></param>
         DeployableLineObject Deploy(Transform parent = null);
     }
 
     /// <summary>
-    /// ƒŒƒCƒ„[‚É‚æ‚Á‚Ä‰e‹¿‚ğó‚¯‚é
+    /// ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ã‚ˆã£ã¦å½±éŸ¿ã‚’å—ã‘ã‚‹
     /// </summary>
     public interface ILayerAffectable
     {
@@ -37,19 +37,19 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ƒCƒ“ƒ^ƒ‰ƒNƒg‰Â”\‚ÈƒIƒuƒWƒFƒNƒg(ƒRƒ‰ƒCƒ_[)
+    /// ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆå¯èƒ½ãªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼)
     /// </summary>
     public interface IInteractableCollider
     {
         /// <summary>
-        /// ƒGƒfƒBƒbƒgƒ‚[ƒh‚Ì•ÏX
+        /// ã‚¨ãƒ‡ã‚£ãƒƒãƒˆãƒ¢ãƒ¼ãƒ‰ã®å¤‰æ›´
         /// </summary>
         /// <returns></returns>
         EditMode EditMode { get; }
     }
 
     /// <summary>
-    /// ‘I‘ğ‰Â”\‚ÈƒIƒuƒWƒFƒNƒg(ƒRƒ‰ƒCƒ_[)
+    /// é¸æŠå¯èƒ½ãªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼)
     /// </summary>
     public interface ISelectableVertexCollider : IInteractableCollider
     {
@@ -57,7 +57,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ‘I‘ğ‰Â”\‚ÈƒIƒuƒWƒFƒNƒg
+    /// é¸æŠå¯èƒ½ãªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     /// </summary>
     public interface ISelectableVertexObject
     {
@@ -69,7 +69,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ‘I‘ğ‰Â”\‚Èƒm[ƒg(ƒRƒ‰ƒCƒ_[)
+    /// é¸æŠå¯èƒ½ãªãƒãƒ¼ãƒˆ(ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼)
     /// </summary>
     public interface ISelectableNoteCollider : IInteractableCollider
     {
@@ -77,7 +77,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ‘I‘ğ‰Â”\‚Èƒm[ƒg
+    /// é¸æŠå¯èƒ½ãªãƒãƒ¼ãƒˆ
     /// </summary>
     public interface ISelectableNoteObject
     {
@@ -89,7 +89,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ”z’u‰Â”\ƒIƒuƒWƒFƒNƒg(ƒRƒ‰ƒCƒ_[)
+    /// é…ç½®å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼)
     /// </summary>
     public interface IDeployableCollider: IInteractableCollider
     {
@@ -99,7 +99,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// “_”z’u‰Â”\ƒIƒuƒWƒFƒNƒg(ƒRƒ‰ƒCƒ_[)
+    /// ç‚¹é…ç½®å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼)
     /// </summary>
     public interface IPointDeployableCollider : IInteractableCollider
     {
@@ -107,7 +107,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ©—R”z’u‰Â”\ƒIƒuƒWƒFƒNƒg(ƒRƒ‰ƒCƒ_[)
+    /// è‡ªç”±é…ç½®å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼)
     /// </summary>
     public interface IFreedomDeployableCollider: IInteractableCollider
     {
@@ -117,7 +117,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ”z’u‰Â”\ƒIƒuƒWƒFƒNƒg
+    /// é…ç½®å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     /// </summary>
     public interface IDeployableObject
     {
@@ -135,7 +135,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ˆÚ“®‰Â”\ƒIƒuƒWƒFƒNƒg(ƒRƒ‰ƒCƒ_[)
+    /// ç§»å‹•å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼)
     /// </summary>
     public interface IMovableCollider: IInteractableCollider
     {
@@ -143,7 +143,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// “_ˆÚ“®‰Â”\ƒIƒuƒWƒFƒNƒg(ƒRƒ‰ƒCƒ_[)
+    /// ç‚¹ç§»å‹•å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼)
     /// </summary>
     public interface IPointMovableCollider : IInteractableCollider
     {
@@ -151,7 +151,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ©—RˆÚ“®‰Â”\ƒIƒuƒWƒFƒNƒg(ƒRƒ‰ƒCƒ_[)
+    /// è‡ªç”±ç§»å‹•å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼)
     /// </summary>
     public interface IFreedomMovableCollider : IInteractableCollider
     {
@@ -159,7 +159,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ˆÚ“®‰Â”\ƒIƒuƒWƒFƒNƒg
+    /// ç§»å‹•å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     /// </summary>
     public interface IMovableObject
     {
@@ -173,7 +173,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ©—RˆÚ“®‰Â”\ƒIƒuƒWƒFƒNƒg
+    /// è‡ªç”±ç§»å‹•å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     /// </summary>
     public interface IFreedomMovableObject
     {
@@ -187,7 +187,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ©—RˆÚ“®‰Â”\ƒIƒuƒWƒFƒNƒg
+    /// è‡ªç”±ç§»å‹•å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     /// </summary>
     public interface IPointMovableObject
     {
@@ -201,7 +201,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ƒXƒP[ƒŠƒ“ƒO‰Â”\ƒIƒuƒWƒFƒNƒg(ƒRƒ‰ƒCƒ_[)
+    /// ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼)
     /// </summary>
     public interface IScalableCollider : IInteractableCollider
     {
@@ -211,7 +211,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ƒXƒP[ƒŠƒ“ƒO‰Â”\ƒIƒuƒWƒFƒNƒg
+    /// ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     /// </summary>
     public interface IScalableObject
     {
@@ -225,7 +225,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// íœ‰Â”\ƒIƒuƒWƒFƒNƒg
+    /// å‰Šé™¤å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     /// </summary>
     public interface IDestroyableObject
     {
@@ -235,7 +235,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// íœ‰Â”\ƒIƒuƒWƒFƒNƒg
+    /// å‰Šé™¤å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     /// </summary>
     public interface IDestroyableVertex
     {
@@ -245,7 +245,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// Ú‘±‰Â”\ƒIƒuƒWƒFƒNƒg(ƒRƒ‰ƒCƒ_[)
+    /// æ¥ç¶šå¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼)
     /// </summary>
     public interface IConnectableCollider : IInteractableCollider
     {
@@ -253,7 +253,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// Ú‘±‰Â”\ƒIƒuƒWƒFƒNƒg
+    /// æ¥ç¶šå¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     /// </summary>
     public interface IConnectableObject
     {
@@ -273,7 +273,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ƒ^ƒCƒv•ÏX‰Â”\ƒIƒuƒWƒFƒNƒg(ƒRƒ‰ƒCƒ_[)
+    /// ã‚¿ã‚¤ãƒ—å¤‰æ›´å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼)
     /// </summary>
     public interface IChangableCollider : IInteractableCollider
     {
@@ -281,7 +281,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ƒ^ƒCƒv•ÏX‰Â”\ƒIƒuƒWƒFƒNƒg
+    /// ã‚¿ã‚¤ãƒ—å¤‰æ›´å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     /// </summary>
     public interface IChangableObject
     {
@@ -291,7 +291,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// •ÒW‰Â”\ƒIƒuƒWƒFƒNƒg(ƒRƒ‰ƒCƒ_[)
+    /// ç·¨é›†å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼)
     /// </summary>
     public interface ISpaceEditableCollider : IInteractableCollider
     {
@@ -299,7 +299,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// •ÒW‰Â”\ƒIƒuƒWƒFƒNƒg
+    /// ç·¨é›†å¯èƒ½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     /// </summary>
     public interface ISpaceEditableObject
     {
@@ -307,7 +307,7 @@ namespace ChartEditor
     }
 
     /// <summary>
-    /// ”í‚è”»’èƒRƒ‰ƒCƒ_[
+    /// è¢«ã‚Šåˆ¤å®šã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
     /// </summary>
     public interface IJudgeStackingCollider
     {

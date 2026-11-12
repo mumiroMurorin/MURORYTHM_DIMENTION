@@ -1,4 +1,4 @@
-Shader "Custom/DirectionalEdgeFade"
+ÔªøShader "Custom/DirectionalEdgeFade"
 {
     Properties
     {
@@ -59,8 +59,8 @@ Shader "Custom/DirectionalEdgeFade"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);     // Tiling/OffsetìKópçœÇ›
-                o.uvRaw = v.uv;                           // å≥ÇÃUVÅi0Å`1Åj
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);     // Tiling/OffsetÈÅ©Áî®Ê∏à„Åø
+                o.uvRaw = v.uv;                           // ÂÖÉ„ÅÆUVÔºà0ÔΩû1Ôºâ
                 return o;
             }
 

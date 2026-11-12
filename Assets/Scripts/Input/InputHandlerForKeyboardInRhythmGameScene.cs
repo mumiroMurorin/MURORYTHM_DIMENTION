@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TransitionerInRhythmGameScene;
@@ -22,32 +22,32 @@ public class InputHandlerForKeyboardInRhythmGameScene : InputHandlerForKeyboard
 
     protected override void EachUpdate()
     {
-        // LeftCtrl + A‚ÅƒI[ƒgƒ‚[ƒh
+        // LeftCtrl + Aã§ã‚ªãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.A)) { SwitchAutoMode(); }
 
-        // LeftCtrl + R‚ÅƒŠƒUƒ‹ƒgƒV[ƒ“‚Ö
+        // LeftCtrl + Rã§ãƒªã‚¶ãƒ«ãƒˆã‚·ãƒ¼ãƒ³ã¸
         if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.R)) { SkipRhythmGame(); }
 
-        // LeftCtrl + S‚ÅƒZƒŒƒNƒgƒV[ƒ“‚Ö
+        // LeftCtrl + Sã§ã‚»ãƒ¬ã‚¯ãƒˆã‚·ãƒ¼ãƒ³ã¸
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.S)) { BackSelectScene(); }
 
-        // LeftCtrl + Z‚ÅƒŠƒgƒ‰ƒC
+        // LeftCtrl + Zã§ãƒªãƒˆãƒ©ã‚¤
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Z)) { Retry(); }
     }
 
     /// <summary>
-    /// ƒI[ƒgƒ‚[ƒhØ‘Ö
+    /// ã‚ªãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰åˆ‡æ›¿
     /// </summary>
     private void SwitchAutoMode()
     {
         spawnDataSetter.SetAutoMode(!spawnDataGetter.IsAutoMode);
       
-        if (spawnDataGetter.IsAutoMode) { Debug.Log("ySystemzƒI[ƒgƒ‚[ƒh‚ÉØ‚è‘Ö‚¦"); }
-        else { Debug.Log("ySystemzƒI[ƒgƒ‚[ƒhI—¹"); }
+        if (spawnDataGetter.IsAutoMode) { Debug.Log("ã€Systemã€‘ã‚ªãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰ã«åˆ‡ã‚Šæ›¿ãˆ"); }
+        else { Debug.Log("ã€Systemã€‘ã‚ªãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰çµ‚äº†"); }
     }
 
     /// <summary>
-    /// ƒZƒŒƒNƒgƒV[ƒ“‚É–ß‚é
+    /// ã‚»ãƒ¬ã‚¯ãƒˆã‚·ãƒ¼ãƒ³ã«æˆ»ã‚‹
     /// </summary>
     private void BackSelectScene()
     {

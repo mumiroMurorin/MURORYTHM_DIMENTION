@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using NaughtyAttributes;
 
 public abstract class NoteJudgementSettings : ScriptableObject

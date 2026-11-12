@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
@@ -26,7 +26,7 @@ namespace UIInSelectScene
 
         private void Start()
         {
-            // ƒIƒvƒVƒ‡ƒ“ƒvƒŒƒnƒu‚ğˆêÄ‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒ—ãƒ¬ãƒãƒ–ã‚’ä¸€æ–‰ã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             foreach(var pair in optionPrefabList)
             {
                 pair.InstantiatePrefab(optionGetter, optionObjectParent);
@@ -34,7 +34,7 @@ namespace UIInSelectScene
         }
 
         /// <summary>
-        /// ‘I‘ğƒIƒvƒVƒ‡ƒ“•ÏX
+        /// é¸æŠã‚ªãƒ—ã‚·ãƒ§ãƒ³å¤‰æ›´
         /// </summary>
         /// <param name="deltaValue"></param>
         /// <returns></returns>
@@ -78,7 +78,7 @@ namespace UIInSelectScene
         }
 
         /// <summary>
-        /// ƒgƒsƒbƒN‚ÉƒIƒvƒVƒ‡ƒ“ƒf[ƒ^‚ğƒZƒbƒg‚·‚é
+        /// ãƒˆãƒ”ãƒƒã‚¯ã«ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
         /// </summary>
         /// <param name="index"></param>
         /// <param name="musicDatas"></param>
@@ -89,7 +89,7 @@ namespace UIInSelectScene
                 int indexLocal = index - optionTopicParents.Length / 2 + i;
                 OptionType type = selectSceneDataGetter.GetOptionType(indexLocal);
 
-                // ’[‚Á‚±‚¾‚Á‚½ê‡•\¦‚µ‚È‚¢
+                // ç«¯ã£ã“ã ã£ãŸå ´åˆè¡¨ç¤ºã—ãªã„
                 if (type == OptionType.None)
                 {
                     optionTopicParents[i].SetActive(false);
@@ -98,7 +98,7 @@ namespace UIInSelectScene
 
                 optionTopicParents[i].SetActive(true);
 
-                // ŠeeƒIƒuƒWƒFƒNƒg‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‰»‚µ‚½ƒvƒŒƒnƒu‚ğƒZƒbƒg
+                // å„è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã—ãŸãƒ—ãƒ¬ãƒãƒ–ã‚’ã‚»ãƒƒãƒˆ
                 foreach(var pair in optionPrefabList)
                 {
                     GameObject obj = pair.CheckAndGetGameObject(type);
@@ -111,7 +111,7 @@ namespace UIInSelectScene
         }
 
         /// <summary>
-        /// ƒIƒvƒVƒ‡ƒ“‘I‘ğ
+        /// ã‚ªãƒ—ã‚·ãƒ§ãƒ³é¸æŠæ™‚
         /// </summary>
         public void OnSelectOption()
         {
@@ -119,7 +119,7 @@ namespace UIInSelectScene
         }
 
         /// <summary>
-        /// Šy‹ÈŠm”F‰æ–Ê‚É–ß‚é
+        /// æ¥½æ›²ç¢ºèªç”»é¢ã«æˆ»ã‚‹
         /// </summary>
         public void OnBackDetailSelectPhase()
         {
@@ -127,7 +127,7 @@ namespace UIInSelectScene
         }
 
         /// <summary>
-        /// ƒAƒjƒ[ƒVƒ‡ƒ“‘¤‚©‚çŒÄ‚Î‚ê‚é
+        /// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å´ã‹ã‚‰å‘¼ã°ã‚Œã‚‹
         /// </summary>
         public void OnRequestTopicSwap()
         {
@@ -135,7 +135,7 @@ namespace UIInSelectScene
         }
 
         /// <summary>
-        /// ƒAƒjƒ[ƒVƒ‡ƒ“‘¤‚©‚çŒÄ‚Î‚ê‚é
+        /// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å´ã‹ã‚‰å‘¼ã°ã‚Œã‚‹
         /// </summary>
         public void OnFinishMoveAnimation()
         {
@@ -161,7 +161,7 @@ namespace UIInSelectScene
                 
                 obj = Instantiate(prefab, parent);
 
-                if (!obj.TryGetComponent(out IOptionTopicPresenter topic)) { Debug.Log("‚Ó‚ŸIH"); return; }
+                if (!obj.TryGetComponent(out IOptionTopicPresenter topic)) { Debug.Log("ãµãï¼ï¼Ÿ"); return; }
                 topic.Bind(optionGetter);
             }
 

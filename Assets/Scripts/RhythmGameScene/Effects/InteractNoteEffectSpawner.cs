@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ public abstract class InteractNoteEffectSpawner : MonoBehaviour
 
     private void Start()
     {
-        // ƒv[ƒ‹‚Ì‰Šú‰»
+        // ãƒ—ãƒ¼ãƒ«ã®åˆæœŸåŒ–
         effectPool = new Stack<IInteractNoteEffectController>(poolSize);
 
         for(int i = 0; i < poolSize; i++)
@@ -22,7 +22,7 @@ public abstract class InteractNoteEffectSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒCƒ“ƒXƒ^ƒ“ƒX‰»‚µ‚ÄGetComponent‚µ‚½interface‚ğ•Ô‚·
+    /// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã—ã¦GetComponentã—ãŸinterfaceã‚’è¿”ã™
     /// </summary>
     /// <returns></returns>
     protected virtual IInteractNoteEffectController Instantiate()
@@ -34,7 +34,7 @@ public abstract class InteractNoteEffectSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// –ğ–Ú‚ğI‚¦‚½ƒGƒtƒFƒNƒg‚ğû—e
+    /// å½¹ç›®ã‚’çµ‚ãˆãŸã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’åå®¹
     /// </summary>
     /// <param name="controller"></param>
     private void ReturnToPool(IInteractNoteEffectController controller)
@@ -43,14 +43,14 @@ public abstract class InteractNoteEffectSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// •]‰¿ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌoŒ»‚É“K‚µ‚Ä‚¢‚é‚©”»’è‚·‚é
+    /// è©•ä¾¡ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å‡ºç¾ã«é©ã—ã¦ã„ã‚‹ã‹åˆ¤å®šã™ã‚‹
     /// </summary>
     /// <returns></returns>
     public abstract bool ConditionChecker(NoteJudgementData judgementData);
 
     public virtual IInteractNoteEffectController Spawn(NoteJudgementData judgementData)
     {
-        // ˆê’U–³‚©‚Á‚½‚ç•Ô‚·
+        // ä¸€æ—¦ç„¡ã‹ã£ãŸã‚‰è¿”ã™
         if (effectPool == null || effectPool.Count <= 0) { return null; }
 
         var effect = effectPool.Pop();

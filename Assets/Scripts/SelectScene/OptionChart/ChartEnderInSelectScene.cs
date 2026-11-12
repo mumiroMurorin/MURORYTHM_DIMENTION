@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -14,7 +14,7 @@ public class ChartEnderInSelectScene : MonoBehaviour, IChartEnder
 
     void IChartEnder.BindOnEndChart(Action callback)
     {
-        // •ˆ–ÊI—¹ˆ—‚ğw“Ç
+        // è­œé¢çµ‚äº†å‡¦ç†ã‚’è³¼èª­
         scoreGetter.NoteJudgementDatas
             .ObserveCountChanged()
             .Pairwise()

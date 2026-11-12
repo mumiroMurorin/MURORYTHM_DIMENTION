@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
@@ -20,12 +20,12 @@ namespace TransitionerInGameOverScene
 
         void IPhaseTransitionerInGameOverScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"ConfirmContinue_Operation\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"ConfirmContinue_Operation\"");
 
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase()
         {

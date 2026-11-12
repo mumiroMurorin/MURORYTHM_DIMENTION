@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -10,7 +10,7 @@ namespace TransitionerInTutorialScene
         [SerializeField] SerializeInterface<IPhaseTransitionableInTutorialScene> phaseTransitionable;
         [SerializeField] SerializeInterface<ITimeController> timer;
 
-        [Tooltip("ƒtƒF[ƒY‘JˆÚ‚Ü‚Å‚ÌŠÔ")]
+        [Tooltip("ãƒ•ã‚§ãƒ¼ã‚ºé·ç§»ã¾ã§ã®æ™‚é–“")]
         [SerializeField] float waitDuration = 0.5f;
 
         readonly PhaseStatusInTutorialScene status = PhaseStatusInTutorialScene.Play;
@@ -22,17 +22,17 @@ namespace TransitionerInTutorialScene
 
         void IPhaseTransitionerInTutorialScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"Play\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"Play\"");
 
             _ = DelayedExecutor.ExecuteAfterDelay(waitDuration, StartTutorial);
         }
 
         /// <summary>
-        /// ‰¹ƒQ[‚ÌŠJn
+        /// éŸ³ã‚²ãƒ¼ã®é–‹å§‹
         /// </summary>
         private void StartTutorial()
         {
-            // ‚ği‚ß‚é
+            // æ™‚ã‚’é€²ã‚ã‚‹
             timer?.Value.StartTimer();
         }
     }

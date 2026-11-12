@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -8,7 +8,7 @@ using System;
 namespace ChartEditor
 {
     /// <summary>
-    /// •ˆ–Ê’†‚Ìu¬ß”Ô†vu•ªß”Ô†vuƒXƒ‰ƒCƒ_[ƒCƒ“ƒfƒbƒNƒXv‚ğ‚Ü‚Æ‚ß‚½ƒNƒ‰ƒX
+    /// è­œé¢ä¸­ã®ã€Œå°ç¯€ç•ªå·ã€ã€Œåˆ†ç¯€ç•ªå·ã€ã€Œã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã€ã‚’ã¾ã¨ã‚ãŸã‚¯ãƒ©ã‚¹
     /// </summary>
     public class AddressInChart : IReadOnlyAddressInChart
     {
@@ -56,7 +56,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ¬ßü”Ô†
+        /// å°ç¯€ç·šç•ªå·
         /// </summary>
         ReactiveProperty<int> barIndex;
         public int BarIndex { get { return barIndex.Value; } }
@@ -68,7 +68,7 @@ namespace ChartEditor
 
 
         /// <summary>
-        /// •ªß”Ô†
+        /// åˆ†ç¯€ç•ªå·
         /// </summary>
         ReactiveProperty<int> subDivisionIndex;
         public int SubDivisionIndex { get { return subDivisionIndex.Value; } }
@@ -79,7 +79,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒXƒ‰ƒCƒ_[”Ô†
+        /// ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼ç•ªå·
         /// </summary>
         ReactiveProperty<float> sliderIndex;
         public float SliderIndex { get { return sliderIndex.Value; } }
@@ -90,7 +90,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// “¯‚¶ƒAƒhƒŒƒX‚©’²‚×‚é
+        /// åŒã˜ã‚¢ãƒ‰ãƒ¬ã‚¹ã‹èª¿ã¹ã‚‹
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
@@ -100,21 +100,21 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ‚Ç‚¿‚ç‚ªæ‚ÌƒAƒhƒŒƒX‚©•Ô‚·
-        /// ˆø”‚Ì‚Ù‚¤‚ª’x‚¯‚ê‚ÎTrue
+        /// ã©ã¡ã‚‰ãŒå…ˆã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‹è¿”ã™
+        /// å¼•æ•°ã®ã»ã†ãŒé…ã‘ã‚Œã°True
         /// </summary>
         /// <param name="address"></param>
         public bool IsEarlierThan(IReadOnlyAddressInChart address)
         {
-            // ˆá‚¤¬ß”Ô†‚Ìê‡
+            // é•ã†å°ç¯€ç•ªå·ã®å ´åˆ
             if (this.barIndex.Value < address.BarIndex) { return true; }
             else if (this.barIndex.Value > address.BarIndex) { return false; }
 
-            // “¯‚¶¬ß”Ô†‚Ìê‡A•ªß”Ô†‚Å”»’f
+            // åŒã˜å°ç¯€ç•ªå·ã®å ´åˆã€åˆ†ç¯€ç•ªå·ã§åˆ¤æ–­
             if (this.subDivisionIndex.Value < address.SubDivisionIndex) { return true; }
             else if (this.subDivisionIndex.Value > address.SubDivisionIndex) { return false; }
 
-            // ‘S‚­“¯‚¶ê‡false‚ğ•Ô‚·
+            // å…¨ãåŒã˜å ´åˆfalseã‚’è¿”ã™
             return false;
         }
 
@@ -180,7 +180,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ¬ßü”Ô†
+        /// å°ç¯€ç·šç•ªå·
         /// </summary>
         ReactiveProperty<int> barIndex = new ReactiveProperty<int>();
         public int BarIndex { get { return barIndex.Value; } }
@@ -192,7 +192,7 @@ namespace ChartEditor
 
 
         /// <summary>
-        /// •ªß”Ô†
+        /// åˆ†ç¯€ç•ªå·
         /// </summary>
         ReactiveProperty<int> subDivisionIndex = new ReactiveProperty<int>();
         public int SubDivisionIndex { get { return subDivisionIndex.Value; } }
@@ -204,7 +204,7 @@ namespace ChartEditor
 
 
         /// <summary>
-        /// ”z’u”ÍˆÍ
+        /// é…ç½®ç¯„å›²
         /// </summary>
         ReactiveCollection<float> range = new ReactiveCollection<float>();
         public List<float> Range { get { return RangeRP.ToList(); } }
@@ -213,7 +213,7 @@ namespace ChartEditor
         {
             this.range.Clear();
 
-            // ³‹K‰»
+            // æ­£è¦åŒ–
             for(int i = 0; i < range.Count; i++)
             {
                 float index = range[i];
@@ -223,7 +223,7 @@ namespace ChartEditor
                 else if (15 < index) { range[i] = 15; }
             }
 
-            // d•¡íœ‚µ‚Ä’Ç‰Á
+            // é‡è¤‡å‰Šé™¤ã—ã¦è¿½åŠ 
             foreach(var index in range.Distinct().OrderBy(x => x)) { this.range.Add(index); }
         }
         public void MirrorRange()
@@ -249,21 +249,21 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ‚Ç‚¿‚ç‚ªæ‚ÌƒAƒhƒŒƒX‚©•Ô‚·
-        /// ˆø”‚Ì‚Ù‚¤‚ª’x‚¯‚ê‚ÎTrue
+        /// ã©ã¡ã‚‰ãŒå…ˆã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‹è¿”ã™
+        /// å¼•æ•°ã®ã»ã†ãŒé…ã‘ã‚Œã°True
         /// </summary>
         /// <param name="address"></param>
         public bool IsEarlierThan(IReadOnlyAddressWithinRange address)
         {
-            // ˆá‚¤¬ß”Ô†‚Ìê‡
+            // é•ã†å°ç¯€ç•ªå·ã®å ´åˆ
             if (this.barIndex.Value < address.BarIndex) { return true; }
             else if (this.barIndex.Value > address.BarIndex) { return false; }
 
-            // “¯‚¶¬ß”Ô†‚Ìê‡A•ªß”Ô†‚Å”»’f
+            // åŒã˜å°ç¯€ç•ªå·ã®å ´åˆã€åˆ†ç¯€ç•ªå·ã§åˆ¤æ–­
             if (this.subDivisionIndex.Value < address.SubDivisionIndex) { return true; }
             else if (this.subDivisionIndex.Value > address.SubDivisionIndex) { return false; }
 
-            // ‘S‚­“¯‚¶ê‡false‚ğ•Ô‚·
+            // å…¨ãåŒã˜å ´åˆfalseã‚’è¿”ã™
             return false;
         }
 

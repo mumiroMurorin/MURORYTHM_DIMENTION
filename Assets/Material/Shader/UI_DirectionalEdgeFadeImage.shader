@@ -1,4 +1,4 @@
-Shader "UI/DirectionalEdgeFadeImage"
+﻿Shader "UI/DirectionalEdgeFadeImage"
 {
     Properties
     {

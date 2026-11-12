@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,7 +25,7 @@ namespace ChartEditor
         }
 
 
-        // Ú‘±”Ô† 
+        // æ¥ç¶šç•ªå· 
         ReactiveProperty<int> chainIndex = new ReactiveProperty<int>(-1);
         public IReadOnlyReactiveProperty<int> ChainIndex => chainIndex;
         public void SetChainIndex(int index)
@@ -34,7 +34,7 @@ namespace ChartEditor
         }
 
 
-        // ƒm[ƒgƒ^ƒCƒv
+        // ãƒãƒ¼ãƒˆã‚¿ã‚¤ãƒ—
         ReactiveProperty<DeploymentNoteType> noteType = new ReactiveProperty<DeploymentNoteType>(DeploymentNoteType.SpaceHoldStart);
         public DeploymentNoteType NoteType {
             get { return noteType.Value; }
@@ -45,7 +45,7 @@ namespace ChartEditor
         {
             if (!IsSpaceHoldNoteType(noteType))
             {
-                Debug.LogWarning($"yNotezSpaceHoldNote‚Í {noteType} ‚É‘Î‰‚µ‚Ä‚¢‚Ü‚¹‚ñ");
+                Debug.LogWarning($"ã€Noteã€‘SpaceHoldNoteã¯ {noteType} ã«å¯¾å¿œã—ã¦ã„ã¾ã›ã‚“");
                 return;
             }
 
@@ -63,21 +63,21 @@ namespace ChartEditor
             bool hasBackNote = NoteObject.BackNote.Value != null;
             bool hasNextNote = NoteObject.NextNote.Value != null;
 
-            // n“_
+            // å§‹ç‚¹
             if (!hasBackNote && hasNextNote)
             {
                 SetDefaultIfInvalid(DeploymentNoteType.SpaceHoldStart, DeploymentNoteType.SpaceHoldStart);
                 return;
             }
 
-            // ’†Œp“_
+            // ä¸­ç¶™ç‚¹
             if (hasBackNote && hasNextNote)
             {
                 SetDefaultIfInvalid(DeploymentNoteType.SpaceHoldRelay, DeploymentNoteType.SpaceHoldRelay, DeploymentNoteType.SpaceHoldMeshRelay);
                 return;
             }
 
-            // I“_
+            // çµ‚ç‚¹
             if (hasBackNote && !hasNextNote)
             {
                 SetDefaultIfInvalid(DeploymentNoteType.SpaceHoldEnd, DeploymentNoteType.SpaceHoldEnd);
@@ -100,10 +100,10 @@ namespace ChartEditor
                    noteType == DeploymentNoteType.SpaceHoldEnd;
         }
 
-        // ’¸“_
+        // é ‚ç‚¹
         public SpaceVertices SpaceVertices { get; private set; } = new SpaceVertices();
 
-        // ƒAƒhƒŒƒX
+        // ã‚¢ãƒ‰ãƒ¬ã‚¹
         AddressWithinRange address;
         public IReadOnlyAddressWithinRange Address => address;
         public void SetAddress(IReadOnlyAddressWithinRange address)

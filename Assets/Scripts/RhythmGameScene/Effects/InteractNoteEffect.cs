@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -43,7 +43,7 @@ public abstract class InteractNoteEffect : MonoBehaviour
 
     private void OnStopParticle()
     {
-        // •¡”‚ÌParticleEndCallback‚ª‚ ‚éê‡‚Å‚àAƒv[ƒ‹‚Ö‚Ì•Ô‹p‚Íˆê“x‚¾‚¯‚É‚·‚é
+        // è¤‡æ•°ã®ParticleEndCallbackãŒã‚ã‚‹å ´åˆã§ã‚‚ã€ãƒ—ãƒ¼ãƒ«ã¸ã®è¿”å´ã¯ä¸€åº¦ã ã‘ã«ã™ã‚‹
         if (isReturnedToPool) { return; }
 
         isReturnedToPool = true;
@@ -74,7 +74,7 @@ public abstract class InteractNoteEffect : MonoBehaviour
         [SerializeField] float distanceUnit = 1f;
 
         /// <summary>
-        /// ƒOƒ‰ƒEƒ“ƒhƒm[ƒc‚É‘Î‚µ‚Ä‚ÌƒGƒtƒFƒNƒgİ’è (emission)
+        /// ã‚°ãƒ©ã‚¦ãƒ³ãƒ‰ãƒãƒ¼ãƒ„ã«å¯¾ã—ã¦ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆè¨­å®š (emission)
         /// </summary>
         /// <param name="laneLength"></param>
         public void ApplyGroundEmissionSetting(int laneLength)
@@ -92,26 +92,26 @@ public abstract class InteractNoteEffect : MonoBehaviour
         }
 
         /// <summary>
-        /// ƒOƒ‰ƒEƒ“ƒhƒm[ƒc‚É‘Î‚µ‚Ä‚ÌƒGƒtƒFƒNƒgİ’è (shape)
+        /// ã‚°ãƒ©ã‚¦ãƒ³ãƒ‰ãƒãƒ¼ãƒ„ã«å¯¾ã—ã¦ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆè¨­å®š (shape)
         /// </summary>
         /// <param name="laneLength"></param>
 
         public void ApplyGroundShapeSetting(int startIndex, int laneLength)
         {
-            // Shapeƒ‚ƒWƒ…[ƒ‹
+            // Shapeãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
             var shape = particle.shape;
             shape.shapeType = ParticleSystemShapeType.Cone;
-            shape.rotation = new Vector3(0, 0, 180f + startIndex * ANGLE_UNIT);   // Šp“x‚Ì•ÏX
-            shape.arc = laneLength * 11.25f; // ’·‚³‚Ì•ÏX
+            shape.rotation = new Vector3(0, 0, 180f + startIndex * ANGLE_UNIT);   // è§’åº¦ã®å¤‰æ›´
+            shape.arc = laneLength * 11.25f; // é•·ã•ã®å¤‰æ›´
         }
 
         /// <summary>
-        /// ƒXƒy[ƒXƒm[ƒc‚É‘Î‚µ‚Ä‚ÌƒGƒtƒFƒNƒgİ’è (emission)
+        /// ã‚¹ãƒšãƒ¼ã‚¹ãƒãƒ¼ãƒ„ã«å¯¾ã—ã¦ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆè¨­å®š (emission)
         /// </summary>
         /// <param name="verticesLength"></param>
         public void ApplySpaceEmissionSetting(float verticesLength)
         {
-            // Emissionƒ‚ƒWƒ…[ƒ‹
+            // Emissionãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
             var emission = particle.emission;
             ParticleSystem.Burst[] bursts = new ParticleSystem.Burst[emission.burstCount];
             emission.GetBursts(bursts);
@@ -125,12 +125,12 @@ public abstract class InteractNoteEffect : MonoBehaviour
         }
 
         /// <summary>
-        /// ƒXƒy[ƒXƒm[ƒc‚É‘Î‚µ‚Ä‚ÌƒGƒtƒFƒNƒgİ’è (shape)
+        /// ã‚¹ãƒšãƒ¼ã‚¹ãƒãƒ¼ãƒ„ã«å¯¾ã—ã¦ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆè¨­å®š (shape)
         /// </summary>
         /// <param name="mesh"></param>
         public void ApplySpaceShapeSetting(Mesh mesh)
         {
-            // Shapeƒ‚ƒWƒ…[ƒ‹
+            // Shapeãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
             var shape = particle.shape;
             shape.shapeType = ParticleSystemShapeType.Mesh;
             shape.meshShapeType = ParticleSystemMeshShapeType.Edge;

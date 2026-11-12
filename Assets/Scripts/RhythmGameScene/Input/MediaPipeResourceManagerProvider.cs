@@ -1,4 +1,4 @@
-using Mediapipe;
+﻿using Mediapipe;
 using UnityEngine;
 
 namespace Mediapipe.Unity.Tutorial

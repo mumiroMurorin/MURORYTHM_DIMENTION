@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -17,9 +17,9 @@ namespace ChartEditor
         [SerializeField] TextMeshPro speedRatioTmp;
 
         /// <summary>
-        /// BPMî•ñ‚ğUI‚ÉƒZƒbƒg
+        /// BPMæƒ…å ±ã‚’UIã«ã‚»ãƒƒãƒˆ
         /// </summary>
-        /// <param name="bpm"> -1 : •\¦‚µ‚È‚¢ </param>
+        /// <param name="bpm"> -1 : è¡¨ç¤ºã—ãªã„ </param>
         public void SetBPM(float bpm = -1)
         {
             if (bpmTmp == null) { return; }
@@ -29,14 +29,14 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒXƒs[ƒh”{—¦‚ğUI‚ÉƒZƒbƒg
+        /// ã‚¹ãƒ”ãƒ¼ãƒ‰å€ç‡ã‚’UIã«ã‚»ãƒƒãƒˆ
         /// </summary>
         /// <param name="speedRatio"></param>
         public void SetSpeedRatio(float speedRatio, bool isDiffBack)
         {
             if (speedRatioTmp == null) { return; }
 
-            speedRatioTmp.text = !isDiffBack ? "" : "~<size=0.15>" + speedRatio.ToString();
+            speedRatioTmp.text = !isDiffBack ? "" : "Ã—<size=0.15>" + speedRatio.ToString();
             speedRatioObject.SetActive(isDiffBack);
         }
     }

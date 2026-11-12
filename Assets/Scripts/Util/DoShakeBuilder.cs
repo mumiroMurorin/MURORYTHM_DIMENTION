@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -7,27 +7,27 @@ using DG.Tweening;
 [System.Serializable]
 public class DoShakeBuilder
 {
-    [Header("’Êíİ’è")]
-    [Tooltip("U“®‚ÌüŠú")]
+    [Header("é€šå¸¸è¨­å®š")]
+    [Tooltip("æŒ¯å‹•ã®å‘¨æœŸ")]
     [SerializeField] float duration = 1f;
-    [Tooltip("U“®‚Ì‹­‚³(U•)")]
+    [Tooltip("æŒ¯å‹•ã®å¼·ã•(æŒ¯å¹…)")]
     [SerializeField] float strength = 1f;
-    [Tooltip("U“®‚Ìü”g”")]
+    [Tooltip("æŒ¯å‹•ã®å‘¨æ³¢æ•°")]
     [SerializeField] int vibrato = 10;
-    [Tooltip("U“®‚Ìƒ‰ƒ“ƒ_ƒ€«(•Ï‚¦‚È‚­‚Ä‚¢‚¢)")]
+    [Tooltip("æŒ¯å‹•ã®ãƒ©ãƒ³ãƒ€ãƒ æ€§(å¤‰ãˆãªãã¦ã„ã„)")]
     [SerializeField] float randomness = 90f;
-    [Tooltip("U“®‚ğ‚¾‚ñ‚¾‚ñã‚­‚·‚é")]
+    [Tooltip("æŒ¯å‹•ã‚’ã ã‚“ã ã‚“å¼±ãã™ã‚‹")]
     [SerializeField] bool isFadeOut = true;
-    [Header("ƒ‹[ƒvİ’è")]
-    [Tooltip("U“®‰ñ”(-1‚Å–³ŒÀƒ‹[ƒv)")]
+    [Header("ãƒ«ãƒ¼ãƒ—è¨­å®š")]
+    [Tooltip("æŒ¯å‹•å›æ•°(-1ã§ç„¡é™ãƒ«ãƒ¼ãƒ—)")]
     [SerializeField] int shakeTimes = 1;
-    [Tooltip("ƒ‹[ƒvƒ^ƒCƒv")]
+    [Tooltip("ãƒ«ãƒ¼ãƒ—ã‚¿ã‚¤ãƒ—")]
     [SerializeField] LoopType loopType = LoopType.Restart;
 
     private Tweener shakeTween;
 
     /// <summary>
-    /// U“®‚ÌÀs
+    /// æŒ¯å‹•ã®å®Ÿè¡Œ
     /// </summary>
     /// <param name="transform"></param>
     public void ApplyShake(Transform transform)

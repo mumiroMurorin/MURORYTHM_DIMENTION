@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -38,14 +38,14 @@ public class TimeCounter : MonoBehaviour, ITimeGetter, ITimeController
     {
         if (!isCounting) { return; }
 
-        // Šy‹ÈŠJn‘O‚¾‚¯“à•”ƒJƒEƒ“ƒg‚Åi‚ß‚é
+        // æ¥½æ›²é–‹å§‹å‰ã ã‘å†…éƒ¨ã‚«ã‚¦ãƒ³ãƒˆã§é€²ã‚ã‚‹
         if (time.Value < 0f)
         {
             AdvanceInternalTime(true);
             return;
         }
 
-        // Šy‹ÈŠJnŒã‚ÍAudioSource‚ÌÄ¶ˆÊ’u‚ğ³‚Æ‚·‚é
+        // æ¥½æ›²é–‹å§‹å¾Œã¯AudioSourceã®å†ç”Ÿä½ç½®ã‚’æ­£ã¨ã™ã‚‹
         if (syncWithMusic &&
             SoundManager.TryGetInstance(out SoundManager soundManager) &&
             soundManager.TryGetBGMPlaybackSeconds(syncBgmType, out float musicTime))
@@ -55,7 +55,7 @@ public class TimeCounter : MonoBehaviour, ITimeGetter, ITimeController
             return;
         }
 
-        // Šy‹ÈI—¹Œã‚ÍÅŒã‚ÌÄ¶ˆÊ’u‚©‚ç“à•”ƒJƒEƒ“ƒg‚Åi‚ß‘±‚¯‚é
+        // æ¥½æ›²çµ‚äº†å¾Œã¯æœ€å¾Œã®å†ç”Ÿä½ç½®ã‹ã‚‰å†…éƒ¨ã‚«ã‚¦ãƒ³ãƒˆã§é€²ã‚ç¶šã‘ã‚‹
         if (!syncWithMusic || hasSyncedWithMusic)
         {
             AdvanceInternalTime(false);
@@ -71,7 +71,7 @@ public class TimeCounter : MonoBehaviour, ITimeGetter, ITimeController
 }
 
 /// <summary>
-/// ƒ^ƒCƒ}[ƒXƒ^[ƒgAƒXƒgƒbƒv‚·‚é
+/// ã‚¿ã‚¤ãƒãƒ¼ã‚¹ã‚¿ãƒ¼ãƒˆã€ã‚¹ãƒˆãƒƒãƒ—ã™ã‚‹
 /// </summary>
 public interface ITimeController
 {

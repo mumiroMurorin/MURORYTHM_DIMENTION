@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -8,7 +8,7 @@ using System;
 
 public class TimelinePlayer : MonoBehaviour, ITimelinePlayer
 {
-    [Header("‰‰oƒ^ƒCƒ€ƒ‰ƒCƒ“")]
+    [Header("æ¼”å‡ºã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³")]
     [SerializeField] PlayableDirector playableDirector;
     [SerializeField] bool isResetAwake;
 
@@ -28,7 +28,7 @@ public class TimelinePlayer : MonoBehaviour, ITimelinePlayer
     }
 
     /// <summary>
-    /// ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
+    /// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿ
     /// </summary>
     /// <returns></returns>
     private async UniTaskVoid PlayAnimation(CancellationToken token, Action callback)
@@ -46,12 +46,12 @@ public class TimelinePlayer : MonoBehaviour, ITimelinePlayer
         {
             playableDirector.Play();
 
-            // ƒ^ƒCƒ€ƒ‰ƒCƒ“‚ÌÄ¶‚ªI—¹‚·‚é‚©ƒLƒƒƒ“ƒZƒ‹‚³‚ê‚é‚Ü‚Å‘Ò‹@
+            // ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³ã®å†ç”ŸãŒçµ‚äº†ã™ã‚‹ã‹ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚Œã‚‹ã¾ã§å¾…æ©Ÿ
             await UniTask.WaitUntil(() => playableDirector.state != PlayState.Playing, cancellationToken: token);
         }
         catch (OperationCanceledException)
         {
-            Debug.Log("ySystemzƒ^ƒCƒ€ƒ‰ƒCƒ“‚ÌÄ¶‚ªƒLƒƒƒ“ƒZƒ‹‚³‚ê‚Ü‚µ‚½");
+            Debug.Log("ã€Systemã€‘ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³ã®å†ç”ŸãŒã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚Œã¾ã—ãŸ");
         }
 
         callback?.Invoke();

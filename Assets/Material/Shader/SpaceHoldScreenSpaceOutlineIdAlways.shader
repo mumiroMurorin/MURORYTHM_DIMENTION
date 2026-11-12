@@ -1,4 +1,4 @@
-Shader "Hidden/SpaceHold/ScreenSpaceOutlineCoverageAlways"
+﻿Shader "Hidden/SpaceHold/ScreenSpaceOutlineCoverageAlways"
 {
     Properties
     {

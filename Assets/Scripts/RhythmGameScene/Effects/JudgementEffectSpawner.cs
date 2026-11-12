@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -13,7 +13,7 @@ public abstract class JudgementEffectSpawner : MonoBehaviour
 
     private void Start()
     {
-        // ƒv[ƒ‹‚Ì‰Šú‰»
+        // ãƒ—ãƒ¼ãƒ«ã®åˆæœŸåŒ–
         effectPool = new Stack<IJudgementEffectController>(poolSize);
 
         for (int i = 0; i < poolSize; i++)
@@ -23,7 +23,7 @@ public abstract class JudgementEffectSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// ”»’è‚ÌoŒ»‚É“K‚µ‚Ä‚¢‚é‚©”»’è‚·‚é
+    /// åˆ¤å®šã®å‡ºç¾ã«é©ã—ã¦ã„ã‚‹ã‹åˆ¤å®šã™ã‚‹
     /// </summary>
     /// <returns></returns>
     public abstract bool ConditionChecker(NoteJudgementData judgementData);
@@ -37,7 +37,7 @@ public abstract class JudgementEffectSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// –ğ–Ú‚ğI‚¦‚½ƒGƒtƒFƒNƒg‚ğû—e
+    /// å½¹ç›®ã‚’çµ‚ãˆãŸã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’åå®¹
     /// </summary>
     /// <param name="controller"></param>
     private void ReturnToPool(IJudgementEffectController effect)
@@ -47,7 +47,7 @@ public abstract class JudgementEffectSpawner : MonoBehaviour
 
     public IJudgementEffectController Spawn(NoteJudgementData judgementData)
     {
-        // ˆê’U–³‚©‚Á‚½‚ç•Ô‚·
+        // ä¸€æ—¦ç„¡ã‹ã£ãŸã‚‰è¿”ã™
         if (effectPool == null || effectPool.Count <= 0) { return null; }
 
         var effect = effectPool.Pop();

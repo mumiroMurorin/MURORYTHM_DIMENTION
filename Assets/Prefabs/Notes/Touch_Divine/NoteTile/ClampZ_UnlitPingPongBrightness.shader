@@ -1,4 +1,4 @@
-Shader "Notes/DivineNote/ClampZ_UnlitPingPongBrightness"
+﻿Shader "Notes/DivineNote/ClampZ_UnlitPingPongBrightness"
 {
     Properties
     {

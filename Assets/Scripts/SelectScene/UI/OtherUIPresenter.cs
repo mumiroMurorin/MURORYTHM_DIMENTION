@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -20,12 +20,12 @@ namespace UIInRhythmGameScene
 
         private void Bind()
         {
-            // “ïˆÕ“x•ÏX
+            // é›£æ˜“åº¦å¤‰æ›´
             musicDataListGetter?.Difficulty
                 .Subscribe(menuCircle_view.OnChangeDifficulty)
                 .AddTo(this.gameObject);
 
-            // ƒtƒF[ƒY•ÏX
+            // ãƒ•ã‚§ãƒ¼ã‚ºå¤‰æ›´
             phaseGetter?.Value?.PhaseStatus
                 .Subscribe(menuCircle_view.OnChangePhase)
                 .AddTo(this.gameObject);

@@ -1,0 +1,14 @@
+# エディター共通の文字コード・改行コード設定
+# Visual Studio / Rider は標準で、VS Code は EditorConfig 拡張機能で読み込まれる。
+# Assets/Editor/SourceFileNormalizer.cs が Unity 側でも同じルールを適用する。
+root = true
+
+[*]
+charset = utf-8
+
+# ソースコードは UTF-8 (BOM 付き)・CRLF に統一する。
+# BOM があればどのエディターでも UTF-8 と判定され、Shift-JIS で保存し直されることがない。
+# (git のリポジトリ内では .gitattributes により LF で保存される)
+[*.{cs,shader,hlsl,cginc,compute}]
+charset = utf-8-bom
+end_of_line = crlf

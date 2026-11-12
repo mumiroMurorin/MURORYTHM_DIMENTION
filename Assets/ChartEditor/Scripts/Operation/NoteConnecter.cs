@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -40,26 +40,26 @@ namespace ChartEditor
                 return; 
             }
 
-            // Ctrl‰Ÿ‚³‚ê‚Ä‚¢‚éŠÔ‚ÍÚ‘±‰ğœƒ‚[ƒh
+            // CtrlæŠ¼ã•ã‚Œã¦ã„ã‚‹é–“ã¯æ¥ç¶šè§£é™¤ãƒ¢ãƒ¼ãƒ‰
             if (Input.GetKey(KeyCode.LeftControl)) { dataSetter.SetEditMode(EditMode.DisConnect); }
-            // ‚»‚êˆÈŠO‚ÍÚ‘±ƒ‚[ƒh
+            // ãã‚Œä»¥å¤–ã¯æ¥ç¶šãƒ¢ãƒ¼ãƒ‰
             else if (isConnecting) { dataSetter.SetEditMode(EditMode.Connecting); }
             else { dataSetter.SetEditMode(EditMode.Connect); }
 
             editMode = dataGetter.CurrentEditMode.Value;
 
-            // Ú‘±ƒ‚[ƒhŠJn
+            // æ¥ç¶šãƒ¢ãƒ¼ãƒ‰é–‹å§‹
             if (Input.GetMouseButtonDown(0) && editMode == EditMode.Connect) { StartConnectOnClick(); }
-            // Ú‘±‰ğœ
+            // æ¥ç¶šè§£é™¤
             else if (Input.GetMouseButtonDown(0) && editMode == EditMode.DisConnect) { DisConnectNoteOnClick(); }
-            // Ú‘±
+            // æ¥ç¶š
             else if (Input.GetMouseButtonDown(0) && editMode == EditMode.Connecting) { ConnectNoteOnClick(); }
-            // Ú‘±ƒ‚[ƒhI—¹
+            // æ¥ç¶šãƒ¢ãƒ¼ãƒ‰çµ‚äº†
             else if (Input.GetMouseButtonDown(1)) { EndConnect(); }
         }
 
         /// <summary>
-        /// Ú‘±ƒ‚[ƒh‚ÌŠJn
+        /// æ¥ç¶šãƒ¢ãƒ¼ãƒ‰ã®é–‹å§‹
         /// </summary>
         private void StartConnectOnClick()
         {
@@ -78,7 +78,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒm[ƒc‚ÌÚ‘±
+        /// ãƒãƒ¼ãƒ„ã®æ¥ç¶š
         /// </summary>
         private void ConnectNoteOnClick()
         {
@@ -89,14 +89,14 @@ namespace ChartEditor
             if (connectableObject == null) { return; }
             if (connectableObject.Note.NoteData is not IChainNoteData addNote) { return; }
 
-            // Ú‘±”Ô†‚Ìæ“¾
-            // Ú‘±Œ³‚à’Ç‰Áƒm[ƒg‚à”Ô†‚ğ‚Á‚Ä‚¢‚È‚©‚Á‚½‚Æ‚«(—¼ƒm[ƒg–¢Ú‘±)AV‹Kæ“¾
+            // æ¥ç¶šç•ªå·ã®å–å¾—
+            // æ¥ç¶šå…ƒã‚‚è¿½åŠ ãƒãƒ¼ãƒˆã‚‚ç•ªå·ã‚’æŒã£ã¦ã„ãªã‹ã£ãŸã¨ã(ä¸¡ãƒãƒ¼ãƒˆæœªæ¥ç¶šæ™‚)ã€æ–°è¦å–å¾—
             if (connectingChainIndex == UNCHAINED_INDEX && addNote.ChainIndex.Value == UNCHAINED_INDEX)
             {
                 connectingChainIndex = notesGetter.GetUsableChainNoteIndex();
             }
-            // ’Ç‰Áƒm[ƒg‚ª”Ô†‚ğ‚Á‚Ä‚¢‚½‚Æ‚«A”Ô†‚ğXV
-            // Œ³ƒm[ƒg‚ª”Ô†‚ğ‚Á‚Ä‚¢‚½ê‡‚Í‰½‚à‚µ‚È‚¢(connectingChainIndex‚ÉŠù‚É‘ã“üÏ)
+            // è¿½åŠ ãƒãƒ¼ãƒˆãŒç•ªå·ã‚’æŒã£ã¦ã„ãŸã¨ãã€ç•ªå·ã‚’æ›´æ–°
+            // å…ƒãƒãƒ¼ãƒˆãŒç•ªå·ã‚’æŒã£ã¦ã„ãŸå ´åˆã¯ä½•ã‚‚ã—ãªã„(connectingChainIndexã«æ—¢ã«ä»£å…¥æ¸ˆ)
             else if (connectingChainIndex == UNCHAINED_INDEX && addNote.ChainIndex.Value != UNCHAINED_INDEX)
             {
                 connectingChainIndex = addNote.ChainIndex.Value;
@@ -108,9 +108,9 @@ namespace ChartEditor
             int startNoteIndexOrigin = startNote.ChainIndex.Value;
             int connectingChainIndexCopy = connectingChainIndex;
 
-            // Ú‘±
+            // æ¥ç¶š
             Record(() => {
-                // Œq‚ª‚Á‚Ä‚éƒm[ƒc‚Í‘S•”Œq‚°‚é
+                // ç¹‹ãŒã£ã¦ã‚‹ãƒãƒ¼ãƒ„ã¯å…¨éƒ¨ç¹‹ã’ã‚‹
                 if (chainList != null)
                 {
                     ConnectNote(startNoteCopy, connectingChainIndexCopy);
@@ -119,16 +119,16 @@ namespace ChartEditor
                         ConnectNote(chain, connectingChainIndexCopy);
                     }
                 }
-                // ‚Â‚È‚ª‚Á‚Ä‚È‚¢‚Æ‚«
+                // ã¤ãªãŒã£ã¦ãªã„ã¨ã
                 else
                 {
                     ConnectNote(startNoteCopy, connectingChainIndexCopy);
                     ConnectNote(addNote, connectingChainIndexCopy);
                 }
             }, 
-            // Ú‘±‰ğœ
+            // æ¥ç¶šè§£é™¤
             () => {
-                // Œq‚ª‚Á‚Ä‚½ƒm[ƒc‚Í‘S•”Œq‚°‚ÄŒ³‚É–ß‚·
+                // ç¹‹ãŒã£ã¦ãŸãƒãƒ¼ãƒ„ã¯å…¨éƒ¨ç¹‹ã’ã¦å…ƒã«æˆ»ã™
                 if (chainList != null)
                 {
                     DisconnectNote(startNoteCopy);
@@ -140,7 +140,7 @@ namespace ChartEditor
                         ConnectNote(chain, chainListIndexOrigin);
                     }
                 }
-                // •Ê‚ÉŒq‚ª‚Á‚Ä‚È‚©‚Á‚½‚çÚ‘±‰ğœ‚·‚é‚¾‚¯
+                // åˆ¥ã«ç¹‹ãŒã£ã¦ãªã‹ã£ãŸã‚‰æ¥ç¶šè§£é™¤ã™ã‚‹ã ã‘
                 else
                 {
                     DisconnectNote(startNoteCopy);
@@ -152,7 +152,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒm[ƒc‚ÌÚ‘±‰ğœ
+        /// ãƒãƒ¼ãƒ„ã®æ¥ç¶šè§£é™¤
         /// </summary>
         private void DisConnectNoteOnClick()
         {
@@ -167,7 +167,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒm[ƒg‚ÌÚ‘±
+        /// ãƒãƒ¼ãƒˆã®æ¥ç¶š
         /// </summary>
         /// <param name="chainNote"></param>
         /// <param name="chainIndex"></param>
@@ -175,22 +175,22 @@ namespace ChartEditor
         {
             if(chainIndex == -1) { return; }
 
-            // ƒf[ƒ^‚Ì“ü‚ê‘Ö‚¦
+            // ãƒ‡ãƒ¼ã‚¿ã®å…¥ã‚Œæ›¿ãˆ
             notesGetter.RemoveChainNote(chainNote);
             chainNote.SetChainIndex(chainIndex);
             notesGetter.AddChainNote(chainNote);
 
-            // ƒm[ƒg‡‚ÌƒAƒbƒvƒf[ƒg
+            // ãƒãƒ¼ãƒˆé †ã®ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
             UpdateChainNoteObj(chainNote, chainIndex);
 
-            // ‚·‚Å‚Éw“Ç‚³‚ê‚Ä‚¢‚½‚Æ‚«A”jŠü
+            // ã™ã§ã«è³¼èª­ã•ã‚Œã¦ã„ãŸã¨ãã€ç ´æ£„
             if (noteDataToDisposables.TryGetValue(chainNote, out var disposables))
             {
                 foreach(var dis in disposables) { dis.Dispose(); }
                 noteDataToDisposables.Remove(chainNote);
             }
 
-            // w“Ç
+            // è³¼èª­
             var noteList = notesGetter.GetChainNoteList(chainIndex);
             var disposable1 = noteList.ChainNoteList.ObserveCountChanged()
                 .Subscribe(_ => {
@@ -206,7 +206,7 @@ namespace ChartEditor
                 .Subscribe(_ => { noteList.UpdateChainNoteData(chainNote); })
                 .AddTo(this.gameObject);
 
-            // w“Çƒf[ƒ^‚Ì’Ç‰ÁAXV
+            // è³¼èª­ãƒ‡ãƒ¼ã‚¿ã®è¿½åŠ ã€æ›´æ–°
             var disList = new List<IDisposable>() { disposable1, disposable2, disposable3 };
             if (!noteDataToDisposables.TryAdd(chainNote, disList))
             {
@@ -215,7 +215,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒm[ƒg‚ÌÚ‘±‰ğœ
+        /// ãƒãƒ¼ãƒˆã®æ¥ç¶šè§£é™¤
         /// </summary>
         /// <param name="chainNote"></param>
         private void DisconnectNote(IChainNoteData chainNote)
@@ -224,7 +224,7 @@ namespace ChartEditor
             chainNote.SetChainIndex(-1);
             UpdateChainNoteObj(chainNote, -1);
 
-            // w“Ç‚Ì”jŠü
+            // è³¼èª­ã®ç ´æ£„
             if (noteDataToDisposables.TryGetValue(chainNote, out var disposables))
             {
                 foreach (var dis in disposables) { dis.Dispose(); }
@@ -234,13 +234,13 @@ namespace ChartEditor
 
 
         /// <summary>
-        /// ƒm[ƒg‚Ì‘OŒã‚ğXV
+        /// ãƒãƒ¼ãƒˆã®å‰å¾Œã‚’æ›´æ–°
         /// </summary>
         /// <param name="chainNote"></param>
         /// <param name="chainIndex"></param>
         private void UpdateChainNoteObj(IChainNoteData chainNote, int chainIndex)
         {
-            // NextNote‚ÆBackNote‚ğXV‚·‚é
+            // NextNoteã¨BackNoteã‚’æ›´æ–°ã™ã‚‹
             var noteList = notesGetter.GetChainNoteList(chainIndex);
             int index = noteList != null ? noteList.IndexOf(chainNote) : -1;
 
@@ -259,7 +259,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// Ú‘±ƒ‚[ƒh‚ÌI—¹
+        /// æ¥ç¶šãƒ¢ãƒ¼ãƒ‰ã®çµ‚äº†
         /// </summary>
         private void EndConnect()
         {

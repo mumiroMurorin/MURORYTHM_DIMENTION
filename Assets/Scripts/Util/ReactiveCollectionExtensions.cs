@@ -1,4 +1,4 @@
-using UniRx;
+ï»¿using UniRx;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,24 +9,24 @@ public static class ReactiveCollectionExtensions
         int count = collection.Count;
         if (count == 0) { return; }
 
-        delta = ((delta % count) + count) % count; // ³‹K‰»
+        delta = ((delta % count) + count) % count; // æ­£è¦åŒ–
 
         if (delta == 0) { return; }
 
-        // ”²‚«o‚·––”ö•”•ª‚ğ•Û‘¶
+        // æŠœãå‡ºã™æœ«å°¾éƒ¨åˆ†ã‚’ä¿å­˜
         List<T> tail = new List<T>();
         for (int i = count - delta; i < count; i++)
         {
             tail.Add(collection[i]);
         }
 
-        // ––”ö•”•ª‚ğíœiŒã‚ë‚©‚ç‡‚Éj
+        // æœ«å°¾éƒ¨åˆ†ã‚’å‰Šé™¤ï¼ˆå¾Œã‚ã‹ã‚‰é †ã«ï¼‰
         for (int i = 0; i < delta; i++)
         {
             collection.RemoveAt(collection.Count - 1);
         }
 
-        // æ“ª‚É‘}“üi‘O‚©‚ç‡‚Éj
+        // å…ˆé ­ã«æŒ¿å…¥ï¼ˆå‰ã‹ã‚‰é †ã«ï¼‰
         for (int i = delta - 1; i >= 0; i--)
         {
             collection.Insert(0, tail[i]);
@@ -34,22 +34,22 @@ public static class ReactiveCollectionExtensions
     }
 
     /// <summary>
-    /// ReactiveCollection‚Ì—v‘f‚ğ”½“]‚³‚¹‚é
+    /// ReactiveCollectionã®è¦ç´ ã‚’åè»¢ã•ã›ã‚‹
     /// </summary>
     public static void ReverseElements<T>(this ReactiveCollection<T> collection)
     {
         if (collection == null || collection.Count <= 1) return;
 
-        // Œ»İ‚Ì—v‘f‚ğ‹t‡‚É•Û‘¶
+        // ç¾åœ¨ã®è¦ç´ ã‚’é€†é †ã«ä¿å­˜
         var reversed = collection.Reverse().ToList();
 
-        // Œ³‚Ì—v‘f‚ğ‚·‚×‚Äíœ
+        // å…ƒã®è¦ç´ ã‚’ã™ã¹ã¦å‰Šé™¤
         while (collection.Count > 0)
         {
             collection.RemoveAt(collection.Count - 1);
         }
 
-        // ‹t‡‚É’Ç‰Á
+        // é€†é †ã«è¿½åŠ 
         foreach (var item in reversed)
         {
             collection.Add(item);

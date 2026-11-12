@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -23,7 +23,7 @@ namespace TransitionerInTitleScene
 
         void IPhaseTransitionerInTitleScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"WaitingForPlayer\"");
+            Debug.Log("„ÄêTransition„ÄëTransition to \"WaitingForPlayer\"");
         }
     }
 }

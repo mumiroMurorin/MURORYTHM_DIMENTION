@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -6,7 +6,7 @@ using System.Linq;
 
 public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
 {
-    // ”»’èŠÖŒW
+    // åˆ¤å®šé–¢ä¿‚
     // Perfect
     ReactiveProperty<int> perfectNum = new ReactiveProperty<int>(0);
     public IReadOnlyReactiveProperty<int> PerfectNum { get { return perfectNum; } }
@@ -27,7 +27,7 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     ReactiveProperty<int> combo = new ReactiveProperty<int>(0);
     public IReadOnlyReactiveProperty<int> Combo { get { return combo; } }
 
-    // ScoreŒvZ‹@
+    // Scoreè¨ˆç®—æ©Ÿ
     ScoreCalculater scoreCalculater = new ScoreCalculater(1);
     public void SetScoreCalculater(ScoreCalculater scoreCalculater)
     {
@@ -43,7 +43,7 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     ReactiveProperty<float> score = new ReactiveProperty<float>();
     public IReadOnlyReactiveProperty<float> Score { get { return score; } }
 
-    // Score (Œ¸Z•û®)
+    // Score (æ¸›ç®—æ–¹å¼)
     ReactiveProperty<float> scoreSubtraction = new ReactiveProperty<float>();
     public IReadOnlyReactiveProperty<float> ScoreSubtraction { get { return scoreSubtraction; } }
 
@@ -60,7 +60,7 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     ReactiveProperty<ScoreRank> scoreRank = new ReactiveProperty<ScoreRank>();
     public IReadOnlyReactiveProperty<ScoreRank> CurrentScoreRank { get { return scoreRank; } }
 
-    // ScoreRank (Œ¸Z•û®)
+    // ScoreRank (æ¸›ç®—æ–¹å¼)
     ReactiveProperty<ScoreRank> scoreRankSubtraction = new ReactiveProperty<ScoreRank>();
     public IReadOnlyReactiveProperty<ScoreRank> CurrentScoreRankSubtraction { get { return scoreRankSubtraction; } }
 
@@ -80,7 +80,7 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
     }
 
     /// <summary>
-    /// ”»’è‚ÌƒŠƒZƒbƒg
+    /// åˆ¤å®šã®ãƒªã‚»ãƒƒãƒˆ
     /// </summary>
     public void ResetScore()
     {
@@ -94,32 +94,32 @@ public class ScoreHolder : IJudgementRecorder, IScoreGetter, IScoreSetter
         comboRank.Value = ComboRank.AllPerfect;
     }
 
-    // ”»’èƒf[ƒ^
+    // åˆ¤å®šãƒ‡ãƒ¼ã‚¿
     ReactiveCollection<NoteJudgementData> noteJudgementDatas = new ReactiveCollection<NoteJudgementData>();
     public IReadOnlyReactiveCollection<NoteJudgementData> NoteJudgementDatas { get { return noteJudgementDatas; } }
 
     /// <summary>
-    /// ”»’è‚Ì‹L˜^
+    /// åˆ¤å®šã®è¨˜éŒ²
     /// </summary>
     /// <param name="judgement"></param>
     void IJudgementRecorder.RecordJudgement(NoteJudgementData judgementData)
     {
-        // ƒfƒoƒbƒO—p
-        //Debug.Log($"yJudgementz”»’è {judgementData.NoteData.NoteType}: {judgementData.Judgement}");
+        // ãƒ‡ãƒãƒƒã‚°ç”¨
+        //Debug.Log($"ã€Judgementã€‘åˆ¤å®š {judgementData.NoteData.NoteType}: {judgementData.Judgement}");
 
         UpdateComboRank();
         noteJudgementDatas.Add(judgementData);
 
-        // ƒXƒRƒA‚ÌXVE”»’è”‚ÌXV
+        // ã‚¹ã‚³ã‚¢ã®æ›´æ–°ãƒ»åˆ¤å®šæ•°ã®æ›´æ–°
         AddJudgement(judgementData.Judgement, true);
     }
 
     public void AddJudgement(Judgement judgement, bool isUpdateScore = true)
     {
-        // Œ»ƒXƒRƒA‚ÌŒvZ
+        // ç¾ã‚¹ã‚³ã‚¢ã®è¨ˆç®—
         scoreCalculater?.AddJudgement(judgement);
 
-        // ƒXƒRƒA‚ÌXV
+        // ã‚¹ã‚³ã‚¢ã®æ›´æ–°
         if (isUpdateScore)
         {
             score.Value = scoreCalculater.Score;
@@ -177,26 +177,26 @@ public class ScoreCalculater
 
     public ScoreCalculater(int maxCombo)
     {
-        // —˜_’l‚Ìİ’è
+        // ç†è«–å€¤ã®è¨­å®š
         maxScore = BASE_SCORE + maxCombo;
 
-        // ’Ç‰ÁƒXƒRƒA‚Ìİ’è
+        // è¿½åŠ ã‚¹ã‚³ã‚¢ã®è¨­å®š
         addScoreOnPerfect = (double)maxScore / maxCombo;
         addScoreOnGreat = addScoreOnPerfect - 10f;
         addScoreOnGood = addScoreOnPerfect * 0.5f;
         addScoreOnMiss = 0;
 
-        // ƒXƒRƒAƒ‰ƒ“ƒN‚Ìè‡’l‚ğXV
+        // ã‚¹ã‚³ã‚¢ãƒ©ãƒ³ã‚¯ã®é–¾å€¤ã‚’æ›´æ–°
         rankThreshold.Add(new RankToThreshold(ScoreRank.MAX, maxScore));
         rankThreshold = rankThreshold.OrderByDescending(x => x.Threshold).ToList();
 
-        // ‚»‚Ì‘¼‰Šú‰»
+        // ãã®ä»–åˆæœŸåŒ–
         scoreSubtraction = maxScore;
         rankSubtraction = ScoreRank.MAX;
     }
 
     double scoreOrigin = 0;
-    double scoreIfMax = 0; // —˜_’l‚ÌŒ»ƒXƒRƒA
+    double scoreIfMax = 0; // ç†è«–å€¤æ™‚ã®ç¾ã‚¹ã‚³ã‚¢
 
     float score = 0;
     float scoreSubtraction = 0;

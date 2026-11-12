@@ -1,4 +1,4 @@
-public enum TutorialGuideCharacterType
+﻿public enum TutorialGuideCharacterType
 {
     Shikiboo = 0,
     Creation = 10,

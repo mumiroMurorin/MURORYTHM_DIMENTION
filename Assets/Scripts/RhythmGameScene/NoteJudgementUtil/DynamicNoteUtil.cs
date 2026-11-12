@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,21 +7,21 @@ namespace JudgementUtil.Dynamic
     static public class DynamicJudgement
     {
         /// <summary>
-        /// “ü—Í‚³‚ê‚½Vector‚ª”»’èè‡’l‚ğ’´‚¦‚Ä‚¢‚é‚©•Ô‚·
+        /// å…¥åŠ›ã•ã‚ŒãŸVectorãŒåˆ¤å®šé–¾å€¤ã‚’è¶…ãˆã¦ã„ã‚‹ã‹è¿”ã™
         /// </summary>
         /// <param name="thresHold"></param>
         /// <param name="input"></param>
         /// <returns></returns>
         public static bool JudgeThreshold(Vector3 thresHold, Vector3 input)
         {
-            // XYZ‚Ç‚ê‚©‚Åè‡’l‚ğ’´‚¦‚Ä‚¢‚ê‚Îtrue
+            // XYZã©ã‚Œã‹ã§é–¾å€¤ã‚’è¶…ãˆã¦ã„ã‚Œã°true
             return JudgeThresholdValue(thresHold.x, input.x) ||
                 JudgeThresholdValue(thresHold.y, input.y) ||
                 JudgeThresholdValue(thresHold.z, input.z);
         }
 
         /// <summary>
-        /// —v‘f‚Ì’l‚Å”»’è
+        /// è¦ç´ ã®å€¤ã§åˆ¤å®š
         /// </summary>
         /// <param name="valueThreshold"></param>
         /// <param name="valueInput"></param>
@@ -36,16 +36,16 @@ namespace JudgementUtil.Dynamic
         }
 
         /// <summary>
-        /// ª‚ğ(0,1)‚Æ‚·‚éƒxƒNƒgƒ‹‚ğŠî‚É”»’è‚Ìè‡’l‚ğZo‚·‚é
+        /// â†‘ã‚’(0,1)ã¨ã™ã‚‹ãƒ™ã‚¯ãƒˆãƒ«ã‚’åŸºã«åˆ¤å®šã®é–¾å€¤ã‚’ç®—å‡ºã™ã‚‹
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
         static public Vector3 CalcJudgementThresHold(float radius, int index, Vector3 rotationVector, Vector3? center = null)
         {
-            // ‰~ã‚©‚ç’†S‚ÉŒü‚¯‚Ä‚ÌƒxƒNƒgƒ‹‚ğZo
+            // å††ä¸Šã‹ã‚‰ä¸­å¿ƒã«å‘ã‘ã¦ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç®—å‡º
             Vector3 directionToCenter = GetDirectionToCenter(radius, index, center);
 
-            // ‰ñ“]Šp‚ğZo
+            // å›è»¢è§’ã‚’ç®—å‡º
             float rad = GetRadianXY(rotationVector);
 
             return RotateVector(directionToCenter, rad);
@@ -53,14 +53,14 @@ namespace JudgementUtil.Dynamic
 
         public static float GetRadianXY(Vector2 direction)
         {
-            // Mathf.Atan2(y, x) ‚ğg‚Á‚Äƒ‰ƒWƒAƒ“‚ğæ“¾
+            // Mathf.Atan2(y, x) ã‚’ä½¿ã£ã¦ãƒ©ã‚¸ã‚¢ãƒ³ã‚’å–å¾—
             float angle = Mathf.Atan2(direction.y, direction.x);
 
             return angle;
         }
 
         /// <summary>
-        /// ”¼Œa r ‚ÆŠp“x theta ‚©‚ç’†S‚ÉŒü‚©‚¤ƒxƒNƒgƒ‹‚ğæ“¾
+        /// åŠå¾„ r ã¨è§’åº¦ theta ã‹ã‚‰ä¸­å¿ƒã«å‘ã‹ã†ãƒ™ã‚¯ãƒˆãƒ«ã‚’å–å¾—
         /// </summary>
         /// <param name="r"></param>
         /// <param name="theta"></param>
@@ -76,7 +76,7 @@ namespace JudgementUtil.Dynamic
         }
 
         /// <summary>
-        /// ƒxƒNƒgƒ‹‚ğ rotationAngle •ª‚¾‚¯‰ñ“]‚³‚¹‚é
+        /// ãƒ™ã‚¯ãƒˆãƒ«ã‚’ rotationAngle åˆ†ã ã‘å›è»¢ã•ã›ã‚‹
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="rotationAngle"></param>
@@ -85,15 +85,15 @@ namespace JudgementUtil.Dynamic
         {
             float radian = rotationAngle * Mathf.Deg2Rad;
 
-            // 2D ‰ñ“]s—ñ‚ğ“K—p (Z²‚ğ’†S‚É‰ñ“])
+            // 2D å›è»¢è¡Œåˆ—ã‚’é©ç”¨ (Zè»¸ã‚’ä¸­å¿ƒã«å›è»¢)
             float rotatedX = vector.x * Mathf.Cos(radian) - vector.y * Mathf.Sin(radian);
             float rotatedY = vector.x * Mathf.Sin(radian) + vector.y * Mathf.Cos(radian);
 
-            return new Vector3(rotatedX, rotatedY, vector.z); // Z²‚Í‚»‚Ì‚Ü‚Ü
+            return new Vector3(rotatedX, rotatedY, vector.z); // Zè»¸ã¯ãã®ã¾ã¾
         }
 
         /// <summary>
-        /// 2‚Â‚ÌTimeToPosition‚©‚çƒxƒNƒgƒ‹‚ğ‹‚ß‚é
+        /// 2ã¤ã®TimeToPositionã‹ã‚‰ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ±‚ã‚ã‚‹
         /// </summary>
         /// <param name="timeToPosition1"></param>
         /// <param name="timeToPosition2"></param>

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "TutorialGuideCharacterDatabase", menuName = "ScriptableObject/Tutorial/TutorialGuideCharacterDatabase")]
 public class TutorialGuideCharacterDatabase : ScriptableObject

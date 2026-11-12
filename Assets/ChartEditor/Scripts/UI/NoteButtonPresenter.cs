@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -39,14 +39,14 @@ namespace ChartEditor
 
         private void BindForNoteView()
         {
-            // ”z’uƒm[ƒcƒ{ƒ^ƒ“
+            // é…ç½®ãƒãƒ¼ãƒ„ãƒœã‚¿ãƒ³
             foreach (var button in noteButtons_view)
             {
                 button.BindForDeploymentNoteType(editorDataGetter_model.DeploymentNoteType, this.gameObject);
                 button.BindForEditNoteType(editorDataGetter_model.EditNoteType, this.gameObject);
             }
 
-            // ƒm[ƒcƒrƒ…[‚Ì‰Â‹•s‰Â‹
+            // ãƒãƒ¼ãƒ„ãƒ“ãƒ¥ãƒ¼ã®å¯è¦–ä¸å¯è¦–
             editorDataGetter_model?.CurrentEditMode
                 .Subscribe(mode => notesViewport_view.OnChangeEditMode(mode, editorDataGetter_model.EditNoteType.Value))
                 .AddTo(this.gameObject);
@@ -54,7 +54,7 @@ namespace ChartEditor
 
         private void SetEvent()
         {
-            // ”z’uƒm[ƒcƒ{ƒ^ƒ“
+            // é…ç½®ãƒãƒ¼ãƒ„ãƒœã‚¿ãƒ³
             foreach (var button in noteButtons_view)
             {
                 button.SetEvent(() => { editorDataSetter_model.SetNoteType(button.NoteType); });
@@ -62,7 +62,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒm[ƒgƒ{ƒ^ƒ“‚É‘Î‚·‚éƒAƒNƒVƒ‡ƒ“‘¼
+        /// ãƒãƒ¼ãƒˆãƒœã‚¿ãƒ³ã«å¯¾ã™ã‚‹ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ä»–
         /// </summary>
         [Serializable]
         public class NoteButtonToEditMode

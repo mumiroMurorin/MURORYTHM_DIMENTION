@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -37,7 +37,7 @@ public class LogGetter : MonoBehaviour
 }
 
 /// <summary>
-/// Debug.Log‚Æˆê‚Ég‚¨‚¤
+/// Debug.Logã¨ä¸€ç·’ã«ä½¿ãŠã†
 /// </summary>
 public class LogData
 {

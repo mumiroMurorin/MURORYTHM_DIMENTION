@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -57,17 +57,17 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // ƒJ[ƒ\ƒ‹–³‹ƒ‚[ƒh‚ÌXV
+            // ã‚«ãƒ¼ã‚½ãƒ«ç„¡è¦–ãƒ¢ãƒ¼ãƒ‰ã®æ›´æ–°
             chartEditorDataGetter?.CurrentEditMode
                 .Subscribe(mode => {
                     isCursorIgnoremode = false;
 
-                    // ˆê‚Â‚¸‚Âƒ‚[ƒh‚ğæ‚èo‚µ‚Ä‚Ç‚ê‚©‚ÉŠY“–‚µ‚½‚ç–³‹ƒ‚[ƒh‚É‚·‚é
+                    // ä¸€ã¤ãšã¤ãƒ¢ãƒ¼ãƒ‰ã‚’å–ã‚Šå‡ºã—ã¦ã©ã‚Œã‹ã«è©²å½“ã—ãŸã‚‰ç„¡è¦–ãƒ¢ãƒ¼ãƒ‰ã«ã™ã‚‹
                     if (mode.IsInEditModeList(cursorIgnoreModes)) { isCursorIgnoremode = true; }
                 })
                 .AddTo(this.gameObject);
 
-            // Ray‚ğ”­Ë‚·‚éƒJƒƒ‰‚ÌXV
+            // Rayã‚’ç™ºå°„ã™ã‚‹ã‚«ãƒ¡ãƒ©ã®æ›´æ–°
             chartEditorDataGetter?.EditNoteType
                 .Subscribe(type => {
                     switch (type)
@@ -93,23 +93,23 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒGƒfƒBƒbƒgƒ‚[ƒh‚ÌXV
-        /// ‚»‚ÌƒRƒ‰ƒCƒ_[‚Ìˆê”Ôã‚É‚ ‚éInteractableCollider‚ÌEditMode‚ª”½‰f‚³‚ê‚é
+        /// ã‚¨ãƒ‡ã‚£ãƒƒãƒˆãƒ¢ãƒ¼ãƒ‰ã®æ›´æ–°
+        /// ãã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ä¸€ç•ªä¸Šã«ã‚ã‚‹InteractableColliderã®EditModeãŒåæ˜ ã•ã‚Œã‚‹
         /// </summary>
         private void SetEditorMode()
         {
             EditMode raycastEditMode = GetEditModeUnderCursor();
 
-            // –³‹ƒŠƒXƒg‚É“ü‚Á‚Ä‚éƒ‚[ƒh’†‚Å‚ ‚ê‚Î–³Œø
+            // ç„¡è¦–ãƒªã‚¹ãƒˆã«å…¥ã£ã¦ã‚‹ãƒ¢ãƒ¼ãƒ‰ä¸­ã§ã‚ã‚Œã°ç„¡åŠ¹
             if (isCursorIgnoremode) { return; }
 
-            // ƒJ[ƒ\ƒ‹‰º‚ÉUI‚ª‚ ‚éê‡‚Í–³‹
+            // ã‚«ãƒ¼ã‚½ãƒ«ä¸‹ã«UIãŒã‚ã‚‹å ´åˆã¯ç„¡è¦–
             if (EventSystem.current.IsPointerOverGameObject()) { return; }
 
-            // -ƒJ[ƒ\ƒ‹‰º‚É‰½‚à‚È‚¢‚Æ‚«‚Í–³Œø-
+            // -ã‚«ãƒ¼ã‚½ãƒ«ä¸‹ã«ä½•ã‚‚ãªã„ã¨ãã¯ç„¡åŠ¹-
             // if (raycastEditMode == EditMode.None) { return; }
 
-            // ’·‰Ÿ‚µ’†‚Í–³Œø
+            // é•·æŠ¼ã—ä¸­ã¯ç„¡åŠ¹
             if (Input.GetMouseButton(0)) { return; }
             if (Input.GetMouseButtonUp(0)) { return; }
             if (Input.GetMouseButtonDown(0)) { return; }
@@ -118,7 +118,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒJ[ƒ\ƒ‹‚Éæ‚Á‚©‚Á‚Ä‚¢‚éƒRƒ‰ƒCƒ_[‚ÌƒGƒfƒBƒbƒgƒ‚[ƒh‚ğ•Ô‚·
+        /// ã‚«ãƒ¼ã‚½ãƒ«ã«ä¹—ã£ã‹ã£ã¦ã„ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ã‚¨ãƒ‡ã‚£ãƒƒãƒˆãƒ¢ãƒ¼ãƒ‰ã‚’è¿”ã™
         /// </summary>
         /// <returns></returns>
         private EditMode GetEditModeUnderCursor()
@@ -132,31 +132,31 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒJ[ƒ\ƒ‹‰º‚ÌƒIƒuƒWƒFƒNƒg‚É‚Â‚¢‚ÄXV
+        /// ã‚«ãƒ¼ã‚½ãƒ«ä¸‹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã¤ã„ã¦æ›´æ–°
         /// </summary>
         private void UpdateObjectUnderCursor()
         {
             GameObject obj = GetObjectUnderCursor();
 
-            // ƒqƒbƒgƒIƒuƒWƒFƒNƒg‚ÌXV
-            // ‘OƒtƒŒ[ƒ€‚Æ•Ï‚í‚Á‚Ä‚È‚©‚Á‚½‚çXV‚µ‚È‚¢
+            // ãƒ’ãƒƒãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ›´æ–°
+            // å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã¨å¤‰ã‚ã£ã¦ãªã‹ã£ãŸã‚‰æ›´æ–°ã—ãªã„
             if(currentHitObject != null && obj == currentHitObject) { return; }
             currentHitObject = obj;
 
-            // ƒJ[ƒ\ƒ‹‰º‚É‰½‚à‚È‚©‚Á‚½‚ç•Ô‚·
+            // ã‚«ãƒ¼ã‚½ãƒ«ä¸‹ã«ä½•ã‚‚ãªã‹ã£ãŸã‚‰è¿”ã™
             if(obj == null)
             {
                 chartEditorDataSetter.SetInteractableColliders(null);
                 return;
             }
 
-            // ‚·‚×‚Ä‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾
+            // ã™ã¹ã¦ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—
             IInteractableCollider[] allComponents = obj.GetComponents<IInteractableCollider>();
             chartEditorDataSetter.SetInteractableColliders(allComponents);
         }
 
         /// <summary>
-        /// ƒJ[ƒ\ƒ‹‚Éæ‚Á‚©‚Á‚Ä‚¢‚éƒIƒuƒWƒFƒNƒg‚ğ•Ô‚·
+        /// ã‚«ãƒ¼ã‚½ãƒ«ã«ä¹—ã£ã‹ã£ã¦ã„ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã™
         /// </summary>
         /// <returns></returns>
         public GameObject GetObjectUnderCursor()
@@ -166,13 +166,13 @@ namespace ChartEditor
             Ray ray = currentViewCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            // ƒIƒuƒWƒFƒNƒg‚ª‚È‚©‚Á‚½‚çnull‚ğ•Ô‚·
+            // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãªã‹ã£ãŸã‚‰nullã‚’è¿”ã™
             if (!Physics.Raycast(ray, out hit, rayDistance, raycastLayer)) { return null; }
             return hit.collider.gameObject;
         }
 
         /// <summary>
-        /// Ray‚ªƒqƒbƒg‚µ‚½ˆÊ’u(ƒ[ƒ‹ƒhÀ•W)‚ğ•Ô‚·
+        /// RayãŒãƒ’ãƒƒãƒˆã—ãŸä½ç½®(ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™)ã‚’è¿”ã™
         /// </summary>
         /// <returns></returns>
         public Vector3 GetWorldPositionUnderCursor()
@@ -182,7 +182,7 @@ namespace ChartEditor
             Ray ray = currentViewCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            // ƒIƒuƒWƒFƒNƒg‚ª‚È‚©‚Á‚½‚çnull‚ğ•Ô‚·
+            // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãªã‹ã£ãŸã‚‰nullã‚’è¿”ã™
             if (!Physics.Raycast(ray, out hit, rayDistance, raycastLayer)) { return Vector3.one * -9999; }
             return hit.point;
         }

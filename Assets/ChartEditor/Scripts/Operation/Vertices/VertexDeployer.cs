@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -31,7 +31,7 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // ’¸“_”z’u‰Â”\‚É
+            // é ‚ç‚¹é…ç½®å¯èƒ½ã«
             dataGetter.InteractableColliders.ObserveAdd()
                 .Subscribe(collider =>
                 {
@@ -41,7 +41,7 @@ namespace ChartEditor
                     }
                 }).AddTo(this.gameObject);
 
-            // ’¸“_”z’u•s‰Â”\‚É
+            // é ‚ç‚¹é…ç½®ä¸å¯èƒ½ã«
             dataGetter.InteractableColliders.ObserveReset()
                 .Subscribe(_ => { deployableCollider = null; })
                 .AddTo(this.gameObject);
@@ -52,7 +52,7 @@ namespace ChartEditor
             var currentEditMode = dataGetter.CurrentEditMode.Value;
             if (currentEditMode != EditMode.VertexDeploy) { return; }
 
-            // ’¸“_ƒIƒuƒWƒFƒNƒg‚Ì”z’u
+            // é ‚ç‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é…ç½®
             if (Input.GetMouseButtonDown(0)) 
             {
                 DeployVertex();
@@ -60,7 +60,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒm[ƒc‚Ì”z’u
+        /// ãƒãƒ¼ãƒ„ã®é…ç½®
         /// </summary>
         private void DeployVertex()
         {
@@ -68,24 +68,24 @@ namespace ChartEditor
 
             Vector3 worldPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
 
-            // ƒf[ƒ^ã‚Ì’Ç‰Á
+            // ãƒ‡ãƒ¼ã‚¿ä¸Šã®è¿½åŠ 
             VertexData vertexData = new VertexData(verticesController.WorldPosToNormalizedPos(worldPos));
 
             var vertices = notesGetter.EditingVertices.Value.SpaceVertices;
-            // RedoUndo‚É‘Î‰
+            // RedoUndoã«å¯¾å¿œ
             Record(() =>
-            // ”z’u
+            // é…ç½®
             {
                 DeployVertex(vertices, vertexData);
             }, () =>
-            // ”z’uæ‚èÁ‚µ
+            // é…ç½®å–ã‚Šæ¶ˆã—
             {
                 verticesDestroyer.DestroyVertex(vertices, vertexData);
             }); 
         }
 
         /// <summary>
-        /// ˆø”‚Ì’¸“_ƒf[ƒ^‚ğ”z’u‚·‚é
+        /// å¼•æ•°ã®é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ã‚’é…ç½®ã™ã‚‹
         /// </summary>
         /// <param name="data"></param>
         public void DeployVertex(SpaceVertices vertices, VertexData data)

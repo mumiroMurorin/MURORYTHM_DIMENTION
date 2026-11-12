@@ -1,4 +1,4 @@
-using System.IO;
+ï»¿using System.IO;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
@@ -9,7 +9,7 @@ public static class ImageLoader
     {
         if (!File.Exists(path))
         {
-            Debug.LogError("‰æ‘œƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñ: " + path);
+            Debug.LogError("ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ã¾ã›ã‚“: " + path);
             return null;
         }
 
@@ -18,7 +18,7 @@ public static class ImageLoader
         var texture = new Texture2D(2, 2);
         if (!texture.LoadImage(fileData))
         {
-            Debug.LogError("‰æ‘œ‚Ì“Ç‚İ‚İ‚É¸”s‚µ‚Ü‚µ‚½");
+            Debug.LogError("ç”»åƒã®èª­ã¿è¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸ");
             return null;
         }
 

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -9,7 +9,7 @@ using static MeshGenerate.SpaceHoldMeshGenerator;
 namespace ChartConvert
 {
     /// <summary>
-    /// ƒXƒy[ƒXƒz[ƒ‹ƒhn“_(’†Œp“_ƒf[ƒ^‚É•ÏŠ·)
+    /// ã‚¹ãƒšãƒ¼ã‚¹ãƒ›ãƒ¼ãƒ«ãƒ‰å§‹ç‚¹(ä¸­ç¶™ç‚¹ãƒ‡ãƒ¼ã‚¿ã«å¤‰æ›)
     /// </summary>
     public class SpaceHoldStartConverter : ISpaceHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
@@ -23,7 +23,7 @@ namespace ChartConvert
             {
                 if (holdNumberToVertices.ContainsKey(noteOrigin.HoldNumber))
                 {
-                    Debug.LogWarning($"yConverterzSpaceHoldStart‚Ì•ÏŠ·‚ÌÛAŠù‚ÉHoldNumber‚ª‘¶İ‚µ‚Ü‚µ‚½: {noteOrigin.HoldNumber}");
+                    Debug.LogWarning($"ã€Converterã€‘SpaceHoldStartã®å¤‰æ›ã®éš›ã€æ—¢ã«HoldNumberãŒå­˜åœ¨ã—ã¾ã—ãŸ: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
@@ -51,19 +51,19 @@ namespace ChartConvert
             if (noteDataInEditor is not IChainNoteData chainData) { return false; }
             if (noteDataInEditor is not IVerticesControlableNoteData verticesData) { return false; }
 
-            // ‘OŒãƒm[ƒcƒ`ƒFƒbƒN
+            // å‰å¾Œãƒãƒ¼ãƒ„ãƒã‚§ãƒƒã‚¯
             var backNote = chainData.NoteObject.BackNote.Value;
             var nextNote = chainData.NoteObject.NextNote.Value;
             if (backNote != null) { return false; }
             if (backNote == null && nextNote == null) { return false; }
 
-            // V‚½‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // æ–°ãŸã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             if (dataOrigin.SpaceHoldStartData == null)
             {
                 dataOrigin.SpaceHoldStartData = new List<NoteDataOrigin_SpaceHoldStart>();
             }
 
-            // ’Ç‰Á‚·‚éƒf[ƒ^‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             NoteDataOrigin_SpaceHoldStart data = new NoteDataOrigin_SpaceHoldStart()
             {
                 Vertices = verticesData.SpaceVertices.GetVertexArray(),
@@ -85,7 +85,7 @@ namespace ChartConvert
                 if (noteData is not ITypeChangableNoteData typeChangableData) { return false; }
                 if (noteData is not IVerticesControlableNoteData verticesData) { return false; }
 
-                // ƒf[ƒ^‚ÌƒZƒbƒg
+                // ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
                 var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
 
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
@@ -100,7 +100,7 @@ namespace ChartConvert
     }
 
     /// <summary>
-    /// ƒXƒy[ƒXƒz[ƒ‹ƒh’†Œp“_
+    /// ã‚¹ãƒšãƒ¼ã‚¹ãƒ›ãƒ¼ãƒ«ãƒ‰ä¸­ç¶™ç‚¹
     /// </summary>
     public class SpaceHoldRelayConverter : ISpaceHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
@@ -114,7 +114,7 @@ namespace ChartConvert
             {
                 if (!holdNumberToVertices.ContainsKey(noteOrigin.HoldNumber))
                 {
-                    Debug.LogWarning($"yConverterzSpaceHoldRelay‚Ì•ÏŠ·‚ÌÛAƒm[ƒc‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: {noteOrigin.HoldNumber}");
+                    Debug.LogWarning($"ã€Converterã€‘SpaceHoldRelayã®å¤‰æ›ã®éš›ã€ãƒãƒ¼ãƒ„ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
@@ -141,18 +141,18 @@ namespace ChartConvert
             if (noteDataInEditor is not IChainNoteData chainData) { return false; }
             if (noteDataInEditor is not IVerticesControlableNoteData verticesData) { return false; }
 
-            // ‘OŒãƒm[ƒcƒ`ƒFƒbƒN
+            // å‰å¾Œãƒãƒ¼ãƒ„ãƒã‚§ãƒƒã‚¯
             var backNote = chainData.NoteObject.BackNote.Value;
             var nextNote = chainData.NoteObject.NextNote.Value;
             if (backNote == null || nextNote == null) { return false; }
 
-            // V‚½‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // æ–°ãŸã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             if (dataOrigin.SpaceHoldRelayData == null)
             {
                 dataOrigin.SpaceHoldRelayData = new List<NoteDataOrigin_SpaceHoldRelay>();
             }
 
-            // ’Ç‰Á‚·‚éƒf[ƒ^‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             NoteDataOrigin_SpaceHoldRelay data = new NoteDataOrigin_SpaceHoldRelay()
             {
                 Vertices = verticesData.SpaceVertices.GetVertexArray(),
@@ -174,7 +174,7 @@ namespace ChartConvert
                 if (noteData is not ITypeChangableNoteData typeChangableData) { return false; }
                 if (noteData is not IVerticesControlableNoteData verticesData) { return false; }
 
-                // ƒf[ƒ^‚ÌƒZƒbƒg
+                // ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
                 var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
 
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
@@ -190,7 +190,7 @@ namespace ChartConvert
     }
 
     /// <summary>
-    /// ƒXƒy[ƒXƒz[ƒ‹ƒhƒƒbƒVƒ…’†Œpƒm[ƒc
+    /// ã‚¹ãƒšãƒ¼ã‚¹ãƒ›ãƒ¼ãƒ«ãƒ‰ãƒ¡ãƒƒã‚·ãƒ¥ä¸­ç¶™ãƒãƒ¼ãƒ„
     /// </summary>
     public class SpaceHoldMeshRelayConverter : ISpaceHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
@@ -204,7 +204,7 @@ namespace ChartConvert
             {
                 if (!holdNumberToVertices.ContainsKey(noteOrigin.HoldNumber))
                 {
-                    Debug.LogWarning($"yConverterzSpaceHoldMeshRelay‚Ì•ÏŠ·‚ÌÛAƒm[ƒc‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: {noteOrigin.HoldNumber}");
+                    Debug.LogWarning($"ã€Converterã€‘SpaceHoldMeshRelayã®å¤‰æ›ã®éš›ã€ãƒãƒ¼ãƒ„ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
@@ -220,18 +220,18 @@ namespace ChartConvert
             if (noteDataInEditor is not IChainNoteData chainData) { return false; }
             if (noteDataInEditor is not IVerticesControlableNoteData verticesData) { return false; }
 
-            // ‘OŒãƒm[ƒcƒ`ƒFƒbƒN
+            // å‰å¾Œãƒãƒ¼ãƒ„ãƒã‚§ãƒƒã‚¯
             var backNote = chainData.NoteObject.BackNote.Value;
             var nextNote = chainData.NoteObject.NextNote.Value;
             if (backNote == null || nextNote == null) { return false; }
 
-            // V‚½‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // æ–°ãŸã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             if (dataOrigin.SpaceHoldMeshRelayData == null)
             {
                 dataOrigin.SpaceHoldMeshRelayData = new List<NoteDataOrigin_SpaceHoldMeshRelay>();
             }
 
-            // ’Ç‰Á‚·‚éƒf[ƒ^‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             NoteDataOrigin_SpaceHoldMeshRelay data = new NoteDataOrigin_SpaceHoldMeshRelay()
             {
                 Vertices = verticesData.SpaceVertices.GetVertexArray(),
@@ -253,7 +253,7 @@ namespace ChartConvert
                 if (noteData is not ITypeChangableNoteData typeChangableData) { return false; }
                 if (noteData is not IVerticesControlableNoteData verticesData) { return false; }
 
-                // ƒf[ƒ^‚ÌƒZƒbƒg
+                // ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
                 var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
 
                 typeChangableData.SetNoteType(DeploymentNoteType.SpaceHoldMeshRelay);
@@ -269,7 +269,7 @@ namespace ChartConvert
     }
 
     /// <summary>
-    /// ƒXƒy[ƒXƒz[ƒ‹ƒhI“_(’†Œp“_ƒf[ƒ^‚É•ÏŠ·)
+    /// ã‚¹ãƒšãƒ¼ã‚¹ãƒ›ãƒ¼ãƒ«ãƒ‰çµ‚ç‚¹(ä¸­ç¶™ç‚¹ãƒ‡ãƒ¼ã‚¿ã«å¤‰æ›)
     /// </summary>
     public class SpaceHoldEndConverter : ISpaceHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
@@ -284,7 +284,7 @@ namespace ChartConvert
             {
                 if (!holdNumberToVertices.ContainsKey(noteOrigin.HoldNumber))
                 {
-                    Debug.LogWarning($"yConverterzSpaceHoldRelay‚Ì•ÏŠ·‚ÌÛAƒm[ƒc‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: {noteOrigin.HoldNumber}");
+                    Debug.LogWarning($"ã€Converterã€‘SpaceHoldRelayã®å¤‰æ›ã®éš›ã€ãƒãƒ¼ãƒ„ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
@@ -313,19 +313,19 @@ namespace ChartConvert
             if (noteDataInEditor is not IChainNoteData chainData) { return false; }
             if (noteDataInEditor is not IVerticesControlableNoteData verticesData) { return false; }
             
-            // ‘OŒãƒm[ƒcƒ`ƒFƒbƒN
+            // å‰å¾Œãƒãƒ¼ãƒ„ãƒã‚§ãƒƒã‚¯
             var backNote = chainData.NoteObject.BackNote.Value;
             var nextNote = chainData.NoteObject.NextNote.Value;
             if (nextNote != null) { return false; }
             if (backNote == null && nextNote == null) { return false; }
 
-            // V‚½‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // æ–°ãŸã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             if (dataOrigin.SpaceHoldEndData == null)
             {
                 dataOrigin.SpaceHoldEndData = new List<NoteDataOrigin_SpaceHoldEnd>();
             }
 
-            // ’Ç‰Á‚·‚éƒf[ƒ^‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             NoteDataOrigin_SpaceHoldEnd data = new NoteDataOrigin_SpaceHoldEnd()
             {
                 Vertices = verticesData.SpaceVertices.GetVertexArray(),
@@ -347,7 +347,7 @@ namespace ChartConvert
                 if (noteData is not ITypeChangableNoteData typeChangableData) { return false; }
                 if (noteData is not IVerticesControlableNoteData verticesData) { return false; }
 
-                // ƒf[ƒ^‚ÌƒZƒbƒg
+                // ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
                 var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, RANGE_DEFAULT);
 
                 chainData.SetChainIndex(noteDataOrigin.HoldNumber);
@@ -362,7 +362,7 @@ namespace ChartConvert
     }
 
     /// <summary>
-    /// ƒXƒy[ƒXƒz[ƒ‹ƒhƒƒbƒVƒ…
+    /// ã‚¹ãƒšãƒ¼ã‚¹ãƒ›ãƒ¼ãƒ«ãƒ‰ãƒ¡ãƒƒã‚·ãƒ¥
     /// </summary>
     public class SpaceHoldMeshConverter : IUnchainDataToRhythmGameConvertable
     {
@@ -383,14 +383,14 @@ namespace ChartConvert
         {
             if (dataOrigin.SpaceHoldStartData == null) { return true; }
 
-            // n“_AƒƒbƒVƒ…ƒf[ƒ^Ši”[ƒŠƒXƒg‚Ìì¬
+            // å§‹ç‚¹ã€ãƒ¡ãƒƒã‚·ãƒ¥ãƒ‡ãƒ¼ã‚¿æ ¼ç´ãƒªã‚¹ãƒˆã®ä½œæˆ
             foreach (var noteOrigin in dataOrigin.SpaceHoldStartData)
             {
-                // ˆê“xƒfƒBƒNƒVƒ‡ƒiƒŠ[‚ÉŠi”[
-                // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎV‹Kì¬
+                // ä¸€åº¦ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªãƒ¼ã«æ ¼ç´
+                // ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªãƒ¼ã«ç™»éŒ²ã•ã‚Œã¦ã„ãªã‘ã‚Œã°æ–°è¦ä½œæˆ
                 if (numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
-                    Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ªŠù‚É“o˜^‚³‚ê‚Ä‚¢‚Ü‚·: {noteOrigin.HoldNumber}");
+                    Debug.LogWarning($"ã€Converterã€‘å§‹ç‚¹ãƒ‡ãƒ¼ã‚¿ãŒæ—¢ã«ç™»éŒ²ã•ã‚Œã¦ã„ã¾ã™: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
@@ -408,10 +408,10 @@ namespace ChartConvert
 
             foreach (var noteOrigin in dataOrigin.SpaceHoldRelayData)
             {
-                // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚½‚çƒGƒ‰[
+                // ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªãƒ¼ã«ç™»éŒ²ã•ã‚Œã¦ãŸã‚‰ã‚¨ãƒ©ãƒ¼
                 if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
-                    Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {noteOrigin.HoldNumber}");
+                    Debug.LogWarning($"ã€Converterã€‘å§‹ç‚¹ãƒ‡ãƒ¼ã‚¿ãŒç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
@@ -427,10 +427,10 @@ namespace ChartConvert
 
             foreach (var noteOrigin in dataOrigin.SpaceHoldMeshRelayData)
             {
-                // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚½‚çƒGƒ‰[
+                // ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªãƒ¼ã«ç™»éŒ²ã•ã‚Œã¦ãŸã‚‰ã‚¨ãƒ©ãƒ¼
                 if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
-                    Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {noteOrigin.HoldNumber}");
+                    Debug.LogWarning($"ã€Converterã€‘å§‹ç‚¹ãƒ‡ãƒ¼ã‚¿ãŒç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
@@ -444,13 +444,13 @@ namespace ChartConvert
         {
             if (dataOrigin.SpaceHoldEndData == null) { return true; }
 
-            // I“_AƒƒbƒVƒ…ƒf[ƒ^Ši”[ƒŠƒXƒg‚Éƒf[ƒ^‚ğ’Ç‰ÁŒãA•ˆ–Êƒf[ƒ^‚É‘ã“ü
+            // çµ‚ç‚¹ã€ãƒ¡ãƒƒã‚·ãƒ¥ãƒ‡ãƒ¼ã‚¿æ ¼ç´ãƒªã‚¹ãƒˆã«ãƒ‡ãƒ¼ã‚¿ã‚’è¿½åŠ å¾Œã€è­œé¢ãƒ‡ãƒ¼ã‚¿ã«ä»£å…¥
             foreach (var noteOrigin in dataOrigin.SpaceHoldEndData)
             {
-                // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î•Ô‚·
+                // ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªãƒ¼ã«ç™»éŒ²ã•ã‚Œã¦ã„ãªã‘ã‚Œã°è¿”ã™
                 if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
-                    Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {noteOrigin.HoldNumber}");
+                    Debug.LogWarning($"ã€Converterã€‘å§‹ç‚¹ãƒ‡ãƒ¼ã‚¿ãŒç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
@@ -462,7 +462,7 @@ namespace ChartConvert
         }
 
         /// <summary>
-        /// ListƒHoldMeshOriginAndTiming„ ¨ NoteData_HoldMesh
+        /// Listï¼œHoldMeshOriginAndTimingï¼ â†’ NoteData_HoldMesh
         /// </summary>
         /// <param name="meshDataList"></param>
         /// <returns></returns>
@@ -480,7 +480,7 @@ namespace ChartConvert
     }
 
     /// <summary>
-    /// ƒXƒy[ƒXƒz[ƒ‹ƒh”»’è“_
+    /// ã‚¹ãƒšãƒ¼ã‚¹ãƒ›ãƒ¼ãƒ«ãƒ‰åˆ¤å®šç‚¹
     /// </summary>
     public class SpaceHoldJudgementPointConverter : IUnchainDataToRhythmGameConvertable
     {
@@ -502,14 +502,14 @@ namespace ChartConvert
         {
             if (dataOrigin == null) { return true; }
 
-            // n“_AƒƒbƒVƒ…ƒf[ƒ^Ši”[ƒŠƒXƒg‚Ìì¬
+            // å§‹ç‚¹ã€ãƒ¡ãƒƒã‚·ãƒ¥ãƒ‡ãƒ¼ã‚¿æ ¼ç´ãƒªã‚¹ãƒˆã®ä½œæˆ
             foreach (var noteOrigin in dataOrigin)
             {
-                // ˆê“xƒfƒBƒNƒVƒ‡ƒiƒŠ[‚ÉŠi”[
-                // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎV‹Kì¬
+                // ä¸€åº¦ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªãƒ¼ã«æ ¼ç´
+                // ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªãƒ¼ã«ç™»éŒ²ã•ã‚Œã¦ã„ãªã‘ã‚Œã°æ–°è¦ä½œæˆ
                 if (numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
-                    Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ªŠù‚É“o˜^‚³‚ê‚Ä‚¢‚Ü‚·: {noteOrigin.HoldNumber}");
+                    Debug.LogWarning($"ã€Converterã€‘å§‹ç‚¹ãƒ‡ãƒ¼ã‚¿ãŒæ—¢ã«ç™»éŒ²ã•ã‚Œã¦ã„ã¾ã™: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
@@ -527,10 +527,10 @@ namespace ChartConvert
 
             foreach (var noteOrigin in dataOrigin)
             {
-                // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚½‚çƒGƒ‰[
+                // ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªãƒ¼ã«ç™»éŒ²ã•ã‚Œã¦ãŸã‚‰ã‚¨ãƒ©ãƒ¼
                 if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
-                    Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {noteOrigin.HoldNumber}");
+                    Debug.LogWarning($"ã€Converterã€‘å§‹ç‚¹ãƒ‡ãƒ¼ã‚¿ãŒç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
@@ -546,10 +546,10 @@ namespace ChartConvert
 
             foreach (var noteOrigin in dataOrigin)
             {
-                // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚½‚çƒGƒ‰[
+                // ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªãƒ¼ã«ç™»éŒ²ã•ã‚Œã¦ãŸã‚‰ã‚¨ãƒ©ãƒ¼
                 if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
-                    Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {noteOrigin.HoldNumber}");
+                    Debug.LogWarning($"ã€Converterã€‘å§‹ç‚¹ãƒ‡ãƒ¼ã‚¿ãŒç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
@@ -563,13 +563,13 @@ namespace ChartConvert
         {
             if (dataOrigin == null) { return true; }
 
-            // I“_AƒƒbƒVƒ…ƒf[ƒ^Ši”[ƒŠƒXƒg‚Éƒf[ƒ^‚ğ’Ç‰ÁŒãA•ˆ–Êƒf[ƒ^‚É‘ã“ü
+            // çµ‚ç‚¹ã€ãƒ¡ãƒƒã‚·ãƒ¥ãƒ‡ãƒ¼ã‚¿æ ¼ç´ãƒªã‚¹ãƒˆã«ãƒ‡ãƒ¼ã‚¿ã‚’è¿½åŠ å¾Œã€è­œé¢ãƒ‡ãƒ¼ã‚¿ã«ä»£å…¥
             foreach (var noteOrigin in dataOrigin)
             {
-                // ƒfƒBƒNƒVƒ‡ƒiƒŠ[‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î•Ô‚·
+                // ãƒ‡ã‚£ã‚¯ã‚·ãƒ§ãƒŠãƒªãƒ¼ã«ç™»éŒ²ã•ã‚Œã¦ã„ãªã‘ã‚Œã°è¿”ã™
                 if (!numberToHoldMeshDataOrigin.ContainsKey(noteOrigin.HoldNumber))
                 {
-                    Debug.LogWarning($"yConverterzn“_ƒf[ƒ^‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ: {noteOrigin.HoldNumber}");
+                    Debug.LogWarning($"ã€Converterã€‘å§‹ç‚¹ãƒ‡ãƒ¼ã‚¿ãŒç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“: {noteOrigin.HoldNumber}");
                     return false;
                 }
 
@@ -584,7 +584,7 @@ namespace ChartConvert
         }
 
         /// <summary>
-        /// ListƒHoldMeshOriginAndTiming„ ¨ List<NoteData_SpaceHoldRelayHidden>
+        /// Listï¼œHoldMeshOriginAndTimingï¼ â†’ List<NoteData_SpaceHoldRelayHidden>
         /// </summary>
         /// <param name="meshDataList"></param>
         /// <returns></returns>
@@ -603,7 +603,7 @@ namespace ChartConvert
             {
                 var detail = timeToDetails[index];
 
-                // ƒCƒ“ƒ^[ƒoƒ‹‚ÌXV
+                // ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã®æ›´æ–°
                 while (index + 1 < timeToDetails.Count && timeToDetails[index + 1].Timing < count)
                 {
                     index++;
@@ -611,10 +611,10 @@ namespace ChartConvert
                     mergin = interval / 2f;
                 }
 
-                // ‹ß‚­‚É”»’è“_‚ª‚ ‚Á‚½‚ç’Ç‰Á‚µ‚È‚¢
+                // è¿‘ãã«åˆ¤å®šç‚¹ãŒã‚ã£ãŸã‚‰è¿½åŠ ã—ãªã„
                 if (IsNearJudgementPoint(timeToDetails, count, mergin)) { continue; }
 
-                // ”»’è“_‚Ì’Ç‰Á
+                // åˆ¤å®šç‚¹ã®è¿½åŠ 
                 noteDatas.Add(ConvertNoteData(holdNumber, timeToVertices, count));
             }
 
@@ -661,7 +661,7 @@ namespace ChartConvert
 
         private float CalcInterval(float bpm)
         {
-            // 8•ªŠÔŠu
+            // 8åˆ†é–“éš”
             return 30f / bpm;
         }
 
@@ -688,7 +688,7 @@ namespace ChartConvert
     }
 
     /// <summary>
-    /// ƒXƒy[ƒXƒuƒŒƒCƒN
+    /// ã‚¹ãƒšãƒ¼ã‚¹ãƒ–ãƒ¬ã‚¤ã‚¯
     /// </summary>
     public class SpaceBreakConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
     {
@@ -717,13 +717,13 @@ namespace ChartConvert
             if (noteDataInEditor.NoteType != DeploymentNoteType.SpaceBreak) { return false; }
             if (noteDataInEditor is not IVerticesControlableNoteData verticesData) { return false; }
 
-            // V‚½‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // æ–°ãŸã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             if (dataOrigin.SpaceBreakData == null)
             {
                 dataOrigin.SpaceBreakData = new List<NoteDataOrigin_SpaceBreak>();
             }
 
-            // ’Ç‰Á‚·‚éƒf[ƒ^‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             var data = new NoteDataOrigin_SpaceBreak()
             {
                 Vertices = verticesData.SpaceVertices.GetVertexArray(),

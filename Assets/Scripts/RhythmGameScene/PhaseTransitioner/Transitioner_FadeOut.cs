@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
@@ -22,14 +22,14 @@ namespace TransitionerInRhythmGameScene
 
         void IPhaseTransitionerInRhythmGameScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"FadeOut\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"FadeOut\"");
 
-            // ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
+            // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿ
             fadeController?.FadeOut(musicDataGetter.DataGetter, TransitionNextPhase);
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase()
         {

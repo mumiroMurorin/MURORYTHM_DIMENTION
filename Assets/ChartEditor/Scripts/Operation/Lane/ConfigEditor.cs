@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -35,24 +35,24 @@ namespace ChartEditor
             if(dataGetter.EditNoteType.Value != EditNoteType.Ground && dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
             if(dataGetter.CurrentEditMode.Value != EditMode.EditBarConfig && dataGetter.CurrentEditMode.Value != EditMode.EditSubDivisionConfig) { return; }
 
-            // ¶ƒNƒŠƒbƒN
+            // å·¦ã‚¯ãƒªãƒƒã‚¯
             if (Input.GetMouseButtonDown(0)) { StartEditConfigOnClick(); }
         }
 
         /// <summary>
-        /// ƒRƒ“ƒtƒBƒO‚Ì•ÒW
+        /// ã‚³ãƒ³ãƒ•ã‚£ã‚°ã®ç·¨é›†
         /// </summary>
         private void StartEditConfigOnClick()
         {
             var subDivisionCollider = dataGetter.GetInteractableCollider<IRhythmConfigurableSubDivisionCollider>();
             var barCollider = dataGetter.GetInteractableCollider<IRhythmConfigurableBarCollider>();
 
-            // ƒGƒfƒBƒbƒgƒ‚[ƒh‚Ì•ÏX
+            // ã‚¨ãƒ‡ã‚£ãƒƒãƒˆãƒ¢ãƒ¼ãƒ‰ã®å¤‰æ›´
             if(subDivisionCollider != null)
             {
                 subConfigCollider = subDivisionCollider;
 
-                // •ÒW’†ƒRƒ“ƒtƒBƒO‚ğƒZƒbƒg
+                // ç·¨é›†ä¸­ã‚³ãƒ³ãƒ•ã‚£ã‚°ã‚’ã‚»ãƒƒãƒˆ
                 var lineObj = subConfigCollider.subdivisionObj;
                 var subData = laneController.GetData(lineObj);
                 int barIndex = subData.BarData.BarIndex;
@@ -69,7 +69,7 @@ namespace ChartEditor
             {
                 barConfigCollider = barCollider;
 
-                // •ÒW’†ƒRƒ“ƒtƒBƒO‚ğƒZƒbƒg
+                // ç·¨é›†ä¸­ã‚³ãƒ³ãƒ•ã‚£ã‚°ã‚’ã‚»ãƒƒãƒˆ
                 var lineObj = barConfigCollider.barObj;
                 var subData = laneController.GetData(lineObj);
                 int barIndex = subData.BarData.BarIndex;
@@ -92,38 +92,38 @@ namespace ChartEditor
             var previousBarData = dataGetter.ChartData.Value.BarDatas[barIndex];
             var previousBarConfig = previousBarData.BarConfig;
 
-            // ƒRƒ“ƒtƒBƒO‚ª•ÏX‚Å‚«‚é‚©’²‚×‚é
+            // ã‚³ãƒ³ãƒ•ã‚£ã‚°ãŒå¤‰æ›´ã§ãã‚‹ã‹èª¿ã¹ã‚‹
             if (!IsChangableBarConfig(previousBarData, barConfig)) 
             {
-                Debug.Log($"yƒRƒ“ƒtƒBƒOz‘Î‰‚µ‚È‚¢•ªüã‚Éƒm[ƒc‚ª‚ ‚é‚½‚ß•ÏX‚Å‚«‚Ü‚¹‚ñ");
+                Debug.Log($"ã€ã‚³ãƒ³ãƒ•ã‚£ã‚°ã€‘å¯¾å¿œã—ãªã„åˆ†ç·šä¸Šã«ãƒãƒ¼ãƒ„ãŒã‚ã‚‹ãŸã‚å¤‰æ›´ã§ãã¾ã›ã‚“");
                 return;
             }
 
-            // •ÏX
+            // å¤‰æ›´
             Record(() => {
                 ChangeBarConfig(barIndex, barConfig, previousBarData);
             }, 
-            // Œ³‚É–ß‚·
+            // å…ƒã«æˆ»ã™
             () => {
                 ChangeBarConfig(barIndex, previousBarConfig, previousBarData);
             });
         }
 
         /// <summary>
-        /// ƒRƒ“ƒtƒBƒO‚ª•ÏX‚Å‚«‚é‚©’²‚×‚é
+        /// ã‚³ãƒ³ãƒ•ã‚£ã‚°ãŒå¤‰æ›´ã§ãã‚‹ã‹èª¿ã¹ã‚‹
         /// </summary>
         /// <returns></returns>
         private bool IsChangableBarConfig(IBarDataGetter previousBarData, BarConfig barConfig)
         {
-            // Œö–ñ”•ªüãˆÓŠO‚Éƒm[ƒc‚ª‚ ‚éê‡‚Í•ÏX‚Å‚«‚È‚¢
+            // å…¬ç´„æ•°åˆ†ç·šä¸Šæ„å¤–ã«ãƒãƒ¼ãƒ„ãŒã‚ã‚‹å ´åˆã¯å¤‰æ›´ã§ããªã„
             int oldCount = previousBarData.SubDivisionDatas.Count;
             int newCount = barConfig.BeatCount * barConfig.DivisionNum;
             for (int i = 0; i < oldCount; i++)
             {
-                // ®”‚©‚Ç‚¤‚©‚Ì”»’è,•ªü‚ÌˆÊ’u‚ª”í‚é‚©‚Ç‚¤‚©‚Ì”»’è
+                // æ•´æ•°ã‹ã©ã†ã‹ã®åˆ¤å®š,åˆ†ç·šã®ä½ç½®ãŒè¢«ã‚‹ã‹ã©ã†ã‹ã®åˆ¤å®š
                 if ((newCount * i) % oldCount == 0) { continue; }
 
-                // ”í‚ç‚È‚¢•ªüã‚Éƒm[ƒg‚ª‚ ‚Á‚½‚çŒx“f‚¢‚ÄI—¹
+                // è¢«ã‚‰ãªã„åˆ†ç·šä¸Šã«ãƒãƒ¼ãƒˆãŒã‚ã£ãŸã‚‰è­¦å‘Šåã„ã¦çµ‚äº†
                 if (previousBarData.SubDivisionDatas[i].NoteDatas.Count > 0)
                 {
                     return false;
@@ -134,7 +134,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒRƒ“ƒtƒBƒO‚Ì•ÏXA‚à‚Æ‚ ‚Á‚½ƒm[ƒc‚ğÄ•Ò¬‚·‚é
+        /// ã‚³ãƒ³ãƒ•ã‚£ã‚°ã®å¤‰æ›´ã€ã‚‚ã¨ã‚ã£ãŸãƒãƒ¼ãƒ„ã‚’å†ç·¨æˆã™ã‚‹
         /// </summary>
         /// <param name="beforeConfig"></param>
         /// <param name="afterConfig"></param>
@@ -143,14 +143,14 @@ namespace ChartEditor
         {
             if(barData.BarConfig == afterConfig) { return; }
 
-            // Œ³‚ ‚Á‚½•ªüƒf[ƒ^‚ğŠ„‚èU‚é
+            // å…ƒã‚ã£ãŸåˆ†ç·šãƒ‡ãƒ¼ã‚¿ã‚’å‰²ã‚ŠæŒ¯ã‚‹
             int newSubCount = afterConfig.BeatCount * afterConfig.DivisionNum;
             var indexToSubdivisionData = new List<IndexToSubdivisionData>();
             var beforeList = Enumerable.Range(0, barData.SubDivisionDatas.Count).Select(i => (float)i / barData.SubDivisionDatas.Count).ToList();
             var afterList = Enumerable.Range(0, newSubCount).Select(i => (float)i / newSubCount).ToList();
             beforeList = beforeList.SnapToNearest(afterList);
 
-            // ˆÈ‘O‚Ìƒf[ƒ^‚ğ•Û‘¶‚µAƒm[ƒc‚ğíœ
+            // ä»¥å‰ã®ãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜ã—ã€ãƒãƒ¼ãƒ„ã‚’å‰Šé™¤
             for (int i = 0; i < barData.SubDivisionDatas.Count; i++)
             {
                 var subData = barData.SubDivisionDatas[i];
@@ -166,10 +166,10 @@ namespace ChartEditor
                 }
             }
 
-            // ƒRƒ“ƒtƒBƒO•ÏX
+            // ã‚³ãƒ³ãƒ•ã‚£ã‚°å¤‰æ›´
             dataGetter.ChartData.Value.SetBarDataConfig(barIndex, afterConfig);
 
-            // ˆÈ‘O‚ ‚Á‚½ƒm[ƒc‚ğŠ„‚èU‚é
+            // ä»¥å‰ã‚ã£ãŸãƒãƒ¼ãƒ„ã‚’å‰²ã‚ŠæŒ¯ã‚‹
             foreach (var sub in indexToSubdivisionData)
             {
                 var newNote = sub.Note;
@@ -190,11 +190,11 @@ namespace ChartEditor
             var previousSubData = dataGetter.ChartData.Value.BarDatas[barIndex].SubDivisionDatas[subIndex];
             var previousSubConfig = previousSubData.SubConfig;
 
-            // •ÏX
+            // å¤‰æ›´
             Record(() => {
                 dataGetter.ChartData.Value.SetSubDivisionConfig(barIndex, subIndex, subConfig);
             },
-            // Œ³‚É–ß‚·
+            // å…ƒã«æˆ»ã™
             () => {
                 dataGetter.ChartData.Value.SetSubDivisionConfig(barIndex, subIndex, previousSubConfig);
             });

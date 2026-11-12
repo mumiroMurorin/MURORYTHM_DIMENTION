@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -12,7 +12,7 @@ namespace UIInSelectScene
 
         public void OnChangeDivisionNum(int divNum)
         {
-            divisionNumTmp.text = divNum.ToString()+ "<size=50%>•ªŠ„";
+            divisionNumTmp.text = divNum.ToString()+ "<size=50%>åˆ†å‰²";
         }
     }
 }

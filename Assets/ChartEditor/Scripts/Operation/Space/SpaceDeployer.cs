@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -9,9 +9,9 @@ namespace ChartEditor
 {
     public class SpaceDeployer : MonoBehaviour
     {
-        // SubclassSelector‚ğ©ìƒNƒ‰ƒX‚Ì’†‚É‚¢‚ê‚é‚Æãè‚­“®ì‚µ‚È‚¢‚Ì‚Å‹ê“÷‚Ìô
+        // SubclassSelectorã‚’è‡ªä½œã‚¯ãƒ©ã‚¹ã®ä¸­ã«ã„ã‚Œã‚‹ã¨ä¸Šæ‰‹ãå‹•ä½œã—ãªã„ã®ã§è‹¦è‚‰ã®ç­–
         [SerializeField] NoteTypeToNoteObjectList noteList;
-        [Tooltip("ƒm[ƒgƒf[ƒ^(’ŠÛƒNƒ‰ƒX)")]
+        [Tooltip("ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿(æŠ½è±¡ã‚¯ãƒ©ã‚¹)")]
         [SerializeReference, SubclassSelector] IDeployableNoteData[] noteDataList;
 
         IChartEditorDataGetter dataGetter;
@@ -33,13 +33,13 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // ƒm[ƒc‚Ìíœ
+            // ãƒãƒ¼ãƒ„ã®å‰Šé™¤
             dataGetter.CurrentEditMode
                 .Where(editMode => editMode != EditMode.SpaceDeploy)
                 .Subscribe(editMode => DestroyNote())
                 .AddTo(this.gameObject);
 
-            // ƒm[ƒc‚Ì‰¼”z’u
+            // ãƒãƒ¼ãƒ„ã®ä»®é…ç½®
             dataGetter.InteractableColliders.ObserveAdd()
                 .Subscribe(collider =>
                 {
@@ -47,7 +47,7 @@ namespace ChartEditor
                     if (collider.Value is IFreedomDeployableCollider matched) { UpdateNotePosition(matched); }
                 }).AddTo(this.gameObject);
 
-            // ”z’uƒm[ƒc‚Ìí—Ş‚Ì•ÏX
+            // é…ç½®ãƒãƒ¼ãƒ„ã®ç¨®é¡ã®å¤‰æ›´
             dataGetter.DeploymentNoteType
                 .Subscribe(noteType =>
                 {
@@ -65,16 +65,16 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ”z’u’†‚Ìƒm[ƒc‚ÌˆÊ’u‚ğXV‚·‚é
+        /// é…ç½®ä¸­ã®ãƒãƒ¼ãƒ„ã®ä½ç½®ã‚’æ›´æ–°ã™ã‚‹
         /// </summary>
         private void UpdateNotePosition(IFreedomDeployableCollider deployable)
         {
-            // ”z’uƒ‚[ƒh‚Å‚È‚¢Û‚Í•Ô‚·
+            // é…ç½®ãƒ¢ãƒ¼ãƒ‰ã§ãªã„éš›ã¯è¿”ã™
             if (deployable == null) { return; }
 
-            // ”z’uƒm[ƒc‚ª–³‚©‚Á‚½‚çV‹KƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // é…ç½®ãƒãƒ¼ãƒ„ãŒç„¡ã‹ã£ãŸã‚‰æ–°è¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             if (deployingNote == null) { SpawnNewNote(dataGetter.DeploymentNoteType.Value); }
-            // ‚»‚ê‚Å‚à‚È‚©‚Á‚½‚ç•Ô‚·
+            // ãã‚Œã§ã‚‚ãªã‹ã£ãŸã‚‰è¿”ã™
             if (deployingNote == null) { return; }
 
             deployingNote.OnMove(deployable.deployParent);
@@ -82,7 +82,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ¶ƒNƒŠƒbƒN‚É‚æ‚éƒm[ƒc‚Ì”z’u
+        /// å·¦ã‚¯ãƒªãƒƒã‚¯ã«ã‚ˆã‚‹ãƒãƒ¼ãƒ„ã®é…ç½®
         /// </summary>
         private void DeployNoteOnClick()
         {
@@ -96,23 +96,23 @@ namespace ChartEditor
             deployingNoteData.SetAddress(new AddressWithinRange(address, 1));
             var deployedData = deployingNoteData;
 
-            // ƒf[ƒ^ã‚Ì’Ç‰Á
+            // ãƒ‡ãƒ¼ã‚¿ä¸Šã®è¿½åŠ 
             Record(() => {
                 dataGetter.ChartData.Value.AddNote(deployedData);
             },
-            // Undo‚Åíœ
+            // Undoã§å‰Šé™¤
             () => {
                 dataGetter.ChartData.Value.RemoveNote(deployedData);
             });
 
-            Debug.Log($"y”z’uz:\n{deployedData.Address}");
+            Debug.Log($"ã€é…ç½®ã€‘:\n{deployedData.Address}");
 
             DestroyNote();
             SpawnNewNote(dataGetter.DeploymentNoteType.Value);
         }
 
         /// <summary>
-        /// ƒm[ƒg‚Ì¶¬
+        /// ãƒãƒ¼ãƒˆã®ç”Ÿæˆ
         /// </summary>
         private void SpawnNewNote(DeploymentNoteType noteType)
         {
@@ -133,11 +133,11 @@ namespace ChartEditor
 
             if (!obj.TryGetComponent(out IDeployableObject deployable))
             {
-                Debug.LogWarning("ƒm[ƒc‚ÉIDeployableObject‚ª‚­‚Á‚Â‚¢‚Ä‚Ë‚¥‚¼I");
+                Debug.LogWarning("ãƒãƒ¼ãƒ„ã«IDeployableObjectãŒãã£ã¤ã„ã¦ã­ã‡ãï¼");
                 return null;
             }
 
-            // ƒ`ƒFƒCƒ“ƒm[ƒc‚Ì‚Æ‚«ƒf[ƒ^ƒZƒbƒg
+            // ãƒã‚§ã‚¤ãƒ³ãƒãƒ¼ãƒ„ã®ã¨ããƒ‡ãƒ¼ã‚¿ã‚»ãƒƒãƒˆ
             if (noteData is IChainNoteData chainData)
             {
                 chainData.SetNoteObject(obj.GetComponent<IConnectableObject>());
@@ -150,7 +150,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒm[ƒg‚Ìíœ
+        /// ãƒãƒ¼ãƒˆã®å‰Šé™¤
         /// </summary>
         private void DestroyNote()
         {
@@ -181,7 +181,7 @@ namespace ChartEditor
                 }
             }
 
-            Debug.LogWarning($"ySystemz{noteType}‚É‘Î‰‚·‚é’ŠÛƒNƒ‰ƒX‚ª‚ ‚è‚Ü‚¹‚ñ");
+            Debug.LogWarning($"ã€Systemã€‘{noteType}ã«å¯¾å¿œã™ã‚‹æŠ½è±¡ã‚¯ãƒ©ã‚¹ãŒã‚ã‚Šã¾ã›ã‚“");
             return null;
         }
 

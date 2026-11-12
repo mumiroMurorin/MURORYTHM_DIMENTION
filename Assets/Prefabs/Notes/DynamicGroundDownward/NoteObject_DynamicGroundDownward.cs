@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -6,7 +6,7 @@ using JudgementUtil.Dynamic;
 using System.Linq;
 
 /// <summary>
-/// ƒ_ƒCƒiƒ~ƒbƒNƒOƒ‰ƒEƒ“ƒhƒm[ƒc‚ÉƒAƒ^ƒbƒ`‚³‚ê‚éƒNƒ‰ƒX
+/// ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ã‚°ãƒ©ã‚¦ãƒ³ãƒ‰ãƒãƒ¼ãƒ„ã«ã‚¢ã‚¿ãƒƒãƒã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroundDownward>
 {
@@ -27,7 +27,7 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
     bool isJudged;
 
     /// <summary>
-    /// ‰Šú‰»
+    /// åˆæœŸåŒ–
     /// </summary>
     /// <param name="data"></param>
     public override void Initialize(NoteData_DynamicGroundDownward data)
@@ -42,7 +42,7 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
         if (noteData == null) { return; }
         if (isJudged) { return; }
 
-        // ”»’èŠÔ‰ß‚¬‚Ä‚é‚Æ‚«
+        // åˆ¤å®šæ™‚é–“éãã¦ã‚‹ã¨ã
         if (noteData.JudgementWindow.IsPassJudgementRange(noteData.Timer.Time, noteData.Timing))
         {
             SendJudgementData();
@@ -50,15 +50,15 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
             return;
         }
 
-        // ”»’èŠÔ“à‚Å‚È‚¢‚Æ‚«
+        // åˆ¤å®šæ™‚é–“å†…ã§ãªã„ã¨ã
         if (!IsInJudgementTimeRange()) { return; }
 
-        // ’Êí”»’è
+        // é€šå¸¸æ™‚åˆ¤å®š
         if (!noteData.OptionGetter.IsAutoMode)
         {
             NormalJudgement();
         }
-        // ƒI[ƒgƒ‚[ƒh”»’è
+        // ã‚ªãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰æ™‚åˆ¤å®š
         else
         {
             AutoJudgement();
@@ -66,14 +66,14 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
     }
 
     /// <summary>
-    /// ”»’è
+    /// åˆ¤å®š
     /// </summary>
     private void NormalJudgement()
     {
-        // ”»’èŠÔŠO‚È‚ç•Ô‚·
+        // åˆ¤å®šæ™‚é–“å¤–ãªã‚‰è¿”ã™
         if (!IsInJudgementTimeRange()) { return; }
 
-        // Å‚”»’èŠ‚Âƒm[ƒc‚ª‰ß‚¬‚½‚Æ‚«”»’è‘—M
+        // æœ€é«˜åˆ¤å®šä¸”ã¤ãƒãƒ¼ãƒ„ãŒéããŸã¨ãåˆ¤å®šé€ä¿¡
         if (bestJudgement == Judgement.Perfect && noteData.Timing <= noteData.Timer.Time)
         {
             SendJudgementData();
@@ -81,20 +81,20 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
             return;
         }
 
-        // ”»’èŠÔ“à‚©‚Âè‡’l‚ğ’´‚¦‚Ä‚¢‚é‚Æ‚«
+        // åˆ¤å®šæ™‚é–“å†…ã‹ã¤é–¾å€¤ã‚’è¶…ãˆã¦ã„ã‚‹ã¨ã
         bool isOverThresholdRight = dynamicJudgement.Judge(noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.RightHand).Value);
         bool isOverThresholdLeft = dynamicJudgement.Judge(noteData.SpaceInput.GetSpaceInputVelocity(SpaceTrackingTag.LeftHand).Value);
         if (!isOverThresholdRight && !isOverThresholdLeft) { return; }
 
         var jae = noteData.JudgementWindow.GetJudgementAndError(noteData.Timer.Time, noteData.Timing);
 
-        // Å‚”»’è‚ÌXV
+        // æœ€é«˜åˆ¤å®šã®æ›´æ–°
         if ((int)bestJudgement < (int)jae.Judgement)
         {
             bestJudgement = jae.Judgement;
         }
 
-        // ’x‚ß‚¾‚Á‚½A‘¦”»’è
+        // é…ã‚ã ã£ãŸæ™‚ã€å³æ™‚åˆ¤å®š
         if (jae.Error > 0)
         {
             SendJudgementData();
@@ -103,11 +103,11 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
     }
 
     /// <summary>
-    /// ƒI[ƒg”»’è
+    /// ã‚ªãƒ¼ãƒˆåˆ¤å®š
     /// </summary>
     private void AutoJudgement()
     {
-        // Å‚”»’è‚Ì‚Æ‚«Šm’è
+        // æœ€é«˜åˆ¤å®šã®ã¨ãç¢ºå®š
         if (noteData.Timing > noteData.Timer.Time) { return; }
 
         bestJudgement = Judgement.Perfect;
@@ -116,7 +116,7 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
     }
 
     /// <summary>
-    /// ”»’è‚Ì‹L˜^
+    /// åˆ¤å®šã®è¨˜éŒ²
     /// </summary>
     private void SendJudgementData()
     {
@@ -128,7 +128,7 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
     }
 
     /// <summary>
-    /// ”»’è”ÍˆÍ“à‚©’²‚×‚é
+    /// åˆ¤å®šç¯„å›²å†…ã‹èª¿ã¹ã‚‹
     /// </summary>
     /// <returns></returns>
     private bool IsInJudgementTimeRange()
@@ -143,7 +143,7 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
     }
 
     /// <summary>
-    /// ƒm[ƒc‚ğ‹@”\’â~‚·‚é
+    /// ãƒãƒ¼ãƒ„ã‚’æ©Ÿèƒ½åœæ­¢ã™ã‚‹
     /// </summary>
     private void SetDisable()
     {
@@ -154,7 +154,7 @@ public class NoteObject_DynamicGroundDownward : NoteObject<NoteData_DynamicGroun
 }
 
 /// <summary>
-/// (‰Šú‰»‚É•K—v‚È•Ï”‚àŠÜ‚Ş)ƒ_ƒCƒiƒ~ƒbƒNƒm[ƒc(ƒAƒbƒv)‚Ìƒf[ƒ^
+/// (åˆæœŸåŒ–ã«å¿…è¦ãªå¤‰æ•°ã‚‚å«ã‚€)ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ãƒãƒ¼ãƒ„(ã‚¢ãƒƒãƒ—)ã®ãƒ‡ãƒ¼ã‚¿
 /// </summary>
 public class NoteData_DynamicGroundDownward : INoteData, IJudgableNoteData
 {

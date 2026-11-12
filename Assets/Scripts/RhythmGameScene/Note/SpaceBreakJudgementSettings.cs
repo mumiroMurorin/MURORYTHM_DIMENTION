@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "ScriptableObject/Note Judgement Settings/SpaceBreak", fileName = "SpaceBreakJudgementSettings")]
 public class SpaceBreakJudgementSettings : NoteJudgementSettings

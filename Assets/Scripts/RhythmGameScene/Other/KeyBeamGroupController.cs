@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -25,8 +25,8 @@ public class KeyBeamGroupController : MonoBehaviour
     {
         for (int i = 0; i < keyBeams.Length; i++)
         {
-            // UniRx‚ÌŽd—l‚©‰½‚©’m‚ç‚È‚¢‚ªintŒ^‚ªŽQÆ“n‚µ‚³‚ê‚Ä‚µ‚Ü‚¤‚Ì‚Å
-            // i‚ð’¼Ú‘ã“ü‚·‚é‚Ì‚Å‚Í‚È‚­index‚ð‰î‚·
+            // UniRxã®ä»•æ§˜ã‹ä½•ã‹çŸ¥ã‚‰ãªã„ãŒintåž‹ãŒå‚ç…§æ¸¡ã—ã•ã‚Œã¦ã—ã¾ã†ã®ã§
+            // iã‚’ç›´æŽ¥ä»£å…¥ã™ã‚‹ã®ã§ã¯ãªãindexã‚’ä»‹ã™
             int index = i;
 
             inputGetter?.GetSliderInputReactiveProperty(index)

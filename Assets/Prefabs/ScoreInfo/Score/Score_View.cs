@@ -1,11 +1,11 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class Score_View : MonoBehaviour
 {
-    [Header("ƒ‰ƒ“ƒN•Êƒ}ƒeƒŠƒAƒ‹")]
+    [Header("ãƒ©ãƒ³ã‚¯åˆ¥ãƒžãƒ†ãƒªã‚¢ãƒ«")]
     [SerializeField] ScoreRankTextMaterialPreset[] presetRank;
     [SerializeField] TextMeshPro textMeshPro;
     [SerializeField] DoScalePulseBuilder scalePulseBuilder;

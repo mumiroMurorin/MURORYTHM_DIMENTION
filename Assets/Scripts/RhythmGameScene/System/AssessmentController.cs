@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -6,7 +6,7 @@ using System;
 
 public class AssessmentController : MonoBehaviour, IAssessmentController
 {
-    [Header("I—¹‰‰o")]
+    [Header("çµ‚äº†æ¼”å‡º")]
     [SerializeField] List<SerializeInterface<IAssessmentPlayer>> players;
 
     IScoreGetter scoreGetter;
@@ -28,7 +28,7 @@ public class AssessmentController : MonoBehaviour, IAssessmentController
             }
         }
 
-        Debug.LogWarning($"ySystemzƒXƒe[ƒ^ƒX‚É‘Î‚·‚é•]‰¿ƒAƒjƒ[ƒVƒ‡ƒ“‚ª‚ ‚è‚Ü‚¹‚ñ: {scoreGetter.CurrentComboRank.Value}");
+        Debug.LogWarning($"ã€Systemã€‘ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã«å¯¾ã™ã‚‹è©•ä¾¡ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒã‚ã‚Šã¾ã›ã‚“: {scoreGetter.CurrentComboRank.Value}");
     }
 }
 

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +8,7 @@ using System.Threading;
 
 public class Assessment_FullCombo : MonoBehaviour, IAssessmentPlayer
 {
-    [Header("I—¹‰‰oƒ^ƒCƒ€ƒ‰ƒCƒ“")]
+    [Header("çµ‚äº†æ¼”å‡ºã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³")]
     [SerializeField] PlayableDirector endPlayable;
 
     readonly ComboRank rank = ComboRank.FullCombo;
@@ -26,7 +26,7 @@ public class Assessment_FullCombo : MonoBehaviour, IAssessmentPlayer
     }
 
     /// <summary>
-    /// ƒGƒ“ƒhƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
+    /// ã‚¨ãƒ³ãƒ‰ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿ
     /// </summary>
     /// <returns></returns>
     private async UniTaskVoid PlayAnimation(CancellationToken token, Action callback)
@@ -44,12 +44,12 @@ public class Assessment_FullCombo : MonoBehaviour, IAssessmentPlayer
         {
             endPlayable.Play();
 
-            // ƒ^ƒCƒ€ƒ‰ƒCƒ“‚ÌÄ¶‚ªI—¹‚·‚é‚©ƒLƒƒƒ“ƒZƒ‹‚³‚ê‚é‚Ü‚Å‘Ò‹@
+            // ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³ã®å†ç”ŸãŒçµ‚äº†ã™ã‚‹ã‹ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚Œã‚‹ã¾ã§å¾…æ©Ÿ
             await UniTask.WaitUntil(() => endPlayable.state != PlayState.Playing, cancellationToken: token);
         }
         catch (OperationCanceledException)
         {
-            Debug.Log("yTransitionzƒ^ƒCƒ€ƒ‰ƒCƒ“‚ÌÄ¶‚ªƒLƒƒƒ“ƒZƒ‹‚³‚ê‚Ü‚µ‚½");
+            Debug.Log("ã€Transitionã€‘ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³ã®å†ç”ŸãŒã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚Œã¾ã—ãŸ");
         }
 
         callback.Invoke();

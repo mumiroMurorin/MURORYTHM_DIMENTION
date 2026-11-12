@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using Windows.Kinect;
 
 public class Test : MonoBehaviour
@@ -22,19 +22,19 @@ public class Test : MonoBehaviour
         Debug.Log(IsTracking());
     }
 
-    //ƒgƒ‰ƒbƒLƒ“ƒO
+    //ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°
     private void Track()
     {
         isTracking = false;
-        // ‚»‚à‚»‚àQÆ‚ªæ‚ê‚Ä‚¢‚È‚¢‚Æ‚«‚Íƒ_ƒ
+        // ãã‚‚ãã‚‚å‚ç…§ãŒå–ã‚Œã¦ã„ãªã„ã¨ãã¯ãƒ€ãƒ¡
         if (_manager == null) return;
 
-        // ‚±‚±‚Ål‚Ìg‘Ìî•ñ‚Ì”z—ñ(‚Â‚Ü‚è‚Í•¡”l‚Ìg‘ÌÀ•W)‚ğó‚¯æ‚é
+        // ã“ã“ã§äººã®èº«ä½“æƒ…å ±ã®é…åˆ—(ã¤ã¾ã‚Šã¯è¤‡æ•°äººã®èº«ä½“åº§æ¨™)ã‚’å—ã‘å–ã‚‹
         bodies = _manager.GetData();
 
         if (bodies == null) return;
 
-        // •¡”l‚©‚çˆêlˆêl‚Ìg‘Ìî•ñ‚ğæ‚èo‚·
+        // è¤‡æ•°äººã‹ã‚‰ä¸€äººä¸€äººã®èº«ä½“æƒ…å ±ã‚’å–ã‚Šå‡ºã™
         int num = 0;
         foreach (var body in bodies)
         {
@@ -49,7 +49,7 @@ public class Test : MonoBehaviour
             isTracking = true;
             break;
 
-            // “Á’è‚Ì•”ˆÊ‚ÌÀ•W‚Ìæ‚èo‚µ•û
+            // ç‰¹å®šã®éƒ¨ä½ã®åº§æ¨™ã®å–ã‚Šå‡ºã—æ–¹
             //Debug.Log($"Right Hand Position : {body.Joints[JointType.HandRight].ToVector3()}");
         }
 
@@ -64,13 +64,13 @@ public class Test : MonoBehaviour
         Debug.Log(right_hand_pos + " , " + left_hand_pos);
     }
 
-    //¡ƒgƒ‰ƒbƒLƒ“ƒO‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·
+    //ä»Šãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã•ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã™
     public bool IsTracking()
     {
         return isTracking;
     }
 
-    //“ü—Í‚³‚ê‚Ä‚¢‚é’l‚ğ•Ô‚·
+    //å…¥åŠ›ã•ã‚Œã¦ã„ã‚‹å€¤ã‚’è¿”ã™
     public Vector3 ReturnHandPos(bool isRight)
     {
         if (isRight) { return right_hand_pos; }

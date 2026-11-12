@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -20,7 +20,7 @@ namespace TransitionerInResultScene
 
         void IPhaseTransitionerInResultScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"Result\"");
+            Debug.Log("„ÄêTransition„ÄëTransition to \"Result\"");
 
         }
 

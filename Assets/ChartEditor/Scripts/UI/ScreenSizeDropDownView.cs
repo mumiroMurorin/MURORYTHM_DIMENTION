@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -20,7 +20,7 @@ namespace ChartEditor
             dropdown.ClearOptions();
             dropdown.AddOptions(names);
 
-            // 2. ’l‚ª‘I‚Î‚ê‚½‚ÌƒR[ƒ‹ƒoƒbƒN‚ğ“o˜^
+            // 2. å€¤ãŒé¸ã°ã‚ŒãŸæ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’ç™»éŒ²
             dropdown.onValueChanged.AddListener(OnChangeDropDown);
         }
 

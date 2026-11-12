@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ namespace ChartEditor
             if (parent) { obj.transform.SetParent(parent); }
             if (!obj.TryGetComponent(out DeployableLineObject deployable)) 
             {
-                Debug.Log("yLanezDeployableLineObject‚ªƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+                Debug.Log("ã€Laneã€‘DeployableLineObjectãŒã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ã¾ã›ã‚“");
             }
 
             return deployable;

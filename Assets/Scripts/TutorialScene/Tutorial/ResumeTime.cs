@@ -1,9 +1,9 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 namespace Tutorial
 {
     /// <summary>
-    /// ƒQ[ƒ€‚ğˆê’â~‚©‚çÄ¶‚·‚é
+    /// ã‚²ãƒ¼ãƒ ã‚’ä¸€æ™‚åœæ­¢ã‹ã‚‰å†ç”Ÿã™ã‚‹
     /// </summary>
     [System.Serializable]
     public class ResumeTime : TutorialActionNode

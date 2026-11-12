@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -24,7 +24,7 @@ namespace ChartEditor
         public virtual void OnChangeDivisionNum(int divNum, int backNum) { }
 
         /// <summary>
-        /// ”z’uƒRƒ‰ƒCƒ_[‚É’S“–ƒAƒhƒŒƒX‚ğ“`‚¦‚é
+        /// é…ç½®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã«æ‹…å½“ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ä¼ãˆã‚‹
         /// </summary>
         /// <param name="address"></param>
         public void SetAddress(IReadOnlyAddressInChart address)
@@ -46,7 +46,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒŒƒCƒ„[ƒ`ƒFƒ“ƒW ¨ ’n‚Æ’ˆ‚ÌˆÊ’u”½“]
+        /// ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒã‚§ãƒ³ã‚¸ â†’ åœ°ã¨å®™ã®ä½ç½®åè»¢
         /// </summary>
         /// <param name="editNoteType"></param>
         public void OnChangeLayer(EditNoteType editNoteType)
@@ -56,7 +56,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ‚»‚ê‚¼‚ê‚Ì”z’uƒŒƒ“ƒW‚ğ’²®
+        /// ãã‚Œãã‚Œã®é…ç½®ãƒ¬ãƒ³ã‚¸ã‚’èª¿æ•´
         /// </summary>
         /// <param name="z"></param>
         public void OnChangeSize(float z)

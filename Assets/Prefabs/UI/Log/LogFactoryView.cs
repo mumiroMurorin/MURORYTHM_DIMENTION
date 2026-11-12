@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,7 +20,7 @@ public class LogFactoryView : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒƒO‚Ì¶¬
+    /// ãƒ­ã‚°ã®ç”Ÿæˆ
     /// </summary>
     /// <param name="logData"></param>
     public void Spawn(LogData logData)

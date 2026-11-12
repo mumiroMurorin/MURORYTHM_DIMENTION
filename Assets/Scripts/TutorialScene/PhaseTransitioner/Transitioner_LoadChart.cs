@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -22,9 +22,9 @@ namespace TransitionerInTutorialScene
 
         void IPhaseTransitionerInTutorialScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"LoadChart\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"LoadChart\"");
 
-            // ƒ`ƒ…[ƒgƒŠƒAƒ‹I—¹‚ÅŸ‚ÌƒV[ƒ“‚Ö
+            // ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«çµ‚äº†ã§æ¬¡ã®ã‚·ãƒ¼ãƒ³ã¸
             tutorialController.OnFinishTutorialListener += () => { phaseTransitionable.Value.TransitionPhase(PhaseStatusInTutorialScene.FadeOut); };
             
             chartGenerator.Value.Generate(() => 
@@ -36,7 +36,7 @@ namespace TransitionerInTutorialScene
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase()
         {

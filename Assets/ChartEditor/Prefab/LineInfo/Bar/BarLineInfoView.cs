@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -8,13 +8,13 @@ namespace ChartEditor
 {
     public class BarLineInfoView : MonoBehaviour
     {
-        [Header("¬ß”Ô†")]
+        [Header("å°ç¯€ç•ªå·")]
         [SerializeField] TextMeshPro numberTmp;
-        [Header("”q")]
+        [Header("æ‹å­")]
         [SerializeField] GameObject beatObject;
         [SerializeField] TextMeshPro beatCountTmp;
         [SerializeField] TextMeshPro beatUnitTmp;
-        [Header("•ªŠ„”")]
+        [Header("åˆ†å‰²æ•°")]
         [SerializeField] GameObject divisionObject;
         [SerializeField] TextMeshPro divisionNumTmp;
 
@@ -22,7 +22,7 @@ namespace ChartEditor
         bool isChangeBeatUnit;
 
         /// <summary>
-        /// ¬ß”Ô†‚Ìİ’è
+        /// å°ç¯€ç•ªå·ã®è¨­å®š
         /// </summary>
         public void SetBarNumber(int number)
         {
@@ -51,14 +51,14 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// •ªŠ„”‚Ìİ’è
+        /// åˆ†å‰²æ•°ã®è¨­å®š
         /// </summary>
         public void SetDivisionNum(int divNum)
         {
             if (divisionNumTmp == null) { return; }
 
             if (divNum == -1) { divisionNumTmp.text = ""; }
-            else { divisionNumTmp.text = divNum.ToString() + "•ªŠ„"; }
+            else { divisionNumTmp.text = divNum.ToString() + "åˆ†å‰²"; }
 
             divisionObject.SetActive(divNum != -1);
         }

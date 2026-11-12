@@ -1,4 +1,4 @@
-#if UNITY_EDITOR || UNITY_STANDALONE_WIN
+﻿#if UNITY_EDITOR || UNITY_STANDALONE_WIN
 using System;
 using System.IO;
 using System.Windows.Forms;

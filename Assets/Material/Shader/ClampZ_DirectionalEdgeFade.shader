@@ -1,4 +1,4 @@
-Shader "Custom/ClampZ_DirectionalEdgeFade"
+ï»¿Shader "Custom/ClampZ_DirectionalEdgeFade"
 {
     Properties
     {
@@ -64,7 +64,7 @@ Shader "Custom/ClampZ_DirectionalEdgeFade"
                     float2 uv : TEXCOORD0;
                     float2 uvRaw : TEXCOORD1;
                     float4 vertex : SV_POSITION;
-                    float3 worldPos : TEXCOORD2; // Z”»’è—p‚É’Ç‰Á
+                    float3 worldPos : TEXCOORD2; // Zåˆ¤å®šç”¨ã«è¿½åŠ 
                 };
 
                 v2f vert(appdata v)
@@ -73,18 +73,18 @@ Shader "Custom/ClampZ_DirectionalEdgeFade"
                     o.vertex = UnityObjectToClipPos(v.vertex);
                     o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                     o.uvRaw = v.uv;
-                    // ƒ‚ƒfƒ‹À•W‚ğƒ[ƒ‹ƒhÀ•W‚É•ÏŠ·
+                    // ãƒ¢ãƒ‡ãƒ«åº§æ¨™ã‚’ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã«å¤‰æ›
                     o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
                     return o;
                 }
 
                 fixed4 frag(v2f i) : SV_Target
                 {
-                    // --- 1. Z²‚É‚æ‚éF‚ÌŒˆ’è (ClampZƒƒWƒbƒN) ---
+                    // --- 1. Zè»¸ã«ã‚ˆã‚‹è‰²ã®æ±ºå®š (ClampZãƒ­ã‚¸ãƒƒã‚¯) ---
                     float inRange = step(_MinZ, i.worldPos.z) * step(i.worldPos.z, _MaxZ);
                     fixed4 tintColor = lerp(_SecondaryColor, _Color, inRange);
 
-                    // --- 2. ’[‚ÌƒtƒF[ƒhŒvZ (EdgeFadeƒƒWƒbƒN) ---
+                    // --- 2. ç«¯ã®ãƒ•ã‚§ãƒ¼ãƒ‰è¨ˆç®— (EdgeFadeãƒ­ã‚¸ãƒƒã‚¯) ---
                     float2 uvRaw = i.uvRaw;
                     float fade = 0;
                     float fadeRange = max(0.0001, _FadeEnd - _FadeStart);
@@ -98,10 +98,10 @@ Shader "Custom/ClampZ_DirectionalEdgeFade"
                     if (_FadeRight > 0)
                         fade = max(fade, saturate((1.0 - uvRaw.x - _FadeStart) / fadeRange));
 
-                    // --- 3. ÅI“I‚ÈF‚Ì‡¬ ---
+                    // --- 3. æœ€çµ‚çš„ãªè‰²ã®åˆæˆ ---
                     fixed4 col = tex2D(_MainTex, i.uv) * tintColor;
 
-                    // ƒtƒF[ƒh’l‚ğƒAƒ‹ƒtƒ@‚É“K—p (1.0 - fade ‚Å“à‘¤‚ğ•s“§–¾‚É‚·‚é)
+                    // ãƒ•ã‚§ãƒ¼ãƒ‰å€¤ã‚’ã‚¢ãƒ«ãƒ•ã‚¡ã«é©ç”¨ (1.0 - fade ã§å†…å´ã‚’ä¸é€æ˜ã«ã™ã‚‹)
                     col.a *= (1.0 - fade);
 
                     return col;

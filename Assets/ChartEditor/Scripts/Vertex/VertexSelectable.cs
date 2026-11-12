@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ namespace ChartEditor
     public class VertexSelectable : MonoBehaviour, ISelectableVertexObject
     {
         [SerializeField] VertexObject vertexObject;
-        [Tooltip("‘I‘ðŽž‚ÌƒAƒEƒgƒ‰ƒCƒ“F")]
+        [Tooltip("é¸æŠžæ™‚ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è‰²")]
         [SerializeField] private ColorSetting outlineColorOnSelect;
 
         public VertexObject VertexObject => vertexObject;

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -12,9 +12,9 @@ namespace ChartEditor
     public class VertexMovable : MonoBehaviour, IPointMovableObject
     {
         [SerializeField] VertexObject vertexObject;
-        [Tooltip("ˆÚ“®‚ÌƒAƒEƒgƒ‰ƒCƒ“F")]
+        [Tooltip("ç§»å‹•æ™‚ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è‰²")]
         [SerializeField] ColorSetting outlineColorOnMove;
-        [Tooltip("ˆÚ“®•‚‚­‚‚³")]
+        [Tooltip("ç§»å‹•æ™‚æµ®ãé«˜ã•")]
         [SerializeField] float addHeightOnMove = 1f;
 
         VertexObject IPointMovableObject.Vertex => vertexObject;
@@ -29,7 +29,7 @@ namespace ChartEditor
 
         private async UniTask Bind(CancellationToken token)
         {
-            // ƒm[ƒgƒf[ƒ^‚ª‘¶İ‚·‚é‚Ü‚Å‘Ò‚Â
+            // ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ã¾ã§å¾…ã¤
             await UniTask.WaitUntil(() => vertexObject.VertexData != null, cancellationToken: token);
 
             vertexObject.VertexData.Position
@@ -52,7 +52,7 @@ namespace ChartEditor
             vertexObject.OutlineColors.Add(outlineColorOnMove);
             vertexObject.SetCollidersActive(false);
 
-            // ’Ç‰Á‚·‚éƒxƒNƒgƒ‹‚ğ•Û‘¶
+            // è¿½åŠ ã™ã‚‹ãƒ™ã‚¯ãƒˆãƒ«ã‚’ä¿å­˜
             addPos = Vector3.back * addHeightOnMove;
             this.transform.position += addPos;
         }
@@ -67,7 +67,7 @@ namespace ChartEditor
             vertexObject.OutlineColors.Remove(outlineColorOnMove);
             vertexObject.SetCollidersActive(true);
 
-            // ’Ç‰Á‚µ‚½ƒxƒNƒgƒ‹•ªŒ³‚É–ß‚·
+            // è¿½åŠ ã—ãŸãƒ™ã‚¯ãƒˆãƒ«åˆ†å…ƒã«æˆ»ã™
             this.transform.position -= addPos;
             addPos = Vector3.zero;
         }

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -56,7 +56,7 @@ namespace ChartEditor
         {
             if(barData == null) { return; }
 
-            // ¬ßƒf[ƒ^“à‚Ì•ÏX‚É‘Î‚·‚éw“Ç
+            // å°ç¯€ãƒ‡ãƒ¼ã‚¿å†…ã®å¤‰æ›´ã«å¯¾ã™ã‚‹è³¼èª­
             barData.SubDivisionDatas.ObserveAdd()
                 .Subscribe(sub => {
                     BindForSubDivisionData(sub.Value, barData);
@@ -103,7 +103,7 @@ namespace ChartEditor
 
             if (!barDataToSeconds.Remove(barData)) 
             {
-                Debug.LogWarning("ySystemzŠY“–‚·‚é¬ßƒf[ƒ^‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½");
+                Debug.LogWarning("ã€Systemã€‘è©²å½“ã™ã‚‹å°ç¯€ãƒ‡ãƒ¼ã‚¿ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ");
                 return;
             }
             barDataToSeconds.Add(barData, seconds);
@@ -112,7 +112,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// •ˆ–ÊŠÔ‚ÌXV
+        /// è­œé¢æ™‚é–“ã®æ›´æ–°
         /// </summary>
         private void UpdateChartSeconds()
         {
@@ -126,7 +126,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ˆê¬ß‚ ‚½‚è‚ÌŠÔ(•b)‚ğ•Ô‚·
+        /// ä¸€å°ç¯€ã‚ãŸã‚Šã®æ™‚é–“(ç§’)ã‚’è¿”ã™
         /// </summary>
         /// <param name="barData"></param>
         /// <returns></returns>
@@ -145,7 +145,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ˆê•ªß‚ ‚½‚è‚ÌŠÔ(•b)‚ğ•Ô‚·
+        /// ä¸€åˆ†ç¯€ã‚ãŸã‚Šã®æ™‚é–“(ç§’)ã‚’è¿”ã™
         /// </summary>
         /// <param name="sub"></param>
         /// <param name="beatCount"></param>

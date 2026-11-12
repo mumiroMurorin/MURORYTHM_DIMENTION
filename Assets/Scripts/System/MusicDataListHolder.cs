@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -7,7 +7,7 @@ using System.Linq;
 
 public class MusicDataListHolder : IMusicDataListGetter, IMusicDataListSetter
 {
-    // Šy‹ÈƒŠƒXƒg
+    // æ¥½æ›²ãƒªã‚¹ãƒˆ
     List<MusicData> musicDataListOrigin = new List<MusicData>();
     ReactiveCollection<MusicData> musicDataListSorted = new ReactiveCollection<MusicData>();
     IReadOnlyReactiveCollection<MusicData> IMusicDataListGetter.MusicDatasSorted => musicDataListSorted;
@@ -18,14 +18,14 @@ public class MusicDataListHolder : IMusicDataListGetter, IMusicDataListSetter
         musicDataListOrigin.Clear();
         musicDataListSorted.Clear();
 
-        // ƒfƒB[ƒvƒRƒs[
+        // ãƒ‡ã‚£ãƒ¼ãƒ—ã‚³ãƒ”ãƒ¼
         foreach (var data in musicDatas)
         {
             musicDataListOrigin.Add(data);
             musicDataListSorted.Add(data);
         }
 
-        // ‘I‘ğŠy‹È‚ÌXV
+        // é¸æŠæ¥½æ›²ã®æ›´æ–°
         currentMusicData.Value = musicDataListSorted[musicIndexSelected.Value];
     }
 
@@ -37,7 +37,7 @@ public class MusicDataListHolder : IMusicDataListGetter, IMusicDataListSetter
         return musicDataListSorted[index];
     }
 
-    // ‘I‘ğŠy‹ÈƒCƒ“ƒfƒbƒNƒX
+    // é¸æŠæ¥½æ›²ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
     ReactiveProperty<int> musicIndexSelected = new ReactiveProperty<int>(0);
     IReadOnlyReactiveProperty<int> IMusicDataListGetter.CurrentMusicIndex => musicIndexSelected;
     void IMusicDataListSetter.SetMusicIndex(int value)
@@ -48,17 +48,17 @@ public class MusicDataListHolder : IMusicDataListGetter, IMusicDataListSetter
         currentMusicData.Value = musicDataListSorted[musicIndexSelected.Value];
     }
 
-    // ‘I‘ğŠy‹È
+    // é¸æŠæ¥½æ›²
     ReactiveProperty<MusicData> currentMusicData = new ReactiveProperty<MusicData>();
     IReadOnlyReactiveProperty<MusicData> IMusicDataListGetter.CurrentMusicData => currentMusicData;
 
 
-    // ‘I‘ğ“ïˆÕ“x
+    // é¸æŠé›£æ˜“åº¦
     ReactiveProperty<Difficulty> difficulty = new ReactiveProperty<Difficulty>(Difficulty.Easy);
     IReadOnlyReactiveProperty<Difficulty> IMusicDataListGetter.Difficulty { get { return difficulty; } }
     void IMusicDataListSetter.SetDifficulty(Difficulty difficulty)
     {
-        // —ñ‹“Œ^‚Ì’l‚ğæ“¾‚µ‚Ä int ”z—ñ‚É•ÏŠ·
+        // åˆ—æŒ™å‹ã®å€¤ã‚’å–å¾—ã—ã¦ int é…åˆ—ã«å¤‰æ›
         int[] values = Enum.GetValues(typeof(Difficulty)).Cast<int>().ToArray();
 
         this.difficulty.Value = (Difficulty)Mathf.Clamp((int)difficulty, values.Min(), values.Max());

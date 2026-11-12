@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using UnityFx.Outline;
@@ -12,7 +12,7 @@ namespace ChartEditor
     public class VertexObject : MonoBehaviour
     {
         [Header("Basic Settings")]
-        [Tooltip("–¾–ÅŠÔ")]
+        [Tooltip("æ˜æ»…æ™‚é–“")]
         [SerializeField] float blinkDuration = 1f;
         [SerializeField] Renderer noteRenderer;
         [SerializeField] GameObject[] colliderObjects;
@@ -49,12 +49,12 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // ƒAƒEƒgƒ‰ƒCƒ“F‚Ì•ÏX
+            // ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è‰²ã®å¤‰æ›´
             OutlineColors?.ObserveAdd()
                 .Subscribe(color => SetOutlineColor(color.Value))
                 .AddTo(this.gameObject);
 
-            // IndexUI‚ÌXV
+            // IndexUIã®æ›´æ–°
             VertexData?.VertexIndexRP
                 .Subscribe(value => { indexTmp.text = value.ToString(); })
                 .AddTo(this.gameObject);
@@ -68,7 +68,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ‘S‚Ä‚ÌƒRƒ‰ƒCƒ_[‚Ì—LŒø^–³Œø‚ğØ‚è‘Ö‚¦‚é
+        /// å…¨ã¦ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®æœ‰åŠ¹ï¼ç„¡åŠ¹ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹
         /// </summary>
         public void SetCollidersActive(bool isActive)
         {
@@ -79,13 +79,13 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒAƒEƒgƒ‰ƒCƒ“ƒJƒ‰[‚Ìİ’è—pƒƒ\ƒbƒh
+        /// ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ã‚«ãƒ©ãƒ¼ã®è¨­å®šç”¨ãƒ¡ã‚½ãƒƒãƒ‰
         /// </summary>
         private void SetOutlineColor(ColorSetting outlineColor)
         {
             if (outline == null) { return; }
 
-            // ‚¢‚Á‚½‚ñ“_–Å‚ğ~‚ß‚é
+            // ã„ã£ãŸã‚“ç‚¹æ»…ã‚’æ­¢ã‚ã‚‹
             if (cts != null)
             {
                 cts.Cancel();
@@ -96,7 +96,7 @@ namespace ChartEditor
             outline.OutlineColor = outlineColor.Color;
             SetOutlineActive(true);
 
-            // “_–ÅŠJn
+            // ç‚¹æ»…é–‹å§‹
             if (outlineColor.IsBlinking)
             {
                 cts = new CancellationTokenSource();
@@ -105,7 +105,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒAƒEƒgƒ‰ƒCƒ“‚ÌON/OFF‚ğØ‚è‘Ö‚¦‚é
+        /// ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ã®ON/OFFã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹
         /// </summary>
         private void SetOutlineActive(bool isActive)
         {
@@ -113,7 +113,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒAƒEƒgƒ‰ƒCƒ“‚Ì–¾–Å‚ğ”ñ“¯Šúƒ‹[ƒv‚Ås‚¤
+        /// ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ã®æ˜æ»…ã‚’éåŒæœŸãƒ«ãƒ¼ãƒ—ã§è¡Œã†
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
@@ -136,12 +136,12 @@ namespace ChartEditor
             }
             finally
             {
-                //outline.OutlineColor = baseColor; // ÅŒã‚ÉŒ³‚ÌF‚É–ß‚·
+                //outline.OutlineColor = baseColor; // æœ€å¾Œã«å…ƒã®è‰²ã«æˆ»ã™
             }
         }
 
         /// <summary>
-        /// w’èŠÔ‚©‚¯‚ÄF‚ğ•âŠÔ
+        /// æŒ‡å®šæ™‚é–“ã‹ã‘ã¦è‰²ã‚’è£œé–“
         /// </summary>
         private async UniTask Fade(Color from, Color to, float duration, CancellationToken token)
         {

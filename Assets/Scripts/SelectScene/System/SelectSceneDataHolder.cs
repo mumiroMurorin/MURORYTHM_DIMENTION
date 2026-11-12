@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -7,7 +7,7 @@ using UniRx;
 
 public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSetter
 {
-    // �I�v�V�������X�g
+    // オプションリスト
     List<OptionType> optionList = new List<OptionType>() { 
          OptionType.NoteSpeed,
          OptionType.Offset,
@@ -36,7 +36,7 @@ public class SelectSceneDataHolder : ISelectSceneDataGetter, ISelectSceneDataSet
     }
 
 
-    // �I���I�v�V�����C���f�b�N�X
+    // 選択オプションインデックス
     ReactiveProperty<int> optionIndexSelected = new ReactiveProperty<int>(0);
     IReadOnlyReactiveProperty<int> ISelectSceneDataGetter.CurrentOptionIndex => optionIndexSelected;
     void ISelectSceneDataSetter.SetOptionIndex(int value)

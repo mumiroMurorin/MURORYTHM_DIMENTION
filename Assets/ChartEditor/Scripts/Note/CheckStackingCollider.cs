@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityFx.Outline;
@@ -12,7 +12,7 @@ namespace ChartEditor
     {
         [SerializeField] List<DeploymentNoteType> warninigNoteTypes;
 
-        [Tooltip("ŒxƒAƒEƒgƒ‰ƒCƒ“F")]
+        [Tooltip("è­¦å‘Šã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è‰²")]
         [SerializeField] private ColorSetting outlineColorOnStacking;
 
         [SerializeField] NoteObject noteObject;
@@ -42,12 +42,12 @@ namespace ChartEditor
 
         private void OnTriggerEnter(Collider other)
         {
-            // ”í‚è”»’è‚¿‚Å‚È‚¯‚ê‚Î•Ô‚·
+            // è¢«ã‚Šåˆ¤å®šæŒã¡ã§ãªã‘ã‚Œã°è¿”ã™
             if(!other.transform.parent.TryGetComponent(out IJudgeStackingCollider stack)) { return; }
             if (warninigNoteTypes == null) { return; }
 
 
-            // ”í‚Á‚Ä‚¢‚éƒm[ƒg‚ÉŒx‚ğo‚·‚©”»’è
+            // è¢«ã£ã¦ã„ã‚‹ãƒãƒ¼ãƒˆã«è­¦å‘Šã‚’å‡ºã™ã‹åˆ¤å®š
             foreach (var type in warninigNoteTypes)
             {
                 if(stack.NoteType == type) 
@@ -60,11 +60,11 @@ namespace ChartEditor
         
         private void OnTriggerExit(Collider other)
         {
-            // ”í‚è”»’è‚¿‚Å‚È‚¯‚ê‚Î•Ô‚·
+            // è¢«ã‚Šåˆ¤å®šæŒã¡ã§ãªã‘ã‚Œã°è¿”ã™
             if (!other.transform.parent.TryGetComponent(out IJudgeStackingCollider stack)) { return; }
             if (warninigNoteTypes == null) { return; }
 
-            // ”í‚Á‚Ä‚¢‚éƒm[ƒg‚ÉŒx‚ğo‚·‚©”»’è
+            // è¢«ã£ã¦ã„ã‚‹ãƒãƒ¼ãƒˆã«è­¦å‘Šã‚’å‡ºã™ã‹åˆ¤å®š
             foreach (var type in warninigNoteTypes)
             {
                 if (stack.NoteType == type)
@@ -77,7 +77,7 @@ namespace ChartEditor
 
         private void OnDisable()
         {
-            // d‚È‚Á‚½‘Sƒm[ƒc‚ÉDisable’Ê’m‚ğs‚¤
+            // é‡ãªã£ãŸå…¨ãƒãƒ¼ãƒ„ã«Disableé€šçŸ¥ã‚’è¡Œã†
             foreach(var stack in stackList)
             {
                 stack.NotifyDisable(this);

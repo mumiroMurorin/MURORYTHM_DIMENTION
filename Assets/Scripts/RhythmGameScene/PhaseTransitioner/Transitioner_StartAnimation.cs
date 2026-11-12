@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -11,7 +11,7 @@ namespace TransitionerInRhythmGameScene
     public class Transitioner_StartAnimation : IPhaseTransitionerInRhythmGameScene
     {
         [SerializeField] SerializeInterface<IPhaseTransitionableInRhythmGameScene> phaseTransitionable;
-        [Header("ƒXƒ^[ƒg‰‰oƒ^ƒCƒ€ƒ‰ƒCƒ“")]
+        [Header("ã‚¹ã‚¿ãƒ¼ãƒˆæ¼”å‡ºã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³")]
         [SerializeField] SerializeInterface<ITimelinePlayer> timelinePlayer;
 
         readonly PhaseStatusInRhythmGame status = PhaseStatusInRhythmGame.StartAnimation;
@@ -23,13 +23,13 @@ namespace TransitionerInRhythmGameScene
 
         void IPhaseTransitionerInRhythmGameScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"StartAnimation\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"StartAnimation\"");
 
             timelinePlayer?.Value.PlayAnimation(TransitionNextPhase);
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase()
         {

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -29,13 +29,13 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // Šy‹È‚ÌÄ¶
+            // æ¥½æ›²ã®å†ç”Ÿ
             chartEditorDataGetter?.PlayMode
                 .Where(mode => mode == PlayMode.Play)
                 .Subscribe(_ => PlayMusic())
                 .AddTo(this.gameObject);
 
-            // Šy‹È‚Ì’â~
+            // æ¥½æ›²ã®åœæ­¢
             chartEditorDataGetter?.PlayMode
                 .Where(mode => mode == PlayMode.Stop)
                 .Subscribe(_ => StopMusic())
@@ -43,11 +43,11 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// Šy‹È‚ÌÄ¶
+        /// æ¥½æ›²ã®å†ç”Ÿ
         /// </summary>
         private void PlayMusic()
         {
-            // Šy‹È‚ÌÄ¶
+            // æ¥½æ›²ã®å†ç”Ÿ
             AudioClip clip = chartEditorDataGetter.Music.Value;
             if(clip != null)
             {
@@ -56,7 +56,7 @@ namespace ChartEditor
                 SoundManager.Instance.PlayBGM(clip, loopFlg: false, isFadeout: false, progress: progress);
             }
 
-            // •ˆ–ÊÄ¶
+            // è­œé¢å†ç”Ÿ
             if (cts != null)
             {
                 cts.Cancel();
@@ -79,13 +79,13 @@ namespace ChartEditor
                 if(currentProgress == 1f) { break; }
                 chartEditorDataSetter.SetPlaybackProgress(currentProgress + addProgress);
 
-                // 1ƒtƒŒ[ƒ€‘Ò‚Â
+                // 1ãƒ•ãƒ¬ãƒ¼ãƒ å¾…ã¤
                 await UniTask.Yield(token);
             }
         }
 
         /// <summary>
-        /// Šy‹È‚Ì’â~
+        /// æ¥½æ›²ã®åœæ­¢
         /// </summary>
         private void StopMusic()
         {

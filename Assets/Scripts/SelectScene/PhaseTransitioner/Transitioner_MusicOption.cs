@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -18,7 +18,7 @@ namespace TransitionerInSelectScene
 
         void IPhaseTransitionerInSelectScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"MusicOption\"");
+            Debug.Log("„ÄêTransition„ÄëTransition to \"MusicOption\"");
 
         }
     }

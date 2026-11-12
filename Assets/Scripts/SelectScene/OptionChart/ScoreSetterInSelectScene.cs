@@ -1,11 +1,11 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
 public class ScoreSetterInSelectScene : MonoBehaviour
 {
-    [Header("–‘O‚É¶¬‚³‚ê‚éƒm[ƒc”")]
+    [Header("äº‹å‰ã«ç”Ÿæˆã•ã‚Œã‚‹ãƒãƒ¼ãƒ„æ•°")]
     [SerializeField] int perfectNum = 1219;
     [SerializeField] int greatNum = 10;
     [SerializeField] int maxCombo = 1234;

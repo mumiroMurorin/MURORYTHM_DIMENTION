@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
@@ -15,7 +15,7 @@ namespace UIInSelectScene
         bool isTopicSwapRequested;
 
         /// <summary>
-        /// ‘I‘ğŠy‹È•ÏX
+        /// é¸æŠæ¥½æ›²å¤‰æ›´
         /// </summary>
         /// <param name="deltaValue"></param>
         /// <returns></returns>
@@ -59,7 +59,7 @@ namespace UIInSelectScene
         }
 
         /// <summary>
-        /// ƒgƒsƒbƒN‚ÉŠy‹Èƒf[ƒ^‚ğƒZƒbƒg‚·‚é
+        /// ãƒˆãƒ”ãƒƒã‚¯ã«æ¥½æ›²ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
         /// </summary>
         /// <param name="index"></param>
         /// <param name="musicDatas"></param>
@@ -83,7 +83,7 @@ namespace UIInSelectScene
         }
 
         /// <summary>
-        /// “ïˆÕ“x•ÏX
+        /// é›£æ˜“åº¦å¤‰æ›´
         /// </summary>
         /// <param name="difficulty"></param>
         public void OnChangeDifficulty(Difficulty difficulty)
@@ -95,7 +95,7 @@ namespace UIInSelectScene
         }
         
         /// <summary>
-        /// Šy‹È‘I‘ğ
+        /// æ¥½æ›²é¸æŠæ™‚
         /// </summary>
         public void OnSelectMusic()
         {
@@ -103,7 +103,7 @@ namespace UIInSelectScene
         }
 
         /// <summary>
-        /// Šy‹È‘I‘ğ‰æ–Ê‚É–ß‚é
+        /// æ¥½æ›²é¸æŠç”»é¢ã«æˆ»ã‚‹
         /// </summary>
         public void OnBackSelectPhase()
         {
@@ -111,7 +111,7 @@ namespace UIInSelectScene
         }
 
         /// <summary>
-        /// ƒIƒvƒVƒ‡ƒ“‘I‘ğ
+        /// ã‚ªãƒ—ã‚·ãƒ§ãƒ³é¸æŠæ™‚
         /// </summary>
         public void OnSelectOption()
         {
@@ -119,7 +119,7 @@ namespace UIInSelectScene
         }
 
         /// <summary>
-        /// Šy‹ÈŠm”F‰æ–Ê‚É–ß‚é
+        /// æ¥½æ›²ç¢ºèªç”»é¢ã«æˆ»ã‚‹
         /// </summary>
         public void OnBackDetailSelectPhase()
         {
@@ -127,7 +127,7 @@ namespace UIInSelectScene
         }
 
         /// <summary>
-        /// ƒAƒjƒ[ƒVƒ‡ƒ“‘¤‚©‚çŒÄ‚Î‚ê‚é
+        /// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å´ã‹ã‚‰å‘¼ã°ã‚Œã‚‹
         /// </summary>
         public void OnRequestTopicSwap()
         {
@@ -135,7 +135,7 @@ namespace UIInSelectScene
         }
 
         /// <summary>
-        /// ƒAƒjƒ[ƒVƒ‡ƒ“‘¤‚©‚çŒÄ‚Î‚ê‚é
+        /// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å´ã‹ã‚‰å‘¼ã°ã‚Œã‚‹
         /// </summary>
         public void OnFinishMoveAnimation()
         {

@@ -1,4 +1,4 @@
-Shader "Notes/SpaceHold/RangeLine"
+﻿Shader "Notes/SpaceHold/RangeLine"
 {
     Properties
     {

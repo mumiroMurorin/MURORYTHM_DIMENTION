@@ -1,4 +1,4 @@
-Shader "Hidden/SpaceHold/ScreenSpaceOutlineMask"
+﻿Shader "Hidden/SpaceHold/ScreenSpaceOutlineMask"
 {
     Properties
     {

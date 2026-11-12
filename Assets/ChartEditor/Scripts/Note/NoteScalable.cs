@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -12,9 +12,9 @@ namespace ChartEditor
     public class NoteScalable : MonoBehaviour, IScalableObject
     {
         [SerializeField] NoteObject noteObject;
-        [Tooltip("”z’u‚ÌŒ³‚Æ‚È‚é GameObject")]
+        [Tooltip("é…ç½®æ™‚ã®å…ƒã¨ãªã‚‹ GameObject")]
         [SerializeField] GameObject origin;
-        [Tooltip("‘I‘ğ‚ÌƒAƒEƒgƒ‰ƒCƒ“F")]
+        [Tooltip("é¸æŠæ™‚ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è‰²")]
         [SerializeField] private ColorSetting outlineColorOnScaling;
 
         CancellationTokenSource cts = new CancellationTokenSource();
@@ -28,13 +28,13 @@ namespace ChartEditor
 
         private async UniTask Bind(CancellationToken token)
         {
-            // ƒm[ƒgƒf[ƒ^‚ª‘¶İ‚·‚é‚Ü‚Å‘Ò‚Â
+            // ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ã¾ã§å¾…ã¤
             await UniTask.WaitUntil(() => noteObject.NoteData != null, cancellationToken: token);
 
-            // ObserveCountChanged()‚Í‰Šú‰»‚µ‚Ä‚­‚ê‚È‚¢‚Ì‚ÅAÅ‰‚É‘å‚«‚³‚ğ•Ï‚¦‚é
+            // ObserveCountChanged()ã¯åˆæœŸåŒ–ã—ã¦ãã‚Œãªã„ã®ã§ã€æœ€åˆã«å¤§ãã•ã‚’å¤‰ãˆã‚‹
             OnChangeScale(noteObject.NoteData.Address.Range.Count);
 
-            // ‘å‚«‚³‚Ì•ÏX’Ê’m‚É‘Î‚µ‚ÄƒXƒP[ƒ‹XV
+            // å¤§ãã•ã®å¤‰æ›´é€šçŸ¥ã«å¯¾ã—ã¦ã‚¹ã‚±ãƒ¼ãƒ«æ›´æ–°
             noteObject.NoteData.Address.RangeRP.ObserveCountChanged()
                 .Subscribe(OnChangeScale)
                 .AddTo(this.gameObject);
@@ -59,7 +59,7 @@ namespace ChartEditor
 
         public void OnChangeScale(int size)
         {
-            // ‘å‚«‚³‚ÌXV
+            // å¤§ãã•ã®æ›´æ–°
             Transform tr = origin.transform;
             tr.localScale = new Vector3(size, tr.localScale.y, tr.localScale.z);
             tr.localPosition = new Vector3((size - 1) / 2f, tr.localPosition.y, tr.localPosition.z);

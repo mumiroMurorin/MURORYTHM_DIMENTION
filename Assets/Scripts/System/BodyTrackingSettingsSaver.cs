@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static BodyTrackingSettingsConverter;
@@ -16,7 +16,7 @@ public class BodyTrackingSettingsSaver : MonoBehaviour
     }
 
     /// <summary>
-    /// BodyTrackingSettings‚Ì•Û‘¶
+    /// BodyTrackingSettingsã®ä¿å­˜
     /// </summary>
     public void SaveBodyTrackingSettings()
     {
@@ -24,9 +24,9 @@ public class BodyTrackingSettingsSaver : MonoBehaviour
 
         if (!Save(optionGetter))
         {
-            Debug.LogWarning("ySystemzBodyTrackingSettings‚Ì•Û‘¶‚É¸”s‚µ‚Ü‚µ‚½");
+            Debug.LogWarning("ã€Systemã€‘BodyTrackingSettingsã®ä¿å­˜ã«å¤±æ•—ã—ã¾ã—ãŸ");
         }
 
-        Debug.Log("ySystemzBodyTrackingSettings‚Ì•Û‘¶‚É¬Œ÷");
+        Debug.Log("ã€Systemã€‘BodyTrackingSettingsã®ä¿å­˜ã«æˆåŠŸ");
     }
 }

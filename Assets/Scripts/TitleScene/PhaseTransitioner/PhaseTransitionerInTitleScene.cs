@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -35,7 +35,7 @@ namespace TransitionerInTitleScene
         }
 
         /// <summary>
-        /// ƒtƒF[ƒY‘JˆÚ
+        /// ãƒ•ã‚§ãƒ¼ã‚ºé·ç§»
         /// </summary>
         private bool Transition(PhaseStatusInTitleScene phase)
         {
@@ -48,7 +48,7 @@ namespace TransitionerInTitleScene
                 }
             }
 
-            Debug.LogWarning($"yTransitionz‘JˆÚƒXƒe[ƒ^ƒX{phase}‚É‘Î‚·‚éTransitioner‚ªƒZƒbƒg‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.LogWarning($"ã€Transitionã€‘é·ç§»ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹{phase}ã«å¯¾ã™ã‚‹TransitionerãŒã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã¾ã›ã‚“");
             return false;
         }
 
@@ -67,7 +67,7 @@ namespace TransitionerInTitleScene
     }
 
     /// <summary>
-    /// ƒtƒF[ƒY‘JˆÚ‚ğs‚¤‚±‚Æ‚ªo—ˆ‚é
+    /// ãƒ•ã‚§ãƒ¼ã‚ºé·ç§»ã‚’è¡Œã†ã“ã¨ãŒå‡ºæ¥ã‚‹
     /// </summary>
     public interface IPhaseTransitionableInTitleScene
     {
@@ -82,14 +82,14 @@ namespace TransitionerInTitleScene
     }
 
     /// <summary>
-    /// ƒtƒF[ƒY‘JˆÚ‚ÌÛ‚Ìˆ—‚ğs‚¤
+    /// ãƒ•ã‚§ãƒ¼ã‚ºé·ç§»ã®éš›ã®å‡¦ç†ã‚’è¡Œã†
     /// </summary>
     public interface IPhaseTransitionerInTitleScene
     {
         public void Transition();
 
         /// <summary>
-        /// ‘JˆÚğŒ‚Ìƒ`ƒFƒbƒN
+        /// é·ç§»æ¡ä»¶ã®ãƒã‚§ãƒƒã‚¯
         /// </summary>
         /// <param name="status"></param>
         /// <returns></returns>

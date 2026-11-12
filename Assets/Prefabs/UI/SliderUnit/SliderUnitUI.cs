@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,7 +32,7 @@ public class SliderUnitUI : MonoBehaviour
 
     private void SetSliderColor(Color color)
     {
-        // F‚Ì•ÏX
+        // è‰²ã®å¤‰æ›´
         if (image) { image.color = color; }
         if (isTouching)
         {
@@ -42,7 +42,7 @@ public class SliderUnitUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒXƒ‰ƒCƒ_[UI‚Ì”½‰
+    /// ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼UIã®åå¿œ
     /// </summary>
     /// <param name="sliderTouchData"></param>
     /// <param name="pressedDecrmentionColorValue"></param>
@@ -58,13 +58,13 @@ public class SliderUnitUI : MonoBehaviour
             Mathf.Clamp(sliderTouchData.ThemeColor.b - pressedDecrmentionColorValue, 0, 1),
             sliderTouchData.ThemeColor.a);
 
-        // ’x‚ç‚¹‚ÄŒ³‚É–ß‚·
+        // é…ã‚‰ã›ã¦å…ƒã«æˆ»ã™
         cts?.CancelAndDispose();
         cts = DelayUtility.Run(duration, () => DisConnectSlider(sliderTouchData));
     }
 
     /// <summary>
-    /// ƒXƒ‰ƒCƒ_[UI‚Ì”½‰‚ğŒ³‚É–ß‚·
+    /// ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼UIã®åå¿œã‚’å…ƒã«æˆ»ã™
     /// </summary>
     /// <param name="sliderTouchData"></param>
     /// <param name="pressedDecrmentionColorValue"></param>

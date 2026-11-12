@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -22,7 +22,7 @@ namespace TransitionerInRhythmGameScene
 
         void IPhaseTransitionerInRhythmGameScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"LoadChart\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"LoadChart\"");
 
             chartEnder.Value.BindOnEndChart(() => phaseTransitionable.Value.TransitionPhase(PhaseStatusInRhythmGame.EndAnimation));
             chartGenerator.Value.Generate(() => 
@@ -34,7 +34,7 @@ namespace TransitionerInRhythmGameScene
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase()
         {

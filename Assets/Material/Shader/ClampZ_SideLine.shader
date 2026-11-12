@@ -1,4 +1,4 @@
-Shader "Custom/ClampZ_SideLine"
+﻿Shader "Custom/ClampZ_SideLine"
 {
     Properties
     {

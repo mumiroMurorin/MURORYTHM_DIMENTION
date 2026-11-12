@@ -1,4 +1,4 @@
-namespace ChartEditor
+﻿namespace ChartEditor
 {
     /// <summary>
     /// Stores the current chart file path used by the editor.

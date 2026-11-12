@@ -1,11 +1,11 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 
 public static class SnapUtil
 {
     /// <summary>
-    /// —^‚¦‚ç‚ê‚½ƒŠƒXƒg‚ğQÆƒŠƒXƒg“à‚ÌÅ‚à‹ß‚¢’l‚É•ÏŠ·‚·‚é
+    /// ä¸ãˆã‚‰ã‚ŒãŸãƒªã‚¹ãƒˆã‚’å‚ç…§ãƒªã‚¹ãƒˆå†…ã®æœ€ã‚‚è¿‘ã„å€¤ã«å¤‰æ›ã™ã‚‹
     /// </summary>
     public static List<float> SnapToNearest(this List<float> source, List<float> reference)
     {

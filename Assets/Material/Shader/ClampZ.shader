@@ -1,4 +1,4 @@
-Shader "Custom/ClampZ" {
+ï»¿Shader "Custom/ClampZ" {
 
 	Properties{
 		_Color("Color", Color) = (1,1,1,1)
@@ -7,8 +7,8 @@ Shader "Custom/ClampZ" {
 		_Glossiness("Smoothness", Range(0,1)) = 0.5
 		_Metallic("Metallic", Range(0,1)) = 0.0
 
-		_MinZ("Visible Range Min Z", Float) = 0.0  // ©’Ç‰Á
-		_MaxZ("Visible Range Max Z", Float) = 1.0  // ©’Ç‰Á
+		_MinZ("Visible Range Min Z", Float) = 0.0  // â†è¿½åŠ 
+		_MaxZ("Visible Range Max Z", Float) = 1.0  // â†è¿½åŠ 
 	}
 
 		SubShader{
@@ -37,10 +37,10 @@ Shader "Custom/ClampZ" {
 			UNITY_INSTANCING_BUFFER_END(Props)
 
 			void surf(Input IN, inout SurfaceOutputStandard o) {
-				// z”ÍˆÍ‚É‚ ‚é‚©‚Ç‚¤‚©‚ğ”»’è
+				// zç¯„å›²ã«ã‚ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®š
 				float inRange = step(_MinZ, IN.worldPos.z) * step(IN.worldPos.z, _MaxZ);
 
-				// _SecondaryColori”ÍˆÍŠOj‚©‚ç_Colori”ÍˆÍ“àj‚Ö•âŠÔ
+				// _SecondaryColorï¼ˆç¯„å›²å¤–ï¼‰ã‹ã‚‰_Colorï¼ˆç¯„å›²å†…ï¼‰ã¸è£œé–“
 				fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * lerp(_SecondaryColor, _Color, inRange);
 
 				o.Albedo = c.rgb;

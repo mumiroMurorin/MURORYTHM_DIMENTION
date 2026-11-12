@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -8,7 +8,7 @@ using System;
 namespace ChartConvert
 {
     /// <summary>
-    /// ƒ^ƒbƒ`ƒm[ƒc
+    /// ã‚¿ãƒƒãƒãƒãƒ¼ãƒ„
     /// </summary>
     public class TouchNoteConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
     {
@@ -16,13 +16,13 @@ namespace ChartConvert
         {
             if (noteDataInEditor.NoteType != DeploymentNoteType.Touch) { return false; }
 
-            // V‚½‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // æ–°ãŸã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             if (dataOrigin.TouchNoteData == null)
             {
                 dataOrigin.TouchNoteData = new List<NoteDataOrigin_Touch>();
             }
 
-            // ’Ç‰Á‚·‚éƒf[ƒ^‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             NoteDataOrigin_Touch data = new NoteDataOrigin_Touch()
             {
                 Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray()
@@ -58,7 +58,7 @@ namespace ChartConvert
             {
                 IDeployableNoteData noteData = new ChartEditor.NoteData_Touch();
 
-                // ƒf[ƒ^‚ÌƒZƒbƒg
+                // ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
                 var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 noteData.SetAddress(address);
 
@@ -70,7 +70,7 @@ namespace ChartConvert
     }
 
     /// <summary>
-    /// _ƒ^ƒbƒ`ƒm[ƒc
+    /// ç¥ã‚¿ãƒƒãƒãƒãƒ¼ãƒ„
     /// </summary>
     public class DivineTouchNoteConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
     {
@@ -78,13 +78,13 @@ namespace ChartConvert
         {
             if (noteDataInEditor.NoteType != DeploymentNoteType.DivineTouch) { return false; }
 
-            // V‚½‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // æ–°ãŸã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             if (dataOrigin.DivineTouchData == null)
             {
                 dataOrigin.DivineTouchData = new List<NoteDataOrigin_DivineTouch>();
             }
 
-            // ’Ç‰Á‚·‚éƒf[ƒ^‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             NoteDataOrigin_DivineTouch data = new NoteDataOrigin_DivineTouch()
             {
                 Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray()
@@ -122,7 +122,7 @@ namespace ChartConvert
 
                 if (noteData is not ITypeChangableNoteData typeChangableData) { return false; }
 
-                // ƒf[ƒ^‚ÌƒZƒbƒg
+                // ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
                 var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 noteData.SetAddress(address);
                 typeChangableData.SetNoteType(DeploymentNoteType.DivineTouch);

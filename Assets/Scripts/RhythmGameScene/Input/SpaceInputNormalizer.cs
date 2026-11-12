@@ -1,9 +1,9 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public static class SpaceInputNormalizer
 {
     /// <summary>
-    /// XY‚Ì‚İ‚ğg‚Á‚ÄABodyTrackingSettings‚ÌŠî€“_‚©‚ç-1`1‚É³‹K‰»‚µ‚Ü‚·B
+    /// XYã®ã¿ã‚’ä½¿ã£ã¦ã€BodyTrackingSettingsã®åŸºæº–ç‚¹ã‹ã‚‰-1ï½1ã«æ­£è¦åŒ–ã—ã¾ã™ã€‚
     /// </summary>
     public static Vector3 NormalizeUsedVector2(Vector3 pos, BodyTrackingSettings settings)
     {
@@ -29,7 +29,7 @@ public static class SpaceInputNormalizer
     }
 
     /// <summary>
-    /// XYZ‚ğg‚Á‚ÄABodyTrackingSettings‚ÌŠî€“_‚©‚ç-1`1‚É³‹K‰»‚µ‚Ü‚·B
+    /// XYZã‚’ä½¿ã£ã¦ã€BodyTrackingSettingsã®åŸºæº–ç‚¹ã‹ã‚‰-1ï½1ã«æ­£è¦åŒ–ã—ã¾ã™ã€‚
     /// </summary>
     public static Vector3 NormalizeUsedVector3(Vector3 pos, BodyTrackingSettings settings)
     {

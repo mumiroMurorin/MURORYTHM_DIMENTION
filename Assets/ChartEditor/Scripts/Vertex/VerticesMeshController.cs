@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MeshGenerate;
@@ -44,11 +44,11 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// Œ`‚ª•Ï‚í‚Á‚½‚È‚ÇƒƒbƒVƒ…‚ğXV‚·‚é
+        /// å½¢ãŒå¤‰ã‚ã£ãŸæ™‚ãªã©ãƒ¡ãƒƒã‚·ãƒ¥ã‚’æ›´æ–°ã™ã‚‹
         /// </summary>
         private void UpdateMesh()
         {
-            // ƒZƒ“ƒ^[ƒƒbƒVƒ…
+            // ã‚»ãƒ³ã‚¿ãƒ¼ãƒ¡ãƒƒã‚·ãƒ¥
             List<Vector3> positions = new List<Vector3>();
             for(int i = 0; i < notesGetter.DataToVertexObject.Count; i++)
             {
@@ -63,7 +63,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒZƒ“ƒ^[ƒƒbƒVƒ…‚Ì¶¬
+        /// ã‚»ãƒ³ã‚¿ãƒ¼ãƒ¡ãƒƒã‚·ãƒ¥ã®ç”Ÿæˆ
         /// </summary>
         private void GenerateCenterMeshParent()
         {
@@ -76,7 +76,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒƒbƒVƒ…‚Ìƒ}ƒeƒŠƒAƒ‹•ÏX
+        /// ãƒ¡ãƒƒã‚·ãƒ¥ã®ãƒãƒ†ãƒªã‚¢ãƒ«å¤‰æ›´
         /// </summary>
         /// <param name="type"></param>
         private void ChangeMaterial(DeploymentNoteType type)

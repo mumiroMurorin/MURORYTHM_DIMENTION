@@ -1,11 +1,11 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using JudgementUtil.Hold;
 using UniRx;
 
 /// <summary>
-/// ƒ^ƒbƒ`ƒm[ƒc‚ÉƒAƒ^ƒbƒ`‚³‚ê‚éƒNƒ‰ƒX
+/// ã‚¿ãƒƒãƒãƒãƒ¼ãƒ„ã«ã‚¢ã‚¿ãƒƒãƒã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 public class NoteObject_HoldEndUnjudge : NoteObject<NoteData_HoldEndUnjudge>
 {
@@ -14,7 +14,7 @@ public class NoteObject_HoldEndUnjudge : NoteObject<NoteData_HoldEndUnjudge>
     bool isJudged;
 
     /// <summary>
-    /// ‰Šú‰»
+    /// åˆæœŸåŒ–
     /// </summary>
     /// <param name="data"></param>
     public override void Initialize(NoteData_HoldEndUnjudge data)
@@ -24,7 +24,7 @@ public class NoteObject_HoldEndUnjudge : NoteObject<NoteData_HoldEndUnjudge>
 
     private void Update()
     {
-        // ”»’èŠÔ‚ğ‰ß‚¬‚½‚Æ‚«
+        // åˆ¤å®šæ™‚é–“ã‚’éããŸã¨ã
         if (IsPassJudgementRange())
         {
             SetDisable();
@@ -32,7 +32,7 @@ public class NoteObject_HoldEndUnjudge : NoteObject<NoteData_HoldEndUnjudge>
     }
 
     /// <summary>
-    /// ƒm[ƒc‚ğ‹@”\’â~‚·‚é
+    /// ãƒãƒ¼ãƒ„ã‚’æ©Ÿèƒ½åœæ­¢ã™ã‚‹
     /// </summary>
     private void SetDisable()
     {
@@ -41,7 +41,7 @@ public class NoteObject_HoldEndUnjudge : NoteObject<NoteData_HoldEndUnjudge>
     }
 
     /// <summary>
-    /// ƒm[ƒc”»’è”ÍˆÍŠOH
+    /// ãƒãƒ¼ãƒ„åˆ¤å®šç¯„å›²å¤–ï¼Ÿ
     /// </summary>
     /// <returns></returns>
     private bool IsPassJudgementRange()
@@ -49,7 +49,7 @@ public class NoteObject_HoldEndUnjudge : NoteObject<NoteData_HoldEndUnjudge>
         if (noteData == null) { return false; }
         if (isJudged) { return false; }
 
-        // ”»’è‚È‚µ‚È‚Ì‚Å”»’èŠÔ‚É‚È‚Á‚½‚çÁ‚·
+        // åˆ¤å®šãªã—ãªã®ã§åˆ¤å®šæ™‚é–“ã«ãªã£ãŸã‚‰æ¶ˆã™
         if (noteData.Timer?.Time < noteData.Timing) { return false; }
 
         return true;
@@ -57,7 +57,7 @@ public class NoteObject_HoldEndUnjudge : NoteObject<NoteData_HoldEndUnjudge>
 }
 
 /// <summary>
-/// (‰Šú‰»‚É•K—v‚È•Ï”‚àŠÜ‚Ş)ƒz[ƒ‹ƒhI“_(”»’è‚È‚µ)ƒm[ƒc‚Ìƒf[ƒ^
+/// (åˆæœŸåŒ–ã«å¿…è¦ãªå¤‰æ•°ã‚‚å«ã‚€)ãƒ›ãƒ¼ãƒ«ãƒ‰çµ‚ç‚¹(åˆ¤å®šãªã—)ãƒãƒ¼ãƒ„ã®ãƒ‡ãƒ¼ã‚¿
 /// </summary>
 public class NoteData_HoldEndUnjudge : INoteData
 {

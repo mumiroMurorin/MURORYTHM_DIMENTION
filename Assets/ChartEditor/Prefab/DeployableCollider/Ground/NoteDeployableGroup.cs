@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,14 +6,14 @@ namespace ChartEditor
 {
     public class NoteDeployableGroup : MonoBehaviour, ILayerAffectable, IScaleAffectable, IAddressSettable
     {
-        [Header("‚»‚ê‚¼‚ê‚Ì‚‚³")]
+        [Header("ãã‚Œãã‚Œã®é«˜ã•")]
         [SerializeField] float heightOnGroundEditMode = 17.1f;
         [SerializeField] float heightOnSpaceEditMode = 0.1f;
 
         [SerializeField] NoteDeployableUnit[] units;
 
         /// <summary>
-        /// ƒŒƒCƒ„[ƒ`ƒFƒ“ƒW ¨ ’n‚Æ’ˆ‚ÌˆÊ’u”½“]
+        /// ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒã‚§ãƒ³ã‚¸ â†’ åœ°ã¨å®™ã®ä½ç½®åè»¢
         /// </summary>
         /// <param name="editNoteType"></param>
         public void OnChangeLayer(EditNoteType editNoteType)
@@ -31,7 +31,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ”z’uƒTƒCƒY(‰œs)‚Ì•ÏX
+        /// é…ç½®ã‚µã‚¤ã‚º(å¥¥è¡Œ)ã®å¤‰æ›´
         /// </summary>
         /// <param name="z"></param>
         public void OnChangeSize(float z)
@@ -43,7 +43,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ’S“–ƒAƒhƒŒƒX‚ÌƒZƒbƒg
+        /// æ‹…å½“ã‚¢ãƒ‰ãƒ¬ã‚¹ã®ã‚»ãƒƒãƒˆ
         /// </summary>
         /// <param name="address"></param>
         public void SetAddress(IReadOnlyAddressInChart address)

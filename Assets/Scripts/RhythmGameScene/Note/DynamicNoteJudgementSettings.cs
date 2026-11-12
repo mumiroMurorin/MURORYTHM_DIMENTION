@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "ScriptableObject/Note Judgement Settings/Dynamic", fileName = "DynamicNoteJudgementSettings")]
 public class DynamicNoteJudgementSettings : NoteJudgementSettings

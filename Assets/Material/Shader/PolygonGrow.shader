@@ -1,4 +1,4 @@
-Shader "Custom/PolygonGlow"
+ï»¿Shader "Custom/PolygonGlow"
 {
     Properties
     {
@@ -41,15 +41,15 @@ Shader "Custom/PolygonGlow"
             {
                 v2f o;
                 o.pos = UnityObjectToClipPos(v.vertex);
-                // UV‚Í0`1”ÍˆÍ‚Å³‹K‰»
+                // UVã¯0ï½1ç¯„å›²ã§æ­£è¦åŒ–
                 o.uv = v.vertex.xy;
                 return o;
             }
 
-            // ’†S‚©‚ç‹«ŠE‚Ü‚Å‚Ì‹——£ƒx[ƒX‚Å”­Œõ
+            // ä¸­å¿ƒã‹ã‚‰å¢ƒç•Œã¾ã§ã®è·é›¢ãƒ™ãƒ¼ã‚¹ã§ç™ºå…‰
             fixed4 frag(v2f i) : SV_Target
             {
-                // ‚±‚±‚Å‚ÍŠÈˆÕ“I‚ÉA‹——£0‚ğ’†SA1‚ğŠO‰‚Æ‚·‚é‰¼‘z‹——£
+                // ã“ã“ã§ã¯ç°¡æ˜“çš„ã«ã€è·é›¢0ã‚’ä¸­å¿ƒã€1ã‚’å¤–ç¸ã¨ã™ã‚‹ä»®æƒ³è·é›¢
                 float dist = length(i.uv - 0.5);
                 float glow = smoothstep(0.5, 0.5 - _GlowWidth, dist);
                 fixed4 col = _Color * glow * _Intensity;

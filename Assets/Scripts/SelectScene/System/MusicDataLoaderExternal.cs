@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Networking;
@@ -13,27 +13,27 @@ using Newtonsoft.Json.Linq;
 
 public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
 {
-    [Header("�y�ȃf�[�^�̃p�X")]
-    [Tooltip("�f�[�^�������Ă�t�H���_��")]
+    [Header("楽曲データのパス")]
+    [Tooltip("データが入ってるフォルダ名")]
     [SerializeField] string dataFolderName;
-    [Tooltip("�y�ȃf�[�^�t�@�C����")]
+    [Tooltip("楽曲データファイル名")]
     [SerializeField] string musicInformationFileName = "information.json";
-    [Tooltip("�y�ȃW���P�b�g�t�@�C����")]
+    [Tooltip("楽曲ジャケットファイル名")]
     [SerializeField] string[] musicJacketFileNames = new string[] { "jacket.png", "jacket.jpg", "jacket.jpeg" };
-    [Tooltip("�y�ȃe�[�}�摜�t�@�C����")]
+    [Tooltip("楽曲テーマ画像ファイル名")]
     [SerializeField] string[] musicThemeImageFileNames = new string[] { "theme.png", "theme.jpg", "theme.jpeg" };
-    [Tooltip("�y�ȃI�[�f�B�I�t�@�C����")]
+    [Tooltip("楽曲オーディオファイル名")]
     [SerializeField] string[] musicClipFileNames = new string[] { "clip.wav", "clip.mp3", "clip.ogg" };
-    [Tooltip("�y�ȃT���v���I�[�f�B�I�t�@�C����")]
+    [Tooltip("楽曲サンプルオーディオファイル名")]
     [SerializeField] string[] sampleClipFileNames = new string[] { "sample.wav", "sample.mp3", "sample.ogg" };
-    [Header("�t�H�[���o�b�N")]
-    [Tooltip("�T���v���I�[�f�B�I�t�@�C�������݂��Ȃ��ꍇ�Ɏg�p���鉹��")]
+    [Header("フォールバック")]
+    [Tooltip("サンプルオーディオファイルが存在しない場合に使用する音源")]
     [SerializeField] AudioClip fallbackSampleClip;
-    [Tooltip("�W���P�b�g�摜�����݂��Ȃ��ꍇ�Ɏg�p����摜")]
+    [Tooltip("ジャケット画像が存在しない場合に使用する画像")]
     [SerializeField] Sprite fallbackJacketSprite;
-    [Tooltip("�e�[�}�摜�����݂��Ȃ��ꍇ�Ɏg�p����摜")]
+    [Tooltip("テーマ画像が存在しない場合に使用する画像")]
     [SerializeField] Sprite fallbackThemeSprite;
-    [Tooltip("���ʃf�[�^��")]
+    [Tooltip("譜面データ名")]
     [SerializeField] string chartFileNameEasy = "chart_easy.json";
     [SerializeField] string chartFileNameNormal = "chart_normal.json";
     [SerializeField] string chartFileNameHard = "chart_hard.json";
@@ -59,7 +59,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
 
     public void LoadMusicDataList(Action onFinishedAction)
     {
-        // ���ɓǂݍ��܂�Ă���ꍇ(���̃V�[�����痈����)�͓ǂݍ��ݏ������΂�
+        // 既に読み込まれている場合(他のシーンから来た時)は読み込み処理を飛ばす
         //if(dataGetter.MusicDatasSorted != null && dataGetter.MusicDatasSorted.Count > 0) 
         //{
         //    onFinishedAction.Invoke();
@@ -76,27 +76,27 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     {
         dataPath = Application.dataPath + "/" + dataFolderName;
 
-        // �t�H���_�p�X�̑��݊m�F
+        // フォルダパスの存在確認
         if (!Directory.Exists(dataPath))
         {
-            Debug.LogWarning("�ySystem�z�w�肳�ꂽ�t�H���_�����݂��܂���: " + dataPath);
+            Debug.LogWarning("【System】指定されたフォルダが存在しません: " + dataPath);
             return;
         }
 
-        // �T�u�t�H���_�̃p�X�ꗗ��擾���Ĉ�����o��
+        // サブフォルダのパス一覧を取得して一つずつ取り出す
         string[] subDirectories = Directory.GetDirectories(dataPath);
         List<UniTask<MusicData>> tasks = new List<UniTask<MusicData>>();
         MusicDataList musicDataList = new MusicDataList();
 
-        // �e�T�u�t�H���_����[�v
+        // 各サブフォルダをループ
         foreach (string dir in subDirectories)
         {
-            // �Ō���́u/�v���u\�v�ɂȂ����Ⴄ�̂Œu��
+            // 最後尾の「/」が「\」になっちゃうので置換
             string normalizedPath = dir.Replace("\\", "/");
             tasks.Add(LoadMusicData(normalizedPath, token));
         }
 
-        // �S�Ă̏������I���܂ő҂�
+        // 全ての処理が終わるまで待ち
         MusicData[] results = await UniTask.WhenAll(tasks);
 
         foreach (var result in results)
@@ -111,19 +111,19 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     }
 
     /// <summary>
-    /// �f�B���N�g������MusicData�𐶐����ĕԂ�
+    /// ディレクトリからMusicDataを生成して返す
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
     private async UniTask<MusicData> LoadMusicData(string path, CancellationToken token)
     {
-        Debug.Log("�ySystem�zMusicData���[�h�J�n:" + path);
+        Debug.Log("【System】MusicDataロード開始:" + path);
 
         MusicData musicData = new MusicData();
-        // �y�ȏ��̃Z�b�g
+        // 楽曲情報のセット
         if (!SetMusicInformation(musicData, path)) { return null; }
 
-        // �y�ȃf�[�^�̃Z�b�g
+        // 楽曲データのセット
         List<UniTask<bool>> tasks = new List<UniTask<bool>>
         {
             SetMusicClipFileAsync(musicData, path, token),
@@ -133,21 +133,21 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
             SetChartFileAsync(musicData, path, token)
         };
 
-        // �S�Ă̏������I���܂ő҂�
+        // 全ての処理が終わるまで待ち
         bool[] results = await UniTask.WhenAll(tasks);
 
-        // clip�͕K�{�A����ȊO�̓t�H�[���o�b�N�œǂݍ��߂邽�߁A�����Ŏ��s�����ꍇ�̂ݏ��O����
+        // clipは必須、それ以外はフォールバックで読み込めるため、ここで失敗した場合のみ除外する
         if(!results.All(x => x)) { return null; }
 
-        // �L�^�̓ǂݍ���
+        // 記録の読み込み
         MusicRecordPersistence.LoadAndApply(musicData);
 
-        Debug.Log($"�ySystem�z{musicData.MusicName} ���[�h����: {path}");
+        Debug.Log($"【System】{musicData.MusicName} ロード完了: {path}");
         return musicData;
     }
 
     /// <summary>
-    /// �y�ȏ��̎擾�A�Z�b�g
+    /// 楽曲情報の取得、セット
     /// </summary>
     /// <param name="musicData"></param>
     /// <param name="path"></param>
@@ -156,36 +156,36 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     {
         path = path + "/" + musicInformationFileName;
 
-        // �t�@�C���̑��݊m�F
+        // ファイルの存在確認
         if (!File.Exists(path))
         {
-            Debug.LogWarning("�ySystem�z�w�肳�ꂽ�t�H���_�����݂��܂���: " + path);
+            Debug.LogWarning("【System】指定されたフォルダが存在しません: " + path);
             return false;
         }
 
-        // �y�ȏ��f�[�^�̕ϊ�
+        // 楽曲情報データの変換
         if(!JsonLoader.TryLoadFromJsonFile(path, out MusicInformation info))
         {
-            Debug.LogWarning("�ySystem�z�y�ȏ��t�@�C���̕ϊ��Ɏ��s���܂���: " + path);
+            Debug.LogWarning("【System】楽曲情報ファイルの変換に失敗しました: " + path);
             return false;
         }
 
-        // �f�[�^�Z�b�g
+        // データセット
         musicData.MusicName = RemoveLineBreakSequences(info.MusicName);
         musicData.ComposerName = RemoveLineBreakSequences(info.ComposerName);
         musicData.OtherCreator = SanitizeCreatorNames(info.OtherCreator);
         musicData.ChartDesigners = SanitizeChartDesigners(info.ChartDesigner);
         musicData.SetDifficulty(info.Difficulties);
 
-        // �X�e�[�W
+        // ステージ
         if(info.StageType == null || !Enum.TryParse<StageType>(info.StageType, ignoreCase: true, out var stageType))
-        { Debug.LogWarning($"�ySystem�z�X�e�[�W��񂪂���܂���: {path}"); }
+        { Debug.LogWarning($"【System】ステージ情報がありません: {path}"); }
         else
         { musicData.StageType = stageType; }
 
-        // �^�C�v
+        // タイプ
         if (info.SymphonyType == null || !Enum.TryParse<SymphonyType>(info.SymphonyType, ignoreCase: true, out var symphonyType))
-        { Debug.LogWarning($"�ySystem�z�^�C�v��񂪂���܂���: {path}"); }
+        { Debug.LogWarning($"【System】タイプ情報がありません: {path}"); }
         else
         { musicData.SymphonyType = symphonyType; }
 
@@ -236,7 +236,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         return chartDesigners;
     }
     /// <summary>
-    /// �ȃf�[�^�̎擾�A�Z�b�g(�񓯊�)
+    /// 曲データの取得、セット(非同期)
     /// </summary>
     /// <param name="musicData"></param>
     /// <param name="path"></param>
@@ -244,13 +244,13 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     /// <returns></returns>
     private async UniTask<bool> SetMusicClipFileAsync(MusicData musicData, string path, CancellationToken token)
     {
-        // ���X�g�ɂ���t�@�C�������݂��邩�m�F
+        // リストにあるファイルが存在するか確認
         bool isFindPath = false;
         foreach(var fileName in musicClipFileNames)
         {
             string clipPath = path + "/" + fileName;
 
-            // �t�H���_�p�X�̑��݊m�F
+            // フォルダパスの存在確認
             if (File.Exists(clipPath))
             {
                 isFindPath = true;
@@ -259,21 +259,21 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
             }
         }
 
-        // ������Ȃ������ꍇ�͊y�ȃf�[�^�Ƃ��ēǂݍ��܂Ȃ�
+        // 見つからなかった場合は楽曲データとして読み込まない
         if (!isFindPath)
         {
-            Debug.LogWarning("�ySystem�z�y�ȃI�[�f�B�I�t�@�C�������݂��Ȃ����ߊy�ȓǂݍ��݂�X�L�b�v���܂�: " + path);
+            Debug.LogWarning("【System】楽曲オーディオファイルが存在しないため楽曲読み込みをスキップします: " + path);
             return false;
         }
 
-        // �y�Ȃ̓ǂݍ���
+        // 楽曲の読み込み
         musicData.MusicClip = await AudioFileSelector.LoadAudioClip(path, token);
 
         return true;
     }
 
     /// <summary>
-    /// �y�ȃT���v���̎擾�A�Z�b�g(�񓯊�)
+    /// 楽曲サンプルの取得、セット(非同期)
     /// </summary>
     /// <param name="musicData"></param>
     /// <param name="path"></param>
@@ -281,13 +281,13 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     /// <returns></returns>
     private async UniTask<bool> SetSampleClipFileAsync(MusicData musicData, string path, CancellationToken token)
     {
-        // ���X�g�ɂ���t�@�C�������݂��邩�m�F
+        // リストにあるファイルが存在するか確認
         bool isFindPath = false;
         foreach (var fileName in sampleClipFileNames)
         {
             string samplePath = path + "/" + fileName;
 
-            // �t�H���_�p�X�̑��݊m�F
+            // フォルダパスの存在確認
             if (File.Exists(samplePath))
             {
                 isFindPath = true;
@@ -296,22 +296,22 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
             }
         }
 
-        // ������Ȃ������ꍇ�̓t�H�[���o�b�N��g�p����
+        // 見つからなかった場合はフォールバックを使用する
         if (!isFindPath)
         {
-            Debug.LogWarning("�ySystem�z�y�ȃT���v���I�[�f�B�I�t�@�C�������݂��Ȃ����߃t�H�[���o�b�N��g�p���܂�: " + path);
+            Debug.LogWarning("【System】楽曲サンプルオーディオファイルが存在しないためフォールバックを使用します: " + path);
             musicData.SampleClip = fallbackSampleClip;
             return true;
         }
 
-        // �y�Ȃ̓ǂݍ���
+        // 楽曲の読み込み
         musicData.SampleClip = await AudioFileSelector.LoadAudioClip(path, token);
 
         return true;
     }
 
     /// <summary>
-    /// �y�ȃW���P�b�g�̎擾�A�Z�b�g(�񓯊�)
+    /// 楽曲ジャケットの取得、セット(非同期)
     /// </summary>
     /// <param name="musicData"></param>
     /// <param name="path"></param>
@@ -321,7 +321,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     {
         if (!TryFindFilePath(path, musicJacketFileNames, out var jacketPath))
         {
-            Debug.LogWarning("�ySystem�z�y�ȃW���P�b�g�摜�����݂��Ȃ����߃t�H�[���o�b�N��g�p���܂�: " + path);
+            Debug.LogWarning("【System】楽曲ジャケット画像が存在しないためフォールバックを使用します: " + path);
             musicData.MusicSprite = fallbackJacketSprite;
             return true;
         }
@@ -331,7 +331,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     }
 
     /// <summary>
-    /// �y�ȃe�[�}�̎擾�A�Z�b�g(�񓯊�)
+    /// 楽曲テーマの取得、セット(非同期)
     /// </summary>
     /// <param name="musicData"></param>
     /// <param name="path"></param>
@@ -341,7 +341,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     {
         if (!TryFindFilePath(path, musicThemeImageFileNames, out var themeImagePath))
         {
-            Debug.LogWarning("�ySystem�z�y�ȃe�[�}�摜�����݂��Ȃ����߃t�H�[���o�b�N��g�p���܂�: " + path);
+            Debug.LogWarning("【System】楽曲テーマ画像が存在しないためフォールバックを使用します: " + path);
             musicData.ThemeSprite = fallbackThemeSprite;
             return true;
         }
@@ -368,7 +368,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     }
 
     /// <summary>
-    /// ���ʃf�[�^(�p�X)�̎擾
+    /// 譜面データ(パス)の取得
     /// </summary>
     /// <param name="musicData"></param>
     /// <param name="path"></param>
@@ -376,7 +376,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     /// <returns></returns>
     private async UniTask<bool> SetChartFileAsync(MusicData musicData, string path, CancellationToken token)
     {
-        // ���X�g�ɂ���t�@�C�������݂��邩�m�F
+        // リストにあるファイルが存在するか確認
         string pathEasy = path + "/" + chartFileNameEasy;
         bool isExistEasy = musicData.GetDifficulty(Difficulty.Easy) >= 0;
         bool isExistNormal = musicData.GetDifficulty(Difficulty.Normal) >= 0;
@@ -386,7 +386,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         if (isExistEasy && File.Exists(pathEasy))
         {
             musicData.SetChartPath(Difficulty.Easy, pathEasy);
-            Debug.Log($"�ySystem�zEasy����path�ǂݍ���: {musicData.MusicName}");
+            Debug.Log($"【System】Easy譜面path読み込み: {musicData.MusicName}");
         }
         else
         {
@@ -397,7 +397,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         if (isExistNormal && File.Exists(pathNormal))
         {
             musicData.SetChartPath(Difficulty.Normal, pathNormal);
-            Debug.Log($"�ySystem�zNormal����path�ǂݍ���: {musicData.MusicName}");
+            Debug.Log($"【System】Normal譜面path読み込み: {musicData.MusicName}");
         }
         else
         {
@@ -408,7 +408,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         if (isExistHard && File.Exists(pathHard))
         {
             musicData.SetChartPath(Difficulty.Hard, pathHard);
-            Debug.Log($"�ySystem�zHard����path�ǂݍ���: {musicData.MusicName}");
+            Debug.Log($"【System】Hard譜面path読み込み: {musicData.MusicName}");
         }
         else
         {
@@ -419,20 +419,20 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         if (isExistMaster && File.Exists(pathMaster))
         {
             musicData.SetChartPath(Difficulty.Master, pathMaster);
-            Debug.Log($"�ySystem�zMaster����path�ǂݍ���: {musicData.MusicName}");
+            Debug.Log($"【System】Master譜面path読み込み: {musicData.MusicName}");
         }
         else
         {
             musicData.SetDifficulty(Difficulty.Master, -1);
         }
 
-        // �������
+        // 無理やり
         await UniTask.Delay(1, cancellationToken: token);
         return true;
     }
 
     /// <summary>
-    /// �y�Ȃ̃��[�h��񓯊��ōs��
+    /// 楽曲のロードを非同期で行う
     /// </summary>
     /// <param name="onEndAction"></param>
     /// <param name="token"></param>
@@ -443,7 +443,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
         {
             if (data.SampleClip == null)
             {
-                Debug.LogWarning($"�ySystem�zSampleClip���ݒ肳��Ă��Ȃ����ߎ��O���[�h��X�L�b�v���܂�: {data.MusicName}");
+                Debug.LogWarning($"【System】SampleClipが設定されていないため事前ロードをスキップします: {data.MusicName}");
                 continue;
             }
 
@@ -465,7 +465,7 @@ public class MusicDataLoaderExternal : MonoBehaviour, IMusicDataListLoader
     }
 
     /// <summary>
-    /// �y�Ȗ��Ȃǂ̏��
+    /// 楽曲名などの情報
     /// </summary>
     public class MusicInformation
     {

@@ -1,10 +1,10 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class JudgementSpawner_DynamicDownward : JudgementEffectSpawner
 {
-    [Header("”»’èoŒ»”¼Œa")]
+    [Header("åˆ¤å®šå‡ºç¾åŠå¾„")]
     [SerializeField] float radius = 8f;
 
     public override bool ConditionChecker(NoteJudgementData judgementData)

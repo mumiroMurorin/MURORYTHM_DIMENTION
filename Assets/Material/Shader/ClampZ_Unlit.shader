@@ -1,4 +1,4 @@
-Shader "Custom/ClampZ_Unlit"
+ï»¿Shader "Custom/ClampZ_Unlit"
 {
     Properties
     {
@@ -21,11 +21,11 @@ Shader "Custom/ClampZ_Unlit"
 
             LOD 100
 
-            // “§–¾‡¬‚Ìİ’è
+            // é€æ˜åˆæˆã®è¨­å®š
             Blend SrcAlpha OneMinusSrcAlpha
-            // “§–¾ƒIƒuƒWƒFƒNƒg‚È‚Ì‚ÅƒfƒvƒX‘‚«‚İ‚ğƒIƒt‚É‚·‚éid‚È‚è‡‚Ì–â‘è‚ğ–h‚®‚½‚ßj
+            // é€æ˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãªã®ã§ãƒ‡ãƒ—ã‚¹æ›¸ãè¾¼ã¿ã‚’ã‚ªãƒ•ã«ã™ã‚‹ï¼ˆé‡ãªã‚Šé †ã®å•é¡Œã‚’é˜²ããŸã‚ï¼‰
             ZWrite Off
-            // ƒJƒŠƒ“ƒOi— –Ê•`‰æj‚Ìİ’èB•K—v‚É‰‚¶‚Ä Off ‚É‚µ‚Ä‚­‚¾‚³‚¢
+            // ã‚«ãƒªãƒ³ã‚°ï¼ˆè£é¢æç”»ï¼‰ã®è¨­å®šã€‚å¿…è¦ã«å¿œã˜ã¦ Off ã«ã—ã¦ãã ã•ã„
             Cull Back
 
             Pass
@@ -33,7 +33,7 @@ Shader "Custom/ClampZ_Unlit"
                 CGPROGRAM
                 #pragma vertex vert
                 #pragma fragment frag
-                // ƒtƒHƒOi–¶j‚ğg‚¢‚½‚¢ê‡‚ÍˆÈ‰º‚ğ—LŒø‰»
+                // ãƒ•ã‚©ã‚°ï¼ˆéœ§ï¼‰ã‚’ä½¿ã„ãŸã„å ´åˆã¯ä»¥ä¸‹ã‚’æœ‰åŠ¹åŒ–
                 #pragma multi_compile_fog
 
                 #include "UnityCG.cginc"
@@ -49,7 +49,7 @@ Shader "Custom/ClampZ_Unlit"
                     float2 uv : TEXCOORD0;
                     UNITY_FOG_COORDS(1)
                     float4 vertex : SV_POSITION;
-                    float3 worldPos : TEXCOORD2; // ƒ[ƒ‹ƒhÀ•W‚ğó‚¯“n‚·‚½‚ß‚Ì•Ï”
+                    float3 worldPos : TEXCOORD2; // ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å—ã‘æ¸¡ã™ãŸã‚ã®å¤‰æ•°
                 };
 
                 sampler2D _MainTex;
@@ -62,11 +62,11 @@ Shader "Custom/ClampZ_Unlit"
                 v2f vert(appdata v)
                 {
                     v2f o;
-                    // ƒIƒuƒWƒFƒNƒg‹óŠÔ -> ƒNƒŠƒbƒv‹óŠÔi‰æ–Êã‚ÌˆÊ’uj‚Ö•ÏŠ·
+                    // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç©ºé–“ -> ã‚¯ãƒªãƒƒãƒ—ç©ºé–“ï¼ˆç”»é¢ä¸Šã®ä½ç½®ï¼‰ã¸å¤‰æ›
                     o.vertex = UnityObjectToClipPos(v.vertex);
-                    // UVÀ•W‚ÌŒvZ
+                    // UVåº§æ¨™ã®è¨ˆç®—
                     o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                    // ƒ[ƒ‹ƒhÀ•W‚ÌŒvZiZ”»’è‚É•K—vj
+                    // ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã®è¨ˆç®—ï¼ˆZåˆ¤å®šã«å¿…è¦ï¼‰
                     o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
 
                     UNITY_TRANSFER_FOG(o,o.vertex);
@@ -75,20 +75,20 @@ Shader "Custom/ClampZ_Unlit"
 
                 fixed4 frag(v2f i) : SV_Target
                 {
-                    // ƒeƒNƒXƒ`ƒƒ‚ÌF‚ğæ“¾
+                    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®è‰²ã‚’å–å¾—
                     fixed4 col = tex2D(_MainTex, i.uv);
 
-                // --- Z”ÍˆÍ”»’èƒƒWƒbƒN ---
-                // MinZˆÈã ‚©‚Â MaxZˆÈ‰º ‚È‚ç 1A‚»‚êˆÈŠO‚Í 0
+                // --- Zç¯„å›²åˆ¤å®šãƒ­ã‚¸ãƒƒã‚¯ ---
+                // MinZä»¥ä¸Š ã‹ã¤ MaxZä»¥ä¸‹ ãªã‚‰ 1ã€ãã‚Œä»¥å¤–ã¯ 0
                 float inRange = step(_MinZ, i.worldPos.z) * step(i.worldPos.z, _MaxZ);
 
-                // ”ÍˆÍ“à‚È‚ç _ColorA”ÍˆÍŠO‚È‚ç _SecondaryColor ‚ğƒuƒŒƒ“ƒh
+                // ç¯„å›²å†…ãªã‚‰ _Colorã€ç¯„å›²å¤–ãªã‚‰ _SecondaryColor ã‚’ãƒ–ãƒ¬ãƒ³ãƒ‰
                 fixed4 tintColor = lerp(_SecondaryColor, _Color, inRange);
 
-                // ƒeƒNƒXƒ`ƒƒƒJƒ‰[‚ÆŒvZ‚µ‚½F‚ğæZ
+                // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚«ãƒ©ãƒ¼ã¨è¨ˆç®—ã—ãŸè‰²ã‚’ä¹—ç®—
                 col *= tintColor;
 
-                // ƒtƒHƒO‚Ì“K—p
+                // ãƒ•ã‚©ã‚°ã®é©ç”¨
                 UNITY_APPLY_FOG(i.fogCoord, col);
 
                 return col;

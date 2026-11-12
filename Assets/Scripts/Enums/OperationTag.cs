@@ -1,4 +1,4 @@
-public enum OperationTag
+﻿public enum OperationTag
 {
     Title_WaitingForPlayerInput = 50,
     Lobby_SelectJapanese = 130,

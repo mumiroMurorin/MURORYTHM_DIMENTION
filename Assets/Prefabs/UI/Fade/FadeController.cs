@@ -1,20 +1,20 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
 public class FadeController : MonoBehaviour
 {
-    [Header("’ÊíƒtƒF[ƒh")]
+    [Header("é€šå¸¸ãƒ•ã‚§ãƒ¼ãƒ‰")]
     [SerializeField] FadeClass defaultFadeIn;
     [SerializeField] FadeClass defaultFadeOut;
 
-    [Header("ƒVƒ“ƒtƒHƒj[ƒ^ƒCƒv‚É‘Î‚·‚éƒtƒF[ƒh")]
+    [Header("ã‚·ãƒ³ãƒ•ã‚©ãƒ‹ãƒ¼ã‚¿ã‚¤ãƒ—ã«å¯¾ã™ã‚‹ãƒ•ã‚§ãƒ¼ãƒ‰")]
     [SerializeField] SymponyTypeToFade[] symponyTypeToFadeIns;
     [SerializeField] SymponyTypeToFade[] symponyTypeToFadeOuts;
 
     /// <summary>
-    /// Šy‹Èî•ñ‚ÉˆË‘¶‚µ‚È‚¢ƒtƒF[ƒhƒCƒ“
+    /// æ¥½æ›²æƒ…å ±ã«ä¾å­˜ã—ãªã„ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³
     /// </summary>
     /// <param name="callBack"></param>
     public void FadeIn(System.Action callBack = null)
@@ -66,7 +66,7 @@ public class FadeController : MonoBehaviour
 
 
     /// <summary>
-    /// Šy‹Èî•ñ‚ÉˆË‘¶‚µ‚È‚¢ƒtƒF[ƒhƒAƒEƒg
+    /// æ¥½æ›²æƒ…å ±ã«ä¾å­˜ã—ãªã„ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
     /// </summary>
     /// <param name="callBack"></param>
     public void FadeOut(System.Action callBack = null)

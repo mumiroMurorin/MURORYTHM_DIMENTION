@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -20,32 +20,32 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ‚»‚Ì“_‚Ìˆø”‚Ìƒf[ƒ^‘ã“ü
-        /// bpmˆÈŠO -1 ‚Å”ñ•\¦
+        /// ãã®æ™‚ç‚¹ã®å¼•æ•°ã®ãƒ‡ãƒ¼ã‚¿ä»£å…¥
+        /// bpmä»¥å¤– -1 ã§éè¡¨ç¤º
         /// </summary>
         public void SetDataOnUI(SubdivisionConfig subConfig)
         {
-            // •\¦”ñ•\¦
+            // è¡¨ç¤ºéè¡¨ç¤º
             bpmField.interactable = subConfig.Bpm != -1;
 
-            // ”’l‚ÌƒZƒbƒg
+            // æ•°å€¤ã®ã‚»ãƒƒãƒˆ
             bpmField.text = subConfig.Bpm == -1 ? "" : subConfig.Bpm.ToString();
             speedRatioField.text = subConfig.SpeedRatio.ToString();
         }
 
         /// <summary>
-        /// •ªü‚É‘Î‚·‚éƒf[ƒ^‚ÌƒZƒbƒg
+        /// åˆ†ç·šã«å¯¾ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
         /// </summary>
         /// <param name="barData"></param>
         public void SetData(SubDivisionDataInBeat subDivisionData)
         {
-            // BPM‚ÌƒZƒbƒg
+            // BPMã®ã‚»ãƒƒãƒˆ
             if (!string.IsNullOrWhiteSpace(bpmField.text) && float.TryParse(bpmField.text, out float bpm))
             {
                 subDivisionData.SetBpm(bpm);
             }
 
-            // SpeedRatio‚ÌƒZƒbƒg
+            // SpeedRatioã®ã‚»ãƒƒãƒˆ
             if (!string.IsNullOrWhiteSpace(speedRatioField.text) && float.TryParse(speedRatioField.text, out float speedRatio))
             {
                 subDivisionData.SetSpeedRatio(speedRatio);
@@ -53,7 +53,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        ///  ˆÈ~‚Ì•ªü‘S•”BPMƒZƒbƒg
+        ///  ä»¥é™ã®åˆ†ç·šå…¨éƒ¨BPMã‚»ãƒƒãƒˆ
         /// </summary>
         /// <param name="subDivisionData"></param>
         public void SetData(Action<SubdivisionConfig> setSubdivisionConfig)
@@ -61,17 +61,17 @@ namespace ChartEditor
             float bpm = 1;
             float speedRatio = 1;
 
-            // BPM‚ÌƒZƒbƒg
+            // BPMã®ã‚»ãƒƒãƒˆ
             if (string.IsNullOrWhiteSpace(bpmField.text) || !float.TryParse(bpmField.text, out bpm))
             {
-                Debug.Log($"BPM‚É—LŒø‚È”š‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢: {bpmField.text}");
+                Debug.Log($"BPMã«æœ‰åŠ¹ãªæ•°å­—ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„: {bpmField.text}");
                 return;
             }
 
-            // SpeedRatio‚ÌƒZƒbƒg
+            // SpeedRatioã®ã‚»ãƒƒãƒˆ
             if (string.IsNullOrWhiteSpace(speedRatioField.text) || !float.TryParse(speedRatioField.text, out speedRatio))
             {
-                Debug.Log($"ƒXƒs[ƒh”{—¦‚É—LŒø‚È”š‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢: {speedRatioField.text}");
+                Debug.Log($"ã‚¹ãƒ”ãƒ¼ãƒ‰å€ç‡ã«æœ‰åŠ¹ãªæ•°å­—ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„: {speedRatioField.text}");
                 return;
             }
 

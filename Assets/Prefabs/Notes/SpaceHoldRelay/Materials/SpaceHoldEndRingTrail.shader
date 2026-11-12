@@ -1,4 +1,4 @@
-Shader "Notes/SpaceHold/SpaceHoldEndRingTrail"
+﻿Shader "Notes/SpaceHold/SpaceHoldEndRingTrail"
 {
     Properties
     {

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -18,7 +18,7 @@ public class OptionDataListController : MonoBehaviour
     }
 
     /// <summary>
-    /// OptionTopic�̈ړ�
+    /// OptionTopicの移動
     /// </summary>
     /// <param name="index"></param>
     public void MoveOptionTopic(int delta)

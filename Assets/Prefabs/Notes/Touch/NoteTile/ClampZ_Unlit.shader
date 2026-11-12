@@ -1,4 +1,4 @@
-Shader "Notes/TouchNote/ClampZ_Unlit"
+﻿Shader "Notes/TouchNote/ClampZ_Unlit"
 {
     Properties
     {

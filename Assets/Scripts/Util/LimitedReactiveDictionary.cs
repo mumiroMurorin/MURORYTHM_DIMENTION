@@ -1,4 +1,4 @@
-using UniRx;
+ï»¿using UniRx;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -17,7 +17,7 @@ public class LimitedReactiveDictionary<TKey, TValue>
 
     public void Add(TKey key, TValue value)
     {
-        // Šù‚ÉDictionary‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚éê‡’l‚ğ•ÏX‚·‚é
+        // æ—¢ã«Dictionaryã«å«ã¾ã‚Œã¦ã„ã‚‹å ´åˆå€¤ã‚’å¤‰æ›´ã™ã‚‹
         if (_dictionary.ContainsKey(key))
         {
             _dictionary[key] = value;
@@ -26,7 +26,7 @@ public class LimitedReactiveDictionary<TKey, TValue>
             return;
         }
 
-        // —v‘f”‚ªÅ‘å’l‚ğ’´‚¦‚éê‡AÅ‚àŒÃ‚¢—v‘f‚ğíœ
+        // è¦ç´ æ•°ãŒæœ€å¤§å€¤ã‚’è¶…ãˆã‚‹å ´åˆã€æœ€ã‚‚å¤ã„è¦ç´ ã‚’å‰Šé™¤
         if (_dictionary.Count + 1 > _maxCount)
         {
             var oldestKey = _keyOrder.First.Value;
@@ -34,9 +34,9 @@ public class LimitedReactiveDictionary<TKey, TValue>
             _keyOrder.RemoveFirst();
         }
 
-        // V‚µ‚¢—v‘f‚ğ’Ç‰Á
+        // æ–°ã—ã„è¦ç´ ã‚’è¿½åŠ 
         _dictionary.Add(key, value);
-        // Add‡ŠÇ—‚Ì‚½‚ß‚ÉLinkedList‚É‚à’Ç‰Á
+        // Addé †ç®¡ç†ã®ãŸã‚ã«LinkedListã«ã‚‚è¿½åŠ 
         _keyOrder.AddLast(key);
     }
 

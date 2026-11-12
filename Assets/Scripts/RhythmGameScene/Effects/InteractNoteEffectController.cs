@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -31,7 +31,7 @@ public class InteractNoteEffectController : MonoBehaviour, IInteractNoteEffectCo
             }
         }
 
-        // ”»’è‚É”º‚¤ƒGƒtƒFƒNƒg‚ª‘¶İ‚µ‚È‚©‚Á‚½ê‡
+        // åˆ¤å®šã«ä¼´ã†ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãŒå­˜åœ¨ã—ãªã‹ã£ãŸå ´åˆ
         if (!isExist)
         {
             this.gameObject.SetActive(false);
@@ -39,7 +39,7 @@ public class InteractNoteEffectController : MonoBehaviour, IInteractNoteEffectCo
         }
     }
 
-  @public void SetTransform(Vector3 pos, Quaternion rotation)
+  ã€€public void SetTransform(Vector3 pos, Quaternion rotation)
     {
         this.gameObject.transform.position = pos;
         this.gameObject.transform.rotation = rotation;
@@ -50,7 +50,7 @@ public class InteractNoteEffectController : MonoBehaviour, IInteractNoteEffectCo
         this.gameObject.SetActive(true);
         foreach (var effect in effects)
         {
-            // Ä¶‚³‚ê‚éƒGƒtƒFƒNƒg‚ÍSetEffect“à‚ÅƒAƒNƒeƒBƒu‚É‚È‚Á‚Ä‚é‚Í‚¸
+            // å†ç”Ÿã•ã‚Œã‚‹ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã¯SetEffectå†…ã§ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ãªã£ã¦ã‚‹ã¯ãš
             if (effect.Effect == null) { continue; }
             if (!effect.Effect.gameObject.activeInHierarchy) { continue; }
             effect.Effect.Play();

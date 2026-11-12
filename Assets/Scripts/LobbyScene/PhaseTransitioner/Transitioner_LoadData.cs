@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -23,7 +23,7 @@ namespace TransitionerInLobbyScene
 
         void IPhaseTransitionerInLobbyScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"LoadData\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"LoadData\"");
 
             SoundManager.Instance.PlayBGM(BGM_Type.Lobby);
 
@@ -33,7 +33,7 @@ namespace TransitionerInLobbyScene
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase()
         {
@@ -88,14 +88,14 @@ namespace TransitionerInLobbyScene
         {
             if (LocalizationSettings.AvailableLocales == null)
             {
-                Debug.LogWarning("yTransitioner_LoadDatazLocalization available locales is not initialized.");
+                Debug.LogWarning("ã€Transitioner_LoadDataã€‘Localization available locales is not initialized.");
                 return;
             }
 
             var locale = LocalizationSettings.AvailableLocales.GetLocale(new LocaleIdentifier(GetLocaleCode(language)));
             if (locale == null)
             {
-                Debug.LogWarning($"yTransitioner_LoadDatazLocale was not found for {language}.");
+                Debug.LogWarning($"ã€Transitioner_LoadDataã€‘Locale was not found for {language}.");
                 return;
             }
 

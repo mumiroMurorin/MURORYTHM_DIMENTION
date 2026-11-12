@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -46,7 +46,7 @@ public class MusicDataListLoaderDebug : MonoBehaviour, IMusicDataListLoader
     }
 
     /// <summary>
-    /// Šy‹È‚Ìƒ[ƒh‚ğ”ñ“¯Šú‚Ås‚¤
+    /// æ¥½æ›²ã®ãƒ­ãƒ¼ãƒ‰ã‚’éåŒæœŸã§è¡Œã†
     /// </summary>
     /// <param name="onEndAction"></param>
     /// <param name="token"></param>

@@ -1,4 +1,4 @@
-Shader "Notes/Stages/WorldTMPHorizontalClip"
+﻿Shader "Notes/Stages/WorldTMPHorizontalClip"
 {
     Properties
     {

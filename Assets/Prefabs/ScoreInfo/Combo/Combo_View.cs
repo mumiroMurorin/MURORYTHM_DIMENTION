@@ -1,13 +1,13 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class Combo_View : MonoBehaviour
 {
-    [Header("‰½ƒRƒ“ƒ{‚©‚ç•\¦‚·‚é‚©")]
+    [Header("ä½•ã‚³ãƒ³ãƒœã‹ã‚‰è¡¨ç¤ºã™ã‚‹ã‹")]
     [SerializeField] int comboThreshold = 5;
-    [Header("ƒRƒ“ƒ{•Êƒ}ƒeƒŠƒAƒ‹")]
+    [Header("ã‚³ãƒ³ãƒœåˆ¥ãƒãƒ†ãƒªã‚¢ãƒ«")]
     [SerializeField] TextMaterialPreset[] presets;
     [SerializeField] TextMeshPro textMeshPro;
     [SerializeField] DoScalePulseBuilder scalePulseBuilder;

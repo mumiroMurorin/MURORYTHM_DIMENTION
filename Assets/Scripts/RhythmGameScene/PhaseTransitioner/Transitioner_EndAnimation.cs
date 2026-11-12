@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
@@ -21,14 +21,14 @@ namespace TransitionerInRhythmGameScene
 
         void IPhaseTransitionerInRhythmGameScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"EndAnimation\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"EndAnimation\"");
 
-            // •]‰¿ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
+            // è©•ä¾¡ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿ
             controller.Value.PlayAnimation(TransitionNextPhase);
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase()
         {

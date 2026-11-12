@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,12 +13,12 @@ public class CharacterSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// •¶šƒIƒuƒWƒFƒNƒg‚ÌƒXƒ|[ƒ“
+    /// æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¹ãƒãƒ¼ãƒ³
     /// </summary>
     /// <param name="pos"></param>
     public GameObject SpawnCharacter(string str, FlyingTextSettings settings = default)
     {
-        // İ’è‚Ì”½‰f
+        // è¨­å®šã®åæ˜ 
         if(settings != null) { settings.ApplySettings(); }
 
         var parent = new GameObject(str);

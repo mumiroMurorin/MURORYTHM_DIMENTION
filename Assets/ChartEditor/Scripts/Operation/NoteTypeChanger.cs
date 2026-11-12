@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -22,12 +22,12 @@ namespace ChartEditor
         {
             if (chartEditorDataGetter.CurrentEditMode.Value != EditMode.ChangeType) { return; }
 
-            // ¶ƒNƒŠƒbƒN
+            // å·¦ã‚¯ãƒªãƒƒã‚¯
             if (Input.GetMouseButtonDown(0)) { ChangeNoteTypeOnClick(); }
         }
 
         /// <summary>
-        /// ƒm[ƒcƒ^ƒCƒv‚Ì•ÏX
+        /// ãƒãƒ¼ãƒ„ã‚¿ã‚¤ãƒ—ã®å¤‰æ›´
         /// </summary>
         private void ChangeNoteTypeOnClick()
         {

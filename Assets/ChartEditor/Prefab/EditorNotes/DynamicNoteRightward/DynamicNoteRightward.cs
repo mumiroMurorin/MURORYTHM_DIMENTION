@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -35,7 +35,7 @@ namespace ChartEditor
             if (noteType != DeploymentNoteType.DynamicGroundLeftward &&
                 noteType != DeploymentNoteType.DynamicGroundRightward)
             {
-                Debug.LogWarning($"yNotezDynamicNote‚Í {noteType} ‚É‘Î‰‚µ‚Ä‚¢‚Ü‚¹‚ñ");
+                Debug.LogWarning($"ã€Noteã€‘DynamicNoteã¯ {noteType} ã«å¯¾å¿œã—ã¦ã„ã¾ã›ã‚“");
                 return;
             }
 

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -23,13 +23,13 @@ namespace ChartEditor
 
         private async UniTask Load(CancellationToken token)
         {
-            // ƒm[ƒgƒf[ƒ^‚ª‘¶İ‚·‚é‚Ü‚Å‘Ò‚Â
+            // ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ã¾ã§å¾…ã¤
             await UniTask.WaitUntil(() => noteObject.NoteData != null, cancellationToken: token);
 
-            // ƒm[ƒgƒf[ƒ^‚ª‘¶İ‚·‚é‚Ü‚Å‘Ò‚Â
+            // ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ã¾ã§å¾…ã¤
             await UniTask.WaitUntil(() => noteObject.NoteData.Address != null, cancellationToken: token);
 
-            // IVerticesControlableNoteData‚É•ÏŠ·
+            // IVerticesControlableNoteDataã«å¤‰æ›
             if (noteObject.NoteData is not IVerticesControlableNoteData noteData) { return; }
             this.noteData = noteData;
         }

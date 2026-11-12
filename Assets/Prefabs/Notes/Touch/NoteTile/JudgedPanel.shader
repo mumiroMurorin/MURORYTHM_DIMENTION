@@ -1,4 +1,4 @@
-Shader "Notes/TouchNote/JudgedPanel"
+﻿Shader "Notes/TouchNote/JudgedPanel"
 {
     Properties
     {

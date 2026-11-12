@@ -1,11 +1,11 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
 
 /// <summary>
-/// Šeíƒm[ƒcƒf[ƒ^‚ÌList‚ğ‚Ü‚Æ‚ß‚½‚à‚Ì
+/// å„ç¨®ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿ã®Listã‚’ã¾ã¨ã‚ãŸã‚‚ã®
 /// </summary>
 public class ChartData
 {
@@ -14,19 +14,19 @@ public class ChartData
     public int MaxCombo { get; private set; } = 0;
 
     /// <summary>
-    /// ‘S‚Ä‚Ìƒm[ƒc(ƒŠƒXƒg)‚ğ“Z‚ß‚½ƒvƒƒpƒeƒB
+    /// å…¨ã¦ã®ãƒãƒ¼ãƒ„(ãƒªã‚¹ãƒˆ)ã‚’çºã‚ãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
     /// </summary>
     List<List<INoteData>> allNoteDataLists = new List<List<INoteData>>();
 
     public IEnumerable<IEnumerable<INoteData>> AllNoteDataLists { get { return allNoteDataLists; } }
 
     /// <summary>
-    /// ƒ\ƒtƒ‰ƒ“ƒf[ƒ^
+    /// ã‚½ãƒ•ãƒ©ãƒ³ãƒ‡ãƒ¼ã‚¿
     /// </summary>
     public PositionGraph PositionGraph { get; } = new();
 
     /// <summary>
-    /// ƒm[ƒcƒf[ƒ^‚Ì’Ç‰Á
+    /// ãƒãƒ¼ãƒ„ãƒ‡ãƒ¼ã‚¿ã®è¿½åŠ 
     /// </summary>
     /// <param name="noteData"></param>
     public void AddNoteData(INoteData noteData)
@@ -36,10 +36,10 @@ public class ChartData
 
         NoteNum++;
 
-        // ˆø”‚Ìƒf[ƒ^‚Ìƒm[ƒcƒŠƒXƒg‚ª‘¶İ‚·‚é‚©Šm”F
+        // å¼•æ•°ã®ãƒ‡ãƒ¼ã‚¿ã®ãƒãƒ¼ãƒ„ãƒªã‚¹ãƒˆãŒå­˜åœ¨ã™ã‚‹ã‹ç¢ºèª
         foreach (var noteList in allNoteDataLists)
         {
-            // ‘¶İ‚·‚éê‡‚Í’Ç‰Á‚µ‚ÄI—¹
+            // å­˜åœ¨ã™ã‚‹å ´åˆã¯è¿½åŠ ã—ã¦çµ‚äº†
             if (noteList.Count > 0 && noteList[0].NoteType == noteData.NoteType)
             {
                 noteList.Add(noteData);
@@ -47,12 +47,12 @@ public class ChartData
             }
         }
 
-        // ‘¶İ‚µ‚È‚¢ê‡‚ÍV‚µ‚­List‚ğì‚Á‚Ä’Ç‰Á
+        // å­˜åœ¨ã—ãªã„å ´åˆã¯æ–°ã—ãListã‚’ä½œã£ã¦è¿½åŠ 
         allNoteDataLists.Add(new List<INoteData>() { noteData });
     }
 
     /// <summary>
-    /// ƒXƒs[ƒh”{—¦ƒf[ƒ^‚Ì’Ç‰Á
+    /// ã‚¹ãƒ”ãƒ¼ãƒ‰å€ç‡ãƒ‡ãƒ¼ã‚¿ã®è¿½åŠ 
     /// </summary>
     /// <param name="speedRatioData"></param>
     public void AddSpeedRatioData(SpeedRatioData speedRatioData)
@@ -61,39 +61,39 @@ public class ChartData
     }
 
     /// <summary>
-    /// ƒm[ƒcƒŠƒXƒg‚ğ•Ô‚·
+    /// ãƒãƒ¼ãƒ„ãƒªã‚¹ãƒˆã‚’è¿”ã™
     /// </summary>
     /// <param name="noteType"></param>
     /// <returns></returns>
     public IEnumerable<INoteData> GetNoteDataList(NoteType noteType)
     {
-        // ˆø”‚Ìƒf[ƒ^‚Ìƒm[ƒcƒŠƒXƒg‚ª‘¶İ‚·‚é‚©Šm”F
+        // å¼•æ•°ã®ãƒ‡ãƒ¼ã‚¿ã®ãƒãƒ¼ãƒ„ãƒªã‚¹ãƒˆãŒå­˜åœ¨ã™ã‚‹ã‹ç¢ºèª
         foreach (var noteList in allNoteDataLists)
         {
-            // ‘¶İ‚·‚éê‡‚Í’Ç‰Á‚µ‚ÄI—¹
+            // å­˜åœ¨ã™ã‚‹å ´åˆã¯è¿½åŠ ã—ã¦çµ‚äº†
             if (noteList.Count > 0 && noteList[0].NoteType == noteType)
             {
                 return noteList;
             }
         }
 
-        // ‘¶İ‚µ‚È‚¢ê‡‚Í‹ó‚ÌƒŠƒXƒg‚ğ•Ô‚·
+        // å­˜åœ¨ã—ãªã„å ´åˆã¯ç©ºã®ãƒªã‚¹ãƒˆã‚’è¿”ã™
         return new List<INoteData>();
     }
 
     public IEnumerable<T> GetNoteDataList<T>(T noteData) where T : INoteData
     {
-        // ˆø”‚Ìƒf[ƒ^‚Ìƒm[ƒcƒŠƒXƒg‚ª‘¶İ‚·‚é‚©Šm”F
+        // å¼•æ•°ã®ãƒ‡ãƒ¼ã‚¿ã®ãƒãƒ¼ãƒ„ãƒªã‚¹ãƒˆãŒå­˜åœ¨ã™ã‚‹ã‹ç¢ºèª
         foreach (var noteList in allNoteDataLists)
         {
-            // ‘¶İ‚·‚éê‡‚Í’Ç‰Á‚µ‚ÄI—¹
+            // å­˜åœ¨ã™ã‚‹å ´åˆã¯è¿½åŠ ã—ã¦çµ‚äº†
             if (noteList.Count > 0 && noteList[0].GetType() == noteData.GetType())
             {
                 return noteList.Select(x => (T)x).ToList();
             }
         }
 
-        // ‘¶İ‚µ‚È‚¢ê‡‚Í‹ó‚ÌƒŠƒXƒg‚ğ•Ô‚·
+        // å­˜åœ¨ã—ãªã„å ´åˆã¯ç©ºã®ãƒªã‚¹ãƒˆã‚’è¿”ã™
         return null;
     }
 }

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -26,11 +26,11 @@ namespace ChartEditor
             var vertices = notesGetter.EditingVertices.Value.SpaceVertices;
 
             Record(() => 
-            // ‚¸‚ç‚·
+            // ãšã‚‰ã™
             {
                 vertices.SlideVertexIndices(delta);
             }, () =>
-            // ‹t‚É‚¸‚ç‚·
+            // é€†ã«ãšã‚‰ã™
             {
                 vertices.SlideVertexIndices(-delta);
             });

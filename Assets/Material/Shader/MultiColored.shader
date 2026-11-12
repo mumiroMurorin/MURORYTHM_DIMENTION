@@ -1,4 +1,4 @@
-Shader "Custom/MultiColored"
+﻿Shader "Custom/MultiColored"
 {
     Properties
     {

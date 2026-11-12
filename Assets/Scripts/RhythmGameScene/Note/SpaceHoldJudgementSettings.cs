@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "ScriptableObject/Note Judgement Settings/SpaceHold", fileName = "SpaceHoldJudgementSettings")]
 public class SpaceHoldJudgementSettings : NoteJudgementSettings

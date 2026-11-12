@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -24,14 +24,14 @@ namespace TransitionerInTitleScene
 
         void IPhaseTransitionerInTitleScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"LoadData\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"LoadData\"");
 
             bool[] isCompletedTask = new bool[2];
 
             optionDataSetter?.SetOption(initializingOption);
             optionDataSetter?.ResetTutorialGuideCharacterType();
 
-            // Šy‹Èƒf[ƒ^ƒŠƒXƒg‚Ì“Ç‚İ‚İ‚ÆƒZƒbƒg
+            // æ¥½æ›²ãƒ‡ãƒ¼ã‚¿ãƒªã‚¹ãƒˆã®èª­ã¿è¾¼ã¿ã¨ã‚»ãƒƒãƒˆ
             if (!musicDataListLoader.Value.CheckLoadedMusicDatas())
             {
                 musicDataListLoader.Value.LoadMusicDataList(() => {
@@ -44,7 +44,7 @@ namespace TransitionerInTitleScene
                 isCompletedTask[0] = true;
             }
 
-            // ƒ^ƒCƒgƒ‹“®‰æ‚Ì“Ç‚İ‚İ
+            // ã‚¿ã‚¤ãƒˆãƒ«å‹•ç”»ã®èª­ã¿è¾¼ã¿
             videoLoader.LoadVideo(() =>
             {
                 isCompletedTask[1] = true;
@@ -66,7 +66,7 @@ namespace TransitionerInTitleScene
         }
 
         /// <summary>
-        /// GameStartƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// GameStartãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionGameStartPhase()
         {
@@ -75,7 +75,7 @@ namespace TransitionerInTitleScene
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase()
         {

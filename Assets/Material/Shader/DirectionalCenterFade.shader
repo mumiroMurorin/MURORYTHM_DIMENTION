@@ -1,4 +1,4 @@
-Shader "Custom/DirectionalCenterFadeWithEnd"
+﻿Shader "Custom/DirectionalCenterFadeWithEnd"
 {
     Properties
     {

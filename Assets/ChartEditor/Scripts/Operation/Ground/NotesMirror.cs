@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -22,7 +22,7 @@ namespace ChartEditor
 
         public void MirrorSelectingNotes()
         {
-            // ŒÃ‚¢ƒAƒhƒŒƒX‚ğ‹L˜^‚µ‚Ä”½“]
+            // å¤ã„ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è¨˜éŒ²ã—ã¦åè»¢
             var previousAddress = new List<NoteDataToAddress>();
             foreach (var note in notesGetter.SelectingNotes)
             {
@@ -30,28 +30,28 @@ namespace ChartEditor
                 MirrorNote(note);
             }
 
-            // V‚µ‚¢ƒAƒhƒŒƒX‚ğ‹L˜^
+            // æ–°ã—ã„ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è¨˜éŒ²
             var currentAddress = new List<NoteDataToAddress>();
             foreach (var note in notesGetter.SelectingNotes)
             {
                 currentAddress.Add(new NoteDataToAddress(note, note.Address));
             }
 
-            // RedoUndo‚É“o˜^
+            // RedoUndoã«ç™»éŒ²
             RecordNotesMovingMirror(previousAddress, currentAddress);
 
-            Debug.Log($"y”½“]z");
+            Debug.Log($"ã€åè»¢ã€‘");
         }
 
         private void MirrorNote(IDeployableNoteData noteData)
         {
             if(noteData == null) { return; }
 
-            // IMovableObject‚Ìæ“¾
+            // IMovableObjectã®å–å¾—
             var noteObject = notesGetter.GetNoteObject(noteData);
             if (!noteObject.TryGetComponent(out IMovableObject movableObject)) { return; }
 
-            // ƒAƒhƒŒƒX‚ÌŒvZ
+            // ã‚¢ãƒ‰ãƒ¬ã‚¹ã®è¨ˆç®—
             var newAddress = new AddressWithinRange(noteData.Address);
             newAddress.MirrorRange();
 

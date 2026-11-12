@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -6,9 +6,9 @@ using DG.Tweening;
 [System.Serializable]
 public class DoScalePulseBuilder
 {
-    [Tooltip("‘å‚«‚³”{—¦")]
+    [Tooltip("å¤§ãã•å€ç‡")]
     [SerializeField] float scaleMultiplier = 1.5f;
-    [Tooltip("Œp‘±ŠÔ")]
+    [Tooltip("ç¶™ç¶šæ™‚é–“")]
     [SerializeField] float duration = 0.3f; 
 
     Vector3 originalScale;
@@ -23,7 +23,7 @@ public class DoScalePulseBuilder
             isSetOriginalScale = true;
         }
 
-        // ‚·‚Å‚ÉTween‚ª“®‚¢‚Ä‚¢‚½‚ç’†’f‚µ‚ÄƒŠƒZƒbƒg
+        // ã™ã§ã«TweenãŒå‹•ã„ã¦ã„ãŸã‚‰ä¸­æ–­ã—ã¦ãƒªã‚»ãƒƒãƒˆ
         if (currentTween != null && currentTween.IsActive())
         {
             currentTween.Kill();

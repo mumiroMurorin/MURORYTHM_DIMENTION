@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -28,7 +28,7 @@ namespace UIInRhythmGameScene
 
         private void Bind()
         {
-            // Šy‹Èƒf[ƒ^‚ÉŠÖ˜A‚·‚éUI
+            // æ¥½æ›²ãƒ‡ãƒ¼ã‚¿ã«é–¢é€£ã™ã‚‹UI
             musicDataGetter_model?.Music
                 .Where(data => data != null)
                 .Subscribe(readyToPlayUIControllerView.SetMusicData)

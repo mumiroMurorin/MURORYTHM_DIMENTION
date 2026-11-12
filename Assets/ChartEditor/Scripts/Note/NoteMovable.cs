@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -12,9 +12,9 @@ namespace ChartEditor
     public class NoteMovable : MonoBehaviour, IMovableObject
     {
         [SerializeField] NoteObject noteObject;
-        [Tooltip("ˆÚ“®‚ÌƒAƒEƒgƒ‰ƒCƒ“F")]
+        [Tooltip("ç§»å‹•æ™‚ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è‰²")]
         [SerializeField] private ColorSetting outlineColorOnMove;
-        [Tooltip("ˆÚ“®•‚‚­‚‚³")]
+        [Tooltip("ç§»å‹•æ™‚æµ®ãé«˜ã•")]
         [SerializeField] float addHeightOnMove = 1f;
 
         NoteObject IMovableObject.Note => noteObject;
@@ -29,13 +29,13 @@ namespace ChartEditor
 
         private async UniTask Bind(CancellationToken token)
         {
-            // ƒm[ƒgƒf[ƒ^‚ª‘¶İ‚·‚é‚Ü‚Å‘Ò‚Â
+            // ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ã¾ã§å¾…ã¤
             await UniTask.WaitUntil(() => noteObject.NoteData != null, cancellationToken: token);
 
-            // ƒm[ƒgƒf[ƒ^‚ª‘¶İ‚·‚é‚Ü‚Å‘Ò‚Â
+            // ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ã¾ã§å¾…ã¤
             await UniTask.WaitUntil(() => noteObject.NoteData.Address != null, cancellationToken: token);
 
-            // ƒAƒhƒŒƒX‚Ì•ÏX’Ê’m‚É‘Î‚µ‚ÄêŠ‚ÌXV
+            // ã‚¢ãƒ‰ãƒ¬ã‚¹ã®å¤‰æ›´é€šçŸ¥ã«å¯¾ã—ã¦å ´æ‰€ã®æ›´æ–°
             noteObject.NoteData.Address.BarIndexRP
                 .Subscribe(_ => {
                     OnChangeAddress(noteObject.NoteData.Address); })
@@ -59,7 +59,7 @@ namespace ChartEditor
             noteObject.OutlineColors.Add(outlineColorOnMove);
             noteObject.SetCollidersActive(false);
 
-            // ’Ç‰Á‚·‚éƒxƒNƒgƒ‹‚ğ•Û‘¶
+            // è¿½åŠ ã™ã‚‹ãƒ™ã‚¯ãƒˆãƒ«ã‚’ä¿å­˜
             addPos = Vector3.up * addHeightOnMove;
             this.transform.position += addPos;
         }
@@ -74,13 +74,13 @@ namespace ChartEditor
             noteObject.OutlineColors.Remove(outlineColorOnMove);
             noteObject.SetCollidersActive(true);
 
-            // ’Ç‰Á‚µ‚½ƒxƒNƒgƒ‹•ªŒ³‚É–ß‚·
+            // è¿½åŠ ã—ãŸãƒ™ã‚¯ãƒˆãƒ«åˆ†å…ƒã«æˆ»ã™
             this.transform.position -= addPos;
             addPos = Vector3.zero;
         }
 
         /// <summary>
-        /// ƒAƒhƒŒƒX‚ªXV‚³‚ê‚½‚Ì“®ì
+        /// ã‚¢ãƒ‰ãƒ¬ã‚¹ãŒæ›´æ–°ã•ã‚ŒãŸæ™‚ã®å‹•ä½œ
         /// </summary>
         /// <param name="address"></param>
         private void OnChangeAddress(IReadOnlyAddressWithinRange address)

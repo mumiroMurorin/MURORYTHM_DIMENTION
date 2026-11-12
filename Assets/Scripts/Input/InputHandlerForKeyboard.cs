@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +6,7 @@ public abstract class InputHandlerForKeyboard : MonoBehaviour
 {
     void Update()
     {
-        // ƒQ[ƒ€‚Ì‹­§I—¹
+        // ã‚²ãƒ¼ãƒ ã®å¼·åˆ¶çµ‚äº†
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Escape)) { QuitGame(); }
 
         EachUpdate();
@@ -15,7 +15,7 @@ public abstract class InputHandlerForKeyboard : MonoBehaviour
     protected abstract void EachUpdate();
 
     /// <summary>
-    /// ƒQ[ƒ€‚Ì‹­§I—¹
+    /// ã‚²ãƒ¼ãƒ ã®å¼·åˆ¶çµ‚äº†
     /// </summary>
     private void QuitGame()
     {

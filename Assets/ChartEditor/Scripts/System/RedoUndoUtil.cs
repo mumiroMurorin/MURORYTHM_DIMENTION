@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ChartEditor;
@@ -14,21 +14,21 @@ namespace UndoRedo.Vertices
         }
 
         /// <summary>
-        /// ’¸“_ƒf[ƒ^‚ÌˆÚ“®‚ğRedoUndo‚É‘Î‰‚³‚¹‚é
+        /// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ã®ç§»å‹•ã‚’RedoUndoã«å¯¾å¿œã•ã›ã‚‹
         /// </summary>
         /// <param name="previous"></param>
         /// <param name="current"></param>
         public static void RecordVertcesMoving(List<VertexDataToPos> previous, List<VertexDataToPos> current)
         {
             Record(() =>
-            // ˆÚ“®
+            // ç§»å‹•
             {
                 foreach (var pair in current)
                 {
                     MoveVertex(pair.Data, pair.Pos);
                 }
             }, () =>
-            // –ß‚·
+            // æˆ»ã™
             {
                 foreach (var pair in previous)
                 {
@@ -51,14 +51,14 @@ namespace UndoRedo.Notes
         public static void RecordNotesMoving(List<NoteDataToAddress> previous, List<NoteDataToAddress> current)
         {
             Record(() =>
-            // ˆÚ“®
+            // ç§»å‹•
             {
                 foreach (var pair in current)
                 {
                     MoveNote(pair.NoteData, pair.Address);
                 }
             }, () =>
-            // –ß‚·
+            // æˆ»ã™
             {
                 foreach (var pair in previous)
                 {
@@ -70,7 +70,7 @@ namespace UndoRedo.Notes
         public static void RecordNotesMovingMirror(List<NoteDataToAddress> previous, List<NoteDataToAddress> current)
         {
             Record(() =>
-            // ˆÚ“®
+            // ç§»å‹•
             {
                 foreach (var pair in current)
                 {
@@ -78,7 +78,7 @@ namespace UndoRedo.Notes
                     ChangeTypeNote(pair.NoteData);
                 }
             }, () =>
-            // –ß‚·
+            // æˆ»ã™
             {
                 foreach (var pair in previous)
                 {

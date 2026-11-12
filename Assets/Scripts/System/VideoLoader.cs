@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
@@ -22,7 +22,7 @@ public class VideoLoader : MonoBehaviour
     }
 
     /// <summary>
-    /// “®‰æ‚Ìƒ[ƒhI—¹‚Ü‚Å‘Ò‚¿
+    /// å‹•ç”»ã®ãƒ­ãƒ¼ãƒ‰çµ‚äº†ã¾ã§å¾…ã¡
     /// </summary>
     /// <param name="callBack"></param>
     public void LoadVideo(System.Action callBack = null)

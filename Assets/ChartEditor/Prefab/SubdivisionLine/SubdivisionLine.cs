@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -11,14 +11,14 @@ namespace ChartEditor
 
         public override void OnChangeBpm(float bpm, float backBpm)
         {
-            //// ‘Oƒf[ƒ^‚Æ“¯‚¶bpm‚Ì‚Í•\¦‚µ‚È‚¢
+            //// å‰ãƒ‡ãƒ¼ã‚¿ã¨åŒã˜bpmã®æ™‚ã¯è¡¨ç¤ºã—ãªã„
             //bpm = !Mathf.Approximately(bpm, backBpm) ? bpm : -1;
             lineInfo_view.SetBPM(bpm);
         }
 
         public override void OnChangeSpeedRatio(float speedRatio, float backSpeedRatio)
         {
-            //// ‘Oƒf[ƒ^‚Æ“¯‚¶bpm‚Ì‚Í•\¦‚µ‚È‚¢
+            //// å‰ãƒ‡ãƒ¼ã‚¿ã¨åŒã˜bpmã®æ™‚ã¯è¡¨ç¤ºã—ãªã„
             //bpm = !Mathf.Approximately(bpm, backBpm) ? bpm : -1;
             lineInfo_view.SetSpeedRatio(speedRatio, !Mathf.Approximately(speedRatio, backSpeedRatio));
         }

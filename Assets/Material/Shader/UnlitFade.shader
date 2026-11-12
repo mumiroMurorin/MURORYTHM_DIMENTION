@@ -1,4 +1,4 @@
-Shader "Custom/UnlitFade"
+﻿Shader "Custom/UnlitFade"
 {
     Properties
     {

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ public class InteractNoteEffect_DynamicLeftward : InteractNoteEffect
     {
         if (noteDataOrigin is not NoteData_DynamicGroundLeftward noteData) { return; }
 
-        // ƒp[ƒeƒBƒNƒ‹‚ÌƒZƒbƒg
+        // ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã®ã‚»ãƒƒãƒˆ
         foreach (var particle in particles)
         {
             particle.ApplyGroundShapeSetting(noteData.Range[0], noteData.Range.Length);

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -22,7 +22,7 @@ namespace TransitionerInRhythmGameScene
 
         void IPhaseTransitionerInRhythmGameScene.Transition()
         {
-            Debug.Log("yTransitionzTransition to \"LoadBody\"");
+            Debug.Log("ã€Transitionã€‘Transition to \"LoadBody\"");
 
             loadingBodyUIObj.SetActive(true);
             openLodingBodyUI?.Value.PlayAnimation(() => {
@@ -31,7 +31,7 @@ namespace TransitionerInRhythmGameScene
         }
 
         /// <summary>
-        /// ‘Ì‚Ì”F¯UI‚ğ•Â‚¶‚é
+        /// ä½“ã®èªè­˜UIã‚’é–‰ã˜ã‚‹
         /// </summary>
         private void CloseUI()
         {
@@ -39,7 +39,7 @@ namespace TransitionerInRhythmGameScene
         }
 
         /// <summary>
-        /// Ÿ‚ÌƒtƒF[ƒY‚Ö‚ÌˆÚ“®
+        /// æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã¸ã®ç§»å‹•
         /// </summary>
         private void TransitionNextPhase()
         {

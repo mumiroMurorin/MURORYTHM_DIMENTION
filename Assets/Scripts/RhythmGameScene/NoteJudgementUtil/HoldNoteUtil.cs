@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -9,11 +9,11 @@ namespace JudgementUtil.Hold
     {
         static public List<int> GetJudgeRange(List<TimeToRange> timeToRanges ,float currentTime)
         {
-            // ŠÔŠO”»’è
+            // æ™‚é–“å¤–åˆ¤å®š
             if (timeToRanges[0].Timing > currentTime) { return new List<int>(); }
             if (timeToRanges[^1].Timing < currentTime) { return timeToRanges[^1].Range.Select(x => (int)x).ToList(); }
 
-            // ¡ƒz[ƒ‹ƒhƒm[ƒc‚Ì‚Ç‚ÌŠÔ‚ğ”»’è‚µ‚Ä‚¢‚é‚Ì‚©’²‚×‚é
+            // ä»Šãƒ›ãƒ¼ãƒ«ãƒ‰ãƒãƒ¼ãƒ„ã®ã©ã®æ™‚é–“ã‚’åˆ¤å®šã—ã¦ã„ã‚‹ã®ã‹èª¿ã¹ã‚‹
             TimeToRange former = new TimeToRange(0, new float[0]);
             TimeToRange latter = new TimeToRange(0, new float[0]);
             for (int i = 0; i < timeToRanges.Count; i++)
@@ -25,7 +25,7 @@ namespace JudgementUtil.Hold
                 latter = timeToRanges[i + 1];
             }
 
-            // ”»’è”ÍˆÍ‚ÌŒvZ
+            // åˆ¤å®šç¯„å›²ã®è¨ˆç®—
             float t0 = former.Timing;
             float t1 = latter.Timing;
             float x0 = former.Range[0];

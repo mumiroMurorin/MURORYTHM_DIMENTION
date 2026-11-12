@@ -1,4 +1,4 @@
-using UniRx;
+﻿using UniRx;
 using UnityEngine;
 
 public class RootSceneTimeCounter : MonoBehaviour, ITimeGetter, ITimeController

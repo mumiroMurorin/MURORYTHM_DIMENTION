@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,13 +10,13 @@ namespace ChartEditor
 
         public void OnChangeEditMode(EditMode editMode)
         {
-            // ˆê’U‘S•””ñ•\¦
+            // ä¸€æ—¦å…¨éƒ¨éè¡¨ç¤º
             foreach (var description in descriptionObjects)
             {
                 description.InActive();
             }
 
-            // ‘R‚é‚×‚«•\¦‚ğs‚¤
+            // ç„¶ã‚‹ã¹ãè¡¨ç¤ºã‚’è¡Œã†
             foreach (var description in descriptionObjects)
             {
                 description.CheckAndSet(editMode);

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -23,7 +23,7 @@ namespace ChartEditor
         IConnectableObject NoteObject { get; }
 
         /// <summary>
-        /// Šî–{ƒ`ƒFƒCƒ“ŠÖŒW‚Í‚±‚ê‚ÉˆË‘¶
+        /// åŸºæœ¬ãƒã‚§ã‚¤ãƒ³é–¢ä¿‚ã¯ã“ã‚Œã«ä¾å­˜
         /// </summary>
         IReadOnlyReactiveProperty<int> ChainIndex { get; }
 

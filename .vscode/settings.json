@@ -1,4 +1,10 @@
 ﻿{
+    "files.encoding": "utf8",
+    "files.autoGuessEncoding": false,
+    "files.eol": "\r\n",
+    "[csharp]": { "files.encoding": "utf8bom" },
+    "[shaderlab]": { "files.encoding": "utf8bom" },
+    "[hlsl]": { "files.encoding": "utf8bom" },
     "files.exclude":
     {
         "**/.DS_Store":true,

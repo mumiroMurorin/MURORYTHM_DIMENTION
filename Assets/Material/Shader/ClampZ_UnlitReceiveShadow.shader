@@ -1,4 +1,4 @@
-Shader "Custom/ClampZ_UnlitReceiveShadow"
+﻿Shader "Custom/ClampZ_UnlitReceiveShadow"
 {
     Properties
     {

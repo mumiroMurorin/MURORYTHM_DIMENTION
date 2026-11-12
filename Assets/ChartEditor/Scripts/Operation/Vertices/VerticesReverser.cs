@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -27,11 +27,11 @@ namespace ChartEditor
             var vertices = notesGetter.EditingVertices.Value.SpaceVertices;
 
             Record(() =>
-            // ”½“]
+            // åè»¢
             {
                 vertices.ReverseVertices(new Vector2(0, 1), new Vector2(0, -1));
             }, () =>
-            // “¯‚¶‚­”½“]
+            // åŒã˜ãåè»¢
             {
                 vertices.ReverseVertices(new Vector2(0, 1), new Vector2(0, -1));
             });
@@ -45,11 +45,11 @@ namespace ChartEditor
             var vertices = notesGetter.EditingVertices.Value.SpaceVertices;
 
             Record(() =>
-            // ”½“]
+            // åè»¢
             {
                 vertices.ReverseVertices(new Vector2(1, 0), new Vector2(-1, 0));
             }, () =>
-            // “¯‚¶‚­”½“]
+            // åŒã˜ãåè»¢
             {
                 vertices.ReverseVertices(new Vector2(1, 0), new Vector2(-1, 0));
             });

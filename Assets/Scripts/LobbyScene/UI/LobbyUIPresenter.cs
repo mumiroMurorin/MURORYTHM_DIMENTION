@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TransitionerInLobbyScene;
@@ -22,12 +22,12 @@ namespace UIInLobbyScene
 
         private void BindSliderUI()
         {
-            // ƒ^ƒbƒ`‚³‚ê‚½Žž‚ÌUI‹““®
+            // ã‚¿ãƒƒãƒã•ã‚ŒãŸæ™‚ã®UIæŒ™å‹•
             operationGetter_model?.Value.OnTouchSliderListner
                 .Subscribe(sliderUnitsController_view.OnTouchSlider)
                 .AddTo(this.gameObject);
 
-            // ‘€ì‚Ì’Ç‰Á
+            // æ“ä½œã®è¿½åŠ 
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveAdd()
                 .Subscribe(value =>
@@ -37,7 +37,7 @@ namespace UIInLobbyScene
                 })
                 .AddTo(this.gameObject);
 
-            // ‘€ì‚ÌˆêV
+            // æ“ä½œã®ä¸€æ–°
             operationGetter_model?.Value.SliderTouchDatas
                 .ObserveReset()
                 .Subscribe(_ =>

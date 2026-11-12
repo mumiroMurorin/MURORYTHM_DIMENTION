@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -14,13 +14,13 @@ namespace ChartEditor
     {
         [SerializeField] NoteObject noteObject;
 
-        [Header("ƒm[ƒcƒ}ƒeƒŠƒAƒ‹")]
+        [Header("ãƒãƒ¼ãƒ„ãƒãƒ†ãƒªã‚¢ãƒ«")]
         [SerializeField] Material startMaterial;
         [SerializeField] Material relayMaterial;
         [SerializeField] Material endMaterial;
         [SerializeField] Material meshMaterial;
 
-        [Tooltip("ŒxƒAƒEƒgƒ‰ƒCƒ“F")]
+        [Tooltip("è­¦å‘Šã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è‰²")]
         [SerializeField] ColorSetting outlineColorOnAlone;
 
         [Space(40)]
@@ -31,23 +31,23 @@ namespace ChartEditor
 
         public Action OnDestroyListner { get; set; }
 
-        // ‰E’[¶’[
+        // å³ç«¯å·¦ç«¯
         Transform IConnectableObject.MeshRightEdge => meshRightEdge;
         Transform IConnectableObject.MeshLeftEdge => meshLeftEdge;
 
         NoteObject IConnectableObject.Note => noteObject;
 
-        // Ÿƒm[ƒg
+        // æ¬¡ãƒãƒ¼ãƒˆ
         ReactiveProperty<IConnectableObject> nextNote = new ReactiveProperty<IConnectableObject>();
         IReadOnlyReactiveProperty<IConnectableObject> IConnectableObject.NextNote => nextNote;
         void IConnectableObject.SetNextNote(IConnectableObject nextNote) { this.nextNote.Value = nextNote; }
 
-        // ‘Oƒm[ƒg
+        // å‰ãƒãƒ¼ãƒˆ
         ReactiveProperty<IConnectableObject> backNote = new ReactiveProperty<IConnectableObject>();
         IReadOnlyReactiveProperty<IConnectableObject> IConnectableObject.BackNote => backNote;
         void IConnectableObject.SetBackNote(IConnectableObject backNote) { this.backNote.Value = backNote; }
 
-        // ƒƒ“ƒo•Ï”
+        // ãƒ¡ãƒ³ãƒå¤‰æ•°
         GameObject meshObject;
         List<IDisposable> nextNoteDisposables = new List<IDisposable>();
         CancellationTokenSource cts = new CancellationTokenSource();
@@ -60,18 +60,18 @@ namespace ChartEditor
 
         private async UniTask Bind(CancellationToken token)
         {
-            // ƒm[ƒgƒf[ƒ^‚ª‘¶İ‚·‚é‚Ü‚Å‘Ò‚Â
+            // ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ã¾ã§å¾…ã¤
             await UniTask.WaitUntil(() => noteObject.NoteData != null, cancellationToken: token);
 
-            // ƒm[ƒgƒf[ƒ^‚ª‘¶İ‚·‚é‚Ü‚Å‘Ò‚Â
+            // ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ã¾ã§å¾…ã¤
             await UniTask.WaitUntil(() => noteObject.NoteData.Address != null, cancellationToken: token);
 
-            // ƒm[ƒc‚Ìí—Ş•ÏX
+            // ãƒãƒ¼ãƒ„ã®ç¨®é¡å¤‰æ›´
             noteObject.NoteData.NoteTypeRP
                 .Subscribe(ChangeNoteMaterial)
                 .AddTo(this.gameObject);
 
-            // Ÿƒm[ƒc‚ª•Ï‚í‚Á‚½w“Ç‚µ‚È‚¨‚·
+            // æ¬¡ãƒãƒ¼ãƒ„ãŒå¤‰ã‚ã£ãŸæ™‚è³¼èª­ã—ãªãŠã™
             nextNote
                 .Subscribe(next => {
                     DisposeHoldMesh();
@@ -92,7 +92,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ‚±‚Ìƒm[ƒc‚É‘Î‚·‚éƒoƒCƒ“ƒh
+        /// ã“ã®ãƒãƒ¼ãƒ„ã«å¯¾ã™ã‚‹ãƒã‚¤ãƒ³ãƒ‰
         /// </summary>
         /// <param name="thisNote"></param>
         private void BindForThisNote()
@@ -100,7 +100,7 @@ namespace ChartEditor
             if (this.nextNote == null) { return; }
             if (this.nextNote.Value == null) { return; }
 
-            // 2ƒtƒŒ[ƒ€‚²‚Æ‚ÉˆÊ’u‚ª•Ï‚í‚Á‚Ä‚È‚¢‚©ƒ`ƒFƒbƒN
+            // 2ãƒ•ãƒ¬ãƒ¼ãƒ ã”ã¨ã«ä½ç½®ãŒå¤‰ã‚ã£ã¦ãªã„ã‹ãƒã‚§ãƒƒã‚¯
             var disposable1 = Observable.IntervalFrame(2)
                 .Select(_ => meshLeftEdge.position)
                 .DistinctUntilChanged()
@@ -124,14 +124,14 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// Ÿƒm[ƒc‚É‘Î‚·‚éƒoƒCƒ“ƒh
+        /// æ¬¡ãƒãƒ¼ãƒ„ã«å¯¾ã™ã‚‹ãƒã‚¤ãƒ³ãƒ‰
         /// </summary>
         /// <param name="nextNote"></param>
         private void BindForNextNote(IConnectableObject nextNote)
         {
             if (nextNote == null) { return; }
 
-            // 2ƒtƒŒ[ƒ€‚²‚Æ‚ÉˆÊ’u‚ª•Ï‚í‚Á‚Ä‚È‚¢‚©ƒ`ƒFƒbƒN
+            // 2ãƒ•ãƒ¬ãƒ¼ãƒ ã”ã¨ã«ä½ç½®ãŒå¤‰ã‚ã£ã¦ãªã„ã‹ãƒã‚§ãƒƒã‚¯
             var disposable1 = Observable.IntervalFrame(2)
                 .Select(_ => nextNote.MeshLeftEdge.position)
                 .DistinctUntilChanged()
@@ -155,7 +155,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// Ÿƒm[ƒc‚É‘Î‚·‚éƒoƒCƒ“ƒh‚ğÁ‚·
+        /// æ¬¡ãƒãƒ¼ãƒ„ã«å¯¾ã™ã‚‹ãƒã‚¤ãƒ³ãƒ‰ã‚’æ¶ˆã™
         /// </summary>
         private void DisposeHoldMesh()
         {
@@ -170,17 +170,17 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// Œx‚Ì•\¦
+        /// è­¦å‘Šã®è¡¨ç¤º
         /// </summary>
         private void SetWarning()
         {
-            // “Æ‚è‚Ú‚Á‚¿
+            // ç‹¬ã‚Šã¼ã£ã¡
             if (backNote.Value == null && nextNote.Value == null && !isAlone)
             {
                 noteObject.OutlineColors.Add(outlineColorOnAlone);
                 isAlone = true;
             }
-            // “Æ—§‚Å‚È‚¢
+            // ç‹¬ç«‹ã§ãªã„
             else if ((backNote.Value != null || nextNote.Value != null) && isAlone) 
             {
                 noteObject.OutlineColors.Remove(outlineColorOnAlone);
@@ -189,7 +189,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒ}ƒeƒŠƒAƒ‹‚Ì•ÏX
+        /// ãƒãƒ†ãƒªã‚¢ãƒ«ã®å¤‰æ›´
         /// </summary>
         /// <param name="holdNoteType"></param>
         private void ChangeNoteMaterial(DeploymentNoteType noteType)
@@ -209,7 +209,7 @@ namespace ChartEditor
                     noteMeshRenderer.material = endMaterial;
                     break;
                 default:
-                    Debug.Log($"yNotezİ’è‚³‚ê‚Ä‚¢‚È‚¢ƒpƒ‰ƒ[ƒ^‚Å‚·: {noteType}");
+                    Debug.Log($"ã€Noteã€‘è¨­å®šã•ã‚Œã¦ã„ãªã„ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã§ã™: {noteType}");
                     break;
             }
         }

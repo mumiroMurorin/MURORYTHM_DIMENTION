@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -22,7 +22,7 @@ public class MusicDataListController : MonoBehaviour
     }
 
     /// <summary>
-    /// MusicTopic‚ÌˆÚ“®
+    /// MusicTopicã®ç§»å‹•
     /// </summary>
     /// <param name="index"></param>
     public void MoveMusicTopic(int delta)
@@ -31,7 +31,7 @@ public class MusicDataListController : MonoBehaviour
     }
 
     /// <summary>
-    /// “ïˆÕ“x‚Ì•ÏX
+    /// é›£æ˜“åº¦ã®å¤‰æ›´
     /// </summary>
     /// <param name="diff"></param>
     public void ChangeDifficulty(int delta)
@@ -40,7 +40,7 @@ public class MusicDataListController : MonoBehaviour
     }
 
     /// <summary>
-    /// Œ»İ‘I‘ğ‚³‚ê‚Ä‚¢‚éŠy‹ÈA“ïˆÕ“x‚ª—V‚×‚é‚©•Ô‚·
+    /// ç¾åœ¨é¸æŠã•ã‚Œã¦ã„ã‚‹æ¥½æ›²ã€é›£æ˜“åº¦ãŒéŠã¹ã‚‹ã‹è¿”ã™
     /// </summary>
     /// <returns></returns>
     public bool IsPlayableMusicOnCurrentSelecting()

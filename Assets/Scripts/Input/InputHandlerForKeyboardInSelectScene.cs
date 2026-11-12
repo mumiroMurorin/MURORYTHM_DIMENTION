@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TransitionerInSelectScene;
@@ -9,7 +9,7 @@ public class InputHandlerForKeyboardInSelectScene : InputHandlerForKeyboard
 
     protected override void EachUpdate()
     {
-        // LeftCtrl + RÇ≈ÉãÅ[ÉgÉVÅ[ÉìÇ÷
+        // LeftCtrl + R„Åß„É´„Éº„Éà„Ç∑„Éº„É≥„Å∏
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.R)) { TransitionRootScene(); }
     }
 

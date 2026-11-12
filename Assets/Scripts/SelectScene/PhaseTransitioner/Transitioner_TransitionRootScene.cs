@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -22,7 +22,7 @@ namespace TransitionerInSelectScene
 
         void IPhaseTransitionerInSelectScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"TransitionRootScene\"");
+            Debug.Log("„ÄêTransition„ÄëTransition to \"TransitionRootScene\"");
             var async = SceneManager.LoadSceneAsync(nextSceneName);
         }
     }

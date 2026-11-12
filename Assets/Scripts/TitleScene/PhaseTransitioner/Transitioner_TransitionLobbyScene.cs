@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -25,7 +25,7 @@ namespace TransitionerInTitleScene
 
         void IPhaseTransitionerInTitleScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"TransitionLobbyScene\"");
+            Debug.Log("„ÄêTransition„ÄëTransition to \"TransitionLobbyScene\"");
 
             cts?.CancelAndDispose();
             cts = new CancellationTokenSource();

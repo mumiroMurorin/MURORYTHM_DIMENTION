@@ -1,4 +1,4 @@
-Shader "Custom/ClampX" {
+ï»¿Shader "Custom/ClampX" {
 
 	Properties{
 		_Color("Color", Color) = (1,1,1,1)
@@ -37,10 +37,10 @@ Shader "Custom/ClampX" {
 			UNITY_INSTANCING_BUFFER_END(Props)
 
 			void surf(Input IN, inout SurfaceOutputStandard o) {
-				// z”ÍˆÍ‚É‚ ‚é‚©‚Ç‚¤‚©‚ğ”»’è
+				// zç¯„å›²ã«ã‚ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®š
 				float inRange = step(_MinX, IN.worldPos.x) * step(IN.worldPos.x, _MaxX);
 
-				// _SecondaryColori”ÍˆÍŠOj‚©‚ç_Colori”ÍˆÍ“àj‚Ö•âŠÔ
+				// _SecondaryColorï¼ˆç¯„å›²å¤–ï¼‰ã‹ã‚‰_Colorï¼ˆç¯„å›²å†…ï¼‰ã¸è£œé–“
 				fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * lerp(_SecondaryColor, _Color, inRange);
 
 				o.Albedo = c.rgb;

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -65,7 +65,7 @@ namespace UIInRhythmGameScene
         {
             subText.text = difficulty.ToString().ToUpper();
 
-            // •¶šF‚Ì•ÏX
+            // æ–‡å­—è‰²ã®å¤‰æ›´
             if (difficultyToTMPColorGradients != null)
             {
                 foreach (var t in difficultyToTMPColorGradients)
@@ -78,13 +78,13 @@ namespace UIInRhythmGameScene
                 }
             }
 
-            // ŠeíF‚Ì•ÏX
+            // å„ç¨®è‰²ã®å¤‰æ›´
             if (changableColorImages != null)
             {
                 var color = Color.white;
                 foreach (var c in difficultyToColors)
                 {
-                    // “KØ‚ÈF‚ğæ‚èo‚·
+                    // é©åˆ‡ãªè‰²ã‚’å–ã‚Šå‡ºã™
                     if (c.CheckCondition(difficulty)) 
                     { 
                         color = c.Color;
@@ -92,10 +92,10 @@ namespace UIInRhythmGameScene
                     }
                 }
 
-                // ƒAƒ^ƒbƒ`
+                // ã‚¢ã‚¿ãƒƒãƒ
                 foreach (var i in changableColorImages)
                 {
-                    // “§–¾“x‚Í•ÛŒì
+                    // é€æ˜åº¦ã¯ä¿è­·
                     i.color = new Color(color.r, color.g, color.b, i.color.a);
                 }
             }

@@ -1,20 +1,20 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SliderUnitsControllerView : MonoBehaviour
 {
-    [Header("‡‚ÉƒXƒ‰ƒCƒ_[UI‚ğƒAƒ^ƒbƒ`")]
+    [Header("é †ã«ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼UIã‚’ã‚¢ã‚¿ãƒƒãƒ")]
     [SerializeField] SliderUnitUI[] sliderUnits;
-    [Header("’ÊíF")]
+    [Header("é€šå¸¸æ™‚è‰²")]
     [SerializeField] Color nonActionColor;
-    [Header("ƒ^ƒbƒ`•â³")]
+    [Header("ã‚¿ãƒƒãƒæ™‚è£œæ­£")]
     [SerializeField] float pressedDecrmentionColorValue;
-    [Header("ƒ^ƒbƒ`F•ÏXŠÔ")]
+    [Header("ã‚¿ãƒƒãƒæ™‚è‰²å¤‰æ›´æ™‚é–“")]
     [SerializeField] float interactSliderSeconds;
 
     /// <summary>
-    /// ‘€ì‚ª’Ç‰Á‚³‚ê‚½‚Ìˆ—
+    /// æ“ä½œãŒè¿½åŠ ã•ã‚ŒãŸæ™‚ã®å‡¦ç†
     /// </summary>
     /// <param name="sliderTouchData"></param>
     public void OnChangeSliderData(SliderTouchData sliderTouchData)
@@ -23,7 +23,7 @@ public class SliderUnitsControllerView : MonoBehaviour
         {
             if (sliderUnits.Length <= i)
             {
-                Debug.LogError($"yUIzƒXƒ‰ƒCƒ_[UI‚ªƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB index:{i}");
+                Debug.LogError($"ã€UIã€‘ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼UIãŒã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚ index:{i}");
                 return;
             }
 
@@ -32,7 +32,7 @@ public class SliderUnitsControllerView : MonoBehaviour
     }
 
     /// <summary>
-    /// ‘€ì‚ªˆêV‚³‚ê‚½‚Ìˆ—
+    /// æ“ä½œãŒä¸€æ–°ã•ã‚ŒãŸæ™‚ã®å‡¦ç†
     /// </summary>
     public void OnClearSliderData()
     {
@@ -43,7 +43,7 @@ public class SliderUnitsControllerView : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒ^ƒbƒ`‚³‚ê‚½‚Ìˆ—
+    /// ã‚¿ãƒƒãƒã•ã‚ŒãŸæ™‚ã®å‡¦ç†
     /// </summary>
     /// <param name="sliderTouchData"></param>
     public void OnTouchSlider(SliderTouchData sliderTouchData)
@@ -52,7 +52,7 @@ public class SliderUnitsControllerView : MonoBehaviour
         {
             if (sliderUnits.Length <= i)
             {
-                Debug.LogError($"yUIzƒXƒ‰ƒCƒ_[UI‚ªƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB index:{i}");
+                Debug.LogError($"ã€UIã€‘ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼UIãŒã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚ index:{i}");
                 return;
             }
 

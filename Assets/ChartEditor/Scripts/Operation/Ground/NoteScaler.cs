@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -34,7 +34,7 @@ namespace ChartEditor
 
         private void Update()
         {
-            // ”z’uƒ‚[ƒh‚Ì‚İ
+            // é…ç½®ãƒ¢ãƒ¼ãƒ‰ã®ã¿
             if (dataGetter.CurrentEditMode.Value != EditMode.Scale &&
                 dataGetter.CurrentEditMode.Value != EditMode.Scaling) { return; }
 
@@ -44,11 +44,11 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒNƒŠƒbƒN(Šg‘åk¬ŠJn)
+        /// ã‚¯ãƒªãƒƒã‚¯æ™‚(æ‹¡å¤§ç¸®å°é–‹å§‹)
         /// </summary>
         private void StartScaleNote()
         {
-            // Šg‘åk¬‚Å‚«‚éƒm[ƒc‚Å‚È‚¯‚ê‚Î•Ô‚·
+            // æ‹¡å¤§ç¸®å°ã§ãã‚‹ãƒãƒ¼ãƒ„ã§ãªã‘ã‚Œã°è¿”ã™
             var collider = dataGetter.GetInteractableCollider<IScalableCollider>();
             var scalableObject = collider?.Note;
 
@@ -63,16 +63,16 @@ namespace ChartEditor
             isRightAnchored = !collider.IsRightEdge;
             var baseNoteData = baseNote.Note.NoteData;
 
-            // •¡”‘I‘ğ‚³‚ê‚½ƒIƒuƒWƒFƒNƒg‚©‚çŠg‘åk¬‚Å‚«‚é‚â‚Â‚ğæ‚èo‚·
+            // è¤‡æ•°é¸æŠã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰æ‹¡å¤§ç¸®å°ã§ãã‚‹ã‚„ã¤ã‚’å–ã‚Šå‡ºã™
             foreach (var data in notesGetter.SelectingNotes)
             {
                 var obj = notesGetter.GetNoteObject(data);
                 if (!obj.TryGetComponent(out IScalableObject scalable)) { continue; }
 
-                // ƒm[ƒcƒIƒuƒWƒFƒNƒg‘¤‚Ì“®ì
+                // ãƒãƒ¼ãƒ„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå´ã®å‹•ä½œ
                 scalable.OnStartScale();
 
-                // ƒŠƒXƒg‚É•Û‘¶
+                // ãƒªã‚¹ãƒˆã«ä¿å­˜
                 int delta;
                 var address = data.Address;
                 if (isRightAnchored) { delta = (int)(address.Range[0] - baseNoteData.Address.Range[0]); }
@@ -86,36 +86,36 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒNƒŠƒbƒN’†(Šg‘åk¬’†)
+        /// ã‚¯ãƒªãƒƒã‚¯ä¸­(æ‹¡å¤§ç¸®å°ä¸­)
         /// </summary>
         private void ScaleNote()
         {
             if (scalableAndDelta == null || scalableAndDelta.Count == 0) { return; }
 
-            // ƒJ[ƒ\ƒ‹‰º‚Ìeæ“¾
+            // ã‚«ãƒ¼ã‚½ãƒ«ä¸‹ã®è¦ªå–å¾—
             var deployable = dataGetter.GetInteractableCollider<IDeployableCollider>();
             if (deployable == null) { return; }
             if (lastLocation == deployable) { return; }
 
-            // ÅV”z’uêŠ‚ÌXV
+            // æœ€æ–°é…ç½®å ´æ‰€ã®æ›´æ–°
             lastLocation = deployable;
 
-            // ƒAƒhƒŒƒX‚Ìæ“¾
+            // ã‚¢ãƒ‰ãƒ¬ã‚¹ã®å–å¾—
             AddressInChart address = deployable.Address;
             if (scaledAddress == null) { scaledAddress = new AddressInChart(address); }
 
             foreach (var pair in scalableAndDelta)
             {
-                // ƒf[ƒ^‚ÌXV
+                // ãƒ‡ãƒ¼ã‚¿ã®æ›´æ–°
                 ChangeRange(pair.Key, pair.Value + address.SliderIndex, isRightAnchored);
 
-                // ƒIƒuƒWƒFƒNƒg‚Ì“®ì
+                // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‹•ä½œ
                 pair.Key.OnScale();
             }
         }
 
         /// <summary>
-        /// ƒm[ƒg”ÍˆÍ‚ğ•Ï‚¦‚é
+        /// ãƒãƒ¼ãƒˆç¯„å›²ã‚’å¤‰ãˆã‚‹
         /// </summary>
         /// <param name="address"></param>
         /// <param name="index"></param>
@@ -127,17 +127,17 @@ namespace ChartEditor
             float min = address.Range.First();
             float max = address.Range.Last();
 
-            // ‰EŒÅ’è‚Å¶‘¤‚Æindex‚ªˆê‚Ì‚Æ‚«•Ô‚·
+            // å³å›ºå®šã§å·¦å´ã¨indexãŒä¸€ç·’ã®ã¨ãè¿”ã™
             if (isRightAnchored && (int)min == index) { return; }
-            // ¶ŒÅ’è‚Å‰E‘¤‚Æindex‚ªˆê‚Ì‚Æ‚«•Ô‚·
+            // å·¦å›ºå®šã§å³å´ã¨indexãŒä¸€ç·’ã®ã¨ãè¿”ã™
             if (!isRightAnchored && (int)max == index) { return; }
 
-            // ‰EŒÅ’è‚Å¶‘¤‚ÉL‚Î‚·
+            // å³å›ºå®šã§å·¦å´ã«ä¼¸ã°ã™
             if (isRightAnchored && index <= max)
             {
                 for (float i = index; i <= max; i++) { shifted.Add(i); }
             }
-            // ¶ŒÅ’è‚Å‰E‘¤‚ÉL‚Î‚·
+            // å·¦å›ºå®šã§å³å´ã«ä¼¸ã°ã™
             else if (!isRightAnchored && index >= min)
             {
                 for (float i = min; i <= index; i++) { shifted.Add(i); }
@@ -152,11 +152,11 @@ namespace ChartEditor
 
             scalableNote.Note.NoteData.SetAddress(newAddress);
 
-            Debug.Log($"yŠg‘åz\n {address.Range.First()} ` {address.Range.Last()}");
+            Debug.Log($"ã€æ‹¡å¤§ã€‘\n {address.Range.First()} ï½ {address.Range.Last()}");
         }
 
         /// <summary>
-        /// ƒNƒŠƒbƒNI—¹(Šg‘åk¬I—¹)
+        /// ã‚¯ãƒªãƒƒã‚¯çµ‚äº†æ™‚(æ‹¡å¤§ç¸®å°çµ‚äº†)
         /// </summary>
         private void FinishScaleNote()
         {
@@ -169,11 +169,11 @@ namespace ChartEditor
                 currentAddress.Add(new NoteDataToAddress(noteData, noteData.Address));
             }
 
-            // ˆÚ“®‚ğI‚¦‚½‚Æ‚«‚Í‚¶‚ß‚Ä“o˜^
+            // ç§»å‹•ã‚’çµ‚ãˆãŸã¨ãã¯ã˜ã‚ã¦ç™»éŒ²
             var previousAddressCopy = new List<NoteDataToAddress>(previousAddress);
             RecordNotesMoving(previousAddressCopy, currentAddress);
 
-            // Ä‘I‘ğ
+            // å†é¸æŠ
             notesSetter.ReselectNotes();
 
             Initialize();

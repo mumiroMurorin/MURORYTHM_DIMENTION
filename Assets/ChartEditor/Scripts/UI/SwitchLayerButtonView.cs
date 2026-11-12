@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,13 +30,13 @@ namespace ChartEditor
             switch (editNoteType)
             {
                 case EditNoteType.Ground:
-                    tmp.text = $"ÉåÉCÉÑÅ[\n<size=30><B><color={groundColor.ToHexString()}>Ground</color></B></size>";
+                    tmp.text = $"„É¨„Ç§„É§„Éº\n<size=30><B><color={groundColor.ToHexString()}>Ground</color></B></size>";
                     break;
                 case EditNoteType.Space:
-                    tmp.text = $"ÉåÉCÉÑÅ[\n<size=30><B><color={spaceColor.ToHexString()}>Space</color></B></size>";
+                    tmp.text = $"„É¨„Ç§„É§„Éº\n<size=30><B><color={spaceColor.ToHexString()}>Space</color></B></size>";
                     break;
                 case EditNoteType.Vertices:
-                    tmp.text = $"ÉåÉCÉÑÅ[\n<size=25><B><color={verticesColor.ToHexString()}>Vertices</color></B></size>";
+                    tmp.text = $"„É¨„Ç§„É§„Éº\n<size=25><B><color={verticesColor.ToHexString()}>Vertices</color></B></size>";
                     break;
             }
         }

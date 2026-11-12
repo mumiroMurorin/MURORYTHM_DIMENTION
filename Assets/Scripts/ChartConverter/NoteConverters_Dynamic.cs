@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace ChartConvert
 {
 
     /// <summary>
-    /// ªƒ_ƒCƒiƒ~ƒbƒNªƒm[ƒc
+    /// â†‘ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯â†‘ãƒãƒ¼ãƒ„
     /// </summary>
     public class DynamicUpwardConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
     {
@@ -19,13 +19,13 @@ namespace ChartConvert
         {
             if (noteDataInEditor.NoteType != type) { return false; }
 
-            // V‚½‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // æ–°ãŸã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             if (dataOrigin.DynamicUpwardData == null)
             {
                 dataOrigin.DynamicUpwardData = new List<NoteDataOrigin_DynamicUpward>();
             }
 
-            // ’Ç‰Á‚·‚éƒf[ƒ^‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             NoteDataOrigin_DynamicUpward data = new NoteDataOrigin_DynamicUpward()
             {
                 Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray()
@@ -61,7 +61,7 @@ namespace ChartConvert
             {
                 IDeployableNoteData noteData = new ChartEditor.NoteData_DynamicUpward();
 
-                // ƒf[ƒ^‚ÌƒZƒbƒg
+                // ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
                 var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
                 noteData.SetAddress(address);
 
@@ -73,7 +73,7 @@ namespace ChartConvert
     }
 
     /// <summary>
-    /// «ƒ_ƒCƒiƒ~ƒbƒN«ƒm[ƒc
+    /// â†“ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯â†“ãƒãƒ¼ãƒ„
     /// </summary>
     public class DynamicDownwardConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
     {
@@ -83,13 +83,13 @@ namespace ChartConvert
         {
             if (noteDataInEditor.NoteType != type) { return false; }
 
-            // V‚½‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // æ–°ãŸã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             if (dataOrigin.DynamicDownwardData == null)
             {
                 dataOrigin.DynamicDownwardData = new List<NoteDataOrigin_DynamicDownward>();
             }
 
-            // ’Ç‰Á‚·‚éƒf[ƒ^‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             NoteDataOrigin_DynamicDownward data = new NoteDataOrigin_DynamicDownward()
             {
                 Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray()
@@ -125,7 +125,7 @@ namespace ChartConvert
             {
                 IDeployableNoteData noteData = new ChartEditor.NoteData_DynamicDownward();
 
-                // ƒf[ƒ^‚ÌƒZƒbƒg
+                // ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
                 var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
 
                 noteData.SetAddress(address);
@@ -138,7 +138,7 @@ namespace ChartConvert
     }
 
     /// <summary>
-    /// ¨ƒ_ƒCƒiƒ~ƒbƒN¨ƒm[ƒc
+    /// â†’ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯â†’ãƒãƒ¼ãƒ„
     /// </summary>
     public class DynamicRightwardConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
     {
@@ -148,13 +148,13 @@ namespace ChartConvert
         {
             if (noteDataInEditor.NoteType != type) { return false; }
 
-            // V‚½‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // æ–°ãŸã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             if (dataOrigin.DynamicRightwardData == null)
             {
                 dataOrigin.DynamicRightwardData = new List<NoteDataOrigin_DynamicRightward>();
             }
 
-            // ’Ç‰Á‚·‚éƒf[ƒ^‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             NoteDataOrigin_DynamicRightward data = new NoteDataOrigin_DynamicRightward()
             {
                 Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray()
@@ -191,7 +191,7 @@ namespace ChartConvert
             {
                 IDeployableNoteData noteData = new ChartEditor.NoteData_DynamicRightward();
 
-                // ƒf[ƒ^‚ÌƒZƒbƒg
+                // ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
                 var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
 
                 noteData.SetAddress(address);
@@ -204,7 +204,7 @@ namespace ChartConvert
     }
 
     /// <summary>
-    /// ©ƒ_ƒCƒiƒ~ƒbƒN©ƒm[ƒc
+    /// â†ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯â†ãƒãƒ¼ãƒ„
     /// </summary>
     public class DynamicLeftwardConverter : IUnchainDataToRhythmGameConvertable, IUnchainedNoteConvertable
     {
@@ -214,13 +214,13 @@ namespace ChartConvert
         {
             if (noteDataInEditor.NoteType != type) { return false; }
 
-            // V‚½‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // æ–°ãŸã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             if (dataOrigin.DynamicLeftwardData == null)
             {
                 dataOrigin.DynamicLeftwardData = new List<NoteDataOrigin_DynamicLeftward>();
             }
 
-            // ’Ç‰Á‚·‚éƒf[ƒ^‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             NoteDataOrigin_DynamicLeftward data = new NoteDataOrigin_DynamicLeftward()
             {
                 Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray()
@@ -256,7 +256,7 @@ namespace ChartConvert
             {
                 IDeployableNoteData noteData = new ChartEditor.NoteData_DynamicLeftward();
 
-                // ƒf[ƒ^‚ÌƒZƒbƒg
+                // ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
                 var address = new AddressWithinRange(dataInChartEditor.BarData.BarIndex, dataInChartEditor.SubDivisionIndex, noteDataOrigin.Range.Select(x => (float)x).ToList());
 
                 noteData.SetAddress(address);

@@ -1,4 +1,4 @@
-Shader "Custom/ClampZ_UnlitPingPongBrightness"
+﻿Shader "Custom/ClampZ_UnlitPingPongBrightness"
 {
     Properties
     {

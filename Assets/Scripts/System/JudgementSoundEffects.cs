@@ -1,9 +1,9 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Perfect`Good‚Ü‚Å‚Ì”»’è‹–—e”ÍˆÍ‚ğ‚Ü‚Æ‚ß‚½ƒNƒ‰ƒX
+/// Perfectï½Goodã¾ã§ã®åˆ¤å®šè¨±å®¹ç¯„å›²ã‚’ã¾ã¨ã‚ãŸã‚¯ãƒ©ã‚¹
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObject/JudgementSoundEffects", fileName = "JudgementSoundEffects")]
 public class JudgementSoundEffects : ScriptableObject
@@ -38,7 +38,7 @@ public class JudgementSoundEffects : ScriptableObject
     }
 
     /// <summary>
-    /// w’è‚³‚ê‚½”»’è‚Ì”»’è‰¹‚ğ•Ô‚·
+    /// æŒ‡å®šã•ã‚ŒãŸåˆ¤å®šã®åˆ¤å®šéŸ³ã‚’è¿”ã™
     /// </summary>
     /// <param name="judgement"></param>
     /// <returns></returns>

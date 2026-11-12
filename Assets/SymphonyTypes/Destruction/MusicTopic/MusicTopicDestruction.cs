@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +13,7 @@ public class MusicTopicDestruction : MusicTopic
     {
         base.OnSetDifficulty(difficulty, level);
 
-        // “ïˆÕ“x”wŒiA•ÏX
+        // é›£æ˜“åº¦èƒŒæ™¯ã€å¤‰æ›´
         foreach(var dts in difficultyToLevelBackSprites)
         {
             if (dts.CheckCondition(difficulty)) 
@@ -22,7 +22,7 @@ public class MusicTopicDestruction : MusicTopic
             }
         }
 
-        // ƒŒƒxƒ‹ƒeƒLƒXƒgF•ÏX
+        // ãƒ¬ãƒ™ãƒ«ãƒ†ã‚­ã‚¹ãƒˆè‰²å¤‰æ›´
         foreach (var dtc in difficultyToTMPColors)
         {
             if (dtc.CheckCondition(difficulty))
@@ -31,7 +31,7 @@ public class MusicTopicDestruction : MusicTopic
             }
         }
 
-        // “ïˆÕ“x–¼
+        // é›£æ˜“åº¦å
         if (difficulty == Difficulty.Master)
         {
             diff_tmp.text = "APOCALYPSE";

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -28,22 +28,22 @@ namespace ChartEditor
 
         private async UniTask Bind(CancellationToken token)
         {
-            // ƒm[ƒgƒf[ƒ^‚ª‘¶İ‚·‚é‚Ü‚Å‘Ò‚Â
+            // ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ã¾ã§å¾…ã¤
             await UniTask.WaitUntil(() => noteObject.NoteData != null, cancellationToken: token);
 
-            // ƒm[ƒgƒf[ƒ^‚ª‘¶İ‚·‚é‚Ü‚Å‘Ò‚Â
+            // ãƒãƒ¼ãƒˆãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ã¾ã§å¾…ã¤
             await UniTask.WaitUntil(() => noteObject.NoteData.Address != null, cancellationToken: token);
 
-            // ITypeChangableNoteData‚É•ÏŠ·
+            // ITypeChangableNoteDataã«å¤‰æ›
             if (noteObject.NoteData is not ITypeChangableNoteData) { return; }
             noteData = (ITypeChangableNoteData)noteObject.NoteData;
 
-            // ƒm[ƒcƒ^ƒCƒv‚ª•ÏX‚³‚ê‚½
+            // ãƒãƒ¼ãƒ„ã‚¿ã‚¤ãƒ—ãŒå¤‰æ›´ã•ã‚ŒãŸæ™‚
             noteData.NoteTypeRP
                 .Subscribe(ChangeNoteColor)
                 .AddTo(this.gameObject);
 
-            // IChainNoteData‚É•ÏŠ·
+            // IChainNoteDataã«å¤‰æ›
             if (noteObject.NoteData is not IChainNoteData chainData) { return; }
 
             chainData.NoteObject.NextNote

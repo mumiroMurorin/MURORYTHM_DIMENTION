@@ -1,4 +1,4 @@
-Shader "UI/InverseRectMaskImage"
+ï»¿Shader "UI/InverseRectMaskImage"
 {
     Properties
     {
@@ -6,14 +6,14 @@ Shader "UI/InverseRectMaskImage"
         _Color("Tint", Color) = (1,1,1,1)
 
         [Header(Mask Settings)]
-        // ƒ}ƒXƒN‚Ì’†SÀ•W (UVÀ•W: 0.0 ~ 1.0)
+        // ãƒã‚¹ã‚¯ã®ä¸­å¿ƒåº§æ¨™ (UVåº§æ¨™: 0.0 ~ 1.0)
         _MaskCenter("Mask Center (UV)", Vector) = (0.5, 0.5, 0, 0)
-            // ƒ}ƒXƒN‚ÌƒTƒCƒY (UVÀ•W: •, ‚‚³)
+            // ãƒã‚¹ã‚¯ã®ã‚µã‚¤ã‚º (UVåº§æ¨™: å¹…, é«˜ã•)
             _MaskSize("Mask Size (UV)", Vector) = (0.3, 0.3, 0, 0)
-            // ‹«ŠE‚Ì‚Ú‚©‚µ‹ï‡
+            // å¢ƒç•Œã®ã¼ã‹ã—å…·åˆ
             _Softness("Edge Softness", Range(0, 0.5)) = 0.01
 
-            // --- UI—p•W€ƒvƒƒpƒeƒB ---
+            // --- UIç”¨æ¨™æº–ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ ---
             _StencilComp("Stencil Comparison", Float) = 8
             _Stencil("Stencil ID", Float) = 0
             _StencilOp("Stencil Operation", Float) = 0
@@ -87,7 +87,7 @@ Shader "UI/InverseRectMaskImage"
                 float4 _ClipRect;
                 float4 _MainTex_ST;
 
-                // ƒ}ƒXƒN—p•Ï”
+                // ãƒã‚¹ã‚¯ç”¨å¤‰æ•°
                 float4 _MaskCenter;
                 float4 _MaskSize;
                 float _Softness;
@@ -108,28 +108,28 @@ Shader "UI/InverseRectMaskImage"
                 {
                     half4 color = (tex2D(_MainTex, IN.texcoord) + _TextureSampleAdd) * IN.color;
 
-                    // --- ‹tƒ}ƒXƒNˆ— (‚±‚±‚©‚ç) ---
+                    // --- é€†ãƒã‚¹ã‚¯å‡¦ç† (ã“ã“ã‹ã‚‰) ---
 
-                    // UVÀ•W‚Æƒ}ƒXƒN’†S‚Ì‹——£‚ğŒvZ (â‘Î’l)
+                    // UVåº§æ¨™ã¨ãƒã‚¹ã‚¯ä¸­å¿ƒã®è·é›¢ã‚’è¨ˆç®— (çµ¶å¯¾å€¤)
                     float2 dist = abs(IN.texcoord - _MaskCenter.xy);
 
-                    // ‹éŒ`‚Ì”¼Œa (ƒTƒCƒY‚Ì”¼•ª)
+                    // çŸ©å½¢ã®åŠå¾„ (ã‚µã‚¤ã‚ºã®åŠåˆ†)
                     float2 halfSize = _MaskSize.xy * 0.5;
 
-                    // ”ÍˆÍ“à”»’è
-                    // x²Ay²‚Æ‚à‚É”ÍˆÍ“à‚Å‚ ‚ê‚Î 1 (“§–¾‚É‚·‚é)AŠO‚È‚ç 0 (•`‰æ‚·‚é)
-                    // smoothstep‚ğg‚Á‚Ä‹«ŠE‚ğ­‚µ‚Ú‚©‚·
+                    // ç¯„å›²å†…åˆ¤å®š
+                    // xè»¸ã€yè»¸ã¨ã‚‚ã«ç¯„å›²å†…ã§ã‚ã‚Œã° 1 (é€æ˜ã«ã™ã‚‹)ã€å¤–ãªã‚‰ 0 (æç”»ã™ã‚‹)
+                    // smoothstepã‚’ä½¿ã£ã¦å¢ƒç•Œã‚’å°‘ã—ã¼ã‹ã™
                     float inMaskX = smoothstep(halfSize.x, halfSize.x - _Softness, dist.x);
                     float inMaskY = smoothstep(halfSize.y, halfSize.y - _Softness, dist.y);
 
-                    // —¼•û‚Ì²‚Å”ÍˆÍ“à(=d‚È‚Á‚Ä‚¢‚é•”•ª)‚Ì‹­“x
+                    // ä¸¡æ–¹ã®è»¸ã§ç¯„å›²å†…(=é‡ãªã£ã¦ã„ã‚‹éƒ¨åˆ†)ã®å¼·åº¦
                     float maskWeight = inMaskX * inMaskY;
 
-                    // ƒAƒ‹ƒtƒ@‚ğí‚é (1 - maskWeight)
-                    // ƒ}ƒXƒN“à(maskWeight=1)‚È‚ç“§–¾(0)AŠO‚È‚ç‚»‚Ì‚Ü‚Ü(1)
+                    // ã‚¢ãƒ«ãƒ•ã‚¡ã‚’å‰Šã‚‹ (1 - maskWeight)
+                    // ãƒã‚¹ã‚¯å†…(maskWeight=1)ãªã‚‰é€æ˜(0)ã€å¤–ãªã‚‰ãã®ã¾ã¾(1)
                     color.a *= (1.0 - maskWeight);
 
-                    // --- ‹tƒ}ƒXƒNˆ— (‚±‚±‚Ü‚Å) ---
+                    // --- é€†ãƒã‚¹ã‚¯å‡¦ç† (ã“ã“ã¾ã§) ---
 
                     #ifdef UNITY_UI_CLIP_RECT
                     color.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);

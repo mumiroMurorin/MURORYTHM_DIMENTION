@@ -1,12 +1,12 @@
-Shader "Custom/GlintEffect_Rainbow"
+ï»¿Shader "Custom/GlintEffect_Rainbow"
 {
     Properties
     {
         [PerRendererData] _MainTex("Texture", 2D) = "white" {}
-    // _GlintColor‚ÍRGB‚Íg‚¢‚Ü‚¹‚ñ‚ªAAlpha(“§–¾“x)‚ğŒõ‚Ì‹­‚³’²®‚Ég‚¢‚Ü‚·
+    // _GlintColorã¯RGBã¯ä½¿ã„ã¾ã›ã‚“ãŒã€Alpha(é€æ˜åº¦)ã‚’å…‰ã®å¼·ã•èª¿æ•´ã«ä½¿ã„ã¾ã™
     _GlintColor("Glint Intensity (Alpha only)", Color) = (1,1,1,1)
 
-        // --- ’Ç‰Á: “øF‚ÌƒOƒ‰ƒf[ƒVƒ‡ƒ“ƒeƒNƒXƒ`ƒƒ ---
+        // --- è¿½åŠ : è™¹è‰²ã®ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ†ã‚¯ã‚¹ãƒãƒ£ ---
         [NoScaleOffset] _RampTex("Rainbow Ramp Texture", 2D) = "white" {}
     // ---------------------------------------
 
@@ -14,7 +14,7 @@ Shader "Custom/GlintEffect_Rainbow"
     _GlintWidth("Glint Width", Range(0.01, 1)) = 0.2
     _Angle("Glint Angle (Degrees)", Range(0,360)) = 45
 
-        // UI Mask—pƒvƒƒpƒeƒB
+        // UI Maskç”¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
         _StencilComp("Stencil Comparison", Float) = 8
         _Stencil("Stencil ID", Float) = 0
         _StencilOp("Stencil Operation", Float) = 0
@@ -72,7 +72,7 @@ Shader "Custom/GlintEffect_Rainbow"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-            // ’Ç‰Á‚µ‚½ƒ‰ƒ“ƒvƒeƒNƒXƒ`ƒƒ
+            // è¿½åŠ ã—ãŸãƒ©ãƒ³ãƒ—ãƒ†ã‚¯ã‚¹ãƒãƒ£
             sampler2D _RampTex;
             float4 _GlintColor;
             float _Speed;
@@ -93,7 +93,7 @@ Shader "Custom/GlintEffect_Rainbow"
                 fixed4 col = tex2D(_MainTex, i.uv);
                 col *= i.color;
 
-                // --- ƒOƒŠƒ“ƒgˆÊ’uŒvZ ---
+                // --- ã‚°ãƒªãƒ³ãƒˆä½ç½®è¨ˆç®— ---
                 float2 centeredUV = i.uv - float2(0.5, 0.5);
                 float rad = radians(_Angle);
                 float2 dir = float2(cos(rad), sin(rad));
@@ -103,29 +103,29 @@ Shader "Custom/GlintEffect_Rainbow"
                 float timeVal = frac(_Time.y * _Speed);
                 float glintPos = (timeVal - 0.5) * loopSpan;
 
-                // ’†S‚©‚ç‚Ìu•„†•t‚«v‹——£‚ğŒvZ
+                // ä¸­å¿ƒã‹ã‚‰ã®ã€Œç¬¦å·ä»˜ãã€è·é›¢ã‚’è¨ˆç®—
                 float signedDist = proj - glintPos;
-                // ƒ}ƒXƒN—p‚Ìâ‘Î‹——£
+                // ãƒã‚¹ã‚¯ç”¨ã®çµ¶å¯¾è·é›¢
                 float dist = abs(signedDist);
 
-                // Œõ‚ÌŒ`óƒ}ƒXƒN (’†S‚ª”Z‚­A’[‚ª”–‚¢)
+                // å…‰ã®å½¢çŠ¶ãƒã‚¹ã‚¯ (ä¸­å¿ƒãŒæ¿ƒãã€ç«¯ãŒè–„ã„)
                 float mask = smoothstep(_GlintWidth, 0.0, dist);
 
-                // --- “øFˆ—‚Ì’Ç‰Á ---
+                // --- è™¹è‰²å‡¦ç†ã®è¿½åŠ  ---
 
-                // 1. Œõ‚Ì‹Ø‚Ì•‚Ì’†‚Å‚ÌˆÊ’u‚ğ 0`1 ‚É³‹K‰»‚·‚é
-                // signedDist ‚Í -_GlintWidth ` +_GlintWidth ‚Ì”ÍˆÍ
-                // ‚±‚ê‚ğ 0 (¶’[) ` 0.5 (’†S) ` 1.0 (‰E’[) ‚É•ÏŠ·
+                // 1. å…‰ã®ç­‹ã®å¹…ã®ä¸­ã§ã®ä½ç½®ã‚’ 0ï½1 ã«æ­£è¦åŒ–ã™ã‚‹
+                // signedDist ã¯ -_GlintWidth ï½ +_GlintWidth ã®ç¯„å›²
+                // ã“ã‚Œã‚’ 0 (å·¦ç«¯) ï½ 0.5 (ä¸­å¿ƒ) ï½ 1.0 (å³ç«¯) ã«å¤‰æ›
                 float rampUV = (signedDist / _GlintWidth) * 0.5 + 0.5;
 
-                // 2. ƒ‰ƒ“ƒvƒeƒNƒXƒ`ƒƒ‚©‚çF‚ğæ“¾
-                // ‰¡•ûŒü(U)‚ÉrampUV‚ğg‚¢Ac(V)‚Í’†‰›‚Ì0.5‚ÅŒÅ’è
+                // 2. ãƒ©ãƒ³ãƒ—ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‹ã‚‰è‰²ã‚’å–å¾—
+                // æ¨ªæ–¹å‘(U)ã«rampUVã‚’ä½¿ã„ã€ç¸¦(V)ã¯ä¸­å¤®ã®0.5ã§å›ºå®š
                 fixed4 rainbowColor = tex2D(_RampTex, float2(rampUV, 0.5));
 
-                // 3. ‡¬
-                // rainbowColor.rgb : ƒeƒNƒXƒ`ƒƒ‚Ì“øF
-                // mask : Œõ‚ÌŒ`
-                // _GlintColor.a : ‘S‘Ì‚Ì–¾‚é‚³’²®—p
+                // 3. åˆæˆ
+                // rainbowColor.rgb : ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®è™¹è‰²
+                // mask : å…‰ã®å½¢
+                // _GlintColor.a : å…¨ä½“ã®æ˜ã‚‹ã•èª¿æ•´ç”¨
                 col.rgb += rainbowColor.rgb * mask * _GlintColor.a;
 
                 return col;

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -9,17 +9,17 @@ public class UpDownAnimation : MonoBehaviour
     [SerializeField] float height;
     [SerializeField] bool isDownFirst;
 
-    private Vector3 initialLocalPosition; // qƒIƒuƒWƒFƒNƒg‚Ìƒ[ƒJƒ‹ˆÊ’u
+    private Vector3 initialLocalPosition; // å­ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ­ãƒ¼ã‚«ãƒ«ä½ç½®
 
     void Start()
     {
-        // qƒIƒuƒWƒFƒNƒg‚Ì‰Šúƒ[ƒJƒ‹ˆÊ’u‚ğæ“¾
+        // å­ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸãƒ­ãƒ¼ã‚«ãƒ«ä½ç½®ã‚’å–å¾—
         initialLocalPosition = transform.localPosition;
 
-        // DoTween‚ğg—p‚µ‚Äã‰º‰^“®‚ğ‰i‘±“I‚ÉŒJ‚è•Ô‚·
+        // DoTweenã‚’ä½¿ç”¨ã—ã¦ä¸Šä¸‹é‹å‹•ã‚’æ°¸ç¶šçš„ã«ç¹°ã‚Šè¿”ã™
         transform.DOLocalMoveY(initialLocalPosition.y + height * (isDownFirst ? -1 : 1), duration)
-            .SetRelative(false) // ƒ[ƒJƒ‹ˆÊ’u‚ÉŠî‚Ã‚¢‚Ä“®ì
-            .SetEase(Ease.InOutSine) // ŠŠ‚ç‚©‚È“®‚«
-            .SetLoops(-1, LoopType.Yoyo); // ‰i‹v‚ÉŒJ‚è•Ô‚µiã‰ºj
+            .SetRelative(false) // ãƒ­ãƒ¼ã‚«ãƒ«ä½ç½®ã«åŸºã¥ã„ã¦å‹•ä½œ
+            .SetEase(Ease.InOutSine) // æ»‘ã‚‰ã‹ãªå‹•ã
+            .SetLoops(-1, LoopType.Yoyo); // æ°¸ä¹…ã«ç¹°ã‚Šè¿”ã—ï¼ˆä¸Šä¸‹ï¼‰
     }
 }

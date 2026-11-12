@@ -1,4 +1,4 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 
 namespace TransitionerInLobbyScene
 {
@@ -13,7 +13,7 @@ namespace TransitionerInLobbyScene
 
         void IPhaseTransitionerInLobbyScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"SelectLanguage_Operation\"");
+            Debug.Log("„ÄêTransition„ÄëTransition to \"SelectLanguage_Operation\"");
 
         }
     }

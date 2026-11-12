@@ -1,11 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 
 namespace Tutorial
 {
     /// <summary>
-    /// ƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ô
+    /// ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã¶
     /// </summary>
     [System.Serializable]
     public class Callback : TutorialActionNode

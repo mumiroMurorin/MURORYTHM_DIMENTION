@@ -1,4 +1,4 @@
-Shader "UI/Colored Image Outline"
+﻿Shader "UI/Colored Image Outline"
 {
     Properties
     {

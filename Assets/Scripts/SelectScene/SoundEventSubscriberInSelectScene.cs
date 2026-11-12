@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -33,7 +33,7 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
 
     private void BindInSelectMusicPhase()
     {
-        // ƒgƒsƒbƒN‚ÌˆÚ“®
+        // ãƒˆãƒ”ãƒƒã‚¯ã®ç§»å‹•
         musicDataListGetter?.CurrentMusicIndex
             .Skip(1)
             .Subscribe(_ => {
@@ -41,34 +41,34 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
             })
             .AddTo(this.gameObject);
 
-        // ‘I‘ðŠy‹È‚Ì•ÏX
+        // é¸æŠžæ¥½æ›²ã®å¤‰æ›´
         musicDataListGetter?.CurrentMusicData
             .Where(value => value != null)
             .Subscribe(value => {
                 if (value.SampleClip == null)
                 {
-                    Debug.LogWarning($"ySoundzSampleClip‚ªÝ’è‚³‚ê‚Ä‚¢‚È‚¢‚½‚ßAƒTƒ“ƒvƒ‹BGMÄ¶‚ðƒXƒLƒbƒv‚µ‚Ü‚·: {value.MusicName}");
+                    Debug.LogWarning($"ã€Soundã€‘SampleClipãŒè¨­å®šã•ã‚Œã¦ã„ãªã„ãŸã‚ã€ã‚µãƒ³ãƒ—ãƒ«BGMå†ç”Ÿã‚’ã‚¹ã‚­ãƒƒãƒ—ã—ã¾ã™: {value.MusicName}");
                     return;
                 }
                 soundManager.PlayBGM(value.SampleClip);
             })
             .AddTo(this.gameObject);
 
-        // “ïˆÕ“xUP
+        // é›£æ˜“åº¦UP
         musicDataListGetter?.Difficulty
             .Pairwise()
             .Where(pair => pair.Previous < pair.Current)
             .Subscribe(_ => soundManager.PlaySE(SE_Type.UpDifficulty))
             .AddTo(this.gameObject);
 
-        // “ïˆÕ“xDOWN
+        // é›£æ˜“åº¦DOWN
         musicDataListGetter?.Difficulty
             .Pairwise()
             .Where(pair => pair.Previous > pair.Current)
             .Subscribe(_ => soundManager.PlaySE(SE_Type.DownDifficulty))
             .AddTo(this.gameObject);
 
-        // Šy‹ÈƒgƒsƒbƒN‚Ì‘I‘ð
+        // æ¥½æ›²ãƒˆãƒ”ãƒƒã‚¯ã®é¸æŠž
         phaseStatusGetter?.Value.PhaseStatus
             .Pairwise()
             .Where(pair =>
@@ -82,21 +82,21 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
 
     private void BindInMusicDetailSelectPhase()
     {
-        // Šy‹È‚ÌŒˆ’è
+        // æ¥½æ›²ã®æ±ºå®š
         phaseStatusGetter?.Value.PhaseStatus
             .Pairwise()
             .Where(pair => pair.Current == PhaseStatusInSelectScene.FadeOut && (pair.Previous == PhaseStatusInSelectScene.DetailSelect || pair.Previous == PhaseStatusInSelectScene.DetailSelect_UnStartable))
             .Subscribe(_ => soundManager.PlaySE(SE_Type.DesicionMusic))
             .AddTo(this.gameObject);
 
-        // Šy‹ÈƒgƒsƒbƒN‘I‘ð‚É–ß‚é
+        // æ¥½æ›²ãƒˆãƒ”ãƒƒã‚¯é¸æŠžã«æˆ»ã‚‹
         phaseStatusGetter?.Value.PhaseStatus
             .Pairwise()
             .Where(pair => pair.Current == PhaseStatusInSelectScene.MusicSelect && (pair.Previous == PhaseStatusInSelectScene.DetailSelect || pair.Previous == PhaseStatusInSelectScene.DetailSelect_UnStartable))
             .Subscribe(_ => soundManager.PlaySE(SE_Type.BackTopic1))
             .AddTo(this.gameObject);
 
-        // ƒIƒvƒVƒ‡ƒ“‚Ì‘I‘ð
+        // ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®é¸æŠž
         phaseStatusGetter?.Value.PhaseStatus
             .Pairwise()
             .Where(pair => pair.Current == PhaseStatusInSelectScene.MusicOption && (pair.Previous == PhaseStatusInSelectScene.DetailSelect || pair.Previous == PhaseStatusInSelectScene.DetailSelect_UnStartable))
@@ -106,7 +106,7 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
 
     private void BindInOptionSelectPhase()
     {
-        // ƒgƒsƒbƒN‚ÌˆÚ“®
+        // ãƒˆãƒ”ãƒƒã‚¯ã®ç§»å‹•
         selectSceneDataGetter?.CurrentOptionIndex
             .Skip(1)
             .Subscribe(_ => {
@@ -114,12 +114,12 @@ public class SoundEventSubscriberInSelectScene : MonoBehaviour
             })
             .AddTo(this.gameObject);
 
-        // ƒIƒvƒVƒ‡ƒ“’l‚Ì•ÏX
+        // ã‚ªãƒ—ã‚·ãƒ§ãƒ³å€¤ã®å¤‰æ›´
         optionGetter?.OnChangeOptionValue
             .Subscribe(_ => soundManager.PlaySE(SE_Type.ChangeOptionValue))
             .AddTo(this.gameObject);
 
-        // Šy‹ÈŠm”F‚É–ß‚é
+        // æ¥½æ›²ç¢ºèªã«æˆ»ã‚‹
         phaseStatusGetter?.Value.PhaseStatus
             .Pairwise()
             .Where(pair => pair.Previous == PhaseStatusInSelectScene.MusicOption &&

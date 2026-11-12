@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -7,7 +7,7 @@ using UniRx;
 
 public class GameOverSceneDataHolder : IGameOverSceneDataGetter, IGameOverSceneDataSetter
 {
-    // ƒRƒ“ƒeƒBƒjƒ…[H
+    // ã‚³ãƒ³ãƒ†ã‚£ãƒ‹ãƒ¥ãƒ¼ï¼Ÿ
     ReactiveProperty<bool> isContinue = new ReactiveProperty<bool>(false);
     IReadOnlyReactiveProperty<bool> IGameOverSceneDataGetter.IsContinue => isContinue;
     void IGameOverSceneDataSetter.SetContinue(bool isPlay)

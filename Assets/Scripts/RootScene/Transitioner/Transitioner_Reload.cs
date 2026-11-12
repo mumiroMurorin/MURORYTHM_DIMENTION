@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -26,9 +26,9 @@ namespace TransitionerInRootScene
 
         void IPhaseTransitionerInRootScene.Transition()
         {
-            Debug.Log("ÅyTransitionÅzTransition to \"Reload\"");
+            Debug.Log("„ÄêTransition„ÄëTransition to \"Reload\"");
 
-            // ÉfÅ[É^ï€ë∂
+            // „Éá„Éº„Çø‰øùÂ≠ò
             trackingSettingsSaver?.SaveBodyTrackingSettings();
 
             LoadSceneAsync(cts.Token).Forget();

@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using System.IO.Ports;
@@ -118,14 +118,14 @@ public class SerialHandler : MonoBehaviour
         */
     }
 
-    //ƒ|[ƒg”Ô†‚ÆƒXƒs[ƒh(ƒŒ[ƒg)‚ğƒZƒbƒg
+    //ãƒãƒ¼ãƒˆç•ªå·ã¨ã‚¹ãƒ”ãƒ¼ãƒ‰(ãƒ¬ãƒ¼ãƒˆ)ã‚’ã‚»ãƒƒãƒˆ
     public void SetOption(string str,int speed)
     {
         portName = str;
         baudRate = speed;
     }
 
-    //óMƒXƒ^[ƒg
+    //å—ä¿¡ã‚¹ã‚¿ãƒ¼ãƒˆ
     public void StartSerial()
     {
         //if (slider.IsReturnSerialMode())
@@ -135,14 +135,14 @@ public class SerialHandler : MonoBehaviour
         }
     }
 
-    //óMƒf[ƒ^‚ğ•Ô‚·
+    //å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’è¿”ã™
     public string ReturnTouchData()
     {
         if (!isNewMessageReceived_) { return null; }
         return message_;
     }
 
-    //Ú‘±‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©•Ô‚·
+    //æ¥ç¶šã•ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹è¿”ã™
     public bool IsReturnConnectDevice()
     {
         return isRunning_ && serialPort_ != null && serialPort_.IsOpen;

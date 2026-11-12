@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -35,7 +35,7 @@ namespace ChartEditor
 
         private void Bind()
         {
-            // •ˆ–Ê¶¬
+            // è­œé¢ç”Ÿæˆ
             dataGetter?.ChartData
                 .Where(data => data != null)
                 .Subscribe(data => {
@@ -46,24 +46,24 @@ namespace ChartEditor
                 })
                 .AddTo(this.gameObject);
 
-            // ƒŒƒCƒ„[ƒ`ƒFƒ“ƒW
+            // ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒã‚§ãƒ³ã‚¸
             dataGetter.EditNoteType
                 .Subscribe(OnChangeLayer)
                 .AddTo(this.gameObject);
 
-            // Šg‘å—¦‘€ì
+            // æ‹¡å¤§ç‡æ“ä½œ
             optionGetter.ChartViewScale
                 .Subscribe(_ => { UpdateLinePos(0, 0); })
                 .AddTo(this.gameObject);
         }
 
         /// <summary>
-        /// •ˆ–Êƒf[ƒ^‚É‘Î‚·‚éw“Ç‚ğs‚¤
+        /// è­œé¢ãƒ‡ãƒ¼ã‚¿ã«å¯¾ã™ã‚‹è³¼èª­ã‚’è¡Œã†
         /// </summary>
         /// <param name="chartData"></param>
         private void BindForChartData(ChartData chartData)
         {
-            // Collection‚ÌŠÄ‹‚Í‰Šú‰»‚ª‚È‚¢‚Ì‚Å¬ßü‚Ì”‚¾‚¯ŒJ‚è•Ô‚·
+            // Collectionã®ç›£è¦–ã¯åˆæœŸåŒ–ãŒãªã„ã®ã§å°ç¯€ç·šã®æ•°ã ã‘ç¹°ã‚Šè¿”ã™
             foreach(var bar in chartData.BarDatas)
             {
                 BindForBarData(bar);
@@ -73,95 +73,95 @@ namespace ChartEditor
                 .Subscribe(barData => BindForBarData(barData.Value))
                 .AddTo(this.gameObject);
 
-            // ¬ßü’Ç‰Á
+            // å°ç¯€ç·šè¿½åŠ æ™‚
             chartData?.OnAddBarDataListener
                 .Subscribe(barIndex => { UpdateLinePos(Mathf.Max(0, barIndex - 1), 0); })
                 .AddTo(this.gameObject);
 
-            // BPM•ÏX
+            // BPMå¤‰æ›´æ™‚
             chartData?.OnChangeBPMListener
                 .Subscribe(pair => { UpdateLinePos(pair.Item1, pair.Item2); })
                 .AddTo(this.gameObject);
         }
 
         /// <summary>
-        /// ¬ßü‚É‘Î‚·‚éw“Ç‚ğs‚¤
+        /// å°ç¯€ç·šã«å¯¾ã™ã‚‹è³¼èª­ã‚’è¡Œã†
         /// </summary>
         /// <param name="barData"></param>
         private void BindForBarData(IBarDataGetter barData)
         {
-            // BeatUnit‚ÌXV ¨ ˆÊ’u‚ÌXV
+            // BeatUnitã®æ›´æ–° â†’ ä½ç½®ã®æ›´æ–°
             barData?.BeatUnit
                 .Skip(1)
                 .Subscribe(_ => { UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0); })
                 .AddTo(this.gameObject);
 
 
-            // SubdivisionDatas‚Éw“Ç
-            // Collection‚ÌŠÄ‹‚Í‰Šú‰»‚ª‚È‚¢‚Ì‚Åü‚Ì”‚¾‚¯ŒJ‚è•Ô‚·
+            // SubdivisionDatasã«è³¼èª­
+            // Collectionã®ç›£è¦–ã¯åˆæœŸåŒ–ãŒãªã„ã®ã§ç·šã®æ•°ã ã‘ç¹°ã‚Šè¿”ã™
             foreach (var sub in barData.SubDivisionDatas)
             {
                 OnAddSubdivision(sub);
                 BindForSubdivisionData(sub, Find(sub.BarData.BarIndex, sub.SubDivisionIndex).Item2.Obj.gameObject);
             }
 
-            // •ªüƒf[ƒ^’Ç‰Á ¨ •ªüƒIƒuƒWƒFƒNƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // åˆ†ç·šãƒ‡ãƒ¼ã‚¿è¿½åŠ  â†’ åˆ†ç·šã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             barData?.SubDivisionDatas.ObserveAdd()
                 .Subscribe(subData => {
                     OnAddSubdivision(subData.Value);
                     BindForSubdivisionData(subData.Value, Find(subData.Value.BarData.BarIndex, subData.Value.SubDivisionIndex).Item2.Obj.gameObject);
 
-                    // ¦ƒ‹[ƒv‚ª‘½‚¢‚Æd‚½‚¢
+                    // â€»ãƒ«ãƒ¼ãƒ—ãŒå¤šã„ã¨é‡ãŸã„
                     UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0);
                 })
                 .AddTo(this.gameObject);
 
-            // •ªüƒf[ƒ^íœ ¨ •ªüƒIƒuƒWƒFƒNƒg‚àíœ
+            // åˆ†ç·šãƒ‡ãƒ¼ã‚¿å‰Šé™¤ â†’ åˆ†ç·šã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚‚å‰Šé™¤
             barData?.SubDivisionDatas.ObserveRemove()
                 .Subscribe(subData => {
                     OnRemoveSubdivision(subData.Value);
 
-                    // ¦ƒ‹[ƒv‚ª‘½‚¢‚Æd‚½‚¢
+                    // â€»ãƒ«ãƒ¼ãƒ—ãŒå¤šã„ã¨é‡ãŸã„
                     UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0);
                 })
                 .AddTo(this.gameObject);
         }
 
         /// <summary>
-        /// •ªü‚É‘Î‚·‚éw“Ç‚ğs‚¤
+        /// åˆ†ç·šã«å¯¾ã™ã‚‹è³¼èª­ã‚’è¡Œã†
         /// </summary>
         /// <param name="subData"></param>
         private void BindForSubdivisionData(ISubDivisionDataGetter subData, GameObject lineObj)
         {
-            // BPM‚ÌXV ¨ •\‹L‚ÌXV
+            // BPMã®æ›´æ–° â†’ è¡¨è¨˜ã®æ›´æ–°
             subData.Bpm
                 .Where(_ => lineObj != null)
                 .Subscribe(bpm => OnChangeBPM(subData.BarData.BarIndex, subData.SubDivisionIndex, bpm))
                 .AddTo(this.gameObject)
                 .AddTo(lineObj);
 
-            // ƒXƒs[ƒh”{—¦‚ÌXV ¨ •\‹L‚ÌXV
+            // ã‚¹ãƒ”ãƒ¼ãƒ‰å€ç‡ã®æ›´æ–° â†’ è¡¨è¨˜ã®æ›´æ–°
             subData.SpeedRatio
                 .Where(_ => lineObj != null)
                 .Subscribe(ratio => OnChangeSpeedRatio(subData.BarData.BarIndex, subData.SubDivisionIndex,ratio))
                 .AddTo(this.gameObject)
                 .AddTo(lineObj);
 
-            // BeatUnit‚ÌXV ¨ •\‹L‚ÌXV
+            // BeatUnitã®æ›´æ–° â†’ è¡¨è¨˜ã®æ›´æ–°
             subData.BarData.BeatUnit
                 .Where(_ => lineObj != null)
                 .Subscribe(unit => OnChangeBeatUnit(subData.BarData.BarIndex, subData.SubDivisionIndex, unit))
                 .AddTo(this.gameObject)
                 .AddTo(lineObj);
 
-            // BeatCount‚ÌXV ¨ •\‹L‚ÌXV
+            // BeatCountã®æ›´æ–° â†’ è¡¨è¨˜ã®æ›´æ–°
             subData.BarData.BeatCount
                 .Where(_ => lineObj != null)
                 .Subscribe(count => OnChangeBeatCount(subData.BarData.BarIndex, subData.SubDivisionIndex, count))
                 .AddTo(this.gameObject)
                 .AddTo(lineObj);
 
-            // DivisionNum‚ÌXV ¨ •\‹L‚ÌXV
+            // DivisionNumã®æ›´æ–° â†’ è¡¨è¨˜ã®æ›´æ–°
             subData.BarData.DivisionNum
                 .Where(_ => lineObj != null)
                 .Subscribe(divNum => OnChangeDivisionNum(subData.BarData.BarIndex, subData.SubDivisionIndex, divNum))
@@ -170,7 +170,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// •ªü‚ª’Ç‰Á‚³‚ê‚½
+        /// åˆ†ç·šãŒè¿½åŠ ã•ã‚ŒãŸæ™‚
         /// </summary>
         /// <param name="subData"></param>
         private void OnAddSubdivision(SubDivisionDataInBeat subData)
@@ -178,21 +178,21 @@ namespace ChartEditor
             DeployableLineObject lineObj;
             var address = new AddressInChart(subData.BarData.BarIndex, subData.SubDivisionIndex, 0);
 
-            // ¬ßü‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // å°ç¯€ç·šã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             if (subData.SubDivisionIndex == 0) { lineObj = barLineFactory.Value.Deploy(lineParent); }
-            // ”qü‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // æ‹å­ç·šã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             else if (subData.SubDivisionIndex % subData.BarData.DivisionNum.Value == 0) { lineObj = beatLineFactory.Value.Deploy(lineParent); }
-            // •ªü‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»
+            // åˆ†ç·šã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
             else { lineObj = subDivisionLineFactory.Value.Deploy(lineParent); }
 
-            // ‰Šú‰»
+            // åˆæœŸåŒ–
             lineObj.transform.localPosition = Vector3.zero;
             lineObj.SetAddress(address);
             lineObj.SetBarNumber(subData.BarData.BarIndex + 1);
             lineObj.SetPlacementLocation(subData.SetPlacementLocation, subData.SetSpaceLocation);
             lineObj.OnChangeLayer(dataGetter.EditNoteType.Value);
 
-            // ‘}“ü‚·‚é
+            // æŒ¿å…¥ã™ã‚‹
             var addLine = new LineDataToObject(lineObj, subData);
             int insertIndex;
             for (insertIndex = 0; insertIndex < lines.Count + 1; insertIndex++)
@@ -214,7 +214,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// •ªü‚ªíœ‚³‚ê‚½
+        /// åˆ†ç·šãŒå‰Šé™¤ã•ã‚ŒãŸæ™‚
         /// </summary>
         /// <param name="subData"></param>
         private void OnRemoveSubdivision(SubDivisionDataInBeat subData)
@@ -224,7 +224,7 @@ namespace ChartEditor
                 var line = lines[i];
                 if (line.Data != subData) { continue; }
 
-                // íœˆ—
+                // å‰Šé™¤å‡¦ç†
                 Destroy(lines[i].Obj.gameObject);
                 lines.RemoveAt(i);
                 return;
@@ -233,7 +233,7 @@ namespace ChartEditor
 
         private void OnChangeBeatCount(int barIndex, int subIndex, int beatCount)
         {
-            // •\‹L‚ÌXV
+            // è¡¨è¨˜ã®æ›´æ–°
             var pair = Find(barIndex, subIndex);
             var index = pair.Item1;
             if(index < 0) { return; }
@@ -246,7 +246,7 @@ namespace ChartEditor
 
         private void OnChangeBeatUnit(int barIndex, int subIndex, float beatUnit)
         {
-            // •\‹L‚ÌXV
+            // è¡¨è¨˜ã®æ›´æ–°
             var pair = Find(barIndex, subIndex);
             var index = pair.Item1;
             if (index < 0) { return; }
@@ -259,7 +259,7 @@ namespace ChartEditor
 
         private void OnChangeDivisionNum(int barIndex, int subIndex, int divisionNum)
         {
-            // •\‹L‚ÌXV
+            // è¡¨è¨˜ã®æ›´æ–°
             var pair = Find(barIndex, subIndex);
             var index = pair.Item1;
             if (index < 0) { return; }
@@ -272,7 +272,7 @@ namespace ChartEditor
 
         private void OnChangeBPM(int barIndex, int subIndex, float bpm)
         {
-            // •\‹L‚ÌXV
+            // è¡¨è¨˜ã®æ›´æ–°
             var pair = Find(barIndex, subIndex);
             var index = pair.Item1;
             if (index < 0) { return; }
@@ -285,7 +285,7 @@ namespace ChartEditor
 
         private void OnChangeSpeedRatio(int barIndex, int subIndex, float speedRatio)
         {
-            // •\‹L‚ÌXV
+            // è¡¨è¨˜ã®æ›´æ–°
             var pair = Find(barIndex, subIndex);
             var index = pair.Item1;
             if (index < 0) { return; }
@@ -297,7 +297,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒŒƒCƒ„[‚ª•ÏX‚³‚ê‚½‚Æ‚«ˆêŠ‡‚Å”z’uêŠ‚ÌˆÊ’u‚ğ•Ï‚¦‚é
+        /// ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå¤‰æ›´ã•ã‚ŒãŸã¨ãä¸€æ‹¬ã§é…ç½®å ´æ‰€ã®ä½ç½®ã‚’å¤‰ãˆã‚‹
         /// </summary>
         /// <param name="editNoteType"></param>
         private void OnChangeLayer(EditNoteType editNoteType)
@@ -309,7 +309,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// Line‚ÌêŠ‚ğ•ÏX‚·‚é
+        /// Lineã®å ´æ‰€ã‚’å¤‰æ›´ã™ã‚‹
         /// </summary>
         /// <param name="barNumber"></param>
         /// <param name="subIndex"></param>
@@ -341,11 +341,11 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// ƒŒ[ƒ“ã‚ÌƒIƒuƒWƒFƒNƒg‚ğ‚·‚×‚Ä”jŠüA‰Šú‰»
+        /// ãƒ¬ãƒ¼ãƒ³ä¸Šã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã™ã¹ã¦ç ´æ£„ã€åˆæœŸåŒ–
         /// </summary>
         private void ClearLane()
         {
-            // eƒIƒuƒWƒFƒNƒg‚Ìíœ
+            // è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‰Šé™¤
             foreach(var t in lines)
             {
                 Destroy(t.Obj.gameObject);
@@ -363,14 +363,14 @@ namespace ChartEditor
                 if (line.Data.BarData.BarIndex < barIndex) { continue; }
                 else if(line.Data.BarData.BarIndex > barIndex)
                 {
-                    //Debug.Log($"w’è‚³‚ê‚½—v‘f‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: #{barIndex}-{subIndex}");
+                    //Debug.Log($"æŒ‡å®šã•ã‚ŒãŸè¦ç´ ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ: #{barIndex}-{subIndex}");
                     return (-1, null);
                 }
 
                 if(line.Data.SubDivisionIndex < subIndex) { continue; }
                 else if (line.Data.SubDivisionIndex > subIndex)
                 {
-                    //Debug.Log($"w’è‚³‚ê‚½—v‘f‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: #{barIndex}-{subIndex}");
+                    //Debug.Log($"æŒ‡å®šã•ã‚ŒãŸè¦ç´ ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ: #{barIndex}-{subIndex}");
                     return (-1, null);
                 }
 
@@ -387,7 +387,7 @@ namespace ChartEditor
                 if(line.Obj == lineObj) { return line.Data; }
             }
 
-            Debug.LogWarning($"ySystemzƒf[ƒ^‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: {lineObj}");
+            Debug.LogWarning($"ã€Systemã€‘ãƒ‡ãƒ¼ã‚¿ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ: {lineObj}");
             return null;
         }
 
