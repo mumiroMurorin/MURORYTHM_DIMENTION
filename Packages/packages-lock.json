@@ -7,6 +7,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.devfeedback.recorder": {
+      "version": "https://github.com/mumiroMurorin/DevFeedbackRecorder.git#v0.1.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "a1ad636787091e264c1d83623e98164fc237d454"
+    },
     "com.github.homuler.mediapipe": {
       "version": "file:com.github.homuler.mediapipe",
       "depth": 0,
