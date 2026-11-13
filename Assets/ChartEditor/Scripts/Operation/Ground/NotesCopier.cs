@@ -35,6 +35,9 @@ namespace ChartEditor
 
         void Update()
         {
+            // 譜面の読み込み中は受け付けない
+            if (dataGetter.IsLoadingChart.Value) { return; }
+
             EditMode currentEditMode = dataGetter.CurrentEditMode.Value;
 
             if (dataGetter.EditNoteType.Value != EditNoteType.Ground && dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }

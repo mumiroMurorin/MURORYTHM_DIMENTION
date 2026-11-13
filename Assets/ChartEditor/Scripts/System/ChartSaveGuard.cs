@@ -61,6 +61,8 @@ namespace ChartEditor
             if (!isDirtySinceAutoSave) { return; }
             if (Time.realtimeSinceStartup - dirtyStartTime < AUTO_SAVE_INTERVAL_SECONDS) { return; }
 
+            // 譜面の読み込み中は、読み込み途中の譜面を保存してしまうので見送る
+            if (dataGetter.IsLoadingChart.Value) { return; }
             // 再生中・ドラッグ中は処理落ちを避けるため見送る
             if (dataGetter.PlayMode.Value == PlayMode.Play) { return; }
             if (Input.GetMouseButton(0)) { return; }
@@ -105,7 +107,7 @@ namespace ChartEditor
 
             return MessageDialog.Confirm(
                 "未保存の変更があります",
-                $"保存されていない変更があります。\n保存せずに{operationName}しますか？\n\n(「いいえ」で編集に戻ります)");
+                $"保存されていない変更があります。\n保存せずに{operationName}しますか？\n\n「はい」: 変更を破棄して続ける\n「いいえ」: 編集に戻る");
         }
 
         private bool OnWantsToQuit()

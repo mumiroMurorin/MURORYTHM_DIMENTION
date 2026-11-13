@@ -80,7 +80,10 @@ namespace ChartEditor
 
             // BPM変更時
             chartData?.OnChangeBPMListener
-                .Subscribe(pair => { UpdateLinePos(pair.Item1, pair.Item2); })
+                .Subscribe(pair => {
+                    UpdateLinePos(pair.Item1, pair.Item2);
+                    RefreshSpeedRatioLabels(pair.Item1);
+                })
                 .AddTo(this.gameObject);
         }
 
@@ -294,6 +297,32 @@ namespace ChartEditor
             var backSpeedRatio = pair.Item1 != 0 ? lines[index - 1].Data.SpeedRatio.Value : float.MinValue;
 
             thisObj.OnChangeSpeedRatio(speedRatio, backSpeedRatio);
+        }
+
+        /// <summary>
+        /// 指定した小節の線(と、次の小節の先頭の線)の、スピード倍率の表記を付け直す
+        ///
+        /// 表記は「1つ前の線と倍率が違うときだけ出す」が、付け直すのはその線自身の倍率が変わったときだけ。
+        /// 1つ前の線の倍率だけが変わった場合 (譜面の読み込みで、倍率が小節の先頭と同じ値に戻る線など) は
+        /// 表記が古いまま残るので、小節の値をまとめて書き換えた後にここで付け直す。
+        /// </summary>
+        private void RefreshSpeedRatioLabels(int barIndex)
+        {
+            int startIndex = Find(barIndex, 0).Item1;
+            if (startIndex < 0) { return; }
+
+            for (int i = startIndex; i < lines.Count; i++)
+            {
+                var line = lines[i];
+                int lineBarIndex = line.Data.BarData.BarIndex;
+
+                // 次の小節は、先頭の線だけ (前の小節の最後の線と比べ直す)
+                if (lineBarIndex > barIndex + 1) { break; }
+                if (lineBarIndex == barIndex + 1 && line.Data.SubDivisionIndex > 0) { break; }
+
+                float backSpeedRatio = i != 0 ? lines[i - 1].Data.SpeedRatio.Value : float.MinValue;
+                line.Obj.OnChangeSpeedRatio(line.Data.SpeedRatio.Value, backSpeedRatio);
+            }
         }
 
         /// <summary>

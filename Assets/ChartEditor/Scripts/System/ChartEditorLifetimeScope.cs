@@ -34,6 +34,9 @@ namespace ChartEditor
             // レギュレーション違反(赤いアウトライン)をログ欄に知らせる
             builder.RegisterEntryPoint<RegulationWarningNotifier>();
 
+            // 譜面の読み込み中、クリックを受け付けないようにする
+            builder.RegisterEntryPoint<LoadingInputBlocker>();
+
             // ミニプレビューのノーツをクリックして、譜面側のノーツを選択する
             builder.RegisterEntryPoint<PreviewNotePicker>();
         }

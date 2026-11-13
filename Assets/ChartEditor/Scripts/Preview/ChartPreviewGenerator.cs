@@ -166,6 +166,7 @@ namespace ChartEditor
         readonly List<(float Distance, INoteData Data)> pickCandidates = new List<(float, INoteData)>();
         readonly object[] spawnArguments = new object[2];
         readonly List<Renderer> pickRendererBuffer = new List<Renderer>();
+        readonly List<MeshFilter> pickMeshFilterBuffer = new List<MeshFilter>();
         readonly Stopwatch stopwatch = new Stopwatch();
 
         /// <summary>
@@ -182,6 +183,16 @@ namespace ChartEditor
         /// ノーツを生成している途中か
         /// </summary>
         public bool IsGenerating => RemainingSpawnCount > 0;
+
+        /// <summary>
+        /// ノーツの親 (ノーツと一緒に動く地面)
+        /// </summary>
+        public Transform NoteParent => noteParent;
+
+        /// <summary>
+        /// 今のプレビューで使っている「時刻 → 譜面上の位置」の計算。まだ譜面を反映していないときは null
+        /// </summary>
+        public INotePositionCalculator PositionCalculator => chartData?.PositionGraph;
 
         [Inject]
         public void Constructor(INoteSpawnDataOptionGetter optionHolder)
@@ -347,6 +358,75 @@ namespace ChartEditor
                 results.Add(candidate.Data);
             }
             pickCandidates.Clear();
+        }
+
+        /// <summary>
+        /// 光線が、指定したノーツの見た目のどこに当たっているかを求める (プレビュー上でノーツを掴む位置を決めるのに使う)
+        /// 形(メッシュ)を読み取れるノーツは形との交点を、読み取れないノーツは描画範囲の箱との交点を返す
+        /// </summary>
+        /// <param name="data">PickNotes が返したノーツのデータ</param>
+        public bool TryGetHitPoint(Ray ray, INoteData data, out Vector3 worldPoint)
+        {
+            worldPoint = default;
+            if (data == null) { return false; }
+
+            foreach (var typeState in typeStates)
+            {
+                foreach (var note in typeState.LiveNotes)
+                {
+                    if (!ReferenceEquals(note.Data, data) || note.Component == null) { continue; }
+
+                    return TryGetHitPoint(ray, note.Component.transform, out worldPoint);
+                }
+            }
+
+            return false;
+        }
+
+        private bool TryGetHitPoint(Ray ray, Transform noteTransform, out Vector3 worldPoint)
+        {
+            worldPoint = default;
+            float nearestLength = float.MaxValue;
+
+            // 形との交点 (帯のように大きなノーツでも、実際に見えている面までの長さが分かる)
+            noteTransform.GetComponentsInChildren(false, pickMeshFilterBuffer);
+            foreach (MeshFilter meshFilter in pickMeshFilterBuffer)
+            {
+                Mesh mesh = meshFilter.sharedMesh;
+                if (mesh == null || !mesh.isReadable) { continue; }
+                if (!meshFilter.TryGetComponent(out Renderer meshRenderer) || !meshRenderer.enabled) { continue; }
+                if (!meshRenderer.bounds.IntersectRay(ray)) { continue; }
+
+                // メッシュと同じ座標系に直した光線で調べる (長さの単位は元の光線と同じになる)
+                Transform meshTransform = meshFilter.transform;
+                Vector3 origin = meshTransform.InverseTransformPoint(ray.origin);
+                Vector3 direction = meshTransform.InverseTransformVector(ray.direction);
+
+                if (PreviewPickMath.TryRaycastTriangles(mesh.vertices, mesh.triangles, origin, direction, out float hitLength))
+                {
+                    nearestLength = Mathf.Min(nearestLength, hitLength);
+                }
+            }
+            pickMeshFilterBuffer.Clear();
+
+            // 形を読み取れなかったときは、描画範囲の箱で代用する
+            if (nearestLength == float.MaxValue)
+            {
+                noteTransform.GetComponentsInChildren(false, pickRendererBuffer);
+                foreach (Renderer noteRenderer in pickRendererBuffer)
+                {
+                    if (!noteRenderer.enabled) { continue; }
+                    if (!noteRenderer.bounds.IntersectRay(ray, out float distance)) { continue; }
+
+                    nearestLength = Mathf.Min(nearestLength, Mathf.Max(distance, 0f));
+                }
+                pickRendererBuffer.Clear();
+            }
+
+            if (nearestLength == float.MaxValue) { return false; }
+
+            worldPoint = ray.GetPoint(nearestLength);
+            return true;
         }
 
         #endregion

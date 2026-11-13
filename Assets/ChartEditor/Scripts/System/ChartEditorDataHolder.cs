@@ -15,12 +15,21 @@ namespace ChartEditor
         public void SetChartData(ChartData chartData)
         {
             // リセット
-            if (this.chartData != null && this.chartData.Value != null && this.chartData.Value.BarDatas != null) 
-            { 
-                this.chartData.Value.RemoveBar(this.chartData.Value.BarDatas.Count);
+            // (ノーツ1個ごとの削除ログは出さない。数千件のログが一度に出て、それだけで重くなるため)
+            if (this.chartData != null && this.chartData.Value != null && this.chartData.Value.BarDatas != null)
+            {
+                this.chartData.Value.RemoveBar(this.chartData.Value.BarDatas.Count, false);
             }
 
             this.chartData.Value = chartData;
+        }
+
+        // 譜面を読み込んでいる途中か (読み込みは数フレームに分けて行う。その間は編集を受け付けない)
+        ReactiveProperty<bool> isLoadingChart = new ReactiveProperty<bool>(false);
+        public IReadOnlyReactiveProperty<bool> IsLoadingChart => isLoadingChart;
+        public void SetLoadingChart(bool isLoading)
+        {
+            isLoadingChart.Value = isLoading;
         }
 
         public void ChangeChartLength(int delta)
@@ -226,6 +235,11 @@ namespace ChartEditor
     {
         IReadOnlyReactiveProperty<ChartData> ChartData { get; }
 
+        /// <summary>
+        /// 譜面を読み込んでいる途中か (この間は編集・保存・再生を受け付けない)
+        /// </summary>
+        IReadOnlyReactiveProperty<bool> IsLoadingChart { get; }
+
         IReadOnlyReactiveProperty<float> ChartSeconds { get; }
 
         IReadOnlyReactiveProperty<int> TotalNoteCount { get; }
@@ -256,6 +270,8 @@ namespace ChartEditor
         public void ChangeChartLength(int delta);
 
         public void SetChartData(ChartData chartData);
+
+        void SetLoadingChart(bool isLoading);
 
         public void SetChartSeconds(float seconds);
 

@@ -33,6 +33,14 @@ namespace ChartEditor
         public bool IsCenterHandle { get; private set; }
 
         /// <summary>
+        /// アウトラインを描くカメラを指定する (指定しないと全カメラに描かれる)
+        /// </summary>
+        public void SetOutlineCamera(Camera camera)
+        {
+            if (outline != null && camera != null) { outline.Camera = camera; }
+        }
+
+        /// <summary>
         /// 中心点として扱う (Initialize の後に呼ぶ)
         /// </summary>
         public void SetAsCenterHandle()

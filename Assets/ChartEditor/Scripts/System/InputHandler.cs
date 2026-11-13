@@ -77,6 +77,9 @@ namespace ChartEditor
 
         private void Update()
         {
+            // 譜面の読み込み中は、キー操作(再生・保存・Undo・ショートカットなど)を受け付けない
+            if (dataGetter.IsLoadingChart.Value) { return; }
+
             var scroll = Input.mouseScrollDelta.y;
 
             // 修飾キーは左右どちらでも反応する

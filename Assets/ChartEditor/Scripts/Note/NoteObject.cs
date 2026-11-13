@@ -52,6 +52,13 @@ namespace ChartEditor
 
         private void Awake()
         {
+            // アウトラインは譜面を映しているカメラにだけ描く
+            // (指定しないと全カメラに毎フレーム描かれ、警告のアウトラインが出ている間ずっと重くなる)
+            if (outline != null && EditorViewCameras.GroundView != null)
+            {
+                outline.Camera = EditorViewCameras.GroundView;
+            }
+
             colliders = new List<Collider>();
             foreach (var obj in colliderObjects)
             {

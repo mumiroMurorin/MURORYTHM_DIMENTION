@@ -176,6 +176,7 @@ namespace ChartEditor
             vertexObj.Initialize(new VertexData(CalcCenter(vertices)), null, ConvertPositionOnChartGround);
             vertexObj.SetAsCenterHandle();
             vertexObj.SetColor(centerHandleColor);
+            vertexObj.SetOutlineCamera(EditorViewCameras.VerticesView);
 
             centerHandle = vertexObj;
         }
@@ -225,6 +226,9 @@ namespace ChartEditor
                 () => { onChangePosition?.OnNext(Unit.Default); },
                 ConvertPositionOnChartGround
                 );
+
+            // アウトラインは頂点の編集画面を映しているカメラにだけ描く
+            vertexObj.SetOutlineCamera(EditorViewCameras.VerticesView);
 
             onAddVertex?.OnNext(Unit.Default);
             UpdateVertexColor();

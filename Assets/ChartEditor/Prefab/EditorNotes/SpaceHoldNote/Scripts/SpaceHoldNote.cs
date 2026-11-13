@@ -60,6 +60,9 @@ namespace ChartEditor
         {
             if (NoteObject == null) { return; }
 
+            // 譜面の読み込み中は、前後のつながりが確定するまで待つ (途中の状態で種類を変えてしまわないように)
+            if (ChainNoteTypeCorrection.TryDefer(this, UpdateNoteType)) { return; }
+
             bool hasBackNote = NoteObject.BackNote.Value != null;
             bool hasNextNote = NoteObject.NextNote.Value != null;
 

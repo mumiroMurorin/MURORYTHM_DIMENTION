@@ -21,6 +21,9 @@ namespace ChartEditor
 
         public void ChangeChartLength(int delta)
         {
+            // 譜面の読み込み中は受け付けない
+            if (dataGetter.IsLoadingChart.Value) { return; }
+
             // 延長
             if(delta > 0)
             {

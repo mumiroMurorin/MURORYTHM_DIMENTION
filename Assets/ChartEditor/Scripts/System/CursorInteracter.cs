@@ -49,6 +49,19 @@ namespace ChartEditor
             this.chartEditorDataGetter = chartEditorDataGetter;
         }
 
+        private void Awake()
+        {
+            // アウトラインを描くカメラを登録する (ノーツが作られるより前に済ませる)
+            EditorViewCameras.GroundView = groundViewCamera;
+            EditorViewCameras.VerticesView = verticesViewCamera;
+        }
+
+        private void OnDestroy()
+        {
+            if (EditorViewCameras.GroundView == groundViewCamera) { EditorViewCameras.GroundView = null; }
+            if (EditorViewCameras.VerticesView == verticesViewCamera) { EditorViewCameras.VerticesView = null; }
+        }
+
         private void Start()
         {
             raycastLayer = 1 << LayerMask.NameToLayer("CursorInteractable");
@@ -88,6 +101,19 @@ namespace ChartEditor
 
         private void Update()
         {
+            // 譜面の読み込み中は、カーソル下のオブジェクトを「無し」にして編集操作が始まらないようにする
+            if (chartEditorDataGetter.IsLoadingChart.Value)
+            {
+                if (currentHitObject != null)
+                {
+                    currentHitObject = null;
+                    chartEditorDataSetter.SetInteractableColliders(null);
+                }
+
+                chartEditorDataSetter.SetEditMode(EditMode.None);
+                return;
+            }
+
             UpdateObjectUnderCursor();
             SetEditorMode();
         }

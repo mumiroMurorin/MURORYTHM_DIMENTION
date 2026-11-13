@@ -6,11 +6,19 @@ namespace ChartEditor
 {
     public class NoteSoundCollider : MonoBehaviour
     {
+        // 全ノーツ共通の音として使うノーツの種類
+        const NoteType SINGLE_SOUND_NOTE_TYPE = NoteType.Touch;
+
         [SerializeField] NoteObject note;
 
-        public void PlaySE()
+        /// <param name="isSingleSound">true のとき、ノーツの種類に関係なく共通の音(タッチノーツの音)を鳴らす</param>
+        public void PlaySE(bool isSingleSound = false)
         {
-            SoundManager.Instance.PlaySE(DeployableNoteDataUtil.ToNoteType(note.NoteData.NoteType), Judgement.Perfect);
+            NoteType noteType = isSingleSound
+                ? SINGLE_SOUND_NOTE_TYPE
+                : DeployableNoteDataUtil.ToNoteType(note.NoteData.NoteType);
+
+            SoundManager.Instance.PlaySE(noteType, Judgement.Perfect);
         }
     }
 }

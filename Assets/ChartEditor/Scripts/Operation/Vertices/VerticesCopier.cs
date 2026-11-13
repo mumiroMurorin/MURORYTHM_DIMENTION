@@ -30,6 +30,9 @@ namespace ChartEditor
 
         void Update()
         {
+            // 譜面の読み込み中は受け付けない
+            if (dataGetter.IsLoadingChart.Value) { return; }
+
             if(dataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
 
             // 頂点リストのコピー

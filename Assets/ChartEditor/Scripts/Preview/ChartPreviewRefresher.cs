@@ -117,6 +117,8 @@ namespace ChartEditor
                 return;
             }
 
+            // 譜面の読み込みが終わるまで待つ (読み込み途中の譜面をプレビューに出さない)
+            if (dataGetter != null && dataGetter.IsLoadingChart.Value) { return; }
             // 続けて行われた編集が落ち着くまで待つ
             if (Time.unscaledTime - autoRefreshRequestedTime < autoRefreshDelaySeconds) { return; }
             // ドラッグの途中では反映しない
@@ -136,6 +138,15 @@ namespace ChartEditor
         {
             RefreshFromEditorData(false, true);
             return UniTask.CompletedTask;
+        }
+
+        /// <summary>
+        /// 今の譜面を、待たずにすぐプレビューに反映する (プレビュー上でノーツをドラッグしている間の追従用)
+        /// 自動更新と同じ扱いで、変換のログは出さない
+        /// </summary>
+        public void RefreshImmediately()
+        {
+            RefreshFromEditorData(false, false);
         }
 
         /// <summary>

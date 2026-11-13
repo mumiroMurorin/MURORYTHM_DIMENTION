@@ -79,8 +79,8 @@ namespace ChartEditor
 
             SetEvent();
 
-            // 再生速度の切り替え行を、レーン分割数の行の下に追加する
-            PlaybackSpeedRow.Create(changeLaneDivNumButton_view, optionGetter, optionSetter);
+            // 再生速度・ノーツ音の切り替え行を、レーン分割数の行の下に追加する
+            SettingsCycleRow.CreateEditorRows(changeLaneDivNumButton_view, optionGetter, optionSetter);
         }
 
         private void BindForOther()

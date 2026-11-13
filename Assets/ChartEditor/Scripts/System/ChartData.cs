@@ -427,10 +427,26 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 設定を指定して、小節を末尾に1つ追加する (譜面の読み込み用)
+        ///
+        /// 既定の設定で小節を作ってから拍子・分割数を変えると、そのたびに分線を作り直すことになり、
+        /// 譜面全体の線の位置を何度も計算し直してしまう。最初から正しい設定で作ればその無駄が無い。
+        /// </summary>
+        /// <param name="subConfig">小節内の全分線に最初に入れるBPM・スピード倍率</param>
+        public void AddBar(BarConfig barConfig, SubdivisionConfig subConfig)
+        {
+            int barIndex = BarDatas.Count;
+            barDatas.Add(new BarDataInChart(barConfig, subConfig, barIndex));
+
+            OnAddBarData.OnNext(barIndex);
+        }
+
+        /// <summary>
         /// 小節線の削除
         /// </summary>
         /// <param name="length"></param>
-        public void RemoveBar(int length)
+        /// <param name="isLogEnabled">false のとき、削除したノーツのログを出さない (譜面を丸ごと入れ替えるとき用)</param>
+        public void RemoveBar(int length, bool isLogEnabled = true)
         {
             int barCount = BarDatas.Count;
             for (int i = barCount - 1; i >= Mathf.Max(barCount - length, 0); i--)
@@ -445,7 +461,7 @@ namespace ChartEditor
                     for (int k = 0; k < noteCount; k++)
                     {
                         var note = subData.NoteDatas[0];
-                        RemoveNote(note);
+                        RemoveNote(note, isLogEnabled);
                     }
 
                     barData.RemoveSubDivisionData(barDatas[i].SubDivisionDatas.Count - 1);
@@ -488,7 +504,8 @@ namespace ChartEditor
         /// <summary>
         /// ノーツを削除する
         /// </summary>
-        public void RemoveNote(IDeployableNoteData noteData)
+        /// <param name="isLogEnabled">false のとき、削除のログを出さない (大量のノーツをまとめて消すとき用)</param>
+        public void RemoveNote(IDeployableNoteData noteData, bool isLogEnabled = true)
         {
             var address = new AddressInChart(noteData.Address);
 
@@ -504,7 +521,7 @@ namespace ChartEditor
             {
                 OnRemoveNoteListener?.Invoke(noteData);
 
-                Debug.Log($"【削除】:\n{address}");
+                if (isLogEnabled) { Debug.Log($"【削除】:\n{address}"); }
             }
         }
 

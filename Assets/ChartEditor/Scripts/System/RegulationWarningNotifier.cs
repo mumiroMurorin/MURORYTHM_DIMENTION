@@ -29,6 +29,7 @@ namespace ChartEditor
         };
 
         readonly INotesDataGetter notesGetter;
+        readonly IChartEditorDataGetter dataGetter;
 
         readonly Dictionary<NoteWarningType, WarningSummary> summaries = new Dictionary<NoteWarningType, WarningSummary>();
         readonly StringBuilder textBuilder = new StringBuilder();
@@ -41,9 +42,10 @@ namespace ChartEditor
         string pendingText = string.Empty;
         float pendingSinceTime;
 
-        public RegulationWarningNotifier(INotesDataGetter notesGetter)
+        public RegulationWarningNotifier(INotesDataGetter notesGetter, IChartEditorDataGetter dataGetter)
         {
             this.notesGetter = notesGetter;
+            this.dataGetter = dataGetter;
         }
 
         void ITickable.Tick()
@@ -52,7 +54,8 @@ namespace ChartEditor
             if (now < nextCheckTime) { return; }
             nextCheckTime = now + CHECK_INTERVAL_SECONDS;
 
-            string currentText = BuildWarningText();
+            // 譜面の読み込み中は調べない (ホールドの接続が途中なので、実際には無い違反が出てしまう)
+            string currentText = dataGetter.IsLoadingChart.Value ? string.Empty : BuildWarningText();
 
             // 表示中の内容と同じ
             if (currentText == displayedText)

@@ -80,6 +80,21 @@ namespace ChartEditor
 
         #endregion
 
+        #region NoteSound ノーツ音
+
+        /// <summary>
+        /// 再生中にノーツが鳴らす音を、種類に関係なく1種類にそろえるか
+        /// </summary>
+        ReactiveProperty<bool> isSingleNoteSound = new ReactiveProperty<bool>(false);
+        IReadOnlyReactiveProperty<bool> IChartEditorOptionGetter.IsSingleNoteSound => isSingleNoteSound;
+
+        void IChartEditorOptionSetter.SwitchNoteSoundMode()
+        {
+            isSingleNoteSound.Value = !isSingleNoteSound.Value;
+        }
+
+        #endregion
+
         #region スクリーンサイズ
 
         ReactiveProperty<Resolution> resolution = new ReactiveProperty<Resolution>(ChartEditor.Resolution.w1920_1080);
@@ -245,6 +260,11 @@ namespace ChartEditor
         /// </summary>
         IReadOnlyReactiveProperty<float> PlaybackSpeed { get; }
 
+        /// <summary>
+        /// 再生中にノーツが鳴らす音を、種類に関係なく1種類にそろえるか
+        /// </summary>
+        IReadOnlyReactiveProperty<bool> IsSingleNoteSound { get; }
+
         IReadOnlyReactiveProperty<float> JudgementSEVolume { get; }
 
         IReadOnlyReactiveProperty<Resolution> Resolution { get; }
@@ -263,6 +283,11 @@ namespace ChartEditor
         /// 再生速度を次の段階へ切り替える
         /// </summary>
         void SwitchPlaybackSpeed();
+
+        /// <summary>
+        /// ノーツ音を「種類別」と「単一」で切り替える
+        /// </summary>
+        void SwitchNoteSoundMode();
 
         void SetJudgementSEVolume(float value);
 

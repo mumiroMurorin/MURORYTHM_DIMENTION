@@ -65,6 +65,9 @@ namespace ChartEditor
         /// </summary>
         private bool HasChart()
         {
+            // 譜面の読み込み中は、読み込み途中の譜面を保存してしまうので受け付けない
+            if (editorDataGetter.IsLoadingChart.Value) { return false; }
+
             var chartData = editorDataGetter.ChartData.Value;
             if (chartData != null && chartData.BarDatas.Count > 0) { return true; }
 
