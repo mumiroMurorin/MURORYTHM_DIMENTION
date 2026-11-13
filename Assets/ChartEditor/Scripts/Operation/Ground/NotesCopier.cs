@@ -13,6 +13,7 @@ namespace ChartEditor
         INotesDataGetter notesGetter;
         INotesDataSetter notesSetter;
         IChartEditorDataGetter dataGetter;
+        IPreviewPointer previewPointer;
         Dictionary<IDeployableNoteData, AddressWithinRange> copiedNotes;
 
         EditMode[] ignoreEditModes = new EditMode[] {
@@ -26,25 +27,33 @@ namespace ChartEditor
         };
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, INotesDataGetter notesGetter, INotesDataSetter notesSetter)
+        public void Construct(
+            IChartEditorDataGetter dataGetter,
+            IChartEditorDataSetter dataSetter,
+            INotesDataGetter notesGetter,
+            INotesDataSetter notesSetter,
+            IPreviewPointer previewPointer)
         {
             this.notesGetter = notesGetter;
             this.notesSetter = notesSetter;
             this.dataGetter = dataGetter;
+            this.previewPointer = previewPointer;
         }
 
         void Update()
         {
-            // 譜面の読み込み中は受け付けない
-            if (dataGetter.IsLoadingChart.Value) { return; }
+            if (!ModifierKey.Ctrl) { return; }
 
-            EditMode currentEditMode = dataGetter.CurrentEditMode.Value;
+            bool isCopy = Input.GetKeyDown(KeyCode.C);
+            bool isPaste = Input.GetKeyDown(KeyCode.V);
+            if (!isCopy && !isPaste) { return; }
 
-            if (dataGetter.EditNoteType.Value != EditNoteType.Ground && dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
-            if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
+            // 読み込み中・文字の入力中・ほかの操作の途中は受け付けない
+            // (全画面プレビューでも、プレビューの上で選んだノーツをコピー・貼り付けできる)
+            if (!SelectedNotesKeyOperation.IsAcceptable(dataGetter, ignoreEditModes)) { return; }
 
-            if (ModifierKey.Ctrl && Input.GetKeyDown(KeyCode.C)) { CopyNotes(); }
-            if (ModifierKey.Ctrl && Input.GetKeyDown(KeyCode.V)) { PasteNotes(); }
+            if (isCopy) { CopyNotes(); }
+            if (isPaste) { PasteNotes(); }
         }
 
         private void CopyNotes()
@@ -63,12 +72,16 @@ namespace ChartEditor
 
         private void PasteNotes()
         {
-            if (!CanPasteNotes()) { return; }
+            if (copiedNotes == null || copiedNotes.Count == 0) { return; }
+
+            // 貼り付け先 (カーソルが指している分線)。指している場所が無ければ貼り付けない
+            var cursorAddress = GetPasteCursorAddress();
+            if (cursorAddress == null) { return; }
 
             var copiedNotesCopy = CreateCopiedNoteInfos();
             if (copiedNotesCopy.Count == 0) { return; }
 
-            if (!TryCreatePasteContext(copiedNotesCopy, out var pasteContext)) { return; }
+            if (!TryCreatePasteContext(copiedNotesCopy, cursorAddress, out var pasteContext)) { return; }
 
             Record(() => {
                 notesSetter.ClearSelectingNotes();
@@ -79,19 +92,6 @@ namespace ChartEditor
             });
 
             Debug.Log("【Notes】 Pasted notes.");
-        }
-
-        private bool CanPasteNotes()
-        {
-            var currentEditMode = dataGetter.CurrentEditMode.Value;
-            var groundCollider = dataGetter.GetInteractableCollider<IDeployableCollider>();
-            var spaceCollider = dataGetter.GetInteractableCollider<IFreedomDeployableCollider>();
-
-            if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return false; }
-            if (copiedNotes == null || copiedNotes.Count == 0) { return false; }
-            if (groundCollider == null && spaceCollider == null) { return false; }
-
-            return true;
         }
 
         private List<CopiedNoteInfo> CreateCopiedNoteInfos()
@@ -123,7 +123,7 @@ namespace ChartEditor
             return noteData is IChainNoteData chainData ? chainData.ChainIndex.Value : -1;
         }
 
-        private bool TryCreatePasteContext(List<CopiedNoteInfo> copiedNotesCopy, out PasteContext pasteContext)
+        private bool TryCreatePasteContext(List<CopiedNoteInfo> copiedNotesCopy, IReadOnlyAddressInChart cursorAddress, out PasteContext pasteContext)
         {
             pasteContext = default;
 
@@ -134,9 +134,6 @@ namespace ChartEditor
                 ?.Address;
             if (firstNoteAddress == null) { return false; }
 
-            var cursorAddress = GetPasteCursorAddress();
-            if (cursorAddress == null) { return false; }
-
             pasteContext = new PasteContext(
                 dataGetter.ChartData.Value.GetSubdivisionDelta(cursorAddress, new AddressInChart(firstNoteAddress)),
                 CreateChainIndexMap(copiedNotesCopy));
@@ -144,8 +141,21 @@ namespace ChartEditor
             return true;
         }
 
+        /// <summary>
+        /// 貼り付け先の分線 (カーソルが指している場所)。指している場所が無ければ null
+        /// </summary>
         private IReadOnlyAddressInChart GetPasteCursorAddress()
         {
+            // カーソルがプレビューの上にあるときは、プレビューの中で指している分線
+            // (プレビューの画面部品の裏に隠れている譜面のレーンには貼り付けない)
+            if (previewPointer != null && previewPointer.IsPointerOnPreview)
+            {
+                return previewPointer.TryGetPointedAddress(out var previewAddress) ? previewAddress : null;
+            }
+
+            // 全画面プレビューの間は、譜面のレーンは画面に出ていない
+            if (dataGetter.EditNoteType.Value == EditNoteType.Preview) { return null; }
+
             var groundCollider = dataGetter.GetInteractableCollider<IDeployableCollider>();
             if (groundCollider != null) { return groundCollider.Address; }
 

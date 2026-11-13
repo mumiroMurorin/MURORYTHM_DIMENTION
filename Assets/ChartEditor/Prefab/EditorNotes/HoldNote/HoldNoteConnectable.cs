@@ -20,6 +20,10 @@ namespace ChartEditor
         [SerializeField] Material endMaterial;
         [SerializeField] Material meshMaterial;
 
+        [Header("中継点の大きさ")]
+        [Tooltip("中継点のノーツを、時間方向(画面では縦)に縮める割合。1 で始点・終点と同じ大きさ")]
+        [SerializeField, Range(0.1f, 1f)] float relayDepthScale = 0.5f;
+
         [Tooltip("警告アウトライン色")]
         [SerializeField] ColorSetting outlineColorOnAlone;
 
@@ -52,6 +56,8 @@ namespace ChartEditor
         List<IDisposable> nextNoteDisposables = new List<IDisposable>();
         CancellationTokenSource cts = new CancellationTokenSource();
         bool isAlone;
+        // 中継点を細長くする処理 (最初に種類が決まったときに用意する)
+        NoteDepthScaler depthScaler;
 
         private void Start()
         {
@@ -214,6 +220,12 @@ namespace ChartEditor
                     Debug.Log($"【Note】設定されていないパラメータです: {noteType}");
                     break;
             }
+
+            // 中継点は、時間方向に縮めて細長くする
+            // (短い間隔でいくつも並べても、前後のノーツや、その間の帯が隠れないように)
+            bool isRelay = noteType == DeploymentNoteType.HoldRelay || noteType == DeploymentNoteType.HoldMeshRelay;
+            depthScaler ??= new NoteDepthScaler(noteObject, noteMeshRenderer);
+            depthScaler.SetScale(isRelay ? relayDepthScale : 1f);
         }
 
         private void GenerateMesh(Vector3 nextRight, Vector3 nextLeft)

@@ -64,6 +64,19 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 円形の軌道の上での距離の差を、半周ぶん前後の範囲 (-一周の半分 〜 +一周の半分) に直す
+        /// (位置から求めた距離は一周ぶんの範囲に丸まっているので、基準の位置にいちばん近い周回での差に直すために使う)
+        /// </summary>
+        /// <param name="delta">距離の差</param>
+        /// <param name="circumference">軌道の一周の長さ</param>
+        public static float WrapDistance(float delta, float circumference)
+        {
+            if (!(circumference > 0f)) { return delta; }
+
+            return Mathf.Repeat(delta + circumference * 0.5f, circumference) - circumference * 0.5f;
+        }
+
+        /// <summary>
         /// 光線が三角形の集まり(メッシュ)に当たる場所のうち、いちばん手前までの長さを求める
         /// </summary>
         /// <param name="vertices">頂点</param>
@@ -72,6 +85,21 @@ namespace ChartEditor
         /// <param name="direction">光線の向き (頂点と同じ座標系。長さは1でなくてよい)</param>
         /// <param name="hitLength">当たった場所までの長さ (direction の何倍か)</param>
         public static bool TryRaycastTriangles(Vector3[] vertices, int[] triangles, Vector3 origin, Vector3 direction, out float hitLength)
+        {
+            return TryRaycastTriangles(vertices, triangles, origin, direction, null, out hitLength);
+        }
+
+        /// <summary>
+        /// 光線が三角形の集まり(メッシュ)に当たる場所のうち、条件に合うものの中で、いちばん手前までの長さを求める
+        /// </summary>
+        /// <param name="acceptsHit">当たった場所を対象にするか決める処理 (引数は、その場所までの長さ)。null のときはすべて対象にする</param>
+        public static bool TryRaycastTriangles(
+            Vector3[] vertices,
+            int[] triangles,
+            Vector3 origin,
+            Vector3 direction,
+            System.Predicate<float> acceptsHit,
+            out float hitLength)
         {
             hitLength = float.MaxValue;
             if (vertices == null || triangles == null) { return false; }
@@ -104,7 +132,10 @@ namespace ChartEditor
                 if (!(v >= 0f && u + v <= 1f)) { continue; }
 
                 float length = Vector3.Dot(edge2, q) * inverse;
-                if (length > 0f && length < hitLength) { hitLength = length; }
+                if (!(length > 0f && length < hitLength)) { continue; }
+                if (acceptsHit != null && !acceptsHit(length)) { continue; }
+
+                hitLength = length;
             }
 
             return hitLength < float.MaxValue;

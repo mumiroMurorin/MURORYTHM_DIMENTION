@@ -37,7 +37,8 @@ namespace ChartEditor
             // 譜面の読み込み中、クリックを受け付けないようにする
             builder.RegisterEntryPoint<LoadingInputBlocker>();
 
-            // ミニプレビューのノーツをクリックして、譜面側のノーツを選択する
+            // プレビュー(ミニプレビューと全画面)のノーツを、クリック・ドラッグで選択・移動する
+            // (実装しているインターフェースすべてで登録されるので、IPreviewPointer としても受け取れる。NotesCopier が貼り付け先を求めるのに使う)
             builder.RegisterEntryPoint<PreviewNotePicker>();
         }
     }

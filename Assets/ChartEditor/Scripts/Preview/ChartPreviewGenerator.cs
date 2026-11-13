@@ -163,10 +163,14 @@ namespace ChartEditor
         readonly List<SpawnedNote> previousLiveNotes = new List<SpawnedNote>();
         readonly HashSet<GameObject> trackedNoteObjects = new HashSet<GameObject>();
         readonly List<MeshFilter> meshFilterBuffer = new List<MeshFilter>();
-        readonly List<(float Distance, INoteData Data)> pickCandidates = new List<(float, INoteData)>();
+        // クリック判定で当たったノーツと、並べる順を決める値 (小さいほど先)
+        readonly List<(float Order, INoteData Data)> pickCandidates = new List<(float, INoteData)>();
         readonly object[] spawnArguments = new object[2];
         readonly List<Renderer> pickRendererBuffer = new List<Renderer>();
         readonly List<MeshFilter> pickMeshFilterBuffer = new List<MeshFilter>();
+        // 当たり判定に使っている光線と、「当たった場所が今プレビューに映っているか」を調べる処理 (毎回作り直さないよう使い回す)
+        Ray pickRay;
+        System.Predicate<float> isVisibleHit;
         readonly Stopwatch stopwatch = new Stopwatch();
 
         /// <summary>
@@ -308,9 +312,13 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 光線が当たるノーツのデータを、調べる順に並べて返す (プレビュー上のクリック判定用)
-        /// 先に単発のノーツを手前から順に、その後にホールドの帯を手前から順に並べる
-        /// (帯は当たり判定の範囲が広く、近くの単発ノーツより先に当たってしまうので後回しにする)
+        /// 光線が当たるノーツのデータを、選ばれやすい順に並べて返す (プレビュー上のクリック判定用)
+        ///
+        /// 先に単発のノーツを「小さく見えるものから順」に、その後にホールドの帯を手前から順に並べる。
+        /// ・小さく見えるものを先にするのは、大きなノーツの中や手前に重なって見える小さなノーツを選べるようにするため
+        ///   (スペースホールドの節は、手前の大きな節が、奥の節をすっぽり覆って見えることがある。
+        ///    手前から順にすると、奥の節はどこをクリックしても選べない)
+        /// ・帯を後にするのは、帯が画面の広い範囲を覆っていて、単発のノーツより先に当たってしまうため
         /// </summary>
         public void PickNotes(Ray ray, List<INoteData> results)
         {
@@ -335,29 +343,72 @@ namespace ChartEditor
                     Transform noteTransform = note.Component.transform;
                     if (noteTransform.childCount == 0 || !noteTransform.GetChild(0).gameObject.activeInHierarchy) { continue; }
 
-                    // そのノーツの描画範囲のうち、光線がいちばん手前で当たる距離
+                    // 地面に落ちる影は、当たり判定に含めない
+                    Transform shadowRoot = GetShadowRoot(note.Data);
+
+                    // 帯(ホールド)は、実際に見えている形に当たっているかを調べる
+                    // (描画範囲の箱は、曲がりながら奥へ伸びる帯では見た目よりずっと大きい。
+                    //  箱で判定すると、帯から離れた場所をクリックしても帯に当たってしまう)
+                    if (isOrderDependentType)
+                    {
+                        if (TryGetVisibleMeshHitLength(ray, noteTransform, shadowRoot, out float meshHitLength, out bool hasReadableMesh))
+                        {
+                            pickCandidates.Add((meshHitLength, note.Data));
+                            continue;
+                        }
+
+                        // 形は分かっているが、見えている部分には当たっていない
+                        if (hasReadableMesh) { continue; }
+                    }
+
+                    // そのノーツの描画範囲のうち、光線が当たった部品について
+                    // ・いちばん手前で当たる距離
+                    // ・いちばん小さく見える部品の、見かけの大きさ (部品の大きさ ÷ 視点からの距離)
                     float nearestDistance = float.MaxValue;
+                    float smallestApparentSize = float.MaxValue;
                     noteTransform.GetComponentsInChildren(false, pickRendererBuffer);
                     foreach (Renderer noteRenderer in pickRendererBuffer)
                     {
                         if (!noteRenderer.enabled) { continue; }
-                        if (!noteRenderer.bounds.IntersectRay(ray, out float distance)) { continue; }
+                        if (shadowRoot != null && noteRenderer.transform.IsChildOf(shadowRoot)) { continue; }
+
+                        Bounds bounds = noteRenderer.bounds;
+                        if (!bounds.IntersectRay(ray, out float distance)) { continue; }
 
                         nearestDistance = Mathf.Min(nearestDistance, distance);
+
+                        float apparentSize = bounds.extents.magnitude / Mathf.Max(Vector3.Distance(ray.origin, bounds.center), 0.01f);
+                        smallestApparentSize = Mathf.Min(smallestApparentSize, apparentSize);
                     }
 
-                    if (nearestDistance < float.MaxValue) { pickCandidates.Add((nearestDistance, note.Data)); }
+                    if (nearestDistance == float.MaxValue) { continue; }
+
+                    // 帯は手前から順、単発のノーツは小さく見えるものから順
+                    pickCandidates.Add((isOrderDependentType ? nearestDistance : smallestApparentSize, note.Data));
                 }
             }
 
             pickRendererBuffer.Clear();
 
-            pickCandidates.Sort((a, b) => a.Distance.CompareTo(b.Distance));
+            pickCandidates.Sort((a, b) => a.Order.CompareTo(b.Order));
             foreach (var candidate in pickCandidates)
             {
                 results.Add(candidate.Data);
             }
             pickCandidates.Clear();
+        }
+
+        /// <summary>
+        /// 今の再生位置 (譜面上の距離)
+        /// </summary>
+        public float CurrentDistance => noteVisibilityController != null ? noteVisibilityController.CurrentDistance : 0f;
+
+        /// <summary>
+        /// 譜面上の距離が、今プレビューにノーツを表示している範囲に入っているか
+        /// </summary>
+        public bool IsInVisibleRange(float distance)
+        {
+            return noteVisibilityController == null || noteVisibilityController.IsInVisibleRange(distance);
         }
 
         /// <summary>
@@ -376,38 +427,23 @@ namespace ChartEditor
                 {
                     if (!ReferenceEquals(note.Data, data) || note.Component == null) { continue; }
 
-                    return TryGetHitPoint(ray, note.Component.transform, out worldPoint);
+                    return TryGetHitPoint(ray, note.Component.transform, GetShadowRoot(data), out worldPoint);
                 }
             }
 
             return false;
         }
 
-        private bool TryGetHitPoint(Ray ray, Transform noteTransform, out Vector3 worldPoint)
+        private bool TryGetHitPoint(Ray ray, Transform noteTransform, Transform shadowRoot, out Vector3 worldPoint)
         {
             worldPoint = default;
             float nearestLength = float.MaxValue;
 
             // 形との交点 (帯のように大きなノーツでも、実際に見えている面までの長さが分かる)
-            noteTransform.GetComponentsInChildren(false, pickMeshFilterBuffer);
-            foreach (MeshFilter meshFilter in pickMeshFilterBuffer)
+            if (TryGetVisibleMeshHitLength(ray, noteTransform, shadowRoot, out float meshHitLength, out _))
             {
-                Mesh mesh = meshFilter.sharedMesh;
-                if (mesh == null || !mesh.isReadable) { continue; }
-                if (!meshFilter.TryGetComponent(out Renderer meshRenderer) || !meshRenderer.enabled) { continue; }
-                if (!meshRenderer.bounds.IntersectRay(ray)) { continue; }
-
-                // メッシュと同じ座標系に直した光線で調べる (長さの単位は元の光線と同じになる)
-                Transform meshTransform = meshFilter.transform;
-                Vector3 origin = meshTransform.InverseTransformPoint(ray.origin);
-                Vector3 direction = meshTransform.InverseTransformVector(ray.direction);
-
-                if (PreviewPickMath.TryRaycastTriangles(mesh.vertices, mesh.triangles, origin, direction, out float hitLength))
-                {
-                    nearestLength = Mathf.Min(nearestLength, hitLength);
-                }
+                nearestLength = meshHitLength;
             }
-            pickMeshFilterBuffer.Clear();
 
             // 形を読み取れなかったときは、描画範囲の箱で代用する
             if (nearestLength == float.MaxValue)
@@ -416,6 +452,7 @@ namespace ChartEditor
                 foreach (Renderer noteRenderer in pickRendererBuffer)
                 {
                     if (!noteRenderer.enabled) { continue; }
+                    if (shadowRoot != null && noteRenderer.transform.IsChildOf(shadowRoot)) { continue; }
                     if (!noteRenderer.bounds.IntersectRay(ray, out float distance)) { continue; }
 
                     nearestLength = Mathf.Min(nearestLength, Mathf.Max(distance, 0f));
@@ -427,6 +464,89 @@ namespace ChartEditor
 
             worldPoint = ray.GetPoint(nearestLength);
             return true;
+        }
+
+        /// <summary>
+        /// 光線が、ノーツの形(メッシュ)のうち「今プレビューに映っている部分」に当たる場所までの長さを求める
+        ///
+        /// 帯(ホールド)の形は、再生位置を過ぎた部分も含めて作られていて、過ぎた部分は描くときに切り落とされている。
+        /// 切り落とされて見えない部分は視点のすぐそばを通っているので、そこも当たりに含めると、
+        /// 何もない場所をクリックしても帯に当たってしまう。見えている部分だけを当たりにする。
+        /// </summary>
+        /// <param name="shadowRoot">地面に落ちる影の部品 (当たり判定に含めない)。無ければ null</param>
+        /// <param name="hasReadableMesh">形を読み取れるメッシュが1つでもあったか (1つも無ければ、形では判定できない)</param>
+        private bool TryGetVisibleMeshHitLength(Ray ray, Transform noteTransform, Transform shadowRoot, out float hitLength, out bool hasReadableMesh)
+        {
+            hitLength = float.MaxValue;
+            hasReadableMesh = false;
+
+            pickRay = ray;
+            isVisibleHit ??= IsVisibleHit;
+
+            noteTransform.GetComponentsInChildren(false, pickMeshFilterBuffer);
+            foreach (MeshFilter meshFilter in pickMeshFilterBuffer)
+            {
+                Mesh mesh = meshFilter.sharedMesh;
+                if (mesh == null || !mesh.isReadable) { continue; }
+                // 表示範囲から外れた区間は、描画そのものが止められている
+                if (!meshFilter.TryGetComponent(out Renderer meshRenderer) || !meshRenderer.enabled) { continue; }
+                if (shadowRoot != null && meshFilter.transform.IsChildOf(shadowRoot)) { continue; }
+
+                hasReadableMesh = true;
+                if (!meshRenderer.bounds.IntersectRay(ray)) { continue; }
+
+                // メッシュと同じ座標系に直した光線で調べる (長さの単位は元の光線と同じになる)
+                Transform meshTransform = meshFilter.transform;
+                Vector3 origin = meshTransform.InverseTransformPoint(ray.origin);
+                Vector3 direction = meshTransform.InverseTransformVector(ray.direction);
+
+                if (PreviewPickMath.TryRaycastTriangles(mesh.vertices, mesh.triangles, origin, direction, isVisibleHit, out float length))
+                {
+                    hitLength = Mathf.Min(hitLength, length);
+                }
+            }
+            pickMeshFilterBuffer.Clear();
+
+            return hitLength < float.MaxValue;
+        }
+
+        /// <summary>
+        /// ノーツが地面に落としている影の部品を返す (無ければ null)
+        ///
+        /// スペースのノーツは宙に浮いていて、その真下の地面に影を落とす。影もノーツの部品の1つだが、
+        /// 本体から離れた場所に広く映るので、影をクリックしてもそのノーツを選んだことにはしない。
+        /// (長い影は区間ごとに分けて描かれ、分けた部品は影の子になっているので、影とその子をまとめて外す)
+        /// </summary>
+        private static Transform GetShadowRoot(INoteData data)
+        {
+            // 譜面エディタ側にも同名のクラスがあるため、本編側のクラスは global:: を付けて指定する
+            Renderer shadow = data switch
+            {
+                global::NoteData_SpaceHoldMesh spaceHoldMesh => spaceHoldMesh.MeshRendererAsset?.ShadowRenderer,
+                global::NoteData_SpaceBreak spaceBreak => spaceBreak.MeshRendererAsset?.ShadowRenderer,
+                _ => null,
+            };
+
+            return shadow != null ? shadow.transform : null;
+        }
+
+        /// <summary>
+        /// 当たり判定中の光線(pickRay)の上の、指定した長さの場所が、今プレビューに映っている範囲にあるか
+        /// </summary>
+        private bool IsVisibleHit(float length)
+        {
+            if (noteParent == null) { return true; }
+
+            // その場所が、軌道のどの位置(譜面上の距離)にあるか
+            float curveRadius = optionHolder?.NoteCurveRadius.Value ?? 2000f;
+            if (!PreviewTrackSurface.TryGetSection(pickRay.GetPoint(length), noteParent, curveRadius, out float distance, out _, out _)) { return true; }
+
+            // 軌道は円なので、位置から求めた距離は一周ぶんの範囲に丸まっている
+            // 再生位置にいちばん近い周回の距離に直してから比べる (長い譜面の後半でも正しく判定できるように)
+            float currentDistance = CurrentDistance;
+            distance = currentDistance + PreviewPickMath.WrapDistance(distance - currentDistance, 2f * Mathf.PI * curveRadius);
+
+            return IsInVisibleRange(distance);
         }
 
         #endregion

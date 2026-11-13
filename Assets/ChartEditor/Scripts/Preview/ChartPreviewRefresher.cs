@@ -69,6 +69,16 @@ namespace ChartEditor
             // 編集操作はすべてUndo履歴を通るので、履歴の変化を「譜面が変わった」合図にする
             UndoRedo.History.OnChanged += RequestAutoRefresh;
 
+            // ノートスピードが変わると、ノーツの並ぶ間隔が変わる。地面の進み方はすぐ変わるので、待たずに並べ直す
+            // (ログは出さない。スライダーを動かすたびにログ欄が埋まってしまうため)
+            if (optionHolder != null)
+            {
+                optionHolder.NoteSpeed
+                    .Skip(1)
+                    .Subscribe(_ => RefreshFromEditorData(false, false))
+                    .AddTo(this.gameObject);
+            }
+
             if (dataGetter == null) { return; }
 
             // オフセットはUndo履歴を通らないので個別に監視
@@ -138,6 +148,20 @@ namespace ChartEditor
         {
             RefreshFromEditorData(false, true);
             return UniTask.CompletedTask;
+        }
+
+        /// <summary>
+        /// 自動更新が待ち状態(編集してから反映までの短い間)なら、待たずに今すぐ反映する
+        /// プレビューの上で操作を始める前に呼ぶ。古いプレビューを基準に位置を計算しないようにするため
+        /// </summary>
+        /// <returns>反映したとき true</returns>
+        public bool FlushPendingRefresh()
+        {
+            if (!isAutoRefreshRequested || !isAutoRefreshEnabled) { return false; }
+            if (dataGetter != null && dataGetter.IsLoadingChart.Value) { return false; }
+
+            RefreshFromEditorData(false, false);
+            return true;
         }
 
         /// <summary>

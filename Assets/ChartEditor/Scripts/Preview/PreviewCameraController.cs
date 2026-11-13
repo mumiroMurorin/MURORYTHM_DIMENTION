@@ -10,6 +10,11 @@ namespace ChartEditor
     {
         [SerializeField] GameObject previewCameraParent;
 
+        /// <summary>
+        /// 全画面プレビューを映しているカメラ (全画面プレビューの間だけ有効になる)
+        /// </summary>
+        public Camera ScreenCamera => previewCameraParent != null ? previewCameraParent.GetComponentInChildren<Camera>(true) : null;
+
         IChartEditorDataGetter chartEditorDataGetter;
         IChartEditorOptionGetter optionGetter;
 

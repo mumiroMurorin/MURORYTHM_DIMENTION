@@ -25,6 +25,7 @@ namespace ChartEditor
         IChartEditorOptionGetter optionGetter_model;
         INoteSpawnDataOptionSetter noteSpawnDataOptionSetter_model;
         INoteSpawnDataOptionGetter noteSpawnDataOptionGetter_model;
+        INotesDataGetter notesGetter_model;
 
         IChartPreviewRefreshable previewRefreshable;
         EditNoteType editNoteTypeCache = EditNoteType.Ground;
@@ -36,8 +37,10 @@ namespace ChartEditor
             IChartEditorOptionSetter optionDataSetter,
             IChartEditorOptionGetter optionDataGetter,
             INoteSpawnDataOptionSetter noteSpawnDataOptionSetter,
-            INoteSpawnDataOptionGetter noteSpawnDataOptionGetter)
+            INoteSpawnDataOptionGetter noteSpawnDataOptionGetter,
+            INotesDataGetter notesGetter)
         {
+            this.notesGetter_model = notesGetter;
             this.dataGetter_model = dataGetter;
             this.dataSetter_model = dataSetter;
             this.optionSetter_model = optionDataSetter;
@@ -94,18 +97,43 @@ namespace ChartEditor
                 backEditorButton_view.OnPushButtonListner += () =>
                 {
                     ChangeEditMode(EditMode.None);
-                    ChangeEditNoteType(editNoteTypeCache);
+                    ChangeEditNoteType(GetReturnLayer());
                 };
             }
 
             offsetInputField_view.OnFloatValueChangedListner += dataSetter_model.SetOffset;
             changeLaneDivNumButton_view.OnPushButtonListner += () => optionSetter_model.SetLaneDivisionNum(true);
 
-            noteSpeedSlider_view.OnNoteSpeedApplyListener += (value) =>
+            // ノートスピード変更: スライダーを動かし終えたら反映する
+            // (プレビューは、ノートスピードの変化を見て自動で並べ直される)
+            noteSpeedSlider_view.OnNoteSpeedChangedListener += noteSpawnDataOptionSetter_model.SetNoteSpeed;
+        }
+
+        /// <summary>
+        /// 全画面プレビューから編集画面へ戻るときに開くレイヤーを指定する
+        /// (全画面プレビューの中でノーツを選んだとき、そのノーツのあるレイヤーへ戻れるように)
+        /// </summary>
+        public void SetReturnLayer(EditNoteType layer)
+        {
+            if (layer != EditNoteType.Ground && layer != EditNoteType.Space) { return; }
+
+            editNoteTypeCache = layer;
+        }
+
+        /// <summary>
+        /// 編集画面へ戻るときに開くレイヤー
+        /// </summary>
+        private EditNoteType GetReturnLayer()
+        {
+            // 頂点レイヤーから全画面プレビューに来た後、編集していたノーツがUndoなどで無くなっていることがある
+            // 編集するノーツが無いまま頂点レイヤーを開くと操作でエラーになるので、スペースレイヤーへ戻す
+            if (editNoteTypeCache == EditNoteType.Vertices &&
+                (notesGetter_model == null || notesGetter_model.EditingVertices.Value == null))
             {
-                noteSpawnDataOptionSetter_model.SetNoteSpeed(value);
-                previewRefreshable?.RefreshPreviewFromEditorDataAsync().Forget();
-            };
+                return EditNoteType.Space;
+            }
+
+            return editNoteTypeCache;
         }
 
         private async UniTaskVoid RunStartPreviewFlowAsync()

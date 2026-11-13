@@ -40,6 +40,19 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 譜面上の距離が、今プレビューに表示している範囲(再生位置の少し手前から先まで)に入っているか
+        /// </summary>
+        public bool IsInVisibleRange(float distance)
+        {
+            // 準備ができていないときは判断できないので、入っているものとして扱う
+            if (!isReady || timer == null || timer.Value == null || positionCalculator == null) { return true; }
+
+            float currentDistance = CurrentDistance;
+            return distance >= currentDistance - effectiveVisibleBehindDistance &&
+                   distance <= currentDistance + effectiveVisibleAheadDistance;
+        }
+
+        /// <summary>
         /// 位置計算に使う値をセットする (登録済みのノーツはそのまま残す)
         /// </summary>
         public void Initialize(INotePositionCalculator positionCalculator, float noteSpeed, float curveRadius)

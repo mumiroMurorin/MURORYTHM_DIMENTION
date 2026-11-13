@@ -41,9 +41,6 @@ namespace ChartEditor
         [SerializeField] ChartDataImporter chartDataImporter_model;
         [SerializeField] ConfigEditor configEditor_model;
         [SerializeField] LaneExtender laneExtender_model;
-        [SerializeField] MonoBehaviour previewRefreshTarget;
-
-        IChartPreviewRefreshable previewRefreshable;
 
         IChartEditorDataSetter dataSetter;
         IChartEditorDataGetter dataGetter_model;
@@ -72,8 +69,6 @@ namespace ChartEditor
 
         void Start()
         {
-            previewRefreshable = previewRefreshTarget as IChartPreviewRefreshable;
-
             BindForRhythmConfig();
             BindForOther();
 
@@ -271,12 +266,9 @@ namespace ChartEditor
                 dataSetter.SwitchEditNoteType();
             };
 
-            // ノートスピード変更
-            noteSpeedSlider_view.OnNoteSpeedApplyListener += (value) =>
-            {
-                noteSpawnDataOptionSetter.SetNoteSpeed(value);
-                previewRefreshable?.RefreshPreviewFromEditorDataAsync().Forget();
-            };
+            // ノートスピード変更: スライダーを動かし終えたら反映する
+            // (プレビューは、ノートスピードの変化を見て自動で並べ直される)
+            noteSpeedSlider_view.OnNoteSpeedChangedListener += noteSpawnDataOptionSetter.SetNoteSpeed;
 
             explanationButton_view.OnClickedListner += () => dataSetter.SetEditMode(EditMode.Explanation);
 

@@ -35,17 +35,12 @@ namespace ChartEditor
 
         private void Update()
         {
-            // 譜面の読み込み中は受け付けない
-            if (dataGetter.IsLoadingChart.Value) { return; }
-
-            if(dataGetter.EditNoteType.Value != EditNoteType.Ground &&
-                dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
-
             // Deleteキーで消す
             if (Input.GetKeyDown(KeyCode.Delete))
             {
-                // 除外エディットモード中は返す
-                if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
+                // 読み込み中・文字の入力中・ほかの操作の途中は受け付けない
+                // (全画面プレビューでも、プレビューの上で選んだノーツを消せる)
+                if (!SelectedNotesKeyOperation.IsAcceptable(dataGetter, ignoreEditModes)) { return; }
 
                 DestroyNotes();
             }

@@ -56,7 +56,8 @@ namespace ChartEditor
             EditMode.EditingBarConfig,
             EditMode.EditingSubDivisionConfig,
             EditMode.Explanation,
-            EditMode.Preview,
+            // 全画面プレビュー(EditMode.Preview)は含めない
+            // プレビューの上でもノーツを動かせるので、その場で元に戻せるようにする
         };
 
         [Inject]
@@ -86,7 +87,7 @@ namespace ChartEditor
             bool ctrl = ModifierKey.Ctrl;
             bool shift = ModifierKey.Shift;
             // 入力欄に文字を打っている間は、キー操作を譜面の操作として扱わない
-            bool isTyping = IsTypingInInputField();
+            bool isTyping = InputFieldFocus.IsTyping;
 
             // 楽曲再生
             if (!isTyping && Input.GetKeyDown(playKey)) { OperateMusicPlay(); }
@@ -119,23 +120,6 @@ namespace ChartEditor
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(undoRedoIgnoreModes)) { return false; }
 
             return true;
-        }
-
-        /// <summary>
-        /// 入力欄(InputField)にフォーカスがあるか
-        /// </summary>
-        private bool IsTypingInInputField()
-        {
-            var eventSystem = EventSystem.current;
-            if (eventSystem == null) { return false; }
-
-            var selected = eventSystem.currentSelectedGameObject;
-            if (selected == null) { return false; }
-
-            if (selected.TryGetComponent(out TMPro.TMP_InputField tmpField)) { return tmpField.isFocused; }
-            if (selected.TryGetComponent(out UnityEngine.UI.InputField field)) { return field.isFocused; }
-
-            return false;
         }
 
         /// <summary>
