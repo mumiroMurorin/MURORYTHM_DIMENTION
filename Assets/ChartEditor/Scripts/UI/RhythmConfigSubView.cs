@@ -62,16 +62,16 @@ namespace ChartEditor
             float speedRatio = 1;
 
             // BPMのセット
-            if (string.IsNullOrWhiteSpace(bpmField.text) || !float.TryParse(bpmField.text, out bpm))
+            if (string.IsNullOrWhiteSpace(bpmField.text) || !float.TryParse(bpmField.text, out bpm) || !(bpm > 0f) || float.IsInfinity(bpm))
             {
-                Debug.Log($"BPMに有効な数字を入力してください: {bpmField.text}");
+                MessageDialog.ShowError("分線の設定を変更できません", $"BPMには0より大きい数を入力してください。\n入力値: {bpmField.text}");
                 return;
             }
 
             // SpeedRatioのセット
-            if (string.IsNullOrWhiteSpace(speedRatioField.text) || !float.TryParse(speedRatioField.text, out speedRatio))
+            if (string.IsNullOrWhiteSpace(speedRatioField.text) || !float.TryParse(speedRatioField.text, out speedRatio) || float.IsNaN(speedRatio) || float.IsInfinity(speedRatio))
             {
-                Debug.Log($"スピード倍率に有効な数字を入力してください: {speedRatioField.text}");
+                MessageDialog.ShowError("分線の設定を変更できません", $"スピード倍率には数値を入力してください。\n入力値: {speedRatioField.text}");
                 return;
             }
 

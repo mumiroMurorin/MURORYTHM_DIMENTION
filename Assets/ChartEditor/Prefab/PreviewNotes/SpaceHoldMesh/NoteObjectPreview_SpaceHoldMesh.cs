@@ -28,7 +28,14 @@ public class NoteObjectPreview_SpaceHoldMesh : NoteObject<NoteData_SpaceHoldMesh
         // マテリアルの設定
         noteData.MeshRendererAsset.SetMaterial(
             meshMaterialInside, meshMaterialOutside,
-            meshMaterialOutlineInside, meshMaterialOutlineOutside, 
+            meshMaterialOutlineInside, meshMaterialOutlineOutside,
             meshMaterialShadow);
+    }
+
+    private void OnDestroy()
+    {
+        // SetMaterial がホールドごとに複製したマテリアルを破棄する (本編の NoteObject_SpaceHoldMesh と同じ後片付け)
+        // プレビューは編集のたびに作り直すので、破棄しないとメモリが増え続ける
+        noteData?.MeshRendererAsset?.DestroyMaterialInstances();
     }
 }

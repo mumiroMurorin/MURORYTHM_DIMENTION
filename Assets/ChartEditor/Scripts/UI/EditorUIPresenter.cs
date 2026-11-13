@@ -78,6 +78,9 @@ namespace ChartEditor
             BindForOther();
 
             SetEvent();
+
+            // 再生速度の切り替え行を、レーン分割数の行の下に追加する
+            PlaybackSpeedRow.Create(changeLaneDivNumButton_view, optionGetter, optionSetter);
         }
 
         private void BindForOther()
@@ -202,7 +205,11 @@ namespace ChartEditor
                 .Where(pair => pair.Previous == EditMode.EditingBarConfig)
                 .Subscribe(value =>
                 {
-                    rhythmConfigBar_view.SetData(configEditor_model.ChangeBarConfig);
+                    // キャンセルされたときは適用せずに閉じる
+                    if (!configEditor_model.ConsumeCanceled())
+                    {
+                        rhythmConfigBar_view.SetData(configEditor_model.ChangeBarConfig);
+                    }
                     rhythmConfigBar_view.SetActive(false);
                 })
                 .AddTo(this.gameObject);
@@ -213,7 +220,11 @@ namespace ChartEditor
                 .Where(pair => pair.Previous == EditMode.EditingSubDivisionConfig)
                 .Subscribe(value =>
                 {
-                    rhythmConfigSubDivision_view.SetData(configEditor_model.ChangeSubDivisionConfig);
+                    // キャンセルされたときは適用せずに閉じる
+                    if (!configEditor_model.ConsumeCanceled())
+                    {
+                        rhythmConfigSubDivision_view.SetData(configEditor_model.ChangeSubDivisionConfig);
+                    }
                     rhythmConfigSubDivision_view.SetActive(false);
                 })
                 .AddTo(this.gameObject);
@@ -287,6 +298,10 @@ namespace ChartEditor
             soundLoadCts = new CancellationTokenSource();
 
             AudioClip clip = await AudioFileSelector.SelectAudioFile(soundLoadCts.Token);
+
+            // キャンセルされた、または読み込めなかったときは現在の楽曲を残す
+            if (clip == null) { return; }
+
             dataSetter.SetMusic(clip);
         }
 

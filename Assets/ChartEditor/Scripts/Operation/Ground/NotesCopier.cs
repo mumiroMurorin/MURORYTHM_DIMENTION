@@ -40,8 +40,8 @@ namespace ChartEditor
             if (dataGetter.EditNoteType.Value != EditNoteType.Ground && dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
             if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
 
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C)) { CopyNotes(); }
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V)) { PasteNotes(); }
+            if (ModifierKey.Ctrl && Input.GetKeyDown(KeyCode.C)) { CopyNotes(); }
+            if (ModifierKey.Ctrl && Input.GetKeyDown(KeyCode.V)) { PasteNotes(); }
         }
 
         private void CopyNotes()

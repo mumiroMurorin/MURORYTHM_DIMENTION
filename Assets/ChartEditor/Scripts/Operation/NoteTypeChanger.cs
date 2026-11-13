@@ -38,12 +38,18 @@ namespace ChartEditor
             var changableObject = collider.Note;
             if (changableObject.NoteData == null) { return; }
 
-            Record(() => { 
-                ChangeNoteType(changableObject); 
-            }, 
+            // 先に変更し、実際に種類が変わったときだけUndo履歴に登録する
+            // (変更先が無い種類のノートで、何も起きない操作を履歴に積まないため)
+            var previousType = changableObject.NoteData.NoteTypeRP.Value;
+            ChangeNoteType(changableObject);
+            if (changableObject.NoteData.NoteTypeRP.Value == previousType) { return; }
+
+            Record(() => {
+                ChangeNoteType(changableObject);
+            },
             () => {
                 ChangeNoteType(changableObject);
-            });
+            }, execute: false);
         }
 
         private void ChangeNoteType(IChangableObject changableObject)

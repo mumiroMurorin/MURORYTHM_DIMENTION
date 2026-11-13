@@ -18,6 +18,8 @@ namespace ChartEditor
         public IObservable<Unit> OnSelectionChanged => selectionChanged;
 
         IChartEditorDataGetter dataGetter;
+        INotesDataGetter notesGetter;
+        bool needsRelink;
         EditMode[] ignoreEditModes = new EditMode[] {
              EditMode.VertexMoving,
              EditMode.VerticesRotating,
@@ -26,9 +28,10 @@ namespace ChartEditor
         };
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter)
+        public void Construct(IChartEditorDataGetter dataGetter, INotesDataGetter notesGetter)
         {
             this.dataGetter = dataGetter;
+            this.notesGetter = notesGetter;
         }
 
         private void Start()
@@ -38,11 +41,14 @@ namespace ChartEditor
 
         void Update()
         {
+            // 頂点オブジェクトが作り直されていたら、選択を新しいオブジェクトに付け替える
+            if (needsRelink) { RelinkSelection(); }
+
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
             if (dataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
 
             // Ctrl+左クリックで複数選択
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0))
+            if (ModifierKey.Ctrl && Input.GetMouseButtonDown(0))
             {
                 var collider = dataGetter.GetInteractableCollider<ISelectableVertexCollider>();
                 if (collider == null) { return; }
@@ -57,8 +63,13 @@ namespace ChartEditor
 
                 // カーソル先が頂点オブジェクトでないなら選択解除する
                 var collider = dataGetter.GetInteractableCollider<ISelectableVertexCollider>();
-                if (collider == null) 
+                if (collider == null)
                 {
+                    // 中心点を掴んだときは、選択を変えない
+                    var movableCollider = dataGetter.GetInteractableCollider<IPointMovableCollider>();
+                    var clickedVertex = movableCollider?.Vertex?.Vertex;
+                    if (clickedVertex != null && clickedVertex.IsCenterHandle) { return; }
+
                     DeselectAll();
                 }
                 // 頂点オブジェクトであれば単選択する
@@ -81,6 +92,53 @@ namespace ChartEditor
                         }
                     })
                     .AddTo(this.gameObject);
+
+            // 頂点オブジェクトが破棄されたとき、選択が古いオブジェクトを指したままにしない
+            // 反転・並べ替えでは同じ頂点のオブジェクトがすぐ作り直されるので、次のフレームで付け替える
+            notesGetter.DataToVertexObject.ObserveRemove()
+                    .Subscribe(removed =>
+                    {
+                        if (SelectingVertices.Contains(removed.Value.Data)) { needsRelink = true; }
+                    })
+                    .AddTo(this.gameObject);
+
+            // 編集対象の切り替え・貼り付けなどで頂点が総入れ替えになったときは選択を解除する
+            notesGetter.DataToVertexObject.ObserveReset()
+                    .Subscribe(_ => DeselectAll())
+                    .AddTo(this.gameObject);
+        }
+
+        /// <summary>
+        /// 選択中の頂点を、現在の頂点オブジェクトに付け替える
+        /// 対応するオブジェクトが無くなった頂点(削除された頂点)は選択から外す
+        /// </summary>
+        private void RelinkSelection()
+        {
+            needsRelink = false;
+            bool isChanged = false;
+
+            for (int i = SelectingVertices.Count - 1; i >= 0; i--)
+            {
+                var currentObject = notesGetter.GetVertexObject(SelectingVertices[i]);
+
+                // 頂点が削除されていた
+                if (currentObject == null || !currentObject.TryGetComponent(out ISelectableVertexObject selectable))
+                {
+                    selectingObjects.RemoveAt(i);
+                    SelectingVertices.RemoveAt(i);
+                    isChanged = true;
+                    continue;
+                }
+
+                // オブジェクトが作り直されていた
+                if (!ReferenceEquals(selectable, selectingObjects[i]))
+                {
+                    selectingObjects[i] = selectable;
+                    selectable.OnSelect();
+                }
+            }
+
+            if (isChanged) { NotifySelectionChanged(); }
         }
 
         private void SelectSingle(ISelectableVertexObject obj)
@@ -130,7 +188,8 @@ namespace ChartEditor
 
             foreach(var obj in selectingObjects)
             {
-                obj?.OnDeselect();
+                // 破棄済みのオブジェクトには触らない
+                if (obj is UnityEngine.Object unityObject && unityObject != null) { obj.OnDeselect(); }
             }
 
             selectingObjects.Clear();

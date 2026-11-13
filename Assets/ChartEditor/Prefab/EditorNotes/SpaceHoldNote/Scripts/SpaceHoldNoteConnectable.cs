@@ -186,12 +186,14 @@ namespace ChartEditor
             if (backNote.Value == null && nextNote.Value == null && !isAlone)
             {
                 noteObject.OutlineColors.Add(outlineColorOnAlone);
+                noteObject.SetWarning(NoteWarningType.UnconnectedSpaceHold, true);
                 isAlone = true;
             }
             // 独立でない
             else if ((backNote.Value != null || nextNote.Value != null) && isAlone)
             {
                 noteObject.OutlineColors.Remove(outlineColorOnAlone);
+                noteObject.SetWarning(NoteWarningType.UnconnectedSpaceHold, false);
                 isAlone = false;
             }
         }

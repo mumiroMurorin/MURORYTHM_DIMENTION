@@ -52,6 +52,9 @@ namespace ChartEditor
 
             Bind();
             SetEvent();
+
+            // 再生速度の切り替え行を、レーン分割数の行の下に追加する
+            PlaybackSpeedRow.Create(changeLaneDivNumButton_view, optionGetter_model, optionSetter_model);
         }
 
         private void Bind()
@@ -73,7 +76,9 @@ namespace ChartEditor
         {
             if (previewRefreshButton_view != null)
             {
-                previewRefreshButton_view.OnPushButtonListner += () => previewRefreshable?.RefreshPreviewFromEditorDataAsync().Forget();
+                // 更新ボタンは、変わっていないノーツも含めてすべて作り直す
+                // (普段は編集に合わせて自動で反映されるので、表示がおかしいときの作り直し用)
+                previewRefreshButton_view.OnPushButtonListner += () => previewRefreshable?.RebuildPreviewFromEditorData();
             }
 
             if (previewStartButton_view != null)

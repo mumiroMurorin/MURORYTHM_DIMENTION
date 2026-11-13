@@ -27,6 +27,22 @@ namespace ChartEditor
         public Action OnChangePositionListener;
         public Func<Vector2, Vector2> CalcPositionOnChartGround;
 
+        /// <summary>
+        /// 多角形の頂点ではなく、多角形全体を動かすための「中心点」か
+        /// </summary>
+        public bool IsCenterHandle { get; private set; }
+
+        /// <summary>
+        /// 中心点として扱う (Initialize の後に呼ぶ)
+        /// </summary>
+        public void SetAsCenterHandle()
+        {
+            IsCenterHandle = true;
+
+            // 頂点番号は持たないので表示しない
+            if (indexTmp != null) { indexTmp.text = string.Empty; }
+        }
+
         CancellationTokenSource cts;
 
         private void Awake()

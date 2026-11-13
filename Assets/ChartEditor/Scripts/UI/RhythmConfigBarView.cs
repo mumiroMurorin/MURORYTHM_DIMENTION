@@ -52,28 +52,33 @@ namespace ChartEditor
             int divNum = 1;
 
             // BeatCountのセット
-            if (string.IsNullOrWhiteSpace(beatCountField.text) || !int.TryParse(beatCountField.text, out beatCount))
+            if (string.IsNullOrWhiteSpace(beatCountField.text) || !int.TryParse(beatCountField.text, out beatCount) || beatCount < 1)
             {
-                Debug.Log($"BeatUnitに有効な数字を入力してください: {beatCountField.text}");
+                ShowInputError($"拍子の分子には1以上の整数を入力してください。\n入力値: {beatCountField.text}");
                 return;
             }
 
             // BeatUnitのセット
-            if (string.IsNullOrWhiteSpace(beatUnitField.text) || !float.TryParse(beatUnitField.text, out beatUnit)) 
+            if (string.IsNullOrWhiteSpace(beatUnitField.text) || !float.TryParse(beatUnitField.text, out beatUnit) || !(beatUnit > 0f) || float.IsInfinity(beatUnit))
             {
-                Debug.Log($"BeatUnitに有効な数字を入力してください: {beatUnitField.text}");
+                ShowInputError($"拍子の分母には0より大きい数を入力してください。\n入力値: {beatUnitField.text}");
                 return;
             }
 
             // DivisionNumのセット
-            if (string.IsNullOrWhiteSpace(divisionNumField.text) || !int.TryParse(divisionNumField.text, out divNum))
+            if (string.IsNullOrWhiteSpace(divisionNumField.text) || !int.TryParse(divisionNumField.text, out divNum) || divNum < 1)
             {
-                Debug.Log($"DivisionNumに有効な数字を入力してください: {divisionNumField.text}");
+                ShowInputError($"分割数には1以上の整数を入力してください。\n入力値: {divisionNumField.text}");
                 return;
             }
 
             var barConfig = new BarConfig(beatCount, beatUnit, divNum);
             setBarConfig.Invoke(barConfig);
+        }
+
+        private void ShowInputError(string message)
+        {
+            MessageDialog.ShowError("小節の設定を変更できません", message);
         }
 
         public void OnClickedApplyButton()

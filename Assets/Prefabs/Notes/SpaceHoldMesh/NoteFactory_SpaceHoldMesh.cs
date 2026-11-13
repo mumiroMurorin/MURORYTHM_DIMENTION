@@ -3,7 +3,8 @@ using UnityEngine;
 using System.Linq;
 using MeshGenerate;
 
-public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>
+// IOrderDependentNoteFactory: ステンシル番号と輪郭線の重複除去(registeredScreenSpaceOutlineBoundaries)を、生成した順に決めているため
+public class NoteFactory_SpaceHoldMesh : NoteFactory<NoteData_SpaceHoldMesh>, IOrderDependentNoteFactory
 {
     readonly Vector3 CENTER_PIVOT = Vector3.zero;
     readonly float RADIUS = 10f;

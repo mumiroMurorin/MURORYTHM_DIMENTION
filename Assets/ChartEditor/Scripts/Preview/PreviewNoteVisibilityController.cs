@@ -3,12 +3,17 @@ using UnityEngine;
 
 namespace ChartEditor
 {
+    /// <summary>
+    /// プレビューのノーツのうち、再生位置の近くにあるものだけを表示する
+    /// ノーツは生成の途中でも1個ずつ追加・削除できる
+    /// </summary>
     public class PreviewNoteVisibilityController : MonoBehaviour
     {
         [SerializeField] float visibleBehindDistance = 5f;
         [SerializeField] float visibleAheadDistance = 100f;
         [SerializeField] SerializeInterface<ITimeGetter> timer;
 
+        // 開始距離の小さい順に並べたノーツ
         readonly List<INoteVisibilityTarget> targets = new List<INoteVisibilityTarget>();
         readonly List<float> prefixMaxEndDistances = new List<float>();
         HashSet<INoteVisibilityTarget> visibleTargets = new HashSet<INoteVisibilityTarget>();
@@ -20,7 +25,23 @@ namespace ChartEditor
         float effectiveVisibleAheadDistance;
         bool isReady;
         bool requiresVisibilityRefresh;
+        bool isPrefixDirty;
 
+        /// <summary>
+        /// 現在の再生位置(譜面上の累積距離)。準備ができていないときは0
+        /// </summary>
+        public float CurrentDistance
+        {
+            get
+            {
+                if (timer == null || timer.Value == null || positionCalculator == null) { return 0f; }
+                return positionCalculator.GetPosition(timer.Value.Time) * noteSpeed;
+            }
+        }
+
+        /// <summary>
+        /// 位置計算に使う値をセットする (登録済みのノーツはそのまま残す)
+        /// </summary>
         public void Initialize(INotePositionCalculator positionCalculator, float noteSpeed, float curveRadius)
         {
             this.positionCalculator = positionCalculator;
@@ -31,30 +52,55 @@ namespace ChartEditor
                 visibleAheadDistance,
                 0f,
                 maxVisibleSpan - effectiveVisibleBehindDistance);
-            targets.Clear();
-            prefixMaxEndDistances.Clear();
-            visibleTargets.Clear();
-            nextVisibleTargets.Clear();
-            isReady = false;
-            requiresVisibilityRefresh = false;
+            isReady = true;
         }
 
-        public void Register(Component spawnedNote)
+        /// <summary>
+        /// ノーツを登録する。表示するかどうかは次の LateUpdate で決まる
+        /// </summary>
+        public void Add(Component spawnedNote)
         {
             if (spawnedNote is not INoteVisibilityTarget target) { return; }
 
             target.SetActive(false);
-            targets.Add(target);
+
+            // 開始距離の順を保つ位置に挿入する
+            targets.Insert(UpperBoundStart(target.StartChartDistance), target);
+            isPrefixDirty = true;
         }
 
-        public void CompleteRegistration()
+        /// <summary>
+        /// ノーツの登録を解除して非表示にする
+        /// </summary>
+        public void Remove(Component spawnedNote)
         {
-            targets.Sort((x, y) => x.StartChartDistance.CompareTo(y.StartChartDistance));
-            RebuildPrefixMaxEndDistances();
-            isReady = true;
-            requiresVisibilityRefresh = true;
+            if (spawnedNote is not INoteVisibilityTarget target) { return; }
+            if (!targets.Remove(target)) { return; }
+
+            Hide(target);
+            isPrefixDirty = true;
         }
 
+        /// <summary>
+        /// 複数のノーツの登録をまとめて解除して非表示にする (1個ずつ解除するより速い)
+        /// </summary>
+        public void RemoveAll(HashSet<INoteVisibilityTarget> removeTargets)
+        {
+            if (removeTargets == null || removeTargets.Count == 0) { return; }
+
+            if (targets.RemoveAll(removeTargets.Contains) == 0) { return; }
+
+            foreach (INoteVisibilityTarget target in removeTargets)
+            {
+                Hide(target);
+            }
+
+            isPrefixDirty = true;
+        }
+
+        /// <summary>
+        /// すべてのノーツの登録を解除して非表示にする
+        /// </summary>
         public void Clear()
         {
             foreach (INoteVisibilityTarget target in visibleTargets)
@@ -66,8 +112,16 @@ namespace ChartEditor
             prefixMaxEndDistances.Clear();
             visibleTargets.Clear();
             nextVisibleTargets.Clear();
-            isReady = false;
             requiresVisibilityRefresh = false;
+            isPrefixDirty = false;
+        }
+
+        private void Hide(INoteVisibilityTarget target)
+        {
+            if (visibleTargets.Remove(target))
+            {
+                SetTargetVisible(target, false);
+            }
         }
 
         private void LateUpdate()
@@ -79,6 +133,12 @@ namespace ChartEditor
         private void UpdateVisibleRange(bool forceUpdate)
         {
             if (!isReady || timer == null || timer.Value == null || positionCalculator == null) { return; }
+
+            if (isPrefixDirty)
+            {
+                RebuildPrefixMaxEndDistances();
+                isPrefixDirty = false;
+            }
 
             float currentDistance = positionCalculator.GetPosition(timer.Value.Time) * noteSpeed;
             float minDistance = currentDistance - effectiveVisibleBehindDistance;

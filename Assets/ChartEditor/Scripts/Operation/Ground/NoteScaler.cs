@@ -66,7 +66,9 @@ namespace ChartEditor
             // 複数選択されたオブジェクトから拡大縮小できるやつを取り出す
             foreach (var data in notesGetter.SelectingNotes)
             {
+                // 譜面の読み込み直後など、対応するオブジェクトが無いノートは飛ばす
                 var obj = notesGetter.GetNoteObject(data);
+                if (obj == null) { continue; }
                 if (!obj.TryGetComponent(out IScalableObject scalable)) { continue; }
 
                 // ノーツオブジェクト側の動作
@@ -160,6 +162,9 @@ namespace ChartEditor
         /// </summary>
         private void FinishScaleNote()
         {
+            // 拡大縮小を開始していないとき(ノーツの端以外でマウスを離した等)は何もしない
+            if (scalableAndDelta.Count == 0) { return; }
+
             var currentAddress = new List<NoteDataToAddress>();
             foreach (var pair in scalableAndDelta)
             {
@@ -169,12 +174,15 @@ namespace ChartEditor
                 currentAddress.Add(new NoteDataToAddress(noteData, noteData.Address));
             }
 
-            // 移動を終えたときはじめて登録
+            // 拡大縮小を終えたときはじめて登録 (幅が変わっていなければ履歴に積まない)
             var previousAddressCopy = new List<NoteDataToAddress>(previousAddress);
-            RecordNotesMoving(previousAddressCopy, currentAddress);
+            RecordNotesMovingIfChanged(previousAddressCopy, currentAddress);
 
             // 再選択
             notesSetter.ReselectNotes();
+
+            // 拡大縮小中のモードを戻す (戻さないと、カーソルがUI上にある間 Undo を受け付けない)
+            dataSetter?.SetEditMode(EditMode.Scale);
 
             Initialize();
         }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using VContainer;
 using JsonUtil;
 using ChartConvert;
@@ -10,28 +11,140 @@ namespace ChartEditor
     {
         IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter editorDataSetter;
+        ChartSaveGuard saveGuard;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter editorDataSetter)
+        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter editorDataSetter, ChartSaveGuard saveGuard)
         {
             this.dataGetter = dataGetter;
             this.editorDataSetter = editorDataSetter;
+            this.saveGuard = saveGuard;
         }
 
         public void Import()
         {
-            // Load from file dialog and keep the path for subsequent Ctrl+S overwrite.
-            if (!JsonLoader.TryLoadFromJsonFileDialog(out ChartDataOrigin chartDataOrigin, out string loadedPath)) { return; }
+            // 未保存の変更があれば確認
+            if (!saveGuard.ConfirmDiscardChanges("別の譜面を読み込み")) { return; }
 
+            // Load from file dialog and keep the path for subsequent Ctrl+S overwrite.
+            if (!JsonLoader.TryLoadFromJsonFileDialog(out ChartDataOrigin chartDataOrigin, out string loadedPath, out string loadError))
+            {
+                // キャンセル時はエラー文が空。読み込みに失敗したときだけ通知する
+                if (!string.IsNullOrEmpty(loadError))
+                {
+                    MessageDialog.ShowError("譜面を読み込めません", $"{loadError}\n\n現在の譜面はそのまま残しています。\n{loadedPath}");
+                }
+                return;
+            }
+
+            // 現在の譜面を破棄する前に、読み込めるデータか検査する
+            if (!ChartImporterForChartEditor.TryValidate(chartDataOrigin, out string validationError))
+            {
+                MessageDialog.ShowError("譜面を読み込めません", $"{validationError}\n\n現在の譜面はそのまま残しています。\n{loadedPath}");
+                return;
+            }
+
+            // 失敗したとき元に戻せるよう、現在の状態を退避
+            ChartDataOrigin previousChart = ExportCurrentChart();
+            float previousOffset = dataGetter.Offset.Value;
+
+            bool isCompletelyImported;
+            try
+            {
+                isCompletelyImported = ImportToEditor(chartDataOrigin);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"【Import】譜面の読み込みに失敗しました: {ex.Message}\n{ex.StackTrace}");
+                RestoreChart(previousChart, previousOffset);
+                MessageDialog.ShowError("譜面を読み込めません",
+                    $"読み込み中にエラーが発生したため、元の譜面に戻しました。\n{loadedPath}\n\n{ex.Message}\n\n" +
+                    "※接続していないホールドなど、保存できない状態のノーツは戻せていない可能性があります。\n" +
+                    "　元のファイルを上書きしないよう、保存先は未設定にしています(保存時に保存先を選び直してください)。");
+                return;
+            }
+
+            // Reset undo/redo history after import.
+            ResetStates();
+
+            if (isCompletelyImported)
+            {
+                ChartFilePathCache.CurrentChartFilePath = loadedPath;
+                saveGuard.MarkSaved();
+            }
+            else
+            {
+                // 一部のノーツを読み込めなかった譜面で、元のファイルを上書きさせない
+                ChartFilePathCache.CurrentChartFilePath = string.Empty;
+                saveGuard.MarkDirty();
+                MessageDialog.ShowError("一部のノーツを読み込めませんでした",
+                    $"このファイルには、エディタで読み込めないノーツが含まれていました。\n{loadedPath}\n\n" +
+                    "読み込めた分だけを表示しています。元のファイルを上書きしないよう、保存先は未設定にしています\n" +
+                    "(保存するときは保存先を選び直してください)。");
+            }
+        }
+
+        /// <returns>すべてのノーツを読み込めたとき true</returns>
+        private bool ImportToEditor(ChartDataOrigin chartDataOrigin)
+        {
             ChartImporterForChartEditor chartImporter = new ChartImporterForChartEditor();
 
             ChartData chartData = new ChartData(0);
             editorDataSetter.SetChartData(chartData);
-            chartImporter.Import(chartDataOrigin, ref chartData, editorDataSetter);
-            ChartFilePathCache.CurrentChartFilePath = loadedPath;
+            return chartImporter.Import(chartDataOrigin, ref chartData, editorDataSetter);
+        }
 
-            // Reset undo/redo history after import.
+        /// <summary>
+        /// 現在の譜面を退避用に変換する。譜面が無いときは null
+        /// </summary>
+        private ChartDataOrigin ExportCurrentChart()
+        {
+            var current = dataGetter.ChartData.Value;
+            if (current == null) { return null; }
+
+            try
+            {
+                return new ChartExporter().Export(current, dataGetter.Offset.Value);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"【Import】現在の譜面の退避に失敗しました: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 読み込み失敗時に元の譜面へ戻す
+        /// </summary>
+        private void RestoreChart(ChartDataOrigin previousChart, float previousOffset)
+        {
+            try
+            {
+                if (previousChart == null)
+                {
+                    editorDataSetter.SetChartData(new ChartData(0));
+                    editorDataSetter.SetOffset(previousOffset);
+                }
+                else
+                {
+                    ImportToEditor(previousChart);
+                }
+            }
+            catch (Exception ex)
+            {
+                // 復元にも失敗したときは、上書き保存で元ファイルを壊さないよう保存先を忘れる
+                Debug.LogError($"【Import】元の譜面の復元に失敗しました: {ex.Message}\n{ex.StackTrace}");
+                editorDataSetter.SetChartData(new ChartData(0));
+                ChartFilePathCache.CurrentChartFilePath = string.Empty;
+            }
+
+            // 作り直したオブジェクトと履歴が食い違うので履歴は破棄する
             ResetStates();
+
+            // 退避 → 復元の往復では、保存できない状態のノーツ(未接続のホールド等)が戻らない
+            // 欠けた譜面で元のファイルを上書きしないよう、保存先を忘れて未保存扱いにする
+            ChartFilePathCache.CurrentChartFilePath = string.Empty;
+            saveGuard.MarkDirty();
         }
     }
 }

@@ -25,6 +25,9 @@ namespace ChartEditor
 
         IChartEditorDataGetter dataGetter_model; 
         VertexData selectedVertex;
+        // 数値入力で編集中の頂点と、編集前の座標 (Undo用)
+        VertexData positionEditingVertex;
+        Vector2 positionBeforeEdit;
         CancellationTokenSource guideImageLoadCts;
 
         [Inject]
@@ -44,6 +47,8 @@ namespace ChartEditor
         {
             if (positionPanelView_view != null)
             {
+                positionPanelView_view.OnBeginEditListener -= OnBeginEditPosition;
+                positionPanelView_view.OnEndEditListener -= OnEndEditPosition;
                 positionPanelView_view.OnXValueChangedListener -= OnXValueChanged;
                 positionPanelView_view.OnYValueChangedListener -= OnYValueChanged;
             }
@@ -94,6 +99,8 @@ namespace ChartEditor
 
             if (positionPanelView_view != null)
             {
+                positionPanelView_view.OnBeginEditListener += OnBeginEditPosition;
+                positionPanelView_view.OnEndEditListener += OnEndEditPosition;
                 positionPanelView_view.OnXValueChangedListener += OnXValueChanged;
                 positionPanelView_view.OnYValueChangedListener += OnYValueChanged;
             }
@@ -163,8 +170,48 @@ namespace ChartEditor
 
         void ClearSelectedVertex()
         {
+            // 入力途中だった数値編集を確定させる
+            CommitPositionEdit();
+
             selectedVertexDisposables.Clear();
             selectedVertex = null;
+        }
+
+        /// <summary>
+        /// 座標の入力欄が選択された時。編集前の座標を覚えておく
+        /// </summary>
+        void OnBeginEditPosition()
+        {
+            CommitPositionEdit();
+
+            if (selectedVertex == null) { return; }
+
+            positionEditingVertex = selectedVertex;
+            positionBeforeEdit = selectedVertex.Position.Value;
+        }
+
+        /// <summary>
+        /// 座標の入力が終わった時
+        /// </summary>
+        void OnEndEditPosition()
+        {
+            CommitPositionEdit();
+        }
+
+        /// <summary>
+        /// 数値入力による頂点の移動を、1回の操作としてUndo履歴に登録する
+        /// </summary>
+        void CommitPositionEdit()
+        {
+            if (positionEditingVertex == null) { return; }
+
+            var vertex = positionEditingVertex;
+            positionEditingVertex = null;
+
+            var current = vertex.Position.Value;
+            if (current == positionBeforeEdit) { return; }
+
+            UndoRedo.Vertices.VerticesMoveRecord.RecordVertexMoving(vertex, positionBeforeEdit, current);
         }
 
         void SetPositionPanelEnabled(bool enabled)
@@ -203,6 +250,9 @@ namespace ChartEditor
         {
             if (selectedVertex == null) { return; }
 
+            // 入力欄を選び直さずに再編集したときも、Undo用に編集前の座標を覚える
+            if (positionEditingVertex == null) { OnBeginEditPosition(); }
+
             var current = selectedVertex.Position.Value;
             selectedVertex.SetPosition(new Vector2(value, current.y));
         }
@@ -210,6 +260,9 @@ namespace ChartEditor
         void OnYValueChanged(float value)
         {
             if (selectedVertex == null) { return; }
+
+            // 入力欄を選び直さずに再編集したときも、Undo用に編集前の座標を覚える
+            if (positionEditingVertex == null) { OnBeginEditPosition(); }
 
             var current = selectedVertex.Position.Value;
             selectedVertex.SetPosition(new Vector2(current.x, value));

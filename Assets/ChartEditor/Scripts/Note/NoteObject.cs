@@ -26,6 +26,26 @@ namespace ChartEditor
 
         public IDeployableNoteData NoteData { get; set; }
 
+        // 現在発生しているレギュレーション違反 (赤いアウトラインを出している理由)
+        readonly List<NoteWarningType> warnings = new List<NoteWarningType>();
+        public IReadOnlyList<NoteWarningType> Warnings => warnings;
+
+        /// <summary>
+        /// レギュレーション違反の発生／解消を記録する
+        /// (画面への通知に使う。アウトラインの色は OutlineColors で別に指定する)
+        /// </summary>
+        public void SetWarning(NoteWarningType warningType, bool isActive)
+        {
+            if (isActive)
+            {
+                if (!warnings.Contains(warningType)) { warnings.Add(warningType); }
+            }
+            else
+            {
+                warnings.Remove(warningType);
+            }
+        }
+
         public Func<IReadOnlyAddressWithinRange, Transform> GetParentTransformFunc { get; set; }
 
         CancellationTokenSource cts;

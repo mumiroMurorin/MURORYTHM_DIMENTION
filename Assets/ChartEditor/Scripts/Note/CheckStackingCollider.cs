@@ -30,13 +30,21 @@ namespace ChartEditor
         private void AddStackList(IJudgeStackingCollider stack)
         {
             stackList.Add(stack);
-            if (stackList.Count == 1) { noteObject.OutlineColors.Add(outlineColorOnStacking); }
+            if (stackList.Count == 1)
+            {
+                noteObject.OutlineColors.Add(outlineColorOnStacking);
+                noteObject.SetWarning(NoteWarningType.Stacking, true);
+            }
         }
 
         private void RemoveStackList(IJudgeStackingCollider stack)
         {
             stackList.RemoveAll(s => s == stack);
-            if (stackList.Count == 0) { noteObject.OutlineColors.Remove(outlineColorOnStacking); }
+            if (stackList.Count == 0)
+            {
+                noteObject.OutlineColors.Remove(outlineColorOnStacking);
+                noteObject.SetWarning(NoteWarningType.Stacking, false);
+            }
         }
 
 

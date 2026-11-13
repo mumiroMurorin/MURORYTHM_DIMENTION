@@ -69,8 +69,11 @@ namespace ChartEditor
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
 
             // Ctrl+左クリックで複数選択
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0))
+            if (ModifierKey.Ctrl && Input.GetMouseButtonDown(0))
             {
+                // カーソルがUI上にあるときは返す (UIの裏にあるノーツを選択してしまわないように)
+                if (EventSystem.current.IsPointerOverGameObject()) { return; }
+
                 var collider = dataGetter.GetInteractableCollider<ISelectableNoteCollider>();
                 if (collider == null) { return; }
 

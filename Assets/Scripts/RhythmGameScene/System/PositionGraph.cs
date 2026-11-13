@@ -34,6 +34,21 @@ public class PositionGraph : INotePositionCalculator
 {
     private readonly List<TimeSegment> segments = new();
 
+    // 区間を追加したあと、まだ並べ直し・累積距離の再計算をしていないとき true
+    private bool isDirty;
+
+    /// <summary>
+    /// 登録済みの区間 (時系列順)
+    /// </summary>
+    public IReadOnlyList<TimeSegment> Segments
+    {
+        get
+        {
+            RebuildIfDirty();
+            return segments;
+        }
+    }
+
     /// <summary>
     /// 時間区間と傾きを登録（呼び出し順不問）
     /// </summary>
@@ -43,6 +58,16 @@ public class PositionGraph : INotePositionCalculator
     {
         segments.Add(new TimeSegment(startTime, slope));
 
+        // 追加のたびに並べ直すと、区間数の2乗に比例して重くなる(分線ごとに1区間ある)
+        // 実際に位置を求めるときにまとめて1回だけ並べ直す
+        isDirty = true;
+    }
+
+    private void RebuildIfDirty()
+    {
+        if (!isDirty) { return; }
+
+        isDirty = false;
         Rebuild();
     }
 
@@ -70,6 +95,8 @@ public class PositionGraph : INotePositionCalculator
     /// </summary>
     public float GetPosition(float t)
     {
+        RebuildIfDirty();
+
         // 最初の区間以前
         if (segments.Count > 0 && t < segments[0].StartTime)
         {
@@ -77,12 +104,28 @@ public class PositionGraph : INotePositionCalculator
             return last.StartPosition - (last.StartTime - t) * last.Slope;
         }
 
-        foreach (var segment in segments)
+        // tを含む区間を二分探索で探す (開始時刻がt以下の区間のうち、最後のもの)
+        // 先頭から順に探すのと同じ区間が見つかる
+        int low = 0;
+        int high = segments.Count - 1;
+        int found = -1;
+        while (low <= high)
         {
-            if (segment.Contains(t))
+            int middle = low + (high - low) / 2;
+            if (segments[middle].StartTime <= t)
             {
-                return segment.PositionAt(t);
+                found = middle;
+                low = middle + 1;
             }
+            else
+            {
+                high = middle - 1;
+            }
+        }
+
+        if (found >= 0 && segments[found].Contains(t))
+        {
+            return segments[found].PositionAt(t);
         }
 
         // 最後の区間以降

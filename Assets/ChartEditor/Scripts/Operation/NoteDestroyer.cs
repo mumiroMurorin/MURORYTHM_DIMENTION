@@ -21,6 +21,7 @@ namespace ChartEditor
              EditMode.EditingSubDivisionConfig,
              EditMode.Moving,
              EditMode.Scaling,
+             EditMode.SpaceMoving,
             EditMode.Preview,
         };
 
@@ -50,6 +51,10 @@ namespace ChartEditor
         private void DestroyNotes()
         {
             var datasCopy = notesGetter.SelectingNotes.ToList();
+
+            // 何も選択されていないときは何もしない (Undo履歴にも積まない)
+            if (datasCopy.Count == 0) { return; }
+
             notesSetter.ClearSelectingNotes();
 
             // 削除

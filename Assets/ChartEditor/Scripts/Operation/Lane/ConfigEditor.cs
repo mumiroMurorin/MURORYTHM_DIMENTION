@@ -30,10 +30,23 @@ namespace ChartEditor
             this.dataSetter = dataSetter;
         }
 
+        bool isCanceled;
+
         private void Update()
         {
             if(dataGetter.EditNoteType.Value != EditNoteType.Ground && dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
-            if(dataGetter.CurrentEditMode.Value != EditMode.EditBarConfig && dataGetter.CurrentEditMode.Value != EditMode.EditSubDivisionConfig) { return; }
+
+            var editMode = dataGetter.CurrentEditMode.Value;
+
+            // 設定パネルを開いている間: Escでキャンセル、Enterで適用
+            if (editMode == EditMode.EditingBarConfig || editMode == EditMode.EditingSubDivisionConfig)
+            {
+                if (Input.GetKeyDown(KeyCode.Escape)) { CancelConfig(); }
+                else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) { CloseConfig(); }
+                return;
+            }
+
+            if(editMode != EditMode.EditBarConfig && editMode != EditMode.EditSubDivisionConfig) { return; }
 
             // 左クリック
             if (Input.GetMouseButtonDown(0)) { StartEditConfigOnClick(); }
@@ -84,6 +97,13 @@ namespace ChartEditor
 
         public void ChangeBarConfig(BarConfig barConfig)
         {
+            // 不正な値(0以下など)は線の位置が計算できなくなるので受け付けない
+            if (barConfig == null || !barConfig.IsValid)
+            {
+                MessageDialog.ShowError("小節の設定を変更できません", "拍子の分子と分割数は1以上の整数、拍子の分母は0より大きい数を入力してください。");
+                return;
+            }
+
             var lineObj = barConfigCollider.barObj;
             var subData = laneController.GetData(lineObj);
             int barIndex = subData.BarData.BarIndex;
@@ -92,10 +112,13 @@ namespace ChartEditor
             var previousBarData = dataGetter.ChartData.Value.BarDatas[barIndex];
             var previousBarConfig = previousBarData.BarConfig;
 
+            // 値が変わらないときは何もしない (Undo履歴にも積まない)
+            if (previousBarConfig == barConfig) { return; }
+
             // コンフィグが変更できるか調べる
-            if (!IsChangableBarConfig(previousBarData, barConfig)) 
+            if (!IsChangableBarConfig(previousBarData, barConfig))
             {
-                Debug.Log($"【コンフィグ】対応しない分線上にノーツがあるため変更できません");
+                MessageDialog.ShowError("小節の設定を変更できません", "変更後に無くなる分線の上にノーツがあります。\nノーツを移動または削除してから変更してください。");
                 return;
             }
 
@@ -190,6 +213,9 @@ namespace ChartEditor
             var previousSubData = dataGetter.ChartData.Value.BarDatas[barIndex].SubDivisionDatas[subIndex];
             var previousSubConfig = previousSubData.SubConfig;
 
+            // 値が変わらないときは何もしない (Undo履歴にも積まない)
+            if (previousSubConfig.Bpm == subConfig.Bpm && previousSubConfig.SpeedRatio == subConfig.SpeedRatio) { return; }
+
             // 変更
             Record(() => {
                 dataGetter.ChartData.Value.SetSubDivisionConfig(barIndex, subIndex, subConfig);
@@ -200,9 +226,32 @@ namespace ChartEditor
             });
         }
 
+        /// <summary>
+        /// 入力内容を適用して設定パネルを閉じる
+        /// </summary>
         public void CloseConfig()
         {
+            isCanceled = false;
             dataSetter.SetEditMode(EditMode.None);
+        }
+
+        /// <summary>
+        /// 入力内容を破棄して設定パネルを閉じる
+        /// </summary>
+        public void CancelConfig()
+        {
+            isCanceled = true;
+            dataSetter.SetEditMode(EditMode.None);
+        }
+
+        /// <summary>
+        /// 直前に閉じた操作がキャンセルだったかを返し、フラグを戻す
+        /// </summary>
+        public bool ConsumeCanceled()
+        {
+            bool value = isCanceled;
+            isCanceled = false;
+            return value;
         }
 
         private class IndexToSubdivisionData

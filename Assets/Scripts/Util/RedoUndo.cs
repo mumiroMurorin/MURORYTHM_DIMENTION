@@ -147,12 +147,21 @@ namespace UndoRedo
 
         #region Public methods
 
-        public static void Record(RecordableAction act, RecordableAction undo)
+        /// <summary>
+        /// 履歴が変化した(記録・Undo・Redoのいずれかが行われた)ときに呼ばれる
+        /// </summary>
+        public static event Action OnChanged;
+
+        /// <summary>
+        /// Undo / Redo 可能な操作を記録する
+        /// </summary>
+        /// <param name="execute">false のとき act を実行せず記録だけ行う(すでに実行済みの操作を登録するとき用)</param>
+        public static void Record(RecordableAction act, RecordableAction undo, bool execute = true)
         {
             lock (Lock)
             {
                 var cmd = new Command(act, undo);
-                cmd.executeAction();
+                if (execute) { cmd.executeAction(); }
                 if (Transacting)
                 {
                     TransCommand.AddCommand(cmd);
@@ -164,6 +173,8 @@ namespace UndoRedo
                     AddNewState(newState);
                 }
             }
+
+            OnChanged?.Invoke();
         }
 
         /// <summary>
@@ -185,6 +196,8 @@ namespace UndoRedo
                 CurrentState.PrevCommand?.undoAction();
                 CurrentStateIndex = States.IndexOf(prev);
             }
+
+            OnChanged?.Invoke();
         }
 
         /// <summary>
@@ -204,6 +217,8 @@ namespace UndoRedo
                 CurrentState.NextCommand?.executeAction();
                 CurrentStateIndex = States.IndexOf(next);
             }
+
+            OnChanged?.Invoke();
         }
 
         /// <summary>

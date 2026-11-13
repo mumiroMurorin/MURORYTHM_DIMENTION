@@ -16,14 +16,20 @@ namespace ChartEditor
 
         private void OnEnable()
         {
-            button.OnPushButtonListner += () => OnNoteSpeedApplyListener(slider.SliderValue);
+            button.OnPushButtonListner += OnPushApplyButton;
             slider.OnSliderChangedListener += OnValueChanged;
         }
 
         private void OnDisable()
         {
-            button.OnPushButtonListner -= () => OnNoteSpeedApplyListener(slider.SliderValue);
+            // 登録時と同じメソッドを渡さないと解除されない (ラムダ式は毎回別物になる)
+            button.OnPushButtonListner -= OnPushApplyButton;
             slider.OnSliderChangedListener -= OnValueChanged;
+        }
+
+        private void OnPushApplyButton()
+        {
+            OnNoteSpeedApplyListener?.Invoke(slider.SliderValue);
         }
 
         public void OnValueChanged(float value)

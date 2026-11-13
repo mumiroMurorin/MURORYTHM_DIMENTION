@@ -55,37 +55,88 @@ namespace ChartEditor
         /// <param name="length"></param>
         private void ShortenChart(int length)
         {
-            if (dataGetter.ChartData.Value.BarDatas.Count <= 0) { return; }
+            // 譜面が未作成、または小節が無いときは何もしない
+            var chartData = dataGetter.ChartData.Value;
+            if (chartData == null || chartData.BarDatas.Count <= 0) { return; }
 
-            // 消すノーツを記録
-            int count = dataGetter.ChartData.Value.BarDatas.Count;
-            var destroyNoteList = new List<IDeployableNoteData>();
+            int count = chartData.BarDatas.Count;
+            length = Mathf.Min(length, count);
+            if (length <= 0) { return; }
 
-            for (int i = 0; i < length; i++)
+            // 消す小節の設定とノーツを記録 (小節番号の若い順)
+            var removedBars = new List<BarSnapshot>();
+            for (int i = count - length; i < count; i++)
             {
-                foreach (var sub in dataGetter.ChartData.Value.BarDatas[count - i - 1].SubDivisionDatas)
-                {
-                    foreach(var note in sub.NoteDatas)
-                    {
-                        destroyNoteList.Add(note);
-                    }
-                }
+                removedBars.Add(new BarSnapshot(chartData.BarDatas[i]));
             }
 
             // 短縮
             Record(() => {
                 dataSetter.ChangeChartLength(-length);
             },
-            // 延長
+            // 延長して、消した小節の設定とノーツを元に戻す
             () => {
                 dataSetter.ChangeChartLength(length);
 
-                // ノーツを追加
-                foreach(var note in destroyNoteList)
+                var chart = dataGetter.ChartData.Value;
+                int firstIndex = chart.BarDatas.Count - removedBars.Count;
+                for (int i = 0; i < removedBars.Count; i++)
                 {
-                    dataGetter.ChartData.Value.AddNote(note);
+                    removedBars[i].Restore(chart, firstIndex + i);
                 }
             });
+        }
+
+        /// <summary>
+        /// 削除される小節の状態 (拍子・分割数、分線ごとのBPM・速度倍率、ノーツ)
+        /// </summary>
+        private class BarSnapshot
+        {
+            readonly BarConfig barConfig;
+            readonly List<SubdivisionConfig> subConfigs = new List<SubdivisionConfig>();
+            readonly List<IDeployableNoteData> notes = new List<IDeployableNoteData>();
+
+            public BarSnapshot(BarDataInChart barData)
+            {
+                barConfig = barData.BarConfig;
+
+                foreach (var sub in barData.SubDivisionDatas)
+                {
+                    subConfigs.Add(sub.SubConfig);
+
+                    foreach (var note in sub.NoteDatas)
+                    {
+                        notes.Add(note);
+                    }
+                }
+            }
+
+            public void Restore(ChartData chartData, int barIndex)
+            {
+                if (barIndex < 0 || barIndex >= chartData.BarDatas.Count) { return; }
+
+                // 拍子・分割数 (分線が作り直される)
+                var barData = chartData.BarDatas[barIndex];
+                barData.SetBeatCount(barConfig.BeatCount);
+                barData.SetBeatUnit(barConfig.BeatUnit);
+                barData.SetDivisionNum(barConfig.DivisionNum);
+
+                // 分線ごとのBPM・速度倍率
+                for (int i = 0; i < subConfigs.Count && i < barData.SubDivisionDatas.Count; i++)
+                {
+                    barData.SubDivisionDatas[i].SetBpm(subConfigs[i].Bpm);
+                    barData.SubDivisionDatas[i].SetSpeedRatio(subConfigs[i].SpeedRatio);
+                }
+
+                // BPMを直接書き換えたので、線の位置を更新させる
+                chartData.NotifyBpmChanged(barIndex, 0);
+
+                // ノーツ
+                foreach (var note in notes)
+                {
+                    chartData.AddNote(note);
+                }
+            }
         }
     }
 

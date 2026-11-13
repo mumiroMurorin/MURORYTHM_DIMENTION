@@ -4,61 +4,31 @@ using UnityEngine;
 using VContainer;
 using UniRx;
 using System.Linq;
-using static UndoRedo.History;
 
 namespace ChartEditor
 {
-    public class NoteDeployer : MonoBehaviour
+    /// <summary>
+    /// グラウンドノーツの配置 (レーン上のマスに、指定した横幅で置く)
+    /// </summary>
+    public class NoteDeployer : NoteDeployerBase
     {
-        // SubclassSelectorを自作クラスの中にいれると上手く動作しないので苦肉の策
-        [SerializeField] NoteTypeToNoteObjectList noteList;
-        [Tooltip("ノートデータ(抽象クラス)")]
-        [SerializeReference, SubclassSelector] IDeployableNoteData[] noteDataList;
-
-        IChartEditorDataGetter dataGetter;
         INotesDataGetter notesGetter;
         INotesDataSetter notesSetter;
-        IDeployableObject deployingNote;
-        IDeployableNoteData deployingNoteData;
-        bool isDeployedTentative;
+
+        protected override EditMode DeployMode => EditMode.Deploy;
+
+        protected override int DeployRangeCount => notesGetter.DeployNoteSize;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter, INotesDataGetter notesGetter, INotesDataSetter notesSetter)
+        public void ConstructNotes(INotesDataGetter notesGetter, INotesDataSetter notesSetter)
         {
-            this.dataGetter = dataGetter;
             this.notesGetter = notesGetter;
             this.notesSetter = notesSetter;
         }
 
-        private void Start()
+        protected override void Bind()
         {
-            Bind();
-        }
-
-        private void Bind()
-        {
-            // ノーツの削除
-            dataGetter.CurrentEditMode
-                .Where(editMode => editMode != EditMode.Deploy)
-                .Subscribe(editMode => DestroyNote())
-                .AddTo(this.gameObject);
-
-            // ノーツの仮配置
-            dataGetter.InteractableColliders.ObserveAdd()
-                .Subscribe(collider =>
-                {
-                    if (dataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
-                    if (collider.Value is IDeployableCollider matched) { UpdateNotePosition(matched); }
-                }).AddTo(this.gameObject);
-
-            // 配置ノーツの種類の変更
-            dataGetter.DeploymentNoteType
-                .Subscribe(noteType =>
-                {
-                    if (dataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
-                    DestroyNote();
-                })
-                .AddTo(this.gameObject);
+            base.Bind();
 
             // ノーツが単選択されたとき、配置サイズを変える
             notesGetter.SelectingNotes.ObserveCountChanged()
@@ -69,141 +39,32 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
         }
 
-        void Update()
+        protected override IInteractableCollider GetDeployColliderUnderCursor()
         {
-            // 配置モードでない際は返す
-            if (dataGetter.CurrentEditMode.Value != EditMode.Deploy) { return; }
-
-            // 左クリックで配置
-            if (Input.GetMouseButtonDown(0)) { DeployNoteOnClick(); }
+            return dataGetter.GetInteractableCollider<IDeployableCollider>();
         }
 
-        /// <summary>
-        /// 配置中のノーツの位置を更新する
-        /// </summary>
-        private void UpdateNotePosition(IDeployableCollider deployable)
+        protected override bool TryGetDeployLocation(IInteractableCollider collider, out Transform parent, out AddressInChart address)
         {
-            // 配置モードでない際は返す
-            if (deployable == null) { return; }
-
-            // 配置ノーツが無かったら新規インスタンス化
-            if (deployingNote == null) { SpawnNewNote(dataGetter.DeploymentNoteType.Value); }
-            // それでもなかったら返す
-            if (deployingNote == null) { return; }
-
-            deployingNote.OnMove(deployable.deployParent);
-            isDeployedTentative = true;
-        }
-
-        /// <summary>
-        /// 左クリックによるノーツの配置
-        /// </summary>
-        private void DeployNoteOnClick()
-        {
-            var collider = dataGetter.GetInteractableCollider<IDeployableCollider>();
-
-            if (collider == null) { return; }
-            if (!isDeployedTentative) { return; }
-            if (deployingNoteData == null) { return; }
-
-            var address = collider.Address;
-            deployingNoteData.SetAddress(new AddressWithinRange(address, notesGetter.DeployNoteSize));
-            var deployedData = deployingNoteData;
-
-            // データ上の追加
-            Record(() => {
-                dataGetter.ChartData.Value.AddNote(deployedData);
-            },
-            // Undoで削除
-            () => {
-                dataGetter.ChartData.Value.RemoveNote(deployedData);
-            });
-
-            Debug.Log($"【配置】:\n{deployedData.Address}");
-
-            DestroyNote();
-            SpawnNewNote(dataGetter.DeploymentNoteType.Value);
-        }
-
-        /// <summary>
-        /// ノートの生成
-        /// </summary>
-        private void SpawnNewNote(DeploymentNoteType noteType)
-        {
-            deployingNoteData = GetNoteData(noteType);
-            if (deployingNoteData == null) { return; }
-
-            deployingNote = InstantiateNoteObject(deployingNoteData);
-
-            isDeployedTentative = false;
-        }
-
-        private IDeployableObject InstantiateNoteObject(IDeployableNoteData noteData)
-        {
-            GameObject origin = noteList.GetNote(noteData.NoteType);
-            if (origin == null) { return null; }
-
-            GameObject obj = Instantiate(origin);
-
-            if (!obj.TryGetComponent(out IDeployableObject deployable))
+            if (collider is IDeployableCollider deployable)
             {
-                Debug.LogWarning("ノーツにIDeployableObjectがくっついてねぇぞ！");
-                return null;
+                parent = deployable.deployParent;
+                address = deployable.Address;
+                return true;
             }
 
-            // チェインノーツのときデータセット
-            if (noteData is IChainNoteData chainData)
-            {
-                chainData.SetNoteObject(obj.GetComponent<IConnectableObject>());
-            }
-
-            deployable.OnInstantiate(noteData, GetNoteParentTransform);
-            deployable.OnDestroyListner += () => OnDestroyDeployingNote(noteData);
-
-            return deployable;
+            parent = null;
+            address = null;
+            return false;
         }
 
-        /// <summary>
-        /// ノートの削除
-        /// </summary>
-        private void DestroyNote()
+        protected override void SetupNoteData(IDeployableNoteData noteData)
         {
-            if (deployingNote == null) { return; }
-            deployingNote.OnDisable();
+            // 仮ノーツを、配置する横幅で表示する
+            var address = noteData.Address;
+            var range = Enumerable.Range(0, notesGetter.DeployNoteSize).Select(x => (float)x).ToList();
+
+            noteData.SetAddress(new AddressWithinRange(address.BarIndex, address.SubDivisionIndex, range));
         }
-
-        private void OnDestroyDeployingNote(IDeployableNoteData noteData)
-        {
-            if (noteData != deployingNoteData) { return; }
-
-            deployingNote = null;
-            deployingNoteData = null;
-        }
-
-        private Transform GetNoteParentTransform(IReadOnlyAddressWithinRange address)
-        {
-            return dataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(address));
-        }
-
-        private IDeployableNoteData GetNoteData(DeploymentNoteType noteType)
-        {
-            foreach (var data in noteDataList)
-            {
-                if (data.NoteType == noteType)
-                {
-                    var copy = data.Copy();
-                    var address = copy.Address;
-                    var range = Enumerable.Range(0, notesGetter.DeployNoteSize).Select(x => (float)x).ToList();
-
-                    copy.SetAddress(new AddressWithinRange(address.BarIndex, address.SubDivisionIndex, range));
-                    return copy;
-                }
-            }
-
-            Debug.LogWarning($"【System】{noteType}に対応する抽象クラスがありません");
-            return null;
-        }
-
     }
 }
-

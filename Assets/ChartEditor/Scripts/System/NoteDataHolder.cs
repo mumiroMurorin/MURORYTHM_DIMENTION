@@ -69,6 +69,10 @@ namespace ChartEditor
         public CompositeDisposable GetNoteDisposable(IDeployableNoteData data) { return dataToNoteObject.FirstOrDefault(x => x.Data == data)?.OnDestroyDisposables; }
         public void ClearDataToNoteObjectList()
         {
+            // 破棄するノーツを選択・頂点編集の対象に残さない (オブジェクトがあるうちに解除する)
+            ClearSelectingNotes();
+            SetEditingVertices(null);
+
             foreach (var pair in dataToNoteObject)
             {
                 if (pair.Data is System.IDisposable disposable) { disposable.Dispose(); }

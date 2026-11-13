@@ -5,7 +5,8 @@ using System.Linq;
 using MeshGenerate;
 using Deform;
 
-public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>
+// IOrderDependentNoteFactory: 重なったホールドの描画順(spawnedHolds)を、生成した順に決めているため
+public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>, IOrderDependentNoteFactory
 {
     sealed class SpawnedHold
     {

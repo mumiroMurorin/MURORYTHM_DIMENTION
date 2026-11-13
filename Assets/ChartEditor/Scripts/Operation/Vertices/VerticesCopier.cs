@@ -33,9 +33,9 @@ namespace ChartEditor
             if(dataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
 
             // 頂点リストのコピー
-            if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C)) { CopyVertices(); }
+            if(ModifierKey.Ctrl && Input.GetKeyDown(KeyCode.C)) { CopyVertices(); }
             // 頂点リストの貼り付け
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V)) { PasteVertices(); }
+            if (ModifierKey.Ctrl && Input.GetKeyDown(KeyCode.V)) { PasteVertices(); }
         }
 
         /// <summary>

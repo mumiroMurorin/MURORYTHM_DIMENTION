@@ -41,7 +41,7 @@ namespace ChartEditor
             }
 
             // Ctrl押されている間は接続解除モード
-            if (Input.GetKey(KeyCode.LeftControl)) { dataSetter.SetEditMode(EditMode.DisConnect); }
+            if (ModifierKey.Ctrl) { dataSetter.SetEditMode(EditMode.DisConnect); }
             // それ以外は接続モード
             else if (isConnecting) { dataSetter.SetEditMode(EditMode.Connecting); }
             else { dataSetter.SetEditMode(EditMode.Connect); }
@@ -82,6 +82,14 @@ namespace ChartEditor
         /// </summary>
         private void ConnectNoteOnClick()
         {
+            // 接続元のノートが削除されていたら(Undoなど)、接続をやめる
+            if (startNote == null || notesGetter.GetNoteObject(startNote) == null)
+            {
+                startNote = null;
+                EndConnect();
+                return;
+            }
+
             var collider = dataGetter.GetInteractableCollider<IConnectableCollider>();
             if (collider == null) { return; }
 
@@ -163,7 +171,18 @@ namespace ChartEditor
             if (connectableObject == null) { return; }
             if (connectableObject.Note.NoteData is not IChainNoteData removeNote) { return; }
 
-            DisconnectNote(removeNote);
+            // 接続されていないノートは何もしない (Undo履歴にも積まない)
+            int chainIndexOrigin = removeNote.ChainIndex.Value;
+            if (chainIndexOrigin == UNCHAINED_INDEX) { return; }
+
+            // 接続解除
+            Record(() => {
+                DisconnectNote(removeNote);
+            },
+            // 元の接続に戻す
+            () => {
+                ConnectNote(removeNote, chainIndexOrigin);
+            });
         }
 
         /// <summary>
@@ -225,11 +244,33 @@ namespace ChartEditor
             UpdateChainNoteObj(chainNote, -1);
 
             // 購読の破棄
-            if (noteDataToDisposables.TryGetValue(chainNote, out var disposables))
+            ReleaseNote(chainNote);
+        }
+
+        /// <summary>
+        /// ノートに対する購読を破棄する (ノートが譜面から削除されたとき用。接続番号は変更しない)
+        /// </summary>
+        public void ReleaseNote(IChainNoteData chainNote)
+        {
+            if (!noteDataToDisposables.TryGetValue(chainNote, out var disposables)) { return; }
+
+            foreach (var dis in disposables) { dis.Dispose(); }
+            noteDataToDisposables.Remove(chainNote);
+        }
+
+        /// <summary>
+        /// すべてのノートに対する購読を破棄する (譜面が入れ替わったとき用)
+        /// </summary>
+        public void ReleaseAllNotes()
+        {
+            foreach (var disposables in noteDataToDisposables.Values)
             {
                 foreach (var dis in disposables) { dis.Dispose(); }
-                noteDataToDisposables.Remove(chainNote);
             }
+
+            noteDataToDisposables.Clear();
+            startNote = null;
+            isConnecting = false;
         }
 
 

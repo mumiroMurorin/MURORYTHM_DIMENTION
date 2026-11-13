@@ -27,6 +27,15 @@ namespace ChartEditor
                 .As<INotesDataSetter>();
 
             builder.Register<VerticesChainNavigator>(Lifetime.Singleton);
+
+            // 未保存の変更の監視・自動保存
+            builder.RegisterEntryPoint<ChartSaveGuard>().AsSelf();
+
+            // レギュレーション違反(赤いアウトライン)をログ欄に知らせる
+            builder.RegisterEntryPoint<RegulationWarningNotifier>();
+
+            // ミニプレビューのノーツをクリックして、譜面側のノーツを選択する
+            builder.RegisterEntryPoint<PreviewNotePicker>();
         }
     }
 }

@@ -43,6 +43,22 @@ namespace ChartEditor
             EditMode.Explanation,
         };
 
+        // 操作の途中で Undo / Redo すると不整合になるモード
+        EditMode[] undoRedoIgnoreModes = new EditMode[]
+        {
+            EditMode.Moving,
+            EditMode.Scaling,
+            EditMode.Connecting,
+            EditMode.SpaceMoving,
+            EditMode.VertexMoving,
+            EditMode.VerticesRotating,
+            EditMode.VerticesScaling,
+            EditMode.EditingBarConfig,
+            EditMode.EditingSubDivisionConfig,
+            EditMode.Explanation,
+            EditMode.Preview,
+        };
+
         [Inject]
         public void Construct(
             IChartEditorDataSetter dataSetter,
@@ -63,23 +79,60 @@ namespace ChartEditor
         {
             var scroll = Input.mouseScrollDelta.y;
 
+            // 修飾キーは左右どちらでも反応する
+            bool ctrl = ModifierKey.Ctrl;
+            bool shift = ModifierKey.Shift;
+            // 入力欄に文字を打っている間は、キー操作を譜面の操作として扱わない
+            bool isTyping = IsTypingInInputField();
+
             // 楽曲再生
-            if (Input.GetKeyDown(playKey)) { OperateMusicPlay(); }
+            if (!isTyping && Input.GetKeyDown(playKey)) { OperateMusicPlay(); }
             // スケール変更
-            if (Input.GetKey(KeyCode.LeftControl) && Mathf.Abs(scroll) > 0.01f) { OperateChartViewScale(scroll); }
+            if (ctrl && Mathf.Abs(scroll) > 0.01f) { OperateChartViewScale(scroll); }
             // 譜面スクロール
-            if (!Input.GetKey(KeyCode.LeftControl) && Mathf.Abs(scroll) > 0.01f) { OperatePlaybackProgress(scroll); }
+            if (!ctrl && Mathf.Abs(scroll) > 0.01f) { OperatePlaybackProgress(scroll); }
             // 保存
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.S)) { SaveChart(); }
+            if (ctrl && Input.GetKeyDown(KeyCode.S)) { SaveChart(); }
             // Undo
-            if (Input.GetKey(KeyCode.LeftControl) && !Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Z)) { Undo(); }
-            // Redo
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Z)) { Redo(); }
+            if (ctrl && !shift && Input.GetKeyDown(KeyCode.Z) && CanUndoRedo(isTyping)) { Undo(); }
+            // Redo (Ctrl+Shift+Z または Ctrl+Y)
+            if (ctrl && ((shift && Input.GetKeyDown(KeyCode.Z)) || Input.GetKeyDown(KeyCode.Y)) && CanUndoRedo(isTyping)) { Redo(); }
             // Move editing vertices along the connected SpaceHold chain
-            if (Input.GetKeyDown(KeyCode.UpArrow)) { verticesChainNavigator?.MoveToNext(); }
-            if (Input.GetKeyDown(KeyCode.DownArrow)) { verticesChainNavigator?.MoveToPrevious(); }
+            if (!isTyping && Input.GetKeyDown(KeyCode.UpArrow)) { verticesChainNavigator?.MoveToNext(); }
+            if (!isTyping && Input.GetKeyDown(KeyCode.DownArrow)) { verticesChainNavigator?.MoveToPrevious(); }
             // ショートカットキー
-            CheckAndDoShortCutKey();
+            if (!isTyping) { CheckAndDoShortCutKey(); }
+        }
+
+        /// <summary>
+        /// Undo / Redo を受け付けてよい状態か
+        /// ドラッグ操作の途中などで実行すると、操作中のノーツ・頂点が消えて不整合になるため
+        /// </summary>
+        private bool CanUndoRedo(bool isTyping)
+        {
+            if (isTyping) { return false; }
+            // マウスボタンを押している間(ドラッグ中)は不可
+            if (Input.GetMouseButton(0)) { return false; }
+            if (dataGetter.CurrentEditMode.Value.IsInEditModeList(undoRedoIgnoreModes)) { return false; }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 入力欄(InputField)にフォーカスがあるか
+        /// </summary>
+        private bool IsTypingInInputField()
+        {
+            var eventSystem = EventSystem.current;
+            if (eventSystem == null) { return false; }
+
+            var selected = eventSystem.currentSelectedGameObject;
+            if (selected == null) { return false; }
+
+            if (selected.TryGetComponent(out TMPro.TMP_InputField tmpField)) { return tmpField.isFocused; }
+            if (selected.TryGetComponent(out UnityEngine.UI.InputField field)) { return field.isFocused; }
+
+            return false;
         }
 
         /// <summary>
@@ -142,7 +195,7 @@ namespace ChartEditor
 
             foreach(var key in editModeShortCutKeys)
             {
-                key.CheckAndChangeEditMode(KeyCode.LeftAlt, dataGetter.EditNoteType.Value, dataSetter.SetEditMode);
+                key.CheckAndChangeEditMode(ModifierKey.Alt, dataGetter.EditNoteType.Value, dataSetter.SetEditMode);
             }
         }
 
@@ -154,9 +207,9 @@ namespace ChartEditor
             [SerializeField] EditNoteType editNoteType;
             [SerializeField] KeyCode keyCode;
 
-            public bool CheckAndChangeEditMode(KeyCode modifierKey, EditNoteType currentEditNoteType, Action<EditMode> changeEditMode)
+            public bool CheckAndChangeEditMode(bool isModifierKeyPressed, EditNoteType currentEditNoteType, Action<EditMode> changeEditMode)
             {
-                if (!Input.GetKey(modifierKey)) { return false; } 
+                if (!isModifierKeyPressed) { return false; }
                 if (!Input.GetKeyDown(keyCode)) { return false; }
                 if (editNoteType != currentEditNoteType) { return false; }
 

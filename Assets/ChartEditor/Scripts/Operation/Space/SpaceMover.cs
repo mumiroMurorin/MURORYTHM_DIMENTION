@@ -1,146 +1,49 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using VContainer;
-using static UndoRedo.Notes.NotesMoveRecord;
 
 namespace ChartEditor
 {
-    public class SpaceMover : MonoBehaviour
+    /// <summary>
+    /// スペースノーツの移動 (分線方向にのみ動かせる)
+    /// </summary>
+    public class SpaceMover : NoteMoverBase
     {
         [SerializeField] SerializeInterface<ICursorInteracter> cursorInteracter;
 
-        IChartEditorDataGetter dataGetter;
-        IChartEditorDataSetter dataSetter;
-        INotesDataGetter notesGetter;
+        protected override EditMode IdleMode => EditMode.SpaceMove;
 
-        Dictionary<IFreedomMovableObject, int> movableAndDelta = new Dictionary<IFreedomMovableObject, int>();
-        List<NoteDataToAddress> previousAddress = new List<NoteDataToAddress>();
-        IFreedomDeployableCollider lastLocation;
-        AddressInChart baseAddress;
+        protected override EditMode DraggingMode => EditMode.SpaceMoving;
 
-        [Inject]
-        public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, INotesDataGetter notesGetter)
+        protected override bool TryGetClickedNote(out NoteObject note)
         {
-            this.dataGetter = dataGetter;
-            this.dataSetter = dataSetter;
-            this.notesGetter = notesGetter;
-        }
-
-        private void LateUpdate()
-        {
-            // 配置モードのみ
-            if (dataGetter.CurrentEditMode.Value != EditMode.SpaceMove &&
-                dataGetter.CurrentEditMode.Value != EditMode.SpaceMoving) { return; }
-
-            if (Input.GetMouseButtonDown(0)) { StartMovingNotes(); }
-            else if (Input.GetMouseButton(0)) { MoveNotesOnClick(); }
-            else if (Input.GetMouseButtonUp(0)) { EndMoveNote(); }
-        }
-
-        /// <summary>
-        /// クリックされた時
-        /// </summary>
-        private void StartMovingNotes()
-        {
-            Initialize();
-
-            // 動かせるオブジェクトでなければ返す
             var collider = dataGetter.GetInteractableCollider<IFreedomMovableCollider>();
-            var movableObject = collider?.Note;
-
-            if (collider == null) { return; }
-            if (movableObject == null) { return; }
-
-            // 基準となるクリックされたノーツ情報を保存
-            baseAddress = new AddressInChart(movableObject.Note.NoteData.Address);
-            previousAddress = new List<NoteDataToAddress>();
-
-            // 複数選択されたオブジェクトから動かせるやつを取り出す
-            foreach (var data in notesGetter.SelectingNotes)
-            {
-                var obj = notesGetter.GetNoteObject(data);
-                if (!obj.TryGetComponent(out IFreedomMovableObject movable)) { continue; }
-
-                // ノーツオブジェクト側の動作
-                movable.OnMoveStart();
-
-                // 差分を保存
-                var subDelta = dataGetter.ChartData.Value.GetSubdivisionDelta(new AddressInChart(movable.Note.NoteData.Address), baseAddress);
-                movableAndDelta.TryAdd(movable, subDelta);
-                previousAddress.Add(new NoteDataToAddress(data, data.Address));
-            }
-
-            dataSetter?.SetEditMode(EditMode.SpaceMoving);
+            note = collider?.Note?.Note;
+            return note != null;
         }
 
-        private void MoveNotesOnClick()
+        protected override bool TryCreateTarget(NoteObject note, out MoveTarget target)
         {
-            if (movableAndDelta == null || movableAndDelta.Count == 0) { return; }
+            target = null;
+            if (!note.TryGetComponent(out IFreedomMovableObject movable)) { return false; }
 
-            // カーソル下の親取得
+            target = new MoveTarget(note, movable.OnMoveStart, movable.OnMove, movable.OnMoveEnd);
+            return true;
+        }
+
+        protected override bool TryGetDropLocation(out object location, out AddressInChart address)
+        {
             var deployable = dataGetter.GetInteractableCollider<IFreedomDeployableCollider>();
-            if (deployable == null) { return; }
-            if (lastLocation == deployable) { return; }
-
-            // 最新配置場所の更新
-            lastLocation = deployable;
-
-            // アドレスの移動
-            foreach (var pair in movableAndDelta)
-            {
-                var newAddress = dataGetter.ChartData.Value.AddressAddition(deployable.Address, pair.Value);
-
-                MoveNote(pair.Key, new AddressWithinRange(newAddress, 1));
-            }
+            location = deployable;
+            address = deployable?.Address;
+            return deployable != null;
         }
 
-        /// <summary>
-        /// ノートを指定されたアドレスに移動させる
-        /// </summary>
-        /// <param name="movableObject"></param>
-        /// <param name="newAddress"></param>
-        public void MoveNote(IFreedomMovableObject movableObject, AddressWithinRange newAddress)
+        protected override AddressWithinRange CalcAddress(MoveTarget target, AddressInChart dropAddress)
         {
-            var noteData = movableObject.Note.NoteData;
-            noteData.SetAddress(newAddress);
+            var newAddress = dataGetter.ChartData.Value.AddressAddition(dropAddress, target.SubDivisionDelta);
 
-            movableObject.OnMove();
-        }
-
-        /// <summary>
-        /// クリック終了時(移動終了時)
-        /// </summary>
-        private void EndMoveNote()
-        {
-            var currentAddress = new List<NoteDataToAddress>();
-
-            foreach (var pair in movableAndDelta)
-            {
-                pair.Key?.OnMoveEnd(); 
-                
-                var noteData = pair.Key.Note.NoteData;
-                currentAddress.Add(new NoteDataToAddress(noteData, noteData.Address));
-            }
-
-            // 移動を終えたときはじめて登録
-            var previousAddressCopy = new List<NoteDataToAddress>(previousAddress);
-            RecordNotesMoving(previousAddressCopy, currentAddress);
-
-            dataSetter?.SetEditMode(EditMode.SpaceMove);
-
-            Initialize();
-        }
-
-        /// <summary>
-        /// 初期化
-        /// </summary>
-        private void Initialize()
-        {
-            baseAddress = null;
-            lastLocation = null;
-            movableAndDelta.Clear();
-            previousAddress?.Clear();
+            return new AddressWithinRange(newAddress, 1);
         }
     }
 }

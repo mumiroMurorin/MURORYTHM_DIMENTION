@@ -23,7 +23,8 @@ public class LogFactoryView : MonoBehaviour
     /// ログの生成
     /// </summary>
     /// <param name="logData"></param>
-    public void Spawn(LogData logData)
+    /// <returns>生成したログ (表示し続けたい場合などに使う)</returns>
+    public LogItem Spawn(LogData logData)
     {
         GameObject obj = Instantiate(logPrefab);
         LogItem item = obj.GetComponent<LogItem>();
@@ -32,5 +33,7 @@ public class LogFactoryView : MonoBehaviour
         obj.transform.SetAsFirstSibling();
 
         item.SetLogData(logData);
+
+        return item;
     }
 }

@@ -66,6 +66,19 @@ public abstract class NoteFactory<T> : MonoBehaviour, INoteFactory<T> where T : 
 }
 
 /// <summary>
+/// 生成結果が「それまでに生成したノーツ」に左右されるファクトリに付ける目印
+/// (重なったホールドの描画順、ステンシル番号、輪郭線の重複除去など)
+///
+/// こうしたファクトリは、一部のノーツだけ作り直すと本編と結果が変わってしまう。
+/// 譜面エディタのプレビューは、この目印が付いた種類だけ、変更があるたびに
+/// Initialize からやり直して譜面順に全部作り直す。
+/// Spawn をまたいで状態を持つファクトリを新しく作ったら、これを付けること。
+/// </summary>
+public interface IOrderDependentNoteFactory
+{
+}
+
+/// <summary>
 /// ノーツインタラクトエフェクトの初期化など
 /// </summary>
 /// <typeparam name="T"></typeparam>

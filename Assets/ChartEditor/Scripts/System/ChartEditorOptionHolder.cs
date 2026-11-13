@@ -61,6 +61,25 @@ namespace ChartEditor
 
         #endregion
 
+        #region PlaybackSpeed 再生速度
+
+        // 切り替えられる再生速度 (この順に切り替わり、最後の次は先頭に戻る)
+        static readonly float[] playbackSpeeds = { 1f, 0.75f, 0.5f, 0.25f, 0.1f };
+
+        /// <summary>
+        /// 楽曲と譜面の再生速度 (1 = 等倍)
+        /// </summary>
+        ReactiveProperty<float> playbackSpeed = new ReactiveProperty<float>(1f);
+        IReadOnlyReactiveProperty<float> IChartEditorOptionGetter.PlaybackSpeed => playbackSpeed;
+
+        void IChartEditorOptionSetter.SwitchPlaybackSpeed()
+        {
+            int index = System.Array.IndexOf(playbackSpeeds, playbackSpeed.Value);
+            playbackSpeed.Value = playbackSpeeds[(index + 1) % playbackSpeeds.Length];
+        }
+
+        #endregion
+
         #region スクリーンサイズ
 
         ReactiveProperty<Resolution> resolution = new ReactiveProperty<Resolution>(ChartEditor.Resolution.w1920_1080);
@@ -221,6 +240,11 @@ namespace ChartEditor
 
         IReadOnlyReactiveProperty<float> ScrollSensitivity { get; }
 
+        /// <summary>
+        /// 楽曲と譜面の再生速度 (1 = 等倍)
+        /// </summary>
+        IReadOnlyReactiveProperty<float> PlaybackSpeed { get; }
+
         IReadOnlyReactiveProperty<float> JudgementSEVolume { get; }
 
         IReadOnlyReactiveProperty<Resolution> Resolution { get; }
@@ -234,6 +258,11 @@ namespace ChartEditor
         void SetChartViewScale(float scale);
 
         void SetScrollSensitivity(float sensitivity);
+
+        /// <summary>
+        /// 再生速度を次の段階へ切り替える
+        /// </summary>
+        void SwitchPlaybackSpeed();
 
         void SetJudgementSEVolume(float value);
 

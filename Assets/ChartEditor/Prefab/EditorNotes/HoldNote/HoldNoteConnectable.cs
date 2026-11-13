@@ -178,12 +178,14 @@ namespace ChartEditor
             if (backNote.Value == null && nextNote.Value == null && !isAlone)
             {
                 noteObject.OutlineColors.Add(outlineColorOnAlone);
+                noteObject.SetWarning(NoteWarningType.UnconnectedHold, true);
                 isAlone = true;
             }
             // 独立でない
-            else if ((backNote.Value != null || nextNote.Value != null) && isAlone) 
+            else if ((backNote.Value != null || nextNote.Value != null) && isAlone)
             {
                 noteObject.OutlineColors.Remove(outlineColorOnAlone);
+                noteObject.SetWarning(NoteWarningType.UnconnectedHold, false);
                 isAlone = false;
             }
         }

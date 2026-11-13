@@ -67,6 +67,43 @@ namespace UndoRedo.Notes
             });
         }
 
+        /// <summary>
+        /// アドレスが1つでも変わっているときだけ、移動をRedoUndoに登録する
+        /// (クリックしただけで動かしていない操作を履歴に積まないため)
+        /// </summary>
+        /// <returns>登録したとき true</returns>
+        public static bool RecordNotesMovingIfChanged(List<NoteDataToAddress> previous, List<NoteDataToAddress> current)
+        {
+            if (!IsAddressChanged(previous, current)) { return false; }
+
+            RecordNotesMoving(previous, current);
+            return true;
+        }
+
+        private static bool IsAddressChanged(List<NoteDataToAddress> previous, List<NoteDataToAddress> current)
+        {
+            if (previous.Count != current.Count) { return true; }
+
+            for (int i = 0; i < previous.Count; i++)
+            {
+                if (previous[i].NoteData != current[i].NoteData) { return true; }
+
+                var a = previous[i].Address;
+                var b = current[i].Address;
+                if (a.BarIndex != b.BarIndex || a.SubDivisionIndex != b.SubDivisionIndex) { return true; }
+
+                var rangeA = a.Range;
+                var rangeB = b.Range;
+                if (rangeA.Count != rangeB.Count) { return true; }
+                for (int j = 0; j < rangeA.Count; j++)
+                {
+                    if (rangeA[j] != rangeB[j]) { return true; }
+                }
+            }
+
+            return false;
+        }
+
         public static void RecordNotesMovingMirror(List<NoteDataToAddress> previous, List<NoteDataToAddress> current)
         {
             Record(() =>

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
-using static UndoRedo.Vertices.VerticesMoveRecord;
+using static UndoRedo.History;
 
 namespace ChartEditor
 {
@@ -23,34 +23,28 @@ namespace ChartEditor
             if (dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
             if (notesGetter.SelectingNotes == null || notesGetter.SelectingNotes.Count == 0) { return; }
 
-            var previousPositions = new List<VertexDataToPos>();
-            var currentPositions = new List<VertexDataToPos>();
-
+            // 反転対象のノートを取り出す
+            var targets = new List<IVerticesControlableNoteData>();
             foreach (var note in notesGetter.SelectingNotes)
             {
-                if (note is not IVerticesControlableNoteData verticesNote) { continue; }
-
-                AddVertexPositions(verticesNote, previousPositions);
-                MirrorVerticesLeftRight(verticesNote);
-                AddVertexPositions(verticesNote, currentPositions);
+                if (note is IVerticesControlableNoteData verticesNote) { targets.Add(verticesNote); }
             }
 
-            if (previousPositions.Count == 0) { return; }
+            if (targets.Count == 0) { return; }
 
-            RecordVertcesMoving(previousPositions, currentPositions);
+            // 左右反転は「座標の鏡映 + 頂点順の逆転」で、もう一度行うと完全に元へ戻る
+            // 座標だけを記録すると頂点順が戻らないため、操作そのものを Undo / Redo に登録する
+            Record(() => {
+                foreach (var target in targets) { MirrorVerticesLeftRight(target); }
+            },
+            () => {
+                foreach (var target in targets) { MirrorVerticesLeftRight(target); }
+            });
         }
 
         void MirrorVerticesLeftRight(IVerticesControlableNoteData verticesNote)
         {
             verticesNote.SpaceVertices.ReverseVertices(new Vector2(0f, 1f), new Vector2(0f, -1f));
-        }
-
-        void AddVertexPositions(IVerticesControlableNoteData verticesNote, List<VertexDataToPos> positions)
-        {
-            foreach (var vertex in verticesNote.SpaceVertices.Vertices)
-            {
-                positions.Add(new VertexDataToPos(vertex, vertex.Position.Value));
-            }
         }
     }
 }

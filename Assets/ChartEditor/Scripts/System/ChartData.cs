@@ -207,7 +207,8 @@ namespace ChartEditor
         public IReadOnlyReactiveProperty<int> BeatCount => beatCount;
         public void SetBeatCount(int beatCount)
         {
-            beatCount = (int)Mathf.Clamp(beatCount, 0, float.MaxValue);
+            // 1未満は分線が作れないので受け付けない
+            if (beatCount < 1) { return; }
             if (this.beatCount.Value == beatCount) { return; }
 
             this.beatCount.Value = beatCount;
@@ -221,7 +222,8 @@ namespace ChartEditor
         public IReadOnlyReactiveProperty<float> BeatUnit => beatUnit;
         public void SetBeatUnit(float beatUnit)
         {
-            beatUnit = Mathf.Clamp(beatUnit, 0, float.MaxValue);
+            // 0以下は分線の長さが計算できない(0除算になる)ので受け付けない
+            if (!(beatUnit > 0f) || float.IsInfinity(beatUnit)) { return; }
             if (this.beatUnit.Value == beatUnit) { return; }
 
             this.beatUnit.Value = beatUnit;
@@ -234,7 +236,8 @@ namespace ChartEditor
         public IReadOnlyReactiveProperty<int> DivisionNum => divisionNum;
         public void SetDivisionNum(int divisionNum)
         {
-            divisionNum = (int)Mathf.Clamp(divisionNum, 0, float.MaxValue);
+            // 1未満は分線が作れないので受け付けない
+            if (divisionNum < 1) { return; }
             if (this.divisionNum.Value == divisionNum) { return; }
 
             this.divisionNum.Value = divisionNum;
@@ -325,6 +328,14 @@ namespace ChartEditor
                 if (isBreak) { break; }
             }
 
+            OnChangeBPM.OnNext((barIndex, subIndex));
+        }
+
+        /// <summary>
+        /// 分線のBPMを直接書き換えた後に呼ぶ。指定した分線以降の線の位置を更新させる
+        /// </summary>
+        public void NotifyBpmChanged(int barIndex, int subIndex)
+        {
             OnChangeBPM.OnNext((barIndex, subIndex));
         }
 

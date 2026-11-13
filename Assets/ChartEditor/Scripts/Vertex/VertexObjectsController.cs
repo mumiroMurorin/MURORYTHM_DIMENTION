@@ -25,6 +25,15 @@ namespace ChartEditor
         [SerializeField] Color startColor;
         [SerializeField] Color endColor;
 
+        [Header("中心点 (掴んで動かすと多角形全体が動く)")]
+        [SerializeField] Color centerHandleColor = Color.white;
+        [Tooltip("頂点に対する中心点の大きさの倍率")]
+        [SerializeField] float centerHandleScale = 1.4f;
+
+        // 中心点と、その対象の頂点リスト
+        VertexObject centerHandle;
+        SpaceVertices centerHandleVertices;
+
         ReactiveProperty<DeploymentNoteType> editingNoteType = new();
         public IObservable<DeploymentNoteType> EditingNoteType => editingNoteType;
 
@@ -82,6 +91,7 @@ namespace ChartEditor
                 {
                     ResetVerticesPreview();
                     BindForVerticesData(note?.SpaceVertices);
+                    RebuildCenterHandle(note?.SpaceVertices);
 
                     if (note is IDeployableNoteData deployable)
                     {
@@ -127,6 +137,75 @@ namespace ChartEditor
                 .AddTo(this.gameObject)
                 .AddTo(disposableForBindForVertices);
         }
+
+        #region 中心点 (多角形全体を動かすためのハンドル)
+
+        /// <summary>
+        /// 中心点を作り直す。編集対象が無いときは消すだけ
+        /// </summary>
+        private void RebuildCenterHandle(SpaceVertices vertices)
+        {
+            if (centerHandle != null)
+            {
+                centerHandle.Destroy();
+                centerHandle = null;
+            }
+
+            centerHandleVertices = vertices;
+            if (vertices == null) { return; }
+
+            // 頂点と同じプレハブから作る (掴んで動かす仕組みをそのまま使うため)
+            var obj = Instantiate(vertexObject);
+            if (!obj.TryGetComponent(out VertexObject vertexObj))
+            {
+                Destroy(obj);
+                return;
+            }
+
+            // 多角形の頂点ではないので、選択の対象から外す
+            foreach (var selectableCollider in obj.GetComponentsInChildren<SelectableVertexCollider>(true))
+            {
+                Destroy(selectableCollider);
+            }
+
+            obj.name = "VertexCenterHandle";
+            obj.transform.SetParent(vertexObjParent);
+            obj.transform.localPosition = Vector3.zero;
+            obj.transform.localScale *= centerHandleScale;
+
+            vertexObj.Initialize(new VertexData(CalcCenter(vertices)), null, ConvertPositionOnChartGround);
+            vertexObj.SetAsCenterHandle();
+            vertexObj.SetColor(centerHandleColor);
+
+            centerHandle = vertexObj;
+        }
+
+        private void LateUpdate()
+        {
+            // 頂点が動いたら、中心点も追従させる (頂点を1個だけ動かしたとき・追加や削除をしたときも含む)
+            if (centerHandle == null || centerHandleVertices == null) { return; }
+
+            centerHandle.VertexData.SetPosition(CalcCenter(centerHandleVertices));
+        }
+
+        /// <summary>
+        /// 頂点の平均位置
+        /// </summary>
+        private static Vector2 CalcCenter(SpaceVertices vertices)
+        {
+            int count = vertices.Vertices.Count;
+            if (count == 0) { return Vector2.zero; }
+
+            Vector2 sum = Vector2.zero;
+            for (int i = 0; i < count; i++)
+            {
+                sum += vertices.Vertices[i].Position.Value;
+            }
+
+            return sum / count;
+        }
+
+        #endregion
 
         private void OnAddVertex(VertexData vertex, int index)
         {

@@ -15,4 +15,16 @@ namespace ChartEditor
             return false;
         }
     }
+
+    /// <summary>
+    /// 修飾キーの判定 (左右どちらのキーでも反応する)
+    /// </summary>
+    public static class ModifierKey
+    {
+        public static bool Ctrl => Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
+
+        public static bool Shift => Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+
+        public static bool Alt => Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt);
+    }
 }

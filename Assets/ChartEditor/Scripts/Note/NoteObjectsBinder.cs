@@ -66,9 +66,13 @@ namespace ChartEditor
             // 譜面データが追加された時
             dataGetter?.ChartData
                 .Subscribe(chart => {
+                    // 頂点編集中だった場合、編集対象が無くなるのでレイヤーを戻す
+                    LeaveVerticesLayer();
+
                     // データクリア
                     notesSetter.ClearDataToNoteObjectList();
                     notesGetter.ClearIndexToChainNoteDataList();
+                    noteConnecter.ReleaseAllNotes();
 
                     // 購読
                     BindForChartData(chart);
@@ -178,7 +182,10 @@ namespace ChartEditor
         private void OnAddNoteData(IDeployableNoteData note)
         {
             // オブジェクトのインスタンス化
-            var obj = InstantiateNoteObject(note);
+            // チェインノーツは、データに残っている接続番号で接続し直す
+            var obj = NoteObjectFactory.Instantiate(noteList, note, GetNoteParentTransform,
+                chainData => noteConnecter.ConnectNote(chainData, chainData.ChainIndex.Value));
+            if (obj == null) { return; }
 
             // 配置
             Transform parent = dataGetter.ChartData.Value.GetPlacementLocation(new AddressInChart(note.Address));
@@ -204,49 +211,40 @@ namespace ChartEditor
             var noteObject = notesGetter.GetNoteObject(note);
             if (noteObject == null || !noteObject.TryGetComponent(out IDestroyableObject destroyableObject)) { return; }
 
-            // コネクトの解除
-            if(note is IChainNoteData chainData) { notesGetter.RemoveChainNote(chainData); }
+            // コネクトの解除 (接続番号はデータに残すので、Undoで再配置すれば元の接続に戻る)
+            if(note is IChainNoteData chainData)
+            {
+                notesGetter.RemoveChainNote(chainData);
+                noteConnecter.ReleaseNote(chainData);
+            }
 
             // 購読の解除
             notesGetter.GetNoteDisposable(note).Dispose();
 
+            // 選択の解除 (オブジェクトとの対応が残っているうちに行う)
+            notesSetter.TryRemoveSelectingNotes(note);
+
+            // 頂点編集中のノートだった場合、編集を終了する
+            if (note is IVerticesControlableNoteData verticesNote && notesGetter.EditingVertices.Value == verticesNote)
+            {
+                LeaveVerticesLayer();
+                notesSetter.SetEditingVertices(null);
+            }
+
             // データの削除
             notesSetter.RemoveDataToNoteObject(note);
-
-            // 選択の解除
-            notesSetter.TryRemoveSelectingNotes(note);
 
             destroyableObject.OnDestroy();
         }
 
         /// <summary>
-        /// ノートのインスタンス化
+        /// 頂点編集レイヤーにいる場合、スペースレイヤーへ戻す
         /// </summary>
-        /// <param name="noteData"></param>
-        /// <returns></returns>
-        private IDeployableObject InstantiateNoteObject(IDeployableNoteData noteData)
+        private void LeaveVerticesLayer()
         {
-            GameObject origin = noteList.GetNote(noteData.NoteType);
-            if (origin == null) { return null; }
+            if (dataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
 
-            GameObject obj = Instantiate(origin);
-
-            if (!obj.TryGetComponent(out IDeployableObject deployable))
-            {
-                Debug.LogWarning("ノーツにIDeployableObjectがくっついてねぇぞ！");
-                return null;
-            }
-
-            // チェインノーツのときデータセット
-            if (noteData is IChainNoteData chainData)
-            {
-                chainData.SetNoteObject(obj.GetComponent<IConnectableObject>());
-                noteConnecter.ConnectNote(chainData, chainData.ChainIndex.Value);
-            }
-
-            deployable.OnInstantiate(noteData, GetNoteParentTransform);
-
-            return deployable;
+            dataSetter.SetEditNoteType(EditNoteType.Space);
         }
 
         /// <summary>

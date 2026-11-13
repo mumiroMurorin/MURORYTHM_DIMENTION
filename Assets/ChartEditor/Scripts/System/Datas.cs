@@ -283,6 +283,11 @@ namespace ChartEditor
 
         public int DivisionNum { get; set; }
 
+        /// <summary>
+        /// 小節として成立する値か (拍数・分割数は1以上、拍の単位は0より大きい)
+        /// </summary>
+        public bool IsValid => BeatCount >= 1 && DivisionNum >= 1 && BeatUnit > 0f && !float.IsInfinity(BeatUnit);
+
         public override bool Equals(object obj)
         {
             if (obj is not BarConfig other)
@@ -381,6 +386,27 @@ namespace ChartEditor
         Space = 2,
         Vertices = 3,
         Preview = 100
+    }
+
+    /// <summary>
+    /// ノーツのレギュレーション違反の種類 (赤いアウトラインが出る理由)
+    /// </summary>
+    public enum NoteWarningType
+    {
+        /// <summary>
+        /// 重ねてはいけないノーツと重なっている
+        /// </summary>
+        Stacking,
+
+        /// <summary>
+        /// ホールドがどのノーツとも接続されていない
+        /// </summary>
+        UnconnectedHold,
+
+        /// <summary>
+        /// スペースホールドがどのノーツとも接続されていない
+        /// </summary>
+        UnconnectedSpaceHold,
     }
 
     /// <summary>
