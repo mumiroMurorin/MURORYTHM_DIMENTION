@@ -5,6 +5,7 @@ using UniRx;
 using System.Linq;
 using System;
 using VContainer;
+using UnityEngine.EventSystems;
 using static UndoRedo.History;
 
 namespace ChartEditor
@@ -57,6 +58,9 @@ namespace ChartEditor
         /// </summary>
         private void StartEditConfigOnClick()
         {
+            // ボタンやパネルなどの画面部品の上をクリックしたときは、その裏にある線の設定を開かない
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) { return; }
+
             var subDivisionCollider = dataGetter.GetInteractableCollider<IRhythmConfigurableSubDivisionCollider>();
             var barCollider = dataGetter.GetInteractableCollider<IRhythmConfigurableBarCollider>();
 
@@ -122,13 +126,32 @@ namespace ChartEditor
                 return;
             }
 
+            // 元に戻す・やり直すときは、変更の前後の小節の状態(設定・分線ごとのBPMとスピード倍率・ノーツの位置)を、
+            // 小節の番号を頼りにそのまま入れ直す
+            // ・拍子や分割数を逆向きに変え直すだけでは、小節の途中のBPMの変わり目や、ノーツの細かい位置が戻らない
+            // ・小節のデータそのものを覚えておくと、小節が消されて作り直された後 (短縮を元に戻した後など) に、
+            //   もう無い小節からノーツを集めようとして、今の小節のノーツを消してしまう
+            var chartData = dataGetter.ChartData.Value;
+            var before = new BarSnapshot(chartData.BarDatas[barIndex]);
+            BarSnapshot after = null;
+
             // 変更
             Record(() => {
-                ChangeBarConfig(barIndex, barConfig, previousBarData);
-            }, 
+                if (barIndex >= chartData.BarDatas.Count) { return; }
+
+                if (after == null)
+                {
+                    ChangeBarConfig(barIndex, barConfig, chartData.BarDatas[barIndex]);
+                    after = new BarSnapshot(chartData.BarDatas[barIndex]);
+                }
+                else
+                {
+                    after.Restore(chartData, barIndex);
+                }
+            },
             // 元に戻す
             () => {
-                ChangeBarConfig(barIndex, previousBarConfig, previousBarData);
+                before.Restore(chartData, barIndex);
             });
         }
 
@@ -216,14 +239,56 @@ namespace ChartEditor
             // 値が変わらないときは何もしない (Undo履歴にも積まない)
             if (previousSubConfig.Bpm == subConfig.Bpm && previousSubConfig.SpeedRatio == subConfig.SpeedRatio) { return; }
 
+            // 変更は、同じ値が続くかぎり後ろの分線もまとめて書き換える。
+            // 元に戻すときに「前の値で同じ変更をかけ直す」と、変更によって後ろの区間と同じ値になっていた場合に、
+            // その区間まで書き換えてしまう。変更の前後の値をそのまま写しておき、写しを入れ直す
+            var chartData = dataGetter.ChartData.Value;
+            var beforeBpms = new List<float>();
+            var beforeSpeedRatios = new List<float>();
+            chartData.CopySubDivisionConfigsFrom(barIndex, subIndex, beforeBpms, beforeSpeedRatios);
+            List<float> afterBpms = null;
+            List<float> afterSpeedRatios = null;
+
             // 変更
             Record(() => {
-                dataGetter.ChartData.Value.SetSubDivisionConfig(barIndex, subIndex, subConfig);
+                if (afterBpms != null)
+                {
+                    chartData.RestoreSubDivisionConfigsFrom(barIndex, subIndex, afterBpms, afterSpeedRatios);
+                    return;
+                }
+
+                chartData.SetSubDivisionConfig(barIndex, subIndex, subConfig);
+
+                afterBpms = new List<float>();
+                afterSpeedRatios = new List<float>();
+                chartData.CopySubDivisionConfigsFrom(barIndex, subIndex, afterBpms, afterSpeedRatios);
+
+                // 写しは、実際に値が変わった分線までにする (それより後ろは、覚えておかなくてよい)
+                int changedCount = 0;
+                for (int i = 0; i < beforeBpms.Count && i < afterBpms.Count; i++)
+                {
+                    if (beforeBpms[i] != afterBpms[i] || beforeSpeedRatios[i] != afterSpeedRatios[i]) { changedCount = i + 1; }
+                }
+
+                TrimConfigCopy(beforeBpms, beforeSpeedRatios, changedCount);
+                TrimConfigCopy(afterBpms, afterSpeedRatios, changedCount);
             },
             // 元に戻す
             () => {
-                dataGetter.ChartData.Value.SetSubDivisionConfig(barIndex, subIndex, previousSubConfig);
+                chartData.RestoreSubDivisionConfigsFrom(barIndex, subIndex, beforeBpms, beforeSpeedRatios);
             });
+        }
+
+        /// <summary>
+        /// 分線ごとの値の写しを、先頭から count 個だけにする
+        /// </summary>
+        private static void TrimConfigCopy(List<float> bpms, List<float> speedRatios, int count)
+        {
+            if (bpms.Count > count) { bpms.RemoveRange(count, bpms.Count - count); }
+            if (speedRatios.Count > count) { speedRatios.RemoveRange(count, speedRatios.Count - count); }
+
+            bpms.TrimExcess();
+            speedRatios.TrimExcess();
         }
 
         /// <summary>

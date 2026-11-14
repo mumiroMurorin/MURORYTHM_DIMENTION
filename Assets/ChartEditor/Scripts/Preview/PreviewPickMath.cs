@@ -165,8 +165,6 @@ namespace ChartEditor
             hitLength = float.MaxValue;
             if (vertices == null || triangles == null) { return false; }
 
-            const float EPSILON = 1e-7f;
-
             for (int i = 0; i + 2 < triangles.Length; i += 3)
             {
                 int i0 = triangles[i];
@@ -174,32 +172,79 @@ namespace ChartEditor
                 int i2 = triangles[i + 2];
                 if (i0 < 0 || i1 < 0 || i2 < 0 || i0 >= vertices.Length || i1 >= vertices.Length || i2 >= vertices.Length) { continue; }
 
-                Vector3 v0 = vertices[i0];
-                Vector3 edge1 = vertices[i1] - v0;
-                Vector3 edge2 = vertices[i2] - v0;
-
-                // 光線と三角形の交点を求める (面の表裏は問わない)
-                Vector3 p = Vector3.Cross(direction, edge2);
-                float determinant = Vector3.Dot(edge1, p);
-                if (determinant > -EPSILON && determinant < EPSILON) { continue; }
-
-                float inverse = 1f / determinant;
-                Vector3 toOrigin = origin - v0;
-                float u = Vector3.Dot(toOrigin, p) * inverse;
-                if (!(u >= 0f && u <= 1f)) { continue; }
-
-                Vector3 q = Vector3.Cross(toOrigin, edge1);
-                float v = Vector3.Dot(direction, q) * inverse;
-                if (!(v >= 0f && u + v <= 1f)) { continue; }
-
-                float length = Vector3.Dot(edge2, q) * inverse;
-                if (!(length > 0f && length < hitLength)) { continue; }
+                if (!TryIntersectTriangle(vertices[i0], vertices[i1], vertices[i2], origin, direction, out float length)) { continue; }
+                if (!(length < hitLength)) { continue; }
                 if (acceptsHit != null && !acceptsHit(length)) { continue; }
 
                 hitLength = length;
             }
 
             return hitLength < float.MaxValue;
+        }
+
+        /// <summary>
+        /// 光線が三角形の集まり(メッシュ)に当たる場所のうち、条件に合うものの中で、いちばん手前までの長さを求める
+        /// (頂点と三角形をリストで受け取る版。Mesh.GetVertices / GetTriangles で使い回しのリストに読み出せば、
+        ///  調べるたびに配列を新しく作らずに済む。カーソルを動かすたびに呼ばれる処理で使う)
+        /// </summary>
+        public static bool TryRaycastTriangles(
+            List<Vector3> vertices,
+            List<int> triangles,
+            Vector3 origin,
+            Vector3 direction,
+            System.Predicate<float> acceptsHit,
+            out float hitLength)
+        {
+            hitLength = float.MaxValue;
+            if (vertices == null || triangles == null) { return false; }
+
+            int vertexCount = vertices.Count;
+            int triangleCount = triangles.Count;
+
+            for (int i = 0; i + 2 < triangleCount; i += 3)
+            {
+                int i0 = triangles[i];
+                int i1 = triangles[i + 1];
+                int i2 = triangles[i + 2];
+                if (i0 < 0 || i1 < 0 || i2 < 0 || i0 >= vertexCount || i1 >= vertexCount || i2 >= vertexCount) { continue; }
+
+                if (!TryIntersectTriangle(vertices[i0], vertices[i1], vertices[i2], origin, direction, out float length)) { continue; }
+                if (!(length < hitLength)) { continue; }
+                if (acceptsHit != null && !acceptsHit(length)) { continue; }
+
+                hitLength = length;
+            }
+
+            return hitLength < float.MaxValue;
+        }
+
+        /// <summary>
+        /// 光線と三角形1つの交点までの長さを求める (面の表裏は問わない)
+        /// </summary>
+        /// <param name="length">交点までの長さ (direction の何倍か)。光線の向きの側で交わるときだけ求まる</param>
+        private static bool TryIntersectTriangle(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 origin, Vector3 direction, out float length)
+        {
+            const float EPSILON = 1e-7f;
+            length = 0f;
+
+            Vector3 edge1 = v1 - v0;
+            Vector3 edge2 = v2 - v0;
+
+            Vector3 p = Vector3.Cross(direction, edge2);
+            float determinant = Vector3.Dot(edge1, p);
+            if (determinant > -EPSILON && determinant < EPSILON) { return false; }
+
+            float inverse = 1f / determinant;
+            Vector3 toOrigin = origin - v0;
+            float u = Vector3.Dot(toOrigin, p) * inverse;
+            if (!(u >= 0f && u <= 1f)) { return false; }
+
+            Vector3 q = Vector3.Cross(toOrigin, edge1);
+            float v = Vector3.Dot(direction, q) * inverse;
+            if (!(v >= 0f && u + v <= 1f)) { return false; }
+
+            length = Vector3.Dot(edge2, q) * inverse;
+            return length > 0f;
         }
     }
 }

@@ -131,7 +131,7 @@ namespace ChartEditor
             this.divisionNum.Value = barConfig.DivisionNum;
             this.BarIndex = barIndex;
 
-            UpdateSubDivisionData(barConfig.BeatCount, barConfig.DivisionNum, subConfig);
+            UpdateSubDivisionData(barConfig.BeatCount, barConfig.DivisionNum, barConfig.DivisionNum, subConfig);
         }
 
         public int BarIndex { get; set; }
@@ -166,24 +166,47 @@ namespace ChartEditor
         /// </summary>
         /// <param name="beatCount">n分の</param>
         /// <param name="beatUnit">m拍子</param>
-        private void UpdateSubDivisionData(int beatCount, int divNum, SubdivisionConfig subConfigOrigin = null)
+        /// <param name="previousDivNum">作り直す前の分割数 (作り直す前の分線が、拍のどの位置にあったかを知るのに使う)</param>
+        private void UpdateSubDivisionData(int beatCount, int divNum, int previousDivNum, SubdivisionConfig subConfigOrigin = null)
         {
             if (beatCount <= 0) { return; }
             if (divNum <= 0) { return; }
             if (subConfigOrigin == null && this.subDivisionDatas.Count == 0) { return; }
 
-            // 分線設定は最初のコンフィグを使う
-            if (subConfigOrigin == null) { subConfigOrigin = this.subDivisionDatas[0].SubConfig; }
+            // 作り直す前の、分線ごとの設定 (BPM・スピード倍率)
+            var previousConfigs = new List<SubdivisionConfig>(this.subDivisionDatas.Count);
+            foreach (var sub in this.subDivisionDatas) { previousConfigs.Add(sub.SubConfig); }
 
             // 新規セット
             // カウント数 * 分割数が分線の数
             var subDivisionDatas = new List<SubDivisionDataInBeat>();
-            for (int i = 0; i < beatCount * divNum; i++) 
+            for (int i = 0; i < beatCount * divNum; i++)
             {
-                var subConfig = new SubdivisionConfig(subConfigOrigin);
+                var subConfig = new SubdivisionConfig(GetConfigForNewSubDivision(i, divNum, previousDivNum, previousConfigs, subConfigOrigin));
                 subDivisionDatas.Add(new SubDivisionDataInBeat(subConfig, this, i));
             }
             SetSubDivisionDatas(subDivisionDatas);
+        }
+
+        /// <summary>
+        /// 作り直した後の分線に入れる設定 (BPM・スピード倍率) を決める
+        ///
+        /// 小節の途中でBPMやスピード倍率が変わっていることがあるので、作り直す前に「同じ拍の同じ位置」にあった分線
+        /// (ちょうどの位置に無ければ、その直前の分線) の値を引き継ぐ。
+        /// 全部の分線に先頭の分線の値を入れると、小節の途中の変わり目が消えてしまう。
+        /// 拍数が増えて、前には無かった位置にできた分線は、最後の分線の値を引き継ぐ。
+        /// </summary>
+        /// <param name="index">作り直した後の、分線の番号</param>
+        /// <param name="configOrigin">小節を最初に作るときの設定。作り直しのときは null</param>
+        private static SubdivisionConfig GetConfigForNewSubDivision(int index, int divNum, int previousDivNum, List<SubdivisionConfig> previousConfigs, SubdivisionConfig configOrigin)
+        {
+            // 小節を最初に作るとき
+            if (configOrigin != null || previousConfigs.Count == 0) { return configOrigin; }
+
+            int previousIndex = previousDivNum > 0 ? (int)((long)index * previousDivNum / divNum) : index;
+            previousIndex = Mathf.Clamp(previousIndex, 0, previousConfigs.Count - 1);
+
+            return previousConfigs[previousIndex];
         }
 
         public Transform GetPlacementLocation(AddressInChart address)
@@ -212,7 +235,7 @@ namespace ChartEditor
             if (this.beatCount.Value == beatCount) { return; }
 
             this.beatCount.Value = beatCount;
-            UpdateSubDivisionData(beatCount, this.divisionNum.Value);
+            UpdateSubDivisionData(beatCount, this.divisionNum.Value, this.divisionNum.Value);
         }
 
         /// <summary>
@@ -240,8 +263,9 @@ namespace ChartEditor
             if (divisionNum < 1) { return; }
             if (this.divisionNum.Value == divisionNum) { return; }
 
+            int previousDivNum = this.divisionNum.Value;
             this.divisionNum.Value = divisionNum;
-            UpdateSubDivisionData(this.beatCount.Value, divisionNum);
+            UpdateSubDivisionData(this.beatCount.Value, divisionNum, previousDivNum);
         }
 
         #endregion
@@ -336,6 +360,56 @@ namespace ChartEditor
         /// </summary>
         public void NotifyBpmChanged(int barIndex, int subIndex)
         {
+            OnChangeBPM.OnNext((barIndex, subIndex));
+        }
+
+        /// <summary>
+        /// 指定した分線から譜面の最後までの、分線ごとのBPM・スピード倍率を写し取る (元に戻す・やり直す用)
+        ///
+        /// BPM・スピード倍率の変更は「同じ値が続くかぎり、後ろの分線もまとめて書き換える」ので、
+        /// 元に戻すときに同じ変更を逆向きにかけると、変更の前とは違う範囲が書き換わることがある
+        /// (変更によって後ろの区間と同じ値になった場合、その区間まで巻き込んでしまう)。
+        /// 変更の前後の値をそのまま写しておき、元に戻す・やり直すときは写しを入れ直す。
+        /// </summary>
+        /// <param name="bpms">BPMが、指定した分線から順に入る</param>
+        /// <param name="speedRatios">スピード倍率が、指定した分線から順に入る</param>
+        public void CopySubDivisionConfigsFrom(int barIndex, int subIndex, List<float> bpms, List<float> speedRatios)
+        {
+            bpms.Clear();
+            speedRatios.Clear();
+
+            for (int i = Mathf.Max(barIndex, 0); i < barDatas.Count; i++)
+            {
+                var subDivisions = barDatas[i].SubDivisionDatas;
+                for (int j = i == barIndex ? Mathf.Max(subIndex, 0) : 0; j < subDivisions.Count; j++)
+                {
+                    bpms.Add(subDivisions[j].Bpm.Value);
+                    speedRatios.Add(subDivisions[j].SpeedRatio.Value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 写し取っておいたBPM・スピード倍率を、指定した分線から順に入れ直す
+        /// (写しの数より後ろの分線には触らない。譜面の方が短いときは、ある分だけ入れる)
+        /// </summary>
+        public void RestoreSubDivisionConfigsFrom(int barIndex, int subIndex, List<float> bpms, List<float> speedRatios)
+        {
+            int count = Mathf.Min(bpms.Count, speedRatios.Count);
+            int index = 0;
+
+            for (int i = Mathf.Max(barIndex, 0); i < barDatas.Count && index < count; i++)
+            {
+                var subDivisions = barDatas[i].SubDivisionDatas;
+                for (int j = i == barIndex ? Mathf.Max(subIndex, 0) : 0; j < subDivisions.Count && index < count; j++)
+                {
+                    subDivisions[j].SetBpm(bpms[index]);
+                    subDivisions[j].SetSpeedRatio(speedRatios[index]);
+                    index++;
+                }
+            }
+
+            // BPMを直接書き換えたので、線の位置を更新させる
             OnChangeBPM.OnNext((barIndex, subIndex));
         }
 

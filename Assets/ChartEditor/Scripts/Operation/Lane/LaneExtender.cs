@@ -116,58 +116,6 @@ namespace ChartEditor
                 }
             });
         }
-
-        /// <summary>
-        /// 削除される小節の状態 (拍子・分割数、分線ごとのBPM・速度倍率、ノーツ)
-        /// </summary>
-        private class BarSnapshot
-        {
-            readonly BarConfig barConfig;
-            readonly List<SubdivisionConfig> subConfigs = new List<SubdivisionConfig>();
-            readonly List<IDeployableNoteData> notes = new List<IDeployableNoteData>();
-
-            public BarSnapshot(BarDataInChart barData)
-            {
-                barConfig = barData.BarConfig;
-
-                foreach (var sub in barData.SubDivisionDatas)
-                {
-                    subConfigs.Add(sub.SubConfig);
-
-                    foreach (var note in sub.NoteDatas)
-                    {
-                        notes.Add(note);
-                    }
-                }
-            }
-
-            public void Restore(ChartData chartData, int barIndex)
-            {
-                if (barIndex < 0 || barIndex >= chartData.BarDatas.Count) { return; }
-
-                // 拍子・分割数 (分線が作り直される)
-                var barData = chartData.BarDatas[barIndex];
-                barData.SetBeatCount(barConfig.BeatCount);
-                barData.SetBeatUnit(barConfig.BeatUnit);
-                barData.SetDivisionNum(barConfig.DivisionNum);
-
-                // 分線ごとのBPM・速度倍率
-                for (int i = 0; i < subConfigs.Count && i < barData.SubDivisionDatas.Count; i++)
-                {
-                    barData.SubDivisionDatas[i].SetBpm(subConfigs[i].Bpm);
-                    barData.SubDivisionDatas[i].SetSpeedRatio(subConfigs[i].SpeedRatio);
-                }
-
-                // BPMを直接書き換えたので、線の位置を更新させる
-                chartData.NotifyBpmChanged(barIndex, 0);
-
-                // ノーツ
-                foreach (var note in notes)
-                {
-                    chartData.AddNote(note);
-                }
-            }
-        }
     }
 
 }

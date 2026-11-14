@@ -54,8 +54,11 @@ namespace ChartEditor
         const int MAX_PRESS_CANDIDATES = 32;
         // スペースのノーツをドラッグで動かせる、視点の正面からの最小のずれ (これより正面に近い点は掴んでも動かせない)
         const float RAIL_MIN_OFFSET = 0.5f;
-        // カーソルを動かしていなくても、この間隔(秒)でカーソルの下を調べ直す (再生中は、ノーツの方が動いてくるため)
-        const float HOVER_CHECK_INTERVAL_SECONDS = 0.1f;
+        // カーソルの下を調べ直す間隔(秒)
+        // ・カーソルを動かしている間: 動かすたびに調べると重いので、この間隔を空ける
+        // ・カーソルを止めている間: 再生中はノーツの方が動いてくるので、止めていてもこの間隔で調べ直す
+        const float HOVER_CHECK_INTERVAL_MOVING_SECONDS = 0.05f;
+        const float HOVER_CHECK_INTERVAL_IDLE_SECONDS = 0.2f;
 
         // 操作の途中なので、プレビューのクリックを受け付けないモード
         // (選択するとレイヤーや編集モードが切り替わり、入力途中の設定が確定されたりするため)
@@ -139,7 +142,7 @@ namespace ChartEditor
         // カーソルの下を最後に調べたときの結果と、そのときのカーソルの位置
         EditMode hoverCursor = EditMode.None;
         Vector2 lastHoverPosition;
-        float nextHoverCheckTime;
+        float lastHoverCheckTime = float.NegativeInfinity;
         // カーソルの下に重なっているノーツ (調べている間だけ使う)
         readonly List<PressCandidate> hoverCandidates = new List<PressCandidate>();
         // 使い終わった PressCandidate (カーソルを動かすたびに作り直さないよう、使い回す)
@@ -745,7 +748,7 @@ namespace ChartEditor
             isDragging = false;
 
             // カーソルの形を、今カーソルの下にあるものに合わせ直す
-            nextHoverCheckTime = 0f;
+            lastHoverCheckTime = float.NegativeInfinity;
         }
 
         /// <summary>
@@ -1233,16 +1236,18 @@ namespace ChartEditor
 
         /// <summary>
         /// 押していないときのカーソルの形 (カーソルの下にあるものに合わせる)
-        /// カーソルを動かしたときと、一定の間隔ごとに調べ直す。それ以外は、前に調べた結果を返す
+        /// 毎フレームは調べない。一定の間隔を空けて調べ直し、その間は、前に調べた結果を返す
         /// </summary>
         private EditMode GetHoverCursor()
         {
             Vector2 position = Input.mousePosition;
             float now = Time.unscaledTime;
-            if (position == lastHoverPosition && now < nextHoverCheckTime) { return hoverCursor; }
+
+            float interval = position == lastHoverPosition ? HOVER_CHECK_INTERVAL_IDLE_SECONDS : HOVER_CHECK_INTERVAL_MOVING_SECONDS;
+            if (now - lastHoverCheckTime < interval) { return hoverCursor; }
 
             lastHoverPosition = position;
-            nextHoverCheckTime = now + HOVER_CHECK_INTERVAL_SECONDS;
+            lastHoverCheckTime = now;
 
             hoverCursor = FindHoverCursor(position);
             return hoverCursor;

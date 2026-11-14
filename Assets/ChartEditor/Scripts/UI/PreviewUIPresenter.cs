@@ -26,6 +26,7 @@ namespace ChartEditor
         INoteSpawnDataOptionSetter noteSpawnDataOptionSetter_model;
         INoteSpawnDataOptionGetter noteSpawnDataOptionGetter_model;
         INotesDataGetter notesGetter_model;
+        INotesDataSetter notesSetter_model;
 
         IChartPreviewRefreshable previewRefreshable;
         EditNoteType editNoteTypeCache = EditNoteType.Ground;
@@ -38,9 +39,11 @@ namespace ChartEditor
             IChartEditorOptionGetter optionDataGetter,
             INoteSpawnDataOptionSetter noteSpawnDataOptionSetter,
             INoteSpawnDataOptionGetter noteSpawnDataOptionGetter,
-            INotesDataGetter notesGetter)
+            INotesDataGetter notesGetter,
+            INotesDataSetter notesSetter)
         {
             this.notesGetter_model = notesGetter;
+            this.notesSetter_model = notesSetter;
             this.dataGetter_model = dataGetter;
             this.dataSetter_model = dataSetter;
             this.optionSetter_model = optionDataSetter;
@@ -139,6 +142,11 @@ namespace ChartEditor
         private async UniTaskVoid RunStartPreviewFlowAsync()
         {
             editNoteTypeCache = dataGetter_model.EditNoteType.Value;
+
+            // 編集画面で選んでいたノーツの選択は、全画面プレビューへ持ち込まない
+            // (全画面プレビューでは、グラウンドのノーツが選択中かどうかが見た目で分からない。
+            //  選択が残っていると、何も選んでいないつもりで Delete を押したときに、見えていない選択が消えてしまう)
+            notesSetter_model?.ClearSelectingNotes();
 
             if (previewRefreshable != null)
             {

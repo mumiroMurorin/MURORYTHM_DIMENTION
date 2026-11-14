@@ -168,6 +168,9 @@ namespace ChartEditor
         readonly object[] spawnArguments = new object[2];
         readonly List<Renderer> pickRendererBuffer = new List<Renderer>();
         readonly List<MeshFilter> pickMeshFilterBuffer = new List<MeshFilter>();
+        // 当たり判定で調べるメッシュの頂点と三角形 (調べるたびに配列を作らないよう、使い回す)
+        readonly List<Vector3> pickVertexBuffer = new List<Vector3>();
+        readonly List<int> pickTriangleBuffer = new List<int>();
         // 当たり判定に使っている光線と、「当たった場所が今プレビューに映っているか」を調べる処理 (毎回作り直さないよう使い回す)
         Ray pickRay;
         System.Predicate<float> isVisibleHit;
@@ -500,12 +503,25 @@ namespace ChartEditor
                 Vector3 origin = meshTransform.InverseTransformPoint(ray.origin);
                 Vector3 direction = meshTransform.InverseTransformVector(ray.direction);
 
-                if (PreviewPickMath.TryRaycastTriangles(mesh.vertices, mesh.triangles, origin, direction, isVisibleHit, out float length))
+                // 頂点と三角形は、使い回しのリストへ読み出す
+                // (mesh.vertices / mesh.triangles は、呼ぶたびに配列を新しく作って返す。この判定はカーソルを動かすたびに
+                //  帯の数だけ走るので、そのたびに配列を作ると、メモリの確保と片付けで動きが引っかかる)
+                mesh.GetVertices(pickVertexBuffer);
+                for (int subMeshIndex = 0; subMeshIndex < mesh.subMeshCount; subMeshIndex++)
                 {
-                    hitLength = Mathf.Min(hitLength, length);
+                    // 三角形でできていない部分 (線など) には当たらない
+                    if (mesh.GetTopology(subMeshIndex) != MeshTopology.Triangles) { continue; }
+
+                    mesh.GetTriangles(pickTriangleBuffer, subMeshIndex);
+                    if (PreviewPickMath.TryRaycastTriangles(pickVertexBuffer, pickTriangleBuffer, origin, direction, isVisibleHit, out float length))
+                    {
+                        hitLength = Mathf.Min(hitLength, length);
+                    }
                 }
             }
             pickMeshFilterBuffer.Clear();
+            pickVertexBuffer.Clear();
+            pickTriangleBuffer.Clear();
 
             return hitLength < float.MaxValue;
         }

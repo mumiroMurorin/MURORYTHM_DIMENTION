@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace ChartEditor
 {
@@ -12,8 +13,21 @@ namespace ChartEditor
     /// </summary>
     public class ChartExtendSettings
     {
-        // 一度に延長できる小節数の上限 (桁を打ち間違えたときに、延々と小節を作り続けて固まるのを防ぐ)
+        // 入力できる値の範囲
+        // 延長は、追加する分線をその場で全部作る。桁を打ち間違えたときに、大量の分線を作り続けて固まるのを防ぐ
+        public const int MIN_BAR_COUNT = 1;
         public const int MAX_BAR_COUNT = 500;
+        // 拍子の分子 (1小節の拍の数)
+        public const int MIN_BEAT_COUNT = 1;
+        public const int MAX_BEAT_COUNT = 32;
+        // 拍子の分母 (1拍の長さ。4 で4分音符、8 で8分音符)
+        public const float MIN_BEAT_UNIT = 1f;
+        public const float MAX_BEAT_UNIT = 64f;
+        // 分割数 (1拍を何本の分線に分けるか)
+        public const int MIN_DIVISION_NUM = 1;
+        public const int MAX_DIVISION_NUM = 64;
+        // 一度の延長で追加できる分線の合計 (小節数 × 拍の数 × 分割数)。値がそれぞれ範囲の中でも、掛け合わせると大きくなりすぎる
+        public const int MAX_TOTAL_SUBDIVISIONS = 10000;
 
         // 最初に入れておく値 (これまでの延長と同じ: 1小節、4/4拍子、4分割)
         const int DEFAULT_BAR_COUNT = 1;
@@ -89,27 +103,39 @@ namespace ChartEditor
         {
             barConfig = null;
 
-            if (!int.TryParse(barCountField.text, out barCount) || barCount < 1 || barCount > MAX_BAR_COUNT)
+            if (!int.TryParse(barCountField.text, out barCount) || barCount < MIN_BAR_COUNT || barCount > MAX_BAR_COUNT)
             {
-                MessageDialog.ShowError(ERROR_TITLE, $"延長する小節数には、1 以上 {MAX_BAR_COUNT} 以下の整数を入力してください。\n入力値: {barCountField.text}");
+                MessageDialog.ShowError(ERROR_TITLE, $"延長する小節数には、{MIN_BAR_COUNT} 以上 {MAX_BAR_COUNT} 以下の整数を入力してください。\n入力値: {barCountField.text}");
                 return false;
             }
 
-            if (!int.TryParse(beatCountField.text, out int beatCount) || beatCount < 1)
+            if (!int.TryParse(beatCountField.text, out int beatCount) || beatCount < MIN_BEAT_COUNT || beatCount > MAX_BEAT_COUNT)
             {
-                MessageDialog.ShowError(ERROR_TITLE, $"拍子の分子には1以上の整数を入力してください。\n入力値: {beatCountField.text}");
+                MessageDialog.ShowError(ERROR_TITLE, $"拍子の分子には、{MIN_BEAT_COUNT} 以上 {MAX_BEAT_COUNT} 以下の整数を入力してください。\n入力値: {beatCountField.text}");
                 return false;
             }
 
-            if (!float.TryParse(beatUnitField.text, out float beatUnit) || !(beatUnit > 0f) || float.IsInfinity(beatUnit))
+            if (!float.TryParse(beatUnitField.text, out float beatUnit) || !(beatUnit >= MIN_BEAT_UNIT) || !(beatUnit <= MAX_BEAT_UNIT))
             {
-                MessageDialog.ShowError(ERROR_TITLE, $"拍子の分母には0より大きい数を入力してください。\n入力値: {beatUnitField.text}");
+                MessageDialog.ShowError(ERROR_TITLE, $"拍子の分母には、{MIN_BEAT_UNIT} 以上 {MAX_BEAT_UNIT} 以下の数を入力してください。\n入力値: {beatUnitField.text}");
                 return false;
             }
 
-            if (!int.TryParse(divisionNumField.text, out int divisionNum) || divisionNum < 1)
+            if (!int.TryParse(divisionNumField.text, out int divisionNum) || divisionNum < MIN_DIVISION_NUM || divisionNum > MAX_DIVISION_NUM)
             {
-                MessageDialog.ShowError(ERROR_TITLE, $"分割数には1以上の整数を入力してください。\n入力値: {divisionNumField.text}");
+                MessageDialog.ShowError(ERROR_TITLE, $"分割数には、{MIN_DIVISION_NUM} 以上 {MAX_DIVISION_NUM} 以下の整数を入力してください。\n入力値: {divisionNumField.text}");
+                return false;
+            }
+
+            // 追加する分線の合計
+            long totalSubdivisions = (long)barCount * beatCount * divisionNum;
+            if (totalSubdivisions > MAX_TOTAL_SUBDIVISIONS)
+            {
+                MessageDialog.ShowError(
+                    ERROR_TITLE,
+                    $"一度に追加できる分線は {MAX_TOTAL_SUBDIVISIONS} 本までです。\n" +
+                    $"今の入力では {totalSubdivisions} 本になります (小節数 {barCount} × 拍の数 {beatCount} × 分割数 {divisionNum})。\n" +
+                    "小節数を減らして、何回かに分けて延長してください。");
                 return false;
             }
 
@@ -125,7 +151,7 @@ namespace ChartEditor
             if (extendButtonText == null) { return; }
 
             // 正しくない値が入っているときは、小節数を「?」にしておく (押したときに理由が表示される)
-            bool isValid = int.TryParse(barCountField.text, out int barCount) && barCount >= 1 && barCount <= MAX_BAR_COUNT;
+            bool isValid = int.TryParse(barCountField.text, out int barCount) && barCount >= MIN_BAR_COUNT && barCount <= MAX_BAR_COUNT;
             extendButtonText.text = $"延長\n<size=15>({(isValid ? barCount.ToString() : "?")}小節)";
         }
 
@@ -244,6 +270,27 @@ namespace ChartEditor
             if (field.placeholder is TMP_Text placeholder) { placeholder.text = string.Empty; }
 
             field.text = text;
+
+            // 入力を終えたら、入力欄を「選択中」のままにしない
+            field.onEndEdit.AddListener(_ => ReleaseSelection(field));
+        }
+
+        /// <summary>
+        /// 入力欄が選択中のまま残っていたら、選択を外す
+        ///
+        /// Enter で入力を終えても、入力欄は選択中のまま残る。Space キーは「選択中の部品を決定する」キーでもあるので、
+        /// そのまま Space で再生を始めると、入力欄がもう一度入力状態になり、以後の Space (再生の停止) や
+        /// ショートカットキーが「文字を打っている最中」として無視されてしまう。
+        /// </summary>
+        private static void ReleaseSelection(TMP_InputField field)
+        {
+            var eventSystem = EventSystem.current;
+            if (eventSystem == null) { return; }
+            // ほかの部品をクリックして入力を終えたときは、選択の付け替えの最中なので触らない (すでに選択は外れる)
+            if (eventSystem.alreadySelecting) { return; }
+            if (eventSystem.currentSelectedGameObject != field.gameObject) { return; }
+
+            eventSystem.SetSelectedGameObject(null);
         }
 
         #endregion

@@ -36,11 +36,18 @@ namespace ChartEditor
         {
             // 配置モードのみ
             if (dataGetter.CurrentEditMode.Value != EditMode.Scale &&
-                dataGetter.CurrentEditMode.Value != EditMode.Scaling) { return; }
+                dataGetter.CurrentEditMode.Value != EditMode.Scaling)
+            {
+                // 幅を変えている途中で別のモードに切り替えられたら (ショートカットキーを押したときなど)、その場で確定する
+                // 確定しないと、幅は変わったまま履歴に残らず、ノーツの当たり判定も無効のままになって、クリックできなくなる
+                // (切り替えられた後のモードは、そのままにする)
+                if (scalableAndDelta.Count > 0) { FinishScaleNote(false); }
+                return;
+            }
 
             if (Input.GetMouseButtonDown(0)) { StartScaleNote(); }
             if (Input.GetMouseButton(0)) { ScaleNote(); }
-            if (Input.GetMouseButtonUp(0)) { FinishScaleNote(); }
+            if (Input.GetMouseButtonUp(0)) { FinishScaleNote(true); }
         }
 
         /// <summary>
@@ -160,7 +167,8 @@ namespace ChartEditor
         /// <summary>
         /// クリック終了時(拡大縮小終了)
         /// </summary>
-        private void FinishScaleNote()
+        /// <param name="isModeRestored">true のとき、エディットモードを「幅を変えられる状態」へ戻す (途中で別のモードに切り替えられたときは false)</param>
+        private void FinishScaleNote(bool isModeRestored)
         {
             // 拡大縮小を開始していないとき(ノーツの端以外でマウスを離した等)は何もしない
             if (scalableAndDelta.Count == 0) { return; }
@@ -182,7 +190,7 @@ namespace ChartEditor
             notesSetter.ReselectNotes();
 
             // 拡大縮小中のモードを戻す (戻さないと、カーソルがUI上にある間 Undo を受け付けない)
-            dataSetter?.SetEditMode(EditMode.Scale);
+            if (isModeRestored) { dataSetter?.SetEditMode(EditMode.Scale); }
 
             Initialize();
         }

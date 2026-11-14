@@ -34,11 +34,24 @@ namespace ChartEditor
         }
 
 
+        // 役割(始点・中継点・終点)ごとに、最後に使っていた種類
+        // つながりが変わって役割が変わると、種類もその役割のものに付け替わる。元の役割に戻ったときに、
+        // 覚えておいた種類へ戻せるようにする (操作を元に戻しても、メッシュ中継点などが標準の種類のままにならないように)
+        readonly ChainNoteTypeMemory typeMemory = new ChainNoteTypeMemory(
+            new[] { DeploymentNoteType.SpaceHoldStart },
+            new[] { DeploymentNoteType.SpaceHoldRelay, DeploymentNoteType.SpaceHoldMeshRelay },
+            new[] { DeploymentNoteType.SpaceHoldEnd });
+
         // ノートタイプ
         ReactiveProperty<DeploymentNoteType> noteType = new ReactiveProperty<DeploymentNoteType>(DeploymentNoteType.SpaceHoldStart);
         public DeploymentNoteType NoteType {
             get { return noteType.Value; }
-            private set { noteType.Value = value; }
+            private set
+            {
+                noteType.Value = value;
+                // その種類を、対応する役割(始点・中継点・終点)で最後に使っていた種類として覚えておく
+                typeMemory.Remember(value);
+            }
         }
         public IReadOnlyReactiveProperty<DeploymentNoteType> NoteTypeRP => noteType;
         public void SetNoteType(DeploymentNoteType noteType)
@@ -66,34 +79,9 @@ namespace ChartEditor
             bool hasBackNote = NoteObject.BackNote.Value != null;
             bool hasNextNote = NoteObject.NextNote.Value != null;
 
-            // 始点
-            if (!hasBackNote && hasNextNote)
-            {
-                SetDefaultIfInvalid(DeploymentNoteType.SpaceHoldStart, DeploymentNoteType.SpaceHoldStart);
-                return;
-            }
-
-            // 中継点
-            if (hasBackNote && hasNextNote)
-            {
-                SetDefaultIfInvalid(DeploymentNoteType.SpaceHoldRelay, DeploymentNoteType.SpaceHoldRelay, DeploymentNoteType.SpaceHoldMeshRelay);
-                return;
-            }
-
-            // 終点
-            if (hasBackNote && !hasNextNote)
-            {
-                SetDefaultIfInvalid(DeploymentNoteType.SpaceHoldEnd, DeploymentNoteType.SpaceHoldEnd);
-                return;
-            }
-
-            SetDefaultIfInvalid(DeploymentNoteType.SpaceHoldStart, DeploymentNoteType.SpaceHoldStart);
-        }
-        private void SetDefaultIfInvalid(DeploymentNoteType defaultType, params DeploymentNoteType[] validTypes)
-        {
-            if (validTypes.Contains(NoteType)) { return; }
-
-            NoteType = defaultType;
+            // 前後のつながりから決まる役割(始点・中継点・終点)に合わない種類のときは、
+            // その役割で最後に使っていた種類にする (一度も使っていなければ、標準の種類)
+            NoteType = typeMemory.Resolve(hasBackNote, hasNextNote, NoteType);
         }
         private bool IsSpaceHoldNoteType(DeploymentNoteType noteType)
         {

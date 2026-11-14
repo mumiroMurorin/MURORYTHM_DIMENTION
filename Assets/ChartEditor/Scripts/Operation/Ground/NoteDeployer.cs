@@ -19,6 +19,11 @@ namespace ChartEditor
 
         protected override int DeployRangeCount => notesGetter.DeployNoteSize;
 
+        // スペースレイヤーのノーツを表すレーン番号
+        const float SPACE_LANE_INDEX = 100f;
+        // 選択が変わったか (フレームの終わりに、配置する幅を見直す)
+        bool isSelectionChanged;
+
         [Inject]
         public void ConstructNotes(INotesDataGetter notesGetter, INotesDataSetter notesSetter)
         {
@@ -30,13 +35,27 @@ namespace ChartEditor
         {
             base.Bind();
 
-            // ノーツが単選択されたとき、配置サイズを変える
+            // ノーツが1つだけ選択されたとき、配置する幅をそのノーツの幅に合わせる
+            // 選択の数が変わるたびにその場で合わせると、複数選択を解除する途中 (1つずつ外れていく) や、削除・貼り付けの途中で
+            // 「1つ」の瞬間を通るたびに、幅が書き換わってしまう。
+            // ここでは「選択が変わった」ことだけ覚えておき、フレームの終わりに、落ち着いた後の選択を見て決める
             notesGetter.SelectingNotes.ObserveCountChanged()
-                .Where(count => count == 1)
-                .Subscribe(_ => {
-                    notesSetter.DeployNoteSize = notesGetter.SelectingNotes[0].Address.Range.Count;
-                })
+                .Subscribe(_ => isSelectionChanged = true)
                 .AddTo(this.gameObject);
+        }
+
+        private void LateUpdate()
+        {
+            if (!isSelectionChanged) { return; }
+            isSelectionChanged = false;
+
+            if (notesGetter.SelectingNotes.Count != 1) { return; }
+
+            // スペースのノーツにはレーンの幅が無いので、配置する幅には使わない
+            var lanes = notesGetter.SelectingNotes[0].Address.RangeRP;
+            if (lanes.Count == 0 || lanes[0] == SPACE_LANE_INDEX) { return; }
+
+            notesSetter.DeployNoteSize = lanes.Count;
         }
 
         protected override IInteractableCollider GetDeployColliderUnderCursor()

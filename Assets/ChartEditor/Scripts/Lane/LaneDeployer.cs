@@ -21,6 +21,9 @@ namespace ChartEditor
 
         CancellationTokenSource updateLinePosCts;
 
+        // 線の位置の直し待ち。直すのは、この番号の小節から後ろ。待ちが無いときは -1
+        int pendingLinePosBarIndex = -1;
+
         [Inject]
         public void Construct(IChartEditorDataGetter dataGetter, IChartEditorOptionGetter optionGetter)
         {
@@ -114,8 +117,10 @@ namespace ChartEditor
                     OnAddSubdivision(subData.Value);
                     BindForSubdivisionData(subData.Value, Find(subData.Value.BarData.BarIndex, subData.Value.SubDivisionIndex).Item2.Obj.gameObject);
 
-                    // ※ループが多いと重たい
-                    UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0);
+                    // 線の位置は、このフレームの終わりにまとめて1回だけ直す
+                    // (小節の拍子・分割数を変えると、分線が1本ずつ消されて1本ずつ作られる。
+                    //  そのたびに後ろの線をすべて動かすと、分線の本数だけ同じ計算を繰り返すことになる)
+                    RequestUpdateLinePos(Mathf.Max(0, barData.BarIndex - 1));
                 })
                 .AddTo(this.gameObject);
 
@@ -124,10 +129,34 @@ namespace ChartEditor
                 .Subscribe(subData => {
                     OnRemoveSubdivision(subData.Value);
 
-                    // ※ループが多いと重たい
-                    UpdateLinePos(Mathf.Max(0, barData.BarIndex - 1), 0);
+                    // 線の位置は、このフレームの終わりにまとめて1回だけ直す
+                    // (小節の拍子・分割数を変えると、分線が1本ずつ消されて1本ずつ作られる。
+                    //  そのたびに後ろの線をすべて動かすと、分線の本数だけ同じ計算を繰り返すことになる)
+                    RequestUpdateLinePos(Mathf.Max(0, barData.BarIndex - 1));
                 })
                 .AddTo(this.gameObject);
+        }
+
+        /// <summary>
+        /// 指定した小節から後ろの線の位置を、このフレームの終わりに直すよう頼む
+        /// (同じフレームに何度頼まれても、いちばん手前の小節から1回だけ直す)
+        /// </summary>
+        private void RequestUpdateLinePos(int barIndex)
+        {
+            pendingLinePosBarIndex = pendingLinePosBarIndex < 0 ? barIndex : Mathf.Min(pendingLinePosBarIndex, barIndex);
+        }
+
+        private void LateUpdate()
+        {
+            if (pendingLinePosBarIndex < 0) { return; }
+
+            int barIndex = pendingLinePosBarIndex;
+            pendingLinePosBarIndex = -1;
+
+            // 頼まれた小節の線がもう無いとき (小節ごと消されたとき) は、譜面の先頭から直す
+            if (Find(barIndex, 0).Item1 < 0) { barIndex = 0; }
+
+            UpdateLinePos(barIndex, 0);
         }
 
         /// <summary>

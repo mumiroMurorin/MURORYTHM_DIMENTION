@@ -14,7 +14,9 @@ namespace ChartEditor
         INotesDataSetter notesSetter;
         IChartEditorDataGetter dataGetter;
         IPreviewPointer previewPointer;
-        Dictionary<IDeployableNoteData, AddressWithinRange> copiedNotes;
+
+        // コピーしたノーツの写し (コピーした時点の内容)
+        List<CopiedNoteInfo> copiedNotes;
 
         EditMode[] ignoreEditModes = new EditMode[] {
              EditMode.Connecting,
@@ -56,15 +58,34 @@ namespace ChartEditor
             if (isPaste) { PasteNotes(); }
         }
 
+        /// <summary>
+        /// 選択中のノーツをコピーする
+        ///
+        /// コピーした時点の内容(種類・幅・形)と、ノーツどうしの間隔を写し取っておく。
+        /// 元のノーツを覚えておくだけだと、コピーした後に元のノーツを動かしたり変えたり消したりしたときに、
+        /// 貼り付く位置や内容が変わってしまう。
+        /// </summary>
         private void CopyNotes()
         {
             if (notesGetter.SelectingNotes == null || notesGetter.SelectingNotes.Count == 0) { return; }
 
-            copiedNotes = new Dictionary<IDeployableNoteData, AddressWithinRange>();
+            var chartData = dataGetter.ChartData.Value;
+            if (chartData == null) { return; }
+
+            // いちばん手前のノーツ (貼り付けるとき、このノーツがカーソルの指す分線に来る)
+            var firstNote = notesGetter.SelectingNotes.OrderedByAddress().FirstOrDefault();
+            if (firstNote == null) { return; }
+            var firstAddress = new AddressInChart(firstNote.Address);
+
+            copiedNotes = new List<CopiedNoteInfo>();
 
             foreach (var note in notesGetter.SelectingNotes)
             {
-                copiedNotes.Add(note, new AddressWithinRange(note.Address));
+                copiedNotes.Add(new CopiedNoteInfo(
+                    CopyNoteData(note),
+                    // いちばん手前のノーツから、何分線後ろにあるか
+                    chartData.GetSubdivisionDelta(new AddressInChart(note.Address), firstAddress),
+                    GetOriginalChainIndex(note)));
             }
 
             Debug.Log("【Notes】 Copied notes.");
@@ -73,35 +94,28 @@ namespace ChartEditor
         private void PasteNotes()
         {
             if (copiedNotes == null || copiedNotes.Count == 0) { return; }
+            if (dataGetter.ChartData.Value == null) { return; }
 
             // 貼り付け先 (カーソルが指している分線)。指している場所が無ければ貼り付けない
             var cursorAddress = GetPasteCursorAddress();
             if (cursorAddress == null) { return; }
 
-            var copiedNotesCopy = CreateCopiedNoteInfos();
-            if (copiedNotesCopy.Count == 0) { return; }
+            // 貼り付けるノーツ。写しから、貼り付けのたびに新しく作る (同じ写しを何度でも貼り付けられるように)
+            var pasteNotes = copiedNotes
+                .Select(copied => new CopiedNoteInfo(CopyNoteData(copied.NoteData), copied.SubdivisionOffset, copied.OriginalChainIndex))
+                .ToList();
 
-            if (!TryCreatePasteContext(copiedNotesCopy, cursorAddress, out var pasteContext)) { return; }
+            var pasteContext = new PasteContext(new AddressInChart(cursorAddress), CreateChainIndexMap(pasteNotes));
 
             Record(() => {
                 notesSetter.ClearSelectingNotes();
-                PasteCopiedNotes(copiedNotesCopy, pasteContext);
+                PasteCopiedNotes(pasteNotes, pasteContext);
             },
             () => {
-                DeleteCopiedNotes(copiedNotesCopy);
+                DeleteCopiedNotes(pasteNotes);
             });
 
             Debug.Log("【Notes】 Pasted notes.");
-        }
-
-        private List<CopiedNoteInfo> CreateCopiedNoteInfos()
-        {
-            return copiedNotes
-                .Select(pair => new CopiedNoteInfo(
-                    CopyNoteData(pair.Key),
-                    pair.Value,
-                    GetOriginalChainIndex(pair.Key)))
-                .ToList();
         }
 
         private IDeployableNoteData CopyNoteData(IDeployableNoteData sourceNote)
@@ -121,24 +135,6 @@ namespace ChartEditor
         private int GetOriginalChainIndex(IDeployableNoteData noteData)
         {
             return noteData is IChainNoteData chainData ? chainData.ChainIndex.Value : -1;
-        }
-
-        private bool TryCreatePasteContext(List<CopiedNoteInfo> copiedNotesCopy, IReadOnlyAddressInChart cursorAddress, out PasteContext pasteContext)
-        {
-            pasteContext = default;
-
-            var firstNoteAddress = copiedNotesCopy
-                .Select(x => x.NoteData)
-                .OrderedByAddress()
-                .FirstOrDefault()
-                ?.Address;
-            if (firstNoteAddress == null) { return false; }
-
-            pasteContext = new PasteContext(
-                dataGetter.ChartData.Value.GetSubdivisionDelta(cursorAddress, new AddressInChart(firstNoteAddress)),
-                CreateChainIndexMap(copiedNotesCopy));
-
-            return true;
         }
 
         /// <summary>
@@ -163,12 +159,12 @@ namespace ChartEditor
             return spaceCollider?.Address;
         }
 
-        private Dictionary<int, int> CreateChainIndexMap(List<CopiedNoteInfo> copiedNotesCopy)
+        private Dictionary<int, int> CreateChainIndexMap(List<CopiedNoteInfo> pasteNotes)
         {
             Dictionary<int, int> map = new Dictionary<int, int>();
             HashSet<int> reservedIndexes = new HashSet<int>();
 
-            foreach (var originalChainIndex in copiedNotesCopy
+            foreach (var originalChainIndex in pasteNotes
                          .Select(x => x.OriginalChainIndex)
                          .Where(index => index >= 0)
                          .Distinct()
@@ -194,40 +190,52 @@ namespace ChartEditor
             return index;
         }
 
-        private void PasteCopiedNotes(List<CopiedNoteInfo> copiedNotesCopy, PasteContext pasteContext)
+        private void PasteCopiedNotes(List<CopiedNoteInfo> pasteNotes, PasteContext pasteContext)
         {
-            foreach (var copied in copiedNotesCopy)
+            foreach (var pasteNote in pasteNotes)
             {
-                PasteSingleNote(copied, pasteContext);
+                PasteSingleNote(pasteNote, pasteContext);
             }
         }
 
-        private void PasteSingleNote(CopiedNoteInfo copiedNote, PasteContext pasteContext)
+        private void PasteSingleNote(CopiedNoteInfo pasteNote, PasteContext pasteContext)
         {
-            var data = copiedNote.NoteData;
-            var address = dataGetter.ChartData.Value.AddressAddition(new AddressInChart(copiedNote.OriginAddress), pasteContext.SubdivisionDelta);
-            data.SetAddress(new AddressWithinRange(address, data.Address.Range.Count));
+            var chartData = dataGetter.ChartData.Value;
+            var data = pasteNote.NoteData;
+
+            // 貼り付け先: カーソルが指している分線から、コピーしたときの間隔だけ後ろ。レーンはコピーしたときのまま
+            var lanes = data.Address.Range;
+            var cursorAddress = pasteContext.CursorAddress;
+            var address = chartData.AddressAddition(
+                new AddressInChart(cursorAddress.BarIndex, cursorAddress.SubDivisionIndex, lanes[0]),
+                pasteNote.SubdivisionOffset);
+            data.SetAddress(new AddressWithinRange(address, lanes.Count));
 
             if (data is IChainNoteData chainData &&
-                copiedNote.OriginalChainIndex >= 0 &&
-                pasteContext.ChainIndexMap.TryGetValue(copiedNote.OriginalChainIndex, out int newChainIndex))
+                pasteNote.OriginalChainIndex >= 0 &&
+                pasteContext.ChainIndexMap.TryGetValue(pasteNote.OriginalChainIndex, out int newChainIndex))
             {
                 chainData.SetChainIndex(newChainIndex);
             }
 
-            dataGetter.ChartData.Value.AddNote(data);
+            chartData.AddNote(data);
 
-            if (notesGetter.GetNoteObject(data).TryGetComponent(out ISelectableNoteObject selectable))
+            // 譜面に入らなかったノーツ (貼り付け先が譜面の中に無かったとき) は、選択しない
+            var noteObject = notesGetter.GetNoteObject(data);
+            if (noteObject != null && noteObject.TryGetComponent(out ISelectableNoteObject selectable))
             {
                 notesSetter.TryAddSelectingNotes(selectable.NoteObject.NoteData);
             }
         }
 
-        private void DeleteCopiedNotes(List<CopiedNoteInfo> copiedNotesCopy)
+        private void DeleteCopiedNotes(List<CopiedNoteInfo> pasteNotes)
         {
-            foreach (var copied in copiedNotesCopy)
+            foreach (var pasteNote in pasteNotes)
             {
-                DeleteNote(copied.NoteData);
+                // 譜面に入らなかったノーツは、消すものが無い
+                if (notesGetter.GetNoteObject(pasteNote.NoteData) == null) { continue; }
+
+                DeleteNote(pasteNote.NoteData);
             }
         }
 
@@ -236,31 +244,46 @@ namespace ChartEditor
             dataGetter.ChartData.Value.RemoveNote(data);
         }
 
+        /// <summary>
+        /// コピーしたノーツ1つぶん
+        /// </summary>
         private class CopiedNoteInfo
         {
-            public CopiedNoteInfo(IDeployableNoteData noteData, AddressWithinRange originAddress, int originalChainIndex)
+            public CopiedNoteInfo(IDeployableNoteData noteData, int subdivisionOffset, int originalChainIndex)
             {
                 NoteData = noteData;
-                OriginAddress = originAddress;
+                SubdivisionOffset = subdivisionOffset;
                 OriginalChainIndex = originalChainIndex;
             }
 
+            /// <summary>
+            /// ノーツの内容 (コピーした時点の種類・幅・形)
+            /// </summary>
             public IDeployableNoteData NoteData { get; }
 
-            public AddressWithinRange OriginAddress { get; }
+            /// <summary>
+            /// コピーしたノーツのうち、いちばん手前のノーツから何分線後ろにあったか
+            /// </summary>
+            public int SubdivisionOffset { get; }
 
+            /// <summary>
+            /// コピーした時点の接続番号 (接続されていなければ -1)。同じ番号だったノーツは、貼り付けた後も互いにつながる
+            /// </summary>
             public int OriginalChainIndex { get; }
         }
 
         private readonly struct PasteContext
         {
-            public PasteContext(int subdivisionDelta, Dictionary<int, int> chainIndexMap)
+            public PasteContext(AddressInChart cursorAddress, Dictionary<int, int> chainIndexMap)
             {
-                SubdivisionDelta = subdivisionDelta;
+                CursorAddress = cursorAddress;
                 ChainIndexMap = chainIndexMap;
             }
 
-            public int SubdivisionDelta { get; }
+            /// <summary>
+            /// 貼り付け先の分線 (いちばん手前のノーツが来る場所)
+            /// </summary>
+            public AddressInChart CursorAddress { get; }
 
             public Dictionary<int, int> ChainIndexMap { get; }
         }
