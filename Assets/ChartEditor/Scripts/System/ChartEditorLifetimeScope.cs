@@ -41,6 +41,9 @@ namespace ChartEditor
             // (実装しているインターフェースすべてで登録されるので、IPreviewPointer としても受け取れる。NotesCopier が貼り付け先を求めるのに使う)
             builder.RegisterEntryPoint<PreviewNotePicker>();
 
+            // 同じ分線に並んだ、同じホールドのノーツの順番を入れ替える (↑ / ↓)
+            builder.RegisterEntryPoint<ChainOrderChanger>();
+
             // 編集画面の「譜面情報」の欄 (シーンに置いてある ChartInfoView) に、コンボ数・ノーツの種類ごとの数などを渡す
             builder.RegisterEntryPoint<ChartInfoPresenter>();
 

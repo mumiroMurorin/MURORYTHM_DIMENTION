@@ -237,6 +237,37 @@ namespace ChartConvert
             dataInChartEditor.SetBpm(dataOrigin.Bpm);
             dataInChartEditor.SetSpeedRatio(dataOrigin.SpeedRatio);
 
+            // 同じ分線に、同じホールドのノーツが2つ以上あるときは、決まった順番で読み、その順番をノーツに持たせる
+            // (ほとんどの分線は分ける必要が無く、そのまま1回で読まれる。規則は ChainOrderResolver を参照)
+            ChainOrderResolver.Split(dataOrigin, subDivisionParts);
+            for (int i = 0; i < subDivisionParts.Count; i++)
+            {
+                Action<IDeployableNoteData> addNote = onAddNoteData;
+                if (i > 0)
+                {
+                    // 2番目以降のノーツ: 譜面に加える前に、同じ分線の中で何番目かを覚えさせる
+                    int order = i;
+                    addNote = noteData =>
+                    {
+                        if (noteData is IChainNoteData chainNote) { chainNote.SetOrderInSubdivision(order); }
+                        onAddNoteData(noteData);
+                    };
+                }
+
+                isSucceed &= AddNotesFromSubDivisionPart(subDivisionParts[i], dataInChartEditor, addNote);
+            }
+
+            subDivisionParts.Clear();
+            return isSucceed;
+        }
+
+        /// <summary>
+        /// 分節データ(または、それを順番どおりに分けたものの1つ)に入っているノーツを、譜面に加える
+        /// </summary>
+        private bool AddNotesFromSubDivisionPart(SubDivisionDataOrigin dataOrigin, ChartEditor.SubDivisionDataInBeat dataInChartEditor, Action<IDeployableNoteData> onAddNoteData)
+        {
+            bool isSucceed = true;
+
             // 一つずつ取り出して変換
             foreach (var converter in unchainConverters)
             {
@@ -255,6 +286,9 @@ namespace ChartConvert
 
             return isSucceed;
         }
+
+        // 分線のデータを、順番どおりに読める形に分けたもの (作業用)
+        readonly List<SubDivisionDataOrigin> subDivisionParts = new List<SubDivisionDataOrigin>();
     }
 
 }

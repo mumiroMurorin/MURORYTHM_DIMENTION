@@ -9,6 +9,14 @@ using System;
 
 namespace ChartEditor
 {
+    /// <summary>
+    /// 編集画面の画面部品と、譜面エディタの機能をつなぐ
+    ///
+    /// ここで扱うのは、キャンバスの切り替え、小節・分線の設定ダイアログ、操作の説明、レイヤーの切り替え、
+    /// オフセットの入力欄、楽曲名の表示。
+    /// メニューバーとクイックメニュー (左下の設定欄) の項目は、EditorMenuPresenter が扱う
+    /// (そこから、ここの BrowseAudioFile・ExtendChart を呼ぶ)。
+    /// </summary>
     public class EditorUIPresenter : MonoBehaviour
     {
         [Header("Canvas")]
@@ -16,57 +24,34 @@ namespace ChartEditor
         [SerializeField] GameObject previewCanvas;
 
         [Header("Views")]
-        [SerializeField] ChartExtendButtonView chartExtendButton_view;
-        [SerializeField] ChartShortenButtonView chartShortenButton_view;
-        [SerializeField] MusicBrowseButtonView musicBrowseButton_view;
         [SerializeField] OffsetInputFieldView offsetInputField_view;
-        [SerializeField] ChangeLaneDivNumButtonView changeLaneDivNumButton_view;
-        [SerializeField] SliderView scrollSensitivitySlider_view;
         [SerializeField] MusicNameView musicName_view;
         [SerializeField] RhythmConfigBarView rhythmConfigBar_view;
         [SerializeField] RhythmConfigSubView rhythmConfigSubDivision_view;
-        [SerializeField] ImportButtonView importButton_view;
-        [SerializeField] ExportButtonView exportButton_view;
         [SerializeField] OperationDescriptionView description_view;
         [SerializeField] ExplanationButtonView explanationButton_view;
         [SerializeField] ExplanationView explanation_view;
-        [SerializeField] ScreenSizeDropDownView screenSizeDropDown_view;
         [SerializeField] SwitchLayerButtonView switchLayerButton_view;
-        [SerializeField] NoteSpeedSliderView noteSpeedSlider_view;
-        [SerializeField] SliderView seVolumeSlider_view;
 
         [Header("Models")]
-        [SerializeField] ChartDataExporter chartDataExporter_model;
-        [SerializeField] ChartDataImporter chartDataImporter_model;
         [SerializeField] ConfigEditor configEditor_model;
         [SerializeField] LaneExtender laneExtender_model;
 
         IChartEditorDataSetter dataSetter;
         IChartEditorDataGetter dataGetter_model;
-        IChartEditorOptionSetter optionSetter;
         IChartEditorOptionGetter optionGetter;
-        INoteSpawnDataOptionSetter noteSpawnDataOptionSetter;
-        INoteSpawnDataOptionGetter noteSpawnDataOptionGetter;
 
         CancellationTokenSource soundLoadCts;
 
-        // 譜面を延長するときの設定 (小節数、拍子、分割数) の入力欄
-        ChartExtendSettings chartExtendSettings;
-
         [Inject]
-        public void Construct(IChartEditorDataSetter chartEditorDataSetter, 
-            IChartEditorDataGetter chartEditorDataGetter, 
-            IChartEditorOptionSetter optionDataSetter, 
-            IChartEditorOptionGetter optionDataGetter, 
-            INoteSpawnDataOptionSetter noteSpawnDataOptionSetter,
-            INoteSpawnDataOptionGetter noteSpawnDataOptionGetter)
+        public void Construct(
+            IChartEditorDataSetter chartEditorDataSetter,
+            IChartEditorDataGetter chartEditorDataGetter,
+            IChartEditorOptionGetter optionDataGetter)
         {
             dataSetter = chartEditorDataSetter;
-            optionSetter = optionDataSetter;
             dataGetter_model = chartEditorDataGetter;
             optionGetter = optionDataGetter;
-            this.noteSpawnDataOptionSetter = noteSpawnDataOptionSetter;
-            this.noteSpawnDataOptionGetter = noteSpawnDataOptionGetter;
         }
 
         void Start()
@@ -75,31 +60,15 @@ namespace ChartEditor
             BindForOther();
 
             SetEvent();
-
-            // 再生速度・ノーツ音の切り替え行を、レーン分割数の行の下に追加する
-            SettingsCycleRow.CreateEditorRows(changeLaneDivNumButton_view, optionGetter, optionSetter);
-
-            // 延長する小節数・拍子・分割数の入力欄を、譜面長さの行の下に追加する
-            chartExtendSettings = ChartExtendSettings.Create(chartExtendButton_view, offsetInputField_view);
         }
 
         private void BindForOther()
         {
-            // 楽曲選択の可視不可視
+            // オフセットの入力欄・説明書ボタンは、再生中は押せない
             dataGetter_model?.PlayMode
-                .Subscribe(musicBrowseButton_view.OnChangePlayMode)
-                .AddTo(this.gameObject);
-
-            // オフセットフィールドのインタラクト可不可
-            // エクスポートフィールドのインタラクト可不可
-            // 説明書ボタンのインタラクト可不可
-            dataGetter_model?.PlayMode
-                .Subscribe(value => { 
+                .Subscribe(value =>
+                {
                     offsetInputField_view?.OnChangePlayMode(value);
-                    exportButton_view?.OnChangePlayMode(value);
-                    importButton_view?.OnChangePlayMode(value);
-                    chartExtendButton_view?.OnChangePlayMode(value);
-                    chartShortenButton_view?.OnChangePlayMode(value);
                     explanationButton_view?.OnChangePlayMode(value);
                 })
                 .AddTo(this.gameObject);
@@ -107,26 +76,6 @@ namespace ChartEditor
             // オフセットの変更
             dataGetter_model?.Offset
                 .Subscribe(offsetInputField_view.OnChangeFloatValue)
-                .AddTo(this.gameObject);
-
-            // レーン分割数の変更
-            optionGetter?.LaneDivisionNum
-                .Subscribe(changeLaneDivNumButton_view.OnLaneDivNumChanged)
-                .AddTo(this.gameObject);
-
-            // スクロール感度
-            optionGetter?.ScrollSensitivity
-                .Subscribe(scrollSensitivitySlider_view.OnValueChanged)
-                .AddTo(this.gameObject);
-
-            // ノーツスピード
-            noteSpawnDataOptionGetter?.NoteSpeed
-                .Subscribe(noteSpeedSlider_view.OnValueChanged)
-                .AddTo(this.gameObject);
-
-            // SE音量
-            optionGetter?.JudgementSEVolume
-                .Subscribe(seVolumeSlider_view.OnValueChanged)
                 .AddTo(this.gameObject);
 
             // 楽曲の変更
@@ -142,11 +91,6 @@ namespace ChartEditor
             // 説明書の表示、非表示
             dataGetter_model?.CurrentEditMode
                 .Subscribe(explanation_view.OnChangeEditMode)
-                .AddTo(this.gameObject);
-
-            // 解像度の変更
-            optionGetter?.Resolution
-                .Subscribe(screenSizeDropDown_view.OnChangeResolution)
                 .AddTo(this.gameObject);
 
             // レイヤー変更ボタンのインタラクト可不可
@@ -224,35 +168,8 @@ namespace ChartEditor
 
         private void SetEvent()
         {
-            // 曲選択ボタン
-            musicBrowseButton_view.OnClickedListner += BrowseAudioFile;
-
             // オフセットフィールド
             offsetInputField_view.OnFloatValueChangedListner += dataSetter.SetOffset;
-
-            // レーン分割数
-            changeLaneDivNumButton_view.OnPushButtonListner += () => optionSetter.SetLaneDivisionNum(true);
-
-            // スクロール感度
-            scrollSensitivitySlider_view.OnSliderChangedListener += optionSetter.SetScrollSensitivity;
-
-            // SEボリューム
-            seVolumeSlider_view.OnSliderChangedListener += optionSetter.SetJudgementSEVolume;
-
-            // エクスポートボタン
-            exportButton_view.OnClickedListner += chartDataExporter_model.ExportNewFile;
-
-            // インポートボタン
-            importButton_view.OnClickedListner += chartDataImporter_model.Import;
-            
-            // 譜面延長ボタン
-            chartExtendButton_view.OnClickedListner += ExtendChart;
-
-            // 譜面縮小ボタン
-            chartShortenButton_view.OnClickedListner += () => laneExtender_model.ChangeChartLength(-1);
-
-            // 解像度変更ボタン
-            screenSizeDropDown_view.OnChangeValueListner += (resolution) => optionSetter.SetResolution(resolution);
 
             // リズムコンフィグ
             rhythmConfigBar_view.OnClickedApplyButtonListner += () => configEditor_model.CloseConfig();
@@ -266,10 +183,6 @@ namespace ChartEditor
                 dataSetter.SwitchEditNoteType();
             };
 
-            // ノートスピード変更: スライダーを動かし終えたら反映する
-            // (プレビューは、ノートスピードの変化を見て自動で並べ直される)
-            noteSpeedSlider_view.OnNoteSpeedChangedListener += noteSpawnDataOptionSetter.SetNoteSpeed;
-
             explanationButton_view.OnClickedListner += () => dataSetter.SetEditMode(EditMode.Explanation);
 
             // 説明書を閉じる
@@ -277,31 +190,25 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 譜面を延長する。延長する小節数と、延長する小節の拍子・分割数は、入力欄の値を使う
+        /// 譜面を延長する。延長する小節数と、延長する小節の拍子・分割数は、延長の設定の値を使う
+        /// (メニューとクイックメニューの「譜面を延長」から呼ばれる)
         /// </summary>
-        private void ExtendChart()
+        public void ExtendChart()
         {
-            // 入力欄を作れなかったときは、今までどおり1小節だけ延長する
-            if (chartExtendSettings == null)
-            {
-                laneExtender_model.ChangeChartLength(1);
-                return;
-            }
-
-            // 正しくない値が入っているときは、理由が表示される
-            if (!chartExtendSettings.TryGetValues(out int barCount, out BarConfig barConfig)) { return; }
+            // 延長できない組み合わせのときは、理由が表示される
+            if (!ChartExtendSettings.TryGetValues(optionGetter, out int barCount, out BarConfig barConfig)) { return; }
 
             laneExtender_model.ExtendChart(barCount, barConfig);
         }
 
         /// <summary>
-        /// 楽曲ファイルをセット
+        /// 楽曲ファイルをセット (メニューとクイックメニューの「楽曲を選ぶ」から呼ばれる)
         /// </summary>
-        private async void BrowseAudioFile()
+        public async void BrowseAudioFile()
         {
             if (soundLoadCts != null)
             {
-                soundLoadCts.Cancel();  
+                soundLoadCts.Cancel();
                 soundLoadCts.Dispose();
             }
 
@@ -319,7 +226,7 @@ namespace ChartEditor
         {
             previewCanvas.SetActive(noteType == EditNoteType.Preview);
             editorCanvas.SetActive(noteType != EditNoteType.Preview);
-        } 
+        }
 
         private void OnDestroy()
         {

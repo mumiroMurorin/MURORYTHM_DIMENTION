@@ -69,6 +69,23 @@ namespace ChartConvert
         public List<NoteDataOrigin_SpaceBreak> SpaceBreakData { get; set; }
     }
 
+    /// <summary>
+    /// つながるノーツ(ホールド・スペースホールドの始点、中継点、終点)に共通する項目
+    /// </summary>
+    public interface IChainNoteDataOrigin
+    {
+        /// <summary>
+        /// 接続番号 (同じ番号のノーツが、1本のホールドとしてつながる)
+        /// </summary>
+        int HoldNumber { get; }
+
+        /// <summary>
+        /// 同じ分線(同じ時刻)に、同じ接続番号のノーツが2つ以上あるとき、その中で何番目につながるか (0 が先頭)
+        /// 同じ分線にほかのノーツが無いときは、書かれない (null)。読み込みの規則は ChainOrderResolver を参照
+        /// </summary>
+        int? OrderInSubdivision { get; }
+    }
+
     public class NoteDataOrigin_Touch
     {
         public int[] Range { get; set; }
@@ -99,72 +116,92 @@ namespace ChartConvert
         public int[] Range { get; set; }
     }
 
-    public class NoteDataOrigin_HoldStart
+    public class NoteDataOrigin_HoldStart : IChainNoteDataOrigin
     {
         public int HoldNumber { get; set; }
+
+        public int? OrderInSubdivision { get; set; }
 
         public int[] Range { get; set; }
     }
 
-    public class NoteDataOrigin_DivineHoldStart
+    public class NoteDataOrigin_DivineHoldStart : IChainNoteDataOrigin
     {
         public int HoldNumber { get; set; }
+
+        public int? OrderInSubdivision { get; set; }
 
         public int[] Range { get; set; }
     }
 
-    public class NoteDataOrigin_HoldEnd
+    public class NoteDataOrigin_HoldEnd : IChainNoteDataOrigin
     {
         public int HoldNumber { get; set; }
+
+        public int? OrderInSubdivision { get; set; }
 
         public int[] Range { get; set; }
     }
 
-    public class NoteDataOrigin_HoldEndUnjudge
+    public class NoteDataOrigin_HoldEndUnjudge : IChainNoteDataOrigin
     {
         public int HoldNumber { get; set; }
+
+        public int? OrderInSubdivision { get; set; }
 
         public int[] Range { get; set; }
     }
 
-    public class NoteDataOrigin_HoldRelay
+    public class NoteDataOrigin_HoldRelay : IChainNoteDataOrigin
     {
         public int HoldNumber { get; set; }
+
+        public int? OrderInSubdivision { get; set; }
 
         public int[] Range { get; set; }
     }
 
-    public class NoteDataOrigin_HoldMeshRelay
+    public class NoteDataOrigin_HoldMeshRelay : IChainNoteDataOrigin
     {
         public int HoldNumber { get; set; }
+
+        public int? OrderInSubdivision { get; set; }
 
         public int[] Range { get; set; }
     }
 
-    public class NoteDataOrigin_SpaceHoldStart
+    public class NoteDataOrigin_SpaceHoldStart : IChainNoteDataOrigin
     {
         public int HoldNumber { get; set; }
+
+        public int? OrderInSubdivision { get; set; }
 
         public SimpleVector2[] Vertices { get; set; }
     }
 
-    public class NoteDataOrigin_SpaceHoldRelay
+    public class NoteDataOrigin_SpaceHoldRelay : IChainNoteDataOrigin
     {
         public int HoldNumber { get; set; }
+
+        public int? OrderInSubdivision { get; set; }
 
         public SimpleVector2[] Vertices { get; set; }
     }
 
-    public class NoteDataOrigin_SpaceHoldMeshRelay
+    public class NoteDataOrigin_SpaceHoldMeshRelay : IChainNoteDataOrigin
     {
         public int HoldNumber { get; set; }
+
+        public int? OrderInSubdivision { get; set; }
 
         public SimpleVector2[] Vertices { get; set; }
     }
 
-    public class NoteDataOrigin_SpaceHoldEnd
+    public class NoteDataOrigin_SpaceHoldEnd : IChainNoteDataOrigin
     {
         public int HoldNumber { get; set; }
+
+        public int? OrderInSubdivision { get; set; }
 
         public SimpleVector2[] Vertices { get; set; }
     }

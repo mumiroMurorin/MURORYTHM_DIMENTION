@@ -29,6 +29,14 @@ namespace ChartEditor
             else { laneDivisionNum.Value = 1; }
         }
 
+        void IChartEditorOptionSetter.SelectLaneDivisionNum(int divisionNum)
+        {
+            // 選べるのは 1・2・4・8・16
+            if (divisionNum < 1 || divisionNum > 16 || (divisionNum & (divisionNum - 1)) != 0) { return; }
+
+            laneDivisionNum.Value = divisionNum;
+        }
+
         #endregion
 
         #region Scale 拡大率
@@ -78,6 +86,19 @@ namespace ChartEditor
             playbackSpeed.Value = playbackSpeeds[(index + 1) % playbackSpeeds.Length];
         }
 
+        void IChartEditorOptionSetter.SelectPlaybackSpeed(float speed)
+        {
+            // 切り替えられる速度の中から選ぶ (それ以外の値は受け付けない)
+            foreach (float candidate in playbackSpeeds)
+            {
+                if (Mathf.Abs(candidate - speed) < 0.001f)
+                {
+                    playbackSpeed.Value = candidate;
+                    return;
+                }
+            }
+        }
+
         #endregion
 
         #region NoteSound ノーツ音
@@ -91,6 +112,77 @@ namespace ChartEditor
         void IChartEditorOptionSetter.SwitchNoteSoundMode()
         {
             isSingleNoteSound.Value = !isSingleNoteSound.Value;
+        }
+
+        void IChartEditorOptionSetter.SelectNoteSoundMode(bool isSingle)
+        {
+            isSingleNoteSound.Value = isSingle;
+        }
+
+        #endregion
+
+        #region 延長の設定 譜面を延長するときの、小節数・拍子・分割数
+
+        // 値は、設定するときに、入力できる範囲 (ChartExtendSettings) へ収める
+        ReactiveProperty<int> extendBarCount = new ReactiveProperty<int>(ChartExtendSettings.DEFAULT_BAR_COUNT);
+        ReactiveProperty<int> extendBeatCount = new ReactiveProperty<int>(ChartExtendSettings.DEFAULT_BEAT_COUNT);
+        ReactiveProperty<float> extendBeatUnit = new ReactiveProperty<float>(ChartExtendSettings.DEFAULT_BEAT_UNIT);
+        ReactiveProperty<int> extendDivisionNum = new ReactiveProperty<int>(ChartExtendSettings.DEFAULT_DIVISION_NUM);
+
+        IReadOnlyReactiveProperty<int> IChartEditorOptionGetter.ExtendBarCount => extendBarCount;
+        IReadOnlyReactiveProperty<int> IChartEditorOptionGetter.ExtendBeatCount => extendBeatCount;
+        IReadOnlyReactiveProperty<float> IChartEditorOptionGetter.ExtendBeatUnit => extendBeatUnit;
+        IReadOnlyReactiveProperty<int> IChartEditorOptionGetter.ExtendDivisionNum => extendDivisionNum;
+
+        void IChartEditorOptionSetter.SetExtendBarCount(int barCount)
+        {
+            extendBarCount.Value = Mathf.Clamp(barCount, ChartExtendSettings.MIN_BAR_COUNT, ChartExtendSettings.MAX_BAR_COUNT);
+        }
+
+        void IChartEditorOptionSetter.SetExtendBeatCount(int beatCount)
+        {
+            extendBeatCount.Value = Mathf.Clamp(beatCount, ChartExtendSettings.MIN_BEAT_COUNT, ChartExtendSettings.MAX_BEAT_COUNT);
+        }
+
+        void IChartEditorOptionSetter.SetExtendBeatUnit(float beatUnit)
+        {
+            if (float.IsNaN(beatUnit)) { return; }
+
+            extendBeatUnit.Value = Mathf.Clamp(beatUnit, ChartExtendSettings.MIN_BEAT_UNIT, ChartExtendSettings.MAX_BEAT_UNIT);
+        }
+
+        void IChartEditorOptionSetter.SetExtendDivisionNum(int divisionNum)
+        {
+            extendDivisionNum.Value = Mathf.Clamp(divisionNum, ChartExtendSettings.MIN_DIVISION_NUM, ChartExtendSettings.MAX_DIVISION_NUM);
+        }
+
+        #endregion
+
+        #region 画面部品の表示 譜面情報・全体マップ・ログ欄・クイックメニューの各セクションを、表示するかどうか
+
+        // 最初に表示するかどうかは、部品ごとに決まっている (EditorPanelExtension.IsVisibleByDefault)
+        // 前回の設定は、EditorPanelSwitcher が起動時に読み込んで、ここへ入れる
+        readonly Dictionary<EditorPanel, ReactiveProperty<bool>> panelVisibilities = new Dictionary<EditorPanel, ReactiveProperty<bool>>();
+
+        public IReadOnlyReactiveProperty<bool> GetPanelVisibility(EditorPanel panel)
+        {
+            return GetPanelVisibilityProperty(panel);
+        }
+
+        public void SetPanelVisible(EditorPanel panel, bool isVisible)
+        {
+            GetPanelVisibilityProperty(panel).Value = isVisible;
+        }
+
+        private ReactiveProperty<bool> GetPanelVisibilityProperty(EditorPanel panel)
+        {
+            if (!panelVisibilities.TryGetValue(panel, out var visibility))
+            {
+                visibility = new ReactiveProperty<bool>(panel.IsVisibleByDefault());
+                panelVisibilities.Add(panel, visibility);
+            }
+
+            return visibility;
         }
 
         #endregion
@@ -268,12 +360,35 @@ namespace ChartEditor
         IReadOnlyReactiveProperty<float> JudgementSEVolume { get; }
 
         IReadOnlyReactiveProperty<Resolution> Resolution { get; }
+
+        /// <summary>
+        /// 譜面を延長するときの設定: 延長する小節数、延長する小節の拍子 (分子 / 分母)、分割数
+        /// </summary>
+        IReadOnlyReactiveProperty<int> ExtendBarCount { get; }
+        IReadOnlyReactiveProperty<int> ExtendBeatCount { get; }
+        IReadOnlyReactiveProperty<float> ExtendBeatUnit { get; }
+        IReadOnlyReactiveProperty<int> ExtendDivisionNum { get; }
+
+        /// <summary>
+        /// 画面部品 (譜面情報、全体マップ、ログ欄、クイックメニューの各セクション) を、表示するかどうか
+        /// </summary>
+        IReadOnlyReactiveProperty<bool> GetPanelVisibility(EditorPanel panel);
+
+        /// <summary>
+        /// 楽曲の音量 (0〜1)
+        /// </summary>
+        IReadOnlyReactiveProperty<float> BGMVolume { get; }
     }
 
     public interface IChartEditorOptionSetter
     {
 
         void SetLaneDivisionNum(bool isNext);
+
+        /// <summary>
+        /// レーン分割数を、指定した値にする (1・2・4・8・16 のどれか)
+        /// </summary>
+        void SelectLaneDivisionNum(int divisionNum);
 
         void SetChartViewScale(float scale);
 
@@ -285,13 +400,41 @@ namespace ChartEditor
         void SwitchPlaybackSpeed();
 
         /// <summary>
+        /// 再生速度を、指定した値にする (切り替えられる速度のどれか)
+        /// </summary>
+        void SelectPlaybackSpeed(float speed);
+
+        /// <summary>
         /// ノーツ音を「種類別」と「単一」で切り替える
         /// </summary>
         void SwitchNoteSoundMode();
 
+        /// <summary>
+        /// ノーツ音を、1種類にそろえるか(true)、種類ごとに変えるか(false)、指定する
+        /// </summary>
+        void SelectNoteSoundMode(bool isSingle);
+
         void SetJudgementSEVolume(float value);
 
         void SetResolution(Resolution resolution);
+
+        /// <summary>
+        /// 譜面を延長するときの設定を変える (入力できる範囲の外の値は、範囲の端の値になる)
+        /// </summary>
+        void SetExtendBarCount(int barCount);
+        void SetExtendBeatCount(int beatCount);
+        void SetExtendBeatUnit(float beatUnit);
+        void SetExtendDivisionNum(int divisionNum);
+
+        /// <summary>
+        /// 画面部品を、表示する / しない
+        /// </summary>
+        void SetPanelVisible(EditorPanel panel, bool isVisible);
+
+        /// <summary>
+        /// 楽曲の音量を変える (0〜1)
+        /// </summary>
+        void SetBGMVolume(float value);
     }
 }
 

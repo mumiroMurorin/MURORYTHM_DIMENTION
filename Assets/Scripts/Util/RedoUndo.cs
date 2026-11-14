@@ -153,6 +153,22 @@ namespace UndoRedo
         public static event Action OnChanged;
 
         /// <summary>
+        /// 元に戻せる操作が残っているか
+        /// </summary>
+        public static bool CanUndo
+        {
+            get { lock (Lock) { return CurrentState?.PrevState != null; } }
+        }
+
+        /// <summary>
+        /// やり直せる操作が残っているか
+        /// </summary>
+        public static bool CanRedo
+        {
+            get { lock (Lock) { return CurrentState?.NextState != null; } }
+        }
+
+        /// <summary>
         /// Undo / Redo 可能な操作を記録する
         /// </summary>
         /// <param name="execute">false のとき act を実行せず記録だけ行う(すでに実行済みの操作を登録するとき用)</param>

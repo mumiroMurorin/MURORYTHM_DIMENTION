@@ -269,7 +269,18 @@ namespace ChartEditor
 
         void SetBackNote(IConnectableObject backNote);
 
+        /// <summary>
+        /// 同じ分線に、同じ接続のノーツが並んでいるとき、その中で何番目か (0 が先頭。ほかに無ければ 0) を伝える
+        /// レーン画面で、2番目以降のノーツを少しずらして見せるために使う
+        /// </summary>
+        void SetSubdivisionOrder(int index);
+
         NoteObject Note { get; }
+
+        /// <summary>
+        /// このノーツのデータ (接続番号や、同じ分線の中での順番を持つ)
+        /// </summary>
+        IChainNoteData ChainNoteData { get; }
     }
 
     /// <summary>

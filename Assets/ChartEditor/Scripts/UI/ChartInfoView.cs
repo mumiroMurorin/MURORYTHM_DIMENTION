@@ -105,6 +105,29 @@ namespace ChartEditor
             if (gameObject.activeSelf != isVisible) { gameObject.SetActive(isVisible); }
         }
 
+        // 画面の左端に寄せたときの、左端からの距離
+        const float LEFT_EDGE_X = 10f;
+        // シーンに置いてある位置 (編集画面での位置。ノーツのボタンの列の右)
+        Vector2 editorPosition;
+        bool hasEditorPosition;
+
+        /// <summary>
+        /// 欄を、画面の左端に寄せる / シーンに置いてある位置へ戻す
+        /// (全画面プレビューでは、ツールやノーツのボタンの列が無いので、編集画面と同じ位置だと、何も無い場所に浮いて見える)
+        /// </summary>
+        public void SetAtLeftEdge(bool isAtLeftEdge)
+        {
+            var rect = (RectTransform)transform;
+            if (!hasEditorPosition)
+            {
+                editorPosition = rect.anchoredPosition;
+                hasEditorPosition = true;
+            }
+
+            Vector2 position = isAtLeftEdge ? new Vector2(LEFT_EDGE_X, editorPosition.y) : editorPosition;
+            if (rect.anchoredPosition != position) { rect.anchoredPosition = position; }
+        }
+
         /// <summary>
         /// コンボ数を表示する
         /// </summary>

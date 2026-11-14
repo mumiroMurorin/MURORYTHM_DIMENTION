@@ -47,6 +47,41 @@ namespace ChartEditor
             SetEvent();
         }
 
+        // 反転のショートカットキー (Alt と一緒に押す。ボタンに「Alt+M」と表示してある)
+        const KeyCode MIRROR_KEY = KeyCode.M;
+
+        // 反転を受け付けないモード (ほかの操作の途中)
+        static readonly EditMode[] mirrorIgnoreEditModes =
+        {
+            EditMode.Connecting,
+            EditMode.EditingBarConfig,
+            EditMode.EditingSubDivisionConfig,
+            EditMode.Moving,
+            EditMode.Scaling,
+            EditMode.SpaceMoving,
+            EditMode.Explanation,
+        };
+
+        void Update()
+        {
+            // Alt+M: 選択中のノーツを反転する (反転ボタンと同じ。グラウンド・スペースのレイヤーで)
+            if (!ModifierKey.Alt || !Input.GetKeyDown(MIRROR_KEY)) { return; }
+
+            // 読み込み中・文字の入力中・ドラッグの途中・ほかの操作の途中は受け付けない
+            if (dataGetter_model.IsLoadingChart.Value || InputFieldFocus.IsTyping || Input.GetMouseButton(0)) { return; }
+            if (dataGetter_model.CurrentEditMode.Value.IsInEditModeList(mirrorIgnoreEditModes)) { return; }
+
+            switch (dataGetter_model.EditNoteType.Value)
+            {
+                case EditNoteType.Ground:
+                    notesMirror_model?.MirrorSelectingNotes();
+                    break;
+                case EditNoteType.Space:
+                    spaceNotesMirror_model?.MirrorSelectingSpaceNotes();
+                    break;
+            }
+        }
+
         private void BindForEditView()
         {
             foreach (var button in toolButtonsOnGround_view)

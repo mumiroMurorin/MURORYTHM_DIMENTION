@@ -35,7 +35,8 @@ namespace ChartConvert
             NoteDataOrigin_HoldStart data = new NoteDataOrigin_HoldStart()
             {
                 Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray(),
-                HoldNumber = thisNote.ChainIndex.Value
+                HoldNumber = thisNote.ChainIndex.Value,
+                OrderInSubdivision = ChainOrderResolver.GetExportOrder(thisNote)
             };
 
             dataOrigin.HoldStartData.Add(data);
@@ -114,7 +115,8 @@ namespace ChartConvert
             NoteDataOrigin_DivineHoldStart data = new NoteDataOrigin_DivineHoldStart()
             {
                 Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray(),
-                HoldNumber = thisNote.ChainIndex.Value
+                HoldNumber = thisNote.ChainIndex.Value,
+                OrderInSubdivision = ChainOrderResolver.GetExportOrder(thisNote)
             };
 
             dataOrigin.DivineHoldStartData.Add(data);
@@ -194,7 +196,8 @@ namespace ChartConvert
             NoteDataOrigin_HoldRelay data = new NoteDataOrigin_HoldRelay()
             {
                 Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray(),
-                HoldNumber = thisNote.ChainIndex.Value
+                HoldNumber = thisNote.ChainIndex.Value,
+                OrderInSubdivision = ChainOrderResolver.GetExportOrder(thisNote)
             };
 
             dataOrigin.HoldRelayData.Add(data);
@@ -276,7 +279,8 @@ namespace ChartConvert
             NoteDataOrigin_HoldMeshRelay data = new NoteDataOrigin_HoldMeshRelay()
             {
                 Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray(),
-                HoldNumber = thisNote.ChainIndex.Value
+                HoldNumber = thisNote.ChainIndex.Value,
+                OrderInSubdivision = ChainOrderResolver.GetExportOrder(thisNote)
             };
 
             dataOrigin.HoldMeshRelayData.Add(data);
@@ -350,7 +354,8 @@ namespace ChartConvert
             NoteDataOrigin_HoldEnd data = new NoteDataOrigin_HoldEnd()
             {
                 Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray(),
-                HoldNumber = thisNote.ChainIndex.Value
+                HoldNumber = thisNote.ChainIndex.Value,
+                OrderInSubdivision = ChainOrderResolver.GetExportOrder(thisNote)
             };
 
             dataOrigin.HoldEndData.Add(data);
@@ -434,7 +439,8 @@ namespace ChartConvert
             NoteDataOrigin_HoldEndUnjudge data = new NoteDataOrigin_HoldEndUnjudge()
             {
                 Range = noteDataInEditor.Address.Range.Select(x => (int)x).ToArray(),
-                HoldNumber = thisNote.ChainIndex.Value
+                HoldNumber = thisNote.ChainIndex.Value,
+                OrderInSubdivision = ChainOrderResolver.GetExportOrder(thisNote)
             };
 
             dataOrigin.HoldEndUnjudgeData.Add(data);

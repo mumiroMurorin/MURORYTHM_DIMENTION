@@ -114,6 +114,19 @@ namespace ChartEditor
                 return;
             }
 
+            // 画面上のメニューを開いている間は、カーソル下のオブジェクトを「無し」にして、メニューの裏の譜面が操作されないようにする
+            // (メニューの外をクリックして閉じたときに、そのクリックでノーツが動いたり繋がったりしないように。
+            //  エディットモードは変えない。メニューを閉じれば、そのまま続きの操作ができる)
+            if (EditorMenuBar.IsBlockingChartInput)
+            {
+                if (currentHitObject != null)
+                {
+                    currentHitObject = null;
+                    chartEditorDataSetter.SetInteractableColliders(null);
+                }
+                return;
+            }
+
             UpdateObjectUnderCursor();
             SetEditorMode();
         }

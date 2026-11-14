@@ -35,6 +35,24 @@ namespace ChartEditor
     public static class InputFieldFocus
     {
         /// <summary>
+        /// 入力欄が「選択中」のまま残っていたら、選択を外す (入力を終えたときに呼ぶ)
+        ///
+        /// Enter で入力を終えても、入力欄は選択中のまま残る。Space キーは「選択中の部品を決定する」キーでもあるので、
+        /// そのまま Space で再生を始めると、入力欄がもう一度入力状態になり、以後の Space (再生の停止) や
+        /// ショートカットキーが「文字を打っている最中」として無視されてしまう。
+        /// </summary>
+        public static void Release(TMPro.TMP_InputField field)
+        {
+            var eventSystem = EventSystem.current;
+            if (eventSystem == null || field == null) { return; }
+            // ほかの部品をクリックして入力を終えたときは、選択の付け替えの最中なので触らない (すでに選択は外れる)
+            if (eventSystem.alreadySelecting) { return; }
+            if (eventSystem.currentSelectedGameObject != field.gameObject) { return; }
+
+            eventSystem.SetSelectedGameObject(null);
+        }
+
+        /// <summary>
         /// 入力欄にフォーカスがあるか (打っている間は、キー操作を譜面の操作として扱わない)
         /// </summary>
         public static bool IsTyping
@@ -61,7 +79,8 @@ namespace ChartEditor
     public static class SelectedNotesKeyOperation
     {
         /// <param name="ignoreEditModes">編集画面で、その操作を受け付けないエディットモード</param>
-        public static bool IsAcceptable(IChartEditorDataGetter dataGetter, EditMode[] ignoreEditModes)
+        /// <param name="isFromMenu">メニューの項目から行うとき true (キー操作のときは false)</param>
+        public static bool IsAcceptable(IChartEditorDataGetter dataGetter, EditMode[] ignoreEditModes, bool isFromMenu = false)
         {
             // 譜面の読み込み中と、入力欄に文字を打っている間は受け付けない
             if (dataGetter.IsLoadingChart.Value) { return false; }
@@ -74,7 +93,10 @@ namespace ChartEditor
             // (ここではドラッグ中もエディットモードが Preview のままなので、マウスのボタンを押している間は受け付けない)
             if (layer == EditNoteType.Preview)
             {
-                return editMode == EditMode.Preview && !Input.GetMouseButton(0);
+                // メニューの項目は、押している間マウスのボタンが押されたままになる。メニューを開いている間は、
+                // プレビューの上のドラッグは始まらないので、ボタンは見ない
+                // (見ると、項目を押している間だけ「押せない」表示になり、離したときのクリックが捨てられることがある)
+                return editMode == EditMode.Preview && (isFromMenu || !Input.GetMouseButton(0));
             }
 
             // 編集画面: グラウンド・スペースのレイヤーで、ほかの操作の途中でないとき

@@ -124,6 +124,32 @@ namespace ChartConvert
         }
 
         /// <summary>
+        /// 分線のノーツを、保存する順に並べて返す
+        ///
+        /// ふつうは置かれた順のまま。同じ分線に、つながるノーツ(ホールド・スペースホールド)が2つ以上あるときだけ、
+        /// 同じ接続の中でつながっている順に並べる。
+        /// (保存先は種類ごとの一覧なので、同じ種類のノーツが、つながっている順に書かれるようになる。
+        ///  順番の番号を読まない古い読み込み処理でも、同じ種類同士なら正しい順で読める)
+        /// </summary>
+        private IEnumerable<IDeployableNoteData> GetNotesInExportOrder(ISubDivisionDataGetter dataInEditor)
+        {
+            var notes = dataInEditor.NoteDatas;
+
+            int chainNoteCount = 0;
+            for (int i = 0; i < notes.Count; i++)
+            {
+                if (notes[i] is IChainNoteData) { chainNoteCount++; }
+            }
+
+            if (chainNoteCount < 2) { return notes; }
+
+            // OrderBy は、同じ順位のものの並びを変えない
+            return notes
+                .OrderBy(note => note is IChainNoteData chainNote ? ChainOrderResolver.GetIndexInSubdivision(chainNote) : 0)
+                .ToList();
+        }
+
+        /// <summary>
         /// 分節データを変換して代入する
         /// </summary>
         /// <param name="dataInEditor"></param>
@@ -138,7 +164,7 @@ namespace ChartConvert
             bool isSucceed = true;
 
             // ノーツデータを一つずつ取り出して
-            foreach (var noteData in dataInEditor.NoteDatas)
+            foreach (var noteData in GetNotesInExportOrder(dataInEditor))
             {
                 if (noteData == null) { continue; }
                 bool isSucceedLocal = false;

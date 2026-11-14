@@ -230,12 +230,18 @@ namespace ChartEditor
 
         public void AddChainNoteData(IChainNoteData addData)
         {
+            // 同じ分線に、同じ順番のノーツがすでにあるときは、いちばん後ろの順番に付け直す
+            // ・ノーツが新しくこの分線へ来たとき (置いた、動かしてきた、接続した) は、ここで後ろに付く
+            // ・前からこの分線にいたノーツが戻ってきたとき (元に戻す、消して戻す、動かして戻す) は、
+            //   順番がぶつからないので、元の位置に入る
+            ResolveOrderCollision(addData);
+
             // 挿入するインデックスを調べる
             int insertIndex = 0;
             for(insertIndex = 0; insertIndex < chainNoteList.Count; insertIndex++)
             {
                 var current = chainNoteList[insertIndex];
-                if (addData.Address.IsEarlierThan(current.Address)) { break; }
+                if (IsBefore(addData, current)) { break; }
             }
 
             chainNoteList.Insert(insertIndex, addData);
@@ -250,6 +256,71 @@ namespace ChartEditor
         {
             RemoveChainNoteData(data);
             AddChainNoteData(data);
+        }
+
+        /// <summary>
+        /// 同じ分線にある2つのノーツの順番を入れ替える
+        /// </summary>
+        /// <returns>入れ替えたとき true。どちらかがこの接続に無い、同じ分線に無い、のどちらかのとき false</returns>
+        public bool SwapOrder(IChainNoteData a, IChainNoteData b)
+        {
+            if (a == null || b == null || ReferenceEquals(a, b)) { return false; }
+            if (!chainNoteList.Contains(a) || !chainNoteList.Contains(b)) { return false; }
+            if (!IsSameSubdivision(a, b)) { return false; }
+
+            int orderA = a.OrderInSubdivision.Value;
+            int orderB = b.OrderInSubdivision.Value;
+
+            // 両方をいったん外してから、順番を取り替えて入れ直す
+            // (入れ直すことで並びが変わり、数が変わった通知で、前後のノーツとのつながりも付け直される)
+            RemoveChainNoteData(a);
+            RemoveChainNoteData(b);
+            a.SetOrderInSubdivision(orderB);
+            b.SetOrderInSubdivision(orderA);
+            AddChainNoteData(a);
+            AddChainNoteData(b);
+
+            return true;
+        }
+
+        /// <summary>
+        /// 2つのノーツが、同じ分線(同じ小節の、同じ分線)にあるか
+        /// </summary>
+        public static bool IsSameSubdivision(IChainNoteData a, IChainNoteData b)
+        {
+            return a.Address.BarIndex == b.Address.BarIndex &&
+                   a.Address.SubDivisionIndex == b.Address.SubDivisionIndex;
+        }
+
+        /// <summary>
+        /// a が b より先に並ぶか (時刻が早い方が先。同じ分線にあるときは、順番の小さい方が先)
+        /// </summary>
+        private static bool IsBefore(IChainNoteData a, IChainNoteData b)
+        {
+            if (a.Address.IsEarlierThan(b.Address)) { return true; }
+
+            return IsSameSubdivision(a, b) && a.OrderInSubdivision.Value < b.OrderInSubdivision.Value;
+        }
+
+        /// <summary>
+        /// これから加えるノーツの順番が、同じ分線にあるノーツの順番とぶつかるときは、いちばん後ろの順番に付け直す
+        /// </summary>
+        private void ResolveOrderCollision(IChainNoteData addData)
+        {
+            bool isCollided = false;
+            int maxOrder = int.MinValue;
+
+            for (int i = 0; i < chainNoteList.Count; i++)
+            {
+                var current = chainNoteList[i];
+                if (!IsSameSubdivision(current, addData)) { continue; }
+
+                int order = current.OrderInSubdivision.Value;
+                if (order == addData.OrderInSubdivision.Value) { isCollided = true; }
+                if (order > maxOrder) { maxOrder = order; }
+            }
+
+            if (isCollided) { addData.SetOrderInSubdivision(maxOrder + 1); }
         }
 
         public int IndexOf(IChainNoteData targetData)

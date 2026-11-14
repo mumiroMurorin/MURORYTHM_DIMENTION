@@ -16,6 +16,7 @@ namespace ChartEditor
         const float REFRESH_INTERVAL_SECONDS = 0.3f;
 
         readonly IChartEditorDataGetter dataGetter;
+        readonly IChartEditorOptionGetter optionGetter;
 
         bool hasSearchedScene;
         ChartInfoView view;
@@ -29,9 +30,18 @@ namespace ChartEditor
         ChartStatisticsData displayedStatistics;
         int displayedSeconds;
 
-        public ChartInfoPresenter(IChartEditorDataGetter dataGetter)
+        // 欄を隠すモード (ダイアログや説明書を開いている間)
+        static readonly EditMode[] hiddenEditModes =
+        {
+            EditMode.EditingBarConfig,
+            EditMode.EditingSubDivisionConfig,
+            EditMode.Explanation,
+        };
+
+        public ChartInfoPresenter(IChartEditorDataGetter dataGetter, IChartEditorOptionGetter optionGetter)
         {
             this.dataGetter = dataGetter;
+            this.optionGetter = optionGetter;
         }
 
         void ITickable.Tick()
@@ -39,12 +49,21 @@ namespace ChartEditor
             SearchSceneOnce();
             if (view == null) { return; }
 
-            // グラウンド・スペースのレイヤーを編集している間だけ出す
+            // グラウンド・スペースのレイヤーを編集している間と、全画面プレビューの間に出す
+            // (頂点のレイヤーでは、同じ場所に頂点の詳細の欄が出る。メニューの「表示」で消されているときは出さない)
             var layer = dataGetter.EditNoteType.Value;
-            bool isVisible = layer == EditNoteType.Ground || layer == EditNoteType.Space;
+            // 小節・分線の設定ダイアログや説明書を開いている間も出さない
+            // (この欄は、いつも手前に出すキャンバスに置いてあるので、ダイアログの上に重なってしまう)
+            bool isVisible =
+                (layer == EditNoteType.Ground || layer == EditNoteType.Space || layer == EditNoteType.Preview) &&
+                optionGetter.GetPanelVisibility(EditorPanel.ChartInfo).Value &&
+                !dataGetter.CurrentEditMode.Value.IsInEditModeList(hiddenEditModes);
 
             view.SetVisible(isVisible);
             if (!isVisible) { return; }
+
+            // 全画面プレビューでは、画面の左端に寄せる
+            view.SetAtLeftEdge(layer == EditNoteType.Preview);
 
             // 欄が開かれたときは、閉じている間に数えていなかった分を、すぐ数える
             bool isDetailShown = view.IsDetailShown;

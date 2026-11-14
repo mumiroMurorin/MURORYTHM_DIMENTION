@@ -91,10 +91,12 @@ namespace ChartEditor
 
             // 楽曲再生
             if (!isTyping && Input.GetKeyDown(playKey)) { OperateMusicPlay(); }
+            // メニューの一覧を開いている間は、ホイールで裏の譜面を動かさない
+            bool isWheelAccepted = !EditorMenuBar.IsBlockingChartInput;
             // スケール変更
-            if (ctrl && Mathf.Abs(scroll) > 0.01f) { OperateChartViewScale(scroll); }
+            if (isWheelAccepted && ctrl && Mathf.Abs(scroll) > 0.01f) { OperateChartViewScale(scroll); }
             // 譜面スクロール
-            if (!ctrl && Mathf.Abs(scroll) > 0.01f) { OperatePlaybackProgress(scroll); }
+            if (isWheelAccepted && !ctrl && Mathf.Abs(scroll) > 0.01f) { OperatePlaybackProgress(scroll); }
             // 保存
             if (ctrl && Input.GetKeyDown(KeyCode.S)) { SaveChart(); }
             // Undo
@@ -117,10 +119,54 @@ namespace ChartEditor
             if (isTyping) { return false; }
             // マウスボタンを押している間(ドラッグ中)は不可
             if (Input.GetMouseButton(0)) { return false; }
-            if (dataGetter.CurrentEditMode.Value.IsInEditModeList(undoRedoIgnoreModes)) { return false; }
 
-            return true;
+            return IsUndoRedoAllowedMode;
         }
+
+        /// <summary>
+        /// 今のエディットモードで、Undo / Redo をしてよいか (ほかの操作の途中でないか)
+        /// </summary>
+        private bool IsUndoRedoAllowedMode => !dataGetter.CurrentEditMode.Value.IsInEditModeList(undoRedoIgnoreModes);
+
+        #region メニューから呼ぶ操作 (キー操作と同じことをする)
+
+        /// <summary>
+        /// 今、元に戻せるか (元に戻せる操作が残っていて、ほかの操作の途中でない)
+        /// </summary>
+        public bool CanUndoNow => !dataGetter.IsLoadingChart.Value && IsUndoRedoAllowedMode && UndoRedo.History.CanUndo;
+
+        /// <summary>
+        /// 今、やり直せるか
+        /// </summary>
+        public bool CanRedoNow => !dataGetter.IsLoadingChart.Value && IsUndoRedoAllowedMode && UndoRedo.History.CanRedo;
+
+        /// <summary>
+        /// 元に戻す (Ctrl+Z と同じ)
+        /// </summary>
+        public void UndoOnce()
+        {
+            if (CanUndoNow) { Undo(); }
+        }
+
+        /// <summary>
+        /// やり直す (Ctrl+Y と同じ)
+        /// </summary>
+        public void RedoOnce()
+        {
+            if (CanRedoNow) { Redo(); }
+        }
+
+        /// <summary>
+        /// 楽曲を再生する / 止める (Space キーと同じ)
+        /// </summary>
+        public void TogglePlay()
+        {
+            if (dataGetter.IsLoadingChart.Value) { return; }
+
+            OperateMusicPlay();
+        }
+
+        #endregion
 
         /// <summary>
         /// 拡大率の操作

@@ -253,7 +253,17 @@ namespace MeshGenerate
                 verticesEnd = GenerateVertices(depthToVertices[i + 1].Vertices.ToList(), new List<float>(), currentStartZ + depth);
 
                 // メッシュを線形補間
-                var interpolationVerticesList = LinearInterpolationVertices(verticesStart, verticesEnd, Mathf.CeilToInt(depth / lerpThresholdDepth));
+                int interpolateSteps = Mathf.CeilToInt(depth / lerpThresholdDepth);
+
+                // 同じ時刻に、形の違う断面が2つ続くとき (同じ時刻で形を切り替える「段」):
+                // 奥行きが無いので、そのままでは面が1枚も作られず、段のところに隙間ができる。
+                // 2つの断面を直接つないで、段をふさぐ壁にする
+                if (interpolateSteps <= 0 && Mathf.Approximately(depth, 0f) && !IsSameSection(verticesStart, verticesEnd))
+                {
+                    interpolateSteps = 1;
+                }
+
+                var interpolationVerticesList = LinearInterpolationVertices(verticesStart, verticesEnd, interpolateSteps);
 
                 // 線形補間された全ての頂点リスト
                 for (int j = 0; j < interpolationVerticesList.Count - 1; j++)
@@ -414,6 +424,21 @@ namespace MeshGenerate
         /// <param name="endVertices"></param>
         /// <param name="interpolateSteps"></param>
         /// <returns></returns>
+        /// <summary>
+        /// 2つの断面が、まったく同じ形か
+        /// </summary>
+        static bool IsSameSection(List<Vector3> sectionA, List<Vector3> sectionB)
+        {
+            if (sectionA.Count != sectionB.Count) { return false; }
+
+            for (int i = 0; i < sectionA.Count; i++)
+            {
+                if (sectionA[i] != sectionB[i]) { return false; }
+            }
+
+            return true;
+        }
+
         static List<List<Vector3>> LinearInterpolationVertices(List<Vector3> startVertices, List<Vector3> endVertices, int interpolateSteps = 10)
         {
             if(startVertices.Count != endVertices.Count) { return null; }

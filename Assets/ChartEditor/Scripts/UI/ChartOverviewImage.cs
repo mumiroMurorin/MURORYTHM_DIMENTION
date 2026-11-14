@@ -48,6 +48,12 @@ namespace ChartEditor
         {
             public int Kind;
             public int ChainIndex;
+            // 譜面の先頭から数えた、分線の通し番号 (つなぐ順番を決めるのに使う)
+            public int SubDivisionSerial;
+            // 同じ分線に、同じ接続のノーツが2つ以上あるときの順番 (小さいほど先につながる)
+            public int OrderInSubdivision;
+            // 集めた順番 (上の2つが同じときに、並びが毎回同じになるように)
+            public int Serial;
             public int Row;
             public float Left;
             public float Right;
@@ -94,6 +100,7 @@ namespace ChartEditor
         private static void ForEachNote(ChartData chartData, float totalSeconds, Color32[] pixels, int width, int height, bool isDrawingNotes)
         {
             float seconds = 0f;
+            int subDivisionSerial = 0;
             var bars = chartData.BarDatas;
 
             for (int barIndex = 0; barIndex < bars.Count; barIndex++)
@@ -134,6 +141,9 @@ namespace ChartEditor
                             {
                                 Kind = isSpaceNote ? KIND_SPACE_HOLD : KIND_HOLD,
                                 ChainIndex = chainNote.ChainIndex.Value,
+                                SubDivisionSerial = subDivisionSerial,
+                                OrderInSubdivision = chainNote.OrderInSubdivision.Value,
+                                Serial = chainNodes.Count,
                                 Row = row,
                                 Left = left,
                                 Right = right,
@@ -142,6 +152,7 @@ namespace ChartEditor
                     }
 
                     seconds += GetSubDivisionSeconds(bar, subDivision);
+                    subDivisionSerial++;
                 }
             }
         }
@@ -151,7 +162,7 @@ namespace ChartEditor
         /// </summary>
         private static void DrawChainBands(Color32[] pixels, int width, int height)
         {
-            // 種類・接続番号ごとに、時刻の順に並べる
+            // 種類・接続番号ごとに、つながる順に並べる (譜面のレーンで帯がつながる順番と同じ)
             chainNodes.Sort(compareChainNodes);
 
             for (int i = 0; i + 1 < chainNodes.Count; i++)
@@ -175,12 +186,22 @@ namespace ChartEditor
             }
         }
 
+        /// <summary>
+        /// つながるノーツを並べる順番
+        ///
+        /// 譜面のレーンと同じ決まり (SortedChainNoteDataList) にする: 分線の順、同じ分線のノーツは順番の数字の小さい順。
+        /// 描く行(Row)の順では並べない。長い譜面では、いくつもの分線が同じ行に重なるので、行だけでは前後が決まらない。
+        /// 同じ分線に2つのノーツを置いた「段差」も、順番の数字を見ないと、どちらが先か決まらず、
+        /// 段差ではなく斜めの帯になってしまう。
+        /// </summary>
         private static int CompareChainNodes(ChainNode a, ChainNode b)
         {
             if (a.Kind != b.Kind) { return a.Kind.CompareTo(b.Kind); }
             if (a.ChainIndex != b.ChainIndex) { return a.ChainIndex.CompareTo(b.ChainIndex); }
+            if (a.SubDivisionSerial != b.SubDivisionSerial) { return a.SubDivisionSerial.CompareTo(b.SubDivisionSerial); }
+            if (a.OrderInSubdivision != b.OrderInSubdivision) { return a.OrderInSubdivision.CompareTo(b.OrderInSubdivision); }
 
-            return a.Row.CompareTo(b.Row);
+            return a.Serial.CompareTo(b.Serial);
         }
 
         /// <summary>

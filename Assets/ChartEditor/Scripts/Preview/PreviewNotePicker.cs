@@ -584,6 +584,8 @@ namespace ChartEditor
         {
             if (dataGetter.ChartData.Value == null) { return false; }
             if (dataGetter.IsLoadingChart.Value) { return false; }
+            // 画面上のメニューを開いている間は、メニューの裏のプレビューを操作しない
+            if (EditorMenuBar.IsBlockingChartInput) { return false; }
 
             var editMode = dataGetter.CurrentEditMode.Value;
 

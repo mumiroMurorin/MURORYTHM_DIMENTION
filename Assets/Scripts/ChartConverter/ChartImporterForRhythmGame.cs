@@ -18,6 +18,8 @@ namespace ChartConvert
         List<ISpaceHoldDataToRhythmGameConvertable> spaceHoldConverters = new List<ISpaceHoldDataToRhythmGameConvertable>();
         Dictionary<int, List<TimeToRange>> chainNumberToRanges = new Dictionary<int, List<TimeToRange>>();
         Dictionary<int, List<TimeToVertices>> chainNumberToVertices = new Dictionary<int, List<TimeToVertices>>();
+        // 分線のデータを、順番どおりに読める形に分けたもの (作業用)
+        readonly List<SubDivisionDataOrigin> subDivisionParts = new List<SubDivisionDataOrigin>();
 
 
         public ChartData Import(ChartDataOrigin originData, INoteSpawnDataOptionGetter optionHolder)
@@ -142,6 +144,25 @@ namespace ChartConvert
         /// <param name="calcTiming"></param>
         /// <returns></returns>
         private bool SetDataFromSubDivisionData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float secondsPassed)
+        {
+            bool isSucceed = true;
+
+            // 同じ分線に、同じホールドのノーツが2つ以上あるときは、決まった順番で1つずつ変換する
+            // (ほとんどの分線は分ける必要が無く、そのまま1回で変換される。規則は ChainOrderResolver を参照)
+            ChainOrderResolver.Split(dataOrigin, subDivisionParts);
+            foreach (var part in subDivisionParts)
+            {
+                if (!SetDataFromSubDivisionPart(part, onAddNoteData, secondsPassed)) { isSucceed = false; }
+            }
+
+            subDivisionParts.Clear();
+            return isSucceed;
+        }
+
+        /// <summary>
+        /// 分節データ(または、それを順番どおりに分けたものの1つ)から、ノーツデータに一つ一つ変換
+        /// </summary>
+        private bool SetDataFromSubDivisionPart(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float secondsPassed)
         {
             bool isSucceed = true;
 

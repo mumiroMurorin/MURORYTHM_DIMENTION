@@ -84,24 +84,17 @@ namespace ChartEditor
             {
                 // 更新ボタンは、変わっていないノーツも含めてすべて作り直す
                 // (普段は編集に合わせて自動で反映されるので、表示がおかしいときの作り直し用)
-                previewRefreshButton_view.OnPushButtonListner += () => previewRefreshable?.RebuildPreviewFromEditorData();
+                previewRefreshButton_view.OnPushButtonListner += RebuildPreview;
             }
 
             if (previewStartButton_view != null)
             {
-                previewStartButton_view.OnPushButtonListner += () =>
-                {
-                    RunStartPreviewFlowAsync().Forget();
-                };
+                previewStartButton_view.OnPushButtonListner += StartFullScreenPreview;
             }
 
             if (backEditorButton_view != null)
             {
-                backEditorButton_view.OnPushButtonListner += () =>
-                {
-                    ChangeEditMode(EditMode.None);
-                    ChangeEditNoteType(GetReturnLayer());
-                };
+                backEditorButton_view.OnPushButtonListner += BackToEditor;
             }
 
             offsetInputField_view.OnFloatValueChangedListner += dataSetter_model.SetOffset;
@@ -137,6 +130,36 @@ namespace ChartEditor
             }
 
             return editNoteTypeCache;
+        }
+
+        /// <summary>
+        /// 全画面プレビューから、編集画面へ戻る (Back Editor ボタンと、メニューの「編集画面へ戻る」から呼ばれる)
+        /// </summary>
+        public void BackToEditor()
+        {
+            if (dataGetter_model.EditNoteType.Value != EditNoteType.Preview) { return; }
+
+            ChangeEditMode(EditMode.None);
+            ChangeEditNoteType(GetReturnLayer());
+        }
+
+        /// <summary>
+        /// 全画面プレビューを開く (Preview ボタンと、メニューの「全画面プレビュー」から呼ばれる)
+        /// </summary>
+        public void StartFullScreenPreview()
+        {
+            // すでに全画面プレビューの中にいるときは、何もしない (戻る先のレイヤーを、プレビューで上書きしないように)
+            if (dataGetter_model.EditNoteType.Value == EditNoteType.Preview) { return; }
+
+            RunStartPreviewFlowAsync().Forget();
+        }
+
+        /// <summary>
+        /// プレビューのノーツをすべて作り直す (Update ボタンと、メニューの「プレビューを作り直す」から呼ばれる)
+        /// </summary>
+        public void RebuildPreview()
+        {
+            previewRefreshable?.RebuildPreviewFromEditorData();
         }
 
         private async UniTaskVoid RunStartPreviewFlowAsync()

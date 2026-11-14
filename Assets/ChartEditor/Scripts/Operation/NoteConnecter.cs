@@ -338,6 +338,7 @@ namespace ChartEditor
             {
                 chainNote.NoteObject.SetBackNote(null);
                 chainNote.NoteObject.SetNextNote(null);
+                chainNote.NoteObject.SetSubdivisionOrder(0);
                 return;
             }
 
@@ -346,6 +347,17 @@ namespace ChartEditor
 
             chainNote.NoteObject.SetBackNote(backNoteObj);
             chainNote.NoteObject.SetNextNote(nextNoteObj);
+
+            // 同じ分線に、同じ接続のノーツが並んでいるとき、その中で何番目かを伝える (レーン画面で、ずらして見せるため)
+            int subdivisionOrder = 0;
+            for (int i = index - 1; i >= 0; i--)
+            {
+                if (!SortedChainNoteDataList.IsSameSubdivision(noteList.ChainNoteList[i], chainNote)) { break; }
+
+                subdivisionOrder++;
+            }
+
+            chainNote.NoteObject.SetSubdivisionOrder(subdivisionOrder);
         }
 
         /// <summary>

@@ -21,6 +21,8 @@ namespace ChartEditor
         {
             SetAddress(data.address);
             SetNoteType(data.NoteType);
+            // 同じ分線に並んだノーツをまとめて複製したとき、並びの順番が保たれるように
+            SetOrderInSubdivision(data.OrderInSubdivision.Value);
         }
 
 
@@ -30,6 +32,14 @@ namespace ChartEditor
         public void SetChainIndex(int index)
         {
             chainIndex.Value = index;
+        }
+
+        // 同じ分線に、同じ接続のノーツが2つ以上あるときの順番 (小さいほど先につながる)
+        ReactiveProperty<int> orderInSubdivision = new ReactiveProperty<int>(0);
+        public IReadOnlyReactiveProperty<int> OrderInSubdivision => orderInSubdivision;
+        public void SetOrderInSubdivision(int order)
+        {
+            orderInSubdivision.Value = order;
         }
 
 

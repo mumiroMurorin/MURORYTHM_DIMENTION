@@ -24,6 +24,10 @@ namespace ChartEditor
         [Tooltip("中継点のノーツを、時間方向(画面では縦)に縮める割合。1 で始点・終点と同じ大きさ")]
         [SerializeField, Range(0.1f, 1f)] float relayDepthScale = 0.5f;
 
+        [Header("同じ分線に並べたとき")]
+        [Tooltip("同じ分線に、同じ接続のノーツを2つ以上置いたとき、2つ目以降を時間方向(画面では縦)にずらして見せる量。つながる順番が後ろのノーツほど上に見える。見た目だけで、譜面上の時刻は変わらない")]
+        [SerializeField] float sameSubdivisionOffset = 0.15f;
+
         [Tooltip("警告アウトライン色")]
         [SerializeField] ColorSetting outlineColorOnAlone;
 
@@ -50,6 +54,61 @@ namespace ChartEditor
         ReactiveProperty<IConnectableObject> backNote = new ReactiveProperty<IConnectableObject>();
         IReadOnlyReactiveProperty<IConnectableObject> IConnectableObject.BackNote => backNote;
         void IConnectableObject.SetBackNote(IConnectableObject backNote) { this.backNote.Value = backNote; }
+
+        IChainNoteData IConnectableObject.ChainNoteData => noteObject != null ? noteObject.NoteData as IChainNoteData : null;
+
+        // 同じ分線に並んだノーツの中で、このノーツが何番目か (0 が先頭)
+        int subdivisionOrder;
+        // ずらして見せる部品 (ノーツの絵・当たり判定・帯の端をまとめている親) と、ずらす前の位置
+        Transform offsetBody;
+        float offsetBodyBaseZ;
+        // 音を鳴らすための当たり判定 (時刻どおりに鳴るよう、これだけは元の位置に残す)
+        Transform offsetSound;
+        float offsetSoundBaseZ;
+
+        /// <summary>
+        /// 同じ分線に、同じ接続のノーツが並んでいるとき、2番目以降を少し上にずらして見せる
+        /// (ぴったり重なっていると、順番が分からず、片方しかクリックできず、間をつなぐ帯も面積が無くて見えないため)
+        /// </summary>
+        void IConnectableObject.SetSubdivisionOrder(int index)
+        {
+            if (subdivisionOrder == index) { return; }
+            subdivisionOrder = index;
+
+            if (offsetBody == null)
+            {
+                if (noteMeshRenderer == null) { return; }
+
+                offsetBody = noteMeshRenderer.transform.parent;
+                if (offsetBody == null || offsetBody == noteObject.transform)
+                {
+                    offsetBody = null;
+                    return;
+                }
+
+                offsetBodyBaseZ = offsetBody.localPosition.z;
+
+                var sound = offsetBody.GetComponentInChildren<NoteSoundCollider>(true);
+                if (sound != null && sound.transform != offsetBody)
+                {
+                    offsetSound = sound.transform;
+                    offsetSoundBaseZ = offsetSound.localPosition.z;
+                }
+            }
+
+            float offset = subdivisionOrder * sameSubdivisionOffset;
+
+            Vector3 bodyPosition = offsetBody.localPosition;
+            bodyPosition.z = offsetBodyBaseZ + offset;
+            offsetBody.localPosition = bodyPosition;
+
+            if (offsetSound != null)
+            {
+                Vector3 soundPosition = offsetSound.localPosition;
+                soundPosition.z = offsetSoundBaseZ - offset;
+                offsetSound.localPosition = soundPosition;
+            }
+        }
 
         // メンバ変数
         GameObject meshObject;
@@ -198,6 +257,7 @@ namespace ChartEditor
 
         /// <summary>
         /// マテリアルの変更
+        /// 差し替える前に付いていた色は引き継ぐ (色は別の処理(〜TypeChangable)が付けている。引き継がないと、白いノーツになることがある)
         /// </summary>
         /// <param name="holdNoteType"></param>
         private void ChangeNoteMaterial(DeploymentNoteType noteType)
@@ -206,15 +266,15 @@ namespace ChartEditor
             {
                 case DeploymentNoteType.HoldStart:
                 case DeploymentNoteType.DivineHoldStart:
-                    noteMeshRenderer.material = startMaterial;
+                    NoteMaterialUtil.ReplaceKeepingColor(noteMeshRenderer, startMaterial);
                     break;
                 case DeploymentNoteType.HoldRelay:
                 case DeploymentNoteType.HoldMeshRelay:
-                    noteMeshRenderer.material = relayMaterial;
+                    NoteMaterialUtil.ReplaceKeepingColor(noteMeshRenderer, relayMaterial);
                     break;
                 case DeploymentNoteType.HoldEnd:
                 case DeploymentNoteType.HoldEndUnjudge:
-                    noteMeshRenderer.material = endMaterial;
+                    NoteMaterialUtil.ReplaceKeepingColor(noteMeshRenderer, endMaterial);
                     break;
                 default:
                     Debug.Log($"【Note】設定されていないパラメータです: {noteType}");

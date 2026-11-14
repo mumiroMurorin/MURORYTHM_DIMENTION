@@ -59,6 +59,24 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 今、選択中のノーツをコピーできるか (メニューの項目を押せるかどうかに使う)
+        /// </summary>
+        public bool CanCopySelectedNotes =>
+            notesGetter.SelectingNotes != null &&
+            notesGetter.SelectingNotes.Count > 0 &&
+            SelectedNotesKeyOperation.IsAcceptable(dataGetter, ignoreEditModes, true);
+
+        /// <summary>
+        /// 選択中のノーツをコピーする (メニューから。Ctrl+C と同じ)
+        /// </summary>
+        public void CopySelectedNotes()
+        {
+            if (!CanCopySelectedNotes) { return; }
+
+            CopyNotes();
+        }
+
+        /// <summary>
         /// 選択中のノーツをコピーする
         ///
         /// コピーした時点の内容(種類・幅・形)と、ノーツどうしの間隔を写し取っておく。

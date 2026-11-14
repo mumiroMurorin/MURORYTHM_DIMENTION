@@ -48,10 +48,13 @@ namespace ChartEditor
         int displayedBarIndex = -1;
         int displayedBarCount = -1;
 
-        public ChartOverviewPresenter(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter)
+        readonly IChartEditorOptionGetter optionGetter;
+
+        public ChartOverviewPresenter(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, IChartEditorOptionGetter optionGetter)
         {
             this.dataGetter = dataGetter;
             this.dataSetter = dataSetter;
+            this.optionGetter = optionGetter;
 
             // 編集操作はすべてUndo履歴を通るので、履歴の変化を「譜面が変わった」合図にする
             UndoRedo.History.OnChanged += MarkDirty;
@@ -72,9 +75,11 @@ namespace ChartEditor
             SearchSceneOnce();
             if (view == null) { return; }
 
-            // グラウンド・スペースのレイヤーを編集している間だけ出す
+            // グラウンド・スペースのレイヤーを編集している間だけ出す (メニューの「表示」で消されているときは出さない)
             var layer = dataGetter.EditNoteType.Value;
-            bool isVisible = layer == EditNoteType.Ground || layer == EditNoteType.Space;
+            bool isVisible =
+                (layer == EditNoteType.Ground || layer == EditNoteType.Space) &&
+                optionGetter.GetPanelVisibility(EditorPanel.ChartOverview).Value;
 
             view.SetVisible(isVisible);
             if (!isVisible) { return; }

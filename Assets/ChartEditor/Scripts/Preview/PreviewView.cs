@@ -75,14 +75,16 @@ namespace ChartEditor
             bool isOn;
             if (IsFullScreen)
             {
-                // 全画面プレビュー: ボタン・スライダー・入力欄・スクロール欄の上でなければ操作できる
+                // 全画面プレビュー: ボタン・スライダー・入力欄・スクロール欄と、メニューのキャンバスの画面部品
+                // (メニューバー、開いた一覧、譜面情報の欄) の上でなければ操作できる
                 // (背景の板など、操作できない画面部品は無視する)
                 isOn = true;
                 foreach (var result in raycastResults)
                 {
                     if (result.gameObject == null) { continue; }
                     if (result.gameObject.GetComponentInParent<Selectable>() != null ||
-                        result.gameObject.GetComponentInParent<ScrollRect>() != null)
+                        result.gameObject.GetComponentInParent<ScrollRect>() != null ||
+                        EditorMenuBar.IsOnMenuCanvas(result.gameObject))
                     {
                         isOn = false;
                         break;

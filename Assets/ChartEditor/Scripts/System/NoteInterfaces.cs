@@ -29,6 +29,17 @@ namespace ChartEditor
 
         public void SetChainIndex(int index);
 
+        /// <summary>
+        /// 同じ分線(同じ時刻)に、同じ接続のノーツが2つ以上あるときの順番 (小さいほど先につながる)
+        ///
+        /// 同じ分線にほかのノーツが無い間は、意味を持たない。
+        /// ノーツが別の分線へ動いても値は変わらないので、元の分線へ戻せば元の順番に戻る。
+        /// 同じ値のノーツがいる分線へ来たときだけ、いちばん後ろの順番に付け直される (SortedChainNoteDataList)。
+        /// </summary>
+        IReadOnlyReactiveProperty<int> OrderInSubdivision { get; }
+
+        void SetOrderInSubdivision(int order);
+
         void SetNoteObject(IConnectableObject noteObject);
     }
 

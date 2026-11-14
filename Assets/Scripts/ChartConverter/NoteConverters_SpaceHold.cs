@@ -67,7 +67,8 @@ namespace ChartConvert
             NoteDataOrigin_SpaceHoldStart data = new NoteDataOrigin_SpaceHoldStart()
             {
                 Vertices = verticesData.SpaceVertices.GetVertexArray(),
-                HoldNumber = chainData.ChainIndex.Value
+                HoldNumber = chainData.ChainIndex.Value,
+                OrderInSubdivision = ChainOrderResolver.GetExportOrder(chainData)
             };
 
             dataOrigin.SpaceHoldStartData.Add(data);
@@ -156,7 +157,8 @@ namespace ChartConvert
             NoteDataOrigin_SpaceHoldRelay data = new NoteDataOrigin_SpaceHoldRelay()
             {
                 Vertices = verticesData.SpaceVertices.GetVertexArray(),
-                HoldNumber = chainData.ChainIndex.Value
+                HoldNumber = chainData.ChainIndex.Value,
+                OrderInSubdivision = ChainOrderResolver.GetExportOrder(chainData)
             };
 
             dataOrigin.SpaceHoldRelayData.Add(data);
@@ -235,7 +237,8 @@ namespace ChartConvert
             NoteDataOrigin_SpaceHoldMeshRelay data = new NoteDataOrigin_SpaceHoldMeshRelay()
             {
                 Vertices = verticesData.SpaceVertices.GetVertexArray(),
-                HoldNumber = chainData.ChainIndex.Value
+                HoldNumber = chainData.ChainIndex.Value,
+                OrderInSubdivision = ChainOrderResolver.GetExportOrder(chainData)
             };
 
             dataOrigin.SpaceHoldMeshRelayData.Add(data);
@@ -329,7 +332,8 @@ namespace ChartConvert
             NoteDataOrigin_SpaceHoldEnd data = new NoteDataOrigin_SpaceHoldEnd()
             {
                 Vertices = verticesData.SpaceVertices.GetVertexArray(),
-                HoldNumber = chainData.ChainIndex.Value
+                HoldNumber = chainData.ChainIndex.Value,
+                OrderInSubdivision = ChainOrderResolver.GetExportOrder(chainData)
             };
 
             dataOrigin.SpaceHoldEndData.Add(data);

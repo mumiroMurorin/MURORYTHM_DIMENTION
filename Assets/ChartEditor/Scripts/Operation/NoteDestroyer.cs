@@ -46,6 +46,23 @@ namespace ChartEditor
             }
         }
 
+        /// <summary>
+        /// 今、選択中のノーツを削除できるか (メニューの項目を押せるかどうかに使う)
+        /// </summary>
+        public bool CanDestroySelectedNotes =>
+            notesGetter.SelectingNotes.Count > 0 &&
+            SelectedNotesKeyOperation.IsAcceptable(dataGetter, ignoreEditModes, true);
+
+        /// <summary>
+        /// 選択中のノーツを削除する (メニューから。Delete キーと同じ)
+        /// </summary>
+        public void DestroySelectedNotes()
+        {
+            if (!CanDestroySelectedNotes) { return; }
+
+            DestroyNotes();
+        }
+
         private void DestroyNotes()
         {
             var datasCopy = notesGetter.SelectingNotes.ToList();
