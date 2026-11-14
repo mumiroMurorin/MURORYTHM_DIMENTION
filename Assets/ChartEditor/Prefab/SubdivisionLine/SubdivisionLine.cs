@@ -11,15 +11,13 @@ namespace ChartEditor
 
         public override void OnChangeBpm(float bpm, float backBpm)
         {
-            //// 前データと同じbpmの時は表示しない
-            //bpm = !Mathf.Approximately(bpm, backBpm) ? bpm : -1;
-            lineInfo_view.SetBPM(bpm);
+            // 前の線と同じBPMのときは表示しない
+            lineInfo_view.SetBPM(bpm, !Mathf.Approximately(bpm, backBpm));
         }
 
         public override void OnChangeSpeedRatio(float speedRatio, float backSpeedRatio)
         {
-            //// 前データと同じbpmの時は表示しない
-            //bpm = !Mathf.Approximately(bpm, backBpm) ? bpm : -1;
+            // 前の線と同じスピード倍率のときは表示しない
             lineInfo_view.SetSpeedRatio(speedRatio, !Mathf.Approximately(speedRatio, backSpeedRatio));
         }
     }

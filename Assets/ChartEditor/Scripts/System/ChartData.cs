@@ -442,6 +442,39 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 拍子・分割数を指定して、小節を末尾にまとめて追加する (譜面の延長用)
+        /// BPM とスピード倍率は、今の最後の分線の値を引き継ぐ
+        /// </summary>
+        /// <param name="length">追加する小節の数</param>
+        /// <param name="barConfig">追加する小節の拍子・分割数</param>
+        public void AddBars(int length, BarConfig barConfig)
+        {
+            if (length <= 0 || barConfig == null || !barConfig.IsValid) { return; }
+
+            float bpm = DEFAULT_BPM;
+            float speedRatio = DEFAULT_SPEEDRATIO;
+
+            // 最後の分線の値を引き継ぐ
+            if (BarDatas.Count > 0 && BarDatas[BarDatas.Count - 1].SubDivisionDatas.Count > 0)
+            {
+                var lastBar = BarDatas[BarDatas.Count - 1];
+                var lastSubDivision = lastBar.SubDivisionDatas[lastBar.SubDivisionDatas.Count - 1];
+                bpm = lastSubDivision.Bpm.Value;
+                speedRatio = lastSubDivision.SpeedRatio.Value;
+            }
+
+            int firstIndex = BarDatas.Count;
+            for (int i = 0; i < length; i++)
+            {
+                var config = new BarConfig(barConfig.BeatCount, barConfig.BeatUnit, barConfig.DivisionNum);
+                var subConfig = new SubdivisionConfig(bpm, speedRatio);
+                barDatas.Add(new BarDataInChart(config, subConfig, firstIndex + i));
+            }
+
+            OnAddBarData.OnNext(firstIndex);
+        }
+
+        /// <summary>
         /// 小節線の削除
         /// </summary>
         /// <param name="length"></param>

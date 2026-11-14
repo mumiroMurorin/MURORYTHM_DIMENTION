@@ -77,6 +77,67 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 軌道の上の位置から求めた距離を、譜面の先頭からの距離に直す
+        ///
+        /// 軌道は円なので、位置から求めた距離は一周ぶんの範囲 (-半周 〜 +半周) に丸まっている。
+        /// 譜面の先頭からの距離は、曲が進むと半周を超えるので、そのままでは比べられない
+        /// (比べると、譜面の後ろの方で、カーソルの指す分線を取り違える)。
+        /// 基準の位置(今の再生位置)にいちばん近い周回での距離に直してから比べる。
+        /// </summary>
+        /// <param name="sectionDistance">位置から求めた距離 (PreviewTrackSurface が返す値)</param>
+        /// <param name="referenceDistance">基準の位置の、譜面の先頭からの距離 (今の再生位置)</param>
+        /// <param name="curveRadius">軌道の半径</param>
+        public static float UnwrapDistance(float sectionDistance, float referenceDistance, float curveRadius)
+        {
+            return referenceDistance + WrapDistance(sectionDistance - referenceDistance, 2f * Mathf.PI * curveRadius);
+        }
+
+        // ノーツの「端」として扱う幅 (レーン数)。ノーツの幅に対する割合で決めて、狭すぎ・広すぎにならないよう範囲を限る
+        // (幅1レーンのノーツでも、真ん中を掴めば動かせて、端を掴めば幅を変えられるように)
+        const float NOTE_EDGE_RATIO = 0.2f;
+        const float NOTE_EDGE_MIN_LANES = 0.3f;
+        const float NOTE_EDGE_MAX_LANES = 0.6f;
+
+        /// <summary>
+        /// レーン番号(実数)が、グラウンドのノーツの左右どちらの端を指しているかを返す
+        /// (端を掴むと幅の変更、真ん中を掴むと移動になる)
+        /// </summary>
+        /// <param name="lane">調べるレーン番号 (実数。レーンの中心で整数になる)</param>
+        /// <param name="firstLane">ノーツの左端のレーン番号</param>
+        /// <param name="lastLane">ノーツの右端のレーン番号</param>
+        /// <returns>左の端 = -1、右の端 = +1、端ではない = 0</returns>
+        public static int GetNoteEdge(float lane, float firstLane, float lastLane)
+        {
+            // ノーツが占めている範囲 (レーンの中心が整数なので、両端のレーンの外側へ半レーンずつ広がっている)
+            float left = firstLane - 0.5f;
+            float right = lastLane + 0.5f;
+            float edgeWidth = Mathf.Clamp((right - left) * NOTE_EDGE_RATIO, NOTE_EDGE_MIN_LANES, NOTE_EDGE_MAX_LANES);
+
+            if (lane <= left + edgeWidth) { return -1; }
+            if (lane >= right - edgeWidth) { return 1; }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// ノーツの片方の端を動かしたときの、新しい左端と右端のレーン番号を求める
+        /// 動かす端は、反対の端より内側へは行かず (幅は1レーン以上)、レーンの外へも出ない
+        /// </summary>
+        /// <param name="originFirstLane">動かす前の左端のレーン番号</param>
+        /// <param name="originLastLane">動かす前の右端のレーン番号</param>
+        /// <param name="laneDelta">端を動かすレーン数 (右へ動かすとき正)</param>
+        /// <param name="isRightEdge">右の端を動かすとき true、左の端を動かすとき false</param>
+        /// <param name="maxLane">レーン番号の最大値</param>
+        public static void MoveNoteEdge(int originFirstLane, int originLastLane, int laneDelta, bool isRightEdge, int maxLane, out int firstLane, out int lastLane)
+        {
+            firstLane = originFirstLane;
+            lastLane = originLastLane;
+
+            if (isRightEdge) { lastLane = Mathf.Clamp(originLastLane + laneDelta, originFirstLane, maxLane); }
+            else { firstLane = Mathf.Clamp(originFirstLane + laneDelta, 0, originLastLane); }
+        }
+
+        /// <summary>
         /// 光線が三角形の集まり(メッシュ)に当たる場所のうち、いちばん手前までの長さを求める
         /// </summary>
         /// <param name="vertices">頂点</param>

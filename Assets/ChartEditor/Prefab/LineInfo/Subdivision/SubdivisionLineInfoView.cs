@@ -19,13 +19,15 @@ namespace ChartEditor
         /// <summary>
         /// BPM情報をUIにセット
         /// </summary>
-        /// <param name="bpm"> -1 : 表示しない </param>
-        public void SetBPM(float bpm = -1)
+        /// <param name="isDiffBack">1つ前の線とBPMが違うか。同じときは表記を出さない</param>
+        public void SetBPM(float bpm, bool isDiffBack)
         {
             if (bpmTmp == null) { return; }
 
-            bpmTmp.text = bpm == -1 ? "" : bpm.ToString();
-            bpmObject.SetActive(bpm != -1);
+            // 同じ数字がずらっと並ぶと、BPMの変わり目が分かりにくいので、変わり目の線にだけ出す
+            // (クリックを受ける当たり判定は別のオブジェクトにあるので、表記を隠した線でも、クリックして設定を開ける)
+            bpmTmp.text = !isDiffBack ? "" : bpm.ToString();
+            bpmObject.SetActive(isDiffBack);
         }
 
         /// <summary>

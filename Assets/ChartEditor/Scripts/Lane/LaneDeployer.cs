@@ -82,7 +82,7 @@ namespace ChartEditor
             chartData?.OnChangeBPMListener
                 .Subscribe(pair => {
                     UpdateLinePos(pair.Item1, pair.Item2);
-                    RefreshSpeedRatioLabels(pair.Item1);
+                    RefreshLineLabels(pair.Item1);
                 })
                 .AddTo(this.gameObject);
         }
@@ -230,6 +230,10 @@ namespace ChartEditor
                 // 削除処理
                 Destroy(lines[i].Obj.gameObject);
                 lines.RemoveAt(i);
+
+                // 消した線の次にあった線は、比べる相手(1つ前の線)が変わるので、表記を付け直す
+                RefreshBpmLabel(i);
+                RefreshSpeedRatioLabel(i);
                 return;
             }
         }
@@ -284,6 +288,10 @@ namespace ChartEditor
             var backBpm = pair.Item1 != 0 ? lines[index - 1].Data.Bpm.Value : -1f;
 
             thisObj.OnChangeBpm(bpm, backBpm);
+
+            // 次の線の表記は「この線と値が違うか」で決まるので、一緒に付け直す
+            // (この線だけを付け直すと、次の線に、もう変わり目ではなくなった表記が残ったままになる)
+            RefreshBpmLabel(index + 1);
         }
 
         private void OnChangeSpeedRatio(int barIndex, int subIndex, float speedRatio)
@@ -297,16 +305,46 @@ namespace ChartEditor
             var backSpeedRatio = pair.Item1 != 0 ? lines[index - 1].Data.SpeedRatio.Value : float.MinValue;
 
             thisObj.OnChangeSpeedRatio(speedRatio, backSpeedRatio);
+
+            // 次の線の表記は「この線と値が違うか」で決まるので、一緒に付け直す
+            RefreshSpeedRatioLabel(index + 1);
         }
 
         /// <summary>
-        /// 指定した小節の線(と、次の小節の先頭の線)の、スピード倍率の表記を付け直す
-        ///
-        /// 表記は「1つ前の線と倍率が違うときだけ出す」が、付け直すのはその線自身の倍率が変わったときだけ。
-        /// 1つ前の線の倍率だけが変わった場合 (譜面の読み込みで、倍率が小節の先頭と同じ値に戻る線など) は
-        /// 表記が古いまま残るので、小節の値をまとめて書き換えた後にここで付け直す。
+        /// 指定した番号の線の、BPM の表記を付け直す (表記は、1つ前の線と値が違うときだけ出す)
         /// </summary>
-        private void RefreshSpeedRatioLabels(int barIndex)
+        private void RefreshBpmLabel(int index)
+        {
+            if (index < 0 || index >= lines.Count) { return; }
+
+            var line = lines[index];
+            if (line.Obj == null) { return; }
+
+            float backBpm = index != 0 ? lines[index - 1].Data.Bpm.Value : -1f;
+            line.Obj.OnChangeBpm(line.Data.Bpm.Value, backBpm);
+        }
+
+        /// <summary>
+        /// 指定した番号の線の、スピード倍率の表記を付け直す (表記は、1つ前の線と値が違うときだけ出す)
+        /// </summary>
+        private void RefreshSpeedRatioLabel(int index)
+        {
+            if (index < 0 || index >= lines.Count) { return; }
+
+            var line = lines[index];
+            if (line.Obj == null) { return; }
+
+            float backSpeedRatio = index != 0 ? lines[index - 1].Data.SpeedRatio.Value : float.MinValue;
+            line.Obj.OnChangeSpeedRatio(line.Data.SpeedRatio.Value, backSpeedRatio);
+        }
+
+        /// <summary>
+        /// 指定した小節の線(と、次の小節の先頭の線)の、BPM とスピード倍率の表記を付け直す
+        ///
+        /// 表記は「1つ前の線と値が違うときだけ出す」。値を1本ずつ書き換えている途中は、前後の線の値が
+        /// そろっていないので、小節の値をまとめて書き換えた後に、ここでもう一度付け直しておく。
+        /// </summary>
+        private void RefreshLineLabels(int barIndex)
         {
             int startIndex = Find(barIndex, 0).Item1;
             if (startIndex < 0) { return; }
@@ -320,8 +358,8 @@ namespace ChartEditor
                 if (lineBarIndex > barIndex + 1) { break; }
                 if (lineBarIndex == barIndex + 1 && line.Data.SubDivisionIndex > 0) { break; }
 
-                float backSpeedRatio = i != 0 ? lines[i - 1].Data.SpeedRatio.Value : float.MinValue;
-                line.Obj.OnChangeSpeedRatio(line.Data.SpeedRatio.Value, backSpeedRatio);
+                RefreshBpmLabel(i);
+                RefreshSpeedRatioLabel(i);
             }
         }
 

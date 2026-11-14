@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using VContainer;
 using UniRx;
+using UnityEngine.EventSystems;
 
 namespace ChartEditor
 {
@@ -17,6 +18,8 @@ namespace ChartEditor
         IChartEditorDataGetter dataGetter_model;
 
         EditMode currentEditMode;
+        // プレビューの上で出すカーソル (EditMode.None のときは、プレビューからの指定なし)
+        EditMode previewCursorMode = EditMode.None;
         Dictionary<EditMode, Type> dependenceObjectType = new Dictionary<EditMode, Type>
         {
             { EditMode.Move,typeof(IMovableCollider) },
@@ -52,6 +55,8 @@ namespace ChartEditor
                 .Subscribe(value =>
                 {
                     currentEditMode = value;
+                    // プレビューがカーソルを指定している間は、そちらを優先する
+                    if (previewCursorMode != EditMode.None) { return; }
                     if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
 
                     SetCursorTexture(value);
@@ -61,12 +66,14 @@ namespace ChartEditor
             // クリアされたとき
             dataGetter_model?.InteractableColliders.ObserveReset()
                 .Subscribe(_ => {
+                    if (previewCursorMode != EditMode.None) { return; }
                     SetCursorTexture(currentEditMode, true);
                 }).AddTo(this.gameObject);
 
             // コライダーが追加されたときカーソルを変更する
             dataGetter_model?.InteractableColliders.ObserveAdd()
                 .Subscribe(col => { 
+                    if (previewCursorMode != EditMode.None) { return; }
                     foreach(var type in dependenceObjectType)
                     {
                         if (currentEditMode == type.Key && type.Value.IsAssignableFrom(col.Value.GetType())) 
@@ -75,6 +82,29 @@ namespace ChartEditor
                         }
                     }
                 }).AddTo(this.gameObject);
+        }
+
+        /// <summary>
+        /// プレビューの上でのカーソルを指定する (プレビューのノーツを動かす・幅を変えるとき用)
+        /// 指定している間は、エディットモードに関わらず、そのモードのカーソルを出し続ける
+        /// </summary>
+        /// <param name="editMode">カーソルを出すモード (EditMode.Move なら移動のカーソル)。EditMode.None で指定をやめる</param>
+        public void SetPreviewCursor(EditMode editMode)
+        {
+            if (previewCursorMode == editMode) { return; }
+            previewCursorMode = editMode;
+
+            if (editMode != EditMode.None)
+            {
+                SetCursorTexture(editMode);
+                return;
+            }
+
+            // 指定をやめたとき: 今のエディットモードのカーソルに戻す
+            // (ボタンなどの画面部品の上にいるときと、カーソルを切り替えないモードのときは、標準のカーソルにする)
+            bool isOnUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+            bool isStandard = isOnUI || currentEditMode.IsInEditModeList(ignoreEditModes);
+            SetCursorTexture(currentEditMode, isStandard);
         }
 
         /// <summary>

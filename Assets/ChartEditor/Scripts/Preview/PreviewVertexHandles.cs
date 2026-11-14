@@ -333,27 +333,10 @@ namespace ChartEditor
             isGrabbing = false;
             dragTargets.Clear();
 
-            if (view == null || noteParent == null || handles.Count == 0) { return false; }
-
-            float scale = Screen.height / REFERENCE_SCREEN_HEIGHT;
-            float pickRadius = (view.IsFullScreen ? PICK_RADIUS : PICK_RADIUS_MINI) * scale;
+            if (noteParent == null) { return false; }
 
             // 押した位置にいちばん近いつまみ
-            int nearestIndex = -1;
-            float nearestScore = float.MaxValue;
-            for (int i = 0; i < handles.Count; i++)
-            {
-                float distance = Vector2.Distance(handles[i].ScreenPosition, screenPosition);
-                if (distance > pickRadius) { continue; }
-
-                float score = handles[i].Vertex == null ? distance + CENTER_PICK_PENALTY * scale : distance;
-                if (score < nearestScore)
-                {
-                    nearestScore = score;
-                    nearestIndex = i;
-                }
-            }
-
+            int nearestIndex = FindNearestHandleIndex(view, screenPosition);
             if (nearestIndex < 0) { return false; }
 
             var handle = handles[nearestIndex];
@@ -389,6 +372,42 @@ namespace ChartEditor
 
             isGrabbing = dragTargets.Count > 0;
             return isGrabbing;
+        }
+
+        /// <summary>
+        /// 画面上の位置に、掴めるつまみがあるか (掴みはしない。カーソルの形を変えるための確認用)
+        /// </summary>
+        public bool IsOverHandle(PreviewView view, Vector2 screenPosition)
+        {
+            return FindNearestHandleIndex(view, screenPosition) >= 0;
+        }
+
+        /// <summary>
+        /// 画面上の位置から、掴める距離にあるつまみのうち、いちばん近いものの番号を返す。無ければ -1
+        /// </summary>
+        private int FindNearestHandleIndex(PreviewView view, Vector2 screenPosition)
+        {
+            if (view == null || handles.Count == 0) { return -1; }
+
+            float scale = Screen.height / REFERENCE_SCREEN_HEIGHT;
+            float pickRadius = (view.IsFullScreen ? PICK_RADIUS : PICK_RADIUS_MINI) * scale;
+
+            int nearestIndex = -1;
+            float nearestScore = float.MaxValue;
+            for (int i = 0; i < handles.Count; i++)
+            {
+                float distance = Vector2.Distance(handles[i].ScreenPosition, screenPosition);
+                if (distance > pickRadius) { continue; }
+
+                float score = handles[i].Vertex == null ? distance + CENTER_PICK_PENALTY * scale : distance;
+                if (score < nearestScore)
+                {
+                    nearestScore = score;
+                    nearestIndex = i;
+                }
+            }
+
+            return nearestIndex;
         }
 
         /// <summary>

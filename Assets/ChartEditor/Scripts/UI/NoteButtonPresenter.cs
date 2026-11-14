@@ -21,6 +21,21 @@ namespace ChartEditor
         IChartEditorOptionSetter optionDataSetter_model;
         IChartEditorOptionGetter optionDataGetter_model;
 
+        // ショートカットキーで選べる配置ノーツの数の上限 (Alt + 1 〜 Alt + 9)
+        const int MAX_SHORTCUT_COUNT = 9;
+
+        // 操作の途中なので、配置ノーツのショートカットキーを受け付けないモード
+        static readonly EditMode[] shortcutIgnoreModes =
+        {
+            EditMode.Moving,
+            EditMode.Scaling,
+            EditMode.Connecting,
+            EditMode.SpaceMoving,
+            EditMode.EditingBarConfig,
+            EditMode.EditingSubDivisionConfig,
+            EditMode.Explanation,
+        };
+
         [Inject]
         public void Construct(IChartEditorDataSetter chartEditorDataSetter, IChartEditorDataGetter chartEditorDataGetter, IChartEditorOptionSetter optionDataSetter, IChartEditorOptionGetter optionDataGetter)
         {
@@ -35,6 +50,78 @@ namespace ChartEditor
             BindForNoteView();
 
             SetEvent();
+
+            SetShortcutTexts();
+        }
+
+        private void Update()
+        {
+            CheckShortcutKey();
+        }
+
+        /// <summary>
+        /// 配置ノーツのショートカットキー
+        /// Alt を押しながら数字キーを押すと、今のレイヤーの一覧の、上からその番号のノーツを選ぶ
+        /// (Alt + 1 で1番目、Alt + 2 で2番目。ボタンをクリックしたときと同じ)
+        /// </summary>
+        private void CheckShortcutKey()
+        {
+            if (!ModifierKey.Alt) { return; }
+
+            // 譜面の読み込み中、入力欄に文字を打っている間、ドラッグの途中は受け付けない
+            if (editorDataGetter_model.IsLoadingChart.Value) { return; }
+            if (InputFieldFocus.IsTyping) { return; }
+            if (Input.GetMouseButton(0)) { return; }
+            if (editorDataGetter_model.CurrentEditMode.Value.IsInEditModeList(shortcutIgnoreModes)) { return; }
+
+            int number = GetPressedNumber();
+            if (number <= 0) { return; }
+
+            // 今のレイヤーに出ているボタンのうち、上から number 番目
+            var layer = editorDataGetter_model.EditNoteType.Value;
+            int order = 0;
+            foreach (var button in noteButtons_view)
+            {
+                if (button.EditNoteType != layer) { continue; }
+
+                order++;
+                if (order != number) { continue; }
+
+                editorDataSetter_model.SetNoteType(button.NoteType);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 今のフレームで押された数字キーの番号 (1〜9)。押されていなければ 0
+        /// 文字キーの上の数字でも、テンキーの数字でも反応する
+        /// </summary>
+        private static int GetPressedNumber()
+        {
+            for (int i = 0; i < MAX_SHORTCUT_COUNT; i++)
+            {
+                if (Input.GetKeyDown(KeyCode.Alpha1 + i) || Input.GetKeyDown(KeyCode.Keypad1 + i)) { return i + 1; }
+            }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// それぞれのボタンに、ショートカットキーを表示する (レイヤーごとに、上から Alt+1、Alt+2…)
+        /// </summary>
+        private void SetShortcutTexts()
+        {
+            var orders = new Dictionary<EditNoteType, int>();
+            foreach (var button in noteButtons_view)
+            {
+                orders.TryGetValue(button.EditNoteType, out int order);
+                order++;
+                orders[button.EditNoteType] = order;
+
+                if (order > MAX_SHORTCUT_COUNT || button.NoteButton_view == null) { continue; }
+
+                button.NoteButton_view.SetShortcutText($"Alt+{order}");
+            }
         }
 
         private void BindForNoteView()
@@ -74,6 +161,8 @@ namespace ChartEditor
             public ChangeDeploymentNoteButtonView NoteButton_view { get { return noteButton_view; } }
 
             public DeploymentNoteType NoteType { get { return noteType; } }
+
+            public EditNoteType EditNoteType { get { return editNoteType; } }
 
             public void BindForDeploymentNoteType(IReadOnlyReactiveProperty<DeploymentNoteType> reactiveProperty, GameObject gameObject)
             {

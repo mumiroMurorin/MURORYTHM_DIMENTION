@@ -22,8 +22,15 @@ namespace ChartEditor
     /// カーソルが指している「レーン」と「分線」を PreviewTrackSurface で求め、掴んだ位置との差だけ動かす。
     /// 動かすたびにプレビューへすぐ反映するので、プレビューの中でも動いて見える。
     ///
+    /// 【幅】グラウンドのノーツの左右の端を押したままカーソルを動かすと、ノーツの幅が変わる。
+    /// 複数選択しているときは、選択中のノーツの同じ側の端が、同じレーン数だけ動く (編集画面で端を掴んだときと同じ)。
+    ///
     /// 【頂点】スペースのノーツを選ぶと、頂点と中心点のつまみが出る (PreviewVertexHandles)。
     /// つまみを動かすと、頂点だけ・または形ごと動かせる。
+    ///
+    /// 【カーソル】動かせる場所にカーソルを置くと4方向の矢印、幅を変えられる場所(ノーツの端)では左右の矢印になる。
+    /// ドラッグを始めると、標準のカーソルに戻る (編集画面のレーンの上でノーツを操作するときと同じ)。
+    /// 絵は、編集画面でノーツの上にカーソルを置いたときと同じもの (CursorTextureChanger に登録されているもの)。
     ///
     /// 【複数選択】Ctrl を押しながらクリックすると、選択に加える (選択中のノーツなら外す)。
     /// ノーツの無い場所からドラッグすると枠が出て、中に映っているノーツをまとめて選ぶ (範囲選択)。
@@ -47,6 +54,8 @@ namespace ChartEditor
         const int MAX_PRESS_CANDIDATES = 32;
         // スペースのノーツをドラッグで動かせる、視点の正面からの最小のずれ (これより正面に近い点は掴んでも動かせない)
         const float RAIL_MIN_OFFSET = 0.5f;
+        // カーソルを動かしていなくても、この間隔(秒)でカーソルの下を調べ直す (再生中は、ノーツの方が動いてくるため)
+        const float HOVER_CHECK_INTERVAL_SECONDS = 0.1f;
 
         // 操作の途中なので、プレビューのクリックを受け付けないモード
         // (選択するとレイヤーや編集モードが切り替わり、入力途中の設定が確定されたりするため)
@@ -85,6 +94,7 @@ namespace ChartEditor
         ChartPreviewGenerator previewGenerator;
         ChartPreviewRefresher previewRefresher;
         PreviewUIPresenter previewUIPresenter;
+        CursorTextureChanger cursorTextureChanger;
 
         // スペースのノーツの頂点・中心点のつまみ
         readonly PreviewVertexHandles vertexHandles;
@@ -113,6 +123,27 @@ namespace ChartEditor
         bool isRangeSelecting;
         readonly PreviewRangeRect rangeRect = new PreviewRangeRect();
         readonly List<IDeployableNoteData> rangeNotes = new List<IDeployableNoteData>();
+
+        // --- 幅の変更 ---
+        // 押したのが、ノーツの端か (そのまま動かすと、動かす代わりに幅が変わる)
+        bool isScalePress;
+        // 掴んだのが右の端か (false のときは左の端)
+        bool isScaleRightEdge;
+        // 幅を変えているノーツ
+        readonly List<ScaleTarget> scaleTargets = new List<ScaleTarget>();
+
+        // --- カーソルの形 ---
+        // 今プレビューの上で出しているカーソル
+        // (EditMode.Move = 移動のカーソル、EditMode.Scale = 幅の変更のカーソル、EditMode.None = 指定なし = 標準のカーソル)
+        EditMode previewCursor = EditMode.None;
+        // カーソルの下を最後に調べたときの結果と、そのときのカーソルの位置
+        EditMode hoverCursor = EditMode.None;
+        Vector2 lastHoverPosition;
+        float nextHoverCheckTime;
+        // カーソルの下に重なっているノーツ (調べている間だけ使う)
+        readonly List<PressCandidate> hoverCandidates = new List<PressCandidate>();
+        // 使い終わった PressCandidate (カーソルを動かすたびに作り直さないよう、使い回す)
+        readonly List<PressCandidate> candidatePool = new List<PressCandidate>();
 
         readonly List<RaycastResult> uiRaycastResults = new List<RaycastResult>();
         readonly List<INoteData> pickedNotes = new List<INoteData>();
@@ -186,6 +217,24 @@ namespace ChartEditor
             public Action OnMoveEnd;
         }
 
+        /// <summary>
+        /// ドラッグで幅を変えているノーツ
+        /// </summary>
+        private class ScaleTarget
+        {
+            public IDeployableNoteData Data;
+            public NoteObject NoteObject;
+            public IScalableObject Scalable;
+            // 幅を変え始めたときのアドレス
+            public AddressWithinRange OriginAddress;
+            // 幅を変え始めたときの、左端と右端のレーン番号
+            public int OriginFirstLane;
+            public int OriginLastLane;
+            // 今の、左端と右端のレーン番号
+            public int FirstLane;
+            public int LastLane;
+        }
+
         public PreviewNotePicker(
             IChartEditorDataGetter dataGetter,
             IChartEditorDataSetter dataSetter,
@@ -229,6 +278,8 @@ namespace ChartEditor
             {
                 Release();
             }
+
+            UpdateCursor();
         }
 
         void IPostLateTickable.PostLateTick()
@@ -253,7 +304,8 @@ namespace ChartEditor
             isDragging = false;
             isKeptPress = false;
             canDragPressedNote = false;
-            pressCandidates.Clear();
+            isScalePress = false;
+            ReleaseCandidates(pressCandidates);
 
             // ほかの操作の途中でないときだけ
             if (!CanOperate()) { return; }
@@ -283,7 +335,7 @@ namespace ChartEditor
             }
 
             // 押した場所に重なっているノーツを、選ばれやすい順に集める
-            if (!isForcedRange) { CollectPressCandidates(ray); }
+            if (!isForcedRange) { CollectCandidates(ray, pressCandidates); }
 
             if (pressCandidates.Count == 0)
             {
@@ -301,7 +353,7 @@ namespace ChartEditor
             // ・複数選択したノーツのうち1つを掴んで、まとめて動かせるように
             // ・ほかのノーツが重なって見えていても、選択中のノーツを動かせるように
             // (Ctrl を押しているときは、いちばん選ばれやすいノーツを選択に加える・外す)
-            int selectedIndex = ModifierKey.Ctrl ? -1 : FindSelectedCandidateIndex();
+            int selectedIndex = ModifierKey.Ctrl ? -1 : FindSelectedCandidateIndex(pressCandidates);
             pressedCandidateIndex = Mathf.Max(selectedIndex, 0);
             PressCandidate pressed = pressCandidates[pressedCandidateIndex];
 
@@ -320,9 +372,24 @@ namespace ChartEditor
 
             // ドラッグに備えて、押した位置を覚える。求められなければ選択だけ (ドラッグでは動かせない)
             isRailDrag = pressed.IsSpaceNote;
-            canDragPressedNote = isRailDrag
-                ? TryGrabOnRail(ray, pressed.PreviewNote)
-                : PreviewTrackSurface.TryGetPoint(ray, previewGenerator.NoteParent, optionHolder.NoteCurveRadius.Value, out grabDistance, out grabLane);
+
+            // ノーツの端を押したときは、ドラッグで幅を変える。それ以外の場所は、ドラッグで動かす
+            isScalePress = TryGetScaleEdge(pressed, ray, out isScaleRightEdge, out int edgeLaneIndex);
+            if (isScalePress)
+            {
+                // 掴んだ端のあるレーンを基準にする (ドラッグ中、端はカーソルが指しているレーンへ動く)
+                grabLaneIndex = edgeLaneIndex;
+                canDragPressedNote = true;
+            }
+            else
+            {
+                canDragPressedNote = isRailDrag
+                    ? TryGrabOnRail(ray, pressed.PreviewNote)
+                    : PreviewTrackSurface.TryGetPoint(ray, previewGenerator.NoteParent, optionHolder.NoteCurveRadius.Value, out grabDistance, out grabLane);
+
+                // 掴んだ位置を、譜面の先頭からの距離に直しておく (分線の距離と比べるため)
+                if (canDragPressedNote) { grabDistance = ToChartDistance(grabDistance); }
+            }
 
             isPressing = true;
             pressScreenPosition = Input.mousePosition;
@@ -330,35 +397,64 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 押した場所に重なっているノーツを、選ばれやすい順に集める (結果は pressCandidates に入る)
+        /// 光線の当たる場所に重なっているノーツを、選ばれやすい順に集める (結果は results に入る)
         /// </summary>
-        private void CollectPressCandidates(Ray ray)
+        private void CollectCandidates(Ray ray, List<PressCandidate> results)
         {
-            pressCandidates.Clear();
+            ReleaseCandidates(results);
 
             previewGenerator.PickNotes(ray, pickedNotes);
             foreach (INoteData previewNoteData in pickedNotes)
             {
-                if (pressCandidates.Count >= MAX_PRESS_CANDIDATES) { break; }
+                if (results.Count >= MAX_PRESS_CANDIDATES) { break; }
 
                 // 譜面側に対応するノーツが無いもの(ホールド途中の判定点など)は飛ばす
                 if (!TryFindEditorNotes(previewNoteData, out bool isSpaceNote)) { continue; }
 
                 // 同じノーツに対応するものが、すでに挙がっているときは加えない
-                if (HasCandidateOf(foundNotes)) { continue; }
+                if (HasCandidateOf(results, foundNotes)) { continue; }
 
-                var candidate = new PressCandidate { PreviewNote = previewNoteData, IsSpaceNote = isSpaceNote };
+                PressCandidate candidate = RentCandidate();
+                candidate.PreviewNote = previewNoteData;
+                candidate.IsSpaceNote = isSpaceNote;
                 candidate.Notes.AddRange(foundNotes);
-                pressCandidates.Add(candidate);
+                results.Add(candidate);
             }
 
             pickedNotes.Clear();
             foundNotes.Clear();
         }
 
-        private bool HasCandidateOf(List<IDeployableNoteData> notes)
+        /// <summary>
+        /// 中身が空の PressCandidate を用意する (使い終わったものがあれば、それを使い回す)
+        /// </summary>
+        private PressCandidate RentCandidate()
         {
-            foreach (var candidate in pressCandidates)
+            if (candidatePool.Count == 0) { return new PressCandidate(); }
+
+            PressCandidate candidate = candidatePool[candidatePool.Count - 1];
+            candidatePool.RemoveAt(candidatePool.Count - 1);
+            return candidate;
+        }
+
+        /// <summary>
+        /// リストを空にして、入っていた PressCandidate を使い回せるようにする
+        /// </summary>
+        private void ReleaseCandidates(List<PressCandidate> candidates)
+        {
+            foreach (var candidate in candidates)
+            {
+                candidate.PreviewNote = null;
+                candidate.Notes.Clear();
+                candidatePool.Add(candidate);
+            }
+
+            candidates.Clear();
+        }
+
+        private static bool HasCandidateOf(List<PressCandidate> candidates, List<IDeployableNoteData> notes)
+        {
+            foreach (var candidate in candidates)
             {
                 if (candidate.Notes.Count != notes.Count) { continue; }
 
@@ -379,13 +475,13 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 押した場所にあるノーツのうち、すでに選択中のもの(のうち、いちばん選ばれやすいもの)の番号を返す。無ければ -1
+        /// その場所にあるノーツのうち、すでに選択中のもの(のうち、いちばん選ばれやすいもの)の番号を返す。無ければ -1
         /// </summary>
-        private int FindSelectedCandidateIndex()
+        private int FindSelectedCandidateIndex(List<PressCandidate> candidates)
         {
-            for (int i = 0; i < pressCandidates.Count; i++)
+            for (int i = 0; i < candidates.Count; i++)
             {
-                if (IsAllSelected(pressCandidates[i].Notes)) { return i; }
+                if (IsAllSelected(candidates[i].Notes)) { return i; }
             }
 
             return -1;
@@ -454,7 +550,7 @@ namespace ChartEditor
                     return;
                 }
 
-                bool isStarted = isHandlePress ? BeginHandleDrag() : BeginDrag();
+                bool isStarted = isHandlePress ? BeginHandleDrag() : (isScalePress ? BeginScale() : BeginDrag());
                 if (!isStarted)
                 {
                     CancelPress();
@@ -463,6 +559,7 @@ namespace ChartEditor
             }
 
             if (isHandlePress) { UpdateHandleDrag(); }
+            else if (isScalePress) { UpdateScale(); }
             else { UpdateDrag(); }
         }
 
@@ -501,7 +598,8 @@ namespace ChartEditor
         /// (ドラッグの途中で、削除・コピー・Undo などの操作が割り込まないように)。
         /// 全画面プレビューでは、もともとそれらの操作を受け付けないモード(Preview)なので切り替えない。
         /// </summary>
-        private void EnterDragMode(bool isSpaceNote)
+        /// <param name="editorDragMode">編集画面で同じ操作をしているときのモード (Moving / SpaceMoving / Scaling)</param>
+        private void EnterDragMode(EditMode editorDragMode)
         {
             editModeBeforeDrag = dataGetter.CurrentEditMode.Value;
 
@@ -514,8 +612,7 @@ namespace ChartEditor
 
             // 頂点レイヤーでは、頂点をドラッグしているときのモードにする
             // (頂点のコピー・貼り付け・削除は、このモードの間だけ止まるようになっている)
-            if (layer == EditNoteType.Vertices) { dragEditMode = EditMode.VertexMoving; }
-            else { dragEditMode = isSpaceNote ? EditMode.SpaceMoving : EditMode.Moving; }
+            dragEditMode = layer == EditNoteType.Vertices ? EditMode.VertexMoving : editorDragMode;
 
             dataSetter.SetEditMode(dragEditMode);
         }
@@ -603,7 +700,7 @@ namespace ChartEditor
         {
             if (!vertexHandles.IsGrabbing) { return false; }
 
-            EnterDragMode(true);
+            EnterDragMode(EditMode.SpaceMoving);
             isDragging = true;
             return true;
         }
@@ -646,6 +743,9 @@ namespace ChartEditor
 
             isPressing = false;
             isDragging = false;
+
+            // カーソルの形を、今カーソルの下にあるものに合わせ直す
+            nextHoverCheckTime = 0f;
         }
 
         /// <summary>
@@ -753,7 +853,7 @@ namespace ChartEditor
 
             if (dragTargets.Count == 0) { return false; }
 
-            EnterDragMode(dragTargets[0].IsSpaceNote);
+            EnterDragMode(dragTargets[0].IsSpaceNote ? EditMode.SpaceMoving : EditMode.Moving);
 
             currentSubDelta = 0;
             currentLaneDelta = 0;
@@ -791,6 +891,7 @@ namespace ChartEditor
             }
 
             // 指している分線 (同じ距離を何度も通る譜面では、直前に指していた分線に近いものを選ぶ)
+            distance = ToChartDistance(distance);
             int subIndex = PreviewPickMath.FindNearestIndex(subDivisionDistances, distance, pointedSubIndex);
             if (subIndex < 0) { return; }
             pointedSubIndex = subIndex;
@@ -839,6 +940,13 @@ namespace ChartEditor
                 return;
             }
 
+            // 幅の変更
+            if (isScalePress)
+            {
+                EndScale();
+                return;
+            }
+
             var previous = new List<NoteDataToAddress>();
             var current = new List<NoteDataToAddress>();
 
@@ -859,6 +967,18 @@ namespace ChartEditor
 
             // 履歴に登録されると、その通知でプレビューも更新される
             UndoRedo.Notes.NotesMoveRecord.RecordNotesMovingIfChanged(previous, current);
+        }
+
+        /// <summary>
+        /// プレビューの中の位置から求めた距離を、譜面の先頭からの距離に直す
+        ///
+        /// ノーツの流れる軌道は円なので、位置から求めた距離は一周ぶんの範囲に丸まっている。
+        /// 分線の距離(譜面の先頭からの距離)と比べる前に、今の再生位置にいちばん近い周回の距離に直す。
+        /// (直さないと、譜面の後ろの方で、どこを指しても譜面の先頭の分線を指したことになり、ノーツが前後に動かなくなる)
+        /// </summary>
+        private float ToChartDistance(float sectionDistance)
+        {
+            return PreviewPickMath.UnwrapDistance(sectionDistance, previewGenerator.CurrentDistance, optionHolder.NoteCurveRadius.Value);
         }
 
         /// <summary>
@@ -927,6 +1047,236 @@ namespace ChartEditor
             }
 
             return index + subDivisionIndex;
+        }
+
+        #endregion
+
+        #region ノーツの幅を変える
+
+        /// <summary>
+        /// 光線が、ノーツの左右どちらかの端を指しているかを調べる
+        /// (端を掴んでドラッグすると、ノーツの幅が変わる。編集画面で、ノーツの端を掴んだときと同じ)
+        /// </summary>
+        /// <param name="isRightEdge">右の端のとき true、左の端のとき false</param>
+        /// <param name="edgeLaneIndex">その端のあるレーン番号</param>
+        private bool TryGetScaleEdge(PressCandidate candidate, Ray ray, out bool isRightEdge, out int edgeLaneIndex)
+        {
+            isRightEdge = false;
+            edgeLaneIndex = 0;
+
+            // 幅を変えられるのは、グラウンドのノーツ1つを指しているときだけ (ホールドの帯と、スペースのノーツは対象外)
+            if (candidate.IsSpaceNote || candidate.Notes.Count != 1) { return false; }
+            if (candidate.PreviewNote is global::NoteData_HoldMesh) { return false; }
+
+            IDeployableNoteData note = candidate.Notes[0];
+            NoteObject noteObject = notesGetter.GetNoteObject(note);
+            if (noteObject == null || !noteObject.TryGetComponent(out IScalableObject _)) { return false; }
+
+            var lanes = note.Address.RangeRP;
+            if (lanes.Count == 0 || lanes[0] == SPACE_LANE_INDEX) { return false; }
+
+            // カーソルが指しているレーン
+            if (!PreviewTrackSurface.TryGetPoint(ray, previewGenerator.NoteParent, optionHolder.NoteCurveRadius.Value, out _, out float lane)) { return false; }
+
+            // ノーツの左右の端に近いか (真ん中のときは、幅の変更ではなく移動になる)
+            int edge = PreviewPickMath.GetNoteEdge(lane, lanes[0], lanes[lanes.Count - 1]);
+            isRightEdge = edge > 0;
+            edgeLaneIndex = Mathf.RoundToInt(isRightEdge ? lanes[lanes.Count - 1] : lanes[0]);
+            return edge != 0;
+        }
+
+        /// <summary>
+        /// 幅の変更の開始。選択中のノーツのうち、幅を変えられるものを対象にする
+        /// </summary>
+        private bool BeginScale()
+        {
+            scaleTargets.Clear();
+
+            foreach (var data in notesGetter.SelectingNotes)
+            {
+                var noteObject = notesGetter.GetNoteObject(data);
+                if (noteObject == null) { continue; }
+                if (!noteObject.TryGetComponent(out IScalableObject scalable)) { continue; }
+
+                var origin = new AddressWithinRange(data.Address);
+                var lanes = origin.RangeRP;
+                if (lanes.Count == 0 || lanes[0] == SPACE_LANE_INDEX) { continue; }
+
+                var target = new ScaleTarget
+                {
+                    Data = data,
+                    NoteObject = noteObject,
+                    Scalable = scalable,
+                    OriginAddress = origin,
+                    OriginFirstLane = Mathf.RoundToInt(lanes[0]),
+                    OriginLastLane = Mathf.RoundToInt(lanes[lanes.Count - 1]),
+                };
+                target.FirstLane = target.OriginFirstLane;
+                target.LastLane = target.OriginLastLane;
+
+                // 譜面上で端を掴んだときと同じ「幅の変更の開始」の処理を呼ぶ
+                scalable.OnStartScale();
+                scaleTargets.Add(target);
+            }
+
+            if (scaleTargets.Count == 0) { return false; }
+
+            EnterDragMode(EditMode.Scaling);
+
+            currentLaneDelta = 0;
+            isDragging = true;
+            return true;
+        }
+
+        /// <summary>
+        /// 幅の変更中。掴んだ端を、カーソルが指しているレーンまで動かす
+        /// </summary>
+        private void UpdateScale()
+        {
+            // カーソルが指している位置 (プレビューの外に出ても、押したプレビューを基準に求める)
+            if (pressedView == null || !pressedView.TryGetRay(Input.mousePosition, false, out Ray ray)) { return; }
+            if (!PreviewTrackSurface.TryGetPoint(ray, previewGenerator.NoteParent, optionHolder.NoteCurveRadius.Value, out _, out float lane)) { return; }
+
+            // 掴んだ端のあったレーンから、カーソルが指しているレーンまで、何レーンあるか
+            int laneDelta = Mathf.Clamp(Mathf.RoundToInt(lane), 0, MAX_LANE_INDEX) - grabLaneIndex;
+            if (laneDelta == currentLaneDelta) { return; }
+            currentLaneDelta = laneDelta;
+
+            bool isChanged = false;
+            foreach (var target in scaleTargets)
+            {
+                // ドラッグ中に削除されたノーツには触らない
+                if (target.NoteObject == null) { continue; }
+
+                // 掴んだ側の端だけを動かす。反対の端より内側へは行かず(幅は1レーン以上)、レーンの外へも出ない
+                PreviewPickMath.MoveNoteEdge(
+                    target.OriginFirstLane, target.OriginLastLane, laneDelta, isScaleRightEdge, MAX_LANE_INDEX,
+                    out int firstLane, out int lastLane);
+
+                if (firstLane == target.FirstLane && lastLane == target.LastLane) { continue; }
+                target.FirstLane = firstLane;
+                target.LastLane = lastLane;
+
+                var lanes = new List<float>(lastLane - firstLane + 1);
+                for (int i = firstLane; i <= lastLane; i++) { lanes.Add(i); }
+
+                target.Data.SetAddress(new AddressWithinRange(target.OriginAddress.BarIndex, target.OriginAddress.SubDivisionIndex, lanes));
+                target.Scalable.OnScale();
+                isChanged = true;
+            }
+
+            // 変えた結果を、すぐプレビューにも反映する
+            if (isChanged && previewRefresher != null) { previewRefresher.RefreshImmediately(); }
+        }
+
+        /// <summary>
+        /// 幅の変更の終了。実際に幅が変わっていればUndo履歴に登録する
+        /// </summary>
+        private void EndScale()
+        {
+            var previous = new List<NoteDataToAddress>();
+            var current = new List<NoteDataToAddress>();
+
+            foreach (var target in scaleTargets)
+            {
+                // ドラッグ中に削除されたノーツには触らない
+                if (target.NoteObject == null) { continue; }
+
+                target.Scalable.OnFinishScale();
+
+                previous.Add(new NoteDataToAddress(target.Data, target.OriginAddress));
+                current.Add(new NoteDataToAddress(target.Data, target.Data.Address));
+            }
+
+            scaleTargets.Clear();
+
+            LeaveDragMode();
+
+            // 履歴に登録されると、その通知でプレビューも更新される
+            UndoRedo.Notes.NotesMoveRecord.RecordNotesMovingIfChanged(previous, current);
+
+            // 選択中の表示を付け直す (譜面上で幅を変え終えたときと同じ)
+            notesSetter.ReselectNotes();
+        }
+
+        #endregion
+
+        #region カーソルの形
+
+        /// <summary>
+        /// プレビューの上でのカーソルの形を、今の操作やカーソルの下にあるものに合わせる (毎フレーム呼ぶ)
+        /// </summary>
+        private void UpdateCursor()
+        {
+            EditMode cursor;
+            if (isDragging)
+            {
+                // ドラッグ中: 標準のカーソルに戻す (編集画面のレーンの上でノーツをドラッグしているときと同じ)
+                cursor = EditMode.None;
+            }
+            else if (isPressing)
+            {
+                // 押してから動かし始めるまで: 動かしたら始まる操作のカーソル。範囲選択は標準のカーソル
+                cursor = isRangePress ? EditMode.None : (isScalePress ? EditMode.Scale : EditMode.Move);
+            }
+            else
+            {
+                cursor = GetHoverCursor();
+            }
+
+            if (cursor == previewCursor) { return; }
+            previewCursor = cursor;
+
+            SearchSceneOnce();
+            if (cursorTextureChanger != null) { cursorTextureChanger.SetPreviewCursor(cursor); }
+        }
+
+        /// <summary>
+        /// 押していないときのカーソルの形 (カーソルの下にあるものに合わせる)
+        /// カーソルを動かしたときと、一定の間隔ごとに調べ直す。それ以外は、前に調べた結果を返す
+        /// </summary>
+        private EditMode GetHoverCursor()
+        {
+            Vector2 position = Input.mousePosition;
+            float now = Time.unscaledTime;
+            if (position == lastHoverPosition && now < nextHoverCheckTime) { return hoverCursor; }
+
+            lastHoverPosition = position;
+            nextHoverCheckTime = now + HOVER_CHECK_INTERVAL_SECONDS;
+
+            hoverCursor = FindHoverCursor(position);
+            return hoverCursor;
+        }
+
+        /// <summary>
+        /// 画面上の位置を押したら何が始まるかを調べて、それに合うカーソルを返す
+        /// (つまみ・ノーツの真ん中 = 移動、ノーツの端 = 幅の変更、何もない場所・プレビューの外 = 指定なし)
+        /// </summary>
+        private EditMode FindHoverCursor(Vector2 screenPosition)
+        {
+            if (!CanOperate()) { return EditMode.None; }
+
+            SearchSceneOnce();
+            if (previewGenerator == null) { return EditMode.None; }
+            if (!TryGetPreviewRay(screenPosition, out Ray ray, out var view)) { return EditMode.None; }
+
+            // Shift を押している間は、どこを押しても範囲選択になる
+            if (ModifierKey.Shift) { return EditMode.None; }
+
+            // 頂点・中心点のつまみ (ノーツより手前にあるものとして扱う)
+            if (vertexHandles.IsOverHandle(view, screenPosition)) { return EditMode.Move; }
+
+            CollectCandidates(ray, hoverCandidates);
+            if (hoverCandidates.Count == 0) { return EditMode.None; }
+
+            // 押したときに掴むことになるノーツ (Press と同じ決め方)
+            int selectedIndex = ModifierKey.Ctrl ? -1 : FindSelectedCandidateIndex(hoverCandidates);
+            PressCandidate candidate = hoverCandidates[Mathf.Max(selectedIndex, 0)];
+
+            EditMode cursor = TryGetScaleEdge(candidate, ray, out _, out _) ? EditMode.Scale : EditMode.Move;
+
+            ReleaseCandidates(hoverCandidates);
+            return cursor;
         }
 
         #endregion
@@ -1120,6 +1470,8 @@ namespace ChartEditor
             if (!PreviewTrackSurface.TryGetPoint(ray, previewGenerator.NoteParent, optionHolder.NoteCurveRadius.Value, out float distance, out _)) { return false; }
             if (!EnsureSubDivisionDistances()) { return false; }
 
+            distance = ToChartDistance(distance);
+
             // その位置にいちばん近い分線 (同じ距離を何度も通る譜面では、今の再生位置に近いものを選ぶ)
             int playheadSubIndex = PreviewPickMath.FindNearestIndex(subDivisionDistances, previewGenerator.CurrentDistance, -1);
             int subIndex = PreviewPickMath.FindNearestIndex(subDivisionDistances, distance, playheadSubIndex);
@@ -1167,6 +1519,7 @@ namespace ChartEditor
             previewGenerator = UnityEngine.Object.FindObjectOfType<ChartPreviewGenerator>(true);
             previewRefresher = UnityEngine.Object.FindObjectOfType<ChartPreviewRefresher>(true);
             previewUIPresenter = UnityEngine.Object.FindObjectOfType<PreviewUIPresenter>(true);
+            cursorTextureChanger = UnityEngine.Object.FindObjectOfType<CursorTextureChanger>(true);
 
             // ミニプレビュー: 映像を画面部品に映しているカメラ = 撮影先のテクスチャが、画面部品のテクスチャと同じカメラ
             var cameras = UnityEngine.Object.FindObjectsOfType<Camera>(true);
@@ -1197,9 +1550,11 @@ namespace ChartEditor
             foreach (var view in previewViews)
             {
                 if (!view.IsActive) { continue; }
+                // 先に、位置が映像の中にあるかを調べる (こちらの方が軽い。毎フレーム呼ばれるので、外にいるときはここで終える)
+                if (!view.TryGetRay(screenPosition, true, out Ray viewRay)) { continue; }
                 if (!view.IsPointerOn(screenPosition, uiRaycastResults)) { continue; }
-                if (!view.TryGetRay(screenPosition, true, out ray)) { continue; }
 
+                ray = viewRay;
                 hitView = view;
                 return true;
             }

@@ -70,11 +70,60 @@ namespace ChartEditor
             if (connectableObject == null) { return; }
             if (connectableObject.Note.NoteData is not IChainNoteData) { return; }
 
-            startNote = (IChainNoteData)connectableObject.Note.NoteData;
+            var clickedNote = (IChainNoteData)connectableObject.Note.NoteData;
+
+            // 複数選択しているノーツの1つを押したときは、選択中のノーツをまとめて接続して終わる
+            if (TryConnectSelectingNotes(clickedNote)) { return; }
+
+            startNote = clickedNote;
             connectingChainIndex = startNote.ChainIndex.Value;
 
             dataSetter.SetEditMode(EditMode.Connecting);
             isConnecting = true;
+        }
+
+        /// <summary>
+        /// 複数選択しているノーツの1つを押したとき、選択中の(押したノーツと同じ種類の)ノーツをまとめて接続する
+        /// (1つずつ順に押していかなくても、範囲選択してから1回押すだけでつながるように)
+        /// </summary>
+        /// <param name="clickedNote">押したノーツ</param>
+        /// <returns>まとめて接続したとき true。そうでないとき(ふつうの接続の操作に進むとき) false</returns>
+        private bool TryConnectSelectingNotes(IChainNoteData clickedNote)
+        {
+            // どのノーツを、どの接続番号に入れるかを決める
+            // (押したノーツが選択中でないとき、選択中の接続できるノーツが1つだけのとき、すでに全部つながっているときは、ここで終わる)
+            var members = new List<IChainNoteData>();
+            var originIndices = new List<int>();
+            if (!ChainConnectPlanner.TryPlan(
+                    clickedNote,
+                    notesGetter.SelectingNotes,
+                    note => notesGetter.GetNoteObject(note) != null,
+                    index => notesGetter.GetChainNoteList(index)?.ChainNoteList,
+                    notesGetter.GetUsableChainNoteIndex,
+                    members,
+                    originIndices,
+                    out int chainIndex))
+            {
+                return false;
+            }
+
+            // 接続
+            Record(() => {
+                foreach (var member in members)
+                {
+                    ConnectNote(member, chainIndex);
+                }
+            },
+            // 元の接続に戻す (未接続だったノーツは、未接続に戻る)
+            () => {
+                for (int i = 0; i < members.Count; i++)
+                {
+                    DisconnectNote(members[i]);
+                    ConnectNote(members[i], originIndices[i]);
+                }
+            });
+
+            return true;
         }
 
         /// <summary>

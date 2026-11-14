@@ -34,7 +34,6 @@ namespace ChartEditor
         [SerializeField] SwitchLayerButtonView switchLayerButton_view;
         [SerializeField] NoteSpeedSliderView noteSpeedSlider_view;
         [SerializeField] SliderView seVolumeSlider_view;
-        [SerializeField] ComboView combo_view;
 
         [Header("Models")]
         [SerializeField] ChartDataExporter chartDataExporter_model;
@@ -50,6 +49,9 @@ namespace ChartEditor
         INoteSpawnDataOptionGetter noteSpawnDataOptionGetter;
 
         CancellationTokenSource soundLoadCts;
+
+        // 譜面を延長するときの設定 (小節数、拍子、分割数) の入力欄
+        ChartExtendSettings chartExtendSettings;
 
         [Inject]
         public void Construct(IChartEditorDataSetter chartEditorDataSetter, 
@@ -76,18 +78,13 @@ namespace ChartEditor
 
             // 再生速度・ノーツ音の切り替え行を、レーン分割数の行の下に追加する
             SettingsCycleRow.CreateEditorRows(changeLaneDivNumButton_view, optionGetter, optionSetter);
+
+            // 延長する小節数・拍子・分割数の入力欄を、譜面長さの行の下に追加する
+            chartExtendSettings = ChartExtendSettings.Create(chartExtendButton_view, offsetInputField_view);
         }
 
         private void BindForOther()
         {
-            // 総ノーツ数の変更
-            if (combo_view != null)
-            {
-                dataGetter_model?.TotalNoteCount
-                    .Subscribe(combo_view.OnChangeTotalNoteCount)
-                    .AddTo(this.gameObject);
-            }
-
             // 楽曲選択の可視不可視
             dataGetter_model?.PlayMode
                 .Subscribe(musicBrowseButton_view.OnChangePlayMode)
@@ -249,7 +246,7 @@ namespace ChartEditor
             importButton_view.OnClickedListner += chartDataImporter_model.Import;
             
             // 譜面延長ボタン
-            chartExtendButton_view.OnClickedListner += () => laneExtender_model.ChangeChartLength(1);
+            chartExtendButton_view.OnClickedListner += ExtendChart;
 
             // 譜面縮小ボタン
             chartShortenButton_view.OnClickedListner += () => laneExtender_model.ChangeChartLength(-1);
@@ -260,6 +257,9 @@ namespace ChartEditor
             // リズムコンフィグ
             rhythmConfigBar_view.OnClickedApplyButtonListner += () => configEditor_model.CloseConfig();
             rhythmConfigSubDivision_view.OnClickedApplyButtonListner += () => configEditor_model.CloseConfig();
+            // Cancel: 入力した内容を適用せずに閉じる (Esc キーと同じ)
+            rhythmConfigBar_view.OnClickedCancelButtonListner += () => configEditor_model.CancelConfig();
+            rhythmConfigSubDivision_view.OnClickedCancelButtonListner += () => configEditor_model.CancelConfig();
 
             // レイヤー変更ボタン
             switchLayerButton_view.OnClickCloseButtonListner += () => {
@@ -274,6 +274,24 @@ namespace ChartEditor
 
             // 説明書を閉じる
             explanation_view.OnClickCloseButtonListner += () => dataSetter.SetEditMode(EditMode.None);
+        }
+
+        /// <summary>
+        /// 譜面を延長する。延長する小節数と、延長する小節の拍子・分割数は、入力欄の値を使う
+        /// </summary>
+        private void ExtendChart()
+        {
+            // 入力欄を作れなかったときは、今までどおり1小節だけ延長する
+            if (chartExtendSettings == null)
+            {
+                laneExtender_model.ChangeChartLength(1);
+                return;
+            }
+
+            // 正しくない値が入っているときは、理由が表示される
+            if (!chartExtendSettings.TryGetValues(out int barCount, out BarConfig barConfig)) { return; }
+
+            laneExtender_model.ExtendChart(barCount, barConfig);
         }
 
         /// <summary>

@@ -37,6 +37,33 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 拍子・分割数を指定して、譜面を延長する
+        /// </summary>
+        /// <param name="length">延長する小節の数</param>
+        /// <param name="barConfig">延長する小節の拍子・分割数</param>
+        public void ExtendChart(int length, BarConfig barConfig)
+        {
+            // 譜面の読み込み中は受け付けない
+            if (dataGetter.IsLoadingChart.Value) { return; }
+            if (length <= 0 || barConfig == null || !barConfig.IsValid) { return; }
+
+            // 後から入力欄の値が変わっても、やり直し(Redo)で同じ小節が作られるよう、値を写しておく
+            var config = new BarConfig(barConfig.BeatCount, barConfig.BeatUnit, barConfig.DivisionNum);
+
+            // 延長
+            Record(() => {
+                // 譜面がまだ無いときは、空の譜面を作る
+                if (dataGetter.ChartData.Value == null) { dataSetter.ChangeChartLength(0); }
+
+                dataGetter.ChartData.Value.AddBars(length, config);
+            },
+            // 短縮
+            () => {
+                dataSetter.ChangeChartLength(-length);
+            });
+        }
+
+        /// <summary>
         /// 譜面の延長
         /// </summary>
         /// <param name="length"></param>

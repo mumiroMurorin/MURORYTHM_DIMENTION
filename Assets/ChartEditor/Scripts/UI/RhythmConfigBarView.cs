@@ -15,8 +15,23 @@ namespace ChartEditor
 
         public Action OnClickedApplyButtonListner { get; set; }
 
+        /// <summary>
+        /// Cancel ボタンが押されたとき (入力した内容を適用せずに閉じる)
+        /// </summary>
+        public Action OnClickedCancelButtonListner { get; set; }
+
+        // Cancel ボタンを作り終えたか
+        bool hasCancelButton;
+
         public void SetActive(bool value)
         {
+            // Cancel ボタンは、最初に開くときに Apply ボタンを複製して作る
+            if (value && !hasCancelButton)
+            {
+                hasCancelButton = true;
+                DialogCancelButton.Create(this.transform, () => OnClickedCancelButtonListner?.Invoke());
+            }
+
             this.gameObject.SetActive(value);
         }
 

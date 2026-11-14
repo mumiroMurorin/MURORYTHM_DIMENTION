@@ -161,6 +161,9 @@ namespace ChartEditor
             bool isFound = false;
             float bestDistance = 0f;
             float bestGap = float.MaxValue;
+            // 「直前に求めた位置」との近さは、円周に沿って測る
+            // (直前の位置が、別の周回の距離で渡されることがある。そのまま引き算すると、どの谷も同じくらい遠いことになってしまう)
+            float circumference = 2f * Mathf.PI * safeRadius;
 
             float previousSlope = float.MaxValue;
             float currentDistance = startDistance;
@@ -177,7 +180,7 @@ namespace ChartEditor
                 // 前後より小さければ谷 (視点より後ろの点はずれが最大値なので、谷にならない)
                 if (currentSlope < float.MaxValue && currentSlope <= previousSlope && currentSlope <= nextSlope)
                 {
-                    float gap = Mathf.Abs(currentDistance - preferredDistance);
+                    float gap = Mathf.Abs(PreviewPickMath.WrapDistance(currentDistance - preferredDistance, circumference));
                     if (gap < bestGap)
                     {
                         isFound = true;
