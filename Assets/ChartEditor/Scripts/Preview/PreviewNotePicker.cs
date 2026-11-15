@@ -252,10 +252,17 @@ namespace ChartEditor
             this.optionHolder = optionHolder;
 
             vertexHandles = new PreviewVertexHandles(notesGetter, optionHolder);
+
+            instance = this;
         }
+
+        // 今動いているもの (シーンに1つ)
+        static PreviewNotePicker instance;
 
         void IDisposable.Dispose()
         {
+            if (instance == this) { instance = null; }
+
             vertexHandles.Dispose();
             rangeRect.Dispose();
         }
@@ -1407,6 +1414,9 @@ namespace ChartEditor
             {
                 var note = pair.Data;
 
+                // ホールドを1本だけ編集している間は、ほかのノーツを選ばない
+                if (HoldIsolation.IsBlocked(note)) { continue; }
+
                 // プレビューに表示されていないノーツ(再生位置から離れているもの)は選ばない
                 if (!TryGetVisibleNoteDistance(note, out float distance)) { continue; }
 
@@ -1547,6 +1557,15 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 画面上の位置が、いずれかのプレビューの映像の上にあるか (ミニプレビューと、全画面プレビュー)
+        /// プレビューの映像は画面部品だが、その上でのホイールは、譜面の上と同じように、再生位置を動かす
+        /// </summary>
+        public static bool IsPointerOnPreview(Vector2 screenPosition)
+        {
+            return instance != null && instance.TryGetPreviewRay(screenPosition, out _, out _);
+        }
+
+        /// <summary>
         /// 画面上の位置が、いずれかのプレビューの映像の上にあれば、その位置を通るプレビュー世界の光線を返す
         /// </summary>
         private bool TryGetPreviewRay(Vector2 screenPosition, out Ray ray, out PreviewView hitView)
@@ -1578,6 +1597,15 @@ namespace ChartEditor
         /// </summary>
         /// <returns>見つかったとき true</returns>
         private bool TryFindEditorNotes(INoteData previewNoteData, out bool isSpaceNote)
+        {
+            if (!TryFindAllEditorNotes(previewNoteData, out isSpaceNote)) { return false; }
+
+            // ホールドを1本だけ編集している間は、ほかのノーツを、プレビューからも選ばせない
+            if (HoldIsolation.IsActive) { foundNotes.RemoveAll(HoldIsolation.IsBlocked); }
+            return foundNotes.Count > 0;
+        }
+
+        private bool TryFindAllEditorNotes(INoteData previewNoteData, out bool isSpaceNote)
         {
             foundNotes.Clear();
             isSpaceNote = false;

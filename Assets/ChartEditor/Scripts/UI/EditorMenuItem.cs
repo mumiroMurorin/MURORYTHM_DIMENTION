@@ -22,6 +22,12 @@ namespace ChartEditor
         SaveChart = 101,
         SaveChartAs = 102,
         SelectMusic = 110,
+        /// <summary>値 = バックアップの一覧の何番目か (0 が、いちばん新しいもの)</summary>
+        RestoreBackup = 120,
+        /// <summary>自動保存のフォルダを開いて、復元するファイルを選ぶ</summary>
+        RestoreBackupFromFolder = 121,
+        /// <summary>「ファイル」の一覧の横に、バックアップの一覧を開く / 閉じる</summary>
+        ToggleBackupList = 122,
 
         // 編集
         Undo = 200,
@@ -67,6 +73,7 @@ namespace ChartEditor
     ///
     /// 2つの見た目がある。
     /// ・行: メニューの横幅いっぱいの1行 (「上書き保存」など)。カーソルを乗せると色が付く
+    ///       横にもう1つ一覧を開く行 (「バックアップから復元」) は、その一覧を開いている間も、色を付けたままにする
     /// ・ボタン: 行の中に並ぶ小さな押しどころ (レーン分割数の「4」「8」、ノートスピードの「+」など)。
     ///           今選ばれている値のボタンは、色を変えて示す
     /// どの操作をするかは、項目ごとの「操作」と「値」で決まる。押されたことを知らせるだけで、操作そのものは EditorMenuPresenter が行う。
@@ -194,7 +201,12 @@ namespace ChartEditor
         {
             bool isHighlighted = isHovered && isEnabled;
 
-            if (!isButton) { return isHighlighted ? rowHoverColor : rowColor; }
+            if (!isButton)
+            {
+                // チェックの印を持たない行が「選ばれている」のは、その行から開いた一覧が出ている間
+                bool isListOpen = isChecked && checkMark == null && isEnabled;
+                return isHighlighted || isListOpen ? rowHoverColor : rowColor;
+            }
 
             if (isChecked) { return isHighlighted ? buttonCheckedHoverColor : buttonCheckedColor; }
             if (!isEnabled) { return buttonDisabledColor; }

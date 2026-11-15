@@ -74,6 +74,49 @@ namespace ChartEditor
     }
 
     /// <summary>
+    /// 編集ツールの中での範囲選択 (Shift を押しながらドラッグ)
+    ///
+    /// 編集ツールでは、何も無い所を押すと置く、ノーツ (頂点) を押すと動かす、になる。
+    /// Shift を押している間は、どちらもせずに、押した所から範囲選択を始める (ノーツや頂点の上からでも)。
+    /// 以前は、範囲で選ぶための「選択」ツールが別にあった。それを編集ツールにまとめたときに、この操作にした。
+    /// </summary>
+    public static class RangeSelectGesture
+    {
+        /// <summary>
+        /// 今マウスのボタンを押すと、範囲選択になるか (Shift を押していて、編集ツールの操作待ちのとき)
+        /// 置く・動かす・幅を変える・クリックで選ぶ処理は、これが true のとき何もしない
+        /// </summary>
+        public static bool IsForced(IChartEditorDataGetter dataGetter)
+        {
+            return ModifierKey.Shift && IsEditToolIdle(dataGetter.EditNoteType.Value, dataGetter.CurrentEditMode.Value);
+        }
+
+        /// <summary>
+        /// 編集ツールの操作待ちか (押すと、置く・動かす・幅を変える、が始まる状態)
+        /// </summary>
+        public static bool IsEditToolIdle(EditNoteType layer, EditMode editMode)
+        {
+            switch (layer)
+            {
+                // グラウンド・スペース: カーソルの下にあるもので決まるモード
+                // (接続・タイプ変更のツール、小節や分線の設定の上、ホールドを曲げる制御点の上、ドラッグの途中は、含めない)
+                case EditNoteType.Ground:
+                case EditNoteType.Space:
+                    return editMode == EditMode.None
+                        || editMode == EditMode.Deploy || editMode == EditMode.Move || editMode == EditMode.Scale
+                        || editMode == EditMode.SpaceDeploy || editMode == EditMode.SpaceMove;
+
+                // 頂点: 編集ツールを選んでいるとき (回転・拡大縮小のツールは、含めない)
+                case EditNoteType.Vertices:
+                    return editMode == EditMode.VertexEdit;
+
+                default:
+                    return false;
+            }
+        }
+    }
+
+    /// <summary>
     /// 選択中のノーツに対するキー操作 (削除・コピー・貼り付け) を受け付けてよい状態かの判定
     /// </summary>
     public static class SelectedNotesKeyOperation
@@ -85,6 +128,8 @@ namespace ChartEditor
             // 譜面の読み込み中と、入力欄に文字を打っている間は受け付けない
             if (dataGetter.IsLoadingChart.Value) { return false; }
             if (InputFieldFocus.IsTyping) { return false; }
+            // ホールドを曲げる制御点を動かしている間は受け付けない (置き直している最中の中継点が消えたりしないように)
+            if (HoldCurveEditor.IsDragging) { return false; }
 
             var layer = dataGetter.EditNoteType.Value;
             var editMode = dataGetter.CurrentEditMode.Value;

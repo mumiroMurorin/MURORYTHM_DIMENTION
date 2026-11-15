@@ -11,45 +11,37 @@ namespace ChartEditor
     {
         [SerializeField] Button button;
 
-        // ボタンに元からある、ショートカットキーの文字のオブジェクト名 (ボタンの下の端に「alt + S」のように書いてある)
-        const string SHORTCUT_LABEL_NAME = "Text_Shortcut";
+        // ショートカットキーの表示 (実行時に作る)
+        TextMeshProUGUI shortcutText;
 
         public Action OnClickedListner { get; set; }
 
         private void Start()
         {
             button.onClick.AddListener(OnClicked);
-
-            ReplaceShortcutLabel();
         }
 
         /// <summary>
-        /// ショートカットキーの表示を、配置ノーツのボタンと同じ形式にする
-        /// (ボタンの下の端の文字をやめて、右下の黒い四角に「Alt+S」のように書く。キーは元の文字から読み取る)
+        /// このボタンのショートカットキーを、ボタンの右下に小さく表示する (配置ノーツのボタンと同じ見た目)
+        /// キーが決まっていないボタンには、空の文字を渡す (何も出さない)
         /// </summary>
-        private void ReplaceShortcutLabel()
+        public void SetShortcutText(string text)
         {
-            TextMeshProUGUI original = null;
-            foreach (var text in GetComponentsInChildren<TextMeshProUGUI>(true))
+            if (string.IsNullOrEmpty(text))
             {
-                if (text.gameObject.name != SHORTCUT_LABEL_NAME) { continue; }
-
-                original = text;
-                break;
+                if (shortcutText != null) { shortcutText.transform.parent.gameObject.SetActive(false); }
+                return;
             }
 
-            if (original == null) { return; }
+            if (shortcutText == null)
+            {
+                // 文字の見た目(フォント)は、ボタンの名前の文字に合わせる
+                shortcutText = ShortcutBadge.Create(button.transform, button.GetComponentInChildren<TextMeshProUGUI>(true));
+            }
+            if (shortcutText == null) { return; }
 
-            string shortcut = ShortcutBadge.Format(original.text);
-
-            // 元の文字は隠す
-            original.gameObject.SetActive(false);
-
-            // ショートカットキーが決まっていないボタンには、何も出さない
-            if (shortcut.Length == 0) { return; }
-
-            TextMeshProUGUI badgeText = ShortcutBadge.Create(button.transform, original);
-            if (badgeText != null) { badgeText.text = shortcut; }
+            shortcutText.transform.parent.gameObject.SetActive(true);
+            shortcutText.text = text;
         }
 
         public void OnChangeEditMode(bool isInteracted)

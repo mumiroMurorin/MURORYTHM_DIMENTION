@@ -24,6 +24,22 @@ namespace ChartEditor
 
         public BarConfig EditingBarConfig { get; private set; }
 
+        /// <summary>
+        /// 設定を開いている小節 (0 始まり。1小節目が 0)。分線の設定を開いているときは、その分線がある小節
+        /// </summary>
+        public int EditingBarIndex { get; private set; } = -1;
+
+        /// <summary>
+        /// 設定を開いている分線の、小節の中での番号 (0 始まり。小節線が 0)。小節の設定を開いているときは -1
+        /// </summary>
+        public int EditingSubDivisionIndex { get; private set; } = -1;
+
+        /// <summary>
+        /// 設定を開くときにクリックした、レーンの上の表示 (小節の情報、分線の BPM の欄) の当たり判定
+        /// (今どの線の設定を開いているかを、枠で囲んで示すのに使う)
+        /// </summary>
+        public Collider EditingTargetCollider { get; private set; }
+
         [Inject]
         public void Construct(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter)
         {
@@ -79,6 +95,9 @@ namespace ChartEditor
                 if (dataGetter.ChartData.Value.BarDatas[barIndex].SubDivisionDatas.Count <= subIndex) { return; }
                 var previousSubData = dataGetter.ChartData.Value.BarDatas[barIndex].SubDivisionDatas[subIndex];
                 EditingSubdivisionConfig = previousSubData.SubConfig;
+                EditingBarIndex = barIndex;
+                EditingSubDivisionIndex = subIndex;
+                EditingTargetCollider = GetCollider(subDivisionCollider);
 
                 dataSetter.SetEditMode(EditMode.EditingSubDivisionConfig);
             }
@@ -94,9 +113,21 @@ namespace ChartEditor
                 if (dataGetter.ChartData.Value.BarDatas.Count <= barIndex) { return; }
                 var previousBarData = dataGetter.ChartData.Value.BarDatas[barIndex];
                 EditingBarConfig = previousBarData.BarConfig;
+                EditingBarIndex = barIndex;
+                EditingSubDivisionIndex = -1;
+                EditingTargetCollider = GetCollider(barCollider);
 
                 dataSetter.SetEditMode(EditMode.EditingBarConfig);
             }
+        }
+
+        /// <summary>
+        /// クリックされた表示の、当たり判定そのもの
+        /// </summary>
+        private static Collider GetCollider(IInteractableCollider interactable)
+        {
+            var component = interactable as Component;
+            return component != null ? component.GetComponent<Collider>() : null;
         }
 
         public void ChangeBarConfig(BarConfig barConfig)

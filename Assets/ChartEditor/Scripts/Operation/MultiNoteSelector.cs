@@ -67,6 +67,20 @@ namespace ChartEditor
         void Update()
         {
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
+            // ホールドを曲げる制御点の印を押したときは、選択を変えない (選択が外れると、制御点が消えてしまう)
+            if (HoldCurveEditor.IsCapturingPointer) { return; }
+
+            // 編集ツールで Shift を押しながらのドラッグは、範囲選択 (NoteRangeSelector)。押した所のノーツは、ここでは選ばない
+            // (ここで選ぶと、範囲選択の結果と二重になって、そのノーツの選択が外れてしまう)
+            // Ctrl も押しているときは、今の選択に足す・外すので、選択を残す
+            if (RangeSelectGesture.IsForced(dataGetter))
+            {
+                if (Input.GetMouseButtonDown(0) && !ModifierKey.Ctrl && !EventSystem.current.IsPointerOverGameObject())
+                {
+                    notesSetter.ClearSelectingNotes();
+                }
+                return;
+            }
 
             // Ctrl+左クリックで複数選択
             if (ModifierKey.Ctrl && Input.GetMouseButtonDown(0))

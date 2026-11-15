@@ -11,8 +11,22 @@ namespace ChartEditor
     {
         [SerializeField] TMP_InputField bpmField;
         [SerializeField] TMP_InputField speedRatioField;
+        [Tooltip("どの分線の設定かを書く見出し")]
+        [SerializeField] TextMeshProUGUI titleText;
 
         public Action OnClickedApplyButtonListner { get; set; }
+
+        /// <summary>
+        /// どの分線の設定を開いているかを、見出しに書く
+        /// </summary>
+        /// <param name="barIndex">分線がある小節 (0 始まり。1小節目が 0)</param>
+        /// <param name="subDivisionIndex">小節の中での、分線の番号 (0 始まり。小節線が 0)</param>
+        public void SetTarget(int barIndex, int subDivisionIndex)
+        {
+            if (titleText == null) { return; }
+
+            titleText.text = barIndex < 0 || subDivisionIndex < 0 ? "" : $"{barIndex + 1} 小節目 ・ {subDivisionIndex + 1} 本目の分線";
+        }
 
         /// <summary>
         /// Cancel ボタンが押されたとき (入力した内容を適用せずに閉じる)

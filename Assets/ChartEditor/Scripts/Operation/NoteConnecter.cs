@@ -9,9 +9,32 @@ using static UndoRedo.History;
 
 namespace ChartEditor
 {
+    /// <summary>
+    /// ホールド (スペースホールド) の接続
+    ///
+    /// ・接続ツール: ノーツを押して接続を始め、つなぐ先を順に押していく。Ctrl を押しながら押すと、接続を外す
+    /// ・接続ツールで、複数選択しているノーツの1つを押す: 選択中のノーツをまとめて接続する
+    /// ・Ctrl+J (どのツールでも): 選択中のホールド・スペースホールドを、まとめて接続する
+    /// </summary>
     public class NoteConnecter : MonoBehaviour
     {
         const int UNCHAINED_INDEX = -1;
+
+        // 選択中のノーツをまとめて接続するショートカットキー (Ctrl と一緒に押す。J = Join)
+        const KeyCode CONNECT_SELECTION_KEY = KeyCode.J;
+
+        // 操作の途中なので、まとめて接続するキーを受け付けないモード
+        static readonly EditMode[] connectSelectionIgnoreModes =
+        {
+            EditMode.Connecting,
+            EditMode.EditingBarConfig,
+            EditMode.EditingSubDivisionConfig,
+            EditMode.Moving,
+            EditMode.Scaling,
+            EditMode.SpaceMoving,
+            EditMode.CurveHandling,
+            EditMode.Explanation,
+        };
 
         IChartEditorDataGetter dataGetter;
         IChartEditorDataSetter dataSetter;
@@ -32,6 +55,14 @@ namespace ChartEditor
 
         private void Update()
         {
+            // Ctrl+J: 選択中のホールド・スペースホールドを、まとめて接続する (どのツールを選んでいても使える)
+            // 読み込み中・文字の入力中・ドラッグの途中・ほかの操作の途中は受け付けない
+            if (ModifierKey.Ctrl && Input.GetKeyDown(CONNECT_SELECTION_KEY) && !Input.GetMouseButton(0) &&
+                SelectedNotesKeyOperation.IsAcceptable(dataGetter, connectSelectionIgnoreModes))
+            {
+                ConnectSelectingNotes();
+            }
+
             EditMode editMode = dataGetter.CurrentEditMode.Value;
 
             if(editMode != EditMode.Connect && editMode != EditMode.Connecting && editMode != EditMode.DisConnect) 
@@ -123,6 +154,56 @@ namespace ChartEditor
                 }
             });
 
+            return true;
+        }
+
+        /// <summary>
+        /// 選択中のホールド・スペースホールドを、種類ごとにまとめて接続する (Ctrl+J)
+        ///
+        /// 接続ツールで、複数選択しているノーツの1つを押したときと同じ結果になる。
+        /// ホールド同士、スペースホールド同士を、それぞれ1本につなぐ。すでにつながっているノーツは、その接続ごと入る。
+        /// 接続番号は、選択中のノーツの中で最初に見つかった接続済みのノーツのもの。どれも未接続なら、新しい番号。
+        /// 元に戻す操作は、両方の種類をまとめて1回ぶん。
+        /// </summary>
+        /// <returns>1つでも接続したとき true</returns>
+        public bool ConnectSelectingNotes()
+        {
+            // どのノーツを、どの接続番号に入れるかを決める (種類ごとに、別の接続になる)
+            var members = new List<IChainNoteData>();
+            var originIndices = new List<int>();
+            var targetIndices = new List<int>();
+            ChainConnectPlanner.TryPlanSelection(
+                notesGetter.SelectingNotes,
+                note => notesGetter.GetNoteObject(note) != null,
+                index => notesGetter.GetChainNoteList(index)?.ChainNoteList,
+                index => notesGetter.GetChainNoteList(index) != null,
+                members,
+                originIndices,
+                targetIndices);
+
+            if (members.Count == 0)
+            {
+                Debug.Log("【接続】接続できるノーツがありません。同じ種類のホールド (スペースホールド) を2つ以上選んでから、Ctrl+J を押してください");
+                return false;
+            }
+
+            // 接続
+            Record(() => {
+                for (int i = 0; i < members.Count; i++)
+                {
+                    ConnectNote(members[i], targetIndices[i]);
+                }
+            },
+            // 元の接続に戻す (未接続だったノーツは、未接続に戻る)
+            () => {
+                for (int i = 0; i < members.Count; i++)
+                {
+                    DisconnectNote(members[i]);
+                    ConnectNote(members[i], originIndices[i]);
+                }
+            });
+
+            Debug.Log($"【接続】選択中のノーツを接続しました ({members.Count} 個)");
             return true;
         }
 

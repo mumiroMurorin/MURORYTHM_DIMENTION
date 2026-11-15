@@ -41,7 +41,7 @@ namespace ChartEditor
 
         /// <summary>
         /// メニューバーと同じキャンバス (MenuCanvas) に置いてある画面部品か
-        /// (メニューバー、開いた一覧、譜面情報の欄。全画面プレビューでは、これらの上のクリックを、プレビューへの操作として扱わない)
+        /// (メニューバー、開いた一覧、譜面情報の欄、クイックメニュー。全画面プレビューでは、これらの上のクリックを、プレビューへの操作として扱わない)
         /// </summary>
         public static bool IsOnMenuCanvas(GameObject target)
         {

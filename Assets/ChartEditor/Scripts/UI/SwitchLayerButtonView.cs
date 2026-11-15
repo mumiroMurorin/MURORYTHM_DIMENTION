@@ -18,6 +18,21 @@ namespace ChartEditor
 
         public Action OnClickCloseButtonListner;
 
+        // ショートカットキーの表示 (実行時に作る)
+        TextMeshProUGUI shortcutText;
+
+        /// <summary>
+        /// このボタンのショートカットキーを、ボタンの左上に小さく表示する
+        /// (ツールのボタンは右下に出しているが、このボタンは右下にレイヤーの名前があるので、左上に出す)
+        /// </summary>
+        public void SetShortcutText(string text)
+        {
+            if (string.IsNullOrEmpty(text) || switchButton == null) { return; }
+
+            if (shortcutText == null) { shortcutText = ShortcutBadge.Create(switchButton.transform, tmp, ShortcutBadge.Corner.TopLeft); }
+            if (shortcutText != null) { shortcutText.text = text; }
+        }
+
         public void OnChangeEditMode(EditMode editMode)
         {
             if(editMode == EditMode.Connecting) { this.gameObject.SetActive(false); }

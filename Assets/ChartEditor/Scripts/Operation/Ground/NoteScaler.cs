@@ -45,7 +45,8 @@ namespace ChartEditor
                 return;
             }
 
-            if (Input.GetMouseButtonDown(0)) { StartScaleNote(); }
+            // (Shift を押しながらのドラッグは範囲選択なので、幅は変えない)
+            if (Input.GetMouseButtonDown(0) && !RangeSelectGesture.IsForced(dataGetter)) { StartScaleNote(); }
             if (Input.GetMouseButton(0)) { ScaleNote(); }
             if (Input.GetMouseButtonUp(0)) { FinishScaleNote(true); }
         }

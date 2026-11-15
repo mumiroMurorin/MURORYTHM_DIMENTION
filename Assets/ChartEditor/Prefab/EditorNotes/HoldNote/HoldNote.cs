@@ -23,6 +23,7 @@ namespace ChartEditor
             SetNoteType(data.NoteType);
             // 同じ分線に並んだノーツをまとめて複製したとき、並びの順番が保たれるように
             SetOrderInSubdivision(data.OrderInSubdivision.Value);
+            curveControl = data.curveControl;
         }
 
 
@@ -102,6 +103,26 @@ namespace ChartEditor
                    noteType == DeploymentNoteType.HoldEndUnjudge;
         }
 
+
+        // このノーツ (節) と、次の節との間を曲げる、制御点の位置。動かしていないときは null (まっすぐ)
+        // x: 2つの節をまっすぐ結んだ線から、横へレーンいくつぶん離れているか (プラスが右)
+        // y: この節から次の節までの長さの、何割のところにあるか (0〜1)     (計算は HoldCurveMath)
+        // 編集している間だけ覚えている。譜面ファイルには保存しない
+        Vector2? curveControl;
+        public Vector2? CurveControl => curveControl;
+
+        public void SetCurveControl(Vector2? control)
+        {
+            curveControl = control;
+        }
+
+        /// <summary>
+        /// 制御点の左右を入れ替える (ノーツを左右に反転したときに呼ぶ。2回呼ぶと元に戻る)
+        /// </summary>
+        public void MirrorCurveControl()
+        {
+            if (curveControl.HasValue) { curveControl = new Vector2(-curveControl.Value.x, curveControl.Value.y); }
+        }
 
         // アドレス
         AddressWithinRange address;

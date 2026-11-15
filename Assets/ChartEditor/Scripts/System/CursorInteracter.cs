@@ -21,9 +21,9 @@ namespace ChartEditor
         GameObject currentHitObject;
         Camera currentViewCamera;
 
+        // カーソルの下にあるものでモードを切り替えないモード (ツールで選んだモードと、ダイアログなどを開いている間)
         EditMode[] cursorIgnoreModes = new EditMode[]
         {
-            EditMode.NoteSelect,
             EditMode.EditingBarConfig,
             EditMode.EditingSubDivisionConfig,
             EditMode.Connect,
@@ -31,14 +31,12 @@ namespace ChartEditor
             EditMode.Connecting,
             EditMode.Explanation,
             EditMode.ChangeType,
-            EditMode.VertexDeploy,
-            EditMode.VertexMove,
+            EditMode.VertexEdit,
             EditMode.VertexMoving,
             EditMode.VerticesRotate,
             EditMode.VerticesRotating,
             EditMode.VerticesScale,
             EditMode.VerticesScaling,
-            EditMode.VerticesSelect,
             EditMode.Preview,
         };
 
@@ -127,6 +125,26 @@ namespace ChartEditor
                 return;
             }
 
+            // ホールドを曲げる制御点の印にカーソルが乗っている間と、制御点を動かしている間も、
+            // カーソル下のオブジェクトを「無し」にする (印の下にあるノーツやレーンが、クリックで操作されないように)
+            if (HoldCurveEditor.IsCapturingPointer)
+            {
+                if (currentHitObject != null)
+                {
+                    currentHitObject = null;
+                    chartEditorDataSetter.SetInteractableColliders(null);
+                }
+
+                // カーソルの下のもので決まるモード (配置、移動など) のときは、制御点のモードにする
+                // (ツールで選んだモード (選択など) と、制御点を動かしている最中のモードは、そのまま)
+                bool isMouseBusy = Input.GetMouseButton(0) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0);
+                if (!isCursorIgnoremode && !isMouseBusy && !HoldCurveEditor.IsDragging)
+                {
+                    chartEditorDataSetter.SetEditMode(EditMode.CurveHandle);
+                }
+                return;
+            }
+
             UpdateObjectUnderCursor();
             SetEditorMode();
         }
@@ -138,6 +156,9 @@ namespace ChartEditor
         private void SetEditorMode()
         {
             EditMode raycastEditMode = GetEditModeUnderCursor();
+
+            // ホールドを1本だけ編集している間は、ノーツを置けない (レーンの上にカーソルを置いても、配置のモードにしない)
+            if (HoldIsolation.IsActive && raycastEditMode == EditMode.Deploy) { raycastEditMode = EditMode.None; }
 
             // 無視リストに入ってるモード中であれば無効
             if (isCursorIgnoremode) { return; }
@@ -205,6 +226,12 @@ namespace ChartEditor
             Ray ray = currentViewCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
+            // ホールドを1本だけ編集している間は、ほかのノーツを通り抜けて、その奥にあるものを返す
+            if (HoldIsolation.IsActive)
+            {
+                return HoldIsolation.TryRaycast(ray, rayDistance, raycastLayer, out hit) ? hit.collider.gameObject : null;
+            }
+
             // オブジェクトがなかったらnullを返す
             if (!Physics.Raycast(ray, out hit, rayDistance, raycastLayer)) { return null; }
             return hit.collider.gameObject;
@@ -220,6 +247,12 @@ namespace ChartEditor
 
             Ray ray = currentViewCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
+
+            // ホールドを1本だけ編集している間は、ほかのノーツを通り抜ける (GetObjectUnderCursor と同じものを指すように)
+            if (HoldIsolation.IsActive)
+            {
+                return HoldIsolation.TryRaycast(ray, rayDistance, raycastLayer, out hit) ? hit.point : Vector3.one * -9999;
+            }
 
             // オブジェクトがなかったらnullを返す
             if (!Physics.Raycast(ray, out hit, rayDistance, raycastLayer)) { return Vector3.one * -9999; }

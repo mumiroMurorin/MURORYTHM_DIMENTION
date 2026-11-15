@@ -78,8 +78,9 @@ namespace ChartEditor
                 .Subscribe(type => {
                     switch (type)
                     {
+                        // 頂点のレイヤーに入ったときは、編集ツール (配置・移動・選択) にする
                         case EditNoteType.Vertices:
-                            dataSetter.SetEditMode(EditMode.VerticesSelect);
+                            dataSetter.SetEditMode(EditMode.VertexEdit);
                             break;
                     }
                 })

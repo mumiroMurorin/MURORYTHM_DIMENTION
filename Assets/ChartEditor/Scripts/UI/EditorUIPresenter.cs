@@ -12,7 +12,7 @@ namespace ChartEditor
     /// <summary>
     /// 編集画面の画面部品と、譜面エディタの機能をつなぐ
     ///
-    /// ここで扱うのは、キャンバスの切り替え、小節・分線の設定ダイアログ、操作の説明、レイヤーの切り替え、
+    /// ここで扱うのは、キャンバスの切り替え、小節・分線の設定ダイアログ (どの線の設定かの表示も)、操作の説明、レイヤーの切り替え、
     /// オフセットの入力欄、楽曲名の表示。
     /// メニューバーとクイックメニュー (左下の設定欄) の項目は、EditorMenuPresenter が扱う
     /// (そこから、ここの BrowseAudioFile・ExtendChart を呼ぶ)。
@@ -28,6 +28,8 @@ namespace ChartEditor
         [SerializeField] MusicNameView musicName_view;
         [SerializeField] RhythmConfigBarView rhythmConfigBar_view;
         [SerializeField] RhythmConfigSubView rhythmConfigSubDivision_view;
+        [Tooltip("設定を開いている線の、レーンの上の表示を囲む枠")]
+        [SerializeField] RhythmConfigTargetFrameView rhythmConfigTargetFrame_view;
         [SerializeField] OperationDescriptionView description_view;
         [SerializeField] ExplanationButtonView explanationButton_view;
         [SerializeField] ExplanationView explanation_view;
@@ -54,12 +56,48 @@ namespace ChartEditor
             optionGetter = optionDataGetter;
         }
 
+        // レイヤーを切り替えるショートカットキー (Alt と一緒に押す。レイヤーのボタンに「Alt+L」と表示する)
+        const KeyCode SWITCH_LAYER_KEY = KeyCode.L;
+
+        // レイヤーの切り替えを、キーでは受け付けないモード (ほかの操作の途中、ダイアログや説明書を開いている間、全画面プレビュー)
+        static readonly EditMode[] switchLayerIgnoreEditModes =
+        {
+            EditMode.Connecting,
+            EditMode.Moving,
+            EditMode.Scaling,
+            EditMode.SpaceMoving,
+            EditMode.CurveHandling,
+            EditMode.VertexMoving,
+            EditMode.VerticesRotating,
+            EditMode.VerticesScaling,
+            EditMode.EditingBarConfig,
+            EditMode.EditingSubDivisionConfig,
+            EditMode.Explanation,
+            EditMode.Preview,
+        };
+
         void Start()
         {
             BindForRhythmConfig();
             BindForOther();
 
             SetEvent();
+
+            switchLayerButton_view.SetShortcutText(ShortcutBadge.FormatAltKey(SWITCH_LAYER_KEY));
+        }
+
+        void Update()
+        {
+            // Alt+L: レイヤーを切り替える (レイヤーのボタンと同じ)
+            if (!ModifierKey.Alt || !Input.GetKeyDown(SWITCH_LAYER_KEY)) { return; }
+
+            // 読み込み中・文字の入力中・ドラッグの途中・メニューを開いている間・ほかの操作の途中は受け付けない
+            if (dataGetter_model.IsLoadingChart.Value || InputFieldFocus.IsTyping || Input.GetMouseButton(0)) { return; }
+            if (EditorMenuBar.IsBlockingChartInput) { return; }
+            if (dataGetter_model.EditNoteType.Value == EditNoteType.Preview) { return; }
+            if (dataGetter_model.CurrentEditMode.Value.IsInEditModeList(switchLayerIgnoreEditModes)) { return; }
+
+            dataSetter.SwitchEditNoteType();
         }
 
         private void BindForOther()
@@ -83,9 +121,13 @@ namespace ChartEditor
                 .Subscribe(musicName_view.OnChangeMusic)
                 .AddTo(this.gameObject);
 
-            // 説明文の表示
+            // 操作説明の表示 (エディットモードとレイヤーで、出す行が決まる)
             dataGetter_model?.CurrentEditMode
                 .Subscribe(description_view.OnChangeEditMode)
+                .AddTo(this.gameObject);
+
+            dataGetter_model?.EditNoteType
+                .Subscribe(description_view.OnChangeEditNoteType)
                 .AddTo(this.gameObject);
 
             // 説明書の表示、非表示
@@ -119,6 +161,9 @@ namespace ChartEditor
                     var config = configEditor_model.EditingBarConfig;
 
                     rhythmConfigBar_view.SetDataOnUI(config);
+                    // どの小節の設定かを、見出しと、レーンの上の枠で示す
+                    rhythmConfigBar_view.SetTarget(configEditor_model.EditingBarIndex);
+                    rhythmConfigTargetFrame_view?.Show(configEditor_model.EditingTargetCollider);
                     rhythmConfigBar_view.SetActive(true);
                 })
                 .AddTo(this.gameObject);
@@ -131,6 +176,9 @@ namespace ChartEditor
                     var config = configEditor_model.EditingSubdivisionConfig;
 
                     rhythmConfigSubDivision_view.SetDataOnUI(config);
+                    // どの分線の設定かを、見出しと、レーンの上の枠で示す
+                    rhythmConfigSubDivision_view.SetTarget(configEditor_model.EditingBarIndex, configEditor_model.EditingSubDivisionIndex);
+                    rhythmConfigTargetFrame_view?.Show(configEditor_model.EditingTargetCollider);
                     rhythmConfigSubDivision_view.SetActive(true);
                 })
                 .AddTo(this.gameObject);
@@ -147,6 +195,7 @@ namespace ChartEditor
                         rhythmConfigBar_view.SetData(configEditor_model.ChangeBarConfig);
                     }
                     rhythmConfigBar_view.SetActive(false);
+                    rhythmConfigTargetFrame_view?.Hide();
                 })
                 .AddTo(this.gameObject);
 
@@ -162,6 +211,7 @@ namespace ChartEditor
                         rhythmConfigSubDivision_view.SetData(configEditor_model.ChangeSubDivisionConfig);
                     }
                     rhythmConfigSubDivision_view.SetActive(false);
+                    rhythmConfigTargetFrame_view?.Hide();
                 })
                 .AddTo(this.gameObject);
         }

@@ -75,6 +75,8 @@ namespace ChartEditor
                 .Subscribe(collider =>
                 {
                     if (dataGetter.CurrentEditMode.Value != DeployMode) { return; }
+                    // ホールドを1本だけ編集している間は、仮ノーツも出さない
+                    if (HoldIsolation.IsActive) { return; }
                     if (TryGetDeployLocation(collider.Value, out var parent, out _)) { UpdateNotePosition(parent); }
                 }).AddTo(this.gameObject);
 
@@ -93,8 +95,16 @@ namespace ChartEditor
             // 配置モードでない際は返す
             if (dataGetter.CurrentEditMode.Value != DeployMode) { return; }
 
-            // 左クリックで配置
-            if (Input.GetMouseButtonDown(0)) { DeployNoteOnClick(); }
+            // ホールドを1本だけ編集している間は、どのノーツも置けない
+            // (配置のツールを、ボタンやショートカットキーで選んだときも同じ。出ている仮ノーツは消す)
+            if (HoldIsolation.IsActive)
+            {
+                DestroyNote();
+                return;
+            }
+
+            // 左クリックで配置 (Shift を押しながらのドラッグは範囲選択なので、置かない)
+            if (Input.GetMouseButtonDown(0) && !RangeSelectGesture.IsForced(dataGetter)) { DeployNoteOnClick(); }
         }
 
         /// <summary>

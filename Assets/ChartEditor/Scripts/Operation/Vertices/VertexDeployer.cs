@@ -1,12 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using VContainer;
 using UniRx;
 using static UndoRedo.History;
 
 namespace ChartEditor
 {
+    /// <summary>
+    /// 頂点の配置
+    /// 頂点の編集ツールで、頂点も中心点も無い所 (円の中) を押すと、そこに頂点を置く
+    /// (頂点の上を押したときは、選択と移動になる。MultiVertexSelector / VerticesMover)
+    /// </summary>
     public class VertexDeployer : MonoBehaviour
     {
         [SerializeField] VertexObjectsController verticesController;
@@ -49,12 +55,18 @@ namespace ChartEditor
 
         void Update()
         {
+            // 頂点の編集ツールの、操作待ちのときだけ
             var currentEditMode = dataGetter.CurrentEditMode.Value;
-            if (currentEditMode != EditMode.VertexDeploy) { return; }
+            if (currentEditMode != EditMode.VertexEdit) { return; }
 
             // 頂点オブジェクトの配置
             if (Input.GetMouseButtonDown(0)) 
             {
+                // 範囲選択 (Shift を押しながらドラッグ) と、複数選択 (Ctrl を押しながらクリック) の操作では置かない
+                if (ModifierKey.Shift || ModifierKey.Ctrl) { return; }
+                // ボタンなどの画面部品を押したときは、裏に置かない
+                if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) { return; }
+
                 DeployVertex();
             }
         }
@@ -64,7 +76,12 @@ namespace ChartEditor
         /// </summary>
         private void DeployVertex()
         {
+            // カーソルの下が「頂点を置ける所」のときだけ (頂点や中心点の上では、置ける所は取れない)
             if (deployableCollider == null) { return; }
+            // 今カーソルの下にあるものでも確かめる
+            // (スペースノートのダブルクリックで頂点のレイヤーに入った、そのクリックで置いてしまわないように)
+            if (dataGetter.GetInteractableCollider<IPointDeployableCollider>() == null) { return; }
+            if (notesGetter.EditingVertices.Value == null) { return; }
 
             Vector3 worldPos = cursorInteracter.Value.GetWorldPositionUnderCursor();
 

@@ -353,20 +353,29 @@ namespace ChartEditor
         Connecting = 41,
         DisConnect = 42,
         ChangeType = 50,
+        /// <summary>ホールドを曲げる制御点の印に、カーソルが乗っている</summary>
+        CurveHandle = 60,
+        /// <summary>ホールドを曲げる制御点を、掴んで動かしている</summary>
+        CurveHandling = 61,
 
         SpaceDeploy = 100,
         SpaceMove = 110,
         SpaceMoving = 111,
-        NoteSelect = 150,
+        // 150 は、以前の「選択」ツール (NoteSelect) の番号。編集ツールにまとめたので、今は無い (番号は使い回さない)
 
-        VertexDeploy = 200,
-        VertexMove = 210,
+        // 200 は、以前の「頂点の配置」ツール (VertexDeploy) の番号。頂点の編集ツールにまとめたので、今は無い
+        /// <summary>
+        /// 頂点の編集ツールの操作待ち (何も無い所を押すと頂点を置く、頂点を掴むと動かす、Ctrl+クリックで複数選択、
+        /// Shift+ドラッグで範囲選択)。以前の「配置」「移動」「選択」の3つのツールを、1つにまとめたもの (番号は、以前の移動ツールのもの)
+        /// </summary>
+        VertexEdit = 210,
+        /// <summary>頂点を掴んで動かしている</summary>
         VertexMoving = 211,
         VerticesRotate = 220,
         VerticesRotating = 221,
         VerticesScale = 230,
         VerticesScaling = 231,
-        VerticesSelect = 290,
+        // 290 は、以前の「頂点の選択」ツール (VerticesSelect) の番号。今は無い
 
         EditBarConfig = 500,
         EditingBarConfig = 501,

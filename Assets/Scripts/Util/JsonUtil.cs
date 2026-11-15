@@ -163,6 +163,14 @@ namespace JsonUtil
         /// <param name="errorMessage">読み込みに失敗したときの理由。キャンセルされたときは空</param>
         public static bool TryLoadFromJsonFileDialog<T>(out T result, out string loadedPath, out string errorMessage)
         {
+            return TryLoadFromJsonFileDialog(out result, out loadedPath, out errorMessage, null, null);
+        }
+
+        /// <param name="errorMessage">読み込みに失敗したときの理由。キャンセルされたときは空</param>
+        /// <param name="initialDirectory">最初に開くフォルダ (null や、無いフォルダのときは、前回開いたフォルダ)</param>
+        /// <param name="filter">選べるファイルの種類 (null のときは JSON ファイルだけ)</param>
+        public static bool TryLoadFromJsonFileDialog<T>(out T result, out string loadedPath, out string errorMessage, string initialDirectory, string filter)
+        {
             result = default;
             loadedPath = string.Empty;
             errorMessage = string.Empty;
@@ -172,8 +180,14 @@ namespace JsonUtil
                 using (VistaOpenFileDialog dialog = new VistaOpenFileDialog())
                 {
                     dialog.Title = "Select JSON file to load";
-                    dialog.Filter = "JSON file (*.json)|*.json";
+                    dialog.Filter = string.IsNullOrEmpty(filter) ? "JSON file (*.json)|*.json" : filter;
                     dialog.Multiselect = false;
+                    if (!string.IsNullOrEmpty(initialDirectory) && Directory.Exists(initialDirectory))
+                    {
+                        // フォルダを指定するときは、末尾に区切りを付けておく (付けないと、フォルダ名がファイル名の欄に入る)
+                        dialog.InitialDirectory = initialDirectory;
+                        dialog.FileName = initialDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+                    }
 
                     if (dialog.ShowDialog() != DialogResult.OK)
                     {
@@ -187,6 +201,53 @@ namespace JsonUtil
                     Debug.Log($"[JsonLoader] Loaded: {dialog.FileName}");
                     return true;
                 }
+            }
+            catch (IOException ioEx)
+            {
+                errorMessage = $"ファイルを読み込めませんでした: {ioEx.Message}";
+                Debug.LogError($"[JsonLoader] IO error: {ioEx.Message}");
+            }
+            catch (JsonException jsonEx)
+            {
+                errorMessage = $"JSONとして解釈できませんでした: {jsonEx.Message}";
+                Debug.LogError($"[JsonLoader] JSON parse error: {jsonEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"予期しないエラーが発生しました: {ex.Message}";
+                Debug.LogError($"[JsonLoader] Unexpected error: {ex.Message}\n{ex.StackTrace}");
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 決まったファイルを読み込む。失敗したときは、その理由も返す
+        /// </summary>
+        /// <param name="errorMessage">読み込みに失敗したときの理由</param>
+        public static bool TryLoadFromJsonFile<T>(string filePath, out T result, out string errorMessage)
+        {
+            result = default;
+            errorMessage = string.Empty;
+
+            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+            {
+                errorMessage = "ファイルが見つかりません。";
+                return false;
+            }
+
+            try
+            {
+                string json = File.ReadAllText(filePath);
+                result = JsonConvert.DeserializeObject<T>(json);
+                if (result == null)
+                {
+                    errorMessage = "ファイルの中身が空です。";
+                    return false;
+                }
+
+                Debug.Log($"[JsonLoader] Loaded: {filePath}");
+                return true;
             }
             catch (IOException ioEx)
             {

@@ -32,7 +32,7 @@ namespace ChartEditor
             builder.RegisterEntryPoint<ChartSaveGuard>().AsSelf();
 
             // レギュレーション違反(赤いアウトライン)をログ欄に知らせる
-            builder.RegisterEntryPoint<RegulationWarningNotifier>();
+            builder.RegisterEntryPoint<RegulationWarningNotifier>().AsSelf();
 
             // 譜面の読み込み中、クリックを受け付けないようにする
             builder.RegisterEntryPoint<LoadingInputBlocker>();
@@ -43,6 +43,12 @@ namespace ChartEditor
 
             // 同じ分線に並んだ、同じホールドのノーツの順番を入れ替える (↑ / ↓)
             builder.RegisterEntryPoint<ChainOrderChanger>();
+
+            // ホールドを、制御点で曲げる (間にメッシュ中継点を置き直す)。制御点の印の見た目は、シーンに置いてある HoldCurveHandlesView
+            builder.RegisterEntryPoint<HoldCurveEditor>();
+
+            // ホールドを1本だけ編集する (ホールドをダブルクリックすると、ほかのノーツを白黒にして、触れなくする)
+            builder.RegisterEntryPoint<HoldIsolation>();
 
             // 編集画面の「譜面情報」の欄 (シーンに置いてある ChartInfoView) に、コンボ数・ノーツの種類ごとの数などを渡す
             builder.RegisterEntryPoint<ChartInfoPresenter>();

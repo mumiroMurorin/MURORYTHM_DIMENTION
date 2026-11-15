@@ -110,6 +110,79 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 選択中のノーツを、種類ごと (ホールド同士、スペースホールド同士) にまとめて接続するときの段取りを決める
+        /// (押したノーツが無い操作 = ショートカットキー用。種類ごとに、最初に選択されているノーツを「押したノーツ」として扱う)
+        /// </summary>
+        /// <param name="selectingNotes">選択中のノーツ</param>
+        /// <param name="isConnectable">そのノーツを接続の対象にできるか (譜面上にオブジェクトがあるか)</param>
+        /// <param name="getChainNotes">接続番号から、その接続に入っているノーツを返す処理 (その番号の接続が無ければ null)</param>
+        /// <param name="isChainIndexUsed">その接続番号が、すでに使われているか</param>
+        /// <param name="members">接続するノーツが入る</param>
+        /// <param name="originIndices">members のそれぞれの、今の接続番号が入る (元に戻すとき用)</param>
+        /// <param name="targetIndices">members のそれぞれを入れる接続番号が入る</param>
+        /// <returns>接続するものが1つでもあるとき true</returns>
+        public static bool TryPlanSelection(
+            IEnumerable<IDeployableNoteData> selectingNotes,
+            Func<IChainNoteData, bool> isConnectable,
+            Func<int, IEnumerable<IChainNoteData>> getChainNotes,
+            Func<int, bool> isChainIndexUsed,
+            List<IChainNoteData> members,
+            List<int> originIndices,
+            List<int> targetIndices)
+        {
+            members.Clear();
+            originIndices.Clear();
+            targetIndices.Clear();
+
+            if (selectingNotes == null) { return false; }
+
+            // 種類ごとに、基準にするノーツ (その種類で最初に選択されているもの) を決める
+            var anchors = new List<IChainNoteData>();
+            foreach (var selecting in selectingNotes)
+            {
+                if (selecting is not IChainNoteData chainNote) { continue; }
+                if (isConnectable != null && !isConnectable(chainNote)) { continue; }
+
+                bool isKnownKind = false;
+                foreach (var anchor in anchors)
+                {
+                    if (anchor.GetType() == chainNote.GetType()) { isKnownKind = true; break; }
+                }
+                if (!isKnownKind) { anchors.Add(chainNote); }
+            }
+
+            // 新しい接続番号は、種類ごとに別のものにする
+            // (番号の空きは、実際に接続するまで埋まらない。同じ空き番号を2回使うと、ホールドとスペースホールドが同じ番号になってしまう)
+            var reservedIndices = new HashSet<int>();
+            Func<int> getUsableChainIndex = () =>
+            {
+                int index = 0;
+                while ((isChainIndexUsed != null && isChainIndexUsed(index)) || reservedIndices.Contains(index)) { index++; }
+                reservedIndices.Add(index);
+                return index;
+            };
+
+            var kindMembers = new List<IChainNoteData>();
+            var kindOriginIndices = new List<int>();
+            foreach (var anchor in anchors)
+            {
+                if (!TryPlan(anchor, selectingNotes, isConnectable, getChainNotes, getUsableChainIndex, kindMembers, kindOriginIndices, out int chainIndex))
+                {
+                    continue;
+                }
+
+                for (int i = 0; i < kindMembers.Count; i++)
+                {
+                    members.Add(kindMembers[i]);
+                    originIndices.Add(kindOriginIndices[i]);
+                    targetIndices.Add(chainIndex);
+                }
+            }
+
+            return members.Count > 0;
+        }
+
+        /// <summary>
         /// 接続するノーツの一覧に、ノーツと今の接続番号を加える (すでに入っているノーツは加えない)
         /// </summary>
         private static void AddMember(IChainNoteData note, List<IChainNoteData> members, List<int> originIndices)

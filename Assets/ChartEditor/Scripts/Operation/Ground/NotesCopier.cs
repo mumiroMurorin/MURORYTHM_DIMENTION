@@ -55,7 +55,17 @@ namespace ChartEditor
             if (!SelectedNotesKeyOperation.IsAcceptable(dataGetter, ignoreEditModes)) { return; }
 
             if (isCopy) { CopyNotes(); }
-            if (isPaste) { PasteNotes(); }
+            if (isPaste)
+            {
+                // ホールドを1本だけ編集している間は、ノーツを増やせない
+                if (HoldIsolation.IsActive)
+                {
+                    Debug.Log("【ホールドの単独編集】このホールドだけを編集している間は、貼り付けできません");
+                    return;
+                }
+
+                PasteNotes();
+            }
         }
 
         /// <summary>

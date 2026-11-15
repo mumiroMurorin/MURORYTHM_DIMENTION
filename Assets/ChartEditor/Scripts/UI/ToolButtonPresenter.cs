@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UniRx;
 using VContainer;
@@ -26,6 +27,9 @@ namespace ChartEditor
         [SerializeField] VerticesMirrorButtonView mirrorYAxisButton_view;
         [SerializeField] VerticesSlider verticesSlider_model;
         [SerializeField] VerticesReverser verticesReverser_model;
+        [Space(10), Header("ショートカットキーの表示")]
+        [Tooltip("ツールを切り替えるキーを受け付けている処理 (ボタンに表示するキーを、ここから受け取る)")]
+        [SerializeField] InputHandler inputHandler_model;
 
         IChartEditorDataSetter dataSetter_model;
         IChartEditorDataGetter dataGetter_model;
@@ -45,10 +49,51 @@ namespace ChartEditor
         {
             BindForEditView();
             SetEvent();
+            SetShortcutTexts();
         }
 
-        // 反転のショートカットキー (Alt と一緒に押す。ボタンに「Alt+M」と表示してある)
+        // 反転のショートカットキー (Alt と一緒に押す。反転ボタンに「Alt+M」と表示する)
         const KeyCode MIRROR_KEY = KeyCode.M;
+
+        /// <summary>
+        /// それぞれのボタンの右下に、ショートカットキーを表示する
+        /// (キーは、実際にキーを受け付けている処理から受け取る。ボタンには書いていない)
+        /// </summary>
+        private void SetShortcutTexts()
+        {
+            SetShortcutTexts(toolButtonsOnGround_view, EditNoteType.Ground);
+            SetShortcutTexts(toolButtonsOnSpace_view, EditNoteType.Space);
+            SetShortcutTexts(toolButtonsOnVertices_view, EditNoteType.Vertices);
+
+            // 反転ボタン (グラウンド・スペース)
+            string mirrorText = ShortcutBadge.FormatAltKey(MIRROR_KEY);
+            SetShortcutText(notesMirrorButton_view, mirrorText);
+            SetShortcutText(spaceNotesMirrorButton_view, mirrorText);
+        }
+
+        private void SetShortcutTexts(List<ToolButtonToEditMode> buttons, EditNoteType editNoteType)
+        {
+            if (buttons == null) { return; }
+
+            foreach (var button in buttons)
+            {
+                if (button == null || button.ToolButton_view == null) { continue; }
+
+                KeyCode key = KeyCode.None;
+                if (inputHandler_model != null) { inputHandler_model.TryGetEditModeShortcutKey(button.EditMode, editNoteType, out key); }
+
+                button.ToolButton_view.SetShortcutText(ShortcutBadge.FormatAltKey(key));
+            }
+        }
+
+        private static void SetShortcutText(ButtonView button, string text)
+        {
+            if (button == null || string.IsNullOrEmpty(text)) { return; }
+
+            // 文字の見た目(フォント)は、ボタンの名前の文字に合わせる
+            TextMeshProUGUI label = ShortcutBadge.Create(button.transform, button.GetComponentInChildren<TextMeshProUGUI>(true));
+            if (label != null) { label.text = text; }
+        }
 
         // 反転を受け付けないモード (ほかの操作の途中)
         static readonly EditMode[] mirrorIgnoreEditModes =

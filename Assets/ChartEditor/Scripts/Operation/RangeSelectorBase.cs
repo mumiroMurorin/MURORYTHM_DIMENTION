@@ -9,6 +9,10 @@ namespace ChartEditor
     /// <summary>
     /// ドラッグで矩形を描いて範囲選択する操作の共通処理 (ノーツ・頂点共通)
     /// 派生クラスは「いつ有効か」と「矩形内のどれを選択するか」を実装する
+    ///
+    /// 始まり方は2つ:
+    /// ・ノーツ (頂点) が無い所を押してドラッグ
+    /// ・編集ツールで、Shift を押しながらドラッグ (ノーツや頂点の上からでも始まる。RangeSelectGesture)
     /// </summary>
     public abstract class RangeSelectorBase : MonoBehaviour
     {
@@ -17,8 +21,13 @@ namespace ChartEditor
         protected IChartEditorDataGetter dataGetter;
         protected INotesDataGetter notesGetter;
 
+        // Shift を押しながら押して、この大きさ(ピクセル)より動かさずに離したときは、ドラッグではなくクリックとして扱う
+        const float CLICK_SIZE = 5f;
+
         Vector2 startPos;
         bool isSelecting = false;
+        // Shift を押しながら始めた範囲選択か
+        bool isForcedSelection = false;
 
         /// <summary>
         /// 範囲選択を受け付ける状態か (編集レイヤーなど)
@@ -36,9 +45,20 @@ namespace ChartEditor
         protected abstract bool IsCursorOnSelectable { get; }
 
         /// <summary>
+        /// Shift を押していなくても、何も無い所を押しただけで範囲選択を始めるか
+        /// (押した所に何かを置く状態のときは false にする。そのときは、Shift を押しながらのドラッグでだけ始まる)
+        /// </summary>
+        protected virtual bool StartsOnPlainPress => true;
+
+        /// <summary>
         /// 矩形(スクリーン座標、左下原点)の中にあるオブジェクトを選択する
         /// </summary>
         protected abstract void SelectObjects(Rect selectionRect);
+
+        /// <summary>
+        /// カーソルの下にあるオブジェクトを選択する (Shift を押しながら、ドラッグせずにクリックしたとき)
+        /// </summary>
+        protected abstract void SelectObjectUnderCursor();
 
         [Inject]
         public void Construct(IChartEditorDataGetter dataGetter, INotesDataGetter notesGetter)
@@ -56,8 +76,22 @@ namespace ChartEditor
                 return;
             }
 
-            // カーソル先にオブジェクトがある場合は返す
-            if (!isSelecting && IsCursorOnSelectable) { return; }
+            bool isForced = false;
+            if (!isSelecting)
+            {
+                // ホールドを曲げる制御点の印の上では始めない
+                if (HoldCurveEditor.IsCapturingPointer) { return; }
+
+                // 編集ツールで Shift を押しているときは、ノーツ (頂点) の上からでも始める
+                isForced = RangeSelectGesture.IsForced(dataGetter);
+                if (!isForced)
+                {
+                    // カーソル先にオブジェクトがある場合は返す
+                    if (IsCursorOnSelectable) { return; }
+                    // 押した所に何かを置く状態のときは返す
+                    if (!StartsOnPlainPress) { return; }
+                }
+            }
 
             // 範囲選択開始
             if (Input.GetMouseButtonDown(0))
@@ -67,13 +101,19 @@ namespace ChartEditor
 
                 startPos = Input.mousePosition;
                 isSelecting = true;
+                isForcedSelection = isForced;
             }
 
             // 範囲選択終了
             if (Input.GetMouseButtonUp(0) && isSelecting)
             {
                 isSelecting = false;
-                SelectObjects(GetScreenRectForContains(startPos, Input.mousePosition));
+                Rect rect = GetScreenRectForContains(startPos, Input.mousePosition);
+
+                // Shift を押しながらのクリック (ドラッグしていない): カーソルの下のノーツ (頂点) を選ぶ
+                // (押したときに選択を外しているので、何もしないと、クリックしたものが選ばれない)
+                if (isForcedSelection && rect.width < CLICK_SIZE && rect.height < CLICK_SIZE) { SelectObjectUnderCursor(); }
+                else { SelectObjects(rect); }
             }
         }
 

@@ -34,6 +34,8 @@ namespace ChartEditor
         {
             if (dataGetter.EditNoteType.Value != EditNoteType.Space) { return; }
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
+            // Shift を押しながらのクリックは範囲選択なので、ダブルクリックに数えない
+            if (RangeSelectGesture.IsForced(dataGetter)) { return; }
 
             // カウントダウン
             if(count > 0) { count -= Time.deltaTime; }

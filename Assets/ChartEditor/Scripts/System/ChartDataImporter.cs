@@ -11,6 +11,16 @@ using Debug = UnityEngine.Debug;
 
 namespace ChartEditor
 {
+    /// <summary>
+    /// 譜面のファイルを読み込んで、編集中の譜面と入れ替える
+    ///
+    /// ・「開く」: ファイルを選んで読み込む。読み込んだファイルが、上書き保存の保存先になる
+    /// ・「バックアップから復元」: 自動保存されたファイルや、上書き保存する前のファイルを読み込む。
+    ///   バックアップのファイルそのものは、保存先にしない (上書き保存で、バックアップを書き換えてしまわないように)。
+    ///   今開いている譜面のバックアップなら、保存先はそのまま。別の譜面のバックアップなら、保存先は未設定にする。
+    ///   どちらも「保存されていない変更がある」状態になる (元のファイルは、保存するまで変わらない)。
+    ///   復元する前の状態に、保存されていない変更があれば、それもバックアップに残してから入れ替える
+    /// </summary>
     public class ChartDataImporter : MonoBehaviour
     {
         [Tooltip("読み込み中、1フレームのうち読み込みに使ってよい時間(ミリ秒)。大きいほど早く終わるが、画面がカクつく")]
@@ -39,21 +49,81 @@ namespace ChartEditor
             ChainNoteTypeCorrection.Resume(false);
         }
 
+        /// <summary>
+        /// どこから読み込むか
+        /// </summary>
+        private enum Source
+        {
+            // ファイルを選んで開く
+            FileDialog,
+            // 決まったバックアップから復元する
+            Backup,
+            // バックアップのフォルダを開いて、ファイルを選んで復元する
+            BackupDialog,
+        }
+
+        // バックアップを選ぶ画面で、選べるファイルの種類 (自動保存と、上書き保存する前のファイル)
+        const string BACKUP_FILE_FILTER = "バックアップ (*.json;*.bak)|*.json;*.bak";
+
         public void Import()
         {
             // 読み込みの途中で、もう一度読み込みを始めない
             if (dataGetter.IsLoadingChart.Value) { return; }
 
-            ImportAsync(this.GetCancellationTokenOnDestroy()).Forget();
+            ImportAsync(Source.FileDialog, null, this.GetCancellationTokenOnDestroy()).Forget();
         }
 
-        private async UniTaskVoid ImportAsync(CancellationToken token)
+        /// <summary>
+        /// バックアップ (自動保存されたファイル、上書き保存する前のファイル) から、譜面を復元する
+        /// </summary>
+        public void ImportBackup(string backupPath)
+        {
+            if (dataGetter.IsLoadingChart.Value || string.IsNullOrEmpty(backupPath)) { return; }
+
+            ImportAsync(Source.Backup, backupPath, this.GetCancellationTokenOnDestroy()).Forget();
+        }
+
+        /// <summary>
+        /// 自動保存のフォルダを開いて、選んだファイルから、譜面を復元する
+        /// </summary>
+        public void ImportBackupFromDialog()
+        {
+            if (dataGetter.IsLoadingChart.Value) { return; }
+
+            ImportAsync(Source.BackupDialog, null, this.GetCancellationTokenOnDestroy()).Forget();
+        }
+
+        private async UniTaskVoid ImportAsync(Source source, string backupPath, CancellationToken token)
         {
             // 未保存の変更があれば確認
-            if (!saveGuard.ConfirmDiscardChanges("別の譜面を読み込み")) { return; }
+            // (バックアップからの復元で、今の内容がもうバックアップにあるときは、聞かない。
+            //  復元した直後に、別のバックアップを試すときなど。今の内容へは、同じ一覧から戻れる)
+            bool isRestore = source != Source.FileDialog;
+            if (!isRestore || saveGuard.HasChangesSinceBackup)
+            {
+                if (!saveGuard.ConfirmDiscardChanges(isRestore ? "バックアップから復元" : "別の譜面を読み込み")) { return; }
+            }
 
-            // Load from file dialog and keep the path for subsequent Ctrl+S overwrite.
-            if (!JsonLoader.TryLoadFromJsonFileDialog(out ChartDataOrigin chartDataOrigin, out string loadedPath, out string loadError))
+            ChartDataOrigin chartDataOrigin;
+            string loadedPath;
+            string loadError;
+            bool isLoaded;
+            switch (source)
+            {
+                case Source.Backup:
+                    loadedPath = backupPath;
+                    isLoaded = JsonLoader.TryLoadFromJsonFile(backupPath, out chartDataOrigin, out loadError);
+                    break;
+                case Source.BackupDialog:
+                    isLoaded = JsonLoader.TryLoadFromJsonFileDialog(out chartDataOrigin, out loadedPath, out loadError, ChartSaveGuard.AutoSaveDirectoryPath, BACKUP_FILE_FILTER);
+                    break;
+                default:
+                    // Load from file dialog and keep the path for subsequent Ctrl+S overwrite.
+                    isLoaded = JsonLoader.TryLoadFromJsonFileDialog(out chartDataOrigin, out loadedPath, out loadError);
+                    break;
+            }
+
+            if (!isLoaded)
             {
                 // キャンセル時はエラー文が空。読み込みに失敗したときだけ通知する
                 if (!string.IsNullOrEmpty(loadError))
@@ -63,12 +133,19 @@ namespace ChartEditor
                 return;
             }
 
+            // 選んだファイルが、バックアップか (バックアップのフォルダを開いた画面から、ふつうの譜面を選ぶこともできる)
+            bool isBackup = ChartBackups.IsBackupPath(loadedPath, ChartSaveGuard.AutoSaveDirectoryPath);
+
             // 現在の譜面を破棄する前に、読み込めるデータか検査する
             if (!ChartImporterForChartEditor.TryValidate(chartDataOrigin, out string validationError))
             {
                 MessageDialog.ShowError("譜面を読み込めません", $"{validationError}\n\n現在の譜面はそのまま残しています。\n{loadedPath}");
                 return;
             }
+
+            // バックアップから復元するときは、復元する前の状態も、バックアップに残しておく
+            // (選び間違えたときに、同じ一覧から戻せるように。保存されていない変更が無ければ、何も作らない)
+            if (isBackup) { saveGuard.BackupNow(); }
 
             // 失敗したとき元に戻せるよう、現在の状態を退避
             ChartDataOrigin previousChart = ExportCurrentChart();
@@ -113,7 +190,20 @@ namespace ChartEditor
             // Reset undo/redo history after import.
             ResetStates();
 
-            if (isCompletelyImported)
+            if (isCompletelyImported && isBackup)
+            {
+                // バックアップのファイルそのものは、保存先にしない (上書き保存で、バックアップを書き換えてしまわないように)
+                // 今開いていた譜面のバックアップなら、保存先はそのまま。別の譜面のバックアップなら、保存先を未設定にする
+                if (!ChartBackups.IsBackupOf(loadedPath, ChartFilePathCache.CurrentChartFilePath, ChartSaveGuard.AUTO_SAVE_PREFIX))
+                {
+                    ChartFilePathCache.CurrentChartFilePath = string.Empty;
+                }
+
+                // 復元した内容は、まだ譜面のファイルには保存されていない (同じ内容がバックアップにあるので、自動保存はしない)
+                saveGuard.MarkRestored();
+                Debug.Log($"【復元】バックアップから譜面を復元しました。保存するまで、元のファイルは変わりません\n{loadedPath}");
+            }
+            else if (isCompletelyImported)
             {
                 ChartFilePathCache.CurrentChartFilePath = loadedPath;
                 saveGuard.MarkSaved();

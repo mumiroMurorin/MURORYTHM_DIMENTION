@@ -47,6 +47,18 @@ namespace ChartEditor
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
             if (dataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
 
+            // 編集ツールで Shift を押しながらのドラッグは、範囲選択 (VerticesRangeSelector)。押した所の頂点は、ここでは選ばない
+            // (ここで選ぶと、範囲選択の結果と二重になって、その頂点の選択が外れてしまう)
+            // Ctrl も押しているときは、今の選択に足す・外すので、選択を残す
+            if (RangeSelectGesture.IsForced(dataGetter))
+            {
+                if (Input.GetMouseButtonDown(0) && !ModifierKey.Ctrl && !EventSystem.current.IsPointerOverGameObject())
+                {
+                    DeselectAll();
+                }
+                return;
+            }
+
             // Ctrl+左クリックで複数選択
             if (ModifierKey.Ctrl && Input.GetMouseButtonDown(0))
             {

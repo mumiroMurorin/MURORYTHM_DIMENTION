@@ -6,16 +6,29 @@ using UnityEngine.UI;
 namespace ChartEditor
 {
     /// <summary>
-    /// ボタンの右下に出す、ショートカットキーの表示 (黒い四角に白い文字で「Alt+1」「Alt+S」のように書く)
+    /// ボタンの角 (ふつうは右下) に出す、ショートカットキーの表示 (黒い四角に白い文字で「Alt+1」「Alt+S」のように書く)
     ///
-    /// 配置ノーツのボタンとツールのボタンで同じ見た目にするため、作り方をここにまとめている。
+    /// 配置ノーツのボタンとツールのボタン (反転ボタンも含む) で同じ見た目にするため、作り方をここにまとめている。
     /// 表示は実行時に作る (ボタンの絵の上に重なっても読めるよう、暗い下地を敷く)。
+    /// 表示するキーは、ボタンに書いておくのではなく、実際にキーを受け付けている処理から受け取る
+    /// (キーを変えたときに、表示だけが古いまま残らないように)。
     /// </summary>
     public static class ShortcutBadge
     {
-        // 表示の大きさと位置 (ボタンの右下の角からの距離)
+        /// <summary>
+        /// 表示を出す、ボタンの角
+        /// </summary>
+        public enum Corner
+        {
+            // ふつうのボタン
+            BottomRight,
+            // 右下に文字や絵があって、重なると読みにくいボタン (レイヤーの切り替えボタン)
+            TopLeft,
+        }
+
+        // 表示の大きさと、ボタンの角からの距離
         static readonly Vector2 size = new Vector2(44f, 15f);
-        static readonly Vector2 offset = new Vector2(-3f, 3f);
+        const float CORNER_MARGIN = 3f;
         // 文字の大きさ。長い表示は、四角に収まるよう下限まで自動で縮める
         const float FONT_SIZE = 12f;
         const float FONT_SIZE_MIN = 8f;
@@ -26,10 +39,15 @@ namespace ChartEditor
         /// </summary>
         /// <param name="button">表示を付けるボタン</param>
         /// <param name="template">文字の見た目(フォント)を合わせる相手</param>
+        /// <param name="corner">表示を出す、ボタンの角</param>
         /// <returns>表示の文字。作れなかったときは null</returns>
-        public static TextMeshProUGUI Create(Transform button, TextMeshProUGUI template)
+        public static TextMeshProUGUI Create(Transform button, TextMeshProUGUI template, Corner corner = Corner.BottomRight)
         {
             if (button == null || template == null) { return null; }
+
+            // 角の位置 (ボタンの左下が (0, 0)、右上が (1, 1)) と、そこから内側へ寄せる向き
+            Vector2 anchor = corner == Corner.TopLeft ? new Vector2(0f, 1f) : new Vector2(1f, 0f);
+            Vector2 offset = corner == Corner.TopLeft ? new Vector2(CORNER_MARGIN, -CORNER_MARGIN) : new Vector2(-CORNER_MARGIN, CORNER_MARGIN);
 
             // 下地
             var badge = new GameObject("Shortcut", typeof(RectTransform));
@@ -37,9 +55,9 @@ namespace ChartEditor
 
             var badgeRect = (RectTransform)badge.transform;
             badgeRect.SetParent(button, false);
-            badgeRect.anchorMin = new Vector2(1f, 0f);
-            badgeRect.anchorMax = new Vector2(1f, 0f);
-            badgeRect.pivot = new Vector2(1f, 0f);
+            badgeRect.anchorMin = anchor;
+            badgeRect.anchorMax = anchor;
+            badgeRect.pivot = anchor;
             badgeRect.anchoredPosition = offset;
             badgeRect.sizeDelta = size;
 
@@ -72,6 +90,21 @@ namespace ChartEditor
             label.raycastTarget = false;
 
             return label;
+        }
+
+        /// <summary>
+        /// Alt と一緒に押すキーの表示を作る (「Alt+S」「Alt+1」)
+        /// </summary>
+        public static string FormatAltKey(KeyCode key)
+        {
+            if (key == KeyCode.None) { return string.Empty; }
+
+            string name = key.ToString();
+            // 数字のキーは「Alpha1」のような名前になっている
+            const string digitPrefix = "Alpha";
+            if (name.StartsWith(digitPrefix) && name.Length > digitPrefix.Length) { name = name.Substring(digitPrefix.Length); }
+
+            return Format("Alt+" + name);
         }
 
         /// <summary>

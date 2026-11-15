@@ -11,6 +11,7 @@ namespace ChartEditor
     ///
     /// ・「表示」のログ欄と、「クイックメニュー」の各セクション (左下の設定欄の行) を、表示したり隠したりする
     ///   (譜面情報と全体マップは、それぞれの Presenter が、編集中のレイヤーと合わせて決めている)
+    /// ・クイックメニューは、編集画面でも全画面プレビューでも、同じものを出す (小節・分線の設定ダイアログや、説明書を開いている間は隠す)
     /// ・表示する / しないの設定を、PlayerPrefs に保存し、起動時に読み込む
     /// 対象の画面部品は、シーンに置いてあるものを、panels で指定する。
     /// </summary>
@@ -38,14 +39,26 @@ namespace ChartEditor
         // (v2: クイックメニューの最初の表示を「よく使うものだけ」に変えたときに、名前を変えた。前の名前で保存された設定は使わない)
         const string PREFS_KEY_PREFIX = "ChartEditor.PanelVisible.v2.";
 
+        // クイックメニューを隠すモード (小節・分線の設定ダイアログや、説明書を開いている間)
+        // (クイックメニューは、全画面プレビューでも出したままにするため、いつも手前に出すキャンバス (MenuCanvas) に置いてある。
+        //  隠さないと、ダイアログや説明書の上に重なってしまう)
+        static readonly EditMode[] quickMenuHiddenEditModes =
+        {
+            EditMode.EditingBarConfig,
+            EditMode.EditingSubDivisionConfig,
+            EditMode.Explanation,
+        };
+
         IChartEditorOptionGetter optionGetter;
         IChartEditorOptionSetter optionSetter;
+        IChartEditorDataGetter dataGetter;
 
         [Inject]
-        public void Construct(IChartEditorOptionGetter optionGetter, IChartEditorOptionSetter optionSetter)
+        public void Construct(IChartEditorOptionGetter optionGetter, IChartEditorOptionSetter optionSetter, IChartEditorDataGetter dataGetter)
         {
             this.optionGetter = optionGetter;
             this.optionSetter = optionSetter;
+            this.dataGetter = dataGetter;
         }
 
         private void Start()
@@ -81,6 +94,11 @@ namespace ChartEditor
                     })
                     .AddTo(this);
             }
+
+            // ダイアログや説明書を開いている間は、クイックメニューを隠す
+            dataGetter?.CurrentEditMode
+                .Subscribe(_ => RefreshQuickMenu())
+                .AddTo(this);
         }
 
         private void LateUpdate()
@@ -156,10 +174,17 @@ namespace ChartEditor
 
         /// <summary>
         /// クイックメニューの枠を、表示するセクションが1つでもあるときだけ出す
+        /// (ダイアログや説明書を開いている間は、セクションがあっても出さない)
         /// </summary>
         private void RefreshQuickMenu()
         {
             if (quickMenu == null) { return; }
+
+            if (dataGetter != null && dataGetter.CurrentEditMode.Value.IsInEditModeList(quickMenuHiddenEditModes))
+            {
+                if (quickMenu.activeSelf) { quickMenu.SetActive(false); }
+                return;
+            }
 
             bool hasVisibleSection = false;
             foreach (EditorPanel panel in Enum.GetValues(typeof(EditorPanel)))

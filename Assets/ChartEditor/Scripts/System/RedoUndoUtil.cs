@@ -113,6 +113,7 @@ namespace UndoRedo.Notes
                 {
                     MoveNote(pair.NoteData, pair.Address);
                     ChangeTypeNote(pair.NoteData);
+                    MirrorCurveControl(pair.NoteData);
                 }
             }, () =>
             // 戻す
@@ -121,8 +122,17 @@ namespace UndoRedo.Notes
                 {
                     MoveNote(pair.NoteData, pair.Address);
                     ChangeTypeNote(pair.NoteData);
+                    MirrorCurveControl(pair.NoteData);
                 }
             });
+        }
+
+        /// <summary>
+        /// ホールドを曲げる制御点も、左右を入れ替える (反転した後も、反転した側に曲がったままになるように)
+        /// </summary>
+        public static void MirrorCurveControl(IDeployableNoteData noteData)
+        {
+            if (noteData is ChartEditor.NoteData_Hold hold) { hold.MirrorCurveControl(); }
         }
 
         public static void MoveNote(IDeployableNoteData noteData, AddressWithinRange address)

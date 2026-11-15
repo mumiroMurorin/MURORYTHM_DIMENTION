@@ -9,6 +9,8 @@ namespace ChartEditor
     /// <summary>
     /// レギュレーション違反(赤いアウトラインが出ているノーツ)を、画面のログ欄に知らせる
     /// 違反がある間は表示し続け、すべて解消されたら消す
+    ///
+    /// 違反が残っている譜面は保存できない。保存の処理 (ChartDataExporter) は、GetViolationText で今の違反を調べる
     /// </summary>
     public class RegulationWarningNotifier : ITickable, IDisposable
     {
@@ -82,6 +84,18 @@ namespace ChartEditor
         void IDisposable.Dispose()
         {
             notice.Hide();
+        }
+
+        /// <summary>
+        /// 今ある違反を、ログ欄に出すのと同じ文章で返す (違反が無ければ空文字)
+        /// ログ欄の表示は少し遅れて変わるが、これは、呼ばれた時点のノーツの状態を調べる
+        /// </summary>
+        public string GetViolationText()
+        {
+            // 読み込み中は調べない (ホールドの接続が途中なので、実際には無い違反が出てしまう)
+            if (dataGetter.IsLoadingChart.Value) { return string.Empty; }
+
+            return BuildWarningText();
         }
 
         /// <summary>

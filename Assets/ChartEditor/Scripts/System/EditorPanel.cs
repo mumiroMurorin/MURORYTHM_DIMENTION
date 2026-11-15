@@ -17,17 +17,15 @@
         Log = 3,
 
         // ---- クイックメニュー (編集画面の左下の設定欄) のセクション (メニューの「クイックメニュー」で切り替える)
-        QuickMusicSelect = 101,
+        // 101 (楽曲選択)、104 (レーン分割数)、110 (ウィンドウサイズ)、111 (インポート・エクスポート) は、
+        // クイックメニューから外したので欠番 (これらは、上のメニューから使う)
         QuickChartLength = 102,
         QuickOffset = 103,
-        QuickLaneDivision = 104,
         QuickPlaybackSpeed = 105,
         QuickNoteSound = 106,
         QuickScrollSensitivity = 107,
         QuickNoteSpeed = 108,
         QuickHitVolume = 109,
-        QuickWindowSize = 110,
-        QuickImportExport = 111,
         QuickMusicVolume = 112,
     }
 
@@ -51,8 +49,7 @@
             if (!panel.IsQuickMenuSection()) { return true; }
 
             return panel == EditorPanel.QuickChartLength ||
-                   panel == EditorPanel.QuickOffset ||
-                   panel == EditorPanel.QuickImportExport;
+                   panel == EditorPanel.QuickOffset;
         }
     }
 }

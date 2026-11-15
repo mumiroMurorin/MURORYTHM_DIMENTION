@@ -14,13 +14,16 @@ namespace ChartEditor
     /// ・編集されたら未保存フラグを立てる
     /// ・未保存のまま終了/インポートしようとしたとき確認を出す
     /// ・一定時間ごとにバックアップを自動保存する
+    ///   (バックアップからの復元は、メニューの「ファイル」から行う。一覧は ChartBackups、読み込みは ChartDataImporter)
     /// </summary>
     public class ChartSaveGuard : IStartable, ITickable, IDisposable
     {
         const float AUTO_SAVE_INTERVAL_SECONDS = 180f;
-        const int AUTO_SAVE_KEEP_COUNT = 10;
+        // 残しておく自動保存の数 (これより古いものは消す)
+        public const int AUTO_SAVE_KEEP_COUNT = 10;
         const string AUTO_SAVE_DIRECTORY = "ChartEditorAutoSave";
-        const string AUTO_SAVE_PREFIX = "autosave_";
+        // 自動保存のファイル名の先頭 (この後ろに、譜面の名前と日時が付く。ChartBackups が、この形から譜面の名前を読み取る)
+        public const string AUTO_SAVE_PREFIX = "autosave_";
 
         readonly IChartEditorDataGetter dataGetter;
 
@@ -98,6 +101,34 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// バックアップから復元したときに呼ぶ
+        /// 復元した内容は、譜面のファイルには保存されていない (未保存)。ただし、同じ内容がバックアップにあるので、
+        /// 次に編集されるまで、自動保存はしない
+        /// (ここで自動保存の対象にすると、バックアップを順に試すたびに、試したものの写しが増えて、古いバックアップが押し出されていく)
+        /// </summary>
+        public void MarkRestored()
+        {
+            IsDirty = true;
+            isDirtySinceAutoSave = false;
+        }
+
+        /// <summary>
+        /// 今の内容が、まだバックアップに無いか (最後に自動保存・復元・保存してから、編集されたか)
+        /// </summary>
+        public bool HasChangesSinceBackup => isDirtySinceAutoSave;
+
+        /// <summary>
+        /// 今の譜面を、すぐにバックアップへ保存する (今の内容が、もうバックアップにあるときは、何もしない)
+        /// バックアップから復元する直前に呼ぶ。復元する前の状態も残しておけば、選び間違えたときに、同じ一覧から戻せる
+        /// </summary>
+        public void BackupNow()
+        {
+            if (!isDirtySinceAutoSave) { return; }
+
+            AutoSave();
+        }
+
+        /// <summary>
         /// 未保存の変更があるとき、破棄してよいか確認する
         /// </summary>
         /// <returns>続行してよいとき true</returns>
@@ -130,10 +161,9 @@ namespace ChartEditor
             {
                 var chartDataOrigin = new ChartExporter().Export(chartData, dataGetter.Offset.Value);
 
-                string chartName = string.IsNullOrWhiteSpace(ChartFilePathCache.CurrentChartFilePath)
-                    ? "untitled"
-                    : Path.GetFileNameWithoutExtension(ChartFilePathCache.CurrentChartFilePath);
-                string fileName = $"{AUTO_SAVE_PREFIX}{chartName}_{DateTime.Now:yyyyMMdd_HHmmss}.json";
+                // 名前には、譜面のあるフォルダの名前と、譜面の名前を入れる
+                // (譜面のファイル名は、曲が違っても同じことが多い。フォルダの名前で、どの曲の譜面かを見分ける)
+                string fileName = ChartBackups.CreateAutoSaveFileName(AUTO_SAVE_PREFIX, ChartFilePathCache.CurrentChartFilePath, DateTime.Now);
                 string path = Path.Combine(AutoSaveDirectoryPath, fileName);
 
                 if (JsonWriter.TrySaveToJsonPath(chartDataOrigin, path))

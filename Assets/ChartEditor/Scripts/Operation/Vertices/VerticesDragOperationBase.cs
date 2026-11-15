@@ -27,6 +27,8 @@ namespace ChartEditor
         bool isDragging;
         // 中心点を掴んで、すべての頂点を動かしている最中か
         bool isDraggingCenterHandle;
+        // 今押しているボタンでは、頂点を動かさない (Shift を押しながら押した = 範囲選択のドラッグ)
+        bool isPressForRangeSelect;
         Vector3 cursorPos;
         IPointMovableCollider targetCollider;
 
@@ -95,6 +97,15 @@ namespace ChartEditor
             {
                 if (isDragging) { EndDrag(); }
                 Initialize();
+
+                // 編集ツールで Shift を押しながらのドラッグは範囲選択なので、ボタンを離すまで頂点は掴まない
+                isPressForRangeSelect = RangeSelectGesture.IsForced(dataGetter);
+            }
+
+            if (isPressForRangeSelect)
+            {
+                if (!Input.GetMouseButton(0)) { isPressForRangeSelect = false; }
+                return;
             }
 
             // 頂点オブジェクトを動かす

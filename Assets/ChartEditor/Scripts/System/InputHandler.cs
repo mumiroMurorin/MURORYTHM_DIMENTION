@@ -48,6 +48,7 @@ namespace ChartEditor
         {
             EditMode.Moving,
             EditMode.Scaling,
+            EditMode.CurveHandling,
             EditMode.Connecting,
             EditMode.SpaceMoving,
             EditMode.VertexMoving,
@@ -189,7 +190,13 @@ namespace ChartEditor
             if (dataGetter.PlayMode.Value == PlayMode.Play) { return; }
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(playIgnoreModes)) { return; }
             // カーソルがUI上にあるときは返す
-            if (EventSystem.current.IsPointerOverGameObject() && dataGetter.CurrentEditMode.Value != EditMode.Preview) { return; }
+            // (プレビューの映像の上は別。ミニプレビューにカーソルを置いているときも、譜面の上と同じように動かせる)
+            if (EventSystem.current.IsPointerOverGameObject() &&
+                dataGetter.CurrentEditMode.Value != EditMode.Preview &&
+                !PreviewNotePicker.IsPointerOnPreview(Input.mousePosition))
+            {
+                return;
+            }
 
             // スクロール感度と譜面長さによって変える
             float chartSeconds = dataGetter.ChartSeconds.Value;
@@ -232,6 +239,28 @@ namespace ChartEditor
             }
         }
 
+        /// <summary>
+        /// ツール (エディットモード) を切り替えるショートカットキーを調べる (Alt と一緒に押すキー)
+        /// ツールのボタンに、キーを表示するのに使う
+        /// </summary>
+        /// <param name="editMode">ツールのエディットモード</param>
+        /// <param name="editNoteType">そのツールを使うレイヤー</param>
+        /// <returns>キーが決まっているか</returns>
+        public bool TryGetEditModeShortcutKey(EditMode editMode, EditNoteType editNoteType, out KeyCode keyCode)
+        {
+            keyCode = KeyCode.None;
+            if (editModeShortCutKeys == null) { return false; }
+
+            foreach (var key in editModeShortCutKeys)
+            {
+                if (key == null || !key.IsFor(editMode, editNoteType)) { continue; }
+
+                keyCode = key.KeyCode;
+                return keyCode != KeyCode.None;
+            }
+            return false;
+        }
+
         [System.Serializable]
         class EditModeToKeycode
         {
@@ -239,6 +268,13 @@ namespace ChartEditor
             [SerializeField] EditMode editMode;
             [SerializeField] EditNoteType editNoteType;
             [SerializeField] KeyCode keyCode;
+
+            public KeyCode KeyCode => keyCode;
+
+            public bool IsFor(EditMode editMode, EditNoteType editNoteType)
+            {
+                return this.editMode == editMode && this.editNoteType == editNoteType;
+            }
 
             public bool CheckAndChangeEditMode(bool isModifierKeyPressed, EditNoteType currentEditNoteType, Action<EditMode> changeEditMode)
             {

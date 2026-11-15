@@ -5,15 +5,19 @@ using UniRx;
 
 namespace ChartEditor
 {
+    /// <summary>
+    /// プレビューの画面部品と、譜面エディタの機能をつなぐ
+    ///
+    /// ここで扱うのは、全画面プレビューを開く・編集画面へ戻る・プレビューを作り直すこと。
+    /// 全画面プレビューの中の設定 (オフセット、再生速度、ノートスピードなど) は、編集画面と同じクイックメニューで行う
+    /// (クイックメニューは、全画面プレビューでも表示されたままのキャンバス (MenuCanvas) に置いてある)。
+    /// </summary>
     public class PreviewUIPresenter : MonoBehaviour
     {
         [Header("Views")]
         [SerializeField] ButtonView previewRefreshButton_view;
         [SerializeField] ButtonView previewStartButton_view;
         [SerializeField] ButtonView backEditorButton_view;
-        [SerializeField] OffsetInputFieldView offsetInputField_view;
-        [SerializeField] ChangeLaneDivNumButtonView changeLaneDivNumButton_view;
-        [SerializeField] NoteSpeedSliderView noteSpeedSlider_view;
 
         [Space(20)]
         [Header("Models")]
@@ -21,10 +25,6 @@ namespace ChartEditor
 
         IChartEditorDataGetter dataGetter_model;
         IChartEditorDataSetter dataSetter_model;
-        IChartEditorOptionSetter optionSetter_model;
-        IChartEditorOptionGetter optionGetter_model;
-        INoteSpawnDataOptionSetter noteSpawnDataOptionSetter_model;
-        INoteSpawnDataOptionGetter noteSpawnDataOptionGetter_model;
         INotesDataGetter notesGetter_model;
         INotesDataSetter notesSetter_model;
 
@@ -35,10 +35,6 @@ namespace ChartEditor
         public void Construct(
             IChartEditorDataGetter dataGetter,
             IChartEditorDataSetter dataSetter,
-            IChartEditorOptionSetter optionDataSetter,
-            IChartEditorOptionGetter optionDataGetter,
-            INoteSpawnDataOptionSetter noteSpawnDataOptionSetter,
-            INoteSpawnDataOptionGetter noteSpawnDataOptionGetter,
             INotesDataGetter notesGetter,
             INotesDataSetter notesSetter)
         {
@@ -46,36 +42,13 @@ namespace ChartEditor
             this.notesSetter_model = notesSetter;
             this.dataGetter_model = dataGetter;
             this.dataSetter_model = dataSetter;
-            this.optionSetter_model = optionDataSetter;
-            this.optionGetter_model = optionDataGetter;
-            this.noteSpawnDataOptionSetter_model = noteSpawnDataOptionSetter;
-            this.noteSpawnDataOptionGetter_model = noteSpawnDataOptionGetter;
         }
 
         private void Start()
         {
             previewRefreshable = previewRefreshTarget as IChartPreviewRefreshable;
 
-            Bind();
             SetEvent();
-
-            // 再生速度・ノーツ音の切り替え行を、レーン分割数の行の下に追加する
-            SettingsCycleRow.CreateEditorRows(changeLaneDivNumButton_view, optionGetter_model, optionSetter_model);
-        }
-
-        private void Bind()
-        {
-            dataGetter_model?.Offset
-                .Subscribe(offsetInputField_view.OnChangeFloatValue)
-                .AddTo(this.gameObject);
-
-            optionGetter_model?.LaneDivisionNum
-                .Subscribe(changeLaneDivNumButton_view.OnLaneDivNumChanged)
-                .AddTo(this.gameObject);
-
-            noteSpawnDataOptionGetter_model?.NoteSpeed
-                .Subscribe(noteSpeedSlider_view.OnValueChanged)
-                .AddTo(this.gameObject);
         }
 
         private void SetEvent()
@@ -96,13 +69,6 @@ namespace ChartEditor
             {
                 backEditorButton_view.OnPushButtonListner += BackToEditor;
             }
-
-            offsetInputField_view.OnFloatValueChangedListner += dataSetter_model.SetOffset;
-            changeLaneDivNumButton_view.OnPushButtonListner += () => optionSetter_model.SetLaneDivisionNum(true);
-
-            // ノートスピード変更: スライダーを動かし終えたら反映する
-            // (プレビューは、ノートスピードの変化を見て自動で並べ直される)
-            noteSpeedSlider_view.OnNoteSpeedChangedListener += noteSpawnDataOptionSetter_model.SetNoteSpeed;
         }
 
         /// <summary>

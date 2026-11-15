@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using VContainer;
@@ -47,6 +48,8 @@ namespace ChartEditor
         [SerializeField] ValueLabel[] valueLabels_view;
         [Tooltip("延長する小節数・延長分の拍子・延長分の分割数の入力欄 (メニューの「譜面」と、クイックメニューの「譜面長さ」)")]
         [SerializeField] ChartExtendSettingsView[] chartExtendSettings_view;
+        [Tooltip("「ファイル」の「バックアップから復元」を押すと、横に開く一覧。いちばん下に、バックアップの行が並んでいる (バックアップが少ないときは、余った行を隠して、枠を縮める)")]
+        [SerializeField] RectTransform backupList_view;
 
         [Header("Models")]
         [SerializeField] ChartDataExporter chartDataExporter_model;
@@ -79,6 +82,11 @@ namespace ChartEditor
         INoteSpawnDataOptionGetter noteSpawnDataOptionGetter;
         INoteSpawnDataOptionSetter noteSpawnDataOptionSetter;
 
+        // 復元できるバックアップ (新しい順。メニューを開いたときに調べ直す)
+        readonly List<ChartBackups.Entry> backups = new List<ChartBackups.Entry>();
+        // バックアップの一覧の枠の、バックアップの行をすべて出したときの高さ
+        float fullBackupListHeight = -1f;
+
         // 今表示している値 (変わったときだけ、文字を作り直す)
         int displayedExtendBarCount = -1;
         string extendChartLabel;
@@ -104,7 +112,16 @@ namespace ChartEditor
             SubscribeClicks(items_view);
             SubscribeClicks(quickItems_view);
 
-            if (menuBar_view != null) { menuBar_view.OnOpenedListener += () => RefreshItems(items_view); }
+            if (menuBar_view != null)
+            {
+                menuBar_view.OnOpenedListener += () =>
+                {
+                    // 横に開くバックアップの一覧は、メニューを開き直したときには、閉じた状態から始める
+                    SetBackupListOpen(false);
+                    RefreshItems(items_view);
+                };
+            }
+            SetBackupListOpen(false);
 
             // 入力欄を、延長の設定とつなぐ
             if (chartExtendSettings_view != null)
@@ -184,6 +201,15 @@ namespace ChartEditor
                     break;
                 case EditorMenuCommand.SelectMusic:
                     editorUI_presenter?.BrowseAudioFile();
+                    break;
+                case EditorMenuCommand.RestoreBackup:
+                    if (value >= 0 && value < backups.Count) { chartDataImporter_model?.ImportBackup(backups[value].Path); }
+                    break;
+                case EditorMenuCommand.RestoreBackupFromFolder:
+                    chartDataImporter_model?.ImportBackupFromDialog();
+                    break;
+                case EditorMenuCommand.ToggleBackupList:
+                    SetBackupListOpen(!IsBackupListOpen);
                     break;
 
                 // ---- 編集
@@ -304,6 +330,67 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 「ファイル」の一覧の横に、バックアップの一覧を開いているか
+        /// </summary>
+        private bool IsBackupListOpen => backupList_view != null && backupList_view.gameObject.activeSelf;
+
+        /// <summary>
+        /// バックアップの一覧を、開く / 閉じる (開くときに、バックアップを調べ直す)
+        /// 一覧は「ファイル」の一覧の子にしてあるので、メニューを閉じれば、一緒に見えなくなる
+        /// </summary>
+        private void SetBackupListOpen(bool isOpen)
+        {
+            if (backupList_view == null) { return; }
+
+            if (isOpen) { RefreshBackups(); }
+            if (backupList_view.gameObject.activeSelf != isOpen) { backupList_view.gameObject.SetActive(isOpen); }
+        }
+
+        /// <summary>
+        /// 復元できるバックアップを調べて、バックアップの一覧の行に書く
+        ///
+        /// 行は、シーンに決まった数だけ置いてある。バックアップがそれより少ないときは、余った行を隠して、一覧の枠を縮める。
+        /// 1つも無いときは、1行目に「バックアップはありません」と出す (押せない)。
+        /// </summary>
+        private void RefreshBackups()
+        {
+            if (items_view == null) { return; }
+
+            int rowCount = 0;
+            foreach (var item in items_view)
+            {
+                if (item != null && item.Command == EditorMenuCommand.RestoreBackup) { rowCount = Mathf.Max(rowCount, item.Value + 1); }
+            }
+            if (rowCount == 0) { return; }
+
+            ChartBackups.Collect(ChartSaveGuard.AutoSaveDirectoryPath, ChartSaveGuard.AUTO_SAVE_PREFIX, ChartFilePathCache.CurrentChartFilePath, rowCount, backups);
+
+            float hiddenHeight = 0f;
+            foreach (var item in items_view)
+            {
+                if (item == null || item.Command != EditorMenuCommand.RestoreBackup) { continue; }
+
+                bool hasBackup = item.Value < backups.Count;
+                bool isShown = hasBackup || item.Value == 0;
+                if (item.gameObject.activeSelf != isShown) { item.gameObject.SetActive(isShown); }
+
+                if (!isShown)
+                {
+                    hiddenHeight += ((RectTransform)item.transform).sizeDelta.y;
+                    continue;
+                }
+
+                item.SetLabel(hasBackup ? ChartBackups.FormatLabel(backups[item.Value]) : "バックアップはありません");
+            }
+
+            if (backupList_view != null)
+            {
+                if (fullBackupListHeight < 0f) { fullBackupListHeight = backupList_view.sizeDelta.y; }
+                backupList_view.sizeDelta = new Vector2(backupList_view.sizeDelta.x, fullBackupListHeight - hiddenHeight);
+            }
+        }
+
+        /// <summary>
         /// 「譜面を延長」の項目の名前 (延長する小節数を書き添える。小節数が変わったときだけ、文字を作り直す)
         /// </summary>
         private string GetExtendChartLabel()
@@ -383,7 +470,12 @@ namespace ChartEditor
                 case EditorMenuCommand.OpenChart:
                 case EditorMenuCommand.SelectMusic:
                 case EditorMenuCommand.ExtendChart:
+                case EditorMenuCommand.RestoreBackupFromFolder:
+                case EditorMenuCommand.ToggleBackupList:
                     return !isPlaying && !isInPreview;
+                // バックアップからの復元も、譜面を入れ替えるので同じ。バックアップが無い行は押せない
+                case EditorMenuCommand.RestoreBackup:
+                    return !isPlaying && !isInPreview && item.Value < backups.Count;
                 case EditorMenuCommand.RemoveLastBar:
                     return !isPlaying && !isInPreview && chartData != null && chartData.BarDatas.Count > 0;
                 case EditorMenuCommand.SaveChartAs:
@@ -426,6 +518,9 @@ namespace ChartEditor
                 case EditorMenuCommand.TogglePanel:
                     return Enum.IsDefined(typeof(EditorPanel), item.Value) &&
                            optionGetter.GetPanelVisibility((EditorPanel)item.Value).Value;
+                // 横にバックアップの一覧を開いている間は、その行に色を付けたままにする
+                case EditorMenuCommand.ToggleBackupList:
+                    return IsBackupListOpen;
                 default:
                     return false;
             }

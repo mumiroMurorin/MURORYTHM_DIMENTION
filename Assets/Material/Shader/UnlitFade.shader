@@ -4,6 +4,9 @@
     {
         _MainTex("Texture", 2D) = "white" {}
         _Color("Color", Color) = (1,1,1,1)
+        // 0 = as it is, 1 = black and white. The chart editor sets it per renderer for the notes that cannot be edited
+        // while one hold is edited alone (HoldIsolation). Every material leaves it at 0.
+        _Monochrome("Monochrome", Range(0, 1)) = 0
         [HideInInspector] _GroundClipEnabled("Ground Clip Enabled", Float) = 0
         [HideInInspector] _GroundVisibleDistance("Ground Visible Distance", Float) = 100
     }
@@ -29,6 +32,7 @@
 
                 sampler2D _MainTex;
                 fixed4 _Color;
+                fixed _Monochrome;
                 float4 _MainTex_ST;
                 float _GroundClipEnabled;
                 float _GroundVisibleDistance;
@@ -64,6 +68,10 @@
                     }
 
                     fixed4 col = tex2D(_MainTex, i.uv) * _Color;
+
+                    // black and white by _Monochrome (0 leaves the colour untouched)
+                    fixed gray = dot(col.rgb, fixed3(0.299, 0.587, 0.114));
+                    col.rgb = lerp(col.rgb, fixed3(gray, gray, gray), _Monochrome);
                     return col;
                 }
                 ENDCG

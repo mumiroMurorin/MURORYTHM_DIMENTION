@@ -6,22 +6,33 @@ using static JsonUtil.JsonWriter;
 
 namespace ChartEditor
 {
+    /// <summary>
+    /// 譜面を、ファイルに保存する (上書き保存、名前を付けて保存)
+    ///
+    /// レギュレーション違反 (重なっているノーツ、つながっていないホールドなど) が残っている譜面は、保存しない。
+    /// 違反の内容を知らせて、直してから保存し直してもらう。
+    /// 一定時間ごとの自動保存 (ChartSaveGuard のバックアップ) は、ここを通らないので、違反があっても作られる
+    /// (作業中の譜面が、違反のせいで失われないように)。
+    /// </summary>
     public class ChartDataExporter : MonoBehaviour
     {
         IChartEditorDataGetter editorDataGetter;
         ChartSaveGuard saveGuard;
+        RegulationWarningNotifier regulationNotifier;
         public event Action<ChartDataOrigin, string> OnChartSaved;
 
         [Inject]
-        public void Construct(IChartEditorDataGetter editorDataGetter, ChartSaveGuard saveGuard)
+        public void Construct(IChartEditorDataGetter editorDataGetter, ChartSaveGuard saveGuard, RegulationWarningNotifier regulationNotifier)
         {
             this.editorDataGetter = editorDataGetter;
             this.saveGuard = saveGuard;
+            this.regulationNotifier = regulationNotifier;
         }
 
         public void Export()
         {
             if (!HasChart()) { return; }
+            if (!HasNoRegulationViolation()) { return; }
 
             ChartExporter chartExporter = new ChartExporter();
             ChartDataOrigin chartDataOrigin = chartExporter.Export(editorDataGetter.ChartData.Value, editorDataGetter.Offset.Value);
@@ -49,6 +60,7 @@ namespace ChartEditor
         public void ExportNewFile()
         {
             if (!HasChart()) { return; }
+            if (!HasNoRegulationViolation()) { return; }
 
             ChartExporter chartExporter = new ChartExporter();
             ChartDataOrigin chartDataOrigin = chartExporter.Export(editorDataGetter.ChartData.Value, editorDataGetter.Offset.Value);
@@ -72,6 +84,23 @@ namespace ChartEditor
             if (chartData != null && chartData.BarDatas.Count > 0) { return true; }
 
             Debug.Log("【Export】保存する譜面がありません");
+            return false;
+        }
+
+        /// <summary>
+        /// レギュレーション違反が残っていないか。残っているときは、内容を知らせる (保存はしない)
+        /// </summary>
+        private bool HasNoRegulationViolation()
+        {
+            string violations = regulationNotifier != null ? regulationNotifier.GetViolationText() : string.Empty;
+            if (string.IsNullOrEmpty(violations)) { return true; }
+
+            MessageDialog.ShowError(
+                "保存できません",
+                "レギュレーション違反が残っているため、保存できません。\n" +
+                "赤い縁取りが出ているノーツを直してから、もう一度保存してください。\n\n" +
+                violations + "\n\n" +
+                "(自動保存のバックアップは、違反があっても作られます)");
             return false;
         }
 

@@ -78,7 +78,11 @@ namespace ChartEditor
                 return;
             }
 
-            if (Input.GetMouseButtonDown(0)) { StartDrag(); }
+            if (Input.GetMouseButtonDown(0))
+            {
+                // Shift を押しながらのドラッグは範囲選択なので、ノーツは掴まない
+                if (!RangeSelectGesture.IsForced(dataGetter)) { StartDrag(); }
+            }
             else if (Input.GetMouseButton(0)) { Drag(); }
             else if (Input.GetMouseButtonUp(0) && isDragging)
             {
