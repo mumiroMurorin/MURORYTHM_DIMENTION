@@ -31,6 +31,8 @@ namespace ChartEditor
     /// 【カーソル】動かせる場所にカーソルを置くと4方向の矢印、幅を変えられる場所(ノーツの端)では左右の矢印になる。
     /// ドラッグを始めると、標準のカーソルに戻る (編集画面のレーンの上でノーツを操作するときと同じ)。
     /// 絵は、編集画面でノーツの上にカーソルを置いたときと同じもの (CursorTextureChanger に登録されているもの)。
+    /// 全画面プレビューの頂点の道具を選んでいる間は、その道具の絵になる (頂点レイヤーと同じ絵):
+    /// 回転・拡大縮小は、頂点の上 (と、回している・拡大縮小している間)、編集は、頂点を置ける所。
     ///
     /// 【複数選択】Ctrl を押しながらクリックすると、選択に加える (選択中のノーツなら外す)。
     /// ノーツの無い場所からドラッグすると枠が出て、中に映っているノーツをまとめて選ぶ (範囲選択)。
@@ -137,8 +139,14 @@ namespace ChartEditor
 
         // --- カーソルの形 ---
         // 今プレビューの上で出しているカーソル
-        // (EditMode.Move = 移動のカーソル、EditMode.Scale = 幅の変更のカーソル、EditMode.None = 指定なし = 標準のカーソル)
+        // (EditMode.Move = 移動のカーソル、EditMode.Scale = 幅の変更のカーソル、EditMode.None = 指定なし = 標準のカーソル。
+        //  頂点の道具では、VerticesRotating = 回転、VerticesScaling = 拡大縮小、VertexEdit = 頂点を置く、のカーソル)
         EditMode previewCursor = EditMode.None;
+        // 頂点の道具 (回転・拡大縮小) で押したとき、離すまで出しておくカーソル (道具で押していないときは None)
+        EditMode toolPressCursor = EditMode.None;
+        // 頂点の道具「編集」で置いて、まだ元に戻す履歴に登録していない頂点 (離したときに、置いた操作として1回ぶん登録する)
+        SpaceVertices placedVertices;
+        VertexData placedVertex;
         // カーソルの下を最後に調べたときの結果と、そのときのカーソルの位置
         EditMode hoverCursor = EditMode.None;
         Vector2 lastHoverPosition;
@@ -289,6 +297,9 @@ namespace ChartEditor
                 Release();
             }
 
+            // 全画面プレビューの頂点の道具で「編集」を選んでいる間は、頂点を右クリックすると、その頂点を消す
+            if (Input.GetMouseButtonDown(1)) { TryRemoveVertexWithVertexTool(); }
+
             UpdateCursor();
         }
 
@@ -308,6 +319,8 @@ namespace ChartEditor
         {
             // 前のドラッグが終わっていなければ、ここで確定する (ボタンを離した瞬間を取りこぼしたとき)
             if (isDragging) { EndDrag(); }
+            // 置いた頂点を、まだ履歴に登録していなければ、ここで登録する (同じく、離した瞬間を取りこぼしたとき)
+            if (placedVertex != null) { ReleaseHandle(); }
             EndRange();
 
             isPressing = false;
@@ -315,6 +328,7 @@ namespace ChartEditor
             isKeptPress = false;
             canDragPressedNote = false;
             isScalePress = false;
+            toolPressCursor = EditMode.None;
             ReleaseCandidates(pressCandidates);
 
             // ほかの操作の途中でないときだけ
@@ -333,6 +347,10 @@ namespace ChartEditor
             // Shift を押しているときは、ノーツやつまみの上からでも範囲選択を始める
             // (スペースホールドの帯は画面の広い範囲を覆うので、帯の上からも枠を描けるように)
             bool isForcedRange = ModifierKey.Shift;
+
+            // 全画面プレビューの頂点の道具 (編集・回転・拡大縮小) を選んでいるときは、その操作を先に試す
+            // (Shift = 範囲選択、Ctrl = 複数選択 のときは、ふつうの操作にする)
+            if (!isForcedRange && !ModifierKey.Ctrl && TryPressWithVertexTool(view, ray)) { return; }
 
             // 頂点・中心点のつまみを押したときは、それを掴む (ノーツより手前にあるものとして扱う)
             isHandlePress = !isForcedRange && vertexHandles.TryGrab(view, Input.mousePosition, ray, previewGenerator.NoteParent);
@@ -404,6 +422,144 @@ namespace ChartEditor
             isPressing = true;
             pressScreenPosition = Input.mousePosition;
             pressedView = view;
+        }
+
+        /// <summary>
+        /// 全画面プレビューの頂点の道具 (PreviewVertexTools) で、押した操作を受け取る
+        ///
+        /// ・編集: 押した位置 (選択中のノーツのある断面の上) に、頂点を置く。そのまま動かすと、置いた頂点の位置を調整できる
+        ///         (頂点・中心点のつまみの上を押したときは、置かずに、ふつうに掴んで動かす)
+        /// ・回転 / 拡大縮小: 押した頂点を掴んで、頂点すべてを回す / 拡大・縮小する
+        /// 道具を選んでいないとき、頂点を持つノーツを1つだけ選んでいないとき、ミニプレビューでは、何もしない。
+        /// </summary>
+        /// <returns>道具の操作として受け取ったとき true (ふつうの選択・移動には進まない)</returns>
+        private bool TryPressWithVertexTool(PreviewView view, Ray ray)
+        {
+            if (!view.IsFullScreen) { return false; }
+
+            PreviewVertexTool tool = PreviewVertexTools.Current;
+            if (tool == PreviewVertexTool.Move) { return false; }
+            if (!PreviewVertexTools.TryGetTarget(dataGetter, notesGetter, out IDeployableNoteData note, out SpaceVertices vertices)) { return false; }
+
+            Transform noteParent = previewGenerator.NoteParent;
+            Vector2 screenPosition = Input.mousePosition;
+            isHandlePress = false;
+
+            switch (tool)
+            {
+                case PreviewVertexTool.Edit:
+                {
+                    // つまみの上を押したときは、ふつうに掴んで動かす
+                    if (vertexHandles.IsOverHandle(view, screenPosition)) { return false; }
+                    // 選択中のノーツが、プレビューに映っているときだけ
+                    if (!TryGetVisibleNoteDistance(note, out float distance)) { return false; }
+                    if (!vertexHandles.TryGetVertexPoint(ray, noteParent, distance, out Vector2 point)) { return false; }
+
+                    // 頂点を置くと、頂点の選択は外れる (頂点レイヤーと同じ)
+                    vertexHandles.ClearSelection();
+
+                    // 置いて、位置を調整し終えたときに、1回の操作として履歴に登録する (置いた・動かした、の2回に分けない)
+                    VertexData added = PreviewVertexTools.AddVertexWithoutRecord(vertices, point);
+                    if (previewRefresher != null) { previewRefresher.RefreshImmediately(); }
+
+                    // 置いた頂点を、そのまま掴む (ボタンを離さずに動かすと、位置を調整できる)
+                    RefreshVertexHandles();
+                    isHandlePress = vertexHandles.TryGrab(view, screenPosition, ray, noteParent);
+                    if (isHandlePress)
+                    {
+                        placedVertices = vertices;
+                        placedVertex = added;
+                    }
+                    else
+                    {
+                        // 掴めなかったとき: 置いただけで終わり
+                        PreviewVertexTools.RecordAddedVertex(vertices, added);
+                    }
+                    break;
+                }
+                case PreviewVertexTool.Rotate:
+                case PreviewVertexTool.Scale:
+                {
+                    if (!vertexHandles.TryGrabForTransform(view, screenPosition, ray, noteParent, vertices, tool == PreviewVertexTool.Rotate)) { return false; }
+
+                    isHandlePress = true;
+                    // 離すまで、道具のカーソルを出しておく (頂点レイヤーで、回している・拡大縮小している間と同じ)
+                    toolPressCursor = GetToolCursor(tool);
+                    break;
+                }
+                default:
+                    return false;
+            }
+
+            // 掴んだときは、動かせるように、押した位置を覚える
+            if (isHandlePress)
+            {
+                isPressing = true;
+                pressScreenPosition = screenPosition;
+                pressedView = view;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 掴んでいるつまみを離す。頂点が動いていれば、元に戻す履歴に登録する
+        /// 頂点の道具「編集」で置いた頂点なら、置いた操作として1回ぶん登録する (動かした分は、置いた位置に含める)
+        /// </summary>
+        private void ReleaseHandle()
+        {
+            if (placedVertex == null)
+            {
+                vertexHandles.Release();
+                return;
+            }
+
+            vertexHandles.ReleaseWithoutRecord();
+            PreviewVertexTools.RecordAddedVertex(placedVertices, placedVertex);
+            placedVertices = null;
+            placedVertex = null;
+        }
+
+        /// <summary>
+        /// 頂点のつまみを、動かさずにクリックしたとき: その頂点を選ぶ (Ctrl を押していれば、選択に加える・外す)
+        /// 頂点を選べるのは、全画面プレビューで、頂点を持つノーツを1つだけ選んでいる間だけ (PreviewVertexHandles が確かめる)
+        /// </summary>
+        private void ClickVertexHandle()
+        {
+            if (pressedView == null || !pressedView.IsFullScreen) { return; }
+
+            VertexData vertex = vertexHandles.GrabbedVertex;
+            if (vertex == null) { return; }
+
+            if (ModifierKey.Ctrl) { vertexHandles.ToggleSelection(vertexHandles.GrabbedVertices, vertex); }
+            else { vertexHandles.SelectSingle(vertexHandles.GrabbedVertices, vertex); }
+        }
+
+        /// <summary>
+        /// 全画面プレビューの頂点の道具で「編集」を選んでいる間に、頂点を右クリックしたとき: その頂点を消す
+        /// </summary>
+        private void TryRemoveVertexWithVertexTool()
+        {
+            if (PreviewVertexTools.Current != PreviewVertexTool.Edit) { return; }
+            // ほかの操作の途中 (左ボタンで何かを掴んでいる間など) は、受け付けない
+            if (isPressing || !CanOperate()) { return; }
+
+            SearchSceneOnce();
+            if (previewGenerator == null) { return; }
+            if (!TryGetPreviewRay(Input.mousePosition, out _, out var view) || !view.IsFullScreen) { return; }
+            if (!PreviewVertexTools.TryGetTarget(dataGetter, notesGetter, out _, out SpaceVertices vertices)) { return; }
+
+            // 選択中のノーツの、頂点のつまみの上だけ
+            if (!vertexHandles.TryFindVertex(view, Input.mousePosition, out SpaceVertices owner, out VertexData vertex)) { return; }
+            if (!ReferenceEquals(owner, vertices)) { return; }
+
+            if (PreviewVertexTools.RemoveVertex(vertices, vertex))
+            {
+                if (previewRefresher != null) { previewRefresher.RefreshImmediately(); }
+            }
+            else
+            {
+                Debug.Log($"【頂点】これ以上、頂点を消せません。形を作るには、頂点が {PreviewVertexTools.MIN_VERTEX_COUNT} つ以上必要です");
+            }
         }
 
         /// <summary>
@@ -578,7 +734,7 @@ namespace ChartEditor
         /// </summary>
         private void CancelPress()
         {
-            if (isHandlePress) { vertexHandles.Release(); }
+            if (isHandlePress) { ReleaseHandle(); }
             EndRange();
 
             isPressing = false;
@@ -668,9 +824,15 @@ namespace ChartEditor
 
             if (activeView == null)
             {
+                vertexHandles.SetSelectionOwner(null);
                 vertexHandles.Hide();
                 return;
             }
+
+            // 頂点を選べるのは、全画面プレビューで、頂点を持つノーツを1つだけ選んでいる間だけ (そのノーツの頂点)
+            SpaceVertices selectableVertices = null;
+            if (activeView.IsFullScreen) { PreviewVertexTools.TryGetTarget(dataGetter, notesGetter, out _, out selectableVertices); }
+            vertexHandles.SetSelectionOwner(selectableVertices);
 
             // 頂点レイヤーを開いている間は、そこで編集中のノーツにもつまみを出す
             bool includesEditingNote = dataGetter.EditNoteType.Value == EditNoteType.Vertices;
@@ -743,13 +905,24 @@ namespace ChartEditor
             {
                 if (isRangeSelecting) { FinishRangeSelection(); }
                 // ノーツの無い場所を、動かさずに離したとき: 選択を解除する
-                else if (isRangeClearOnClick && !ModifierKey.Ctrl && CanOperate()) { notesSetter.ClearSelectingNotes(); }
+                // (頂点を選んでいるときは、まず頂点の選択だけを外す。ノーツの選択は、もう一度クリックすると外れる)
+                else if (isRangeClearOnClick && !ModifierKey.Ctrl && CanOperate())
+                {
+                    if (vertexHandles.SelectedCount > 0) { vertexHandles.ClearSelection(); }
+                    else { notesSetter.ClearSelectingNotes(); }
+                }
 
                 EndRange();
             }
             else if (isDragging) { EndDrag(); }
-            // つまみを押しただけで動かさなかったとき
-            else if (isHandlePress) { vertexHandles.Release(); }
+            // つまみを押しただけで動かさなかったとき: 頂点のつまみなら、その頂点を選ぶ
+            // (頂点の道具「編集」で、頂点を置いただけのときは選ばない。置くと、頂点の選択は外れる)
+            else if (isHandlePress)
+            {
+                bool isPlaced = placedVertex != null;
+                ReleaseHandle();
+                if (!isPlaced) { ClickVertexHandle(); }
+            }
             // ノーツを、動かさずにクリックしたとき
             else if (isPressing) { ClickPressedNote(); }
 
@@ -948,7 +1121,7 @@ namespace ChartEditor
             if (isHandlePress)
             {
                 LeaveDragMode();
-                vertexHandles.Release();
+                ReleaseHandle();
                 return;
             }
 
@@ -1224,12 +1397,15 @@ namespace ChartEditor
             if (isDragging)
             {
                 // ドラッグ中: 標準のカーソルに戻す (編集画面のレーンの上でノーツをドラッグしているときと同じ)
-                cursor = EditMode.None;
+                // (頂点の道具で回している・拡大縮小している間は、道具のカーソルのまま。頂点レイヤーと同じ)
+                cursor = toolPressCursor;
             }
             else if (isPressing)
             {
                 // 押してから動かし始めるまで: 動かしたら始まる操作のカーソル。範囲選択は標準のカーソル
-                cursor = isRangePress ? EditMode.None : (isScalePress ? EditMode.Scale : EditMode.Move);
+                if (isRangePress) { cursor = EditMode.None; }
+                else if (toolPressCursor != EditMode.None) { cursor = toolPressCursor; }
+                else { cursor = isScalePress ? EditMode.Scale : EditMode.Move; }
             }
             else
             {
@@ -1277,6 +1453,9 @@ namespace ChartEditor
             // Shift を押している間は、どこを押しても範囲選択になる
             if (ModifierKey.Shift) { return EditMode.None; }
 
+            // 全画面プレビューの頂点の道具を選んでいるとき: 押したら道具の操作になる所では、道具のカーソル (Press と同じ決め方)
+            if (!ModifierKey.Ctrl && TryGetToolHoverCursor(view, ray, screenPosition, out EditMode toolCursor)) { return toolCursor; }
+
             // 頂点・中心点のつまみ (ノーツより手前にあるものとして扱う)
             if (vertexHandles.IsOverHandle(view, screenPosition)) { return EditMode.Move; }
 
@@ -1291,6 +1470,56 @@ namespace ChartEditor
 
             ReleaseCandidates(hoverCandidates);
             return cursor;
+        }
+
+        /// <summary>
+        /// 全画面プレビューの頂点の道具で、その位置を押したら道具の操作になるなら、その道具のカーソルを返す
+        /// (TryPressWithVertexTool と同じ決め方)
+        /// ・回転 / 拡大縮小: 選択中のノーツの頂点のつまみの上
+        /// ・編集: つまみの上ではなく、頂点を置ける所 (選択中のノーツが映っているとき)
+        /// </summary>
+        private bool TryGetToolHoverCursor(PreviewView view, Ray ray, Vector2 screenPosition, out EditMode cursor)
+        {
+            cursor = EditMode.None;
+            if (!view.IsFullScreen) { return false; }
+
+            PreviewVertexTool tool = PreviewVertexTools.Current;
+            if (tool == PreviewVertexTool.Move) { return false; }
+            if (!PreviewVertexTools.TryGetTarget(dataGetter, notesGetter, out IDeployableNoteData note, out SpaceVertices vertices)) { return false; }
+
+            switch (tool)
+            {
+                case PreviewVertexTool.Rotate:
+                case PreviewVertexTool.Scale:
+                    if (!vertexHandles.TryFindVertex(view, screenPosition, out SpaceVertices owner, out _)) { return false; }
+                    if (!ReferenceEquals(owner, vertices)) { return false; }
+                    break;
+                case PreviewVertexTool.Edit:
+                    // つまみの上では、置かずに掴む (移動のカーソルのまま)
+                    if (vertexHandles.IsOverHandle(view, screenPosition)) { return false; }
+                    if (!TryGetVisibleNoteDistance(note, out float distance)) { return false; }
+                    if (!vertexHandles.TryGetVertexPoint(ray, previewGenerator.NoteParent, distance, out _)) { return false; }
+                    break;
+                default:
+                    return false;
+            }
+
+            cursor = GetToolCursor(tool);
+            return true;
+        }
+
+        /// <summary>
+        /// 頂点の道具のカーソル (頂点レイヤーで、同じ操作をしているときのエディットモードの絵)
+        /// </summary>
+        private static EditMode GetToolCursor(PreviewVertexTool tool)
+        {
+            switch (tool)
+            {
+                case PreviewVertexTool.Rotate: return EditMode.VerticesRotating;
+                case PreviewVertexTool.Scale: return EditMode.VerticesScaling;
+                case PreviewVertexTool.Edit: return EditMode.VertexEdit;
+                default: return EditMode.None;
+            }
         }
 
         #endregion
@@ -1361,6 +1590,29 @@ namespace ChartEditor
             if (!CanOperate() || pressedView == null || !pressedView.IsActive) { return; }
 
             CollectNotesInRect(pressedView, GetRangeRect(), rangeNotes);
+
+            // 全画面プレビューで、頂点を持つノーツを1つだけ選んでいる間:
+            // ・枠の中に、そのノーツの頂点があれば、頂点を選ぶ (ノーツの選択は変えない)
+            // ・頂点も、ほかのノーツも無ければ、何も選び直さない (頂点を囲み損ねただけで、ノーツの選択が外れないように)
+            // ・ほかのノーツがあれば、今までどおり、ノーツを選ぶ
+            if (pressedView.IsFullScreen &&
+                PreviewVertexTools.TryGetTarget(dataGetter, notesGetter, out IDeployableNoteData vertexNote, out _))
+            {
+                bool isVertexSelected = vertexHandles.SelectInRect(GetRangeRect(), ModifierKey.Ctrl);
+
+                bool hasOtherNote = false;
+                foreach (var note in rangeNotes)
+                {
+                    if (!ReferenceEquals(note, vertexNote)) { hasOtherNote = true; break; }
+                }
+
+                if (isVertexSelected || !hasOtherNote)
+                {
+                    if (!isVertexSelected && !ModifierKey.Ctrl) { vertexHandles.ClearSelection(); }
+                    rangeNotes.Clear();
+                    return;
+                }
+            }
 
             // 選ぶノーツのあるレイヤーを開く (選択の前に行う。切り替えで編集モードが変わるため)
             bool hasGround = false;

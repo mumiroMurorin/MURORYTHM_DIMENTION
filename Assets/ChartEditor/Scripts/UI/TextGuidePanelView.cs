@@ -7,6 +7,15 @@ using UnityEngine.UI;
 
 namespace ChartEditor
 {
+    /// <summary>
+    /// 頂点詳細設定の、ガイドテキスト (頂点を置くときの下書きの文字) の欄
+    ///
+    /// ・数値は、入力を終えたとき (Enter、ほかの場所をクリック) に反映する (NumberInputField)
+    /// ・文字は、打つたびに反映する (下書きを見ながら打てるように)。打っている間は、欄の文字を外から書き直さない
+    ///   (書き直すと、日本語入力の変換の途中で、文字が崩れる)
+    /// </summary>
+    // ほかの場所のクリックで入力を終えたとき、そのクリックで頂点の選択などが変わる前に、打った値を反映するため、先に動かす
+    [DefaultExecutionOrder(-1000)]
     public class TextGuidePanelView : MonoBehaviour
     {
         [SerializeField] GameObject[] displayElements;
@@ -29,40 +38,38 @@ namespace ChartEditor
         public event Action<float> OnRotationValueChangedListener;
         public event Action<float> OnAlphaValueChangedListener;
 
+        NumberInputField inputX;
+        NumberInputField inputY;
+        NumberInputField inputScale;
+        NumberInputField inputRotation;
+        NumberInputField inputAlpha;
         bool isOpenPanel;
         CancellationTokenSource rebuildLayoutCts;
+
+        void Update()
+        {
+            // ほかの場所がクリックされたら、そのクリックが処理される前に、打っている値を反映する
+            inputX?.CommitIfClickedElsewhere();
+            inputY?.CommitIfClickedElsewhere();
+            inputScale?.CommitIfClickedElsewhere();
+            inputRotation?.CommitIfClickedElsewhere();
+            inputAlpha?.CommitIfClickedElsewhere();
+        }
 
         void Awake()
         {
             if (inputFieldText != null)
             {
                 inputFieldText.onValueChanged.AddListener(OnTextValueChanged);
+                // Enter で終えたときに、欄が「選択中」のまま残らないようにする (Space キーで、もう一度入力状態になってしまう)
+                inputFieldText.onEndEdit.AddListener(_ => InputFieldFocus.Release(inputFieldText));
             }
 
-            if (inputFieldX != null)
-            {
-                inputFieldX.onValueChanged.AddListener(OnXValueChanged);
-            }
-
-            if (inputFieldY != null)
-            {
-                inputFieldY.onValueChanged.AddListener(OnYValueChanged);
-            }
-
-            if (inputFieldScale != null)
-            {
-                inputFieldScale.onValueChanged.AddListener(OnScaleValueChanged);
-            }
-
-            if (inputFieldRotation != null)
-            {
-                inputFieldRotation.onValueChanged.AddListener(OnRotationValueChanged);
-            }
-
-            if (inputFieldAlpha != null)
-            {
-                inputFieldAlpha.onValueChanged.AddListener(OnAlphaValueChanged);
-            }
+            inputX = new NumberInputField(inputFieldX, value => OnXValueChangedListener?.Invoke(value));
+            inputY = new NumberInputField(inputFieldY, value => OnYValueChangedListener?.Invoke(value));
+            inputScale = new NumberInputField(inputFieldScale, value => OnScaleValueChangedListener?.Invoke(value));
+            inputRotation = new NumberInputField(inputFieldRotation, value => OnRotationValueChangedListener?.Invoke(value));
+            inputAlpha = new NumberInputField(inputFieldAlpha, value => OnAlphaValueChangedListener?.Invoke(value));
 
             if (fontDropdown != null)
             {
@@ -152,45 +159,27 @@ namespace ChartEditor
         {
             var format = $"F{Mathf.Clamp(decimalDigits, 0, 9)}";
 
-            if (inputFieldText != null)
+            // 打っている最中の文字は書き直さない (もう同じ文字が入っている)
+            if (inputFieldText != null && !inputFieldText.isFocused)
             {
                 inputFieldText.SetTextWithoutNotify(text ?? string.Empty);
             }
 
-            if (inputFieldX != null)
-            {
-                inputFieldX.SetTextWithoutNotify(localPosition.x.ToString(format));
-            }
-
-            if (inputFieldY != null)
-            {
-                inputFieldY.SetTextWithoutNotify(localPosition.y.ToString(format));
-            }
-
-            if (inputFieldScale != null)
-            {
-                inputFieldScale.SetTextWithoutNotify(scale.ToString(format));
-            }
-
-            if (inputFieldRotation != null)
-            {
-                inputFieldRotation.SetTextWithoutNotify(rotation.ToString(format));
-            }
-
-            if (inputFieldAlpha != null)
-            {
-                inputFieldAlpha.SetTextWithoutNotify(alpha.ToString(format));
-            }
+            inputX?.SetText(localPosition.x.ToString(format));
+            inputY?.SetText(localPosition.y.ToString(format));
+            inputScale?.SetText(scale.ToString(format));
+            inputRotation?.SetText(rotation.ToString(format));
+            inputAlpha?.SetText(alpha.ToString(format));
         }
 
         public void Clear()
         {
             if (inputFieldText != null) { inputFieldText.SetTextWithoutNotify(string.Empty); }
-            if (inputFieldX != null) { inputFieldX.SetTextWithoutNotify(string.Empty); }
-            if (inputFieldY != null) { inputFieldY.SetTextWithoutNotify(string.Empty); }
-            if (inputFieldScale != null) { inputFieldScale.SetTextWithoutNotify(string.Empty); }
-            if (inputFieldRotation != null) { inputFieldRotation.SetTextWithoutNotify(string.Empty); }
-            if (inputFieldAlpha != null) { inputFieldAlpha.SetTextWithoutNotify(string.Empty); }
+            inputX?.SetText(string.Empty);
+            inputY?.SetText(string.Empty);
+            inputScale?.SetText(string.Empty);
+            inputRotation?.SetText(string.Empty);
+            inputAlpha?.SetText(string.Empty);
         }
 
 
@@ -202,36 +191,6 @@ namespace ChartEditor
         void OnTextValueChanged(string value)
         {
             OnTextValueChangedListener?.Invoke(value);
-        }
-
-        void OnXValueChanged(string value)
-        {
-            if (!float.TryParse(value, out var parsed)) { return; }
-            OnXValueChangedListener?.Invoke(parsed);
-        }
-
-        void OnYValueChanged(string value)
-        {
-            if (!float.TryParse(value, out var parsed)) { return; }
-            OnYValueChangedListener?.Invoke(parsed);
-        }
-
-        void OnScaleValueChanged(string value)
-        {
-            if (!float.TryParse(value, out var parsed)) { return; }
-            OnScaleValueChangedListener?.Invoke(parsed);
-        }
-
-        void OnRotationValueChanged(string value)
-        {
-            if (!float.TryParse(value, out var parsed)) { return; }
-            OnRotationValueChangedListener?.Invoke(parsed);
-        }
-
-        void OnAlphaValueChanged(string value)
-        {
-            if (!float.TryParse(value, out var parsed)) { return; }
-            OnAlphaValueChangedListener?.Invoke(parsed);
         }
 
         void OnFontDropdownValueChanged(int index)

@@ -65,6 +65,17 @@ namespace ChartEditor
 
         private void DestroyNotes()
         {
+            // 全画面プレビューで、頂点を選んでいるとき: ノーツではなく、選んでいる頂点を消す (頂点レイヤーと同じ)
+            // (頂点を選んだまま Delete を押して、ノーツごと消えてしまわないように。消せないときも、ノーツは消さない)
+            if (dataGetter.EditNoteType.Value == EditNoteType.Preview && PreviewVertexTools.HasSelectedVertices)
+            {
+                if (!PreviewVertexTools.RemoveSelectedVertices())
+                {
+                    Debug.Log($"【頂点】これ以上、頂点を消せません。形を作るには、頂点が {PreviewVertexTools.MIN_VERTEX_COUNT} つ以上必要です");
+                }
+                return;
+            }
+
             var datasCopy = notesGetter.SelectingNotes.ToList();
 
             // 何も選択されていないときは何もしない (Undo履歴にも積まない)

@@ -9,6 +9,11 @@ using static UndoRedo.History;
 
 namespace ChartEditor
 {
+    /// <summary>
+    /// 形のプリセット (スペース系のノーツの頂点の並びを、名前を付けて取っておいたもの) の登録・上書き・削除・適用
+    ///
+    /// プリセットは、1つのファイルに保存する (chartEditorVerticesShapePresets.json)。ファイルの形は VerticesShapePresetFile。
+    /// </summary>
     public class VerticesShapePresetApplier : MonoBehaviour
     {
         const string FILE_NAME = "chartEditorVerticesShapePresets.json";
@@ -167,7 +172,7 @@ namespace ChartEditor
                 return;
             }
 
-            if (!JsonLoader.TryLoadFromJsonFile(filePath, out VerticesShapePresetCollection collection) ||
+            if (!JsonLoader.TryLoadFromJsonFile(filePath, out VerticesShapePresetFile.Collection collection) ||
                 collection?.presets == null)
             {
                 Debug.LogWarning($"[VerticesPreset] Failed to load presets: {filePath}");
@@ -175,19 +180,38 @@ namespace ChartEditor
                 return;
             }
 
-            presets.AddRange(collection.presets.Where(IsValidPreset));
+            presets.AddRange(VerticesShapePresetFile.ToPresets(collection).Where(IsValidPreset));
             NotifyPresetsChanged();
+
+            RewriteOldFormatFile(filePath);
+        }
+
+        /// <summary>
+        /// 以前の形のファイル (頂点1つごとに、normalized や magnitude まで書かれていた) なら、x と y だけの形で書き直す
+        /// (元のファイルは「ファイル名.bak」として残す。書き直すのは1回だけで、次からは新しい形なので何もしない)
+        /// </summary>
+        void RewriteOldFormatFile(string filePath)
+        {
+            try
+            {
+                if (presets.Count == 0) { return; }
+                if (!VerticesShapePresetFile.IsOldFormat(File.ReadAllText(filePath))) { return; }
+
+                if (JsonWriter.TrySaveToJsonPath(VerticesShapePresetFile.ToCollection(presets.Where(IsValidPreset)), filePath, true))
+                {
+                    Debug.Log($"[VerticesPreset] プリセットのファイルを、x と y だけの形に書き直しました (元のファイルは .bak に残しています)\n{filePath}");
+                }
+            }
+            catch (Exception ex)
+            {
+                // 書き直せなくても、読み込んだプリセットはそのまま使える
+                Debug.LogWarning($"[VerticesPreset] Failed to rewrite the preset file: {ex.Message}");
+            }
         }
 
         bool SavePresets()
         {
-            var collection = new VerticesShapePresetCollection
-            {
-                presets = presets
-                    .Where(IsValidPreset)
-                    .Select(x => x.Clone())
-                    .ToList()
-            };
+            var collection = VerticesShapePresetFile.ToCollection(presets.Where(IsValidPreset));
 
             return JsonWriter.TrySaveToJsonPath(collection, GetFilePath());
         }
@@ -265,9 +289,91 @@ namespace ChartEditor
         }
     }
 
-    [Serializable]
-    class VerticesShapePresetCollection
+    /// <summary>
+    /// 形のプリセットを保存するファイルの形 (chartEditorVerticesShapePresets.json)
+    ///
+    /// 頂点は、x と y だけを持つ SimpleVector2 で保存する (譜面ファイルの頂点と同じ形)。
+    /// Unity の Vector2 のまま保存すると、x と y のほかに normalized・magnitude・sqrMagnitude まで書き出され、
+    /// normalized の中にまた同じものが入るので、ファイルが4倍ほどの大きさになる。以前はそうなっていた。
+    /// 以前の形のファイルも、そのまま読める (x と y 以外の項目は、読み飛ばされる)。
+    /// 編集中に使う VerticesShapePreset (頂点は Vector2) とは、ここで相互に変換する。
+    /// </summary>
+    public static class VerticesShapePresetFile
     {
-        public List<VerticesShapePreset> presets = new();
+        /// <summary>ファイル全体</summary>
+        [Serializable]
+        public class Collection
+        {
+            public List<Preset> presets = new();
+        }
+
+        /// <summary>
+        /// プリセット1つぶん
+        /// (項目の名前は、以前のファイルと同じにしてある。変えると、今あるファイルを読めなくなる)
+        /// </summary>
+        [Serializable]
+        public class Preset
+        {
+            public string Id;
+            public string DisplayName;
+            public SimpleVector2[] Vertices;
+        }
+
+        /// <summary>
+        /// 編集中のプリセットを、保存する形にする
+        /// </summary>
+        public static Collection ToCollection(IEnumerable<VerticesShapePreset> presets)
+        {
+            var collection = new Collection();
+            if (presets == null) { return collection; }
+
+            foreach (var preset in presets)
+            {
+                if (preset == null) { continue; }
+
+                var source = preset.Vertices ?? Array.Empty<Vector2>();
+                var vertices = new SimpleVector2[source.Length];
+                for (int i = 0; i < source.Length; i++) { vertices[i] = new SimpleVector2(source[i]); }
+
+                collection.presets.Add(new Preset { Id = preset.Id, DisplayName = preset.DisplayName, Vertices = vertices });
+            }
+
+            return collection;
+        }
+
+        /// <summary>
+        /// 読み込んだファイルの中身を、編集中に使う形にする (中身の無い項目は飛ばす)
+        /// </summary>
+        public static List<VerticesShapePreset> ToPresets(Collection collection)
+        {
+            var presets = new List<VerticesShapePreset>();
+            if (collection?.presets == null) { return presets; }
+
+            foreach (var preset in collection.presets)
+            {
+                if (preset == null) { continue; }
+
+                var vertices = new List<Vector2>();
+                if (preset.Vertices != null)
+                {
+                    foreach (var vertex in preset.Vertices)
+                    {
+                        if (vertex != null) { vertices.Add(vertex.ToVector2()); }
+                    }
+                }
+
+                presets.Add(new VerticesShapePreset(preset.Id, preset.DisplayName, vertices.ToArray()));
+            }
+
+            return presets;
+        }
+
+        /// <summary>
+        /// ファイルの中身が、以前の形か (頂点に、x と y 以外の項目が書かれている)
+        /// </summary>
+        public static bool IsOldFormat(string json)
+        {
+            return !string.IsNullOrEmpty(json) && json.Contains("\"normalized\"");
+        }
     }
 }

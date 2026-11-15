@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,13 @@ namespace ChartEditor
     /// ・頂点のつまみを動かすと、その頂点だけが動く (形が変わる)
     /// ・中心点のつまみを動かすと、すべての頂点が一緒に動く (形はそのままで位置が変わる)
     ///   複数のノーツを選択しているときは、選択中のノーツがすべて一緒に動く
+    ///
+    /// ・全画面プレビューの頂点の道具 (PreviewVertexTools) で「回転」「拡大縮小」を選んでいるときは、頂点のつまみを動かすと、
+    ///   そのノーツの頂点すべてが、頂点の中心のまわりに回る / 中心から拡大・縮小する
+    ///
+    /// ・全画面プレビューで、頂点を持つノーツを1つだけ選んでいる間は、そのノーツの頂点を選べる (選んだ頂点のつまみは、橙色)
+    ///   選択中の頂点を掴むと、選択中の頂点がまとめて動く。回転・拡大縮小も、2つ以上選んでいれば、選択中の頂点だけに行う
+    ///   また、つまみの横に、頂点の番号を出す (頂点スライドで、どの頂点が何番かを見るため)
     ///
     /// つまみはプレビューの世界ではなく、画面に重ねた板として描く。
     /// (奥のノーツでも同じ大きさで見え、ノーツの面に埋もれず、プレビューのカメラの設定にも左右されない)
@@ -38,7 +46,24 @@ namespace ChartEditor
         static readonly Color vertexColor = new Color(1f, 1f, 1f, 0.95f);
         static readonly Color centerColor = new Color(1f, 0.82f, 0.1f, 0.95f);
         static readonly Color draggingColor = new Color(0.2f, 0.9f, 1f, 1f);
+        static readonly Color selectedColor = new Color(1f, 0.55f, 0.1f, 1f);
         static readonly Color outlineColor = new Color(0f, 0f, 0f, 0.9f);
+
+        // 頂点の番号の札 (画面の高さ 1080 のときのピクセル数)
+        const float INDEX_LABEL_HEIGHT = 15f;
+        const float INDEX_LABEL_WIDTH = 15f;
+        const float INDEX_LABEL_WIDTH_WIDE = 22f;
+        const float INDEX_FONT_SIZE = 11f;
+        static readonly Color indexLabelColor = new Color(0f, 0f, 0f, 0.65f);
+        // 番号の文字 (毎フレーム文字列を作らないように、先に作っておく)
+        static readonly string[] indexTexts = CreateIndexTexts(64);
+
+        private static string[] CreateIndexTexts(int count)
+        {
+            var texts = new string[count];
+            for (int i = 0; i < count; i++) { texts[i] = i.ToString(); }
+            return texts;
+        }
 
         readonly INotesDataGetter notesGetter;
         readonly INoteSpawnDataOptionGetter optionHolder;
@@ -48,6 +73,25 @@ namespace ChartEditor
         // つまみを描く板 (足りなくなったら増やし、余ったら隠す)
         GameObject canvasObject;
         readonly List<Image> handleImages = new List<Image>();
+        // 頂点の番号の札 (足りなくなったら増やし、余ったら隠す)
+        readonly List<IndexLabel> indexLabels = new List<IndexLabel>();
+
+        // --- 選択中の頂点 ---
+        // 頂点を選べるノーツの、頂点の並び (全画面プレビューで、頂点を持つノーツを1つだけ選んでいる間だけ。無いときは null)
+        SpaceVertices selectionOwner;
+        readonly List<VertexData> selectedVertices = new List<VertexData>();
+        readonly List<VertexData> rectVertices = new List<VertexData>();
+
+        // 最後に掴んだつまみ (頂点。中心点のつまみなら null) と、その頂点の並び
+        VertexData grabbedVertex;
+        SpaceVertices grabbedVertices;
+
+        private class IndexLabel
+        {
+            public RectTransform Root;
+            public TextMeshProUGUI Text;
+            public int ShownIndex = -1;
+        }
 
         // --- 掴んでいるつまみ ---
         bool isGrabbing;
@@ -55,6 +99,20 @@ namespace ChartEditor
         float grabDistance;
         // 掴んだ位置 (頂点と同じ、単位円の中の座標)
         Vector2 grabPoint;
+        // 掴んだつまみで、何をするか
+        GrabKind grabKind;
+        // 回す・拡大縮小するときの中心 (掴んだときの、そのノーツの頂点の平均の位置)
+        Vector2 grabCenter;
+
+        private enum GrabKind
+        {
+            // 掴んだ頂点 (中心点なら、すべての頂点) を、カーソルの動きのぶんだけ動かす
+            Move,
+            // すべての頂点を、中心のまわりに回す
+            Rotate,
+            // すべての頂点を、中心から拡大・縮小する
+            Scale,
+        }
         // 動かす頂点と、掴んだときの座標
         readonly List<DragTarget> dragTargets = new List<DragTarget>();
 
@@ -86,6 +144,128 @@ namespace ChartEditor
         /// </summary>
         public bool IsGrabbing => isGrabbing;
 
+        #region 頂点の選択
+
+        /// <summary>選択中の頂点の数</summary>
+        public int SelectedCount => selectedVertices.Count;
+
+        /// <summary>最後に掴んだつまみの頂点 (中心点のつまみなら null)</summary>
+        public VertexData GrabbedVertex => grabbedVertex;
+
+        /// <summary>最後に掴んだつまみの、頂点の並び</summary>
+        public SpaceVertices GrabbedVertices => grabbedVertices;
+
+        /// <summary>
+        /// 頂点を選べるノーツを決める (その頂点の並び。選べるノーツが無いときは null)
+        /// 別のノーツに替わったら、選択は空になる。同じノーツのままなら、消された頂点だけを選択から外す
+        /// </summary>
+        public void SetSelectionOwner(SpaceVertices owner)
+        {
+            // Delete キーの処理 (NoteDestroyer) から、選択中の頂点が見えるようにする
+            PreviewVertexTools.ShareSelection(owner, selectedVertices);
+
+            if (!ReferenceEquals(owner, selectionOwner))
+            {
+                selectionOwner = owner;
+                selectedVertices.Clear();
+                return;
+            }
+
+            for (int i = selectedVertices.Count - 1; i >= 0; i--)
+            {
+                if (!Contains(owner, selectedVertices[i])) { selectedVertices.RemoveAt(i); }
+            }
+        }
+
+        public bool IsSelected(VertexData vertex)
+        {
+            foreach (var selected in selectedVertices)
+            {
+                if (ReferenceEquals(selected, vertex)) { return true; }
+            }
+            return false;
+        }
+
+        public void ClearSelection()
+        {
+            selectedVertices.Clear();
+        }
+
+        /// <summary>
+        /// その頂点だけを選ぶ (選べるノーツの頂点でなければ、何もしない)
+        /// </summary>
+        public void SelectSingle(SpaceVertices owner, VertexData vertex)
+        {
+            if (!CanSelect(owner, vertex)) { return; }
+
+            selectedVertices.Clear();
+            selectedVertices.Add(vertex);
+        }
+
+        /// <summary>
+        /// その頂点を、選択に加える。もう選ばれていれば、選択から外す
+        /// </summary>
+        public void ToggleSelection(SpaceVertices owner, VertexData vertex)
+        {
+            if (!CanSelect(owner, vertex)) { return; }
+
+            for (int i = 0; i < selectedVertices.Count; i++)
+            {
+                if (ReferenceEquals(selectedVertices[i], vertex))
+                {
+                    selectedVertices.RemoveAt(i);
+                    return;
+                }
+            }
+            selectedVertices.Add(vertex);
+        }
+
+        /// <summary>
+        /// 画面上の枠の中にある、選べるノーツの頂点を選ぶ
+        /// </summary>
+        /// <param name="isToggle">true のとき、今の選択に加える (もう選ばれているものは外す)。false のとき、枠の中のものだけを選ぶ</param>
+        /// <returns>枠の中に頂点があったとき true (1つも無ければ、選択は変えずに false)</returns>
+        public bool SelectInRect(Rect screenRect, bool isToggle)
+        {
+            if (selectionOwner == null) { return false; }
+
+            rectVertices.Clear();
+            foreach (var handle in handles)
+            {
+                if (handle.Vertex == null || !ReferenceEquals(handle.Vertices, selectionOwner)) { continue; }
+                if (screenRect.Contains(handle.ScreenPosition)) { rectVertices.Add(handle.Vertex); }
+            }
+            if (rectVertices.Count == 0) { return false; }
+
+            if (!isToggle) { selectedVertices.Clear(); }
+            foreach (var vertex in rectVertices)
+            {
+                if (isToggle) { ToggleSelection(selectionOwner, vertex); }
+                else { selectedVertices.Add(vertex); }
+            }
+
+            rectVertices.Clear();
+            return true;
+        }
+
+        private bool CanSelect(SpaceVertices owner, VertexData vertex)
+        {
+            return owner != null && ReferenceEquals(owner, selectionOwner) && Contains(owner, vertex);
+        }
+
+        /// <summary>
+        /// その頂点が、今もその並びの中にあるか
+        /// </summary>
+        private static bool Contains(SpaceVertices vertices, VertexData vertex)
+        {
+            if (vertices == null || vertex == null) { return false; }
+
+            int index = vertex.VertexIndex;
+            return index >= 0 && index < vertices.Vertices.Count && ReferenceEquals(vertices.Vertices[index], vertex);
+        }
+
+        #endregion
+
         #region 表示
 
         /// <summary>
@@ -104,7 +284,25 @@ namespace ChartEditor
                 CollectHandles(view, noteParent, getDistance, includesEditingNote);
             }
 
+            // 頂点を選べるノーツが、画面に映っていないとき (つまみが出ていないとき) は、選択を外す
+            // (見えていない頂点を、Delete で消したり、まとめて動かしたりしないように)
+            if (selectedVertices.Count > 0 && !HasVertexHandleOf(selectionOwner)) { selectedVertices.Clear(); }
+
             Draw(view);
+        }
+
+        /// <summary>
+        /// そのノーツの頂点のつまみが、1つでも出ているか
+        /// </summary>
+        private bool HasVertexHandleOf(SpaceVertices vertices)
+        {
+            if (vertices == null) { return false; }
+
+            foreach (var handle in handles)
+            {
+                if (handle.Vertex != null && ReferenceEquals(handle.Vertices, vertices)) { return true; }
+            }
+            return false;
         }
 
         /// <summary>
@@ -237,7 +435,9 @@ namespace ChartEditor
                 rectTransform.sizeDelta = Vector2.one * (isCenter ? size * 1.15f : size);
                 rectTransform.localEulerAngles = new Vector3(0f, 0f, isCenter ? 45f : 0f);
 
-                image.color = IsDragging(handle) ? draggingColor : (isCenter ? centerColor : vertexColor);
+                image.color = IsDragging(handle)
+                    ? draggingColor
+                    : (isCenter ? centerColor : (IsSelected(handle.Vertex) ? selectedColor : vertexColor));
                 if (!image.gameObject.activeSelf) { image.gameObject.SetActive(true); }
             }
 
@@ -245,6 +445,99 @@ namespace ChartEditor
             {
                 if (handleImages[i].gameObject.activeSelf) { handleImages[i].gameObject.SetActive(false); }
             }
+
+            DrawIndexLabels(view, size, scale);
+        }
+
+        /// <summary>
+        /// 頂点のつまみの横に、頂点の番号を出す
+        /// 全画面プレビューで、つまみが1つのノーツのものだけのとき (頂点を編集しているとき) に出す
+        /// (ホールドをまるごと選んだときなどは、番号だらけになるので出さない。ミニプレビューは小さいので出さない)
+        /// </summary>
+        private void DrawIndexLabels(PreviewView view, float handleSize, float scale)
+        {
+            int count = 0;
+
+            if (view != null && view.IsFullScreen && IsSingleNote())
+            {
+                foreach (var handle in handles)
+                {
+                    if (handle.Vertex == null) { continue; }
+
+                    int index = handle.Vertex.VertexIndex;
+                    if (index < 0) { continue; }
+
+                    if (count >= indexLabels.Count) { indexLabels.Add(CreateIndexLabel()); }
+                    var label = indexLabels[count++];
+
+                    // つまみの右上
+                    bool isWide = index >= 10;
+                    label.Root.position = new Vector3(
+                        handle.ScreenPosition.x + handleSize * 0.5f + 2f * scale,
+                        handle.ScreenPosition.y + handleSize * 0.5f + 2f * scale,
+                        0f);
+                    label.Root.sizeDelta = new Vector2((isWide ? INDEX_LABEL_WIDTH_WIDE : INDEX_LABEL_WIDTH) * scale, INDEX_LABEL_HEIGHT * scale);
+                    label.Text.fontSize = INDEX_FONT_SIZE * scale;
+
+                    if (label.ShownIndex != index)
+                    {
+                        label.ShownIndex = index;
+                        label.Text.text = index < indexTexts.Length ? indexTexts[index] : index.ToString();
+                    }
+                    if (!label.Root.gameObject.activeSelf) { label.Root.gameObject.SetActive(true); }
+                }
+            }
+
+            for (int i = count; i < indexLabels.Count; i++)
+            {
+                if (indexLabels[i].Root.gameObject.activeSelf) { indexLabels[i].Root.gameObject.SetActive(false); }
+            }
+        }
+
+        /// <summary>
+        /// 出ているつまみが、すべて同じノーツのものか
+        /// </summary>
+        private bool IsSingleNote()
+        {
+            if (handles.Count == 0) { return false; }
+
+            SpaceVertices first = handles[0].Vertices;
+            foreach (var handle in handles)
+            {
+                if (!ReferenceEquals(handle.Vertices, first)) { return false; }
+            }
+            return true;
+        }
+
+        private IndexLabel CreateIndexLabel()
+        {
+            var labelObject = new GameObject("Index", typeof(RectTransform));
+            labelObject.transform.SetParent(canvasObject.transform, false);
+
+            var root = (RectTransform)labelObject.transform;
+            // 左下の角を、つまみの右上に合わせる
+            root.pivot = Vector2.zero;
+
+            // 明るい背景でも暗い背景でも読めるように、暗い札の上に白い文字で書く
+            var background = labelObject.AddComponent<Image>();
+            background.color = indexLabelColor;
+            background.raycastTarget = false;
+
+            var textObject = new GameObject("Text", typeof(RectTransform));
+            textObject.transform.SetParent(labelObject.transform, false);
+            var textRect = (RectTransform)textObject.transform;
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = Vector2.zero;
+            textRect.offsetMax = Vector2.zero;
+
+            var text = textObject.AddComponent<TextMeshProUGUI>();
+            text.raycastTarget = false;
+            text.alignment = TextAlignmentOptions.Center;
+            text.enableWordWrapping = false;
+            text.color = Color.white;
+
+            return new IndexLabel { Root = root, Text = text };
         }
 
         /// <summary>
@@ -316,7 +609,11 @@ namespace ChartEditor
 
             canvasObject = null;
             handleImages.Clear();
+            indexLabels.Clear();
             handles.Clear();
+            selectedVertices.Clear();
+            selectionOwner = null;
+            PreviewVertexTools.ShareSelection(null, null);
         }
 
         #endregion
@@ -331,6 +628,7 @@ namespace ChartEditor
         public bool TryGrab(PreviewView view, Vector2 screenPosition, Ray ray, Transform noteParent)
         {
             isGrabbing = false;
+            grabKind = GrabKind.Move;
             dragTargets.Clear();
 
             if (noteParent == null) { return false; }
@@ -340,6 +638,8 @@ namespace ChartEditor
             if (nearestIndex < 0) { return false; }
 
             var handle = handles[nearestIndex];
+            grabbedVertex = handle.Vertex;
+            grabbedVertices = handle.Vertices;
 
             // 押した位置が、ノーツのある断面のどこに当たるか (動かした量を測る基準にする)
             if (!TryGetVertexPoint(ray, noteParent, handle.Distance, out grabPoint)) { return false; }
@@ -365,6 +665,14 @@ namespace ChartEditor
                     }
                 }
             }
+            else if (selectedVertices.Count >= 2 && ReferenceEquals(handle.Vertices, selectionOwner) && IsSelected(handle.Vertex))
+            {
+                // 選択中の頂点を掴んだ: 選択中の頂点を、まとめて動かす
+                foreach (var selected in selectedVertices)
+                {
+                    dragTargets.Add(new DragTarget { Vertex = selected, OriginPosition = selected.Position.Value });
+                }
+            }
             else
             {
                 dragTargets.Add(new DragTarget { Vertex = handle.Vertex, OriginPosition = handle.Vertex.Position.Value });
@@ -383,9 +691,77 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 画面上の位置にある、頂点のつまみを探す (中心点のつまみは含めない)
+        /// </summary>
+        /// <param name="vertices">その頂点を持つノーツの、頂点の並び</param>
+        public bool TryFindVertex(PreviewView view, Vector2 screenPosition, out SpaceVertices vertices, out VertexData vertex)
+        {
+            vertices = null;
+            vertex = null;
+
+            int index = FindNearestHandleIndex(view, screenPosition, false);
+            if (index < 0) { return false; }
+
+            vertices = handles[index].Vertices;
+            vertex = handles[index].Vertex;
+            return true;
+        }
+
+        /// <summary>
+        /// 画面上の位置に頂点のつまみがあれば、それを掴んで、そのノーツの頂点すべてを回す / 拡大・縮小する
+        /// (頂点の中心が基準。掴んだ頂点が、カーソルの方へ向くように回る / カーソルまでの距離の割合で大きさが変わる)
+        /// </summary>
+        /// <param name="target">動かしてよいノーツの頂点の並び (ほかのノーツのつまみは掴まない)</param>
+        /// <param name="isRotate">true = 回す、false = 拡大・縮小する</param>
+        /// <returns>掴めたとき true</returns>
+        public bool TryGrabForTransform(PreviewView view, Vector2 screenPosition, Ray ray, Transform noteParent, SpaceVertices target, bool isRotate)
+        {
+            isGrabbing = false;
+            grabKind = GrabKind.Move;
+            dragTargets.Clear();
+
+            if (noteParent == null || target == null) { return false; }
+
+            int index = FindNearestHandleIndex(view, screenPosition, false);
+            if (index < 0) { return false; }
+
+            var handle = handles[index];
+            if (!ReferenceEquals(handle.Vertices, target) || handle.Vertices.Vertices.Count == 0) { return false; }
+            if (!TryGetVertexPoint(ray, noteParent, handle.Distance, out grabPoint)) { return false; }
+
+            grabbedVertex = handle.Vertex;
+            grabbedVertices = handle.Vertices;
+
+            // 頂点を2つ以上選んでいるときは、選択中の頂点だけを回す・拡大縮小する (頂点レイヤーと同じ)。そうでなければ、すべての頂点
+            if (selectedVertices.Count >= 2 && ReferenceEquals(target, selectionOwner))
+            {
+                foreach (var selected in selectedVertices)
+                {
+                    dragTargets.Add(new DragTarget { Vertex = selected, OriginPosition = selected.Position.Value });
+                }
+            }
+            else
+            {
+                AddDragTargets(handle.Vertices);
+            }
+            if (dragTargets.Count == 0) { return false; }
+
+            Vector2 sum = Vector2.zero;
+            foreach (var dragTarget in dragTargets) { sum += dragTarget.OriginPosition; }
+            grabCenter = sum / dragTargets.Count;
+
+            isGrabbingCenter = false;
+            grabDistance = handle.Distance;
+            grabKind = isRotate ? GrabKind.Rotate : GrabKind.Scale;
+            isGrabbing = true;
+            return true;
+        }
+
+        /// <summary>
         /// 画面上の位置から、掴める距離にあるつまみのうち、いちばん近いものの番号を返す。無ければ -1
         /// </summary>
-        private int FindNearestHandleIndex(PreviewView view, Vector2 screenPosition)
+        /// <param name="includesCenter">中心点のつまみも対象にするか</param>
+        private int FindNearestHandleIndex(PreviewView view, Vector2 screenPosition, bool includesCenter = true)
         {
             if (view == null || handles.Count == 0) { return -1; }
 
@@ -396,6 +772,8 @@ namespace ChartEditor
             float nearestScore = float.MaxValue;
             for (int i = 0; i < handles.Count; i++)
             {
+                if (!includesCenter && handles[i].Vertex == null) { continue; }
+
                 float distance = Vector2.Distance(handles[i].ScreenPosition, screenPosition);
                 if (distance > pickRadius) { continue; }
 
@@ -432,12 +810,45 @@ namespace ChartEditor
             if (!isGrabbing || noteParent == null) { return false; }
             if (!TryGetVertexPoint(ray, noteParent, grabDistance, out Vector2 point)) { return false; }
 
+            // 回す・拡大縮小する (頂点レイヤーの「回転」「拡大縮小」と同じ計算)
+            if (grabKind != GrabKind.Move)
+            {
+                float angle = 0f;
+                float magnitude = 1f;
+                if (grabKind == GrabKind.Rotate)
+                {
+                    angle = Vector2Extensions.AngleBetweenVectors(grabPoint, point, grabCenter);
+                }
+                else
+                {
+                    float baseDistance = (grabPoint - grabCenter).magnitude;
+                    // 中心のすぐそばを掴んだときは、割合を決められないので、動かさない
+                    if (baseDistance < 0.0001f) { return false; }
+
+                    magnitude = (point - grabCenter).magnitude / baseDistance;
+                }
+
+                bool isTransformed = false;
+                foreach (var target in dragTargets)
+                {
+                    Vector2 before = target.Vertex.Position.Value;
+                    Vector2 next = grabKind == GrabKind.Rotate
+                        ? target.OriginPosition.RotatePoint(grabCenter, angle)
+                        : target.OriginPosition.ScalePoint(grabCenter, magnitude);
+                    target.Vertex.SetPosition(next);
+                    if (target.Vertex.Position.Value != before) { isTransformed = true; }
+                }
+
+                return isTransformed;
+            }
+
             // 掴んだ位置からの移動量だけ動かす (掴んだ瞬間に、つまみがカーソルの位置へ飛ばないように)
             Vector2 translation = point - grabPoint;
 
             // 中心点で全体を動かすときは、形が崩れないよう、どの頂点も範囲の外に出ない位置で止める
             // (複数のノーツをまとめて動かしているときは、どれか1つでも縁に着いたら、全体がそこで止まる)
-            if (isGrabbingCenter) { translation = LimitTranslation(translation); }
+            // (選択中の頂点をまとめて動かすときも同じ)
+            if (isGrabbingCenter || dragTargets.Count > 1) { translation = LimitTranslation(translation); }
 
             bool isMoved = false;
             foreach (var target in dragTargets)
@@ -477,9 +888,18 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 掴んだつまみを離す。元に戻す履歴には登録しない (呼び出し側が、別の形で登録するとき用)
+        /// </summary>
+        public void ReleaseWithoutRecord()
+        {
+            isGrabbing = false;
+            dragTargets.Clear();
+        }
+
+        /// <summary>
         /// 光線が、指定した位置の断面を通る点を、頂点と同じ座標(単位円の中)で求める
         /// </summary>
-        private bool TryGetVertexPoint(Ray ray, Transform noteParent, float distance, out Vector2 point)
+        public bool TryGetVertexPoint(Ray ray, Transform noteParent, float distance, out Vector2 point)
         {
             point = default;
             if (!PreviewTrackSurface.TryGetSectionPoint(ray, noteParent, optionHolder.NoteCurveRadius.Value, distance, out float x, out float y)) { return false; }

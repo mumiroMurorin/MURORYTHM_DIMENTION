@@ -62,8 +62,8 @@ namespace ChartEditor
             view.SetVisible(isVisible);
             if (!isVisible) { return; }
 
-            // 全画面プレビューでは、画面の左端に寄せる
-            view.SetAtLeftEdge(layer == EditNoteType.Preview);
+            // 全画面プレビューでは、画面の左端に寄せる (頂点の道具の列が出ている間は、その右)
+            view.SetAtLeftEdge(layer == EditNoteType.Preview, PreviewVertexTools.IsListShown ? PreviewVertexTools.LIST_RIGHT_EDGE : 0f);
 
             // 欄が開かれたときは、閉じている間に数えていなかった分を、すぐ数える
             bool isDetailShown = view.IsDetailShown;

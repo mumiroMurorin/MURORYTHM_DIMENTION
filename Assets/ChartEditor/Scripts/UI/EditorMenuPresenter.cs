@@ -50,6 +50,8 @@ namespace ChartEditor
         [SerializeField] ChartExtendSettingsView[] chartExtendSettings_view;
         [Tooltip("「ファイル」の「バックアップから復元」を押すと、横に開く一覧。いちばん下に、バックアップの行が並んでいる (バックアップが少ないときは、余った行を隠して、枠を縮める)")]
         [SerializeField] RectTransform backupList_view;
+        [Tooltip("全画面プレビューの、頂点の道具の列 (頂点レイヤーの道具の列と同じ見た目。頂点を持つノーツを1つ選んでいる間だけ出す)")]
+        [SerializeField] PreviewVertexToolsView previewVertexTools_view;
 
         [Header("Models")]
         [SerializeField] ChartDataExporter chartDataExporter_model;
@@ -81,6 +83,7 @@ namespace ChartEditor
         IChartEditorOptionSetter optionSetter;
         INoteSpawnDataOptionGetter noteSpawnDataOptionGetter;
         INoteSpawnDataOptionSetter noteSpawnDataOptionSetter;
+        INotesDataGetter notesGetter;
 
         // 復元できるバックアップ (新しい順。メニューを開いたときに調べ直す)
         readonly List<ChartBackups.Entry> backups = new List<ChartBackups.Entry>();
@@ -98,8 +101,10 @@ namespace ChartEditor
             IChartEditorOptionGetter optionGetter,
             IChartEditorOptionSetter optionSetter,
             INoteSpawnDataOptionGetter noteSpawnDataOptionGetter,
-            INoteSpawnDataOptionSetter noteSpawnDataOptionSetter)
+            INoteSpawnDataOptionSetter noteSpawnDataOptionSetter,
+            INotesDataGetter notesGetter)
         {
+            this.notesGetter = notesGetter;
             this.dataGetter = dataGetter;
             this.optionGetter = optionGetter;
             this.optionSetter = optionSetter;
@@ -122,6 +127,25 @@ namespace ChartEditor
                 };
             }
             SetBackupListOpen(false);
+
+            // 全画面プレビューの、頂点の道具の列
+            if (previewVertexTools_view != null)
+            {
+                // 選んでいる道具をもう一度押すと、選ぶのをやめる (ふつうの操作に戻る)
+                previewVertexTools_view.OnToolClickedListener += tool =>
+                {
+                    PreviewVertexTools.Select(PreviewVertexTools.Current == tool ? PreviewVertexTool.Move : tool);
+                    RefreshPreviewVertexTools();
+                };
+                previewVertexTools_view.OnSlideClickedListener += delta =>
+                {
+                    if (PreviewVertexTools.TryGetTarget(dataGetter, notesGetter, out _, out SpaceVertices vertices)) { PreviewVertexTools.Slide(vertices, delta); }
+                };
+                previewVertexTools_view.OnMirrorClickedListener += isLeftRight =>
+                {
+                    if (PreviewVertexTools.TryGetTarget(dataGetter, notesGetter, out _, out SpaceVertices vertices)) { PreviewVertexTools.Mirror(vertices, isLeftRight); }
+                };
+            }
 
             // 入力欄を、延長の設定とつなぐ
             if (chartExtendSettings_view != null)
@@ -155,10 +179,36 @@ namespace ChartEditor
 
             // メニューバーの項目は、一覧を開いている間だけ、状態を更新し続ける (再生の状態や選択の変化に合わせる)
             if (menuBar_view.IsOpen) { RefreshItems(items_view); }
+            // 全画面プレビューの頂点の道具の列を、使えるときだけ出す
+            RefreshPreviewVertexTools();
+
             // クイックメニューの項目は、いつも見えているので、いつも更新する
             RefreshItems(quickItems_view);
 
             RefreshValueLabels();
+        }
+
+        /// <summary>
+        /// 全画面プレビューの頂点の道具の列を、使えるとき (全画面プレビューで、頂点を持つノーツを1つだけ選んでいるとき) だけ出す
+        /// 使えなくなったら (選択を変えた、編集画面へ戻った)、道具を選んでいない状態に戻す
+        /// </summary>
+        private void RefreshPreviewVertexTools()
+        {
+            bool isAvailable = PreviewVertexTools.TryGetTarget(dataGetter, notesGetter, out _, out _);
+
+            if (!isAvailable && PreviewVertexTools.Current != PreviewVertexTool.Move)
+            {
+                PreviewVertexTools.Select(PreviewVertexTool.Move);
+            }
+
+            // (ほかの欄 (譜面情報) が、列と重ならない位置へ動くのに使う)
+            PreviewVertexTools.IsListShown = isAvailable && previewVertexTools_view != null;
+
+            if (previewVertexTools_view != null)
+            {
+                previewVertexTools_view.SetVisible(isAvailable);
+                previewVertexTools_view.SetTool(PreviewVertexTools.Current);
+            }
         }
 
         /// <summary>

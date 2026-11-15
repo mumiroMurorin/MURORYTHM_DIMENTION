@@ -5,9 +5,15 @@ using UnityEngine.UI;
 
 namespace ChartEditor
 {
+    /// <summary>
+    /// 頂点詳細設定の、頂点の座標 (X・Y) の欄
+    /// 座標は、入力を終えたとき (Enter、ほかの場所をクリック) に反映する (NumberInputField)
+    /// </summary>
+    // ほかの場所のクリックで入力を終えたとき、そのクリックで頂点の選択などが変わる前に、打った値を反映するため、先に動かす
+    [DefaultExecutionOrder(-1000)]
     public class VertexPositionPanelView : MonoBehaviour
     {
-        [SerializeField] GameObject[] displayElements; 
+        [SerializeField] GameObject[] displayElements;
         [SerializeField] TMP_InputField inputFieldX;
         [SerializeField] TMP_InputField inputFieldY;
         [SerializeField] TextChangableButtonView openCloseButton_view;
@@ -17,21 +23,32 @@ namespace ChartEditor
         public event Action<float> OnXValueChangedListener;
         public event Action<float> OnYValueChangedListener;
 
+        NumberInputField inputX;
+        NumberInputField inputY;
         bool isOpenPanel;
+
+        void Update()
+        {
+            // ほかの場所がクリックされたら、そのクリックが処理される前に、打っている値を反映する
+            inputX?.CommitIfClickedElsewhere();
+            inputY?.CommitIfClickedElsewhere();
+        }
 
         void Awake()
         {
+            // 値を知らせる処理を先に登録する (その後で、入力の終わりを知らせる。元に戻す操作の記録は、値が入った後に行うため)
+            inputX = new NumberInputField(inputFieldX, value => OnXValueChangedListener?.Invoke(value));
+            inputY = new NumberInputField(inputFieldY, value => OnYValueChangedListener?.Invoke(value));
+
             if (inputFieldX != null)
             {
                 inputFieldX.onSelect.AddListener(_ => OnBeginEditListener?.Invoke());
-                inputFieldX.onValueChanged.AddListener(OnXValueChanged);
                 inputFieldX.onEndEdit.AddListener(_ => OnEndEditListener?.Invoke());
             }
 
             if (inputFieldY != null)
             {
                 inputFieldY.onSelect.AddListener(_ => OnBeginEditListener?.Invoke());
-                inputFieldY.onValueChanged.AddListener(OnYValueChanged);
                 inputFieldY.onEndEdit.AddListener(_ => OnEndEditListener?.Invoke());
             }
 
@@ -53,33 +70,14 @@ namespace ChartEditor
         {
             var format = $"F{Mathf.Clamp(decimalDigits, 0, 9)}";
 
-            if (inputFieldX != null)
-            {
-                inputFieldX.SetTextWithoutNotify(position.x.ToString(format));
-            }
-
-            if (inputFieldY != null)
-            {
-                inputFieldY.SetTextWithoutNotify(position.y.ToString(format));
-            }
+            inputX?.SetText(position.x.ToString(format));
+            inputY?.SetText(position.y.ToString(format));
         }
 
         public void Clear()
         {
-            if (inputFieldX != null) { inputFieldX.SetTextWithoutNotify(string.Empty); }
-            if (inputFieldY != null) { inputFieldY.SetTextWithoutNotify(string.Empty); }
-        }
-
-        void OnXValueChanged(string value)
-        {
-            if (!float.TryParse(value, out var parsed)) { return; }
-            OnXValueChangedListener?.Invoke(parsed);
-        }
-
-        void OnYValueChanged(string value)
-        {
-            if (!float.TryParse(value, out var parsed)) { return; }
-            OnYValueChangedListener?.Invoke(parsed);
+            inputX?.SetText(string.Empty);
+            inputY?.SetText(string.Empty);
         }
 
         void OnSwitchPanelState()

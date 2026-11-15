@@ -115,7 +115,8 @@ namespace ChartEditor
         /// 欄を、画面の左端に寄せる / シーンに置いてある位置へ戻す
         /// (全画面プレビューでは、ツールやノーツのボタンの列が無いので、編集画面と同じ位置だと、何も無い場所に浮いて見える)
         /// </summary>
-        public void SetAtLeftEdge(bool isAtLeftEdge)
+        /// <param name="leftSpace">左端に寄せるとき、左に空けておく幅 (そこに、ほかの欄が出ているとき)</param>
+        public void SetAtLeftEdge(bool isAtLeftEdge, float leftSpace = 0f)
         {
             var rect = (RectTransform)transform;
             if (!hasEditorPosition)
@@ -124,7 +125,7 @@ namespace ChartEditor
                 hasEditorPosition = true;
             }
 
-            Vector2 position = isAtLeftEdge ? new Vector2(LEFT_EDGE_X, editorPosition.y) : editorPosition;
+            Vector2 position = isAtLeftEdge ? new Vector2(LEFT_EDGE_X + leftSpace, editorPosition.y) : editorPosition;
             if (rect.anchoredPosition != position) { rect.anchoredPosition = position; }
         }
 

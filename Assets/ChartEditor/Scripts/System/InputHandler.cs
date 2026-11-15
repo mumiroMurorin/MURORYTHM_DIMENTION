@@ -190,9 +190,9 @@ namespace ChartEditor
             if (dataGetter.PlayMode.Value == PlayMode.Play) { return; }
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(playIgnoreModes)) { return; }
             // カーソルがUI上にあるときは返す
-            // (プレビューの映像の上は別。ミニプレビューにカーソルを置いているときも、譜面の上と同じように動かせる)
+            // (プレビューの映像の上は別。ミニプレビューにカーソルを置いているときも、譜面の上と同じように動かせる。
+            //  全画面プレビューでも、クイックメニューやメニューの上では動かさない。そこでのホイールは、その欄を送る操作)
             if (EventSystem.current.IsPointerOverGameObject() &&
-                dataGetter.CurrentEditMode.Value != EditMode.Preview &&
                 !PreviewNotePicker.IsPointerOnPreview(Input.mousePosition))
             {
                 return;

@@ -49,6 +49,18 @@ namespace ChartEditor
             button.interactable = !isInteracted;
         }
 
+        /// <summary>
+        /// このツールを選んでいる見た目にする / 戻す。押せる状態は変えない
+        /// (全画面プレビューの頂点の道具用。そこでは、選んでいるツールをもう一度押すと、選ぶのをやめる)
+        /// 見た目は、OnChangeEditMode(true) のとき (押せなくなったボタンの色) と同じにしてある
+        /// </summary>
+        public void SetChosenLook(bool isChosen)
+        {
+            if (button == null || button.targetGraphic == null) { return; }
+
+            button.targetGraphic.color = isChosen ? button.colors.disabledColor : Color.white;
+        }
+
         public void OnClicked()
         {
             OnClickedListner?.Invoke();

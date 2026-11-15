@@ -10,6 +10,9 @@ namespace ChartEditor
 {
     /// <summary>
     /// 状況に応じてカーソルのアイコンを変更する 
+    ///
+    /// 頂点の編集ツール (EditMode.VertexEdit) だけは、同じモードのまま、カーソルの下にあるもので絵が変わる:
+    /// 頂点・中心点の上では「動かす」絵、頂点を置ける所では「置く」絵 (一覧の VertexEdit の絵)、それ以外は標準のカーソル
     /// </summary>
     public class CursorTextureChanger : MonoBehaviour
     {
@@ -35,6 +38,18 @@ namespace ChartEditor
             EditMode.Preview,
         };
 
+        // 頂点の編集ツールで、今出しているカーソル
+        enum VertexEditCursor
+        {
+            // まだ決めていない (次の Update で決め直す)
+            Unknown,
+            Standard,
+            Move,
+            Place,
+        }
+
+        VertexEditCursor vertexEditCursor = VertexEditCursor.Unknown;
+
 
         [Inject]
         public void Construct(IChartEditorDataGetter chartEditorDataGetter)
@@ -55,9 +70,12 @@ namespace ChartEditor
                 .Subscribe(value =>
                 {
                     currentEditMode = value;
+                    // 頂点の編集ツールのカーソルは、カーソルの下にあるもので決まる (Update で決める)
+                    vertexEditCursor = VertexEditCursor.Unknown;
                     // プレビューがカーソルを指定している間は、そちらを優先する
                     if (previewCursorMode != EditMode.None) { return; }
                     if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
+                    if (currentEditMode == EditMode.VertexEdit) { return; }
 
                     SetCursorTexture(value);
                 })
@@ -67,6 +85,7 @@ namespace ChartEditor
             dataGetter_model?.InteractableColliders.ObserveReset()
                 .Subscribe(_ => {
                     if (previewCursorMode != EditMode.None) { return; }
+                    if (currentEditMode == EditMode.VertexEdit) { return; }
                     SetCursorTexture(currentEditMode, true);
                 }).AddTo(this.gameObject);
 
@@ -103,8 +122,53 @@ namespace ChartEditor
             // 指定をやめたとき: 今のエディットモードのカーソルに戻す
             // (ボタンなどの画面部品の上にいるときと、カーソルを切り替えないモードのときは、標準のカーソルにする)
             bool isOnUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
-            bool isStandard = isOnUI || currentEditMode.IsInEditModeList(ignoreEditModes);
+            // (頂点の編集ツールは、いったん標準のカーソルにして、次の Update で決め直す)
+            bool isStandard = isOnUI || currentEditMode.IsInEditModeList(ignoreEditModes) || currentEditMode == EditMode.VertexEdit;
             SetCursorTexture(currentEditMode, isStandard);
+            vertexEditCursor = VertexEditCursor.Unknown;
+        }
+
+        private void Update()
+        {
+            // 頂点の編集ツール: カーソルの下にあるものに合わせて、カーソルの絵を変える
+            if (currentEditMode != EditMode.VertexEdit) { return; }
+            if (previewCursorMode != EditMode.None) { return; }
+
+            VertexEditCursor cursor = GetVertexEditCursor();
+            if (cursor == vertexEditCursor) { return; }
+            vertexEditCursor = cursor;
+
+            switch (cursor)
+            {
+                // 頂点・中心点の上: 動かす (頂点を動かしている最中と同じ絵)
+                case VertexEditCursor.Move:
+                    SetCursorTexture(EditMode.VertexMoving);
+                    break;
+                // 頂点を置ける所: 置く
+                case VertexEditCursor.Place:
+                    SetCursorTexture(EditMode.VertexEdit);
+                    break;
+                default:
+                    SetCursorTexture(EditMode.VertexEdit, true);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 頂点の編集ツールで、今出すカーソル (カーソルの下にあるもので決まる)
+        /// </summary>
+        private VertexEditCursor GetVertexEditCursor()
+        {
+            // ボタンなどの画面部品の上と、範囲選択の操作 (Shift) の間は、標準のカーソル
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) { return VertexEditCursor.Standard; }
+            if (ModifierKey.Shift) { return VertexEditCursor.Standard; }
+
+            // 頂点・中心点の上: 掴んで動かせる
+            if (dataGetter_model.GetInteractableCollider<IPointMovableCollider>() != null) { return VertexEditCursor.Move; }
+            // 何も無い所で、頂点を置ける所 (Ctrl を押している間は、複数選択の操作なので、置かない)
+            if (!ModifierKey.Ctrl && dataGetter_model.GetInteractableCollider<IPointDeployableCollider>() != null) { return VertexEditCursor.Place; }
+
+            return VertexEditCursor.Standard;
         }
 
         /// <summary>
@@ -113,22 +177,28 @@ namespace ChartEditor
         public void SetCursorTexture(EditMode editMode, bool isDisable = false)
         {
             Texture2D texture = null;
+            // 絵のどこを「指している点」にするか (左上が 0,0、右下が 1,1)
+            Vector2 hotspotRatio = new Vector2(0.5f, 0.5f);
 
-            if (!isDisable) 
+            if (!isDisable)
             {
                 foreach (var modeToTexture in cursorTextures)
                 {
                     texture = modeToTexture.CheckAndGetTexture(editMode);
-
                     if (texture == null) { continue; }
-                    else { break; }
+
+                    hotspotRatio = modeToTexture.Hotspot;
+                    break;
                 }
             }
 
             Vector2 hotspot = Vector2.zero;
             if (texture != null)
             {
-                hotspot = new Vector2(texture.width / 2f, texture.height / 2f);
+                // 指している点は、絵の中に収める (外にあると、カーソルを設定できない)
+                hotspot = new Vector2(
+                    Mathf.Clamp(texture.width * hotspotRatio.x, 0f, texture.width - 1),
+                    Mathf.Clamp(texture.height * hotspotRatio.y, 0f, texture.height - 1));
             }
             Cursor.SetCursor(texture, hotspot, CursorMode.Auto);
         }
@@ -140,6 +210,13 @@ namespace ChartEditor
         {
             [SerializeField] EditMode editMode;
             [SerializeField] Texture2D texture;
+            [Tooltip("絵のどこを「指している点」にするか (左上が 0,0、右下が 1,1。0.5,0.5 で絵の真ん中)。クリックした位置は、この点になる")]
+            [SerializeField] Vector2 hotspot = new Vector2(0.5f, 0.5f);
+
+            /// <summary>
+            /// 絵のどこを「指している点」にするか (左上が 0,0、右下が 1,1)
+            /// </summary>
+            public Vector2 Hotspot => new Vector2(Mathf.Clamp01(hotspot.x), Mathf.Clamp01(hotspot.y));
 
             public Texture2D CheckAndGetTexture(EditMode editMode)
             {

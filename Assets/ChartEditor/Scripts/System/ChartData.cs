@@ -103,8 +103,9 @@ namespace ChartEditor
 
         #region SpeedRatio
 
-        const float SPEEDRATIO_MIN = -100f;
-        const float SPEEDRATIO_MAX = 100f;
+        // (以前は -100 〜 100。もっと速く流したい、という要望で、-200 〜 200 にした)
+        const float SPEEDRATIO_MIN = -200f;
+        const float SPEEDRATIO_MAX = 200f;
 
         /// <summary>
         /// スピード倍率変化
