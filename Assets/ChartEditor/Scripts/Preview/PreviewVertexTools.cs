@@ -152,6 +152,8 @@ namespace ChartEditor
             }
 
             if (count != 1) { return false; }
+            // ロックしたノーツの形は、編集させない
+            if (NoteLock.IsLocked(single)) { return false; }
             if (single is not IVerticesControlableNoteData verticesNote) { return false; }
             if (verticesNote.SpaceVertices == null || verticesNote.SpaceVertices.Vertices.Count == 0) { return false; }
 
@@ -177,6 +179,26 @@ namespace ChartEditor
             });
 
             return vertex;
+        }
+
+        /// <summary>頂点を置ける、ほかの頂点からのいちばん近い距離 (単位円の中の値。重なった頂点は、形のメッシュを壊す)</summary>
+        public const float MIN_VERTEX_DISTANCE = 0.02f;
+
+        /// <summary>
+        /// その位置に、頂点を置けるか (ノーツの面 (単位円) の中で、ほかの頂点と重ならない所だけ)
+        /// (面の外を押したときに、縁に頂点が置かれないように。同じ所に2つ置くと、形のメッシュが作れなくなる)
+        /// </summary>
+        public static bool CanPlaceAt(SpaceVertices vertices, Vector2 position)
+        {
+            if (vertices == null) { return false; }
+            if (float.IsNaN(position.x) || float.IsNaN(position.y)) { return false; }
+            if (position.sqrMagnitude > 1f) { return false; }
+
+            foreach (var vertex in vertices.Vertices)
+            {
+                if ((vertex.Position.Value - position).sqrMagnitude < MIN_VERTEX_DISTANCE * MIN_VERTEX_DISTANCE) { return false; }
+            }
+            return true;
         }
 
         /// <summary>

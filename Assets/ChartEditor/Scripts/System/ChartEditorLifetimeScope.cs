@@ -53,6 +53,16 @@ namespace ChartEditor
             // SpaceHold を1本だけ、好きな角度から見て編集する (3D編集。画面部品は実行時に作る)
             builder.RegisterEntryPoint<SpaceHold3DEditor>();
 
+            // ノーツのロック (右クリックのメニューから。ロックしたノーツは、選べない・動かせない)
+            builder.RegisterEntryPoint<NoteLock>();
+
+            // 編集画面で、ノーツを右クリックしたときのメニュー (画面部品は、シーンに置いてある EditorContextMenuView)
+            builder.RegisterEntryPoint<NoteContextMenu>();
+            // 頂点レイヤーから、来る前のレイヤーへ戻る (ミニプレビューの上のボタン)
+            builder.RegisterEntryPoint<VerticesLayerReturn>();
+            // 全画面プレビューの再生中は、まわりの画面部品を隠す
+            builder.RegisterEntryPoint<PreviewPlaybackUi>();
+
             // 頂点レイヤーの下の、SpaceHold の節を時間の順に並べた帯 (フィルムストリップ。画面部品は実行時に作る)
             builder.RegisterEntryPoint<SpaceHoldFilmStrip>();
 

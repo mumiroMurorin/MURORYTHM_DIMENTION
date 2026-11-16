@@ -174,6 +174,20 @@ namespace ChartEditor
             vertices.Clear();
         }
 
+        /// <summary>
+        /// 頂点の並びを、渡した頂点そのもの (同じオブジェクト) に入れ替える
+        /// (元に戻す・やり直すで使う。新しく作り直すと、前の履歴が持っている頂点と別物になり、その履歴が効かなくなる)
+        /// </summary>
+        public void ReplaceVertices(IReadOnlyList<VertexData> vertexDataList)
+        {
+            vertices.Clear();
+            if (vertexDataList != null)
+            {
+                foreach (var vertex in vertexDataList) { vertices.Add(vertex); }
+            }
+            UpdateVertexIndex();
+        }
+
         public void SlideVertexIndices(int delta)
         {
             vertices.Rotate(delta);
@@ -222,6 +236,9 @@ namespace ChartEditor
         public IReadOnlyReactiveProperty<Vector2> Position => position;
         public void SetPosition(Vector2 pos)
         {
+            // 数でない位置 (計算の途中で 0 で割ったときなど) は、使わない (形のメッシュが作れなくなる)
+            if (float.IsNaN(pos.x) || float.IsNaN(pos.y) || float.IsInfinity(pos.x) || float.IsInfinity(pos.y)) { return; }
+
             // 単位円上に配置されるように正規化
             pos = pos.ClampToUnitCircle();
 

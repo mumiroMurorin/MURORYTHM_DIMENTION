@@ -92,6 +92,16 @@ namespace ChartEditor
             else if (Input.GetMouseButtonDown(1)) { EndConnect(); }
         }
 
+        private static bool ContainsLocked(IEnumerable<IChainNoteData> notes)
+        {
+            if (!NoteLock.HasAny || notes == null) { return false; }
+            foreach (var note in notes)
+            {
+                if (NoteLock.IsLocked(note)) { return true; }
+            }
+            return false;
+        }
+
         /// <summary>
         /// 接続モードの開始
         /// </summary>
@@ -131,7 +141,7 @@ namespace ChartEditor
             if (!ChainConnectPlanner.TryPlan(
                     clickedNote,
                     notesGetter.SelectingNotes,
-                    note => notesGetter.GetNoteObject(note) != null,
+                    note => notesGetter.GetNoteObject(note) != null && !NoteLock.IsLocked(note),
                     index => notesGetter.GetChainNoteList(index)?.ChainNoteList,
                     notesGetter.GetUsableChainNoteIndex,
                     members,
@@ -139,6 +149,13 @@ namespace ChartEditor
                     out int chainIndex))
             {
                 return false;
+            }
+
+            // つながりごと加わるノーツに、ロックしたノーツがあれば、つながない (ロックしたノーツの接続や種類を変えないように)
+            if (ContainsLocked(members))
+            {
+                Debug.Log("【ロック】ロックしたノーツを含むつながりは、つなげません (外すには、右クリックのメニューの「ロックを外す」)");
+                return true;
             }
 
             // Shift を押していたら、完成した SpaceHold に加わるノーツの形を、その時刻の断面に合わせる
@@ -204,7 +221,7 @@ namespace ChartEditor
             var targetIndices = new List<int>();
             ChainConnectPlanner.TryPlanSelection(
                 notesGetter.SelectingNotes,
-                note => notesGetter.GetNoteObject(note) != null,
+                note => notesGetter.GetNoteObject(note) != null && !NoteLock.IsLocked(note),
                 index => notesGetter.GetChainNoteList(index)?.ChainNoteList,
                 index => notesGetter.GetChainNoteList(index) != null,
                 members,
@@ -214,6 +231,13 @@ namespace ChartEditor
             if (members.Count == 0)
             {
                 Debug.Log("【接続】接続できるノーツがありません。同じ種類のホールド (スペースホールド) を2つ以上選んでから、Ctrl+J を押してください");
+                return false;
+            }
+
+            // つながりごと加わるノーツに、ロックしたノーツがあれば、つながない
+            if (ContainsLocked(members))
+            {
+                Debug.Log("【ロック】ロックしたノーツを含むつながりは、つなげません (外すには、右クリックのメニューの「ロックを外す」)");
                 return false;
             }
 
@@ -277,6 +301,12 @@ namespace ChartEditor
             }
 
             var chainList = notesGetter.GetChainNoteList(addNote.ChainIndex.Value)?.ChainNoteList.ToList();
+            // つなぐノーツと、そのつながりごと加わるノーツに、ロックしたノーツがあれば、つながない
+            if (NoteLock.IsLocked(startNote) || NoteLock.IsLocked(addNote) || (chainList != null && ContainsLocked(chainList)))
+            {
+                Debug.Log("【ロック】ロックしたノーツを含むつながりは、つなげません (外すには、右クリックのメニューの「ロックを外す」)");
+                return;
+            }
             int chainListIndexOrigin = chainList == null || chainList.Count == 0 ? -1 : chainList[0].ChainIndex.Value;
             var startNoteCopy = startNote;
             int startNoteIndexOrigin = startNote.ChainIndex.Value;

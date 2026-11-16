@@ -54,9 +54,22 @@ namespace ChartEditor
                 if (camera == null || !camera.isActiveAndEnabled) { return false; }
                 if (IsFullScreen) { return camera.targetTexture == null; }
 
-                return image != null && image.isActiveAndEnabled;
+                if (image == null || !image.isActiveAndEnabled) { return false; }
+
+                // ミニプレビューの窓をしまっている (透明にしてある) 間は、出ていないものとする
+                // (見えない映像の上で、ノーツを選んだり、頂点のつまみを出したりしないように)
+                image.GetComponentsInParent(false, canvasGroups);
+                foreach (var group in canvasGroups)
+                {
+                    if (group.alpha <= 0f) { return false; }
+                    if (group.ignoreParentGroups) { break; }
+                }
+                return true;
             }
         }
+
+        // 窓が透明かどうかを調べるときの作業用
+        readonly List<CanvasGroup> canvasGroups = new List<CanvasGroup>();
 
         /// <summary>
         /// 画面上の位置で、このプレビューを操作できるか

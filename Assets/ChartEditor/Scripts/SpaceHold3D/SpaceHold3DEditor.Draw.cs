@@ -21,6 +21,8 @@ namespace ChartEditor
         static readonly Color axisZColor = new Color(0.35f, 0.62f, 1f, 1f);
         static readonly Color vertexStartColor = new Color(0.3f, 1f, 0.65f, 1f);
         static readonly Color vertexEndColor = new Color(1f, 0.45f, 0.85f, 1f);
+        // 選んでいる頂点 (全画面プレビューと同じ橙色)
+        static readonly Color selectedVertexColor = new Color(1f, 0.55f, 0.1f, 1f);
 
         // 描くときに使う節 (制御点を動かしている間は、区間の中継点を、仮の中継点に入れ替えたもの)
         readonly List<SpaceHoldSection> drawnSections = new List<SpaceHoldSection>();
@@ -317,8 +319,9 @@ namespace ChartEditor
             {
                 SpaceHoldSection section = drawnSections[i];
                 bool isVirtual = section.Note == null;
-                bool isSelected = !isVirtual && ReferenceEquals(section.Note, selectedNote);
-                bool isMeshRelay = isVirtual || section.Note.NoteType == DeploymentNoteType.SpaceHoldMeshRelay;
+                bool isSelected = !isVirtual && IsSectionSelected(section.Note);
+                // (ロックしたメッシュ中継点は、曲線の節なので、節と同じ太さで描く)
+                bool isMeshRelay = isVirtual || (section.Note.NoteType == DeploymentNoteType.SpaceHoldMeshRelay && !NoteLock.IsLocked(section.Note));
 
                 Color color = isSelected ? selectedRingColor : SpaceHoldFilmStrip.GetTypeColor(isVirtual ? DeploymentNoteType.SpaceHoldMeshRelay : section.Note.NoteType);
                 if (isMeshRelay && !isSelected) { color.a = 0.55f; }
@@ -442,16 +445,19 @@ namespace ChartEditor
                         {
                             int count = sections[handle.Section].Vertices.Length;
                             Color color = Color.Lerp(vertexStartColor, vertexEndColor, count <= 1 ? 0f : handle.Vertex / (float)(count - 1));
-                            view.DrawHandle(handle.Local, 11f * grow, isHovered ? Color.white : color, true);
+                            var noteVertices = sections[handle.Section].Note.SpaceVertices.Vertices;
+                            bool isVertexSelected = handle.Vertex >= 0 && handle.Vertex < noteVertices.Count && IsVertexSelected(noteVertices[handle.Vertex]);
+                            if (isVertexSelected) { color = selectedVertexColor; }
+                            view.DrawHandle(handle.Local, (isVertexSelected ? 13f : 11f) * grow, isHovered ? Color.white : color, true);
                             view.DrawLabel(handle.Local + new Vector2(7f, 4f), handle.Vertex.ToString(), 12f, new Color(1f, 1f, 1f, 0.85f));
                             break;
                         }
                     case HandleKind.Center:
                         {
                             SpaceHoldSection section = sections[handle.Section];
-                            bool isSelected = handle.Section == selectedIndex;
+                            bool isSelected = IsSectionSelected(section.Note);
                             Color color = isSelected ? Color.white : SpaceHoldFilmStrip.GetTypeColor(section.Note.NoteType);
-                            if (section.Note.NoteType == DeploymentNoteType.SpaceHoldMeshRelay && !isSelected && !isHovered) { color.a = 0.6f; }
+                            if (section.Note.NoteType == DeploymentNoteType.SpaceHoldMeshRelay && !NoteLock.IsLocked(section.Note) && !isSelected && !isHovered) { color.a = 0.6f; }
                             view.DrawHandle(handle.Local, (isSelected ? 13f : 9f) * grow, color, true);
                             break;
                         }
@@ -469,11 +475,16 @@ namespace ChartEditor
 
         private void DrawTexts()
         {
-            if (TryGetSelected(out SpaceHoldSection selected))
+            if (extraSelected.Count > 0)
+            {
+                view.InfoLabel.text = $"選んでいる節: {extraSelected.Count + 1} 個 ({sections.Count} 個の節)。節の道具 (左上) は、選んでいる節すべてに働きます";
+            }
+            else if (TryGetSelected(out SpaceHoldSection selected))
             {
                 view.InfoLabel.text =
                     $"選んでいる節: {SpaceHoldFilmStrip.GetTypeShortName(selected.Note.NoteType)}  {SpaceHoldFilmStrip.FormatLine(timeline, selected.Line)}" +
-                    $"   ({selectedIndex + 1} / {sections.Count})   頂点 {selected.Vertices.Length} 個";
+                    $"   ({selectedIndex + 1} / {sections.Count})   頂点 {selected.Vertices.Length} 個" +
+                    (selectedVertices.Count > 0 ? $"   選んでいる頂点 {selectedVertices.Count} 個" : string.Empty);
             }
             else
             {

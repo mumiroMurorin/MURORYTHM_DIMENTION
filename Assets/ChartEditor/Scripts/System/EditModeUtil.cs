@@ -130,6 +130,8 @@ namespace ChartEditor
             if (InputFieldFocus.IsTyping) { return false; }
             // SpaceHold の3D編集を開いている間は、裏の譜面のノーツを消したり貼り付けたりしない
             if (EditorMenuBar.IsBlockedByOverlay) { return false; }
+            // 右クリックのメニューを出している間も (メニューの項目が働くときは、メニューはもう閉じている)
+            if (EditorContextMenuView.IsOpen) { return false; }
             // ホールドを曲げる制御点を動かしている間は受け付けない (置き直している最中の中継点が消えたりしないように)
             if (HoldCurveEditor.IsDragging) { return false; }
 

@@ -227,7 +227,8 @@ namespace ChartEditor
             // 頂点編集中のノートだった場合、編集を終了する
             if (note is IVerticesControlableNoteData verticesNote && notesGetter.EditingVertices.Value == verticesNote)
             {
-                LeaveVerticesLayer();
+                // (SpaceHold の3D編集を開いている間は、レイヤーを変えない。3D編集が、残った節を編集する節にする)
+                if (!SpaceHold3DEditor.IsOpen) { LeaveVerticesLayer(); }
                 notesSetter.SetEditingVertices(null);
             }
 

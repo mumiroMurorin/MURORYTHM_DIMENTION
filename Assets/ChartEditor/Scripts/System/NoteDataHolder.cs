@@ -17,6 +17,7 @@ namespace ChartEditor
         public bool TryAddSelectingNotes(IDeployableNoteData data)
         {
             if (selectingNotes.Contains(data)) { return false; }
+            // (ロックしたノーツも選べる。選択に対する操作の側で、ロックしたノーツを飛ばす: NoteLock)
 
             selectingNotes.Add(data);
             return true;
@@ -153,6 +154,12 @@ namespace ChartEditor
         public void SetEditingVertices(IVerticesControlableNoteData data)
         {
             if (editingVertices.Value == data) { return; }
+            // ロックしたノーツの形は編集させない
+            if (data is IDeployableNoteData note && NoteLock.IsLocked(note))
+            {
+                Debug.Log("【ロック】ロックしたノーツの形は、編集できません (外すには、右クリックのメニューの「ロックを外す」)");
+                return;
+            }
             editingVertices.Value = data;
         }
 

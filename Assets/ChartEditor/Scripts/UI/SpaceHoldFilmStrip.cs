@@ -20,7 +20,7 @@ namespace ChartEditor
     /// ・サムネイルを押す: その節の頂点を編集する
     /// ・サムネイルを左右にドラッグ: その節の時刻を、離した所の分線へずらす (前後の節は追い越さない)
     /// ・節の無い分線の「+」を押す: その分線に、補間した形 (今の帯の形のまま) のメッシュ中継点を足す
-    /// ・「3Dで編集」を押す: この SpaceHold を、3D編集 (SpaceHold3DEditor) で開く
+    /// (この SpaceHold を3D編集で開く「3Dで編集」のボタンは、ミニプレビューの「プレビュー」のボタンの横にある: SpaceHold3DOpenButtonView)
     /// ・ホイール・下のスクロールバー: 帯を左右に送る
     /// ・背景をダブルクリック: 小さいマスにしまう (マスを押すと戻る。ほかの欄と同じ MinimizableWindow)
     /// どの操作も、元に戻せる (1回の操作が、1回ぶん)。
@@ -30,20 +30,21 @@ namespace ChartEditor
     public class SpaceHoldFilmStrip : ITickable, IDisposable
     {
         // 帯の大きさと位置 (1920×1080 を基準にした大きさ。画面の下のまんなかに出す)
+        // (録音 20261117_033817: 背を低くした (204 → 166)。頂点レイヤーの円が、帯の後ろに隠れないように)
         const float PANEL_WIDTH = 940f;
-        const float PANEL_HEIGHT = 204f;
+        const float PANEL_HEIGHT = 166f;
         const float PANEL_BOTTOM = 8f;
         const float HEADER_HEIGHT = 30f;
         const float SCROLLBAR_HEIGHT = 12f;
         // 目盛り (分線の名前) の高さ
         const float RULER_HEIGHT = 18f;
         // サムネイル1つぶん
-        const float ITEM_WIDTH = 96f;
-        const float ITEM_HEIGHT = 114f;
+        const float ITEM_WIDTH = 80f;
+        const float ITEM_HEIGHT = 84f;
         const float ITEM_LABEL_HEIGHT = 18f;
         const float ITEM_TOP = 4f;
         // 分線1本ぶんの幅 (節のある分線は、節の数 × SLOT、節の無い分線は EMPTY_SLOT)
-        const float ITEM_SLOT_WIDTH = 108f;
+        const float ITEM_SLOT_WIDTH = 92f;
         const float EMPTY_SLOT_WIDTH = 28f;
         const float PLUS_SIZE = 20f;
         const float CONTENT_PADDING = 10f;
@@ -423,6 +424,12 @@ namespace ChartEditor
         {
             if (index < 0 || index >= sections.Count) { return; }
             if (!IsOperable()) { return; }
+            // ロックした節は、時刻をずらさない
+            if (NoteLock.IsLocked(sections[index].Note))
+            {
+                NoteLock.LogRefused(1, "動かし");
+                return;
+            }
 
             dragIndex = index;
             dragTargetLine = sections[index].Line;
@@ -549,14 +556,6 @@ namespace ChartEditor
             return !dataGetter.IsLoadingChart.Value && !EditorMenuBar.IsBlockingChartInput && !InputFieldFocus.IsTyping;
         }
 
-        private void OnOpen3DClicked()
-        {
-            if (notesGetter.EditingVertices.Value is NoteData_SpaceHold editing)
-            {
-                SpaceHold3DEditor.Instance?.Open(editing);
-            }
-        }
-
         #endregion
 
         #region 画面部品を作る
@@ -572,13 +571,12 @@ namespace ChartEditor
             titleLabel = EditorRuntimeUi.CreateLabel("Title", panel, string.Empty, 15f, TextAlignmentOptions.MidlineLeft);
             EditorRuntimeUi.Place(titleLabel.rectTransform, new Vector2(0f, 1f), new Vector2(12f, -2f), new Vector2(300f, HEADER_HEIGHT));
 
-            var hint = EditorRuntimeUi.CreateLabel("Hint", panel,
-                "押す: 選ぶ   ドラッグ: 時刻をずらす   +: 補間した節を足す   ダブルクリック: しまう",
+            // (押す: 選ぶ、+: 補間した節を足す、ダブルクリック: しまう、の説明は、見ればわかるので出さない (録音 20261116_224220))
+            var hint = EditorRuntimeUi.CreateLabel("Hint", panel, "ドラッグ: 時刻をずらす",
                 12f, TextAlignmentOptions.MidlineRight, EditorRuntimeUi.SubTextColor);
-            EditorRuntimeUi.Place(hint.rectTransform, new Vector2(1f, 1f), new Vector2(-126f, -2f), new Vector2(560f, HEADER_HEIGHT));
+            EditorRuntimeUi.Place(hint.rectTransform, new Vector2(1f, 1f), new Vector2(-12f, -2f), new Vector2(560f, HEADER_HEIGHT));
 
-            var open3D = EditorRuntimeUi.CreateButton("Open3D", panel, "3Dで編集", new Vector2(108f, 22f), OnOpen3DClicked, 13f);
-            EditorRuntimeUi.Place(open3D.RectTransform, new Vector2(1f, 1f), new Vector2(-10f, -5f), new Vector2(108f, 22f));
+            // (「3Dで編集」のボタンは、ミニプレビューの「プレビュー」のボタンの横にある: SpaceHold3DOpenButtonView)
 
             // サムネイルを並べる場所 (ホイール・スクロールバーで左右に送る)
             var viewportImage = EditorRuntimeUi.CreateImage("Viewport", panel, new Color(0f, 0f, 0f, 0.18f), true);

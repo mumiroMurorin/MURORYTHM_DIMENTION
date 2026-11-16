@@ -31,6 +31,10 @@ namespace ChartEditor
     ///   (元に戻す・やり直すで節が動いたときも同じ)。
     ///   手で動かした中継点がある区間は、置き直さない (手で直した形を、勝手に上書きしないため)
     ///
+    /// ・印を右クリック・ダブルクリック: 位置を数値で決める窓 (HoldCurveControlPanelView。横 = まっすぐな線からのずれ (レーンの数)、
+    ///   時間 = 0 が前の節、1 が次の節。窓の「まっすぐに戻す」で、まっすぐに戻す。録音 20261117_005036: メニューは挟まない)
+    /// ・ロックしたメッシュ中継点は、節として扱う (その中継点と隣の節の間を、曲げられる。置き直しで消されることもない)
+    ///
     /// 印の見た目は、シーンに置いてある HoldCurveHandlesView。曲線の計算は HoldCurveMath。
     /// </summary>
     public class HoldCurveEditor : ITickable, IPostLateTickable, IDisposable
@@ -67,6 +71,24 @@ namespace ChartEditor
 
         HoldCurveHandlesView view;
         bool hasSearchedScene;
+
+        // 位置を数値で決める窓 (シーンに置いてある) と、窓で見せている区間
+        HoldCurveControlPanelView controlPanel;
+        NoteData_Hold panelStart;
+        NoteData_Hold panelEnd;
+        // 窓を閉じるのに Esc を使ったフレーム (同じ Esc で、ホールドの単独編集まで終わらないように)
+        int escapeUsedFrame = -1;
+        // 窓の場所 (印が描けないときは、ここに置いたままにする)
+        Vector2 lastPanelPosition;
+        // 窓の数値を反映している最中か (そのときは、選択を変えない)
+        bool isApplyingFromPanel;
+        // 印のダブルクリック
+        const float DOUBLE_CLICK_SECONDS = 0.35f;
+        const float DOUBLE_CLICK_PIXELS = 12f;
+        float lastMarkerClickTime = -10f;
+        Vector2 lastMarkerClickPosition;
+        NoteData_Hold lastMarkerClickStart;
+        NoteData_Hold lastMarkerClickEnd;
 
         /// <summary>
         /// 表示している制御点1つぶん
@@ -123,6 +145,12 @@ namespace ChartEditor
         /// カーソルが制御点の印の上にある、または制御点を掴んでいる
         /// (この間は、譜面のほかの操作 (選択、範囲選択、配置、移動など) にクリックを渡さない)
         /// </summary>
+        /// <summary>
+        /// 位置を数値で決める窓を出しているか、このフレームに Esc で閉じたか (その Esc を、ほかの処理で使わないように)
+        /// </summary>
+        public static bool IsUsingEscape => instance != null &&
+            ((instance.controlPanel != null && instance.controlPanel.IsShown) || instance.escapeUsedFrame == Time.frameCount);
+
         public static bool IsCapturingPointer => instance != null && (instance.isDragging || (instance.IsPointerOnMarker() && instance.CanStartDrag()));
 
         /// <summary>
@@ -196,11 +224,188 @@ namespace ChartEditor
                 newlySelectedNodes.Clear();
             }
 
+            HandleControlPanelInput();
+
+            // 印の右クリック: ダブルクリックと同じ、位置を数値で決める窓
+            if (Input.GetMouseButtonDown(1) && IsPointerOnMarker() && CanStartDrag())
+            {
+                Marker pressed = isHoveredToNext ? markerToNext : markerToBack;
+                if (pressed.IsShown) { OpenControlPanel(pressed.Start, pressed.End); }
+                return;
+            }
+
             if (Input.GetMouseButtonDown(0) && IsPointerOnMarker() && CanStartDrag())
             {
+                // 印のダブルクリック: 位置を数値で決める窓を出す
+                Marker clicked = isHoveredToNext ? markerToNext : markerToBack;
+                bool isDoubleClick = clicked.Start != null &&
+                                     ReferenceEquals(clicked.Start, lastMarkerClickStart) && ReferenceEquals(clicked.End, lastMarkerClickEnd) &&
+                                     Time.unscaledTime - lastMarkerClickTime <= DOUBLE_CLICK_SECONDS &&
+                                     ((Vector2)Input.mousePosition - lastMarkerClickPosition).magnitude <= DOUBLE_CLICK_PIXELS;
+                if (isDoubleClick)
+                {
+                    lastMarkerClickStart = null;
+                    OpenControlPanel(clicked.Start, clicked.End);
+                    return;
+                }
+
+                lastMarkerClickStart = clicked.Start;
+                lastMarkerClickEnd = clicked.End;
+                lastMarkerClickTime = Time.unscaledTime;
+                lastMarkerClickPosition = Input.mousePosition;
                 BeginDrag(isHoveredToNext);
             }
         }
+
+        #region 位置を数値で決める窓
+
+        /// <summary>
+        /// 窓を出している間: 窓の外が押されたら閉じる (打っている途中の値は、反映してから)。Esc でも閉じる
+        /// </summary>
+        private void HandleControlPanelInput()
+        {
+            if (controlPanel == null || !controlPanel.IsShown) { return; }
+
+            bool isPressed = Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1);
+            if (isPressed && !controlPanel.IsPointerOver(Input.mousePosition))
+            {
+                controlPanel.CommitTyping();
+                CloseControlPanel();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape) && !InputFieldFocus.IsTyping)
+            {
+                CloseControlPanel();
+                escapeUsedFrame = Time.frameCount;
+            }
+        }
+
+        private void OpenControlPanel(NoteData_Hold start, NoteData_Hold end)
+        {
+            if (start == null || end == null) { return; }
+
+            if (controlPanel == null)
+            {
+                controlPanel = UnityEngine.Object.FindObjectOfType<HoldCurveControlPanelView>(true);
+                if (controlPanel == null)
+                {
+                    Debug.LogWarning("【ホールドの曲線】位置を数値で決める窓 (HoldCurveControlPanelView) がシーンにありません");
+                    return;
+                }
+                controlPanel.OnValueEntered += OnControlValueEntered;
+                controlPanel.OnCloseClicked += CloseControlPanel;
+                controlPanel.OnStraightClicked += () =>
+                {
+                    if (panelStart == null || panelEnd == null) { return; }
+                    ApplyControl(panelStart, panelEnd, new Vector2(0f, 0.5f));
+                    RefreshControlPanel();
+                };
+            }
+
+            panelStart = start;
+            panelEnd = end;
+            lastPanelPosition = (Vector2)Input.mousePosition + new Vector2(24f, 0f);
+            controlPanel.Show(GetPanelPosition());
+            RefreshControlPanel();
+        }
+
+        private void CloseControlPanel()
+        {
+            if (controlPanel != null) { controlPanel.Hide(); }
+            panelStart = null;
+            panelEnd = null;
+        }
+
+        /// <summary>
+        /// 窓の表示と場所を、今の制御点に合わせる (区間が無くなったら閉じる)
+        /// </summary>
+        private void RefreshControlPanel()
+        {
+            if (controlPanel == null || !controlPanel.IsShown) { return; }
+
+            if (panelStart == null || panelEnd == null || !IsInChain(panelStart) || !ReferenceEquals(FindNeighbor(panelStart, true), panelEnd) ||
+                dataGetter.EditNoteType.Value != EditNoteType.Ground)
+            {
+                CloseControlPanel();
+                return;
+            }
+
+            Vector2 control = GetSpanControl(panelStart, panelEnd) ?? new Vector2(0f, 0.5f);
+            controlPanel.SetValues(control.x, control.y);
+            controlPanel.Move(GetPanelPosition());
+        }
+
+        /// <summary>
+        /// 窓を出す場所 (印の右。画面のピクセル)
+        /// </summary>
+        private Vector2 GetPanelPosition()
+        {
+            Camera camera = EditorViewCameras.GroundView;
+            if (camera == null) { return lastPanelPosition; }
+
+            // (印が描けないとき (画面の外など) は、前の場所のまま。カーソルの位置にすると、窓がカーソルを追いかけてしまう)
+            Marker marker = CreateMarker(panelStart, panelEnd, camera);
+            if (marker.IsShown) { lastPanelPosition = marker.MarkerScreen + new Vector2(24f, 0f); }
+            return lastPanelPosition;
+        }
+
+        /// <summary>
+        /// 窓に数値が入力されたとき: その位置の曲線になるように、間のメッシュ中継点を置き直す (元に戻せる)
+        /// </summary>
+        private void OnControlValueEntered(int axis, float value)
+        {
+            if (panelStart == null || panelEnd == null) { return; }
+
+            Vector2 control = GetSpanControl(panelStart, panelEnd) ?? new Vector2(0f, 0.5f);
+            if (axis == 0) { control.x = Mathf.Clamp(value, -MAX_SIDE_OFFSET, MAX_SIDE_OFFSET); }
+            else { control.y = Mathf.Clamp01(value); }
+
+            ApplyControl(panelStart, panelEnd, control);
+        }
+
+        /// <summary>
+        /// 2つの節の間の制御点を、その位置にする (印を掴んで、そこまで動かして離したのと同じ。元に戻すのは1回ぶん)
+        /// </summary>
+        private void ApplyControl(NoteData_Hold start, NoteData_Hold end, Vector2 control)
+        {
+            if (isDragging || start == null || end == null) { return; }
+            if (!ReferenceEquals(FindNeighbor(start, true), end)) { return; }
+            if (dataGetter.ChartData.Value == null || dataGetter.IsLoadingChart.Value) { return; }
+            // (ほかのレイヤーへ切り替えたときに、打っていた値が反映されないように)
+            if (dataGetter.EditNoteType.Value != EditNoteType.Ground) { return; }
+
+            isDragging = true;
+            isDraggingToNext = true;
+            dragStart = start;
+            dragEnd = end;
+            dragSpan = null;
+            modeBeforeDrag = dataGetter.CurrentEditMode.Value;
+            // 覚えていない区間に残っている制御点の位置は、前の区間のためのもの: まっすぐから始める
+            // (元に戻すときのために、消す前の値を覚えておく)
+            controlBeforeDrag = dragStart.CurveControl;
+            if (dragStart.CurveControl.HasValue && FindSpan(dragStart, dragEnd) == null) { dragStart.SetCurveControl(null); }
+            hasApplied = false;
+            originalRelays.Clear();
+
+            try
+            {
+                dragStart.SetCurveControl(control);
+                ApplyCurve();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
+                AbortDrag();
+                return;
+            }
+
+            isApplyingFromPanel = true;
+            try { EndDrag(); }
+            finally { isApplyingFromPanel = false; }
+        }
+
+        #endregion
 
         void IPostLateTickable.PostLateTick()
         {
@@ -208,6 +413,7 @@ namespace ChartEditor
 
             // 印の位置を、そのフレームの動き (スクロール、拡大、ノーツの移動) がすべて終わった後の位置に合わせる
             RefreshMarkers();
+            RefreshControlPanel();
 
             bool isOnMarker = isDragging || IsPointerOnMarker();
             ShowMarker(true, markerToNext, isOnMarker && (isDragging ? isDraggingToNext : isHoveredToNext));
@@ -256,7 +462,7 @@ namespace ChartEditor
             if (target == null) { return; }
 
             // メッシュ中継点を選んでいるとき: その中継点がある区間 (前の節と次の節の間) の制御点を出す
-            if (target.NoteType == DeploymentNoteType.HoldMeshRelay)
+            if (target.NoteType == DeploymentNoteType.HoldMeshRelay && !NoteLock.IsLocked(target))
             {
                 markerToNext = CreateMarker(FindNeighbor(target, false), FindNeighbor(target, true), camera);
                 return;
@@ -306,7 +512,8 @@ namespace ChartEditor
             {
                 var neighbor = list[i] as NoteData_Hold;
                 if (neighbor == null) { return null; }
-                if (neighbor.NoteType != DeploymentNoteType.HoldMeshRelay) { return neighbor; }
+                // ロックしたメッシュ中継点も、節として扱う (その中継点と隣の節の間を、曲げられるように。録音 20261116_233430)
+                if (neighbor.NoteType != DeploymentNoteType.HoldMeshRelay || NoteLock.IsLocked(neighbor)) { return neighbor; }
             }
 
             return null;
@@ -497,8 +704,9 @@ namespace ChartEditor
             dragSpan = null;
             modeBeforeDrag = dataGetter.CurrentEditMode.Value;
             // 覚えていない区間に残っている制御点の位置は、前の区間のためのもの (次の節が入れ替わった) なので、まっすぐから始める
-            if (dragStart.CurveControl.HasValue && FindSpan(dragStart, dragEnd) == null) { dragStart.SetCurveControl(null); }
+            // (元に戻すときのために、消す前の値を覚えておく)
             controlBeforeDrag = dragStart.CurveControl;
+            if (dragStart.CurveControl.HasValue && FindSpan(dragStart, dragEnd) == null) { dragStart.SetCurveControl(null); }
             pressScreenPosition = Input.mousePosition;
             grabOffset = marker.MarkerScreen - pressScreenPosition;
             hasApplied = false;
@@ -601,7 +809,7 @@ namespace ChartEditor
             // メッシュ中継点を選んで制御点を動かすと、その中継点は、置き直しでいったん譜面から外れて、選択も外れる
             // (同じ分線にまた置かれて、譜面へ戻っていることもある)。選んでいるものが無くなると、制御点の印も消えてしまうので、
             // 戻っていればその中継点を、無くなっていれば区間の始まりの節を、選び直す
-            if (hasApplied && start != null && target != null && target.NoteType == DeploymentNoteType.HoldMeshRelay && !IsSelecting(target))
+            if (hasApplied && !isApplyingFromPanel && start != null && target != null && target.NoteType == DeploymentNoteType.HoldMeshRelay && !IsSelecting(target))
             {
                 notesSetter.ClearSelectingNotes();
                 notesSetter.TryAddSelectingNotes(IsInChain(target) ? target : start);
@@ -921,7 +1129,7 @@ namespace ChartEditor
         private void OnHoldSelected(NoteData_Hold hold)
         {
             if (!hasEverCurved) { return; }
-            if (hold.NoteType == DeploymentNoteType.HoldMeshRelay) { return; }
+            if (hold.NoteType == DeploymentNoteType.HoldMeshRelay && !NoteLock.IsLocked(hold)) { return; }
 
             newlySelectedNodes.Add(hold);
         }
@@ -1161,10 +1369,11 @@ namespace ChartEditor
             }
 
             // 外す (外すと、覚えている中継点の一覧を調べている途中で、つながりが変わるので、先に集める)
+            // (ロックした中継点は、外さない・動かさない)
             relayBuffer.Clear();
             foreach (var pair in span.Relays)
             {
-                if (!neededKeys.Contains(pair.Key) && chainSet.Contains(pair.Value)) { relayBuffer.Add(pair.Value); }
+                if (!neededKeys.Contains(pair.Key) && chainSet.Contains(pair.Value) && !NoteLock.IsLocked(pair.Value)) { relayBuffer.Add(pair.Value); }
             }
             foreach (var relay in relayBuffer) { chartData.RemoveNote(relay, false); }
 
@@ -1193,7 +1402,7 @@ namespace ChartEditor
 
                 if (isInChart)
                 {
-                    if (!IsAt(relay, line, neededLanes[i])) { relay.SetAddress(CreateAddress(line, neededLanes[i])); }
+                    if (!IsAt(relay, line, neededLanes[i]) && !NoteLock.IsLocked(relay)) { relay.SetAddress(CreateAddress(line, neededLanes[i])); }
                     continue;
                 }
 
@@ -1214,7 +1423,7 @@ namespace ChartEditor
         /// 区間から片付ける中継点を集める (結果は relayBuffer に入る)
         /// 2つの節の間にあるメッシュ中継点 (手で置いたものも含む) と、この区間に置いた中継点で、譜面に入っているもの
         /// </summary>
-        private void CollectRelaysToClear(CurvedSpan span)
+        private void CollectRelaysToClear(CurvedSpan span, bool includesLockedPlaced = false)
         {
             relayBuffer.Clear();
 
@@ -1224,14 +1433,18 @@ namespace ChartEditor
 
             int startIndex = IndexOf(list, span.Start);
             int endIndex = IndexOf(list, span.End);
+            // (ロックしたメッシュ中継点は、外さない)
             for (int i = startIndex + 1; startIndex >= 0 && i < endIndex; i++)
             {
-                if (list[i] is NoteData_Hold relay && relay.NoteType == DeploymentNoteType.HoldMeshRelay) { relayBuffer.Add(relay); }
+                if (list[i] is NoteData_Hold relay && relay.NoteType == DeploymentNoteType.HoldMeshRelay && !NoteLock.IsLocked(relay)) { relayBuffer.Add(relay); }
             }
 
+            // (この区間が置いた中継点は、元に戻す・やり直すときは、後からロックされていても外す。残すと、元の中継点と重なる)
             foreach (var pair in span.Relays)
             {
-                if (chainSet.Contains(pair.Value) && !relayBuffer.Contains(pair.Value)) { relayBuffer.Add(pair.Value); }
+                if (!chainSet.Contains(pair.Value) || relayBuffer.Contains(pair.Value)) { continue; }
+                if (NoteLock.IsLocked(pair.Value) && !includesLockedPlaced) { continue; }
+                relayBuffer.Add(pair.Value);
             }
         }
 
@@ -1240,8 +1453,12 @@ namespace ChartEditor
         /// </summary>
         private void ClearRelays(ChartData chartData, CurvedSpan span)
         {
-            CollectRelaysToClear(span);
-            foreach (var relay in relayBuffer) { chartData.RemoveNote(relay, false); }
+            CollectRelaysToClear(span, true);
+            foreach (var relay in relayBuffer)
+            {
+                if (NoteLock.IsLocked(relay)) { NoteLock.Unlock(new IDeployableNoteData[] { relay }); }
+                chartData.RemoveNote(relay, false);
+            }
         }
 
         /// <summary>

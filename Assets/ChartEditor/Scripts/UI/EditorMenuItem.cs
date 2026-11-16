@@ -39,6 +39,8 @@ namespace ChartEditor
         RemoveLastBar = 301,
         /// <summary>延長の設定 (小節数、拍子、分割数) のとおりに、譜面を延長する</summary>
         ExtendChart = 302,
+        /// <summary>ロックしたノーツのロックを、すべて外す (NoteLock)</summary>
+        UnlockAllNotes = 303,
 
         // 表示
         /// <summary>値 = レーン分割数</summary>

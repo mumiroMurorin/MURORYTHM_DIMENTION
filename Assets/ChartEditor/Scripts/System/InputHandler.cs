@@ -28,6 +28,9 @@ namespace ChartEditor
         IChartEditorDataGetter dataGetter;
         IChartEditorOptionGetter optionGetter;
         VerticesChainNavigator verticesChainNavigator;
+        // ↑ / ↓ の長押しで、前後の節へ続けて移る
+        readonly KeyRepeat chainUpKeyRepeat = new KeyRepeat(KeyCode.UpArrow);
+        readonly KeyRepeat chainDownKeyRepeat = new KeyRepeat(KeyCode.DownArrow);
 
         EditMode[] scaleIgnoreModes = new EditMode[]
         {
@@ -106,9 +109,12 @@ namespace ChartEditor
             if (ctrl && ((shift && Input.GetKeyDown(KeyCode.Z)) || Input.GetKeyDown(KeyCode.Y)) && CanUndoRedo(isTyping)) { Redo(); }
             // Move editing vertices along the connected SpaceHold chain
             // (SpaceHold の3D編集を開いている間は、3D編集の側で前後の節へ移る)
+            // (長押しで、くり返す: 録音 20261117_024144)
             bool isChainKeyAccepted = !isTyping && !EditorMenuBar.IsBlockedByOverlay;
-            if (isChainKeyAccepted && Input.GetKeyDown(KeyCode.UpArrow)) { verticesChainNavigator?.MoveToNext(); }
-            if (isChainKeyAccepted && Input.GetKeyDown(KeyCode.DownArrow)) { verticesChainNavigator?.MoveToPrevious(); }
+            bool isUpKey = chainUpKeyRepeat.Poll();
+            bool isDownKey = chainDownKeyRepeat.Poll();
+            if (isChainKeyAccepted && isUpKey) { verticesChainNavigator?.MoveToNext(); }
+            if (isChainKeyAccepted && isDownKey) { verticesChainNavigator?.MoveToPrevious(); }
             // ショートカットキー (SpaceHold の3D編集を開いている間は、ツールを切り替えない)
             if (!isTyping && !EditorMenuBar.IsBlockedByOverlay) { CheckAndDoShortCutKey(); }
         }
@@ -122,6 +128,8 @@ namespace ChartEditor
             if (isTyping) { return false; }
             // マウスボタンを押している間(ドラッグ中)は不可
             if (Input.GetMouseButton(0)) { return false; }
+            // 右クリックのメニューを出している間も不可 (メニューの項目が、元に戻して消えたノーツに働かないように)
+            if (EditorContextMenuView.IsOpen) { return false; }
 
             return IsUndoRedoAllowedMode;
         }

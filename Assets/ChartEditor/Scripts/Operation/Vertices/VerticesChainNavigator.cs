@@ -41,6 +41,12 @@ namespace ChartEditor
                 ? currentChainData.NoteObject.NextNote.Value
                 : currentChainData.NoteObject.BackNote.Value;
 
+            // ロックした節は飛ばして、その先の節へ (ロックした節の形は、編集できないので)
+            for (int guard = 0; guard < 100000 && targetObject?.Note?.NoteData is IDeployableNoteData data && NoteLock.IsLocked(data); guard++)
+            {
+                targetObject = moveToNext ? targetObject.NextNote.Value : targetObject.BackNote.Value;
+            }
+
             if (targetObject?.Note?.NoteData is not IVerticesControlableNoteData targetVerticesData) { return; }
 
             notesSetter.SetEditingVertices(targetVerticesData);

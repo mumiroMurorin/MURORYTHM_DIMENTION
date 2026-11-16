@@ -69,6 +69,16 @@ namespace ChartEditor
     }
 
     /// <summary>
+    /// 次のノーツまでの帯 (ホールドのメッシュ) を、自分の子として描くノーツ
+    /// (帯はノーツ自身の絵ではない: ロックの見た目や鍵の印の場所は、帯を除いて決める)
+    /// </summary>
+    public interface INoteConnectionMesh
+    {
+        /// <summary>次のノーツまでの帯 (無ければ null)</summary>
+        GameObject ConnectionMesh { get; }
+    }
+
+    /// <summary>
     /// 選択可能なノート(コライダー)
     /// </summary>
     public interface ISelectableNoteCollider : IInteractableCollider

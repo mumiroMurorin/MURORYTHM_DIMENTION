@@ -325,6 +325,8 @@ namespace ChartEditor
             foreach (var note in notesGetter.SelectingNotes)
             {
                 if (noteCount >= MAX_NOTE_COUNT) { break; }
+                // ロックしたノーツの形は、つまみを出さない (動かせないように)
+                if (NoteLock.IsLocked(note)) { continue; }
                 if (AddNoteHandles(note, view, noteParent, curveRadius, getDistance)) { noteCount++; }
             }
 
@@ -659,6 +661,7 @@ namespace ChartEditor
                     foreach (var note in notesGetter.SelectingNotes)
                     {
                         if (ReferenceEquals(note, handle.Note)) { continue; }
+                        if (NoteLock.IsLocked(note)) { continue; }
                         if (note is not IVerticesControlableNoteData verticesNote) { continue; }
 
                         AddDragTargets(verticesNote.SpaceVertices);

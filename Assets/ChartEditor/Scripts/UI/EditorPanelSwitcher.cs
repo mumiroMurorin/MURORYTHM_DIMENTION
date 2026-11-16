@@ -158,18 +158,8 @@ namespace ChartEditor
         /// </summary>
         private static void SetTransparent(GameObject target, bool isTransparent)
         {
-            var group = target.GetComponent<CanvasGroup>();
-            if (group == null)
-            {
-                // 隠したことが無い部品には、何も足さない
-                if (!isTransparent) { return; }
-
-                group = target.AddComponent<CanvasGroup>();
-            }
-
-            group.alpha = isTransparent ? 0f : 1f;
-            group.blocksRaycasts = !isTransparent;
-            group.interactable = !isTransparent;
+            // (全画面プレビューの再生中にも、同じ部品を隠すことがあるので、隠す理由ごとにまとめて決める)
+            UiHideReasons.Set(target, UiHideReasons.PANEL, isTransparent);
         }
 
         /// <summary>

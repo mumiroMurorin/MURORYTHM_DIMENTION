@@ -25,8 +25,12 @@ namespace ChartEditor
             // 古いアドレスを記録して反転
             var previousAddress = new List<NoteDataToAddress>();
             var currentAddress = new List<NoteDataToAddress>();
+            int lockedCount = 0;
             foreach (var note in notesGetter.SelectingNotes)
             {
+                // ロックしたノーツは反転しない
+                if (NoteLock.IsLocked(note)) { lockedCount++; continue; }
+
                 var before = new NoteDataToAddress(note, note.Address);
 
                 // 反転できなかったノート(オブジェクトが無い等)は記録しない
@@ -35,6 +39,8 @@ namespace ChartEditor
                 previousAddress.Add(before);
                 currentAddress.Add(new NoteDataToAddress(note, note.Address));
             }
+
+            NoteLock.LogRefused(lockedCount, "反転し");
 
             // 反転したノートが無いときは何もしない (Undo履歴にも積まない)
             if (previousAddress.Count == 0) { return; }

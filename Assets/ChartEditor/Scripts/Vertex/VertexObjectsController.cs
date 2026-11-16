@@ -241,7 +241,10 @@ namespace ChartEditor
             notesSetter.InsertVertex(index, new DataToVertexObject(vertex, vertexObj));
             
             vertexObj.gameObject.transform.SetParent(vertexObjParent);
-            vertexObj.gameObject.transform.localPosition = Vector3.zero;
+            // すぐに、頂点の位置に置く (位置を追いかけるのは、次のフレームから (VertexMovable)。それまで原点にあると、
+            // そのフレームに作る形のメッシュが、1点に重なった頂点からになり、「三角形に分けられない形」の警告が出る)
+            Vector2 placed = ConvertPositionOnChartGround(vertex.Position.Value);
+            vertexObj.gameObject.transform.localPosition = new Vector3(placed.x, placed.y, 0f);
             vertexObj.Initialize(
                 vertex,
                 () => { onChangePosition?.OnNext(Unit.Default); },

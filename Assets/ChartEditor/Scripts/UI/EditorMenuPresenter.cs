@@ -286,6 +286,9 @@ namespace ChartEditor
                 case EditorMenuCommand.RemoveLastBar:
                     laneExtender_model?.ChangeChartLength(-1);
                     break;
+                case EditorMenuCommand.UnlockAllNotes:
+                    NoteLock.UnlockAll();
+                    break;
 
                 // ---- 表示
                 case EditorMenuCommand.SelectLaneDivision:
@@ -386,6 +389,9 @@ namespace ChartEditor
                         break;
                     case EditorMenuCommand.ToggleSpaceHold3DView:
                         item.SetLabel(SpaceHold3DEditor.IsOpen ? "SpaceHoldの3D編集を閉じる" : "SpaceHoldを3Dで編集");
+                        break;
+                    case EditorMenuCommand.UnlockAllNotes:
+                        item.SetLabel(NoteLock.HasAny ? $"すべてのロックを外す ({NoteLock.Count} 個)" : "すべてのロックを外す");
                         break;
                 }
             }
@@ -540,6 +546,9 @@ namespace ChartEditor
                     return !isPlaying && !isInPreview && item.Value < backups.Count;
                 case EditorMenuCommand.RemoveLastBar:
                     return !isPlaying && !isInPreview && chartData != null && chartData.BarDatas.Count > 0;
+                // ロックしたノーツが無いときは押せない
+                case EditorMenuCommand.UnlockAllNotes:
+                    return NoteLock.HasAny;
                 case EditorMenuCommand.SaveChartAs:
                     return !isPlaying;
 

@@ -187,6 +187,8 @@ namespace ChartEditor
             GameObject hitObject = GetObjectUnderCursor();
 
             if(hitObject == null) { return EditMode.None; }
+            // ロックしたノーツの上: 選ぶことだけできる (移動・幅を変える などのモードにしない)
+            if (IsLockedNoteObject(hitObject)) { return EditMode.None; }
             if(!hitObject.TryGetComponent(out IInteractableCollider interactable)) { return EditMode.None; }
 
             return interactable.EditMode;
@@ -198,11 +200,13 @@ namespace ChartEditor
         private void UpdateObjectUnderCursor()
         {
             GameObject obj = GetObjectUnderCursor();
+            bool isLocked = IsLockedNoteObject(obj);
 
             // ヒットオブジェクトの更新
-            // 前フレームと変わってなかったら更新しない
-            if(currentHitObject != null && obj == currentHitObject) { return; }
+            // 前フレームと変わってなかったら更新しない (そのノーツをロックした・外したときは、更新する)
+            if(currentHitObject != null && obj == currentHitObject && isLocked == isCurrentHitLocked) { return; }
             currentHitObject = obj;
+            isCurrentHitLocked = isLocked;
 
             // カーソル下に何もなかったら返す
             if(obj == null)
@@ -213,7 +217,22 @@ namespace ChartEditor
 
             // すべてのコンポーネントを取得
             IInteractableCollider[] allComponents = obj.GetComponents<IInteractableCollider>();
+            // ロックしたノーツは、選ぶための部品だけを渡す (移動・幅・接続・種類の道具からは、見えないようにする)
+            if (isLocked) { allComponents = SelectableOnly(allComponents); }
             chartEditorDataSetter.SetInteractableColliders(allComponents);
+        }
+
+        // カーソルの下のノーツを、ロックしているか (前のフレームのもの)
+        bool isCurrentHitLocked;
+
+        private static IInteractableCollider[] SelectableOnly(IInteractableCollider[] components)
+        {
+            var selectable = new List<IInteractableCollider>();
+            foreach (var component in components)
+            {
+                if (component is ISelectableNoteCollider) { selectable.Add(component); }
+            }
+            return selectable.ToArray();
         }
 
         /// <summary>
@@ -228,6 +247,7 @@ namespace ChartEditor
             RaycastHit hit;
 
             // ホールドを1本だけ編集している間は、ほかのノーツを通り抜けて、その奥にあるものを返す
+            // (ロックしたノーツは通り抜けない。選ぶことだけできる: IsLockedNoteObject)
             if (HoldIsolation.IsActive)
             {
                 return HoldIsolation.TryRaycast(ray, rayDistance, raycastLayer, out hit) ? hit.collider.gameObject : null;
@@ -237,6 +257,45 @@ namespace ChartEditor
             if (!Physics.Raycast(ray, out hit, rayDistance, raycastLayer)) { return null; }
             return hit.collider.gameObject;
         }
+
+        /// <summary>
+        /// そのオブジェクトが、ロックしたノーツの一部か
+        /// </summary>
+        private static bool IsLockedNoteObject(GameObject obj)
+        {
+            if (obj == null || !NoteLock.HasAny) { return false; }
+
+            var noteObject = obj.GetComponentInParent<NoteObject>();
+            return noteObject != null && NoteLock.IsLocked(noteObject.NoteData);
+        }
+
+        /// <summary>
+        /// カーソルの下にある、いちばん手前のノーツ (右クリックのメニュー用。ロックしたノーツも見つける)
+        /// ホールドを1本だけ編集している間は、そのホールドのノーツだけを見つける
+        /// </summary>
+        public IDeployableNoteData FindNoteUnderCursor()
+        {
+            if (currentViewCamera == null) { return null; }
+
+            Ray ray = currentViewCamera.ScreenPointToRay(Input.mousePosition);
+            int count = Physics.RaycastNonAlloc(ray, noteHitBuffer, rayDistance, raycastLayer);
+            IDeployableNoteData nearest = null;
+            float nearestDistance = float.MaxValue;
+            for (int i = 0; i < count; i++)
+            {
+                if (noteHitBuffer[i].distance >= nearestDistance) { continue; }
+
+                var noteObject = noteHitBuffer[i].collider != null ? noteHitBuffer[i].collider.GetComponentInParent<NoteObject>() : null;
+                IDeployableNoteData note = noteObject != null ? noteObject.NoteData : null;
+                if (note == null || HoldIsolation.IsBlockedByIsolation(note)) { continue; }
+
+                nearest = note;
+                nearestDistance = noteHitBuffer[i].distance;
+            }
+            return nearest;
+        }
+
+        readonly RaycastHit[] noteHitBuffer = new RaycastHit[32];
 
         /// <summary>
         /// Rayがヒットした位置(ワールド座標)を返す

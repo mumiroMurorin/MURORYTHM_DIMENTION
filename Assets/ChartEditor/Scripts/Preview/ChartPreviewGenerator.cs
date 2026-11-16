@@ -975,8 +975,32 @@ namespace ChartEditor
         /// </summary>
         private void Spawn(SpawnTask task)
         {
+            SpawnOne(task);
+        }
+
+        /// <summary>
+        /// 作る途中で失敗したときに、シーンのいちばん上に残った作りかけのものを消す
+        /// </summary>
+        private static void DestroyLeftovers(UnityEngine.SceneManagement.Scene scene, int rootCountBefore)
+        {
+            if (rootCountBefore < 0 || !scene.IsValid() || scene.rootCount <= rootCountBefore) { return; }
+
+            var roots = scene.GetRootGameObjects();
+            for (int i = rootCountBefore; i < roots.Length; i++)
+            {
+                if (roots[i] != null) { Destroy(roots[i]); }
+            }
+        }
+
+        private void SpawnOne(SpawnTask task)
+        {
             var typeState = task.TypeState;
             Component spawnedComponent = null;
+
+            // 作る途中で失敗すると、作りかけのもの (ノーツの入れ物や、その中の絵) が、シーンのいちばん上に残ってしまう。
+            // 新しく作られたものは、いちばん上の並びの最後に入るので、作る前の数を覚えておき、失敗したらそれより後ろを消す
+            var activeScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            int rootCountBefore = activeScene.IsValid() ? activeScene.rootCount : -1;
 
             try
             {
@@ -989,6 +1013,7 @@ namespace ChartEditor
                 // リフレクション経由の例外は、中身のほうを表示する
                 var cause = ex is TargetInvocationException && ex.InnerException != null ? ex.InnerException : ex;
                 Debug.LogWarning($"[ChartPreviewGenerator] Spawn failed ({typeState.NoteType}): {cause.Message}");
+                DestroyLeftovers(activeScene, rootCountBefore);
             }
 
             if (spawnedComponent != null)

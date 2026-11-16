@@ -644,6 +644,13 @@ namespace MeshGenerate
             // 三角形分割を実行
             tess.Tessellate(WindingRule.EvenOdd, ElementType.Polygons, 3);
 
+            // 面積の無い形 (頂点が一直線に並んでいる、同じ位置に重なっている など) では、三角形が作れない
+            if (tess.Vertices == null || tess.Elements == null || tess.ElementCount == 0)
+            {
+                Debug.LogWarning("【Mesh】三角形に分けられない形です (頂点が一直線に並んでいるか、重なっています)");
+                return null;
+            }
+
             // Mesh作成
             Mesh mesh = new Mesh();
             Vector3[] meshVertices = new Vector3[tess.Vertices.Length];

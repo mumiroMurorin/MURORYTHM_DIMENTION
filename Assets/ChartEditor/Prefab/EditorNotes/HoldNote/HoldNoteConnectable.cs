@@ -10,7 +10,7 @@ using MeshGenerate;
 namespace ChartEditor
 {
     [RequireComponent(typeof(NoteObject))]
-    public class HoldNoteConnectable : MonoBehaviour, IConnectableObject
+    public class HoldNoteConnectable : MonoBehaviour, IConnectableObject, INoteConnectionMesh
     {
         [SerializeField] NoteObject noteObject;
 
@@ -112,6 +112,9 @@ namespace ChartEditor
 
         // メンバ変数
         GameObject meshObject;
+
+        /// <summary>次のノーツまでの帯 (INoteConnectionMesh)</summary>
+        public GameObject ConnectionMesh => meshObject;
         List<IDisposable> nextNoteDisposables = new List<IDisposable>();
         CancellationTokenSource cts = new CancellationTokenSource();
         bool isAlone;
@@ -224,7 +227,8 @@ namespace ChartEditor
         /// </summary>
         private void DisposeHoldMesh()
         {
-            if (meshObject != null) { Destroy(meshObject); }
+            // (消すのはフレームの終わりなので、先に隠す。残っている間に、鍵の印の場所などに数えられないように)
+            if (meshObject != null) { meshObject.SetActive(false); Destroy(meshObject); }
 
             foreach (var dis in nextNoteDisposables)
             {
@@ -290,7 +294,8 @@ namespace ChartEditor
 
         private void GenerateMesh(Vector3 nextRight, Vector3 nextLeft)
         {
-            if(meshObject != null) { Destroy(meshObject); }
+            // (消すのはフレームの終わりなので、先に隠す。残っている間に、鍵の印の場所などに数えられないように)
+            if (meshObject != null) { meshObject.SetActive(false); Destroy(meshObject); }
 
             meshObject = new GameObject("Mesh");
             MeshFilter meshFilter = meshObject.AddComponent<MeshFilter>();

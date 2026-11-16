@@ -43,11 +43,30 @@ namespace ChartEditor
             verticesController?.EditingNoteType.Subscribe(ChangeMaterial).AddTo(this.gameObject);
         }
 
+        // 形のメッシュを作り直すか (頂点が変わったら立てて、フレームの終わりに1回だけ作り直す)
+        bool isMeshDirty;
+
         /// <summary>
-        /// 形が変わった時などメッシュを更新する
+        /// 形が変わった時などメッシュを更新する (頂点が動くたびに作らず、フレームの終わりにまとめて1回作る)
+        /// 反転などで頂点を1つずつ動かすと、途中の形は頂点が重なっていることがあり、そこでメッシュを作ると、
+        /// 「三角形に分けられない形」になる (録音 20261117_005415)。できあがった形だけを作る
         /// </summary>
         private void UpdateMesh()
         {
+            isMeshDirty = true;
+        }
+
+        private void LateUpdate()
+        {
+            if (!isMeshDirty) { return; }
+            isMeshDirty = false;
+            BuildMesh();
+        }
+
+        private void BuildMesh()
+        {
+            if (centerMeshFilter == null) { return; }
+
             // センターメッシュ
             List<Vector3> positions = new List<Vector3>();
             for(int i = 0; i < notesGetter.DataToVertexObject.Count; i++)

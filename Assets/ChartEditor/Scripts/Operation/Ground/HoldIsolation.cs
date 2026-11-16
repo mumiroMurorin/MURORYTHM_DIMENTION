@@ -50,7 +50,9 @@ namespace ChartEditor
             EditMode.Preview,
         };
 
-        static readonly int monochromeId = Shader.PropertyToID("_Monochrome");
+        // (最初に使うときに求める。型を読み込んだ時点では求めない: Unity の外で動かす確認用のプログラムでも、この型を使えるように)
+        static int monochromeIdCache = -1;
+        static int monochromeId => monochromeIdCache >= 0 ? monochromeIdCache : (monochromeIdCache = Shader.PropertyToID("_Monochrome"));
 
         static HoldIsolation instance;
         static readonly RaycastHit[] hitBuffer = new RaycastHit[MAX_HIT_COUNT];
@@ -106,15 +108,35 @@ namespace ChartEditor
         public static bool IsActive => instance != null && instance.isActive;
 
         /// <summary>
-        /// そのノーツは、今、触れなくしてあるか
+        /// そのノーツは、今、触れなくしてあるか (ホールドを1本だけ編集している間のほかのノーツ)
+        /// (ロックしたノーツは、選べるので含めない。録音 20261117_005326)
         /// </summary>
         public static bool IsBlocked(IDeployableNoteData note)
+        {
+            return IsBlockedByIsolation(note);
+        }
+
+        /// <summary>
+        /// そのノーツは、ホールドを1本だけ編集しているために、触れなくしてあるか (ロックは含めない)
+        /// </summary>
+        public static bool IsBlockedByIsolation(IDeployableNoteData note)
         {
             return instance != null && instance.isActive && note != null && instance.blocked.Contains(note);
         }
 
         /// <summary>
-        /// 光線が当たるもののうち、いちばん手前にある「触れるもの」を返す (触れなくしてあるノーツは、通り抜ける)
+        /// そのホールドだけを編集する (右クリックのメニューから。ダブルクリックと同じ)
+        /// </summary>
+        public static void TryEnter(NoteData_Hold hold)
+        {
+            if (instance == null || hold == null) { return; }
+            if (instance.dataGetter.EditNoteType.Value != EditNoteType.Ground) { return; }
+
+            instance.Enter(hold);
+        }
+
+        /// <summary>
+        /// 光線が当たるもののうち、いちばん手前にある「触れるもの」を返す (1本だけ編集しているホールドのほかのノーツは、通り抜ける)
         /// </summary>
         public static bool TryRaycast(Ray ray, float distance, int layerMask, out RaycastHit hit)
         {
@@ -126,7 +148,8 @@ namespace ChartEditor
             for (int i = 0; i < count; i++)
             {
                 if (hitBuffer[i].distance >= nearest) { continue; }
-                if (IsBlocked(GetNote(hitBuffer[i].collider))) { continue; }
+                // (通り抜けるのは、1本だけ編集しているホールドのほかのノーツだけ。ロックしたノーツは通り抜けない)
+                if (IsBlockedByIsolation(GetNote(hitBuffer[i].collider))) { continue; }
 
                 nearest = hitBuffer[i].distance;
                 hit = hitBuffer[i];
@@ -179,7 +202,9 @@ namespace ChartEditor
                     }
 
                     // Esc で戻る (文字の入力中、メニューを開いている間、ほかの操作の途中の Esc は、そちらで使う)
+                    // (ホールドの曲線の、位置を数値で決める窓を閉じる Esc は、そちらで使う)
                     if (Input.GetKeyDown(KeyCode.Escape) && !InputFieldFocus.IsTyping && !EditorMenuBar.IsBlockingChartInput &&
+                        !HoldCurveEditor.IsUsingEscape &&
                         !dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes))
                     {
                         Exit();

@@ -105,6 +105,14 @@ namespace ChartEditor
             EditorRuntimeUi.Stretch(root, 0f, 0f, 0f, MENU_BAR_HEIGHT);
             uiRoot = root;
 
+            // メニューバーの右の、メニューバーと同じ高さの所も、下地でふさぐ (メニューバーは手前に出る。裏の編集画面が見えないように)
+            var topStrip = EditorRuntimeUi.CreateImage("TopStrip", Canvas.transform, backgroundColor, true).rectTransform;
+            topStrip.anchorMin = new Vector2(0f, 1f);
+            topStrip.anchorMax = new Vector2(1f, 1f);
+            topStrip.pivot = new Vector2(0.5f, 1f);
+            topStrip.anchoredPosition = Vector2.zero;
+            topStrip.sizeDelta = new Vector2(0f, MENU_BAR_HEIGHT);
+
             var viewportRect = EditorRuntimeUi.CreateRect("Viewport", root);
             EditorRuntimeUi.Stretch(viewportRect);
             viewportImage = viewportRect.gameObject.AddComponent<RawImage>();
@@ -123,7 +131,7 @@ namespace ChartEditor
             StatusLabel = EditorRuntimeUi.CreateLabel("Status", root, string.Empty, 14f, TextAlignmentOptions.Bottom, new Color(1f, 0.85f, 0.4f, 1f));
             EditorRuntimeUi.Place(StatusLabel.rectTransform, new Vector2(0.5f, 0f), new Vector2(0f, 38f), new Vector2(1000f, 22f));
 
-            var banner = EditorRuntimeUi.CreateLabel("Banner", root, "SpaceHold を1本だけ編集中 (ほかのノーツは灰色)   Esc: 閉じる", 14f, TextAlignmentOptions.Center, new Color(1f, 1f, 1f, 0.75f));
+            var banner = EditorRuntimeUi.CreateLabel("Banner", root, "SpaceHold を1本だけ編集中 (ほかのノーツは灰色)", 14f, TextAlignmentOptions.Center, new Color(1f, 1f, 1f, 0.75f));
             EditorRuntimeUi.Place(banner.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -8f), new Vector2(900f, 22f));
 
             SetVisible(false);

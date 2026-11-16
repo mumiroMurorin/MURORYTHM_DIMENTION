@@ -107,8 +107,11 @@ namespace ChartEditor
             OnStartDrag(clickedNote);
 
             // 複数選択されたオブジェクトから動かせるやつを取り出す
+            skippedLockedCount = 0;
             foreach (var data in notesGetter.SelectingNotes)
             {
+                // ロックしたノーツは動かさない
+                if (NoteLock.IsLocked(data)) { skippedLockedCount++; continue; }
                 // 譜面の読み込み直後など、対応するオブジェクトが無いノートは飛ばす
                 var obj = notesGetter.GetNoteObject(data);
                 if (obj == null) { continue; }
@@ -171,8 +174,8 @@ namespace ChartEditor
                 current.Add(new NoteDataToAddress(noteData, noteData.Address));
             }
 
-            // 実際に動いたときだけUndo履歴に登録
-            RecordNotesMovingIfChanged(previous, current);
+            // 実際に動いたときだけUndo履歴に登録 (そのとき、選択中のロックしたノーツを動かさなかったことも知らせる)
+            if (RecordNotesMovingIfChanged(previous, current)) { NoteLock.LogRefused(skippedLockedCount, "動かし"); }
 
             Initialize();
         }
@@ -180,9 +183,13 @@ namespace ChartEditor
         /// <summary>
         /// 初期化
         /// </summary>
+        // 掴んだときに、選択中だが、ロックしていたので動かさなかったノーツの数
+        int skippedLockedCount;
+
         private void Initialize()
         {
             isDragging = false;
+            skippedLockedCount = 0;
             lastLocation = null;
             targets.Clear();
             previousAddress.Clear();

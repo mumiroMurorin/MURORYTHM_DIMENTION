@@ -54,6 +54,12 @@ namespace ChartEditor
             if (!SelectedNotesKeyOperation.IsAcceptable(dataGetter, ignoreEditModes)) { return; }
 
             if (!TryFindSwapPair(notesGetter.SelectingNotes, notesGetter.GetChainNoteList, direction, out var note, out var other)) { return; }
+            // ロックしたノーツの順番は変えない
+            if (NoteLock.IsLocked(note) || NoteLock.IsLocked(other))
+            {
+                NoteLock.LogRefused(1, "入れ替え");
+                return;
+            }
 
             // 入れ替える。元に戻すときも、同じ2つをもう一度入れ替えればよい
             Record(() => Swap(note, other), () => Swap(note, other));

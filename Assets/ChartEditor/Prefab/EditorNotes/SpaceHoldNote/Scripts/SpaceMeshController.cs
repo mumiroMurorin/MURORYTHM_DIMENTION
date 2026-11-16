@@ -152,8 +152,30 @@ namespace ChartEditor
             UpdateColliderObjectScale();
         }
 
+        // 形のメッシュを作り直すか (頂点が変わったら立てて、フレームの終わりに1回だけ作り直す)
+        bool isMeshDirty;
+
+        /// <summary>
+        /// 形のメッシュを作り直す (頂点が動くたびに作らず、フレームの終わりにまとめて1回作る)
+        /// 反転などで頂点を1つずつ動かすと、途中の形は頂点が重なっていることがあり、そこでメッシュを作ると、
+        /// 「三角形に分けられない形」になる (録音 20261117_005415)。できあがった形だけを作る
+        /// </summary>
         private void UpdateMesh()
         {
+            isMeshDirty = true;
+        }
+
+        private void LateUpdate()
+        {
+            if (!isMeshDirty) { return; }
+            isMeshDirty = false;
+            BuildMesh();
+        }
+
+        private void BuildMesh()
+        {
+            if (centerMeshFilter == null) { return; }
+
             List<Vector3> positions = new List<Vector3>();
             foreach (var pair in dataToObj)
             {

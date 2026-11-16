@@ -26,6 +26,8 @@ namespace ChartEditor
         [SerializeField] Button minimizedButton;
         [Tooltip("しまっているかどうかを保存するときの名前 (欄ごとに違う名前にする)")]
         [SerializeField] string prefsKey;
+        [Tooltip("ここの上のダブルクリックでは、しまわない (ミニプレビューの映像など、クリックをほかの操作に使う所)")]
+        [SerializeField] RectTransform[] ignoredAreas;
 
         // 保存するときの名前 (後ろに prefsKey が付く)
         const string PREFS_KEY_PREFIX = "ChartEditor.WindowMinimized.";
@@ -71,6 +73,7 @@ namespace ChartEditor
                 // 欄のダブルクリックを受け取る部品を、欄に付ける (ボタンなどの上のクリックは、ボタンが受け取るので、ここには来ない)
                 var relay = window.GetComponent<WindowDoubleClickRelay>();
                 if (relay == null) { relay = window.gameObject.AddComponent<WindowDoubleClickRelay>(); }
+                relay.IgnoredAreas = ignoredAreas;
                 relay.OnDoubleClicked += Minimize;
             }
 

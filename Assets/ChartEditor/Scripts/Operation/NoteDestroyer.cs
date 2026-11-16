@@ -50,7 +50,7 @@ namespace ChartEditor
         /// 今、選択中のノーツを削除できるか (メニューの項目を押せるかどうかに使う)
         /// </summary>
         public bool CanDestroySelectedNotes =>
-            notesGetter.SelectingNotes.Count > 0 &&
+            notesGetter.SelectingNotes.Any(note => !NoteLock.IsLocked(note)) &&
             SelectedNotesKeyOperation.IsAcceptable(dataGetter, ignoreEditModes, true);
 
         /// <summary>
@@ -76,12 +76,14 @@ namespace ChartEditor
                 return;
             }
 
-            var datasCopy = notesGetter.SelectingNotes.ToList();
+            // ロックしたノーツは消さない (選択にも残す)
+            var datasCopy = notesGetter.SelectingNotes.Where(note => !NoteLock.IsLocked(note)).ToList();
+            NoteLock.LogRefused(notesGetter.SelectingNotes.Count - datasCopy.Count, "消し");
 
             // 何も選択されていないときは何もしない (Undo履歴にも積まない)
             if (datasCopy.Count == 0) { return; }
 
-            notesSetter.ClearSelectingNotes();
+            foreach (var data in datasCopy) { notesSetter.TryRemoveSelectingNotes(data); }
 
             // 削除
             Record(() => { 

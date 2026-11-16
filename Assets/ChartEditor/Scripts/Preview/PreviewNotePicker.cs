@@ -11,6 +11,10 @@ namespace ChartEditor
     /// <summary>
     /// プレビュー(編集画面のミニプレビューと、全画面プレビュー)に映っているノーツを、クリックで選択し、ドラッグで動かす
     ///
+    /// 【ミニプレビュー】選ぶことだけできる (クリック・Ctrl+クリック・範囲選択。押したノーツのレイヤーが開く)。
+    /// ノーツを動かす・幅を変える・頂点のつまみ・カーソルの位置への貼り付けは、全画面プレビューだけ
+    /// (2026-11-17: ミニプレビューの上で編集する機能はいらない、クリックしたノーツにフォーカスする機能は残す)
+    ///
     /// 【選択】プレビューのノーツと譜面のノーツは番号などで結び付けていないので、
     /// 「時刻」と「レーン」(スペースホールドは接続番号)が一致する譜面側のノーツを探して対応を取る。
     /// ホールドの帯をクリックしたときは、そのホールドにつながるノーツをまとめて選択する。
@@ -85,6 +89,8 @@ namespace ChartEditor
             EditMode.EditingBarConfig,
             EditMode.EditingSubDivisionConfig,
             EditMode.Explanation,
+            // SpaceHold の3D編集を開いている間 (ミニプレビューは3Dの画面に隠れているのに、つまみだけが手前に出てしまう)
+            EditMode.SpaceHoldView,
         };
 
         readonly IChartEditorDataGetter dataGetter;
@@ -352,8 +358,8 @@ namespace ChartEditor
             // (Shift = 範囲選択、Ctrl = 複数選択 のときは、ふつうの操作にする)
             if (!isForcedRange && !ModifierKey.Ctrl && TryPressWithVertexTool(view, ray)) { return; }
 
-            // 頂点・中心点のつまみを押したときは、それを掴む (ノーツより手前にあるものとして扱う)
-            isHandlePress = !isForcedRange && vertexHandles.TryGrab(view, Input.mousePosition, ray, previewGenerator.NoteParent);
+            // 頂点・中心点のつまみを押したときは、それを掴む (ノーツより手前にあるものとして扱う。つまみは全画面プレビューだけ)
+            isHandlePress = !isForcedRange && view.IsFullScreen && vertexHandles.TryGrab(view, Input.mousePosition, ray, previewGenerator.NoteParent);
             if (isHandlePress)
             {
                 isPressing = true;
@@ -395,6 +401,15 @@ namespace ChartEditor
             else if (!Select(pressed, view.IsFullScreen))
             {
                 // Ctrl を押しながら選択中のノーツを押して、選択から外したとき: 掴まない
+                return;
+            }
+
+            // ミニプレビューでは、選ぶだけ (ドラッグでは動かさない・幅も変えない)
+            if (!view.IsFullScreen)
+            {
+                isPressing = true;
+                pressScreenPosition = Input.mousePosition;
+                pressedView = view;
                 return;
             }
 
@@ -454,6 +469,8 @@ namespace ChartEditor
                     // 選択中のノーツが、プレビューに映っているときだけ
                     if (!TryGetVisibleNoteDistance(note, out float distance)) { return false; }
                     if (!vertexHandles.TryGetVertexPoint(ray, noteParent, distance, out Vector2 point)) { return false; }
+                    // ノーツの面の外や、ほかの頂点の上には置かない (面の外を押したときは、ふつうのクリックとして扱う)
+                    if (!PreviewVertexTools.CanPlaceAt(vertices, point)) { return false; }
 
                     // 頂点を置くと、頂点の選択は外れる (頂点レイヤーと同じ)
                     vertexHandles.ClearSelection();
@@ -822,7 +839,8 @@ namespace ChartEditor
                 }
             }
 
-            if (activeView == null)
+            // (ミニプレビューには、つまみを出さない。動かせるのは全画面プレビューだけ)
+            if (activeView == null || !activeView.IsFullScreen)
             {
                 vertexHandles.SetSelectionOwner(null);
                 vertexHandles.Hide();
@@ -958,12 +976,28 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 押したノーツ (その場所に重なっているもののうち、押したもの) が、すべてロックしたノーツか
+        /// </summary>
+        private bool IsPressedNoteLocked()
+        {
+            if (!NoteLock.HasAny || pressedCandidateIndex < 0 || pressedCandidateIndex >= pressCandidates.Count) { return false; }
+
+            foreach (var note in pressCandidates[pressedCandidateIndex].Notes)
+            {
+                if (!NoteLock.IsLocked(note)) { return false; }
+            }
+            return true;
+        }
+
+        /// <summary>
         /// ドラッグの開始。選択中のノーツを動かす対象にして、動かせる範囲を求める
         /// </summary>
         private bool BeginDrag()
         {
             var chartData = dataGetter.ChartData.Value;
             if (chartData == null || chartData.BarDatas.Count == 0) { return false; }
+            // ロックしたノーツを押したときは、動かさない (選ぶことだけできる)
+            if (IsPressedNoteLocked()) { return false; }
 
             // 押した位置にいちばん近い分線
             // (同じ距離を何度も通る譜面では、押したノーツのある分線に近いものを選ぶ)
@@ -989,6 +1023,8 @@ namespace ChartEditor
 
             foreach (var data in notesGetter.SelectingNotes)
             {
+                // ロックしたノーツは動かさない
+                if (NoteLock.IsLocked(data)) { continue; }
                 var noteObject = notesGetter.GetNoteObject(data);
                 if (noteObject == null) { continue; }
 
@@ -1276,9 +1312,12 @@ namespace ChartEditor
         private bool BeginScale()
         {
             scaleTargets.Clear();
+            if (IsPressedNoteLocked()) { return false; }
 
             foreach (var data in notesGetter.SelectingNotes)
             {
+                // ロックしたノーツの幅は変えない
+                if (NoteLock.IsLocked(data)) { continue; }
                 var noteObject = notesGetter.GetNoteObject(data);
                 if (noteObject == null) { continue; }
                 if (!noteObject.TryGetComponent(out IScalableObject scalable)) { continue; }
@@ -1404,6 +1443,8 @@ namespace ChartEditor
             {
                 // 押してから動かし始めるまで: 動かしたら始まる操作のカーソル。範囲選択は標準のカーソル
                 if (isRangePress) { cursor = EditMode.None; }
+                // ミニプレビューでは、押しても動かないので、標準のカーソル
+                else if (pressedView != null && !pressedView.IsFullScreen) { cursor = EditMode.None; }
                 else if (toolPressCursor != EditMode.None) { cursor = toolPressCursor; }
                 else { cursor = isScalePress ? EditMode.Scale : EditMode.Move; }
             }
@@ -1452,6 +1493,8 @@ namespace ChartEditor
 
             // Shift を押している間は、どこを押しても範囲選択になる
             if (ModifierKey.Shift) { return EditMode.None; }
+            // ミニプレビューでは、動かせないので、標準のカーソル
+            if (!view.IsFullScreen) { return EditMode.None; }
 
             // 全画面プレビューの頂点の道具を選んでいるとき: 押したら道具の操作になる所では、道具のカーソル (Press と同じ決め方)
             if (!ModifierKey.Ctrl && TryGetToolHoverCursor(view, ray, screenPosition, out EditMode toolCursor)) { return toolCursor; }
@@ -1730,7 +1773,8 @@ namespace ChartEditor
 
             SearchSceneOnce();
             if (previewGenerator == null || dataGetter.ChartData.Value == null) { return false; }
-            if (!TryGetPreviewRay(Input.mousePosition, out Ray ray, out _)) { return false; }
+            // ミニプレビューの上では、貼り付け先にしない (ミニプレビューでは編集しない)
+            if (!TryGetPreviewRay(Input.mousePosition, out Ray ray, out var pointedView) || !pointedView.IsFullScreen) { return false; }
 
             // まだプレビューに反映されていない変更があれば、先に反映する (古い位置の計算を基準にしないように)
             if (previewRefresher != null) { previewRefresher.FlushPendingRefresh(); }
@@ -1852,7 +1896,7 @@ namespace ChartEditor
         {
             if (!TryFindAllEditorNotes(previewNoteData, out isSpaceNote)) { return false; }
 
-            // ホールドを1本だけ編集している間は、ほかのノーツを、プレビューからも選ばせない
+            // ホールドを1本だけ編集している間のほかのノーツは、プレビューからも選ばせない (ロックしたノーツは選べる)
             if (HoldIsolation.IsActive) { foundNotes.RemoveAll(HoldIsolation.IsBlocked); }
             return foundNotes.Count > 0;
         }

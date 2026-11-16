@@ -25,10 +25,14 @@ namespace ChartEditor
 
             // 反転対象のノートを取り出す
             var targets = new List<IVerticesControlableNoteData>();
+            int lockedCount = 0;
             foreach (var note in notesGetter.SelectingNotes)
             {
+                // ロックしたノーツは反転しない
+                if (NoteLock.IsLocked(note)) { lockedCount++; continue; }
                 if (note is IVerticesControlableNoteData verticesNote) { targets.Add(verticesNote); }
             }
+            NoteLock.LogRefused(lockedCount, "反転し");
 
             if (targets.Count == 0) { return; }
 

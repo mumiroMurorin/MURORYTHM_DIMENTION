@@ -71,9 +71,10 @@ namespace ChartEditor
             isRightAnchored = !collider.IsRightEdge;
             var baseNoteData = baseNote.Note.NoteData;
 
-            // 複数選択されたオブジェクトから拡大縮小できるやつを取り出す
+            // 複数選択されたオブジェクトから拡大縮小できるやつを取り出す (ロックしたノーツは飛ばす)
             foreach (var data in notesGetter.SelectingNotes)
             {
+                if (NoteLock.IsLocked(data)) { continue; }
                 // 譜面の読み込み直後など、対応するオブジェクトが無いノートは飛ばす
                 var obj = notesGetter.GetNoteObject(data);
                 if (obj == null) { continue; }

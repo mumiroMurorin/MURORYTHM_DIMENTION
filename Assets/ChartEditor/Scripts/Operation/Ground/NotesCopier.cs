@@ -171,7 +171,7 @@ namespace ChartEditor
         private IReadOnlyAddressInChart GetPasteCursorAddress()
         {
             // カーソルがプレビューの上にあるときは、プレビューの中で指している分線
-            // (プレビューの画面部品の裏に隠れている譜面のレーンには貼り付けない)
+            // (プレビューの画面部品の裏に隠れている譜面のレーンには貼り付けない。ミニプレビューの上では、貼り付けない)
             if (previewPointer != null && previewPointer.IsPointerOnPreview)
             {
                 return previewPointer.TryGetPointedAddress(out var previewAddress) ? previewAddress : null;
