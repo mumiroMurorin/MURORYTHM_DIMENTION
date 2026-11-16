@@ -37,7 +37,20 @@ namespace ChartEditor
         /// (メニューの外を押して閉じたとき、同じフレームのうちに、その押下でノーツが掴まれたりしないように。
         ///  閉じる処理と譜面の操作のどちらが先に動くかは決まっていないので、閉じたフレームいっぱいは止めておく)
         /// </summary>
-        public static bool IsBlockingChartInput => openMenuBar != null || Time.frameCount == lastClosedFrame;
+        public static bool IsBlockingChartInput => IsMenuOpenOrJustClosed || IsBlockedByOverlay;
+
+        /// <summary>
+        /// メニューの一覧を開いている間と、閉じたフレームの間か (IsBlockingChartInput から、画面を覆う窓のぶんを除いたもの)
+        /// 譜面を覆う窓 (SpaceHold の3D編集) が、メニューを開いている間は自分の操作を止めるのに使う
+        /// </summary>
+        public static bool IsMenuOpenOrJustClosed => openMenuBar != null || Time.frameCount == lastClosedFrame;
+
+        /// <summary>
+        /// 譜面を覆う窓 (SpaceHold の3D編集) が開いているか
+        /// 開いている間は、メニューを開いているときと同じく、裏の譜面をマウスやキーで操作させない
+        /// (IsBlockingChartInput を見ている処理は、すべて止まる)
+        /// </summary>
+        public static bool IsBlockedByOverlay { get; set; }
 
         /// <summary>
         /// メニューバーと同じキャンバス (MenuCanvas) に置いてある画面部品か

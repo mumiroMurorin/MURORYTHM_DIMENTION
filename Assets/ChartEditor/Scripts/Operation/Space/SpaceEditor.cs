@@ -36,6 +36,10 @@ namespace ChartEditor
             if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
             // Shift を押しながらのクリックは範囲選択なので、ダブルクリックに数えない
             if (RangeSelectGesture.IsForced(dataGetter)) { return; }
+            // Alt を押しながらのダブルクリックは、SpaceHold の3D編集を開く操作 (SpaceHold3DEditor) なので、ここでは数えない
+            if (ModifierKey.Alt) { count = 0f; return; }
+            // SpaceHold の3D編集を開いている間は、裏の譜面の操作をしない
+            if (EditorMenuBar.IsBlockedByOverlay) { count = 0f; return; }
 
             // カウントダウン
             if(count > 0) { count -= Time.deltaTime; }

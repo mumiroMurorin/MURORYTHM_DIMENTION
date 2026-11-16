@@ -114,6 +114,9 @@ namespace ChartEditor
 
         private void Start()
         {
+            // 「表示」の一覧に、オニオンスキンの枚数と、SpaceHold の3D編集の行を足す (シーンの行を複製して作る)
+            items_view = EditorMenuRuntimeRows.AddViewRows(items_view);
+
             SubscribeClicks(items_view);
             SubscribeClicks(quickItems_view);
 
@@ -299,6 +302,12 @@ namespace ChartEditor
                 case EditorMenuCommand.RebuildPreview:
                     previewUI_presenter?.RebuildPreview();
                     break;
+                case EditorMenuCommand.ToggleSpaceHold3DView:
+                    SpaceHold3DEditor.Instance?.ToggleFromMenu();
+                    break;
+                case EditorMenuCommand.SelectOnionSkinCount:
+                    optionSetter.SetOnionSkinCount(value);
+                    break;
 
                 // ---- 再生
                 case EditorMenuCommand.TogglePlay:
@@ -374,6 +383,9 @@ namespace ChartEditor
                         break;
                     case EditorMenuCommand.ExtendChart:
                         item.SetLabel(GetExtendChartLabel());
+                        break;
+                    case EditorMenuCommand.ToggleSpaceHold3DView:
+                        item.SetLabel(SpaceHold3DEditor.IsOpen ? "SpaceHoldの3D編集を閉じる" : "SpaceHoldを3Dで編集");
                         break;
                 }
             }
@@ -545,6 +557,10 @@ namespace ChartEditor
                 case EditorMenuCommand.RebuildPreview:
                     return chartData != null;
 
+                // 3D編集は、開いているときは閉じられる。閉じているときは、SpaceHold を選んでいる (頂点を編集している) ときだけ開ける
+                case EditorMenuCommand.ToggleSpaceHold3DView:
+                    return SpaceHold3DEditor.Instance != null && (SpaceHold3DEditor.IsOpen || SpaceHold3DEditor.Instance.CanOpenFromSelection());
+
                 default:
                     return true;
             }
@@ -565,6 +581,8 @@ namespace ChartEditor
                     return Mathf.RoundToInt(optionGetter.PlaybackSpeed.Value * 100f) == item.Value;
                 case EditorMenuCommand.SelectNoteSound:
                     return (optionGetter.IsSingleNoteSound.Value ? 1 : 0) == item.Value;
+                case EditorMenuCommand.SelectOnionSkinCount:
+                    return optionGetter.OnionSkinCount.Value == item.Value;
                 case EditorMenuCommand.TogglePanel:
                     return Enum.IsDefined(typeof(EditorPanel), item.Value) &&
                            optionGetter.GetPanelVisibility((EditorPanel)item.Value).Value;

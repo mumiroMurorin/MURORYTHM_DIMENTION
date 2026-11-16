@@ -128,6 +128,8 @@ namespace ChartEditor
             // 譜面の読み込み中と、入力欄に文字を打っている間は受け付けない
             if (dataGetter.IsLoadingChart.Value) { return false; }
             if (InputFieldFocus.IsTyping) { return false; }
+            // SpaceHold の3D編集を開いている間は、裏の譜面のノーツを消したり貼り付けたりしない
+            if (EditorMenuBar.IsBlockedByOverlay) { return false; }
             // ホールドを曲げる制御点を動かしている間は受け付けない (置き直している最中の中継点が消えたりしないように)
             if (HoldCurveEditor.IsDragging) { return false; }
 

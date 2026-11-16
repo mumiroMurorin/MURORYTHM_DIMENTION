@@ -36,6 +36,34 @@ namespace ChartEditor
         /// <summary>欄をしまっているか</summary>
         public bool IsMinimized => isMinimized;
 
+        /// <summary>しまっている間に出す、小さいマス (実行時に作る欄が、同じ見た目のマスを複製するのに使う)</summary>
+        public Button MinimizedButton => minimizedButton;
+
+        /// <summary>
+        /// 実行時にコードで作った欄に付けるとき、欄とマスを渡す (AddComponent の直後に呼ぶ)
+        /// (Awake は AddComponent の中で、欄が決まる前に動くので、ここで欄のダブルクリックとマスのクリックをつなぐ)
+        /// </summary>
+        public void Setup(RectTransform window, Button minimizedButton, string prefsKey)
+        {
+            this.window = window;
+            this.minimizedButton = minimizedButton;
+            this.prefsKey = prefsKey;
+
+            if (window != null)
+            {
+                var relay = window.GetComponent<WindowDoubleClickRelay>();
+                if (relay == null) { relay = window.gameObject.AddComponent<WindowDoubleClickRelay>(); }
+                relay.OnDoubleClicked -= Minimize;
+                relay.OnDoubleClicked += Minimize;
+            }
+            if (minimizedButton != null)
+            {
+                minimizedButton.onClick.RemoveListener(Restore);
+                minimizedButton.onClick.AddListener(Restore);
+            }
+            RefreshButton();
+        }
+
         private void Awake()
         {
             if (window != null)

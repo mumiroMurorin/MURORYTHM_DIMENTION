@@ -114,6 +114,8 @@ namespace ChartEditor
 
             // 読み込み中・文字の入力中・ドラッグの途中・ほかの操作の途中は受け付けない
             if (dataGetter_model.IsLoadingChart.Value || InputFieldFocus.IsTyping || Input.GetMouseButton(0)) { return; }
+            // SpaceHold の3D編集を開いている間は、裏の譜面のノーツを反転しない
+            if (EditorMenuBar.IsBlockedByOverlay) { return; }
             if (dataGetter_model.CurrentEditMode.Value.IsInEditModeList(mirrorIgnoreEditModes)) { return; }
 
             switch (dataGetter_model.EditNoteType.Value)

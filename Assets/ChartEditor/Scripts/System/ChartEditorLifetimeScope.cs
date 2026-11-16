@@ -50,6 +50,12 @@ namespace ChartEditor
             // ホールドを1本だけ編集する (ホールドをダブルクリックすると、ほかのノーツを白黒にして、触れなくする)
             builder.RegisterEntryPoint<HoldIsolation>();
 
+            // SpaceHold を1本だけ、好きな角度から見て編集する (3D編集。画面部品は実行時に作る)
+            builder.RegisterEntryPoint<SpaceHold3DEditor>();
+
+            // 頂点レイヤーの下の、SpaceHold の節を時間の順に並べた帯 (フィルムストリップ。画面部品は実行時に作る)
+            builder.RegisterEntryPoint<SpaceHoldFilmStrip>();
+
             // 編集画面の「譜面情報」の欄 (シーンに置いてある ChartInfoView) に、コンボ数・ノーツの種類ごとの数などを渡す
             builder.RegisterEntryPoint<ChartInfoPresenter>();
 

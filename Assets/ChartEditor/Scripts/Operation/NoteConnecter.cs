@@ -15,6 +15,9 @@ namespace ChartEditor
     /// ・接続ツール: ノーツを押して接続を始め、つなぐ先を順に押していく。Ctrl を押しながら押すと、接続を外す
     /// ・接続ツールで、複数選択しているノーツの1つを押す: 選択中のノーツをまとめて接続する
     /// ・Ctrl+J (どのツールでも): 選択中のホールド・スペースホールドを、まとめて接続する
+    /// ・Shift を押しながら接続する (つなぐ先を押す、Ctrl+Shift+J): 完成した SpaceHold (始点と終点がある) に加わる
+    ///   ばらばらのスペースホールドのノーツの形を、その時刻での SpaceHold の断面 (前後の節を補間した形) に合わせる
+    ///   (SpaceHoldConnectCorrection)。元に戻すと、形も戻る
     /// </summary>
     public class NoteConnecter : MonoBehaviour
     {
@@ -138,15 +141,20 @@ namespace ChartEditor
                 return false;
             }
 
+            // Shift を押していたら、完成した SpaceHold に加わるノーツの形を、その時刻の断面に合わせる
+            var corrections = PlanSpaceHoldCorrections(members);
+
             // 接続
             Record(() => {
                 foreach (var member in members)
                 {
                     ConnectNote(member, chainIndex);
                 }
+                SpaceHoldConnectCorrection.ApplyAfter(corrections);
             },
             // 元の接続に戻す (未接続だったノーツは、未接続に戻る)
             () => {
+                SpaceHoldConnectCorrection.ApplyBefore(corrections);
                 for (int i = 0; i < members.Count; i++)
                 {
                     DisconnectNote(members[i]);
@@ -154,7 +162,29 @@ namespace ChartEditor
                 }
             });
 
+            LogCorrections(corrections);
             return true;
+        }
+
+        /// <summary>
+        /// Shift を押しながら接続したとき、完成した SpaceHold (始点と終点がある) に加わるノーツの形を、
+        /// その時刻での SpaceHold の断面 (前後の節を補間した形) に合わせる段取りを決める (SpaceHoldConnectCorrection)
+        /// Shift を押していないとき、合わせるノーツが無いときは、空の一覧
+        /// </summary>
+        private List<SpaceHoldConnectCorrection.Correction> PlanSpaceHoldCorrections(IEnumerable<IChainNoteData> joiningNotes)
+        {
+            var corrections = new List<SpaceHoldConnectCorrection.Correction>();
+            if (!SpaceHoldConnectCorrection.IsRequested) { return corrections; }
+
+            SpaceHoldConnectCorrection.TryPlan(notesGetter, dataGetter.ChartData.Value, joiningNotes, corrections);
+            return corrections;
+        }
+
+        private static void LogCorrections(List<SpaceHoldConnectCorrection.Correction> corrections)
+        {
+            if (corrections.Count == 0) { return; }
+
+            Debug.Log($"【接続】SpaceHold に加えたノーツ ({corrections.Count} 個) の形を、その時刻の断面に合わせました");
         }
 
         /// <summary>
@@ -187,15 +217,20 @@ namespace ChartEditor
                 return false;
             }
 
+            // Shift を押していたら (Ctrl+Shift+J)、完成した SpaceHold に加わるノーツの形を、その時刻の断面に合わせる
+            var corrections = PlanSpaceHoldCorrections(members);
+
             // 接続
             Record(() => {
                 for (int i = 0; i < members.Count; i++)
                 {
                     ConnectNote(members[i], targetIndices[i]);
                 }
+                SpaceHoldConnectCorrection.ApplyAfter(corrections);
             },
             // 元の接続に戻す (未接続だったノーツは、未接続に戻る)
             () => {
+                SpaceHoldConnectCorrection.ApplyBefore(corrections);
                 for (int i = 0; i < members.Count; i++)
                 {
                     DisconnectNote(members[i]);
@@ -204,6 +239,7 @@ namespace ChartEditor
             });
 
             Debug.Log($"【接続】選択中のノーツを接続しました ({members.Count} 個)");
+            LogCorrections(corrections);
             return true;
         }
 
@@ -246,8 +282,24 @@ namespace ChartEditor
             int startNoteIndexOrigin = startNote.ChainIndex.Value;
             int connectingChainIndexCopy = connectingChainIndex;
 
+            // Shift を押しながら接続したら、完成した SpaceHold に加わるノーツの形を、その時刻の断面に合わせる
+            var corrections = PlanSpaceHoldCorrections(new IChainNoteData[] { startNote, addNote });
+
             // 接続
             Record(() => {
+                ConnectClickedNotes();
+                SpaceHoldConnectCorrection.ApplyAfter(corrections);
+            },
+            // 接続解除
+            () => {
+                SpaceHoldConnectCorrection.ApplyBefore(corrections);
+                DisconnectClickedNotes();
+            });
+
+            LogCorrections(corrections);
+
+            void ConnectClickedNotes()
+            {
                 // 繋がってるノーツは全部繋げる
                 if (chainList != null)
                 {
@@ -263,9 +315,10 @@ namespace ChartEditor
                     ConnectNote(startNoteCopy, connectingChainIndexCopy);
                     ConnectNote(addNote, connectingChainIndexCopy);
                 }
-            }, 
-            // 接続解除
-            () => {
+            }
+
+            void DisconnectClickedNotes()
+            {
                 // 繋がってたノーツは全部繋げて元に戻す
                 if (chainList != null)
                 {
@@ -286,7 +339,7 @@ namespace ChartEditor
 
                     DisconnectNote(addNote);
                 }
-            });
+            }
         }
 
         /// <summary>

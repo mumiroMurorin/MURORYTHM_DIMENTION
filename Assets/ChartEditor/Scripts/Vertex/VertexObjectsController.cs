@@ -66,9 +66,19 @@ namespace ChartEditor
             this.dataSetter = dataSetter;
         }
 
+        // 前後の節の形を薄く重ねて出す (オニオンスキン)
+        VerticesOnionSkin onionSkin;
+
         private void Start()
         {
+            onionSkin = new VerticesOnionSkin(vertexObjParent, ConvertPositionOnChartGround, rightLimit - leftLimit);
             Bind();
+        }
+
+        private void OnDestroy()
+        {
+            onionSkin?.Dispose();
+            onionSkin = null;
         }
 
         private void Bind()
@@ -184,6 +194,16 @@ namespace ChartEditor
 
         private void LateUpdate()
         {
+            // 前後の節の形 (オニオンスキン) を、今の頂点の位置に合わせて描き直す
+            if (onionSkin != null && notesGetter != null && dataGetter != null && optionGetter != null)
+            {
+                onionSkin.Refresh(
+                    notesGetter,
+                    notesGetter.EditingVertices.Value,
+                    optionGetter.OnionSkinCount.Value,
+                    dataGetter.EditNoteType.Value == EditNoteType.Vertices);
+            }
+
             // 頂点が動いたら、中心点も追従させる (頂点を1個だけ動かしたとき・追加や削除をしたときも含む)
             if (centerHandle == null || centerHandleVertices == null) { return; }
 

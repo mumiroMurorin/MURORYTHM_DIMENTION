@@ -383,7 +383,13 @@ namespace ChartEditor
         EditingSubDivisionConfig = 511,
 
         Explanation = 1000,
-        Preview = 2000
+        Preview = 2000,
+
+        /// <summary>
+        /// SpaceHold を1本だけ、好きな角度から見て編集している (SpaceHold3DEditor)
+        /// この間は、裏の譜面のツールは動かない
+        /// </summary>
+        SpaceHoldView = 3000,
     }
 
     /// <summary>
