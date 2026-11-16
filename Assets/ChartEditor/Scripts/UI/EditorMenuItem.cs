@@ -21,6 +21,8 @@ namespace ChartEditor
         OpenChart = 100,
         SaveChart = 101,
         SaveChartAs = 102,
+        /// <summary>新しい譜面を作る (保存していない変更があれば、確かめてから)</summary>
+        NewChart = 103,
         SelectMusic = 110,
         /// <summary>値 = バックアップの一覧の何番目か (0 が、いちばん新しいもの)</summary>
         RestoreBackup = 120,
@@ -34,6 +36,18 @@ namespace ChartEditor
         Redo = 201,
         CopyNotes = 210,
         DeleteNotes = 211,
+        /// <summary>コピーしたノーツを、今の再生位置の分線に貼り付ける</summary>
+        PasteNotes = 212,
+        /// <summary>選択中のノーツを切り取る (コピーして消す)</summary>
+        CutNotes = 213,
+        /// <summary>選択中のノーツを接続する (Ctrl+J と同じ)</summary>
+        ConnectNotes = 214,
+        /// <summary>選択中のノーツを反転する (Alt+M と同じ)</summary>
+        MirrorNotes = 215,
+        /// <summary>選択中のノーツをロックする</summary>
+        LockNotes = 216,
+        /// <summary>選択中のノーツのロックを外す</summary>
+        UnlockNotes = 217,
 
         // 譜面
         RemoveLastBar = 301,
@@ -49,6 +63,12 @@ namespace ChartEditor
         StepNoteSpeed = 410,
         /// <summary>値 = スクロール感度を増やす量 (10分の1単位。1 で +0.1)</summary>
         StepScrollSensitivity = 411,
+        /// <summary>値 = バックアップ (自動保存) の間隔を増やす量 (分)</summary>
+        StepBackupInterval = 412,
+        /// <summary>値 = プレビューで表示する奥行きを増やす量</summary>
+        StepVisibleDistance = 413,
+        /// <summary>値 = グラウンドのカーブ (半径) を増やす量</summary>
+        StepCurveRadius = 414,
         /// <summary>値 = ウィンドウサイズ (Resolution の番号)</summary>
         SelectWindowSize = 420,
         StartPreview = 430,
@@ -57,6 +77,12 @@ namespace ChartEditor
         ToggleSpaceHold3DView = 432,
         /// <summary>値 = 頂点レイヤーのオニオンスキンの枚数 (前後それぞれ。0 で表示しない)</summary>
         SelectOnionSkinCount = 440,
+        /// <summary>譜面を拡大する (Ctrl+ホイールと同じ)</summary>
+        ZoomIn = 450,
+        /// <summary>譜面を縮小する</summary>
+        ZoomOut = 451,
+        /// <summary>譜面の拡大率を、最初の大きさに戻す</summary>
+        ZoomReset = 452,
 
         // 再生
         TogglePlay = 500,
@@ -72,6 +98,11 @@ namespace ChartEditor
         // 表示・クイックメニュー
         /// <summary>値 = 表示する / しないを切り替える画面部品 (EditorPanel の番号)</summary>
         TogglePanel = 600,
+        // ヘルプ
+        /// <summary>説明書を開く</summary>
+        OpenManual = 700,
+        /// <summary>ショートカット一覧を開く</summary>
+        ShowShortcuts = 701,
     }
 
     /// <summary>

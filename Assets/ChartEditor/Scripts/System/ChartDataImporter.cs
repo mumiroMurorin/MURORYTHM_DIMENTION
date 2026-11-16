@@ -84,6 +84,27 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 新しい譜面を作る (録音 20261117_051338)
+        /// 保存していない変更があれば、別の譜面を開くときと同じように確かめる。保存先は未設定 (保存するときに選ぶ)。
+        /// 楽曲はそのまま。オフセットは 0。延長の設定のとおりに、最初の小節を作る (extendFirstBars)
+        /// </summary>
+        public void CreateNewChart(Action extendFirstBars)
+        {
+            if (dataGetter.IsLoadingChart.Value) { return; }
+            if (!saveGuard.ConfirmDiscardChanges("新しい譜面を作成")) { return; }
+
+            editorDataSetter.SetChartData(new ChartData(0));
+            editorDataSetter.SetOffset(0f);
+            extendFirstBars?.Invoke();
+
+            // 作った直後は、元に戻す履歴も、保存していない変更も無い
+            ResetStates();
+            ChartFilePathCache.CurrentChartFilePath = string.Empty;
+            saveGuard.MarkSaved();
+            Debug.Log("【譜面】新しい譜面を作りました。保存するときは、保存先を選んでください");
+        }
+
+        /// <summary>
         /// 自動保存のフォルダを開いて、選んだファイルから、譜面を復元する
         /// </summary>
         public void ImportBackupFromDialog()

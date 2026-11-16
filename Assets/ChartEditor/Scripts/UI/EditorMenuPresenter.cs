@@ -16,6 +16,9 @@ namespace ChartEditor
         ScrollSensitivity = 2,
         HitVolume = 3,
         MusicVolume = 4,
+        BackupInterval = 5,
+        VisibleDistance = 6,
+        CurveRadius = 7,
     }
 
     /// <summary>
@@ -52,6 +55,8 @@ namespace ChartEditor
         [SerializeField] RectTransform backupList_view;
         [Tooltip("全画面プレビューの、頂点の道具の列 (頂点レイヤーの道具の列と同じ見た目。頂点を持つノーツを1つ選んでいる間だけ出す)")]
         [SerializeField] PreviewVertexToolsView previewVertexTools_view;
+        [Tooltip("「譜面」の一覧の、オフセットの入力欄")]
+        [SerializeField] TMP_InputField offsetField_view;
 
         [Header("Models")]
         [SerializeField] ChartDataExporter chartDataExporter_model;
@@ -69,6 +74,8 @@ namespace ChartEditor
 
         // スクロール感度・音量を、ボタン1回で変える量
         const float STEP_UNIT = 0.1f;
+        // 拡大・縮小1回で、拡大率を何倍にするか
+        const float ZOOM_FACTOR = 1.25f;
 
         // メニューを押せなくするモード (設定のダイアログや説明書を開いている間)
         static readonly EditMode[] disabledEditModes =
@@ -79,6 +86,7 @@ namespace ChartEditor
         };
 
         IChartEditorDataGetter dataGetter;
+        IChartEditorDataSetter dataSetter;
         IChartEditorOptionGetter optionGetter;
         IChartEditorOptionSetter optionSetter;
         INoteSpawnDataOptionGetter noteSpawnDataOptionGetter;
@@ -98,6 +106,7 @@ namespace ChartEditor
         [Inject]
         public void Construct(
             IChartEditorDataGetter dataGetter,
+            IChartEditorDataSetter dataSetter,
             IChartEditorOptionGetter optionGetter,
             IChartEditorOptionSetter optionSetter,
             INoteSpawnDataOptionGetter noteSpawnDataOptionGetter,
@@ -106,6 +115,7 @@ namespace ChartEditor
         {
             this.notesGetter = notesGetter;
             this.dataGetter = dataGetter;
+            this.dataSetter = dataSetter;
             this.optionGetter = optionGetter;
             this.optionSetter = optionSetter;
             this.noteSpawnDataOptionGetter = noteSpawnDataOptionGetter;
@@ -150,6 +160,14 @@ namespace ChartEditor
                 };
             }
 
+            // オフセットの入力欄 (入力を終えたときに反映する)
+            if (offsetField_view != null)
+            {
+                offsetField = new NumberInputField(offsetField_view, value => dataSetter.SetOffset(value));
+                if (menuBar_view != null) { menuBar_view.OnOpenedListener += RefreshOffsetField; }
+                RefreshOffsetField();
+            }
+
             // 入力欄を、延長の設定とつなぐ
             if (chartExtendSettings_view != null)
             {
@@ -158,6 +176,24 @@ namespace ChartEditor
                     ChartExtendSettings.Bind(view, optionGetter, optionSetter, this);
                 }
             }
+        }
+
+        NumberInputField offsetField;
+
+        private void RefreshOffsetField()
+        {
+            if (offsetField != null && dataGetter != null) { offsetField.SetText(dataGetter.Offset.Value.ToString("0.##")); }
+        }
+
+        // 一覧の中の部品 (ノーツの接続・反転など)。メニューから使うときに探す
+        NoteConnecter connecter;
+        NotesMirror groundMirror;
+        SpaceNotesMirror spaceMirror;
+        ShortcutListView shortcutList;
+        T Find<T>(ref T cache) where T : UnityEngine.Object
+        {
+            if (cache == null) { cache = FindObjectOfType<T>(true); }
+            return cache;
         }
 
         private void SubscribeClicks(EditorMenuItem[] items)
@@ -187,6 +223,9 @@ namespace ChartEditor
 
             // クイックメニューの項目は、いつも見えているので、いつも更新する
             RefreshItems(quickItems_view);
+
+            // オフセットの入力欄: ほかの所を押して入力を終えたとき
+            offsetField?.CommitIfClickedElsewhere();
 
             RefreshValueLabels();
         }
@@ -252,6 +291,9 @@ namespace ChartEditor
                 case EditorMenuCommand.SaveChartAs:
                     chartDataExporter_model?.ExportNewFile();
                     break;
+                case EditorMenuCommand.NewChart:
+                    chartDataImporter_model?.CreateNewChart(() => editorUI_presenter?.ExtendChart());
+                    break;
                 case EditorMenuCommand.SelectMusic:
                     editorUI_presenter?.BrowseAudioFile();
                     break;
@@ -277,6 +319,28 @@ namespace ChartEditor
                     break;
                 case EditorMenuCommand.DeleteNotes:
                     noteDestroyer_model?.DestroySelectedNotes();
+                    break;
+                case EditorMenuCommand.PasteNotes:
+                    notesCopier_model?.PasteAtPlaybackLine();
+                    break;
+                case EditorMenuCommand.CutNotes:
+                    notesCopier_model?.CutSelectedNotes();
+                    break;
+                case EditorMenuCommand.ConnectNotes:
+                    if (Find(ref connecter) != null && !connecter.ConnectSelectingNotes())
+                    {
+                        Debug.Log("【接続】接続できるノーツがありません (すでにつながっているか、種類が違います)");
+                    }
+                    break;
+                case EditorMenuCommand.MirrorNotes:
+                    if (dataGetter.EditNoteType.Value == EditNoteType.Space) { Find(ref spaceMirror)?.MirrorSelectingSpaceNotes(); }
+                    else { Find(ref groundMirror)?.MirrorSelectingNotes(); }
+                    break;
+                case EditorMenuCommand.LockNotes:
+                    NoteLock.Lock(GetSelection(false));
+                    break;
+                case EditorMenuCommand.UnlockNotes:
+                    NoteLock.Unlock(GetSelection(true));
                     break;
 
                 // ---- 譜面
@@ -311,6 +375,15 @@ namespace ChartEditor
                 case EditorMenuCommand.SelectOnionSkinCount:
                     optionSetter.SetOnionSkinCount(value);
                     break;
+                case EditorMenuCommand.ZoomIn:
+                    optionSetter.SetChartViewScale(optionGetter.ChartViewScale.Value * ZOOM_FACTOR);
+                    break;
+                case EditorMenuCommand.ZoomOut:
+                    optionSetter.SetChartViewScale(optionGetter.ChartViewScale.Value / ZOOM_FACTOR);
+                    break;
+                case EditorMenuCommand.ZoomReset:
+                    optionSetter.SetChartViewScale(ChartEditorOptionHolder.DEFAULT_CHART_VIEW_SCALE);
+                    break;
 
                 // ---- 再生
                 case EditorMenuCommand.TogglePlay:
@@ -328,13 +401,31 @@ namespace ChartEditor
                 case EditorMenuCommand.StepHitVolume:
                     optionSetter.SetJudgementSEVolume(Step(optionGetter.JudgementSEVolume.Value, value));
                     break;
+                case EditorMenuCommand.StepVisibleDistance:
+                    optionSetter.SetNoteVisibleDistance(optionGetter.NoteVisibleDistance.Value + value);
+                    break;
+                case EditorMenuCommand.StepCurveRadius:
+                    noteSpawnDataOptionSetter.SetNoteCurveRadius(Mathf.Clamp(noteSpawnDataOptionGetter.NoteCurveRadius.Value + value,
+                        ChartEditorOptionHolder.MENU_MIN_NOTE_CURVE_RADIUS, ChartEditorOptionHolder.MENU_MAX_NOTE_CURVE_RADIUS));
+                    break;
 
                 // ---- 設定
                 case EditorMenuCommand.StepScrollSensitivity:
                     optionSetter.SetScrollSensitivity(Step(optionGetter.ScrollSensitivity.Value, value));
                     break;
+                case EditorMenuCommand.StepBackupInterval:
+                    ChartSaveGuard.AutoSaveIntervalMinutes += value;
+                    break;
                 case EditorMenuCommand.StepMusicVolume:
                     optionSetter.SetBGMVolume(Step(optionGetter.BGMVolume.Value, value));
+                    break;
+
+                // ---- ヘルプ
+                case EditorMenuCommand.OpenManual:
+                    dataSetter.SetEditMode(EditMode.Explanation);
+                    break;
+                case EditorMenuCommand.ShowShortcuts:
+                    Find(ref shortcutList)?.Show();
                     break;
 
                 // ---- 表示・クイックメニュー: 画面部品を、表示する / しない
@@ -393,8 +484,54 @@ namespace ChartEditor
                     case EditorMenuCommand.UnlockAllNotes:
                         item.SetLabel(NoteLock.HasAny ? $"すべてのロックを外す ({NoteLock.Count} 個)" : "すべてのロックを外す");
                         break;
+                    case EditorMenuCommand.PasteNotes:
+                    {
+                        int count = notesCopier_model != null ? notesCopier_model.CopiedCount : 0;
+                        item.SetLabel(count > 0 ? $"貼り付け ({count} 個、再生位置へ)" : "貼り付け (再生位置へ)");
+                        break;
+                    }
+                    case EditorMenuCommand.LockNotes:
+                    {
+                        int count = CountSelection(false);
+                        item.SetLabel(count > 1 ? $"選択中のノーツをロックする ({count} 個)" : "選択中のノーツをロックする");
+                        break;
+                    }
+                    case EditorMenuCommand.UnlockNotes:
+                    {
+                        int count = CountSelection(true);
+                        item.SetLabel(count > 1 ? $"選択中のロックを外す ({count} 個)" : "選択中のロックを外す");
+                        break;
+                    }
                 }
             }
+        }
+
+        /// <summary>
+        /// 選択中のノーツのうち、ロックしている (isLocked) / していないものの数 (一覧の表示で毎フレーム数えるので、リストは作らない)
+        /// </summary>
+        private int CountSelection(bool isLocked)
+        {
+            if (notesGetter == null) { return 0; }
+            int count = 0;
+            foreach (var note in notesGetter.SelectingNotes)
+            {
+                if (NoteLock.IsLocked(note) == isLocked) { count++; }
+            }
+            return count;
+        }
+
+        /// <summary>
+        /// 選択中のノーツのうち、ロックしている (isLocked) / していないもの
+        /// </summary>
+        private List<IDeployableNoteData> GetSelection(bool isLocked)
+        {
+            var result = new List<IDeployableNoteData>();
+            if (notesGetter == null) { return result; }
+            foreach (var note in notesGetter.SelectingNotes)
+            {
+                if (NoteLock.IsLocked(note) == isLocked) { result.Add(note); }
+            }
+            return result;
         }
 
         /// <summary>
@@ -507,6 +644,9 @@ namespace ChartEditor
                 case EditorMenuValue.ScrollSensitivity: return optionGetter.ScrollSensitivity.Value;
                 case EditorMenuValue.HitVolume: return optionGetter.JudgementSEVolume.Value;
                 case EditorMenuValue.MusicVolume: return optionGetter.BGMVolume.Value;
+                case EditorMenuValue.BackupInterval: return ChartSaveGuard.AutoSaveIntervalMinutes;
+                case EditorMenuValue.VisibleDistance: return optionGetter.NoteVisibleDistance.Value;
+                case EditorMenuValue.CurveRadius: return noteSpawnDataOptionGetter.NoteCurveRadius.Value;
                 default: return 0f;
             }
         }
@@ -517,6 +657,9 @@ namespace ChartEditor
             {
                 case EditorMenuValue.NoteSpeed: return value.ToString("0");
                 case EditorMenuValue.ScrollSensitivity: return value.ToString("0.0");
+                case EditorMenuValue.BackupInterval: return value.ToString("0") + " 分";
+                case EditorMenuValue.VisibleDistance:
+                case EditorMenuValue.CurveRadius: return value.ToString("0");
                 // 音量は百分率で表示する
                 default: return Mathf.RoundToInt(value * 100f) + "%";
             }
@@ -536,6 +679,7 @@ namespace ChartEditor
                 // 再生中は、譜面や楽曲を入れ替えたり、譜面の長さを変えたりできない
                 // 全画面プレビューの中でも受け付けない (読み込みが始まると、プレビューの操作ができなくなるため)
                 case EditorMenuCommand.OpenChart:
+                case EditorMenuCommand.NewChart:
                 case EditorMenuCommand.SelectMusic:
                 case EditorMenuCommand.ExtendChart:
                 case EditorMenuCommand.RestoreBackupFromFolder:
@@ -560,6 +704,22 @@ namespace ChartEditor
                     return notesCopier_model != null && notesCopier_model.CanCopySelectedNotes;
                 case EditorMenuCommand.DeleteNotes:
                     return noteDestroyer_model != null && noteDestroyer_model.CanDestroySelectedNotes;
+                case EditorMenuCommand.CutNotes:
+                    return notesCopier_model != null && notesCopier_model.CanCutSelectedNotes;
+                case EditorMenuCommand.PasteNotes:
+                    return !isPlaying && notesCopier_model != null && notesCopier_model.CanPasteFromMenu;
+                case EditorMenuCommand.ConnectNotes:
+                case EditorMenuCommand.MirrorNotes:
+                    return !isPlaying && !isInPreview && CountSelection(false) > 0 &&
+                           (dataGetter.EditNoteType.Value == EditNoteType.Ground || dataGetter.EditNoteType.Value == EditNoteType.Space);
+                case EditorMenuCommand.LockNotes:
+                    return CountSelection(false) > 0;
+                case EditorMenuCommand.UnlockNotes:
+                    return CountSelection(true) > 0;
+                case EditorMenuCommand.ZoomIn:
+                case EditorMenuCommand.ZoomOut:
+                case EditorMenuCommand.ZoomReset:
+                    return !isInPreview;
 
                 // プレビューは、譜面があるときだけ
                 case EditorMenuCommand.StartPreview:

@@ -29,6 +29,10 @@
         QuickNoteSpeed = 108,
         QuickHitVolume = 109,
         QuickMusicVolume = 112,
+        /// <summary>全画面プレビューで表示する奥行き (録音 20261117_051155)</summary>
+        QuickVisibleDistance = 113,
+        /// <summary>グラウンドのカーブ (半径)</summary>
+        QuickCurveRadius = 114,
     }
 
     public static class EditorPanelExtension

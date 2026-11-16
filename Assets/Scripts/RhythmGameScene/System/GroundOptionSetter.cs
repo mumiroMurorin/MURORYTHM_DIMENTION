@@ -51,6 +51,8 @@ public class GroundOptionSetter : MonoBehaviour
     private void InitializeGroundVisibility()
     {
         if (bendDeformer == null || groundObjectRoot == null) { return; }
+        // (一度だけ。譜面エディタでは、Start より先に ApplyVisibleDistance から呼ばれることがある)
+        if (propertyBlock != null) { return; }
 
         propertyBlock = new MaterialPropertyBlock();
         groundRenderers.Clear();
@@ -110,6 +112,23 @@ public class GroundOptionSetter : MonoBehaviour
 
         MeshFilter meshFilter = renderer.GetComponent<MeshFilter>();
         return meshFilter != null ? meshFilter.sharedMesh : null;
+    }
+
+    /// <summary>
+    /// 奥行きの表示範囲を、外から決める (譜面エディタの全画面プレビュー: ゲーム本編の設定が無いので、エディタの設定を渡す)
+    /// </summary>
+    public void ApplyVisibleDistance(float distance)
+    {
+        if (propertyBlock == null) { InitializeGroundVisibility(); }
+        SetGroundVisibleDistance(distance);
+    }
+
+    /// <summary>
+    /// グラウンドのカーブ (半径) を、外から決める (譜面エディタの全画面プレビュー)
+    /// </summary>
+    public void ApplyCurveRadius(float radius)
+    {
+        SetBendAngle(radius);
     }
 
     private void SetGroundVisibleDistance(float distance)

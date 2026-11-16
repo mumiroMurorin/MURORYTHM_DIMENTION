@@ -18,7 +18,32 @@ namespace ChartEditor
     /// </summary>
     public class ChartSaveGuard : IStartable, ITickable, IDisposable
     {
-        const float AUTO_SAVE_INTERVAL_SECONDS = 180f;
+        // 自動保存 (バックアップ) の間隔 (分)。メニューの「設定」で変えられ、次に起動したときも同じになる
+        public const int DEFAULT_AUTO_SAVE_INTERVAL_MINUTES = 3;
+        public const int MIN_AUTO_SAVE_INTERVAL_MINUTES = 1;
+        public const int MAX_AUTO_SAVE_INTERVAL_MINUTES = 30;
+        const string AUTO_SAVE_INTERVAL_PREFS_KEY = "ChartEditor.AutoSaveIntervalMinutes";
+        static int autoSaveIntervalMinutes = -1;
+
+        /// <summary>自動保存 (バックアップ) の間隔 (分)</summary>
+        public static int AutoSaveIntervalMinutes
+        {
+            get
+            {
+                if (autoSaveIntervalMinutes < 0)
+                {
+                    autoSaveIntervalMinutes = Mathf.Clamp(PlayerPrefs.GetInt(AUTO_SAVE_INTERVAL_PREFS_KEY, DEFAULT_AUTO_SAVE_INTERVAL_MINUTES),
+                        MIN_AUTO_SAVE_INTERVAL_MINUTES, MAX_AUTO_SAVE_INTERVAL_MINUTES);
+                }
+                return autoSaveIntervalMinutes;
+            }
+            set
+            {
+                autoSaveIntervalMinutes = Mathf.Clamp(value, MIN_AUTO_SAVE_INTERVAL_MINUTES, MAX_AUTO_SAVE_INTERVAL_MINUTES);
+                PlayerPrefs.SetInt(AUTO_SAVE_INTERVAL_PREFS_KEY, autoSaveIntervalMinutes);
+                PlayerPrefs.Save();
+            }
+        }
         // 残しておく自動保存の数 (これより古いものは消す)
         public const int AUTO_SAVE_KEEP_COUNT = 10;
         const string AUTO_SAVE_DIRECTORY = "ChartEditorAutoSave";
@@ -62,7 +87,7 @@ namespace ChartEditor
         void ITickable.Tick()
         {
             if (!isDirtySinceAutoSave) { return; }
-            if (Time.realtimeSinceStartup - dirtyStartTime < AUTO_SAVE_INTERVAL_SECONDS) { return; }
+            if (Time.realtimeSinceStartup - dirtyStartTime < AutoSaveIntervalMinutes * 60f) { return; }
 
             // 譜面の読み込み中は、読み込み途中の譜面を保存してしまうので見送る
             if (dataGetter.IsLoadingChart.Value) { return; }

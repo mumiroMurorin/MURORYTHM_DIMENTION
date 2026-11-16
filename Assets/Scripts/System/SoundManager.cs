@@ -143,11 +143,18 @@ public class SoundManager : SingletonMonoBehaviour<SoundManager>
         PlayBGM(GetBGMClip(bgmType), loopFlg, isFadeout, progress);
     }
 
-    public void PlayBGM(AudioClip audioClip, bool loopFlg = true, bool isFadeout = true, float progress = 0f)
+    /// <param name="isFadeIn">false のとき、フェードせずに、すぐ普通の音量で始める (譜面エディタの再生)</param>
+    public void PlayBGM(AudioClip audioClip, bool loopFlg = true, bool isFadeout = true, float progress = 0f, bool isFadeIn = true)
     {
         // 同じBGMの場合は何もしない
         if (bgmSources[0].clip != null && bgmSources[0].clip == audioClip) { return; }
         else if (bgmSources[1].clip != null && bgmSources[1].clip == audioClip) { return; }
+
+        if (!isFadeIn)
+        {
+            PlayImmediately(audioClip, loopFlg, progress);
+            return;
+        }
 
         // フェードでBGM開始
         if (bgmSources[0].clip == null && bgmSources[1].clip == null)
@@ -192,6 +199,31 @@ public class SoundManager : SingletonMonoBehaviour<SoundManager>
         await UniTask.Delay((int)(BGMCrossFadeDuration * 1000), false, PlayerLoopTiming.Update, token);
         sourceFadeOut.Stop();
         sourceFadeOut.clip = null;
+    }
+
+    /// <summary>
+    /// フェードせずに、すぐ普通の音量で始める (鳴っているBGMは止める)
+    /// </summary>
+    private void PlayImmediately(AudioClip clip, bool loopFlg, float progress)
+    {
+        cts?.Cancel();
+        bgmSources[0].DOKill();
+        bgmSources[1].DOKill();
+        bgmSources[1].Stop();
+        bgmSources[1].clip = null;
+
+        if (clip == null || progress >= 1f)
+        {
+            bgmSources[0].Stop();
+            bgmSources[0].clip = null;
+            return;
+        }
+
+        bgmSources[0].volume = 1f;
+        bgmSources[0].loop = loopFlg;
+        bgmSources[0].clip = clip;
+        bgmSources[0].time = clip.length * Mathf.Clamp01(progress);
+        bgmSources[0].Play();
     }
 
     private async UniTaskVoid FadeIn(AudioClip clip, bool loopFlg, CancellationToken token, float progress = 0f)

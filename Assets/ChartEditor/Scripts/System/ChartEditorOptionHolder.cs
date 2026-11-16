@@ -61,11 +61,13 @@ namespace ChartEditor
 
         const float MAX_SCALE = 100f;
         const float MIN_SCALE = 1f;
+        /// <summary>譜面の拡大率の、最初の値 (メニューの「元の大きさ」)</summary>
+        public const float DEFAULT_CHART_VIEW_SCALE = 5f;
 
         /// <summary>
         /// 1秒間のグラウンド長さ
         /// </summary>
-        ReactiveProperty<float> chartViewScale = new ReactiveProperty<float>(5f);
+        ReactiveProperty<float> chartViewScale = new ReactiveProperty<float>(DEFAULT_CHART_VIEW_SCALE);
         IReadOnlyReactiveProperty<float> IChartEditorOptionGetter.ChartViewScale => chartViewScale;
 
         void IChartEditorOptionSetter.SetChartViewScale(float scale)
@@ -235,6 +237,10 @@ namespace ChartEditor
 
         const float MAX_NOTE_CURVE_RADIUS = 10000f;
         const float MIN_NOTE_CURVE_RADIUS = 10f;
+        // メニューで変えられる範囲と、1回で変える量 (ゲーム本編の設定と同じ)
+        public const float MENU_MIN_NOTE_CURVE_RADIUS = 400f;
+        public const float MENU_MAX_NOTE_CURVE_RADIUS = 2000f;
+        public const float NOTE_CURVE_RADIUS_STEP = 200f;
 
         // 【ノーツ軌道】プレビューでもゲーム本編と同じ半径を使用する
         ReactiveProperty<float> noteCurveRadius = new ReactiveProperty<float>(2000f);
@@ -251,7 +257,7 @@ namespace ChartEditor
 
         const float MAX_NOTE_VISIBLE_DISTANCE = 200f;
         const float MIN_NOTE_VISIBLE_DISTANCE = 20f;
-        const float NOTE_VISIBLE_DISTANCE_STEP = 10f;
+        public const float NOTE_VISIBLE_DISTANCE_STEP = 10f;
 
         // 判定位置より奥側に表示するノーツの距離
         ReactiveProperty<float> noteVisibleDistance = new ReactiveProperty<float>(100f);
@@ -367,6 +373,8 @@ namespace ChartEditor
         /// エディタの拡大倍率、1秒間のUnity長 [z/sec]
         /// </summary>
         IReadOnlyReactiveProperty<float> ChartViewScale { get; }
+        /// <summary>全画面プレビューで、判定位置より奥に表示する距離</summary>
+        IReadOnlyReactiveProperty<float> NoteVisibleDistance { get; }
 
         IReadOnlyReactiveProperty<float> ScrollSensitivity { get; }
 
@@ -419,6 +427,7 @@ namespace ChartEditor
         void SetOnionSkinCount(int count);
 
         void SetChartViewScale(float scale);
+        void SetNoteVisibleDistance(float distance);
 
         void SetScrollSensitivity(float sensitivity);
 

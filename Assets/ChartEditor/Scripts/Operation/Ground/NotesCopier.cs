@@ -48,13 +48,15 @@ namespace ChartEditor
 
             bool isCopy = Input.GetKeyDown(KeyCode.C);
             bool isPaste = Input.GetKeyDown(KeyCode.V);
-            if (!isCopy && !isPaste) { return; }
+            bool isCut = Input.GetKeyDown(KeyCode.X);
+            if (!isCopy && !isPaste && !isCut) { return; }
 
             // 読み込み中・文字の入力中・ほかの操作の途中は受け付けない
             // (全画面プレビューでも、プレビューの上で選んだノーツをコピー・貼り付けできる)
             if (!SelectedNotesKeyOperation.IsAcceptable(dataGetter, ignoreEditModes)) { return; }
 
             if (isCopy) { CopyNotes(); }
+            if (isCut) { CutNotes(); }
             if (isPaste)
             {
                 // ホールドを1本だけ編集している間は、ノーツを増やせない
@@ -75,6 +77,96 @@ namespace ChartEditor
             notesGetter.SelectingNotes != null &&
             notesGetter.SelectingNotes.Count > 0 &&
             SelectedNotesKeyOperation.IsAcceptable(dataGetter, ignoreEditModes, true);
+
+        /// <summary>コピーしてあるノーツの数</summary>
+        public int CopiedCount => copiedNotes != null ? copiedNotes.Count : 0;
+
+        NoteDestroyer destroyer;
+        NoteDestroyer Destroyer => destroyer != null ? destroyer : (destroyer = FindObjectOfType<NoteDestroyer>(true));
+
+        /// <summary>
+        /// 今、選択中のノーツを切り取れるか (コピーできて、消せるとき)
+        /// </summary>
+        public bool CanCutSelectedNotes =>
+            CanCopySelectedNotes && !IsVertexSelectionInPreview && Destroyer != null && Destroyer.CanDestroySelectedNotes;
+
+        /// <summary>全画面プレビューで頂点を選んでいるか (このときの Delete は頂点を消すので、切り取りはしない)</summary>
+        bool IsVertexSelectionInPreview =>
+            dataGetter.EditNoteType.Value == EditNoteType.Preview && PreviewVertexTools.HasSelectedVertices;
+
+        /// <summary>
+        /// 選択中のノーツを切り取る (メニューから。Ctrl+X と同じ)
+        /// </summary>
+        public void CutSelectedNotes()
+        {
+            if (!CanCutSelectedNotes) { return; }
+            CutNotes();
+        }
+
+        /// <summary>
+        /// 切り取り: コピーしてから消す (ロックしたノーツは、コピーはするが消さない。元に戻すのは、消した分の1回)
+        /// </summary>
+        private void CutNotes()
+        {
+            if (notesGetter.SelectingNotes == null || notesGetter.SelectingNotes.Count == 0) { return; }
+            if (IsVertexSelectionInPreview)
+            {
+                // (コピーだけして、選んでいる頂点が消えてしまわないように)
+                Debug.Log("【頂点】頂点を選んでいる間は、ノーツを切り取れません");
+                return;
+            }
+
+            CopyNotes();
+            Destroyer?.DestroySelectedNotes();
+            Debug.Log("【Notes】 Cut notes.");
+        }
+
+        /// <summary>
+        /// 今、メニューから貼り付けられるか (コピーしてあって、グラウンド・スペースのレイヤーのとき)
+        /// </summary>
+        public bool CanPasteFromMenu =>
+            CopiedCount > 0 &&
+            !HoldIsolation.IsActive &&
+            (dataGetter.EditNoteType.Value == EditNoteType.Ground || dataGetter.EditNoteType.Value == EditNoteType.Space) &&
+            SelectedNotesKeyOperation.IsAcceptable(dataGetter, ignoreEditModes, true);
+
+        /// <summary>
+        /// コピーしたノーツを、今の再生位置の分線 (判定の線のところ) に貼り付ける (メニューから)
+        /// </summary>
+        public void PasteAtPlaybackLine()
+        {
+            if (!CanPasteFromMenu) { return; }
+
+            var chartData = dataGetter.ChartData.Value;
+            var timeline = SpaceHoldTimeline.Get(chartData);
+            if (timeline == null || timeline.LineCount == 0) { return; }
+
+            // 今の再生位置の時刻に、いちばん近い分線
+            float time = dataGetter.ChartSeconds.Value * dataGetter.PlaybackProgress.Value;
+            int best = 0;
+            float bestGap = float.MaxValue;
+            for (int line = 0; line < timeline.LineCount; line++)
+            {
+                float gap = Mathf.Abs(timeline.GetTime(line) - time);
+                if (gap < bestGap) { bestGap = gap; best = line; }
+            }
+
+            PasteAt(new AddressInChart(timeline.GetBar(best), timeline.GetSub(best), 0));
+        }
+
+        /// <summary>
+        /// コピーしたノーツを、その分線に貼り付ける (右クリックのメニューの「ここに貼り付け」、メニューの「貼り付け」)
+        /// </summary>
+        public void PasteAt(IReadOnlyAddressInChart address)
+        {
+            if (address == null || CopiedCount == 0) { return; }
+            if (HoldIsolation.IsActive)
+            {
+                Debug.Log("【ホールドの単独編集】このホールドだけを編集している間は、貼り付けできません");
+                return;
+            }
+            PasteNotes(address);
+        }
 
         /// <summary>
         /// 選択中のノーツをコピーする (メニューから。Ctrl+C と同じ)
@@ -121,11 +213,14 @@ namespace ChartEditor
 
         private void PasteNotes()
         {
+            // 貼り付け先 (カーソルが指している分線)。指している場所が無ければ貼り付けない
+            PasteNotes(GetPasteCursorAddress());
+        }
+
+        private void PasteNotes(IReadOnlyAddressInChart cursorAddress)
+        {
             if (copiedNotes == null || copiedNotes.Count == 0) { return; }
             if (dataGetter.ChartData.Value == null) { return; }
-
-            // 貼り付け先 (カーソルが指している分線)。指している場所が無ければ貼り付けない
-            var cursorAddress = GetPasteCursorAddress();
             if (cursorAddress == null) { return; }
 
             // 貼り付けるノーツ。写しから、貼り付けのたびに新しく作る (同じ写しを何度でも貼り付けられるように)

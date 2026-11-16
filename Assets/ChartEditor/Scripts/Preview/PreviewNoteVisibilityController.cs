@@ -59,6 +59,7 @@ namespace ChartEditor
         {
             this.positionCalculator = positionCalculator;
             this.noteSpeed = noteSpeed;
+            lastCurveRadius = curveRadius;
             float maxVisibleSpan = Mathf.Max(0f, 2f * Mathf.PI * curveRadius - 0.01f);
             effectiveVisibleBehindDistance = Mathf.Clamp(visibleBehindDistance, 0f, maxVisibleSpan);
             effectiveVisibleAheadDistance = Mathf.Clamp(
@@ -66,6 +67,21 @@ namespace ChartEditor
                 0f,
                 maxVisibleSpan - effectiveVisibleBehindDistance);
             isReady = true;
+        }
+
+        float lastCurveRadius = 2000f;
+
+        /// <summary>
+        /// 判定位置より奥に表示する距離を変える (メニューの「奥行きの表示範囲」。録音 20261117_051155)
+        /// </summary>
+        public void SetVisibleAheadDistance(float distance)
+        {
+            visibleAheadDistance = Mathf.Max(0f, distance);
+            if (!isReady) { return; }
+
+            float maxVisibleSpan = Mathf.Max(0f, 2f * Mathf.PI * lastCurveRadius - 0.01f);
+            effectiveVisibleAheadDistance = Mathf.Clamp(visibleAheadDistance, 0f, maxVisibleSpan - effectiveVisibleBehindDistance);
+            requiresVisibilityRefresh = true;
         }
 
         /// <summary>

@@ -74,7 +74,8 @@ namespace ChartEditor
             if (clip != null && chartLength > 0f)
             {
                 float progress = Mathf.Clamp01((chartLength * chartEditorDataGetter.PlaybackProgress.Value) / clip.length);
-                SoundManager.Instance.PlayBGM(clip, loopFlg: false, isFadeout: false, progress: progress);
+                // フェードインせずに、すぐ普通の音量で始める (録音 20261117_045937)
+                SoundManager.Instance.PlayBGM(clip, loopFlg: false, isFadeout: false, progress: progress, isFadeIn: false);
 
                 playingClip = clip;
                 ApplyPlaybackSpeedToMusic();

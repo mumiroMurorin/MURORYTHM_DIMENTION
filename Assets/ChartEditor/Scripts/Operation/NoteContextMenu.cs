@@ -65,7 +65,12 @@ namespace ChartEditor
             if (cursorInteracter == null) { return; }
 
             IDeployableNoteData note = cursorInteracter.FindNoteUnderCursor();
-            if (note == null) { return; }
+            if (note == null)
+            {
+                // ノーツの無い線の上: 「ここに貼り付け」 (録音 20261117_051433)
+                TryOpenPasteMenu();
+                return;
+            }
 
             Open(note);
         }
@@ -96,6 +101,27 @@ namespace ChartEditor
             connecter = UnityEngine.Object.FindObjectOfType<NoteConnecter>(true);
             copier = UnityEngine.Object.FindObjectOfType<NotesCopier>(true);
             destroyer = UnityEngine.Object.FindObjectOfType<NoteDestroyer>(true);
+        }
+
+        /// <summary>
+        /// ノーツの無い線の上で右クリックしたとき: コピーしてあれば、その線に貼り付けるメニューを出す
+        /// </summary>
+        private void TryOpenPasteMenu()
+        {
+            if (copier == null || copier.CopiedCount == 0 || HoldIsolation.IsActive) { return; }
+
+            IReadOnlyAddressInChart address = dataGetter.GetInteractableCollider<IDeployableCollider>()?.Address;
+            if (address == null) { address = dataGetter.GetInteractableCollider<IFreedomDeployableCollider>()?.Address; }
+            if (address == null) { return; }
+
+            // (メニューを出している間にカーソルが動いても、右クリックした線に貼る)
+            var target = new AddressInChart(address);
+            int count = copier.CopiedCount;
+            var items = new List<EditorContextMenuView.Item>
+            {
+                new EditorContextMenuView.Item(count > 1 ? $"ここに貼り付け ({count} 個)" : "ここに貼り付け", () => copier.PasteAt(target)),
+            };
+            EditorContextMenuView.Show(Input.mousePosition, items);
         }
 
         private void Open(IDeployableNoteData note)

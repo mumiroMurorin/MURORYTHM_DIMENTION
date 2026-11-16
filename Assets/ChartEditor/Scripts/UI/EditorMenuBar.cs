@@ -43,7 +43,8 @@ namespace ChartEditor
         /// メニューの一覧を開いている間と、閉じたフレームの間か (IsBlockingChartInput から、画面を覆う窓のぶんを除いたもの)
         /// 譜面を覆う窓 (SpaceHold の3D編集) が、メニューを開いている間は自分の操作を止めるのに使う
         /// </summary>
-        public static bool IsMenuOpenOrJustClosed => openMenuBar != null || Time.frameCount == lastClosedFrame || EditorContextMenuView.IsOpenOrJustClosed;
+        public static bool IsMenuOpenOrJustClosed => openMenuBar != null || Time.frameCount == lastClosedFrame || EditorContextMenuView.IsOpenOrJustClosed ||
+                                                     ShortcutListView.IsOpenOrJustClosed;
 
         /// <summary>
         /// 譜面を覆う窓 (SpaceHold の3D編集) が開いているか

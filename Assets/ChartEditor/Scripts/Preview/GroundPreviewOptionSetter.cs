@@ -11,11 +11,15 @@ namespace ChartEditor
         [SerializeField] GameObject[] divisionLines;
 
         IChartEditorOptionGetter optionGetter;
+        INoteSpawnDataOptionGetter spawnOptionGetter;
+        // 全画面プレビューの舞台 (ゲーム本編のもの) のグラウンド。ゲーム本編の設定は届かないので、ここから渡す
+        GroundOptionSetter stageGround;
 
         [Inject]
-        public void Construct(IChartEditorOptionGetter optionGetter)
+        public void Construct(IChartEditorOptionGetter optionGetter, INoteSpawnDataOptionGetter spawnOptionGetter)
         {
             this.optionGetter = optionGetter;
+            this.spawnOptionGetter = spawnOptionGetter;
         }
 
         private void Start()
@@ -27,6 +31,20 @@ namespace ChartEditor
         {
             optionGetter?.LaneDivisionNum
                 .Subscribe(SetDivisionLines)
+                .AddTo(this.gameObject);
+
+            // 奥行きの表示範囲と、グラウンドのカーブ (録音 20261117_051155: ゲーム本編と同じ設定を、プレビューでも)
+            stageGround = FindObjectOfType<GroundOptionSetter>(true);
+            var noteVisibility = FindObjectOfType<PreviewNoteVisibilityController>(true);
+            optionGetter?.NoteVisibleDistance
+                .Subscribe(distance =>
+                {
+                    if (stageGround != null) { stageGround.ApplyVisibleDistance(distance); }
+                    if (noteVisibility != null) { noteVisibility.SetVisibleAheadDistance(distance); }
+                })
+                .AddTo(this.gameObject);
+            spawnOptionGetter?.NoteCurveRadius
+                .Subscribe(radius => { if (stageGround != null) { stageGround.ApplyCurveRadius(radius); } })
                 .AddTo(this.gameObject);
         }
 
