@@ -38,6 +38,7 @@ namespace ChartEditor
             EditMode.VerticesScale,
             EditMode.VerticesScaling,
             EditMode.Preview,
+            EditMode.SpaceHoldView,
         };
 
         [Inject]

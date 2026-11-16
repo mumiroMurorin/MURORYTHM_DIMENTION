@@ -105,10 +105,12 @@ namespace ChartEditor
             // Redo (Ctrl+Shift+Z または Ctrl+Y)
             if (ctrl && ((shift && Input.GetKeyDown(KeyCode.Z)) || Input.GetKeyDown(KeyCode.Y)) && CanUndoRedo(isTyping)) { Redo(); }
             // Move editing vertices along the connected SpaceHold chain
-            if (!isTyping && Input.GetKeyDown(KeyCode.UpArrow)) { verticesChainNavigator?.MoveToNext(); }
-            if (!isTyping && Input.GetKeyDown(KeyCode.DownArrow)) { verticesChainNavigator?.MoveToPrevious(); }
-            // ショートカットキー
-            if (!isTyping) { CheckAndDoShortCutKey(); }
+            // (SpaceHold の3D編集を開いている間は、3D編集の側で前後の節へ移る)
+            bool isChainKeyAccepted = !isTyping && !EditorMenuBar.IsBlockedByOverlay;
+            if (isChainKeyAccepted && Input.GetKeyDown(KeyCode.UpArrow)) { verticesChainNavigator?.MoveToNext(); }
+            if (isChainKeyAccepted && Input.GetKeyDown(KeyCode.DownArrow)) { verticesChainNavigator?.MoveToPrevious(); }
+            // ショートカットキー (SpaceHold の3D編集を開いている間は、ツールを切り替えない)
+            if (!isTyping && !EditorMenuBar.IsBlockedByOverlay) { CheckAndDoShortCutKey(); }
         }
 
         /// <summary>

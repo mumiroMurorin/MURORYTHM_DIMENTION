@@ -39,6 +39,24 @@ namespace ChartEditor
 
         #endregion
 
+        #region OnionSkin 頂点レイヤーのオニオンスキン
+
+        /// <summary>
+        /// オニオンスキンで、前後それぞれ何枚の断面まで重ねて表示するか (0 で表示しない)
+        /// </summary>
+        public const int MAX_ONION_SKIN_COUNT = 10;
+        const int DEFAULT_ONION_SKIN_COUNT = 3;
+
+        ReactiveProperty<int> onionSkinCount = new ReactiveProperty<int>(DEFAULT_ONION_SKIN_COUNT);
+        IReadOnlyReactiveProperty<int> IChartEditorOptionGetter.OnionSkinCount => onionSkinCount;
+
+        void IChartEditorOptionSetter.SetOnionSkinCount(int count)
+        {
+            onionSkinCount.Value = Mathf.Clamp(count, 0, MAX_ONION_SKIN_COUNT);
+        }
+
+        #endregion
+
         #region Scale 拡大率
 
         const float MAX_SCALE = 100f;
@@ -341,6 +359,11 @@ namespace ChartEditor
         IReadOnlyReactiveProperty<int> LaneDivisionNum { get; }
 
         /// <summary>
+        /// 頂点レイヤーのオニオンスキンで、編集中の断面の前後それぞれ何枚の断面まで重ねて表示するか (0 で表示しない)
+        /// </summary>
+        IReadOnlyReactiveProperty<int> OnionSkinCount { get; }
+
+        /// <summary>
         /// エディタの拡大倍率、1秒間のUnity長 [z/sec]
         /// </summary>
         IReadOnlyReactiveProperty<float> ChartViewScale { get; }
@@ -389,6 +412,11 @@ namespace ChartEditor
         /// レーン分割数を、指定した値にする (1・2・4・8・16 のどれか)
         /// </summary>
         void SelectLaneDivisionNum(int divisionNum);
+
+        /// <summary>
+        /// オニオンスキンの枚数を変える (0〜MAX_ONION_SKIN_COUNT。範囲の外の値は、端の値になる)
+        /// </summary>
+        void SetOnionSkinCount(int count);
 
         void SetChartViewScale(float scale);
 

@@ -51,6 +51,10 @@ namespace ChartEditor
         SelectWindowSize = 420,
         StartPreview = 430,
         RebuildPreview = 431,
+        /// <summary>選んでいる (頂点を編集している) SpaceHold を、3D編集で開く / 閉じる</summary>
+        ToggleSpaceHold3DView = 432,
+        /// <summary>値 = 頂点レイヤーのオニオンスキンの枚数 (前後それぞれ。0 で表示しない)</summary>
+        SelectOnionSkinCount = 440,
 
         // 再生
         TogglePlay = 500,
@@ -152,6 +156,23 @@ namespace ChartEditor
         public void SetLabel(string text)
         {
             if (label != null && label.text != text) { label.text = text; }
+        }
+
+        /// <summary>
+        /// 操作と値を付け替える (シーンの項目を複製して、実行時に新しい項目を作るとき用。EditorMenuRuntimeRows)
+        /// </summary>
+        public void Configure(EditorMenuCommand command, int value)
+        {
+            this.command = command;
+            this.value = value;
+        }
+
+        /// <summary>
+        /// ショートカットキーの表示を変える (表示の欄が無い項目では、何もしない)
+        /// </summary>
+        public void SetShortcutLabel(string text)
+        {
+            if (shortcutLabel != null && shortcutLabel.text != text) { shortcutLabel.text = text; }
         }
 
         private void OnEnable()
