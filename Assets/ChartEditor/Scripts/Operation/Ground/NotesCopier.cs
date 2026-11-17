@@ -116,7 +116,13 @@ namespace ChartEditor
                 return;
             }
 
-            CopyNotes();
+            if (!CopyNotes()) { return; }
+
+            // ダイナミックノーツと下のノーツは、どちらを選んでいても、両方とも切り取る (コピーと同じ)。
+            // ルールに合わないダイナミックノーツは、コピーしないので、消さずに残す
+            foreach (var partner in DynamicNoteAttachments.WithPartners(notesGetter.SelectingNotes)) { notesSetter.TryAddSelectingNotes(partner); }
+            foreach (var note in notesGetter.SelectingNotes.Where(DynamicNoteAttachments.IsViolation).ToList()) { notesSetter.TryRemoveSelectingNotes(note); }
+
             Destroyer?.DestroySelectedNotes();
             Debug.Log("【Notes】 Cut notes.");
         }
@@ -141,8 +147,11 @@ namespace ChartEditor
             var timeline = SpaceHoldTimeline.Get(chartData);
             if (timeline == null || timeline.LineCount == 0) { return; }
 
-            // 今の再生位置の時刻に、いちばん近い分線
-            float time = dataGetter.ChartSeconds.Value * dataGetter.PlaybackProgress.Value;
+            // 判定の線の下にある時刻に、いちばん近い分線
+            // (判定の線は、オフセットのぶんずれている: CameraController が、判定の線の親 (OffsetAxis) を
+            //  オフセット [ms] / 1000 × 拡大率 だけ、譜面の奥 (時刻が進む向き) へ動かす。なので、判定の線の下は
+            //  再生位置の時刻 + オフセット [秒] のところ)
+            float time = dataGetter.ChartSeconds.Value * dataGetter.PlaybackProgress.Value + dataGetter.Offset.Value / 1000f;
             int best = 0;
             float bestGap = float.MaxValue;
             for (int line = 0; line < timeline.LineCount; line++)
@@ -185,30 +194,47 @@ namespace ChartEditor
         /// 元のノーツを覚えておくだけだと、コピーした後に元のノーツを動かしたり変えたり消したりしたときに、
         /// 貼り付く位置や内容が変わってしまう。
         /// </summary>
-        private void CopyNotes()
+        /// <returns>コピーしたとき true</returns>
+        private bool CopyNotes()
         {
-            if (notesGetter.SelectingNotes == null || notesGetter.SelectingNotes.Count == 0) { return; }
+            if (notesGetter.SelectingNotes == null || notesGetter.SelectingNotes.Count == 0) { return false; }
 
             var chartData = dataGetter.ChartData.Value;
-            if (chartData == null) { return; }
+            if (chartData == null) { return false; }
+
+            // ダイナミックノーツと下のノーツは、どちらを選んでいても、両方ともコピーする (1つのノーツとして扱う)。
+            // ルールに合わないダイナミックノーツ (どのノーツにも載っていないもの) は、コピーしない
+            var notes = DynamicNoteAttachments.WithPartners(notesGetter.SelectingNotes);
+            int looseCount = notes.RemoveAll(DynamicNoteAttachments.IsViolation);
+            DynamicNoteAttachments.LogRefused(looseCount, "ルールに合わないダイナミックノーツは、コピーできません");
+            if (notes.Count == 0)
+            {
+                // (前にコピーしたものを、うっかり貼り付けないように、空にしておく)
+                copiedNotes = null;
+                return false;
+            }
 
             // いちばん手前のノーツ (貼り付けるとき、このノーツがカーソルの指す分線に来る)
-            var firstNote = notesGetter.SelectingNotes.OrderedByAddress().FirstOrDefault();
-            if (firstNote == null) { return; }
+            var firstNote = notes.OrderedByAddress().FirstOrDefault();
+            if (firstNote == null) { return false; }
             var firstAddress = new AddressInChart(firstNote.Address);
 
             copiedNotes = new List<CopiedNoteInfo>();
 
-            foreach (var note in notesGetter.SelectingNotes)
+            foreach (var note in notes)
             {
+                // ダイナミックノーツは、下のノーツが一覧の何番目か (貼り付けた後も、そのノーツの写しに載せる)
+                var host = DynamicNoteAttachments.GetHostOf(note);
                 copiedNotes.Add(new CopiedNoteInfo(
                     CopyNoteData(note),
                     // いちばん手前のノーツから、何分線後ろにあるか
                     chartData.GetSubdivisionDelta(new AddressInChart(note.Address), firstAddress),
-                    GetOriginalChainIndex(note)));
+                    GetOriginalChainIndex(note),
+                    host != null ? notes.IndexOf(host) : -1));
             }
 
             Debug.Log("【Notes】 Copied notes.");
+            return true;
         }
 
         private void PasteNotes()
@@ -225,8 +251,17 @@ namespace ChartEditor
 
             // 貼り付けるノーツ。写しから、貼り付けのたびに新しく作る (同じ写しを何度でも貼り付けられるように)
             var pasteNotes = copiedNotes
-                .Select(copied => new CopiedNoteInfo(CopyNoteData(copied.NoteData), copied.SubdivisionOffset, copied.OriginalChainIndex))
+                .Select(copied => new CopiedNoteInfo(CopyNoteData(copied.NoteData), copied.SubdivisionOffset, copied.OriginalChainIndex, copied.HostIndex))
                 .ToList();
+
+            // 貼り付けるダイナミックノーツは、一緒に貼り付ける下のノーツの写しに載せる
+            foreach (var pasteNote in pasteNotes)
+            {
+                if (pasteNote.HostIndex >= 0 && pasteNote.HostIndex < pasteNotes.Count)
+                {
+                    DynamicNoteAttachments.Remember(pasteNotes[pasteNote.HostIndex].NoteData, pasteNote.NoteData);
+                }
+            }
 
             var pasteContext = new PasteContext(new AddressInChart(cursorAddress), CreateChainIndexMap(pasteNotes));
 
@@ -372,11 +407,12 @@ namespace ChartEditor
         /// </summary>
         private class CopiedNoteInfo
         {
-            public CopiedNoteInfo(IDeployableNoteData noteData, int subdivisionOffset, int originalChainIndex)
+            public CopiedNoteInfo(IDeployableNoteData noteData, int subdivisionOffset, int originalChainIndex, int hostIndex)
             {
                 NoteData = noteData;
                 SubdivisionOffset = subdivisionOffset;
                 OriginalChainIndex = originalChainIndex;
+                HostIndex = hostIndex;
             }
 
             /// <summary>
@@ -393,6 +429,11 @@ namespace ChartEditor
             /// コピーした時点の接続番号 (接続されていなければ -1)。同じ番号だったノーツは、貼り付けた後も互いにつながる
             /// </summary>
             public int OriginalChainIndex { get; }
+
+            /// <summary>
+            /// ダイナミックノーツのとき: 載っているノーツが、コピーしたノーツの一覧の何番目か (それ以外は -1)
+            /// </summary>
+            public int HostIndex { get; }
         }
 
         private readonly struct PasteContext

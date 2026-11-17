@@ -48,6 +48,19 @@ namespace ChartEditor
         protected abstract EditMode IdleMode { get; }
 
         /// <summary>
+        /// 操作待ちのモードか (操作待ちのモードが2つある操作は、上書きする。ドラッグを終えたら、始めたときのモードに戻る)
+        /// </summary>
+        protected virtual bool IsIdleMode(EditMode mode) => mode == IdleMode;
+
+        // ドラッグを終えたときに戻すモード (押したときの、操作待ちのモード)
+        EditMode modeToReturn;
+        // 押したあとで、掴むものを探してよいか (配置ツールで、押した所に頂点を置いたときだけ。置いた頂点は、押したフレームの後に出てくる)
+        // それ以外は、押した時点でカーソルの下にあったものだけを掴む (空いた所からの範囲選択が、途中で頂点に触れても、頂点のドラッグにならないように)
+        bool canFindTargetLater;
+        // ドラッグの途中でツールを替えられたので、ボタンを離すまで何もしない
+        bool isWaitingForRelease;
+
+        /// <summary>
         /// ドラッグ中のエディットモード
         /// </summary>
         protected abstract EditMode DraggingMode { get; }
@@ -80,12 +93,19 @@ namespace ChartEditor
         void Update()
         {
             var currentEditMode = dataGetter.CurrentEditMode.Value;
-            if (currentEditMode != IdleMode && currentEditMode != DraggingMode)
+            if (!IsIdleMode(currentEditMode) && currentEditMode != DraggingMode)
             {
                 // ドラッグの途中で別のモードに切り替えられたら、その場で確定する
                 // (確定しないと、掴んでいた頂点のコライダーが無効のまま残る)
                 if (isDragging) { EndDrag(); }
                 return;
+            }
+            // ドラッグの途中で、操作待ちのモード (編集・配置ツールのキーなど) に替えられたときも、その場で確定して、ボタンを離すまで待つ
+            // (そのままだと、次のフレームでドラッグを始め直して、頂点が押した所へ戻ってしまう)
+            if (isDragging && currentEditMode != DraggingMode)
+            {
+                EndDrag();
+                isWaitingForRelease = true;
             }
 
             // カーソル位置が動いたかの判定
@@ -97,9 +117,22 @@ namespace ChartEditor
             {
                 if (isDragging) { EndDrag(); }
                 Initialize();
+                modeToReturn = IsIdleMode(currentEditMode) ? currentEditMode : IdleMode;
 
                 // 編集ツールで Shift を押しながらのドラッグは範囲選択なので、ボタンを離すまで頂点は掴まない
                 isPressForRangeSelect = RangeSelectGesture.IsForced(dataGetter);
+
+                // 掴むもの: 押した時点でカーソルの下にあるもの。配置ツールで頂点を置ける所を押したときだけ、置いた頂点をあとで探す
+                targetCollider = dataGetter.GetInteractableCollider<IPointMovableCollider>();
+                canFindTargetLater = targetCollider == null && currentEditMode == EditMode.VertexPlace &&
+                                     !ModifierKey.Shift && !ModifierKey.Ctrl &&
+                                     dataGetter.GetInteractableCollider<IPointDeployableCollider>() != null;
+            }
+
+            if (isWaitingForRelease)
+            {
+                if (!Input.GetMouseButton(0)) { isWaitingForRelease = false; }
+                return;
             }
 
             if (isPressForRangeSelect)
@@ -114,7 +147,7 @@ namespace ChartEditor
                 // 初動、誤動作防止のためある程度カーソルが動くまで待つ
                 if (magnitudeSum < firstMovingThreshold)
                 {
-                    if (targetCollider == null) { targetCollider = dataGetter.GetInteractableCollider<IPointMovableCollider>(); }
+                    if (targetCollider == null && canFindTargetLater) { targetCollider = dataGetter.GetInteractableCollider<IPointMovableCollider>(); }
                     magnitudeSum += delta.magnitude;
                     return;
                 }
@@ -134,7 +167,7 @@ namespace ChartEditor
             else if (Input.GetMouseButtonUp(0) && currentEditMode == DraggingMode)
             {
                 EndDrag();
-                dataSetter.SetEditMode(IdleMode);
+                dataSetter.SetEditMode(IsIdleMode(modeToReturn) ? modeToReturn : IdleMode);
             }
         }
 
@@ -143,6 +176,8 @@ namespace ChartEditor
             targets.Clear();
             magnitudeSum = 0;
             targetCollider = null;
+            canFindTargetLater = false;
+            isWaitingForRelease = false;
             isDragging = false;
             isDraggingCenterHandle = false;
         }

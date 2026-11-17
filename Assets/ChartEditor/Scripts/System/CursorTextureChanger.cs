@@ -75,7 +75,7 @@ namespace ChartEditor
                     // プレビューがカーソルを指定している間は、そちらを優先する
                     if (previewCursorMode != EditMode.None) { return; }
                     if (currentEditMode.IsInEditModeList(ignoreEditModes)) { return; }
-                    if (currentEditMode == EditMode.VertexEdit) { return; }
+                    if (IsVertexTool(currentEditMode)) { return; }
 
                     SetCursorTexture(value);
                 })
@@ -85,7 +85,7 @@ namespace ChartEditor
             dataGetter_model?.InteractableColliders.ObserveReset()
                 .Subscribe(_ => {
                     if (previewCursorMode != EditMode.None) { return; }
-                    if (currentEditMode == EditMode.VertexEdit) { return; }
+                    if (IsVertexTool(currentEditMode)) { return; }
                     SetCursorTexture(currentEditMode, true);
                 }).AddTo(this.gameObject);
 
@@ -123,15 +123,15 @@ namespace ChartEditor
             // (ボタンなどの画面部品の上にいるときと、カーソルを切り替えないモードのときは、標準のカーソルにする)
             bool isOnUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
             // (頂点の編集ツールは、いったん標準のカーソルにして、次の Update で決め直す)
-            bool isStandard = isOnUI || currentEditMode.IsInEditModeList(ignoreEditModes) || currentEditMode == EditMode.VertexEdit;
+            bool isStandard = isOnUI || currentEditMode.IsInEditModeList(ignoreEditModes) || IsVertexTool(currentEditMode);
             SetCursorTexture(currentEditMode, isStandard);
             vertexEditCursor = VertexEditCursor.Unknown;
         }
 
         private void Update()
         {
-            // 頂点の編集ツール: カーソルの下にあるものに合わせて、カーソルの絵を変える
-            if (currentEditMode != EditMode.VertexEdit) { return; }
+            // 頂点の編集ツール・配置ツール: カーソルの下にあるものに合わせて、カーソルの絵を変える
+            if (!IsVertexTool(currentEditMode)) { return; }
             if (previewCursorMode != EditMode.None) { return; }
 
             VertexEditCursor cursor = GetVertexEditCursor();
@@ -144,7 +144,7 @@ namespace ChartEditor
                 case VertexEditCursor.Move:
                     SetCursorTexture(EditMode.VertexMoving);
                     break;
-                // 頂点を置ける所: 置く
+                // 頂点を置ける所: 置く (絵は、一覧の VertexEdit の絵)
                 case VertexEditCursor.Place:
                     SetCursorTexture(EditMode.VertexEdit);
                     break;
@@ -154,8 +154,11 @@ namespace ChartEditor
             }
         }
 
+        // 頂点の編集ツール・配置ツール (同じモードのまま、カーソルの下にあるもので絵が変わる)
+        private static bool IsVertexTool(EditMode mode) => mode == EditMode.VertexEdit || mode == EditMode.VertexPlace;
+
         /// <summary>
-        /// 頂点の編集ツールで、今出すカーソル (カーソルの下にあるもので決まる)
+        /// 頂点の編集ツール・配置ツールで、今出すカーソル (カーソルの下にあるもので決まる)
         /// </summary>
         private VertexEditCursor GetVertexEditCursor()
         {
@@ -165,8 +168,8 @@ namespace ChartEditor
 
             // 頂点・中心点の上: 掴んで動かせる
             if (dataGetter_model.GetInteractableCollider<IPointMovableCollider>() != null) { return VertexEditCursor.Move; }
-            // 何も無い所で、頂点を置ける所 (Ctrl を押している間は、複数選択の操作なので、置かない)
-            if (!ModifierKey.Ctrl && dataGetter_model.GetInteractableCollider<IPointDeployableCollider>() != null) { return VertexEditCursor.Place; }
+            // 配置ツールで、何も無い所の頂点を置ける所 (Ctrl を押している間は、複数選択の操作なので、置かない。編集ツールは置かない)
+            if (currentEditMode == EditMode.VertexPlace && !ModifierKey.Ctrl && dataGetter_model.GetInteractableCollider<IPointDeployableCollider>() != null) { return VertexEditCursor.Place; }
 
             return VertexEditCursor.Standard;
         }

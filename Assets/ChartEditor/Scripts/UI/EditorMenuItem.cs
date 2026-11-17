@@ -63,12 +63,14 @@ namespace ChartEditor
         StepNoteSpeed = 410,
         /// <summary>値 = スクロール感度を増やす量 (10分の1単位。1 で +0.1)</summary>
         StepScrollSensitivity = 411,
-        /// <summary>値 = バックアップ (自動保存) の間隔を増やす量 (分)</summary>
-        StepBackupInterval = 412,
+        /// <summary>値 = バックアップ (自動保存) の間隔 (分)。0 = なし</summary>
+        SelectBackupInterval = 412,
         /// <summary>値 = プレビューで表示する奥行きを増やす量</summary>
         StepVisibleDistance = 413,
-        /// <summary>値 = グラウンドのカーブ (半径) を増やす量</summary>
+        /// <summary>値 = カーブの半径を増やす量</summary>
         StepCurveRadius = 414,
+        /// <summary>値 = SpaceHold の3D編集の選択モード「Nつおき」の N (1〜4。録音 20261117_205010)</summary>
+        SelectAlternateInterval = 415,
         /// <summary>値 = ウィンドウサイズ (Resolution の番号)</summary>
         SelectWindowSize = 420,
         StartPreview = 430,
@@ -189,23 +191,6 @@ namespace ChartEditor
         public void SetLabel(string text)
         {
             if (label != null && label.text != text) { label.text = text; }
-        }
-
-        /// <summary>
-        /// 操作と値を付け替える (シーンの項目を複製して、実行時に新しい項目を作るとき用。EditorMenuRuntimeRows)
-        /// </summary>
-        public void Configure(EditorMenuCommand command, int value)
-        {
-            this.command = command;
-            this.value = value;
-        }
-
-        /// <summary>
-        /// ショートカットキーの表示を変える (表示の欄が無い項目では、何もしない)
-        /// </summary>
-        public void SetShortcutLabel(string text)
-        {
-            if (shortcutLabel != null && shortcutLabel.text != text) { shortcutLabel.text = text; }
         }
 
         private void OnEnable()

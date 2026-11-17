@@ -63,7 +63,15 @@ namespace ChartEditor
             if (!isVisible) { return; }
 
             // 全画面プレビューでは、画面の左端に寄せる (頂点の道具の列が出ている間は、その右)
-            view.SetAtLeftEdge(layer == EditNoteType.Preview, PreviewVertexTools.IsListShown ? PreviewVertexTools.LIST_RIGHT_EDGE : 0f);
+            // 置けるノーツの一覧を隠しているとき (接続・タイプ変更の道具など) は、その一覧の場所へ寄せる (録音 20261118_010533)
+            if (layer != EditNoteType.Preview && NotesViewportView.TryGetHiddenLeft(out float paletteLeft))
+            {
+                view.SetAtLeftEdge(true, paletteLeft - ChartInfoView.LEFT_EDGE_X);
+            }
+            else
+            {
+                view.SetAtLeftEdge(layer == EditNoteType.Preview, PreviewVertexTools.IsListShown ? PreviewVertexTools.LIST_RIGHT_EDGE : 0f);
+            }
 
             // 欄が開かれたときは、閉じている間に数えていなかった分を、すぐ数える
             bool isDetailShown = view.IsDetailShown;

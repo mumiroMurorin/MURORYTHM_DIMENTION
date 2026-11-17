@@ -31,7 +31,7 @@
         QuickMusicVolume = 112,
         /// <summary>全画面プレビューで表示する奥行き (録音 20261117_051155)</summary>
         QuickVisibleDistance = 113,
-        /// <summary>グラウンドのカーブ (半径)</summary>
+        /// <summary>カーブの半径 (グラウンドとノーツの並ぶ曲線。大きいほど、ゆるやか)</summary>
         QuickCurveRadius = 114,
     }
 

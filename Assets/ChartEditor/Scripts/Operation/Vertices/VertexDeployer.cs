@@ -55,9 +55,9 @@ namespace ChartEditor
 
         void Update()
         {
-            // 頂点の編集ツールの、操作待ちのときだけ
+            // 頂点の配置ツールの、操作待ちのときだけ (編集ツールでは置かない。録音 20261118_030551)
             var currentEditMode = dataGetter.CurrentEditMode.Value;
-            if (currentEditMode != EditMode.VertexEdit) { return; }
+            if (currentEditMode != EditMode.VertexPlace) { return; }
 
             // 頂点オブジェクトの配置
             if (Input.GetMouseButtonDown(0)) 

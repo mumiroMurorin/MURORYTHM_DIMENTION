@@ -34,6 +34,8 @@ namespace ChartEditor
             if (dataGetter.IsLoadingChart.Value) { return; }
 
             if(dataGetter.EditNoteType.Value != EditNoteType.Vertices) { return; }
+            // 入力欄に打っている間と、SpaceHold の3D編集・ショートカット一覧を開いている間は、裏の頂点をコピー・貼り付けしない
+            if (InputFieldFocus.IsTyping || EditorMenuBar.IsBlockingChartKeys) { return; }
 
             // 頂点リストのコピー
             if(ModifierKey.Ctrl && Input.GetKeyDown(KeyCode.C)) { CopyVertices(); }

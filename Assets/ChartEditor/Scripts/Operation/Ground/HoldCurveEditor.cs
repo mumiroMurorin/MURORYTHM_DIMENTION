@@ -31,7 +31,7 @@ namespace ChartEditor
     ///   (元に戻す・やり直すで節が動いたときも同じ)。
     ///   手で動かした中継点がある区間は、置き直さない (手で直した形を、勝手に上書きしないため)
     ///
-    /// ・印を右クリック・ダブルクリック: 位置を数値で決める窓 (HoldCurveControlPanelView。横 = まっすぐな線からのずれ (レーンの数)、
+    /// ・印を右クリック: 位置を数値で決める窓 (録音 20261117_185126: ダブルクリックでは出さない) (HoldCurveControlPanelView。横 = まっすぐな線からのずれ (レーンの数)、
     ///   時間 = 0 が前の節、1 が次の節。窓の「まっすぐに戻す」で、まっすぐに戻す。録音 20261117_005036: メニューは挟まない)
     /// ・ロックしたメッシュ中継点は、節として扱う (その中継点と隣の節の間を、曲げられる。置き直しで消されることもない)
     ///
@@ -82,13 +82,6 @@ namespace ChartEditor
         Vector2 lastPanelPosition;
         // 窓の数値を反映している最中か (そのときは、選択を変えない)
         bool isApplyingFromPanel;
-        // 印のダブルクリック
-        const float DOUBLE_CLICK_SECONDS = 0.35f;
-        const float DOUBLE_CLICK_PIXELS = 12f;
-        float lastMarkerClickTime = -10f;
-        Vector2 lastMarkerClickPosition;
-        NoteData_Hold lastMarkerClickStart;
-        NoteData_Hold lastMarkerClickEnd;
 
         /// <summary>
         /// 表示している制御点1つぶん
@@ -226,7 +219,7 @@ namespace ChartEditor
 
             HandleControlPanelInput();
 
-            // 印の右クリック: ダブルクリックと同じ、位置を数値で決める窓
+            // 印の右クリック: 位置を数値で決める窓 (まっすぐに戻すのも、この窓のボタンで)
             if (Input.GetMouseButtonDown(1) && IsPointerOnMarker() && CanStartDrag())
             {
                 Marker pressed = isHoveredToNext ? markerToNext : markerToBack;
@@ -236,23 +229,6 @@ namespace ChartEditor
 
             if (Input.GetMouseButtonDown(0) && IsPointerOnMarker() && CanStartDrag())
             {
-                // 印のダブルクリック: 位置を数値で決める窓を出す
-                Marker clicked = isHoveredToNext ? markerToNext : markerToBack;
-                bool isDoubleClick = clicked.Start != null &&
-                                     ReferenceEquals(clicked.Start, lastMarkerClickStart) && ReferenceEquals(clicked.End, lastMarkerClickEnd) &&
-                                     Time.unscaledTime - lastMarkerClickTime <= DOUBLE_CLICK_SECONDS &&
-                                     ((Vector2)Input.mousePosition - lastMarkerClickPosition).magnitude <= DOUBLE_CLICK_PIXELS;
-                if (isDoubleClick)
-                {
-                    lastMarkerClickStart = null;
-                    OpenControlPanel(clicked.Start, clicked.End);
-                    return;
-                }
-
-                lastMarkerClickStart = clicked.Start;
-                lastMarkerClickEnd = clicked.End;
-                lastMarkerClickTime = Time.unscaledTime;
-                lastMarkerClickPosition = Input.mousePosition;
                 BeginDrag(isHoveredToNext);
             }
         }
@@ -1271,18 +1247,22 @@ namespace ChartEditor
         private bool IsUntouched(CurvedSpan span, IReadOnlyReactiveCollection<IChainNoteData> list, int startIndex, int endIndex)
         {
             // 2つの節の間に、この区間の中継点ではないノーツがある (手で足した中継点、別の分線へ動かした中継点)
+            // (この区間が置いた中継点でも、メッシュ中継点ではなくなっていれば (タイプを変えた)、手で直してある)
             for (int i = startIndex + 1; i < endIndex; i++)
             {
                 var note = list[i] as NoteData_Hold;
-                if (note == null) { return false; }
+                if (!IsMeshRelay(note)) { return false; }
                 if (!span.Relays.TryGetValue(LineKey(note), out var known) || !ReferenceEquals(known, note)) { return false; }
             }
 
             // 譜面に入っている、この区間の中継点が、求めた中継点と同じ数で、同じ場所にある
+            // (この区間が置いた中継点のうち、タイプを変えたものが譜面に残っていれば、手で直してある)
             int inChart = 0;
             foreach (var pair in span.Relays)
             {
-                if (chainSet.Contains(pair.Value)) { inChart++; }
+                if (!chainSet.Contains(pair.Value)) { continue; }
+                if (!IsMeshRelay(pair.Value)) { return false; }
+                inChart++;
             }
             if (inChart != neededLines.Count) { return false; }
 
@@ -1302,14 +1282,15 @@ namespace ChartEditor
             relayBuffer.Clear();
             for (int i = startIndex + 1; i < endIndex; i++)
             {
-                if (list[i] is NoteData_Hold relay) { relayBuffer.Add(relay); }
+                if (list[i] is NoteData_Hold relay && IsMeshRelay(relay)) { relayBuffer.Add(relay); }
             }
 
             // 別の分線の中継点として覚えていたもの (ホールド全体を、時間方向に動かした後) は、覚え直す
+            // メッシュ中継点ではなくなったもの (タイプを変えた) は、もうこの区間の中継点として扱わない (忘れる)
             keyBuffer.Clear();
             foreach (var pair in span.Relays)
             {
-                if (pair.Key != LineKey(pair.Value) && relayBuffer.Contains(pair.Value)) { keyBuffer.Add(pair.Key); }
+                if (!IsMeshRelay(pair.Value) || (pair.Key != LineKey(pair.Value) && relayBuffer.Contains(pair.Value))) { keyBuffer.Add(pair.Key); }
             }
             foreach (long key in keyBuffer) { span.Relays.Remove(key); }
 
@@ -1369,11 +1350,12 @@ namespace ChartEditor
             }
 
             // 外す (外すと、覚えている中継点の一覧を調べている途中で、つながりが変わるので、先に集める)
-            // (ロックした中継点は、外さない・動かさない)
+            // (ロックした中継点は、外さない・動かさない。メッシュ中継点ではなくなったもの (タイプを変えた。ダイナミックノーツが
+            //  乗っていることもある) も、手で直したノーツなので、外さない・動かさない)
             relayBuffer.Clear();
             foreach (var pair in span.Relays)
             {
-                if (!neededKeys.Contains(pair.Key) && chainSet.Contains(pair.Value) && !NoteLock.IsLocked(pair.Value)) { relayBuffer.Add(pair.Value); }
+                if (!neededKeys.Contains(pair.Key) && chainSet.Contains(pair.Value) && IsMeshRelay(pair.Value) && !NoteLock.IsLocked(pair.Value)) { relayBuffer.Add(pair.Value); }
             }
             foreach (var relay in relayBuffer) { chartData.RemoveNote(relay, false); }
 
@@ -1384,6 +1366,10 @@ namespace ChartEditor
                 long key = LineKey(line.BarIndex, line.SubDivisionIndex);
 
                 span.Relays.TryGetValue(key, out NoteData_Hold relay);
+
+                // 覚えていた中継点が、メッシュ中継点ではなくなっている (タイプを変えた): それには触らず、新しく作る
+                if (relay != null && !IsMeshRelay(relay)) { relay = null; }
+
                 bool isInChart = relay != null && chainSet.Contains(relay);
 
                 // 覚えていた中継点が、別の分線へ動かされている: それには触らず、新しく作る
@@ -1440,16 +1426,25 @@ namespace ChartEditor
             }
 
             // (この区間が置いた中継点は、元に戻す・やり直すときは、後からロックされていても外す。残すと、元の中継点と重なる)
+            // (ただし、メッシュ中継点ではなくなったもの (タイプを変えた) は、手で直したノーツなので、外さない)
             foreach (var pair in span.Relays)
             {
-                if (!chainSet.Contains(pair.Value) || relayBuffer.Contains(pair.Value)) { continue; }
+                if (!chainSet.Contains(pair.Value) || relayBuffer.Contains(pair.Value) || !IsMeshRelay(pair.Value)) { continue; }
                 if (NoteLock.IsLocked(pair.Value) && !includesLockedPlaced) { continue; }
                 relayBuffer.Add(pair.Value);
             }
         }
 
         /// <summary>
-        /// 区間の中継点を、すべて譜面から外す
+        /// メッシュ中継点か (この区間が置いた中継点でも、タイプを変えたものは、もう曲線から求めた中継点として扱わない)
+        /// </summary>
+        private static bool IsMeshRelay(NoteData_Hold note)
+        {
+            return note != null && note.NoteType == DeploymentNoteType.HoldMeshRelay;
+        }
+
+        /// <summary>
+        /// 区間の中継点 (メッシュ中継点のまま残っているもの) を、すべて譜面から外す
         /// </summary>
         private void ClearRelays(ChartData chartData, CurvedSpan span)
         {

@@ -1,19 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UniRx;
 using VContainer;
+using Deform;
 
 namespace ChartEditor
 {
+    /// <summary>
+    /// 全画面プレビューの舞台 (ゲーム本編の Stage) のグラウンドの設定
+    /// (エディタの舞台からは、ゲーム本編の GroundOptionSetter を外してある。代わりにここが、エディタの設定から決める)
+    /// </summary>
     public class GroundPreviewOptionSetter : MonoBehaviour
     {
         [SerializeField] GameObject[] divisionLines;
+        [Tooltip("グラウンドを曲げる部品 (ゲーム本編の GroundOptionSetter と同じもの)")]
+        [SerializeField] BendDeformer bendDeformer;
+        [Tooltip("グラウンドのメッシュの親 (奥行きの表示範囲で切るもの)")]
+        [SerializeField] Transform groundObjectRoot;
+        [SerializeField, Min(0f)] float visibleDistancePadding;
 
         IChartEditorOptionGetter optionGetter;
         INoteSpawnDataOptionGetter spawnOptionGetter;
-        // 全画面プレビューの舞台 (ゲーム本編のもの) のグラウンド。ゲーム本編の設定は届かないので、ここから渡す
-        GroundOptionSetter stageGround;
+        // カーブと奥行きの表示範囲 (ゲーム本編と同じ処理)
+        GroundShaper shaper;
 
         [Inject]
         public void Construct(IChartEditorOptionGetter optionGetter, INoteSpawnDataOptionGetter spawnOptionGetter)
@@ -24,49 +32,38 @@ namespace ChartEditor
 
         private void Start()
         {
+            shaper = new GroundShaper(bendDeformer, groundObjectRoot, visibleDistancePadding);
+            shaper.InitializeVisibility();
+            if (bendDeformer == null || groundObjectRoot == null)
+            {
+                Debug.LogWarning("【プレビュー】グラウンドの部品がつながっていないので、カーブと奥行きの表示範囲をグラウンドに反映できません");
+            }
             Bind();
         }
 
         private void Bind()
         {
             optionGetter?.LaneDivisionNum
-                .Subscribe(SetDivisionLines)
+                .Subscribe(divNum => GroundShaper.SetDivisionLines(divisionLines, divNum))
                 .AddTo(this.gameObject);
 
-            // 奥行きの表示範囲と、グラウンドのカーブ (録音 20261117_051155: ゲーム本編と同じ設定を、プレビューでも)
-            stageGround = FindObjectOfType<GroundOptionSetter>(true);
+            // 奥行きの表示範囲と、カーブの半径 (録音 20261117_051155 / 162506: ゲーム本編と同じように、グラウンドも)
             var noteVisibility = FindObjectOfType<PreviewNoteVisibilityController>(true);
             optionGetter?.NoteVisibleDistance
                 .Subscribe(distance =>
                 {
-                    if (stageGround != null) { stageGround.ApplyVisibleDistance(distance); }
+                    shaper.SetVisibleDistance(distance);
                     if (noteVisibility != null) { noteVisibility.SetVisibleAheadDistance(distance); }
                 })
                 .AddTo(this.gameObject);
             spawnOptionGetter?.NoteCurveRadius
-                .Subscribe(radius => { if (stageGround != null) { stageGround.ApplyCurveRadius(radius); } })
+                .Subscribe(shaper.SetCurveRadius)
                 .AddTo(this.gameObject);
         }
 
-        private void SetDivisionLines(int divNum)
+        private void OnDestroy()
         {
-            if (divisionLines.Length != 17) { return; }
-
-            for (int i = 0; i < divisionLines.Length; i++)
-            {
-                if (i == 0 || i == 16)
-                {
-                    divisionLines[i].SetActive(true);
-                }
-                else if (i % (16 / divNum) == 0)
-                {
-                    divisionLines[i].SetActive(true);
-                }
-                else
-                {
-                    divisionLines[i].SetActive(false);
-                }
-            }
+            shaper?.Dispose();
         }
     }
 

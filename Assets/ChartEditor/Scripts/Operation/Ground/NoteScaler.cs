@@ -72,7 +72,8 @@ namespace ChartEditor
             var baseNoteData = baseNote.Note.NoteData;
 
             // 複数選択されたオブジェクトから拡大縮小できるやつを取り出す (ロックしたノーツは飛ばす)
-            foreach (var data in notesGetter.SelectingNotes)
+            // (ダイナミックノーツと下のノーツは、どちらの幅を変えても一緒に変える)
+            foreach (var data in DynamicNoteAttachments.WithPartners(notesGetter.SelectingNotes))
             {
                 if (NoteLock.IsLocked(data)) { continue; }
                 // 譜面の読み込み直後など、対応するオブジェクトが無いノートは飛ばす

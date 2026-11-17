@@ -32,8 +32,6 @@ namespace ChartEditor
 
         // つまみを出すノーツの数の上限 (ホールドをまるごと選んだときに、画面がつまみで埋まらないように)
         const int MAX_NOTE_COUNT = 16;
-        // ほかの画面部品よりも手前に出す (読み込み中の覆いよりは奥)
-        const int SORTING_ORDER = 20000;
         // つまみの大きさと、押したとみなす距離 (画面の高さ 1080 のときのピクセル数)
         const float HANDLE_SIZE = 13f;
         const float HANDLE_SIZE_MINI = 8f;
@@ -417,7 +415,7 @@ namespace ChartEditor
                 return;
             }
 
-            EnsureCanvas();
+            if (!EnsureCanvas()) { return; }
             if (!canvasObject.activeSelf) { canvasObject.SetActive(true); }
 
             float scale = Screen.height / REFERENCE_SCREEN_HEIGHT;
@@ -573,17 +571,16 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// つまみを描くための、画面に重ねる土台を作る (最初の1回だけ)
+        /// つまみを置く、画面に重ねる土台 (シーンに置いてある EditorOverlays の PreviewVertexHandlesCanvas。
+        /// クリックを受け取らないので、つまみは下にあるボタンなどへのクリックを遮らない)
         /// </summary>
-        private void EnsureCanvas()
+        private bool EnsureCanvas()
         {
-            if (canvasObject != null) { return; }
+            if (canvasObject != null) { return true; }
 
-            canvasObject = new GameObject("PreviewVertexHandles");
-            var canvas = canvasObject.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = SORTING_ORDER;
-            // クリックを受け取る部品(GraphicRaycaster)は付けない。つまみは、下にあるボタンなどへのクリックを遮らない
+            var overlays = EditorOverlays.Instance;
+            canvasObject = overlays != null && overlays.VertexHandleCanvas != null ? overlays.VertexHandleCanvas.gameObject : null;
+            return canvasObject != null;
         }
 
         private Image CreateHandleImage()
@@ -607,7 +604,10 @@ namespace ChartEditor
         /// </summary>
         public void Dispose()
         {
-            if (canvasObject != null) { Object.Destroy(canvasObject); }
+            // 土台はシーンのものなので隠すだけ。つまみ・番号は、ここで作ったものなので消す
+            foreach (var image in handleImages) { if (image != null) { Object.Destroy(image.gameObject); } }
+            foreach (var label in indexLabels) { if (label != null && label.Root != null) { Object.Destroy(label.Root.gameObject); } }
+            if (canvasObject != null) { canvasObject.SetActive(false); }
 
             canvasObject = null;
             handleImages.Clear();

@@ -91,7 +91,24 @@ namespace ChartEditor
 
             // 前後のつながりから決まる役割(始点・中継点・終点)に合わない種類のときは、
             // その役割で最後に使っていた種類にする (一度も使っていなければ、標準の種類)
-            NoteType = typeMemory.Resolve(hasBackNote, hasNextNote, NoteType);
+            var resolved = typeMemory.Resolve(hasBackNote, hasNextNote, NoteType);
+            bool isForced = false;
+            // ダイナミックノーツが載っているノーツは、HoldMeshRelay にしない (中継点の役割なら、HoldRelay にする)
+            if (resolved == DeploymentNoteType.HoldMeshRelay && DynamicNoteAttachments.GetDynamicOn(this) != null)
+            {
+                resolved = DeploymentNoteType.HoldRelay;
+                isForced = true;
+            }
+            // 載っているノーツが終点になるときは、判定なしの終点にする (録音 20261118_010356)
+            if (resolved == DeploymentNoteType.HoldEnd && DynamicNoteAttachments.GetDynamicOn(this) != null)
+            {
+                resolved = DeploymentNoteType.HoldEndUnjudge;
+                isForced = true;
+            }
+            // ダイナミックノーツのために変えた種類は、そのノーツが選んだ種類としては覚えない
+            // (元に戻すなどでダイナミックノーツが外れたあと、また終点になったときに、判定なしのままにならないように)
+            if (isForced) { noteType.Value = resolved; }
+            else { NoteType = resolved; }
         }
         private bool IsHoldNoteType(DeploymentNoteType noteType)
         {

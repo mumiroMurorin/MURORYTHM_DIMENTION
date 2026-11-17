@@ -29,11 +29,11 @@ namespace ChartEditor
             dataGetter.GetInteractableCollider<ISelectableVertexCollider>() != null ||
             dataGetter.GetInteractableCollider<IPointMovableCollider>() != null;
 
-        // 編集ツールでは、頂点を置ける所を押すと頂点が置かれるので、そこからのドラッグでは範囲選択を始めない
+        // 配置ツールでは、頂点を置ける所を押すと頂点が置かれるので、そこからのドラッグでは範囲選択を始めない
         // (Shift を押しながらのドラッグで始める。頂点を置けない所 (円の外) からのドラッグと、
-        //  回転・拡大縮小のツールでは、今までどおり Shift 無しで始まる)
+        //  編集・回転・拡大縮小のツールでは、Shift 無しで始まる)
         protected override bool StartsOnPlainPress =>
-            dataGetter.CurrentEditMode.Value != EditMode.VertexEdit ||
+            dataGetter.CurrentEditMode.Value != EditMode.VertexPlace ||
             dataGetter.GetInteractableCollider<IPointDeployableCollider>() == null;
 
         protected override void SelectObjectUnderCursor()

@@ -55,6 +55,8 @@ namespace ChartEditor
 
             // ノーツのロック (右クリックのメニューから。ロックしたノーツは、選べない・動かせない)
             builder.RegisterEntryPoint<NoteLock>();
+            // ダイナミックノーツを、地上のノーツに載せる (載っているノーツと一緒に動かす。ルールに合わないものに赤い縁取り)
+            builder.RegisterEntryPoint<DynamicNoteAttachments>();
 
             // 編集画面で、ノーツを右クリックしたときのメニュー (画面部品は、シーンに置いてある EditorContextMenuView)
             builder.RegisterEntryPoint<NoteContextMenu>();

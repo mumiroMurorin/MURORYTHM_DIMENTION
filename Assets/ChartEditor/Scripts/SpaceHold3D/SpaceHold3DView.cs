@@ -14,7 +14,8 @@ namespace ChartEditor
     ///   専用のカメラで映し、その絵を、画面いっぱいの画面部品 (RawImage) に貼る (編集画面の部品の上に重ねるため)
     /// ・つまみ (頂点・中心・矢印・制御点の印) は、3Dの中ではなく、画面に重ねた板として描く (遠くても同じ大きさで見えるように)
     /// ・線・つまみ・文字は、フレームごとに BeginFrame → 使う分だけ取り出す → EndFrame (余りを隠す)
-    /// 画面部品は、シーンには置かず、ここでコードで作る (EditorRuntimeUi)。
+    /// 画面部品 (キャンバス・下地・3Dの絵・文字・視点のウィンドウ) は、シーンに置いてある (SpaceHold3DViewUi)。
+    /// つまみと文字は、数が決まっていないので、シーンのひな形を複製して作る。3Dのもの (カメラ・面・線) は、ここで作る。
     /// </summary>
     public class SpaceHold3DView : IDisposable
     {
@@ -22,11 +23,8 @@ namespace ChartEditor
         public static readonly Vector3 ROOT_POSITION = new Vector3(0f, -20000f, 0f);
         /// <summary>3Dのもののレイヤー (TagManager の 20番。名前が無くても使える)</summary>
         const int VIEW_LAYER = 20;
-        // 画面部品の重なり順 (EditorCanvas 0、フィルムストリップ 1 より手前、メニューバー 10 より奥)
-        const int SORTING_ORDER = 5;
-        // メニューバーの高さ (メニューバーは、いつも見えるようにしておく)
-        const float MENU_BAR_HEIGHT = 34f;
 
+        // カメラの背景の色 (シーンの下地 (Root) と同じ色)
         static readonly Color backgroundColor = new Color(0.075f, 0.08f, 0.095f, 1f);
 
         public Transform Root { get; private set; }
@@ -37,9 +35,10 @@ namespace ChartEditor
         public TextMeshProUGUI InfoLabel { get; private set; }
         public TextMeshProUGUI StatusLabel { get; private set; }
 
+        /// <summary>シーンに置いてある画面部品 (視点のウィンドウのボタンなど)</summary>
+        public SpaceHold3DViewUi Ui { get; private set; }
+
         RawImage viewportImage;
-        // 画面部品の入れ物 (下地。欄やつまみは、この中に置く)
-        RectTransform uiRoot;
         RectTransform handleLayer;
         RenderTexture renderTexture;
 
@@ -70,8 +69,17 @@ namespace ChartEditor
 
         #region 作る・消す
 
+        /// <summary>
+        /// シーンの画面部品を探して、3Dのもの (カメラ・面) を作る。画面部品が見つからないときは、例外を投げる
+        /// </summary>
         public void Build()
         {
+            var ui = UnityEngine.Object.FindObjectOfType<SpaceHold3DViewUi>(true);
+            if (ui == null || ui.Canvas == null || ui.ViewportImage == null || ui.HandleLayer == null || ui.HandleTemplate == null || ui.LabelTemplate == null)
+            {
+                throw new InvalidOperationException("シーンに SpaceHold3DViewUi (3D編集の画面部品) がありません");
+            }
+
             // 3Dのもの
             var rootObject = new GameObject("SpaceHold3DViewRoot");
             rootObject.layer = VIEW_LAYER;
@@ -96,43 +104,16 @@ namespace ChartEditor
             Camera.allowMSAA = true;
             Camera.enabled = false;
 
-            // 画面部品
-            Canvas = EditorRuntimeUi.CreateOverlayCanvas("SpaceHold3DCanvas", SORTING_ORDER);
-
-            // 下地 (不透明)。3Dの絵には、半透明の面や線のところに透けた部分ができるので、
-            // 下地を敷いておかないと、裏の編集画面 (頂点レイヤーなど) が透けて見える
-            var root = EditorRuntimeUi.CreateImage("Root", Canvas.transform, backgroundColor, true).rectTransform;
-            EditorRuntimeUi.Stretch(root, 0f, 0f, 0f, MENU_BAR_HEIGHT);
-            uiRoot = root;
-
-            // メニューバーの右の、メニューバーと同じ高さの所も、下地でふさぐ (メニューバーは手前に出る。裏の編集画面が見えないように)
-            var topStrip = EditorRuntimeUi.CreateImage("TopStrip", Canvas.transform, backgroundColor, true).rectTransform;
-            topStrip.anchorMin = new Vector2(0f, 1f);
-            topStrip.anchorMax = new Vector2(1f, 1f);
-            topStrip.pivot = new Vector2(0.5f, 1f);
-            topStrip.anchoredPosition = Vector2.zero;
-            topStrip.sizeDelta = new Vector2(0f, MENU_BAR_HEIGHT);
-
-            var viewportRect = EditorRuntimeUi.CreateRect("Viewport", root);
-            EditorRuntimeUi.Stretch(viewportRect);
-            viewportImage = viewportRect.gameObject.AddComponent<RawImage>();
-            viewportImage.color = Color.white;
-            viewportImage.raycastTarget = true;
-            Viewport = viewportRect;
-
-            handleLayer = EditorRuntimeUi.CreateRect("Handles", root);
-            EditorRuntimeUi.Stretch(handleLayer, 0f, 0f, 0f, 0f);
-
-            // 文字 (下のまんなか: 選んでいる節と、その上に、最後の操作)
-            // (左下にはクイックメニュー、右には操作説明の欄が、手前に出る)
-            InfoLabel = EditorRuntimeUi.CreateLabel("Info", root, string.Empty, 15f, TextAlignmentOptions.Bottom);
-            EditorRuntimeUi.Place(InfoLabel.rectTransform, new Vector2(0.5f, 0f), new Vector2(0f, 12f), new Vector2(1000f, 24f));
-
-            StatusLabel = EditorRuntimeUi.CreateLabel("Status", root, string.Empty, 14f, TextAlignmentOptions.Bottom, new Color(1f, 0.85f, 0.4f, 1f));
-            EditorRuntimeUi.Place(StatusLabel.rectTransform, new Vector2(0.5f, 0f), new Vector2(0f, 38f), new Vector2(1000f, 22f));
-
-            var banner = EditorRuntimeUi.CreateLabel("Banner", root, "SpaceHold を1本だけ編集中 (ほかのノーツは灰色)", 14f, TextAlignmentOptions.Center, new Color(1f, 1f, 1f, 0.75f));
-            EditorRuntimeUi.Place(banner.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -8f), new Vector2(900f, 22f));
+            // 画面部品 (シーンに置いてある)
+            // (下地 (Root) は不透明。3Dの絵には、半透明の面や線のところに透けた部分ができるので、
+            //  下地が無いと、裏の編集画面 (頂点レイヤーなど) が透けて見える)
+            Ui = ui;
+            Canvas = ui.Canvas;
+            viewportImage = ui.ViewportImage;
+            Viewport = viewportImage.rectTransform;
+            handleLayer = ui.HandleLayer;
+            InfoLabel = ui.InfoLabel;
+            StatusLabel = ui.StatusLabel;
 
             SetVisible(false);
         }
@@ -160,7 +141,14 @@ namespace ChartEditor
         {
             if (Root != null) { UnityEngine.Object.Destroy(Root.gameObject); }
             if (Camera != null) { UnityEngine.Object.Destroy(Camera.gameObject); }
-            if (Canvas != null) { UnityEngine.Object.Destroy(Canvas.gameObject); }
+            // (画面部品はシーンのものなので、消さずに隠す。複製したつまみと文字は、消す)
+            if (Canvas != null) { Canvas.gameObject.SetActive(false); }
+            foreach (var handle in handles) { if (handle != null) { UnityEngine.Object.Destroy(handle.gameObject); } }
+            foreach (var label in labels) { if (label != null) { UnityEngine.Object.Destroy(label.gameObject); } }
+            handles.Clear();
+            labels.Clear();
+            usedHandleCount = 0;
+            usedLabelCount = 0;
             if (renderTexture != null) { renderTexture.Release(); UnityEngine.Object.Destroy(renderTexture); }
             if (tunnelMesh != null) { UnityEngine.Object.Destroy(tunnelMesh); }
             if (contextMesh != null) { UnityEngine.Object.Destroy(contextMesh); }
@@ -171,6 +159,12 @@ namespace ChartEditor
             Root = null;
             Camera = null;
             Canvas = null;
+            Ui = null;
+            Viewport = null;
+            viewportImage = null;
+            handleLayer = null;
+            InfoLabel = null;
+            StatusLabel = null;
             renderTexture = null;
         }
 
@@ -182,126 +176,6 @@ namespace ChartEditor
 
             // 出したフレームのうちに、画面部品の大きさを決めておく (映す範囲の大きさを、すぐに使うため)
             if (isVisible) { UnityEngine.Canvas.ForceUpdateCanvases(); }
-        }
-
-        #endregion
-
-        #region 欄 (視点の欄・節の欄)
-
-        const float PANEL_PADDING = 8f;
-        const float PANEL_SPACING = 5f;
-        public const float BUTTON_HEIGHT = 28f;
-
-        /// <summary>
-        /// 縦に部品を並べる欄を作る (高さは、中身に合わせて伸びる)
-        /// </summary>
-        /// <param name="anchor">欄を寄せる角 (左上なら (0, 1))</param>
-        /// <param name="position">角からの位置</param>
-        /// <param name="width">欄の幅</param>
-        public RectTransform AddPanel(string name, Vector2 anchor, Vector2 position, float width)
-        {
-            var panel = EditorRuntimeUi.CreatePanel(name, uiRoot).rectTransform;
-            EditorRuntimeUi.Place(panel, anchor, position, new Vector2(width, 0f));
-
-            var layout = panel.gameObject.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset((int)PANEL_PADDING, (int)PANEL_PADDING, (int)PANEL_PADDING, (int)PANEL_PADDING);
-            layout.spacing = PANEL_SPACING;
-            layout.childAlignment = TextAnchor.UpperLeft;
-            layout.childControlWidth = true;
-            layout.childControlHeight = true;
-            layout.childForceExpandWidth = true;
-            layout.childForceExpandHeight = false;
-
-            var fitter = panel.gameObject.AddComponent<ContentSizeFitter>();
-            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
-
-            // 下地の内側の部品 (EditorRuntimeUi.CreatePanel が作る) は、並べる対象から外す
-            foreach (Transform child in panel)
-            {
-                var ignore = child.gameObject.AddComponent<LayoutElement>();
-                ignore.ignoreLayout = true;
-            }
-
-            return panel;
-        }
-
-        /// <summary>
-        /// 欄の見出し
-        /// </summary>
-        public TextMeshProUGUI AddPanelTitle(RectTransform panel, string text)
-        {
-            var label = EditorRuntimeUi.CreateLabel("Title", panel, text, 14f, TextAlignmentOptions.MidlineLeft, EditorRuntimeUi.SubTextColor);
-            SetHeight(label.gameObject, 20f);
-            return label;
-        }
-
-        /// <summary>
-        /// 欄の中の、横に部品を並べる行
-        /// </summary>
-        public RectTransform AddPanelRow(RectTransform panel, float height = BUTTON_HEIGHT)
-        {
-            var row = EditorRuntimeUi.CreateRect("Row", panel);
-            var layout = row.gameObject.AddComponent<HorizontalLayoutGroup>();
-            layout.spacing = PANEL_SPACING;
-            layout.childAlignment = TextAnchor.MiddleLeft;
-            layout.childControlWidth = true;
-            layout.childControlHeight = true;
-            layout.childForceExpandWidth = true;
-            layout.childForceExpandHeight = true;
-            SetHeight(row.gameObject, height);
-            return row;
-        }
-
-        /// <summary>
-        /// 行にボタンを足す (行の中のボタンは、同じ幅に並ぶ。flexible を大きくすると、そのボタンが広くなる)
-        /// </summary>
-        public EditorUiButton AddRowButton(RectTransform row, string text, Action onClick, float flexible = 1f)
-        {
-            var button = EditorRuntimeUi.CreateButton(text, row, text, new Vector2(10f, BUTTON_HEIGHT), onClick, 13.5f);
-            var element = button.gameObject.AddComponent<LayoutElement>();
-            element.minWidth = 10f;
-            element.flexibleWidth = flexible;
-            element.preferredHeight = BUTTON_HEIGHT;
-            return button;
-        }
-
-        /// <summary>
-        /// 行に文字を足す (幅を決めないときは、残りの幅に広がる)
-        /// </summary>
-        public TextMeshProUGUI AddRowLabel(RectTransform row, string text, float width = -1f)
-        {
-            var label = EditorRuntimeUi.CreateLabel("Label", row, text, 13.5f, TextAlignmentOptions.Center, EditorRuntimeUi.SubTextColor);
-            var element = label.gameObject.AddComponent<LayoutElement>();
-            if (width > 0f)
-            {
-                element.preferredWidth = width;
-                element.flexibleWidth = 0f;
-            }
-            else
-            {
-                element.flexibleWidth = 1f;
-            }
-            return label;
-        }
-
-        /// <summary>
-        /// 欄の中に、決まった高さの空きを作る (向きの印などを置く場所)
-        /// </summary>
-        public RectTransform AddPanelSpace(RectTransform panel, float height)
-        {
-            var space = EditorRuntimeUi.CreateRect("Space", panel);
-            SetHeight(space.gameObject, height);
-            return space;
-        }
-
-        private static void SetHeight(GameObject target, float height)
-        {
-            // (Unity の部品は ?? で比べられないので、if で確かめる)
-            var element = target.GetComponent<LayoutElement>();
-            if (element == null) { element = target.AddComponent<LayoutElement>(); }
-            element.preferredHeight = height;
-            element.minHeight = height;
         }
 
         #endregion
@@ -347,7 +221,7 @@ namespace ChartEditor
         {
             local = default;
             if (Viewport == null) { return false; }
-            if (!EditorRuntimeUi.TryGetLocalPoint(Viewport, screenPosition, out Vector2 point)) { return false; }
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(Viewport, screenPosition, null, out Vector2 point)) { return false; }
 
             Rect rect = Viewport.rect;
             local = point - rect.min;
@@ -496,16 +370,15 @@ namespace ChartEditor
             }
             else
             {
-                handle = EditorRuntimeUi.CreateImage("Handle", handleLayer, Color.white);
-                var rect = handle.rectTransform;
-                rect.anchorMin = Vector2.zero;
-                rect.anchorMax = Vector2.zero;
-                rect.pivot = new Vector2(0.5f, 0.5f);
+                // シーンのひな形 (左下を基準にした、まんなかが中心の絵) を複製する
+                handle = UnityEngine.Object.Instantiate(Ui.HandleTemplate, handleLayer);
+                handle.name = "Handle";
+                handle.gameObject.SetActive(true);
                 handles.Add(handle);
             }
             usedHandleCount++;
 
-            Sprite sprite = isRound ? EditorRuntimeUi.CircleSprite : null;
+            Sprite sprite = isRound ? Ui.CircleSprite : null;
             if (handle.sprite != sprite) { handle.sprite = sprite; }
             handle.color = color;
             handle.rectTransform.anchoredPosition = local;
@@ -526,12 +399,10 @@ namespace ChartEditor
             }
             else
             {
-                label = EditorRuntimeUi.CreateLabel("Label", handleLayer, string.Empty, fontSize, TextAlignmentOptions.BottomLeft);
-                var rect = label.rectTransform;
-                rect.anchorMin = Vector2.zero;
-                rect.anchorMax = Vector2.zero;
-                rect.pivot = Vector2.zero;
-                rect.sizeDelta = new Vector2(220f, 20f);
+                // シーンのひな形 (左下を基準にした、220 × 20 の文字) を複製する
+                label = UnityEngine.Object.Instantiate(Ui.LabelTemplate, handleLayer);
+                label.name = "Label";
+                label.gameObject.SetActive(true);
                 labels.Add(label);
             }
             usedLabelCount++;

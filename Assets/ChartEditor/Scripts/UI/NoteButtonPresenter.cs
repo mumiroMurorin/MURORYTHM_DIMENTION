@@ -87,6 +87,7 @@ namespace ChartEditor
                 order++;
                 if (order != number) { continue; }
 
+                DeploymentNoteChoice.SetNone(false);
                 editorDataSetter_model.SetNoteType(button.NoteType);
                 return;
             }
@@ -133,6 +134,9 @@ namespace ChartEditor
                 button.BindForEditNoteType(editorDataGetter_model.EditNoteType, this.gameObject);
             }
 
+            // 置くノーツを選んでいない間は、どのボタンも選んでいない見た目 (録音 20261118_010533)
+            DeploymentNoteChoice.OnChanged += RefreshChosenLook;
+
             // ノーツビューの可視不可視
             editorDataGetter_model?.CurrentEditMode
                 .Subscribe(mode => notesViewport_view.OnChangeEditMode(mode, editorDataGetter_model.EditNoteType.Value))
@@ -141,11 +145,30 @@ namespace ChartEditor
 
         private void SetEvent()
         {
-            // 配置ノーツボタン
+            // 配置ノーツボタン (置くノーツを選んでいない状態から、また選んだ状態にする)
             foreach (var button in noteButtons_view)
             {
-                button.SetEvent(() => { editorDataSetter_model.SetNoteType(button.NoteType); });
+                button.SetEvent(() =>
+                {
+                    DeploymentNoteChoice.SetNone(false);
+                    editorDataSetter_model.SetNoteType(button.NoteType);
+                });
             }
+        }
+
+        private void RefreshChosenLook()
+        {
+            if (this == null) { return; }
+            var chosen = editorDataGetter_model.DeploymentNoteType.Value;
+            foreach (var button in noteButtons_view)
+            {
+                button.NoteButton_view?.OnChangeDeploymentNote(!DeploymentNoteChoice.IsNone && chosen == button.NoteType);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            DeploymentNoteChoice.OnChanged -= RefreshChosenLook;
         }
 
         /// <summary>
@@ -167,7 +190,7 @@ namespace ChartEditor
             public void BindForDeploymentNoteType(IReadOnlyReactiveProperty<DeploymentNoteType> reactiveProperty, GameObject gameObject)
             {
                 reactiveProperty
-                    .Subscribe(noteType => NoteButton_view.OnChangeDeploymentNote(noteType == this.noteType))
+                    .Subscribe(noteType => NoteButton_view.OnChangeDeploymentNote(!DeploymentNoteChoice.IsNone && noteType == this.noteType))
                     .AddTo(gameObject);
             }
 

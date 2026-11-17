@@ -46,6 +46,8 @@ namespace ChartEditor
         NoteConnecter connecter;
         NotesCopier copier;
         NoteDestroyer destroyer;
+        NotesMirror groundMirror;
+        SpaceNotesMirror spaceMirror;
         bool isSceneSearched;
 
         public NoteContextMenu(IChartEditorDataGetter dataGetter, IChartEditorDataSetter dataSetter, INotesDataGetter notesGetter, INotesDataSetter notesSetter)
@@ -101,6 +103,8 @@ namespace ChartEditor
             connecter = UnityEngine.Object.FindObjectOfType<NoteConnecter>(true);
             copier = UnityEngine.Object.FindObjectOfType<NotesCopier>(true);
             destroyer = UnityEngine.Object.FindObjectOfType<NoteDestroyer>(true);
+            groundMirror = UnityEngine.Object.FindObjectOfType<NotesMirror>(true);
+            spaceMirror = UnityEngine.Object.FindObjectOfType<SpaceNotesMirror>(true);
         }
 
         /// <summary>
@@ -144,17 +148,21 @@ namespace ChartEditor
             if (!isLocked)
             {
                 AddConnectItem(items, unlocked);
+                AddMirrorItem(items, unlocked);
                 AddEditItems(items, note);
                 AddTypeItem(items, note, unlocked);
             }
 
-            if (copier != null && copier.CanCopySelectedNotes) { items.Add(new EditorContextMenuView.Item("コピー (Ctrl+C)", copier.CopySelectedNotes)); }
+            if (copier != null && copier.CanCopySelectedNotes) { items.Add(new EditorContextMenuView.Item("コピー", copier.CopySelectedNotes, shortcut: "Ctrl+C")); }
 
             if (!isLocked)
             {
                 if (destroyer != null && destroyer.CanDestroySelectedNotes)
                 {
-                    items.Add(new EditorContextMenuView.Item(unlocked.Count > 1 ? $"削除 ({unlocked.Count} 個)" : "削除", destroyer.DestroySelectedNotes));
+                    // (下のノーツと一緒に消える、ダイナミックノーツも数える)
+                    int deleteCount = DynamicNoteAttachments.WithPartners(unlocked, includeDynamics: true, includeHosts: false).Count;
+                    items.Add(new EditorContextMenuView.Item(deleteCount > 1 ? $"削除 ({deleteCount} 個)" : "削除", destroyer.DestroySelectedNotes,
+                        shortcut: "Delete"));
                 }
 
                 var lockTargets = unlocked.Count > 0 ? unlocked : new List<IDeployableNoteData> { note };
@@ -184,10 +192,25 @@ namespace ChartEditor
             }
             if (chainNotes < 2) { return; }
 
-            items.Add(new EditorContextMenuView.Item("選択中のノーツを接続 (Ctrl+J)", () =>
+            // (つなげなかったときは、ConnectSelectingNotes が理由をログに出す)
+            items.Add(new EditorContextMenuView.Item("選択中のノーツを接続", () => connecter.ConnectSelectingNotes(), shortcut: "Ctrl+J"));
+        }
+
+        /// <summary>
+        /// 反転 (Alt+M と同じ。レーンの左右を入れ替える。ロックしたノーツは変えない。録音 20261117_162236)
+        /// </summary>
+        private void AddMirrorItem(List<EditorContextMenuView.Item> items, List<IDeployableNoteData> selection)
+        {
+            if (selection.Count == 0) { return; }
+
+            if (dataGetter.EditNoteType.Value == EditNoteType.Space)
             {
-                if (!connecter.ConnectSelectingNotes()) { Debug.Log("【接続】接続できるノーツがありません (すでにつながっているか、種類が違います)"); }
-            }));
+                if (spaceMirror != null) { items.Add(new EditorContextMenuView.Item("選択中のノーツを反転", spaceMirror.MirrorSelectingSpaceNotes, shortcut: "Alt+M")); }
+            }
+            else if (groundMirror != null)
+            {
+                items.Add(new EditorContextMenuView.Item("選択中のノーツを反転", groundMirror.MirrorSelectingNotes, shortcut: "Alt+M"));
+            }
         }
 
         private void AddEditItems(List<EditorContextMenuView.Item> items, IDeployableNoteData note)
@@ -240,9 +263,22 @@ namespace ChartEditor
             string label = targets.Count > 1 ? $"{name}にする ({targets.Count} 個)" : $"{name}にする";
             items.Add(new EditorContextMenuView.Item(label, () =>
             {
+                // ダイナミックノーツが載っているノーツは HoldMeshRelay にできない。ルールに合わないダイナミックノーツは、種類を変えられない
+                string refusal = null;
+                int refusedCount = 0;
+                var allowed = targets.FindAll(target =>
+                {
+                    if (DynamicNoteAttachments.CanChangeType(target as IDeployableNoteData, next, out string reason)) { return true; }
+                    refusal = reason;
+                    refusedCount++;
+                    return false;
+                });
+                DynamicNoteAttachments.LogRefused(refusedCount, refusal);
+                if (allowed.Count == 0) { return; }
+
                 // もう一度変えると、元の種類に戻る
-                Record(() => { foreach (var target in targets) { target.ChangeNoteType(); } },
-                       () => { foreach (var target in targets) { target.ChangeNoteType(); } });
+                Record(() => { foreach (var target in allowed) { target.ChangeNoteType(); } },
+                       () => { foreach (var target in allowed) { target.ChangeNoteType(); } });
             }));
         }
 

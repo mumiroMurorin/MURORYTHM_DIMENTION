@@ -31,6 +31,7 @@ namespace ChartEditor
             EditMode.Connecting,
             EditMode.Explanation,
             EditMode.ChangeType,
+            EditMode.VertexPlace,
             EditMode.VertexEdit,
             EditMode.VertexMoving,
             EditMode.VerticesRotate,
@@ -189,6 +190,9 @@ namespace ChartEditor
             if(hitObject == null) { return EditMode.None; }
             // ロックしたノーツの上: 選ぶことだけできる (移動・幅を変える などのモードにしない)
             if (IsLockedNoteObject(hitObject)) { return EditMode.None; }
+            // ダイナミックノーツを置く道具のとき: 地上のノーツの上は、ダイナミックノーツを載せる場所 (移動・幅を変える のモードにしない)
+            // (ホールドを1本だけ編集している間は置けないので、いつものモード。ルールに合わないダイナミックノーツも、今までどおり動かせるように、いつものモード)
+            if (!HoldIsolation.IsActive && DynamicNoteAttachments.IsPlacingDynamic(chartEditorDataGetter) && IsDynamicPlacementTarget(hitObject)) { return EditMode.Deploy; }
             if(!hitObject.TryGetComponent(out IInteractableCollider interactable)) { return EditMode.None; }
 
             return interactable.EditMode;
@@ -256,6 +260,17 @@ namespace ChartEditor
             // オブジェクトがなかったらnullを返す
             if (!Physics.Raycast(ray, out hit, rayDistance, raycastLayer)) { return null; }
             return hit.collider.gameObject;
+        }
+
+        /// <summary>
+        /// そのオブジェクトが、ダイナミックノーツを載せる先になるノーツの一部か (DynamicNoteAttachments.IsPlacementTarget)
+        /// </summary>
+        private static bool IsDynamicPlacementTarget(GameObject obj)
+        {
+            if (obj == null) { return false; }
+
+            var noteObject = obj.GetComponentInParent<NoteObject>();
+            return noteObject != null && DynamicNoteAttachments.IsPlacementTarget(noteObject.NoteData);
         }
 
         /// <summary>

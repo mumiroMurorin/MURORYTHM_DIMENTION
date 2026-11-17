@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
+using UniRx;
 using UnityEngine;
 using VContainer;
 
@@ -16,7 +17,7 @@ namespace ChartEditor
         ScrollSensitivity = 2,
         HitVolume = 3,
         MusicVolume = 4,
-        BackupInterval = 5,
+        // (5 = バックアップの間隔。2026-11-17 に [-][+] から選ぶ形に変えたので、もう使わない)
         VisibleDistance = 6,
         CurveRadius = 7,
     }
@@ -99,9 +100,14 @@ namespace ChartEditor
         float fullBackupListHeight = -1f;
 
         // 今表示している値 (変わったときだけ、文字を作り直す)
-        int displayedExtendBarCount = -1;
-        string extendChartLabel;
         float[] displayedValues;
+
+        // 数を書き添える項目の名前 (一覧を開いている間は毎フレーム名前を付け直すので、数が変わったときだけ、文字を作り直す)
+        readonly CountLabel extendChartLabel = new CountLabel(count => $"譜面を延長 ({count} 小節)");
+        readonly CountLabel unlockAllLabel = new CountLabel(count => count > 0 ? $"すべてのロックを外す ({count} 個)" : "すべてのロックを外す");
+        readonly CountLabel pasteLabel = new CountLabel(count => count > 0 ? $"貼り付け ({count} 個、再生位置へ)" : "貼り付け (再生位置へ)");
+        readonly CountLabel lockLabel = new CountLabel(count => count > 1 ? $"選択中のノーツをロックする ({count} 個)" : "選択中のノーツをロックする");
+        readonly CountLabel unlockLabel = new CountLabel(count => count > 1 ? $"選択中のロックを外す ({count} 個)" : "選択中のロックを外す");
 
         [Inject]
         public void Construct(
@@ -124,9 +130,6 @@ namespace ChartEditor
 
         private void Start()
         {
-            // 「表示」の一覧に、オニオンスキンの枚数と、SpaceHold の3D編集の行を足す (シーンの行を複製して作る)
-            items_view = EditorMenuRuntimeRows.AddViewRows(items_view);
-
             SubscribeClicks(items_view);
             SubscribeClicks(quickItems_view);
 
@@ -164,8 +167,15 @@ namespace ChartEditor
             if (offsetField_view != null)
             {
                 offsetField = new NumberInputField(offsetField_view, value => dataSetter.SetOffset(value));
-                if (menuBar_view != null) { menuBar_view.OnOpenedListener += RefreshOffsetField; }
-                RefreshOffsetField();
+                // オフセットが変わったら (この欄やクイックメニューの欄に入力した、譜面を読み込んだ)、今の値を表示する
+                // (入力を終えたときも、ここで新しい値を指定し直す。指定しないと、欄は前の値の表示に戻ってしまう)
+                dataGetter.Offset
+                    .Subscribe(_ => RefreshOffsetField())
+                    .AddTo(this);
+                // 再生中は入力できない (クイックメニューのオフセットの欄と同じ)
+                dataGetter.PlayMode
+                    .Subscribe(playMode => offsetField_view.interactable = playMode != PlayMode.Play)
+                    .AddTo(this);
             }
 
             // 入力欄を、延長の設定とつなぐ
@@ -259,6 +269,11 @@ namespace ChartEditor
         private bool IsInFullScreenPreview => dataGetter.EditNoteType.Value == EditNoteType.Preview;
 
         /// <summary>
+        /// グラウンド・スペースのレイヤーを編集しているか
+        /// </summary>
+        private bool IsOnGroundOrSpace => dataGetter.EditNoteType.Value == EditNoteType.Ground || dataGetter.EditNoteType.Value == EditNoteType.Space;
+
+        /// <summary>
         /// 項目が押されたとき
         /// </summary>
         private void OnItemClicked(EditorMenuItem item)
@@ -327,10 +342,8 @@ namespace ChartEditor
                     notesCopier_model?.CutSelectedNotes();
                     break;
                 case EditorMenuCommand.ConnectNotes:
-                    if (Find(ref connecter) != null && !connecter.ConnectSelectingNotes())
-                    {
-                        Debug.Log("【接続】接続できるノーツがありません (すでにつながっているか、種類が違います)");
-                    }
+                    // (つなげなかったときは、ConnectSelectingNotes が理由をログに出す)
+                    Find(ref connecter)?.ConnectSelectingNotes();
                     break;
                 case EditorMenuCommand.MirrorNotes:
                     if (dataGetter.EditNoteType.Value == EditNoteType.Space) { Find(ref spaceMirror)?.MirrorSelectingSpaceNotes(); }
@@ -405,16 +418,19 @@ namespace ChartEditor
                     optionSetter.SetNoteVisibleDistance(optionGetter.NoteVisibleDistance.Value + value);
                     break;
                 case EditorMenuCommand.StepCurveRadius:
-                    noteSpawnDataOptionSetter.SetNoteCurveRadius(Mathf.Clamp(noteSpawnDataOptionGetter.NoteCurveRadius.Value + value,
-                        ChartEditorOptionHolder.MENU_MIN_NOTE_CURVE_RADIUS, ChartEditorOptionHolder.MENU_MAX_NOTE_CURVE_RADIUS));
+                    // (変えられる範囲は、設定の側で決まっている)
+                    noteSpawnDataOptionSetter.SetNoteCurveRadius(noteSpawnDataOptionGetter.NoteCurveRadius.Value + value);
                     break;
 
                 // ---- 設定
                 case EditorMenuCommand.StepScrollSensitivity:
                     optionSetter.SetScrollSensitivity(Step(optionGetter.ScrollSensitivity.Value, value));
                     break;
-                case EditorMenuCommand.StepBackupInterval:
-                    ChartSaveGuard.AutoSaveIntervalMinutes += value;
+                case EditorMenuCommand.SelectBackupInterval:
+                    ChartSaveGuard.AutoSaveIntervalMinutes = value;
+                    break;
+                case EditorMenuCommand.SelectAlternateInterval:
+                    SpaceHold3DEditor.AlternateInterval = value;
                     break;
                 case EditorMenuCommand.StepMusicVolume:
                     optionSetter.SetBGMVolume(Step(optionGetter.BGMVolume.Value, value));
@@ -476,46 +492,55 @@ namespace ChartEditor
                         item.SetLabel(isInPreview ? "編集画面へ戻る" : "全画面プレビュー");
                         break;
                     case EditorMenuCommand.ExtendChart:
-                        item.SetLabel(GetExtendChartLabel());
+                        // (延長する小節数を書き添える)
+                        item.SetLabel(extendChartLabel.Get(optionGetter.ExtendBarCount.Value));
                         break;
                     case EditorMenuCommand.ToggleSpaceHold3DView:
                         item.SetLabel(SpaceHold3DEditor.IsOpen ? "SpaceHoldの3D編集を閉じる" : "SpaceHoldを3Dで編集");
                         break;
                     case EditorMenuCommand.UnlockAllNotes:
-                        item.SetLabel(NoteLock.HasAny ? $"すべてのロックを外す ({NoteLock.Count} 個)" : "すべてのロックを外す");
+                        item.SetLabel(unlockAllLabel.Get(NoteLock.HasAny ? NoteLock.Count : 0));
                         break;
                     case EditorMenuCommand.PasteNotes:
-                    {
-                        int count = notesCopier_model != null ? notesCopier_model.CopiedCount : 0;
-                        item.SetLabel(count > 0 ? $"貼り付け ({count} 個、再生位置へ)" : "貼り付け (再生位置へ)");
+                        item.SetLabel(pasteLabel.Get(notesCopier_model != null ? notesCopier_model.CopiedCount : 0));
                         break;
-                    }
                     case EditorMenuCommand.LockNotes:
-                    {
-                        int count = CountSelection(false);
-                        item.SetLabel(count > 1 ? $"選択中のノーツをロックする ({count} 個)" : "選択中のノーツをロックする");
+                        item.SetLabel(lockLabel.Get(CountSelection(false)));
                         break;
-                    }
                     case EditorMenuCommand.UnlockNotes:
-                    {
-                        int count = CountSelection(true);
-                        item.SetLabel(count > 1 ? $"選択中のロックを外す ({count} 個)" : "選択中のロックを外す");
+                        item.SetLabel(unlockLabel.Get(CountSelection(true)));
                         break;
-                    }
                 }
             }
         }
 
         /// <summary>
-        /// 選択中のノーツのうち、ロックしている (isLocked) / していないものの数 (一覧の表示で毎フレーム数えるので、リストは作らない)
+        /// 選択中のノーツのうち、ロックしている (isLocked) / していないものの数
+        /// (一覧の表示で毎フレーム数えるので、リストは作らない。foreach も使わない: 選択のコレクションの foreach は、毎回ごみを出す)
         /// </summary>
         private int CountSelection(bool isLocked)
         {
             if (notesGetter == null) { return 0; }
+            var selection = notesGetter.SelectingNotes;
             int count = 0;
-            foreach (var note in notesGetter.SelectingNotes)
+            for (int i = 0; i < selection.Count; i++)
             {
-                if (NoteLock.IsLocked(note) == isLocked) { count++; }
+                if (NoteLock.IsLocked(selection[i]) == isLocked) { count++; }
+            }
+            return count;
+        }
+
+        /// <summary>
+        /// 選択中のノーツのうち、ロックしていない、接続できるノーツ (ホールド・スペースホールド) の数 (右クリックのメニューの「接続」と同じ数え方)
+        /// </summary>
+        private int CountUnlockedChainSelection()
+        {
+            if (notesGetter == null) { return 0; }
+            var selection = notesGetter.SelectingNotes;
+            int count = 0;
+            for (int i = 0; i < selection.Count; i++)
+            {
+                if (selection[i] is IChainNoteData && !NoteLock.IsLocked(selection[i])) { count++; }
             }
             return count;
         }
@@ -527,9 +552,10 @@ namespace ChartEditor
         {
             var result = new List<IDeployableNoteData>();
             if (notesGetter == null) { return result; }
-            foreach (var note in notesGetter.SelectingNotes)
+            var selection = notesGetter.SelectingNotes;
+            for (int i = 0; i < selection.Count; i++)
             {
-                if (NoteLock.IsLocked(note) == isLocked) { result.Add(note); }
+                if (NoteLock.IsLocked(selection[i]) == isLocked) { result.Add(selection[i]); }
             }
             return result;
         }
@@ -596,18 +622,28 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 「譜面を延長」の項目の名前 (延長する小節数を書き添える。小節数が変わったときだけ、文字を作り直す)
+        /// 数を書き添える項目の名前 (数が変わったときだけ、文字を作り直す)
         /// </summary>
-        private string GetExtendChartLabel()
+        class CountLabel
         {
-            int barCount = optionGetter.ExtendBarCount.Value;
-            if (barCount != displayedExtendBarCount || extendChartLabel == null)
+            readonly Func<int, string> format;
+            int shownCount;
+            string text;
+
+            public CountLabel(Func<int, string> format)
             {
-                displayedExtendBarCount = barCount;
-                extendChartLabel = $"譜面を延長 ({barCount} 小節)";
+                this.format = format;
             }
 
-            return extendChartLabel;
+            public string Get(int count)
+            {
+                if (text == null || count != shownCount)
+                {
+                    shownCount = count;
+                    text = format(count);
+                }
+                return text;
+            }
         }
 
         /// <summary>
@@ -644,7 +680,6 @@ namespace ChartEditor
                 case EditorMenuValue.ScrollSensitivity: return optionGetter.ScrollSensitivity.Value;
                 case EditorMenuValue.HitVolume: return optionGetter.JudgementSEVolume.Value;
                 case EditorMenuValue.MusicVolume: return optionGetter.BGMVolume.Value;
-                case EditorMenuValue.BackupInterval: return ChartSaveGuard.AutoSaveIntervalMinutes;
                 case EditorMenuValue.VisibleDistance: return optionGetter.NoteVisibleDistance.Value;
                 case EditorMenuValue.CurveRadius: return noteSpawnDataOptionGetter.NoteCurveRadius.Value;
                 default: return 0f;
@@ -657,7 +692,6 @@ namespace ChartEditor
             {
                 case EditorMenuValue.NoteSpeed: return value.ToString("0");
                 case EditorMenuValue.ScrollSensitivity: return value.ToString("0.0");
-                case EditorMenuValue.BackupInterval: return value.ToString("0") + " 分";
                 case EditorMenuValue.VisibleDistance:
                 case EditorMenuValue.CurveRadius: return value.ToString("0");
                 // 音量は百分率で表示する
@@ -708,10 +742,14 @@ namespace ChartEditor
                     return notesCopier_model != null && notesCopier_model.CanCutSelectedNotes;
                 case EditorMenuCommand.PasteNotes:
                     return !isPlaying && notesCopier_model != null && notesCopier_model.CanPasteFromMenu;
+                // 接続: Ctrl+J と同じ条件で、ロックしていない、接続できるノーツを2つ以上選んでいるとき (右クリックのメニューと同じ)
                 case EditorMenuCommand.ConnectNotes:
+                    return !isPlaying && !isInPreview && IsOnGroundOrSpace &&
+                           Find(ref connecter) != null && connecter.CanConnectSelection(true) && CountUnlockedChainSelection() >= 2;
+                // 反転: Alt+M と同じ条件 (SpaceHold の3D編集を開いている間などは、できない)
                 case EditorMenuCommand.MirrorNotes:
-                    return !isPlaying && !isInPreview && CountSelection(false) > 0 &&
-                           (dataGetter.EditNoteType.Value == EditNoteType.Ground || dataGetter.EditNoteType.Value == EditNoteType.Space);
+                    return !isPlaying && !isInPreview && IsOnGroundOrSpace && CountSelection(false) > 0 &&
+                           ToolButtonPresenter.CanMirrorSelection(dataGetter, true);
                 case EditorMenuCommand.LockNotes:
                     return CountSelection(false) > 0;
                 case EditorMenuCommand.UnlockNotes:
@@ -725,6 +763,11 @@ namespace ChartEditor
                 case EditorMenuCommand.StartPreview:
                 case EditorMenuCommand.RebuildPreview:
                     return chartData != null;
+
+                // 説明書は、説明書のボタンと同じく、再生中は開けない。全画面プレビューの中でも開かない
+                // (説明書を閉じると、編集画面のエディットモードに戻るので、プレビューの操作ができなくなる)
+                case EditorMenuCommand.OpenManual:
+                    return !isPlaying && !isInPreview;
 
                 // 3D編集は、開いているときは閉じられる。閉じているときは、SpaceHold を選んでいる (頂点を編集している) ときだけ開ける
                 case EditorMenuCommand.ToggleSpaceHold3DView:
@@ -752,6 +795,10 @@ namespace ChartEditor
                     return (optionGetter.IsSingleNoteSound.Value ? 1 : 0) == item.Value;
                 case EditorMenuCommand.SelectOnionSkinCount:
                     return optionGetter.OnionSkinCount.Value == item.Value;
+                case EditorMenuCommand.SelectBackupInterval:
+                    return ChartSaveGuard.AutoSaveIntervalMinutes == item.Value;
+                case EditorMenuCommand.SelectAlternateInterval:
+                    return SpaceHold3DEditor.AlternateInterval == item.Value;
                 case EditorMenuCommand.TogglePanel:
                     return Enum.IsDefined(typeof(EditorPanel), item.Value) &&
                            optionGetter.GetPanelVisibility((EditorPanel)item.Value).Value;

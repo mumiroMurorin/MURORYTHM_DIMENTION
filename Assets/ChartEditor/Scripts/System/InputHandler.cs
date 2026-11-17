@@ -110,13 +110,80 @@ namespace ChartEditor
             // Move editing vertices along the connected SpaceHold chain
             // (SpaceHold の3D編集を開いている間は、3D編集の側で前後の節へ移る)
             // (長押しで、くり返す: 録音 20261117_024144)
-            bool isChainKeyAccepted = !isTyping && !EditorMenuBar.IsBlockedByOverlay;
+            // (ショートカット一覧を開いている間も、裏の譜面の選択を変えない)
+            bool isChainKeyAccepted = !isTyping && !EditorMenuBar.IsBlockingChartKeys;
             bool isUpKey = chainUpKeyRepeat.Poll();
             bool isDownKey = chainDownKeyRepeat.Poll();
             if (isChainKeyAccepted && isUpKey) { verticesChainNavigator?.MoveToNext(); }
             if (isChainKeyAccepted && isDownKey) { verticesChainNavigator?.MoveToPrevious(); }
-            // ショートカットキー (SpaceHold の3D編集を開いている間は、ツールを切り替えない)
-            if (!isTyping && !EditorMenuBar.IsBlockedByOverlay) { CheckAndDoShortCutKey(); }
+            // ショートカットキー (SpaceHold の3D編集・ショートカット一覧を開いている間は、ツールを切り替えない)
+            if (!isTyping && !EditorMenuBar.IsBlockingChartKeys) { CheckAndDoShortCutKey(); }
+            // 接続・タイプ変更の道具: 何も無い所をダブルクリックすると、編集の道具に戻る (3D編集の道具と同じ。録音 20261117_201436)
+            if (!isTyping) { CheckToolDoubleClick(); }
+        }
+
+        // 何も無い所のダブルクリック (接続・タイプ変更の道具から、編集の道具に戻る)
+        readonly DoubleClickDetector toolDoubleClick = new DoubleClickDetector(DoubleClickDetector.MAX_INTERVAL, DoubleClickDetector.POINTER_MAX_DISTANCE);
+        // 編集の道具で、ノーツもレーンも無い所のダブルクリック (置くノーツの選択を外す: 録音 20261118_010533)
+        readonly DoubleClickDetector paletteDoubleClick = new DoubleClickDetector(DoubleClickDetector.MAX_INTERVAL, DoubleClickDetector.POINTER_MAX_DISTANCE);
+
+        // 編集の道具のモード (カーソルの下の物で替わる、待っている状態のモード)
+        static readonly EditMode[] editToolModes =
+        {
+            EditMode.Deploy,
+            EditMode.Move,
+            EditMode.Scale,
+            EditMode.CurveHandle,
+            EditMode.SpaceDeploy,
+            EditMode.SpaceMove,
+        };
+        CursorInteracter cursorInteracter;
+
+        /// <summary>
+        /// 接続・タイプ変更の道具を選んでいるとき、ノーツも画面部品も無い所をダブルクリックしたら、編集の道具にする
+        /// </summary>
+        private void CheckToolDoubleClick()
+        {
+            if (!Input.GetMouseButtonDown(0)) { return; }
+
+            var editMode = dataGetter.CurrentEditMode.Value;
+            bool isTool = editMode == EditMode.Connect || editMode == EditMode.Connecting || editMode == EditMode.DisConnect || editMode == EditMode.ChangeType;
+            var layer = dataGetter.EditNoteType.Value;
+
+            // 編集の道具: ノーツもレーンも (画面部品も) 無い所をダブルクリックすると、置くノーツの選択を外す
+            // (カーソルの下に何も無いときの編集の道具のモードは None。録音 20261118_025442: レーンの外のダブルクリックが効いていなかった)
+            bool isEditToolIdle = editMode.IsInEditModeList(editToolModes) || (editMode == EditMode.None && !dataGetter.IsLoadingChart.Value);
+            if (isEditToolIdle && (layer == EditNoteType.Ground || layer == EditNoteType.Space))
+            {
+                CheckPaletteDoubleClick();
+                return;
+            }
+            paletteDoubleClick.Reset();
+
+            if (!isTool || (layer != EditNoteType.Ground && layer != EditNoteType.Space)) { toolDoubleClick.Reset(); return; }
+            if (EditorMenuBar.IsBlockingChartInput) { return; }
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) { return; }
+
+            if (cursorInteracter == null) { cursorInteracter = FindObjectOfType<CursorInteracter>(true); }
+            if (cursorInteracter != null && cursorInteracter.FindNoteUnderCursor() != null) { toolDoubleClick.Reset(); return; }
+
+            if (!toolDoubleClick.Click(Input.mousePosition)) { return; }
+
+            dataSetter.SetEditMode(layer == EditNoteType.Space ? EditMode.SpaceDeploy : EditMode.Deploy);
+        }
+
+        private void CheckPaletteDoubleClick()
+        {
+            if (EditorMenuBar.IsBlockingChartInput || HoldIsolation.IsActive) { paletteDoubleClick.Reset(); return; }
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) { paletteDoubleClick.Reset(); return; }
+            // ノーツ・レーン・小節の欄など、カーソルの下に何かあれば、その操作 (レーンを押すと、ノーツを置く)
+            if (dataGetter.InteractableColliders.Count > 0) { paletteDoubleClick.Reset(); return; }
+
+            if (!paletteDoubleClick.Click(Input.mousePosition)) { return; }
+            if (DeploymentNoteChoice.IsNone) { return; }
+
+            DeploymentNoteChoice.SetNone(true);
+            Debug.Log("【配置】置くノーツの選択を外しました (ノーツを置かず、動かす・選ぶだけになります。一覧のボタンで、また選べます)");
         }
 
         /// <summary>
@@ -130,6 +197,8 @@ namespace ChartEditor
             if (Input.GetMouseButton(0)) { return false; }
             // 右クリックのメニューを出している間も不可 (メニューの項目が、元に戻して消えたノーツに働かないように)
             if (EditorContextMenuView.IsOpen) { return false; }
+            // ショートカット一覧を開いている間も不可 (裏の譜面が、見えないところで変わらないように)
+            if (ShortcutListView.IsOpenOrJustClosed) { return false; }
 
             return IsUndoRedoAllowedMode;
         }

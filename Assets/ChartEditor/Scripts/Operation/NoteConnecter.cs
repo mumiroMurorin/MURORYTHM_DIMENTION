@@ -60,8 +60,7 @@ namespace ChartEditor
         {
             // Ctrl+J: 選択中のホールド・スペースホールドを、まとめて接続する (どのツールを選んでいても使える)
             // 読み込み中・文字の入力中・ドラッグの途中・ほかの操作の途中は受け付けない
-            if (ModifierKey.Ctrl && Input.GetKeyDown(CONNECT_SELECTION_KEY) && !Input.GetMouseButton(0) &&
-                SelectedNotesKeyOperation.IsAcceptable(dataGetter, connectSelectionIgnoreModes))
+            if (ModifierKey.Ctrl && Input.GetKeyDown(CONNECT_SELECTION_KEY) && !Input.GetMouseButton(0) && CanConnectSelection(false))
             {
                 ConnectSelectingNotes();
             }
@@ -90,6 +89,16 @@ namespace ChartEditor
             else if (Input.GetMouseButtonDown(0) && editMode == EditMode.Connecting) { ConnectNoteOnClick(); }
             // 接続モード終了
             else if (Input.GetMouseButtonDown(1)) { EndConnect(); }
+        }
+
+        /// <summary>
+        /// 選択中のノーツをまとめて接続する操作 (Ctrl+J、メニューの「選択中のノーツを接続」) を、今受け付けるか
+        /// (読み込み中・文字の入力中・ほかの操作の途中などは受け付けない)
+        /// </summary>
+        /// <param name="isFromMenu">メニューの項目から行うとき true (キー操作のときは false)</param>
+        public bool CanConnectSelection(bool isFromMenu)
+        {
+            return SelectedNotesKeyOperation.IsAcceptable(dataGetter, connectSelectionIgnoreModes, isFromMenu);
         }
 
         private static bool ContainsLocked(IEnumerable<IChainNoteData> notes)

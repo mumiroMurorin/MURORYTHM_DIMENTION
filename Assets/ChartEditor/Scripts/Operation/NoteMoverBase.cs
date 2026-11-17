@@ -107,8 +107,10 @@ namespace ChartEditor
             OnStartDrag(clickedNote);
 
             // 複数選択されたオブジェクトから動かせるやつを取り出す
+            // (ダイナミックノーツと下のノーツは、どちらを掴んでも一緒に動かす。相手も「動かしているノーツ」にして、
+            //  カーソルの下のレーンを探すのを邪魔しないようにする)
             skippedLockedCount = 0;
-            foreach (var data in notesGetter.SelectingNotes)
+            foreach (var data in DynamicNoteAttachments.WithPartners(notesGetter.SelectingNotes))
             {
                 // ロックしたノーツは動かさない
                 if (NoteLock.IsLocked(data)) { skippedLockedCount++; continue; }

@@ -17,9 +17,8 @@ namespace ChartEditor
             Pan,
             // 何も無い所を押した (動かせば回す、動かさずに離せば選ぶのをやめる)
             EmptyPress,
-            // 右ボタンを押した (動かせば回す、動かさずに離せば、つまみによって消す・戻す)
+            // 右ボタンを押した (動かせば回す、動かさずに離せば、メニューを出す。◆ なら位置の窓)
             RightPress,
-            Vertex,
             Center,
             AxisX,
             AxisY,
@@ -37,6 +36,7 @@ namespace ChartEditor
             AxisY,
             AxisZ,
             Control,
+            // 頂点 (見せるだけ。掴めない)
             Vertex,
             Center,
         }
@@ -73,22 +73,31 @@ namespace ChartEditor
         Vector2 lastMouse;
         bool hasDragMoved;
         bool waitForMouseRelease;
-        // 右ボタンを押したときの、メニューを出す節と頂点 (無ければ null)
+        // 右ボタンを押したときの、メニューを出す節 (無ければ null)
         NoteData_SpaceHold rightPressNote;
-        VertexData rightPressVertex;
         // 節の線のダブルクリック (前にクリックした節・時刻・位置)
         NoteData_SpaceHold lastRingClickNote;
         float lastRingClickTime = -10f;
         Vector2 lastRingClickPosition;
+        // 何も無い所 (つまみ・節の線の外) を押した時刻と場所 (ダブルクリックで、道具をやめて「編集」に戻る: 録音 20261117_194307 / 204809)
+        float lastEmptyClickTime = -10f;
+        Vector2 lastEmptyClickPosition;
 
-        // 頂点・節を動かす
+        // 節を動かす (中心・矢印)、回す・拡大縮小する
         NoteData_SpaceHold dragNote;
-        int dragVertexIndex;
-        // 選んでいる頂点をまとめて動かすときの、動かす頂点 (dragVertices の中の番号。空なら dragVertexIndex の1つだけ)
-        readonly List<int> dragGroup = new List<int>();
         // 回す・拡大縮小するときの、中心と、掴んだ頂点の元の位置 (単位円の中の値)
         Vector2 transformCenter;
         Vector2 transformGrabPoint;
+        // 回す・拡大縮小する節の、頂点ごとの中心 (その頂点の節の中心) と、効き方 (1 = 全部、0 = 動かさない。「なめらか」のとき)
+        readonly List<Vector2> dragCenters = new List<Vector2>();
+        readonly List<float> dragWeights = new List<float>();
+        // 回した角度 (度。180度を超えても続けて回せるように、少しずつ足していく)
+        float transformAngle;
+        float lastRawAngle;
+        // 回す・拡大縮小している節の数 (表示用)
+        int transformSectionCount;
+        // 中心のすぐそばを掴むと、角度・割合が決まらないので、このくらい離れたところから (単位円の中の値)
+        const float MIN_TRANSFORM_GRAB = 0.03f;
         readonly List<VertexData> dragVertices = new List<VertexData>();
         readonly List<Vector2> dragStartPositions = new List<Vector2>();
         bool dragUseViewPlane;
@@ -140,8 +149,8 @@ namespace ChartEditor
                 // 回している・拡大縮小している間は、その絵のまま。動かしている間は「動かす」の絵
                 if (dragKind == DragKind.Rotate) { SetCursor(EditMode.VerticesRotating); }
                 else if (dragKind == DragKind.Scale) { SetCursor(EditMode.VerticesScaling); }
-                else if (dragKind == DragKind.Vertex || dragKind == DragKind.Center || dragKind == DragKind.AxisX ||
-                         dragKind == DragKind.AxisY || dragKind == DragKind.AxisZ || dragKind == DragKind.Control) { SetCursor(EditMode.VertexMoving); }
+                else if (dragKind == DragKind.Center || dragKind == DragKind.AxisX || dragKind == DragKind.AxisY ||
+                         dragKind == DragKind.AxisZ || dragKind == DragKind.Control) { SetCursor(EditMode.VertexMoving); }
                 else { SetCursor(EditMode.None); }
 
                 UpdateDrag(local, mouse);
@@ -181,9 +190,9 @@ namespace ChartEditor
 
         /// <summary>
         /// カーソルの絵を、今の道具とカーソルの下にあるものに合わせる (頂点レイヤーと同じ決まり)
-        /// ・編集: 頂点・中心の上は「動かす」、頂点を置ける所は「置く」
-        /// ・回転 / 拡大縮小: 頂点の上は「回す」/「拡大縮小」
-        /// ・道具なし: 頂点・中心・矢印・◆の上は「動かす」
+        /// ・回転 / 拡大縮小: 節を選んでいれば、つまみの上のほかは「回す」/「拡大縮小」 (どこを押しても、選んでいる節を回す)
+        /// ・道具なし: 中心・矢印・◆の上は「動かす」
+        /// (3D編集では、頂点を足したり動かしたりしない: 録音 20261117_180313)
         /// それ以外は、標準の絵
         /// </summary>
         private void UpdateCursor(bool isOnViewport, Vector2 local)
@@ -191,24 +200,13 @@ namespace ChartEditor
             EditMode cursor = EditMode.None;
             if (isOnViewport && !ModifierKey.Alt)
             {
-                bool isOnVertex = hasHovered && hovered.Kind == HandleKind.Vertex;
                 bool isOnHandle = hasHovered && hovered.Kind != HandleKind.None;
+                bool isTransformTool = (vertexTool == PreviewVertexTool.Rotate || vertexTool == PreviewVertexTool.Scale) && selectedNote != null;
 
-                switch (vertexTool)
+                if (isOnHandle) { cursor = EditMode.VertexMoving; }
+                else if (isTransformTool && !ModifierKey.Ctrl)
                 {
-                    case PreviewVertexTool.Rotate:
-                        cursor = isOnVertex ? EditMode.VerticesRotating : EditMode.None;
-                        break;
-                    case PreviewVertexTool.Scale:
-                        cursor = isOnVertex ? EditMode.VerticesScaling : EditMode.None;
-                        break;
-                    case PreviewVertexTool.Edit:
-                        if (isOnHandle) { cursor = EditMode.VertexMoving; }
-                        else if (!ModifierKey.Ctrl && CanPlaceVertexAt(local)) { cursor = EditMode.VertexEdit; }
-                        break;
-                    default:
-                        if (isOnHandle) { cursor = EditMode.VertexMoving; }
-                        break;
+                    cursor = vertexTool == PreviewVertexTool.Rotate ? EditMode.VerticesRotating : EditMode.VerticesScaling;
                 }
             }
 
@@ -254,63 +252,62 @@ namespace ChartEditor
             {
                 switch (hovered.Kind)
                 {
-                    case HandleKind.Vertex:
-                        // 頂点の道具「回転」「拡大縮小」: 頂点をドラッグして、回す / 拡大・縮小する
-                        if ((vertexTool == PreviewVertexTool.Rotate || vertexTool == PreviewVertexTool.Scale) && IsSingleSectionSelected && hovered.Section == selectedIndex)
-                        {
-                            StartTransformDrag(hovered.Section, hovered.Vertex, vertexTool == PreviewVertexTool.Rotate, local, mouse);
-                            return;
-                        }
-                        StartVertexDrag(hovered.Section, hovered.Vertex, DragKind.Vertex, local, mouse);
-                        return;
                     case HandleKind.Center:
-                        // Ctrl+クリック: その節を、選択に加える・外す
-                        if (ModifierKey.Ctrl)
+                        // Ctrl+クリック: その節を、選択に加える・外す。Shift+クリック: 間の節をまとめて選ぶ (節の線と同じ。動かさない)
+                        // (選択モードは、StartVertexDrag の中で)
+                        if (ModifierKey.Ctrl || ModifierKey.Shift)
                         {
-                            ToggleSectionSelection(hovered.Section);
+                            if (ModifierKey.Ctrl) { ToggleSectionSelection(hovered.Section); }
+                            else { ClickSelectSection(hovered.Section); }
                             waitForMouseRelease = true;
                             return;
                         }
-                        StartVertexDrag(hovered.Section, -1, DragKind.Center, local, mouse);
+                        StartVertexDrag(hovered.Section, DragKind.Center, local, mouse);
                         return;
                     case HandleKind.AxisX:
-                        StartVertexDrag(hovered.Section, -1, DragKind.AxisX, local, mouse);
+                        StartVertexDrag(hovered.Section, DragKind.AxisX, local, mouse);
                         return;
                     case HandleKind.AxisY:
-                        StartVertexDrag(hovered.Section, -1, DragKind.AxisY, local, mouse);
+                        StartVertexDrag(hovered.Section, DragKind.AxisY, local, mouse);
                         return;
                     case HandleKind.AxisZ:
                         StartTimeDrag(hovered.Section, local, mouse);
                         return;
                     case HandleKind.Control:
-                    {
-                        // ダブルクリック: 位置を数値で決める窓を出す
-                        bool isDoubleClick = hovered.Span == lastControlClickSpan &&
-                                             Time.unscaledTime - lastControlClickTime <= DOUBLE_CLICK_SECONDS &&
-                                             Vector2.Distance(mouse, lastControlClickPosition) <= DOUBLE_CLICK_PIXELS;
-                        if (isDoubleClick)
-                        {
-                            lastControlClickSpan = -1;
-                            OpenControlPanel(hovered.Span);
-                            waitForMouseRelease = true;
-                            return;
-                        }
-
-                        lastControlClickSpan = hovered.Span;
-                        lastControlClickTime = Time.unscaledTime;
-                        lastControlClickPosition = mouse;
+                        // (位置を数値で決める窓は、右クリックで出す。ダブルクリックでは出さない: 録音 20261117_185126)
                         StartControlDrag(hovered.Span, local, mouse);
                         return;
-                    }
                 }
             }
 
             bool isRingPicked = TryPickRing(local, out int ringSection);
 
-            // 頂点の道具「編集」: 選んでいる節の面の上を押すと、そこに頂点を置く (ほかの節の線を押したときは、その節を選ぶ)
-            if (vertexTool == PreviewVertexTool.Edit && IsSingleSectionSelected && !ModifierKey.Ctrl && (!isRingPicked || ringSection == selectedIndex))
+            // 道具「回転」「拡大縮小」を選んでいるとき、何も無い所をダブルクリック: 「編集」に戻る (「編集」のボタンを押すのと同じ)
+            if (!isRingPicked && !ModifierKey.Ctrl && !ModifierKey.Shift)
             {
-                if (TryPlaceVertex(local, mouse)) { return; }
+                bool isDoubleClick = Time.unscaledTime - lastEmptyClickTime <= DOUBLE_CLICK_SECONDS &&
+                                     Vector2.Distance(mouse, lastEmptyClickPosition) <= DOUBLE_CLICK_PIXELS;
+                lastEmptyClickTime = Time.unscaledTime;
+                lastEmptyClickPosition = mouse;
+                if (isDoubleClick && vertexTool != PreviewVertexTool.Move)
+                {
+                    lastEmptyClickTime = -10f;
+                    vertexTool = PreviewVertexTool.Move;
+                    waitForMouseRelease = true;
+                    ShowStatus("編集に戻りました");
+                    return;
+                }
+            }
+
+            // 道具「回転」「拡大縮小」: 押したところから、選んでいる節の形を丸ごと回す / 拡大・縮小する
+            // (範囲のボタンで決めた節も、いっしょに動かす。ほかの節の線を押したときは、その節を選ぶ。録音 20261117_180313 / 180817)
+            // (選んでいる節の線を押したときは、その節を掴む。選んでいるほかの節も、いっしょに動く)
+            if ((vertexTool == PreviewVertexTool.Rotate || vertexTool == PreviewVertexTool.Scale) && selectedNote != null &&
+                !ModifierKey.Ctrl && !ModifierKey.Shift && (!isRingPicked || IsSectionSelected(sections[ringSection].Note)))
+            {
+                if (isRingPicked) { MakePrimary(ringSection); }
+                StartFaceTransformDrag(vertexTool == PreviewVertexTool.Rotate, local, mouse);
+                return;
             }
 
             // 節の形の線: その節を選ぶ (Ctrl を押していれば、選択に加える・外す)
@@ -333,7 +330,7 @@ namespace ChartEditor
                 lastRingClickPosition = mouse;
 
                 if (ModifierKey.Ctrl) { ToggleSectionSelection(ringSection); }
-                else { Select(ringSection); }
+                else { ClickSelectSection(ringSection); }
 
                 waitForMouseRelease = true;
                 return;
@@ -344,14 +341,11 @@ namespace ChartEditor
 
         private void BeginRight(Vector2 local, Vector2 mouse)
         {
-            hasRightPressHandle = hasHovered && (hovered.Kind == HandleKind.Vertex || hovered.Kind == HandleKind.Control || hovered.Kind == HandleKind.Center);
+            hasRightPressHandle = hasHovered && (hovered.Kind == HandleKind.Control || hovered.Kind == HandleKind.Center);
             rightPressHandle = hovered;
             // つまみの上でなければ: 節の線の上ならその節、節を1つ選んでいれば、その節のメニュー (録音 20261117_023636)
             // (番号ではなく、節そのものを覚える: 離すまでの間に、元に戻すなどで番号がずれることがある)
             rightPressNote = hasRightPressHandle ? GetHandleNote(hovered) : null;
-            rightPressVertex = hasRightPressHandle && hovered.Kind == HandleKind.Vertex && rightPressNote != null &&
-                               hovered.Vertex >= 0 && hovered.Vertex < rightPressNote.SpaceVertices.Vertices.Count
-                ? rightPressNote.SpaceVertices.Vertices[hovered.Vertex] : null;
             if (!hasRightPressHandle)
             {
                 if (TryPickRing(local, out int ringSection)) { rightPressNote = sections[ringSection].Note; }
@@ -379,7 +373,6 @@ namespace ChartEditor
                     rig.Pan(delta, view.ViewportSize.y * scale);
                     break;
                 // (つまみは、少し動かすまでは動かさない。クリックしただけで、手のぶれのぶん動いてしまわないように)
-                case DragKind.Vertex:
                 case DragKind.Center:
                 case DragKind.AxisX:
                 case DragKind.AxisY:
@@ -416,11 +409,8 @@ namespace ChartEditor
                     case DragKind.RightPress:
                         if (!hasDragMoved && hasRightPressHandle)
                         {
-                            // 押したときと同じ節・頂点のときだけ (押してから離すまでの間に、変わっていたら出さない)
-                            bool isSame = rightPressNote != null && ReferenceEquals(GetHandleNote(rightPressHandle), rightPressNote) &&
-                                          (rightPressHandle.Kind != HandleKind.Vertex ||
-                                           (rightPressHandle.Vertex >= 0 && rightPressHandle.Vertex < rightPressNote.SpaceVertices.Vertices.Count &&
-                                            ReferenceEquals(rightPressNote.SpaceVertices.Vertices[rightPressHandle.Vertex], rightPressVertex)));
+                            // 押したときと同じ節のときだけ (押してから離すまでの間に、変わっていたら出さない)
+                            bool isSame = rightPressNote != null && ReferenceEquals(GetHandleNote(rightPressHandle), rightPressNote);
                             if (isSame) { ShowHandleMenu(rightPressHandle); }
                         }
                         else if (!hasDragMoved && rightPressNote != null)
@@ -429,7 +419,6 @@ namespace ChartEditor
                             if (index >= 0) { ShowSectionMenu(index); }
                         }
                         break;
-                    case DragKind.Vertex:
                     case DragKind.Center:
                     case DragKind.AxisX:
                     case DragKind.AxisY:
@@ -447,41 +436,45 @@ namespace ChartEditor
             }
             finally
             {
-                dragNote = null;
-                dragVertices.Clear();
-                dragStartPositions.Clear();
-                dragGroup.Clear();
-                dragSpanIndex = -1;
-                previewBaked.Clear();
-                hasRightPressHandle = false;
+                ResetDragState();
             }
         }
 
         /// <summary>
-        /// ドラッグを、何も記録せずにやめる (開き直したとき)
+        /// ドラッグを、何も記録せずにやめる (開き直したとき、説明書を開いたとき)
         /// </summary>
         private void CancelDrag()
         {
-            // 置いたばかりの頂点は、置いた操作として登録しておく (履歴に無い頂点が残らないように)
-            RecordPlacedVertex();
+            ResetDragState();
+        }
 
+        /// <summary>
+        /// ドラッグの状態を、何もしていない状態に戻す
+        /// </summary>
+        private void ResetDragState()
+        {
             dragKind = DragKind.None;
-            dragGroup.Clear();
             dragNote = null;
             dragVertices.Clear();
             dragStartPositions.Clear();
+            dragCenters.Clear();
+            dragWeights.Clear();
             dragSpanIndex = -1;
             previewBaked.Clear();
             hasRightPressHandle = false;
         }
 
-        #region 頂点・節を動かす
+        #region 節を動かす・回す・拡大縮小する
 
-        private void StartVertexDrag(int sectionIndex, int vertexIndex, DragKind kind, Vector2 local, Vector2 mouse)
+        /// <summary>
+        /// 節の中心・矢印 (横・縦) を掴んで、節全体を動かし始める
+        /// </summary>
+        private void StartVertexDrag(int sectionIndex, DragKind kind, Vector2 local, Vector2 mouse)
         {
             if (sectionIndex < 0 || sectionIndex >= sections.Count) { return; }
 
-            if (sectionIndex != selectedIndex) { Select(sectionIndex); }
+            // (選んでいない節: クリックしたときと同じに選ぶ。選んでいる節: いちばん手前にするだけ。ほかの選択はそのまま)
+            if (sectionIndex != selectedIndex) { MakePrimary(sectionIndex); }
             // ロックした節: 選ぶだけで、動かさない
             if (IsLockedSection(sectionIndex))
             {
@@ -492,28 +485,28 @@ namespace ChartEditor
 
             SpaceHoldSection section = sections[sectionIndex];
             dragNote = section.Note;
-            dragVertexIndex = vertexIndex;
 
+            // 動かす節: 選んでいる節すべて (回す・拡大縮小と同じ。「なめらか」のときは、掴んだ節から離れるほど少し: 録音 20261118_010119)
             dragVertices.Clear();
             dragStartPositions.Clear();
-            dragGroup.Clear();
-            foreach (var vertex in section.Note.SpaceVertices.Vertices)
+            dragCenters.Clear();
+            dragWeights.Clear();
+            transformSectionCount = 0;
+            foreach (var target in GetTransformTargets(sectionIndex))
             {
-                dragVertices.Add(vertex);
-                dragStartPositions.Add(vertex.Position.Value);
-            }
-            if (vertexIndex >= dragVertices.Count) { return; }
+                if (target.Weight <= 0f) { continue; }
 
-            // 選んでいる頂点 (2つ以上) のどれかを掴んだときは、選んでいる頂点をまとめて動かす
-            if (kind == DragKind.Vertex && vertexIndex >= 0 && selectedVertices.Count >= 2 && IsVertexSelected(dragVertices[vertexIndex]))
-            {
-                for (int i = 0; i < dragVertices.Count; i++)
+                foreach (var vertex in sections[target.Index].Note.SpaceVertices.Vertices)
                 {
-                    if (IsVertexSelected(dragVertices[i])) { dragGroup.Add(i); }
+                    dragVertices.Add(vertex);
+                    dragStartPositions.Add(vertex.Position.Value);
+                    dragWeights.Add(target.Weight);
                 }
+                transformSectionCount++;
             }
+            if (dragVertices.Count == 0) { return; }
 
-            Vector3 grab = vertexIndex >= 0 ? ToWorld(section.Vertices[vertexIndex], section.Depth) : ToWorld(section.Center, section.Depth);
+            Vector3 grab = ToWorld(section.Center, section.Depth);
             Ray ray = view.GetRay(local);
 
             if (kind == DragKind.AxisX || kind == DragKind.AxisY)
@@ -553,42 +546,15 @@ namespace ChartEditor
                 deltaUnit = ToUnit(hit) - ToUnit(dragStartHit);
             }
 
-            if (dragKind == DragKind.Vertex)
-            {
-                if (dragGroup.Count > 0)
-                {
-                    foreach (int i in dragGroup) { dragVertices[i].SetPosition(dragStartPositions[i] + deltaUnit); }
-                }
-                else if (dragVertexIndex >= 0 && dragVertexIndex < dragVertices.Count)
-                {
-                    dragVertices[dragVertexIndex].SetPosition(dragStartPositions[dragVertexIndex] + deltaUnit);
-                }
-                return;
-            }
-
             for (int i = 0; i < dragVertices.Count; i++)
             {
-                dragVertices[i].SetPosition(dragStartPositions[i] + deltaUnit);
+                float weight = i < dragWeights.Count ? dragWeights[i] : 1f;
+                dragVertices[i].SetPosition(dragStartPositions[i] + deltaUnit * weight);
             }
         }
 
         private void FinishVertexDrag(DragKind kind)
         {
-            // 頂点の道具「編集」で置いた頂点: 置いた操作として1回ぶん登録する (動かした分は、置いた位置に含める)
-            if (placedVertex != null)
-            {
-                RecordPlacedVertex();
-                ShowStatus("頂点を置きました");
-                return;
-            }
-
-            // 頂点を、動かさずにクリックしたとき: その頂点を選ぶ
-            if (kind == DragKind.Vertex && !hasDragMoved)
-            {
-                ClickVertex(chain.IndexOf(dragNote), dragVertexIndex);
-                return;
-            }
-
             var previous = new List<VertexDataToPos>();
             var current = new List<VertexDataToPos>();
             for (int i = 0; i < dragVertices.Count; i++)
@@ -605,59 +571,74 @@ namespace ChartEditor
             VerticesMoveRecord.RecordVertcesMoving(previous, current);
             switch (kind)
             {
-                case DragKind.Vertex: ShowStatus(dragGroup.Count > 0 ? $"頂点を {dragGroup.Count} 個動かしました" : "頂点を動かしました"); break;
-                case DragKind.Rotate: ShowStatus("頂点を回しました"); break;
-                case DragKind.Scale: ShowStatus("頂点を拡大・縮小しました"); break;
-                default: ShowStatus("節を動かしました"); break;
+                case DragKind.Rotate: ShowStatus(transformSectionCount > 1 ? $"節を {transformSectionCount} 個回しました" : "節を回しました"); break;
+                case DragKind.Scale: ShowStatus(transformSectionCount > 1 ? $"節を {transformSectionCount} 個拡大・縮小しました" : "節を拡大・縮小しました"); break;
+                default: ShowStatus(transformSectionCount > 1 ? $"節を {transformSectionCount} 個動かしました" : "節を動かしました"); break;
             }
         }
 
         /// <summary>
-        /// 頂点の道具「回転」「拡大縮小」: 頂点を掴んで、選んでいる頂点 (2つ以上選んでいなければ、すべての頂点) を、その中心のまわりに回す / 拡大・縮小する
-        /// (頂点レイヤーの「回転」「拡大縮小」と同じ計算。動かすのは、節の面の中)
+        /// 道具「回転」「拡大縮小」: 選んでいる節の形を、丸ごと回す / 拡大・縮小する (録音 20261117_180313)
+        /// 押したところ (節の面の上の位置) を掴んで、節の中心のまわりに回す / 中心からの距離の割合で拡大・縮小する。
+        /// 範囲 (SectionTransformRange) で決めた、ほかの節も、それぞれの中心のまわりで同じように動かす (録音 20261117_180817)
         /// </summary>
-        private void StartTransformDrag(int sectionIndex, int vertexIndex, bool isRotate, Vector2 local, Vector2 mouse)
+        private void StartFaceTransformDrag(bool isRotate, Vector2 local, Vector2 mouse)
         {
-            if (sectionIndex < 0 || sectionIndex >= sections.Count) { return; }
-            if (IsLockedSection(sectionIndex))
+            if (!TryGetSelected(out SpaceHoldSection section)) { return; }
+            if (IsLockedSection(selectedIndex))
             {
                 ShowLockedStatus();
                 waitForMouseRelease = true;
                 return;
             }
 
-            SpaceHoldSection section = sections[sectionIndex];
-            var vertices = section.Note.SpaceVertices.Vertices;
-            if (vertexIndex < 0 || vertexIndex >= vertices.Count) { return; }
+            // 節の面の中で動かす (面をほとんど真横から見ているときは、画面に平行な面の中で)
+            Ray ray = view.GetRay(local);
+            Vector3 center = ToWorld(section.Center, section.Depth);
+            dragPlaneZ = center.z;
+            dragUseViewPlane = Mathf.Abs(ray.direction.z) < GRAZING_DIRECTION_Z;
+            dragPlanePoint = center;
+            dragPlaneNormal = rig.Forward;
+            if (!TryHitDragPlane(ray, out dragStartHit))
+            {
+                waitForMouseRelease = true;
+                return;
+            }
+
+            transformCenter = section.Center;
+            transformGrabPoint = ToUnit(dragStartHit);
+            if ((transformGrabPoint - transformCenter).magnitude < MIN_TRANSFORM_GRAB)
+            {
+                ShowStatus(isRotate ? "節の中心から少し離れたところを押して、回してください" : "節の中心から少し離れたところを押して、ドラッグしてください");
+                waitForMouseRelease = true;
+                return;
+            }
 
             dragNote = section.Note;
-            dragVertexIndex = vertexIndex;
             dragVertices.Clear();
             dragStartPositions.Clear();
-            dragGroup.Clear();
+            dragCenters.Clear();
+            dragWeights.Clear();
+            transformAngle = 0f;
+            lastRawAngle = 0f;
+            transformSectionCount = 0;
 
-            bool usesSelection = selectedVertices.Count >= 2;
-            Vector2 sum = Vector2.zero;
-            foreach (var vertex in vertices)
+            foreach (var target in GetTransformTargets(selectedIndex))
             {
-                if (usesSelection && !IsVertexSelected(vertex)) { continue; }
-                dragVertices.Add(vertex);
-                dragStartPositions.Add(vertex.Position.Value);
-                sum += vertex.Position.Value;
+                if (target.Weight <= 0f) { continue; }
+
+                SpaceHoldSection targetSection = sections[target.Index];
+                Vector2 targetCenter = targetSection.Center;
+                foreach (var vertex in targetSection.Note.SpaceVertices.Vertices)
+                {
+                    dragVertices.Add(vertex);
+                    dragStartPositions.Add(vertex.Position.Value);
+                    dragCenters.Add(targetCenter);
+                    dragWeights.Add(target.Weight);
+                }
+                transformSectionCount++;
             }
             if (dragVertices.Count == 0) { return; }
-
-            transformCenter = sum / dragVertices.Count;
-            transformGrabPoint = vertices[vertexIndex].Position.Value;
-
-            // 節の面の中で動かす (面をほとんど真横から見ているときは、画面に平行な面の中で)
-            Vector3 grab = ToWorld(section.Vertices[vertexIndex], section.Depth);
-            Ray ray = view.GetRay(local);
-            dragPlaneZ = grab.z;
-            dragUseViewPlane = Mathf.Abs(ray.direction.z) < GRAZING_DIRECTION_Z;
-            dragPlanePoint = grab;
-            dragPlaneNormal = rig.Forward;
-            if (!TryHitDragPlane(ray, out dragStartHit)) { dragStartHit = grab; }
 
             BeginDrag(isRotate ? DragKind.Rotate : DragKind.Scale, 0, mouse);
         }
@@ -670,90 +651,29 @@ namespace ChartEditor
             Vector2 point = transformGrabPoint + (ToUnit(hit) - ToUnit(dragStartHit));
             if (dragKind == DragKind.Rotate)
             {
-                float angle = Vector2Extensions.AngleBetweenVectors(transformGrabPoint, point, transformCenter);
-                for (int i = 0; i < dragVertices.Count; i++) { dragVertices[i].SetPosition(dragStartPositions[i].RotatePoint(transformCenter, angle)); }
+                // 中心のすぐそばを通ったときは、向きが決まらないので、角度はそのまま
+                if ((point - transformCenter).magnitude < MIN_TRANSFORM_GRAB * 0.5f) { return; }
+
+                float rawAngle = Vector2Extensions.AngleBetweenVectors(transformGrabPoint, point, transformCenter);
+                transformAngle += Mathf.DeltaAngle(lastRawAngle, rawAngle);
+                lastRawAngle = rawAngle;
+                for (int i = 0; i < dragVertices.Count; i++)
+                {
+                    dragVertices[i].SetPosition(dragStartPositions[i].RotatePoint(dragCenters[i], transformAngle * dragWeights[i]));
+                }
             }
             else
             {
                 float baseDistance = (transformGrabPoint - transformCenter).magnitude;
-                // 中心のすぐそばを掴んだときは、割合を決められないので、動かさない
                 if (baseDistance < 0.0001f) { return; }
 
                 float magnitude = (point - transformCenter).magnitude / baseDistance;
-                for (int i = 0; i < dragVertices.Count; i++) { dragVertices[i].SetPosition(dragStartPositions[i].ScalePoint(transformCenter, magnitude)); }
+                for (int i = 0; i < dragVertices.Count; i++)
+                {
+                    float factor = 1f + (magnitude - 1f) * dragWeights[i];
+                    dragVertices[i].SetPosition(dragStartPositions[i].ScalePoint(dragCenters[i], factor));
+                }
             }
-        }
-
-        /// <summary>
-        /// 頂点の道具「編集」: 選んでいる節の面の、押した位置に頂点を置いて、そのまま掴む
-        /// </summary>
-        /// <returns>置いたとき true</returns>
-        private bool TryPlaceVertex(Vector2 local, Vector2 mouse)
-        {
-            if (!TryGetSelected(out SpaceHoldSection section)) { return false; }
-            // ロックした節には、頂点を置かない
-            if (NoteLock.IsLocked(section.Note)) { return false; }
-
-            Ray ray = view.GetRay(local);
-            Vector3 center = ToWorld(section.Center, section.Depth);
-            dragPlaneZ = center.z;
-            dragUseViewPlane = Mathf.Abs(ray.direction.z) < GRAZING_DIRECTION_Z;
-            dragPlanePoint = center;
-            dragPlaneNormal = rig.Forward;
-            if (!TryHitDragPlane(ray, out Vector3 hit)) { return false; }
-
-            // ノーツの面の外や、ほかの頂点の上には置かない (面の外を押したときは、何も無い所を押したのと同じにする)
-            SpaceVertices target = section.Note.SpaceVertices;
-            if (!PreviewVertexTools.CanPlaceAt(target, ToUnit(hit))) { return false; }
-
-            // 頂点を置くと、頂点の選択は外れる (頂点レイヤーと同じ)
-            ClearVertexSelection();
-
-            SpaceVertices vertices = section.Note.SpaceVertices;
-            VertexData added = PreviewVertexTools.AddVertexWithoutRecord(vertices, ToUnit(hit));
-            placedVertices = vertices;
-            placedVertex = added;
-
-            // 頂点が増えたので、節を作り直してから掴む
-            RefreshChain();
-            if (selectedIndex < 0 || added.VertexIndex < 0)
-            {
-                RecordPlacedVertex();
-                return true;
-            }
-
-            StartVertexDrag(selectedIndex, added.VertexIndex, DragKind.Vertex, local, mouse);
-            if (dragKind != DragKind.Vertex) { RecordPlacedVertex(); }
-            return true;
-        }
-
-        /// <summary>
-        /// 頂点の道具「編集」で、その位置を押したら頂点を置くか (カーソルの絵を決めるのに使う。TryPlaceVertex と同じ決め方)
-        /// </summary>
-        private bool CanPlaceVertexAt(Vector2 local)
-        {
-            if (!TryGetSelected(out SpaceHoldSection section)) { return false; }
-            if (NoteLock.IsLocked(section.Note)) { return false; }
-
-            Ray ray = view.GetRay(local);
-            Vector3 center = ToWorld(section.Center, section.Depth);
-            bool useViewPlane = Mathf.Abs(ray.direction.z) < GRAZING_DIRECTION_Z;
-            var plane = useViewPlane ? new Plane(rig.Forward, center) : new Plane(Vector3.forward, new Vector3(0f, 0f, center.z));
-            if (!plane.Raycast(ray, out float enter)) { return false; }
-
-            return PreviewVertexTools.CanPlaceAt(section.Note.SpaceVertices, ToUnit(ray.GetPoint(enter)));
-        }
-
-        /// <summary>
-        /// 置いた頂点を、置いた操作として履歴に登録する (置いていなければ、何もしない)
-        /// </summary>
-        private void RecordPlacedVertex()
-        {
-            if (placedVertex == null) { return; }
-
-            PreviewVertexTools.RecordAddedVertex(placedVertices, placedVertex);
-            placedVertices = null;
-            placedVertex = null;
         }
 
         private bool TryHitDragPlane(Ray ray, out Vector3 hit)
@@ -895,7 +815,8 @@ namespace ChartEditor
             if (dragSpanIndex < 0 || dragSpanIndex >= spans.Count || timeline == null) { return; }
 
             Span span = spans[dragSpanIndex];
-            SpaceHoldCurveMath.Bake(timeline, sections[span.StartIndex], sections[span.EndIndex], dragControl, SpaceHoldSections.GetNormalizedVertexCount(sections), previewBaked);
+            SpaceHoldCurveMath.BakeKeepingShapes(timeline, sections.GetRange(span.StartIndex, span.EndIndex - span.StartIndex + 1), dragStartControl, dragControl,
+                                                 SpaceHoldSections.GetNormalizedVertexCount(sections), previewBaked);
         }
 
         private void FinishControlDrag()
@@ -904,14 +825,9 @@ namespace ChartEditor
             if (!hasDragMoved) { return; }
 
             Span span = spans[dragSpanIndex];
-            int count = CommitCurve(span.StartIndex, span.EndIndex, dragControl);
+            int count = CommitCurve(span.StartIndex, span.EndIndex, dragControl, dragStartControl);
             if (count >= 0) { ShowStatus($"曲線のとおりに、メッシュ中継点を {count} 個置きました"); }
         }
-
-        #endregion
-
-        #region 右クリック・頂点を足す
-
 
         #endregion
 
@@ -932,7 +848,7 @@ namespace ChartEditor
                 AddHandle(HandleKind.Control, -1, -1, i, ToWorld(new Vector2(control.x, control.y), control.z));
             }
 
-            // 選んでいる節の、矢印の先と頂点
+            // 選んでいる節の、矢印の先と頂点 (頂点は見せるだけ)
             if (TryGetSelected(out SpaceHoldSection selected))
             {
                 Vector3 origin = ToWorld(selected.Center, selected.Depth);
@@ -970,7 +886,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// カーソルの下のつまみ (重なっているときは、矢印 → 制御点 → 頂点 → 中心 の順に優先する)
+        /// カーソルの下のつまみ (重なっているときは、矢印 → 制御点 → 中心 の順に優先する。頂点は掴めない)
         /// </summary>
         private bool TryFindHandle(Vector2 local, out Handle found)
         {
@@ -981,6 +897,9 @@ namespace ChartEditor
 
             foreach (var handle in handleList)
             {
+                // 頂点は、見せるだけ (3D編集では、頂点を選んだり動かしたりしない。頂点の編集は頂点レイヤーで: 録音 20261117_180313)
+                if (handle.Kind == HandleKind.Vertex) { continue; }
+
                 float distance = (handle.Local - local).magnitude;
                 if (distance > handle.Radius) { continue; }
 

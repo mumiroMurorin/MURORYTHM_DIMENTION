@@ -28,6 +28,7 @@ namespace ChartEditor
             (NoteWarningType.Stacking, "重なっているノーツ"),
             (NoteWarningType.UnconnectedHold, "つながっていないホールド"),
             (NoteWarningType.UnconnectedSpaceHold, "つながっていないスペースホールド"),
+            (NoteWarningType.LooseDynamic, "ルールに合わないダイナミックノーツ"),
         };
 
         readonly INotesDataGetter notesGetter;

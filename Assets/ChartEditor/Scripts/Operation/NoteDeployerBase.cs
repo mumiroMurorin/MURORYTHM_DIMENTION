@@ -25,6 +25,8 @@ namespace ChartEditor
         IDeployableObject deployingNote;
         IDeployableNoteData deployingNoteData;
         bool isDeployedTentative;
+        // ノーツの上に置く種類 (ダイナミックノーツ) で、今、仮ノーツを出しているノーツ
+        IDeployableNoteData hostUnderCursor;
 
         /// <summary>
         /// 配置を受け付けるエディットモード
@@ -50,6 +52,31 @@ namespace ChartEditor
         /// 雛形から複製した仮ノーツのデータを調整する
         /// </summary>
         protected virtual void SetupNoteData(IDeployableNoteData noteData) { }
+
+        /// <summary>
+        /// レーンのマスではなく、ほかのノーツの上に置く種類か (ダイナミックノーツ)
+        /// </summary>
+        protected virtual bool IsHostPlacement(DeploymentNoteType noteType) => false;
+
+        /// <summary>
+        /// ノーツの上に置く種類のとき: カーソルの下の、置き先のノーツ (置けないときは null と、その理由。ノーツが無いときは理由も null)
+        /// </summary>
+        protected virtual IDeployableNoteData FindHostUnderCursor(out string refusal)
+        {
+            refusal = null;
+            return null;
+        }
+
+        /// <summary>
+        /// ノーツの上に置く種類のとき: 置き先のノーツに、ノーツを置く (元に戻せるように登録する)
+        /// </summary>
+        /// <returns>置いたとき true</returns>
+        protected virtual bool DeployOnHost(IDeployableNoteData host, IDeployableNoteData noteData) => false;
+
+        /// <summary>
+        /// ノーツの上に置く種類のとき: 何も無いレーンのマスをクリックしたときに、ログに出す文
+        /// </summary>
+        protected virtual string HostRequiredMessage => string.Empty;
 
         [Inject]
         public void Construct(IChartEditorDataGetter dataGetter)
@@ -77,6 +104,10 @@ namespace ChartEditor
                     if (dataGetter.CurrentEditMode.Value != DeployMode) { return; }
                     // ホールドを1本だけ編集している間は、仮ノーツも出さない
                     if (HoldIsolation.IsActive) { return; }
+                    // 置くノーツを選んでいない間も、出さない (録音 20261118_010533)
+                    if (DeploymentNoteChoice.IsNone) { return; }
+                    // ノーツの上に置く種類は、レーンのマスには出さない (Update で、カーソルの下のノーツに出す)
+                    if (IsHostPlacement(dataGetter.DeploymentNoteType.Value)) { return; }
                     if (TryGetDeployLocation(collider.Value, out var parent, out _)) { UpdateNotePosition(parent); }
                 }).AddTo(this.gameObject);
 
@@ -103,8 +134,74 @@ namespace ChartEditor
                 return;
             }
 
+            // 置くノーツを選んでいない間は、何も置かない (仮ノーツも消す。録音 20261118_010533)
+            if (DeploymentNoteChoice.IsNone)
+            {
+                DestroyNote();
+                return;
+            }
+
+            // ノーツの上に置く種類 (ダイナミックノーツ): カーソルの下のノーツに仮ノーツを出し、クリックでそのノーツに載せる
+            if (IsHostPlacement(dataGetter.DeploymentNoteType.Value))
+            {
+                UpdateHostGhost();
+                if (Input.GetMouseButtonDown(0) && !RangeSelectGesture.IsForced(dataGetter)) { DeployOnHostOnClick(); }
+                return;
+            }
+
             // 左クリックで配置 (Shift を押しながらのドラッグは範囲選択なので、置かない)
             if (Input.GetMouseButtonDown(0) && !RangeSelectGesture.IsForced(dataGetter)) { DeployNoteOnClick(); }
+        }
+
+        /// <summary>
+        /// ノーツの上に置く種類: カーソルの下の、置けるノーツに仮ノーツを重ねる (幅も、そのノーツと同じ)
+        /// </summary>
+        private void UpdateHostGhost()
+        {
+            var host = FindHostUnderCursor(out _);
+            if (host == null)
+            {
+                hostUnderCursor = null;
+                DestroyNote();
+                return;
+            }
+
+            if (deployingNote == null) { SpawnNewNote(dataGetter.DeploymentNoteType.Value); }
+            if (deployingNote == null || deployingNoteData == null) { return; }
+
+            if (!DynamicNoteLinker.IsSameAddress(host.Address, deployingNoteData.Address)) { deployingNoteData.SetAddress(host.Address); }
+
+            var parent = GetNoteParentTransform(host.Address);
+            if (parent == null) { return; }
+
+            deployingNote.OnMove(parent);
+            hostUnderCursor = host;
+            isDeployedTentative = true;
+        }
+
+        /// <summary>
+        /// ノーツの上に置く種類: クリックしたノーツに載せる
+        /// </summary>
+        private void DeployOnHostOnClick()
+        {
+            // カーソルがUI上にあるときは配置しない
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) { return; }
+
+            var host = FindHostUnderCursor(out string refusal);
+            if (host == null)
+            {
+                // ノーツの上だが置けない (HoldMeshRelay など) ときは、その理由。何も無いレーンのマスのときは、置ける場所
+                if (!string.IsNullOrEmpty(refusal)) { Debug.Log($"【配置】{refusal}"); }
+                else if (GetDeployColliderUnderCursor() != null && !string.IsNullOrEmpty(HostRequiredMessage)) { Debug.Log($"【配置】{HostRequiredMessage}"); }
+                return;
+            }
+            if (!isDeployedTentative || deployingNoteData == null) { return; }
+
+            if (!DeployOnHost(host, deployingNoteData)) { return; }
+
+            hostUnderCursor = null;
+            DestroyNote();
+            SpawnNewNote(dataGetter.DeploymentNoteType.Value);
         }
 
         /// <summary>

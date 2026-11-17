@@ -20,6 +20,7 @@ namespace ChartEditor
         /// <summary>ここの上 (その子も含む) のクリックは数えない (ミニプレビューの映像など)</summary>
         public RectTransform[] IgnoredAreas { get; set; }
 
+        // (ダブルクリックを見分ける部品は System/DoubleClickDetector.cs。ウィンドウでは、決まった値 (0.35 秒、高さ 1080 で 8 ピクセル) を使う)
         readonly DoubleClickDetector detector = new DoubleClickDetector();
 
         public void OnPointerClick(PointerEventData eventData)
@@ -43,45 +44,6 @@ namespace ChartEditor
             {
                 if (area != null && pressed.transform.IsChildOf(area)) { return true; }
             }
-            return false;
-        }
-    }
-
-    /// <summary>
-    /// クリックが続けて2回あったか (ダブルクリック) を見分ける
-    /// </summary>
-    public class DoubleClickDetector
-    {
-        /// <summary>2回のクリックの間の、いちばん長い時間 (秒)</summary>
-        public const float MAX_INTERVAL = 0.35f;
-        /// <summary>2回のクリックの位置の、いちばん大きいずれ (画面の高さ 1080 のときのピクセル数)</summary>
-        public const float MAX_DISTANCE = 8f;
-
-        bool hasFirstClick;
-        float firstClickTime;
-        Vector2 firstClickPosition;
-
-        /// <summary>
-        /// クリックを知らせる
-        /// </summary>
-        /// <param name="time">クリックした時刻 (秒)</param>
-        /// <param name="position">クリックした位置 (画面のピクセル)</param>
-        /// <param name="scale">画面の大きさの倍率 (高さ 1080 のとき 1)</param>
-        /// <returns>このクリックで、ダブルクリックになったとき true (3回目のクリックは、また1回目として数える)</returns>
-        public bool Register(float time, Vector2 position, float scale = 1f)
-        {
-            if (hasFirstClick &&
-                time - firstClickTime <= MAX_INTERVAL &&
-                time >= firstClickTime &&
-                Vector2.Distance(position, firstClickPosition) <= MAX_DISTANCE * scale)
-            {
-                hasFirstClick = false;
-                return true;
-            }
-
-            hasFirstClick = true;
-            firstClickTime = time;
-            firstClickPosition = position;
             return false;
         }
     }

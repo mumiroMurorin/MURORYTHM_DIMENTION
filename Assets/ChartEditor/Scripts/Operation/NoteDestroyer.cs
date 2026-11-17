@@ -83,7 +83,17 @@ namespace ChartEditor
             // 何も選択されていないときは何もしない (Undo履歴にも積まない)
             if (datasCopy.Count == 0) { return; }
 
+            // 下のノーツを消すときは、載っているダイナミックノーツも一緒に消す
+            // (ダイナミックノーツだけを選んで消したときは、ダイナミックノーツだけが外れる)
+            datasCopy = DynamicNoteAttachments.WithPartners(datasCopy, includeDynamics: true, includeHosts: false)
+                .Where(note => !NoteLock.IsLocked(note))
+                .ToList();
+
             foreach (var data in datasCopy) { notesSetter.TryRemoveSelectingNotes(data); }
+
+            // ダイナミックノーツを先に消す (ホールドの終点と一緒に消すとき、つながりが変わって決め直す終点の種類が、
+            // 消えるダイナミックノーツを見ないように)
+            datasCopy = datasCopy.OrderBy(note => DynamicNoteRules.IsDynamic(note.NoteType) ? 0 : 1).ToList();
 
             // 削除
             Record(() => { 

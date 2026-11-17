@@ -82,6 +82,17 @@ namespace ChartEditor
                 return;
             }
 
+            // ダイナミックノーツをノーツに載せるクリックでは、下のノーツを選ばない (何も無い所に置くときと同じく、選択を外す)
+            // (選んだままだと、続けて Delete を押したときに、下のノーツまで消えてしまう)
+            if (dataGetter.CurrentEditMode.Value == EditMode.Deploy && DynamicNoteAttachments.IsPlacingDynamic(dataGetter))
+            {
+                if (Input.GetMouseButtonDown(0) && !ModifierKey.Ctrl && !EventSystem.current.IsPointerOverGameObject())
+                {
+                    notesSetter.ClearSelectingNotes();
+                }
+                return;
+            }
+
             // Ctrl+左クリックで複数選択
             if (ModifierKey.Ctrl && Input.GetMouseButtonDown(0))
             {

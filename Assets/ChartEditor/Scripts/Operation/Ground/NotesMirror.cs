@@ -26,7 +26,8 @@ namespace ChartEditor
             var previousAddress = new List<NoteDataToAddress>();
             var currentAddress = new List<NoteDataToAddress>();
             int lockedCount = 0;
-            foreach (var note in notesGetter.SelectingNotes)
+            // ダイナミックノーツと下のノーツは、どちらを選んでいても、両方とも反転する
+            foreach (var note in DynamicNoteAttachments.WithPartners(notesGetter.SelectingNotes))
             {
                 // ロックしたノーツは反転しない
                 if (NoteLock.IsLocked(note)) { lockedCount++; continue; }

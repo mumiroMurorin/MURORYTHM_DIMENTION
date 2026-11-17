@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UndoRedo.Notes;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VContainer.Unity;
 using static UndoRedo.History;
@@ -25,33 +24,23 @@ namespace ChartEditor
     /// ・背景をダブルクリック: 小さいマスにしまう (マスを押すと戻る。ほかの欄と同じ MinimizableWindow)
     /// どの操作も、元に戻せる (1回の操作が、1回ぶん)。
     ///
-    /// 画面部品は、シーンには置かず、起動したときにコードで作る (EditorRuntimeUi)。
+    /// 帯の枠 (キャンバス・見出し・並べる場所・スクロールバー・しまったときのマス) は、シーンに置いてある (SpaceHoldFilmStripView)。
+    /// サムネイル・「+」・目盛りは、数が節の並びで変わるので、シーンのひな形を複製して作る。
     /// </summary>
     public class SpaceHoldFilmStrip : ITickable, IDisposable
     {
-        // 帯の大きさと位置 (1920×1080 を基準にした大きさ。画面の下のまんなかに出す)
+        // 帯の大きさと位置は、シーンに置いてある (940 × 166、画面の下のまんなか、下から 8)
         // (録音 20261117_033817: 背を低くした (204 → 166)。頂点レイヤーの円が、帯の後ろに隠れないように)
-        const float PANEL_WIDTH = 940f;
-        const float PANEL_HEIGHT = 166f;
-        const float PANEL_BOTTOM = 8f;
-        const float HEADER_HEIGHT = 30f;
-        const float SCROLLBAR_HEIGHT = 12f;
         // 目盛り (分線の名前) の高さ
         const float RULER_HEIGHT = 18f;
-        // サムネイル1つぶん
+        // サムネイル1つぶん (大きさ 80 × 84 は、シーンのひな形に書いてある)
         const float ITEM_WIDTH = 80f;
         const float ITEM_HEIGHT = 84f;
-        const float ITEM_LABEL_HEIGHT = 18f;
         const float ITEM_TOP = 4f;
         // 分線1本ぶんの幅 (節のある分線は、節の数 × SLOT、節の無い分線は EMPTY_SLOT)
         const float ITEM_SLOT_WIDTH = 92f;
         const float EMPTY_SLOT_WIDTH = 28f;
-        const float PLUS_SIZE = 20f;
         const float CONTENT_PADDING = 10f;
-        // ほかの画面部品 (EditorCanvas は 0) より手前、3D編集 (5) とメニューバー (10) より奥
-        const int SORTING_ORDER = 1;
-        // しまったかどうかを覚えておく名前 (MinimizableWindow)
-        const string PREFS_KEY = "SpaceHoldFilmStrip";
 
         static readonly Color itemColor = new Color(0.19f, 0.19f, 0.22f, 1f);
         static readonly Color itemHoverColor = new Color(0.26f, 0.26f, 0.30f, 1f);
@@ -59,18 +48,19 @@ namespace ChartEditor
         static readonly Color dragLabelColor = new Color(1f, 0.85f, 0.35f, 1f);
         static readonly Color tickColor = new Color(1f, 1f, 1f, 0.14f);
         static readonly Color barTickColor = new Color(1f, 1f, 1f, 0.42f);
-        static readonly Color dropColor = new Color(1f, 0.85f, 0.35f, 0.22f);
+        // 目盛りの名前の色 (小節の頭でないもの)
+        static readonly Color subTextColor = new Color(0.72f, 0.72f, 0.76f, 1f);
 
         readonly IChartEditorDataGetter dataGetter;
         readonly INotesDataGetter notesGetter;
         readonly INotesDataSetter notesSetter;
 
+        // シーンに置いてある画面部品
+        SpaceHoldFilmStripView view;
         Canvas canvas;
-        RectTransform panel;
         TextMeshProUGUI titleLabel;
         RectTransform viewport;
         RectTransform content;
-        ScrollRect scrollRect;
         Image dropHighlight;
         readonly List<FilmStripItem> items = new List<FilmStripItem>();
         readonly List<EditorUiButton> plusButtons = new List<EditorUiButton>();
@@ -103,7 +93,8 @@ namespace ChartEditor
 
         void IDisposable.Dispose()
         {
-            if (canvas != null) { UnityEngine.Object.Destroy(canvas.gameObject); }
+            // (画面部品はシーンのものなので、消さない)
+            view = null;
             canvas = null;
         }
 
@@ -113,14 +104,14 @@ namespace ChartEditor
 
             try
             {
-                if (canvas == null) { Build(); }
+                if (view == null && !Connect()) { return; }
                 Refresh();
             }
             catch (Exception exception)
             {
-                // 失敗し続けてログがあふれないよう、作れなかったときは、それ以降は何もしない
+                // 失敗し続けてログがあふれないよう、つなげなかったときは、それ以降は何もしない
                 Debug.LogException(exception);
-                if (canvas == null) { isBuildFailed = true; }
+                if (view == null) { isBuildFailed = true; }
             }
         }
 
@@ -173,7 +164,7 @@ namespace ChartEditor
 
                 bool isDragging = i == dragIndex && dragTargetLine >= 0 && dragTargetLine != section.Line;
                 item.SetLabel(isDragging ? $"→ {FormatLine(timeline, dragTargetLine)}" : GetTypeShortName(section.Note.NoteType),
-                              isDragging ? dragLabelColor : EditorRuntimeUi.TextColor);
+                              isDragging ? dragLabelColor : EditorUiButton.TextColor);
             }
 
             RefreshDropHighlight();
@@ -258,7 +249,7 @@ namespace ChartEditor
                 var label = rulerLabels[labelCount++];
                 SetActive(label.gameObject, true);
                 label.text = counts[i] > 0 ? FormatLine(timeline, line) : $"#{timeline.GetBar(line) + 1}";
-                label.color = isBarHead ? new Color(1f, 1f, 1f, 0.85f) : EditorRuntimeUi.SubTextColor;
+                label.color = isBarHead ? new Color(1f, 1f, 1f, 0.85f) : subTextColor;
                 label.rectTransform.anchoredPosition = new Vector2(slotX[i] + 3f, 1f);
                 label.rectTransform.sizeDelta = new Vector2(Mathf.Max(slotWidths[i] - 4f, 40f), RULER_HEIGHT - 2f);
             }
@@ -506,7 +497,7 @@ namespace ChartEditor
 
         /// <summary>
         /// 節 gapIndex と、その次の節の間のまんなかの分線に、補間した形のメッシュ中継点を足す (元に戻せる)
-        /// (3D編集の「節を足す」から使う)
+        /// (3D編集の右クリックのメニュー「この節の後ろに節を足す」から使う)
         /// </summary>
         public static bool TryInsertInterpolatedSection(ChartData chartData, SpaceHoldTimeline timeline, IReadOnlyList<SpaceHoldSection> sections, int gapIndex, out NoteData_SpaceHold inserted)
         {
@@ -558,180 +549,51 @@ namespace ChartEditor
 
         #endregion
 
-        #region 画面部品を作る
-
-        private void Build()
-        {
-            canvas = EditorRuntimeUi.CreateOverlayCanvas("SpaceHoldFilmStripCanvas", SORTING_ORDER);
-
-            panel = EditorRuntimeUi.CreatePanel("FilmStrip", canvas.transform).rectTransform;
-            EditorRuntimeUi.Place(panel, new Vector2(0.5f, 0f), new Vector2(0f, PANEL_BOTTOM), new Vector2(PANEL_WIDTH, PANEL_HEIGHT));
-
-            // 見出し
-            titleLabel = EditorRuntimeUi.CreateLabel("Title", panel, string.Empty, 15f, TextAlignmentOptions.MidlineLeft);
-            EditorRuntimeUi.Place(titleLabel.rectTransform, new Vector2(0f, 1f), new Vector2(12f, -2f), new Vector2(300f, HEADER_HEIGHT));
-
-            // (押す: 選ぶ、+: 補間した節を足す、ダブルクリック: しまう、の説明は、見ればわかるので出さない (録音 20261116_224220))
-            var hint = EditorRuntimeUi.CreateLabel("Hint", panel, "ドラッグ: 時刻をずらす",
-                12f, TextAlignmentOptions.MidlineRight, EditorRuntimeUi.SubTextColor);
-            EditorRuntimeUi.Place(hint.rectTransform, new Vector2(1f, 1f), new Vector2(-12f, -2f), new Vector2(560f, HEADER_HEIGHT));
-
-            // (「3Dで編集」のボタンは、ミニプレビューの「プレビュー」のボタンの横にある: SpaceHold3DOpenButtonView)
-
-            // サムネイルを並べる場所 (ホイール・スクロールバーで左右に送る)
-            var viewportImage = EditorRuntimeUi.CreateImage("Viewport", panel, new Color(0f, 0f, 0f, 0.18f), true);
-            viewport = viewportImage.rectTransform;
-            EditorRuntimeUi.Stretch(viewport, 8f, 8f + SCROLLBAR_HEIGHT + 2f, 8f, HEADER_HEIGHT + 2f);
-            viewport.gameObject.AddComponent<RectMask2D>();
-
-            content = EditorRuntimeUi.CreateRect("Content", viewport);
-            content.anchorMin = new Vector2(0f, 0f);
-            content.anchorMax = new Vector2(0f, 1f);
-            content.pivot = new Vector2(0f, 0.5f);
-            content.anchoredPosition = Vector2.zero;
-            content.sizeDelta = new Vector2(0f, 0f);
-
-            // 目盛りの帯 (下)
-            var ruler = EditorRuntimeUi.CreateImage("Ruler", content, new Color(0f, 0f, 0f, 0.25f));
-            ruler.rectTransform.anchorMin = new Vector2(0f, 0f);
-            ruler.rectTransform.anchorMax = new Vector2(1f, 0f);
-            ruler.rectTransform.pivot = new Vector2(0.5f, 0f);
-            ruler.rectTransform.anchoredPosition = Vector2.zero;
-            ruler.rectTransform.sizeDelta = new Vector2(0f, RULER_HEIGHT);
-
-            // ドラッグしている間の、動かす先の印
-            dropHighlight = EditorRuntimeUi.CreateImage("DropTarget", content, dropColor);
-            SetVerticalLine(dropHighlight.rectTransform);
-            dropHighlight.gameObject.SetActive(false);
-
-            scrollRect = panel.gameObject.AddComponent<ScrollRect>();
-            scrollRect.viewport = viewport;
-            scrollRect.content = content;
-            scrollRect.horizontal = true;
-            scrollRect.vertical = false;
-            scrollRect.movementType = ScrollRect.MovementType.Clamped;
-            scrollRect.inertia = false;
-            scrollRect.scrollSensitivity = 40f;
-            scrollRect.horizontalScrollbar = CreateScrollbar();
-            scrollRect.horizontalScrollbarVisibility = ScrollRect.ScrollbarVisibility.Permanent;
-
-            SetupMinimize();
-        }
-
-        private Scrollbar CreateScrollbar()
-        {
-            var background = EditorRuntimeUi.CreateImage("Scrollbar", panel, new Color(0f, 0f, 0f, 0.35f), true);
-            var rect = background.rectTransform;
-            rect.anchorMin = new Vector2(0f, 0f);
-            rect.anchorMax = new Vector2(1f, 0f);
-            rect.pivot = new Vector2(0.5f, 0f);
-            rect.anchoredPosition = new Vector2(0f, 6f);
-            rect.sizeDelta = new Vector2(-16f, SCROLLBAR_HEIGHT);
-
-            var slidingArea = EditorRuntimeUi.CreateRect("SlidingArea", rect);
-            EditorRuntimeUi.Stretch(slidingArea, 1f, 1f, 1f, 1f);
-
-            var handle = EditorRuntimeUi.CreateImage("Handle", slidingArea, new Color(0.55f, 0.55f, 0.6f, 1f), true);
-            EditorRuntimeUi.Stretch(handle.rectTransform);
-
-            var scrollbar = rect.gameObject.AddComponent<Scrollbar>();
-            scrollbar.handleRect = handle.rectTransform;
-            scrollbar.targetGraphic = handle;
-            scrollbar.direction = Scrollbar.Direction.LeftToRight;
-            // 押した後に選択中のまま残っても、矢印キーで動かないようにする (矢印キーは、前後の節へ移るのに使う)
-            scrollbar.navigation = new Navigation { mode = Navigation.Mode.None };
-            return scrollbar;
-        }
+        #region 画面部品 (シーンの枠につなぐ・ひな形を複製する)
 
         /// <summary>
-        /// 背景のダブルクリックで、小さいマスにしまえるようにする (ほかの欄と同じ MinimizableWindow。マスの見た目も、ほかの欄のマスを複製する)
+        /// シーンに置いてある帯の枠を探す (最初の1回だけ)。見つからないときは false (それ以降は何もしない)
+        /// (しまう・戻すは、シーンの MinimizableWindow がする。帯の背景のダブルクリックで、小さいマスにしまう)
         /// </summary>
-        private void SetupMinimize()
+        private bool Connect()
         {
-            Button minimizedButton = null;
-            foreach (var window in UnityEngine.Object.FindObjectsOfType<MinimizableWindow>(true))
+            var found = UnityEngine.Object.FindObjectOfType<SpaceHoldFilmStripView>(true);
+            if (found == null || found.Canvas == null || found.Content == null || found.ItemTemplate == null || found.PlusTemplate == null ||
+                found.TickTemplate == null || found.RulerLabelTemplate == null || found.DropHighlight == null ||
+                found.TitleLabel == null || found.Viewport == null)
             {
-                if (window == null || window.MinimizedButton == null) { continue; }
-
-                minimizedButton = UnityEngine.Object.Instantiate(window.MinimizedButton.gameObject, canvas.transform).GetComponent<Button>();
-                break;
+                Debug.LogWarning("【フィルムストリップ】シーンに SpaceHoldFilmStripView がありません (フィルムストリップは出ません)");
+                isBuildFailed = true;
+                return false;
             }
 
-            if (minimizedButton == null)
-            {
-                var image = EditorRuntimeUi.CreateImage("Minimized", canvas.transform, new Color(0.3f, 0.3f, 0.34f, 1f), true);
-                image.rectTransform.sizeDelta = new Vector2(28f, 28f);
-                var mark = EditorRuntimeUi.CreateLabel("Mark", image.rectTransform, "□", 16f, TextAlignmentOptions.Center);
-                EditorRuntimeUi.Stretch(mark.rectTransform);
-                minimizedButton = image.gameObject.AddComponent<Button>();
-            }
-
-            minimizedButton.name = "FilmStripMinimized";
-            minimizedButton.navigation = new Navigation { mode = Navigation.Mode.None };
-            var buttonRect = (RectTransform)minimizedButton.transform;
-            Vector2 size = buttonRect.sizeDelta;
-            EditorRuntimeUi.Place(buttonRect, new Vector2(0.5f, 0f), new Vector2(-PANEL_WIDTH * 0.5f + size.x * 0.5f, PANEL_BOTTOM), size);
-            buttonRect.pivot = new Vector2(0.5f, 0f);
-            minimizedButton.gameObject.SetActive(false);
-
-            var minimizer = canvas.gameObject.AddComponent<MinimizableWindow>();
-            minimizer.Setup(panel, minimizedButton, PREFS_KEY);
+            view = found;
+            canvas = found.Canvas;
+            titleLabel = found.TitleLabel;
+            viewport = found.Viewport;
+            content = found.Content;
+            dropHighlight = found.DropHighlight;
+            return true;
         }
 
         private Image CreateTick()
         {
-            var tick = EditorRuntimeUi.CreateImage("Tick", content, tickColor);
-            SetVerticalLine(tick.rectTransform);
+            var tick = UnityEngine.Object.Instantiate(view.TickTemplate, content);
+            tick.name = "Tick";
             return tick;
         }
 
         private TextMeshProUGUI CreateRulerLabel()
         {
-            var label = EditorRuntimeUi.CreateLabel("RulerLabel", content, string.Empty, 11.5f, TextAlignmentOptions.BottomLeft, EditorRuntimeUi.SubTextColor);
-            var rect = label.rectTransform;
-            rect.anchorMin = new Vector2(0f, 0f);
-            rect.anchorMax = new Vector2(0f, 0f);
-            rect.pivot = new Vector2(0f, 0f);
+            var label = UnityEngine.Object.Instantiate(view.RulerLabelTemplate, content);
+            label.name = "RulerLabel";
             return label;
-        }
-
-        /// <summary>
-        /// 帯の上から下までの、縦の帯にする (左端の位置と幅は、後で決める)
-        /// </summary>
-        private static void SetVerticalLine(RectTransform rect)
-        {
-            rect.anchorMin = new Vector2(0f, 0f);
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(0f, 0.5f);
-            rect.anchoredPosition = Vector2.zero;
-            rect.sizeDelta = new Vector2(1f, 0f);
         }
 
         private FilmStripItem CreateItem(int index)
         {
-            var background = EditorRuntimeUi.CreateImage($"Item{index}", content, itemColor, true);
-            RectTransform rect = background.rectTransform;
-            rect.anchorMin = new Vector2(0f, 1f);
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(0f, 1f);
-            rect.sizeDelta = new Vector2(ITEM_WIDTH, ITEM_HEIGHT);
-
-            var inner = EditorRuntimeUi.CreateImage("Inner", rect, new Color(0.08f, 0.08f, 0.10f, 1f));
-            EditorRuntimeUi.Stretch(inner.rectTransform, 2f, ITEM_LABEL_HEIGHT, 2f, 2f);
-
-            var shapeRect = EditorRuntimeUi.CreateRect("Shape", inner.rectTransform);
-            EditorRuntimeUi.Stretch(shapeRect);
-            var shape = shapeRect.gameObject.AddComponent<SectionShapeGraphic>();
-
-            var label = EditorRuntimeUi.CreateLabel("Label", rect, string.Empty, 12f, TextAlignmentOptions.Center);
-            label.rectTransform.anchorMin = new Vector2(0f, 0f);
-            label.rectTransform.anchorMax = new Vector2(1f, 0f);
-            label.rectTransform.pivot = new Vector2(0.5f, 0f);
-            label.rectTransform.anchoredPosition = Vector2.zero;
-            label.rectTransform.sizeDelta = new Vector2(0f, ITEM_LABEL_HEIGHT);
-
-            var item = rect.gameObject.AddComponent<FilmStripItem>();
-            item.Initialize(background, shape, label);
+            var item = UnityEngine.Object.Instantiate(view.ItemTemplate, content);
+            item.name = $"Item{index}";
             item.Index = index;
             item.OnClicked = OnItemClicked;
             item.OnBeginDragged = OnItemBeginDrag;
@@ -742,11 +604,9 @@ namespace ChartEditor
 
         private EditorUiButton CreatePlusButton(int buttonIndex)
         {
-            var button = EditorRuntimeUi.CreateButton($"Plus{buttonIndex}", content, "+", new Vector2(PLUS_SIZE, PLUS_SIZE), () => OnPlusClicked(buttonIndex), 15f);
-            RectTransform rect = button.RectTransform;
-            rect.anchorMin = new Vector2(0f, 1f);
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(0.5f, 0.5f);
+            var button = UnityEngine.Object.Instantiate(view.PlusTemplate, content);
+            button.name = $"Plus{buttonIndex}";
+            button.SetOnClick(() => OnPlusClicked(buttonIndex));
             return button;
         }
 
@@ -761,104 +621,5 @@ namespace ChartEditor
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// フィルムストリップのサムネイル1つぶん (押された・ドラッグされたを知らせる)
-    /// </summary>
-    public class FilmStripItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
-    {
-        Image background;
-        SectionShapeGraphic shape;
-        TextMeshProUGUI label;
-        Vector2[] shownVertices;
-        Color shownColor;
-        bool isDragging;
-
-        public int Index { get; set; }
-        public bool IsHovered { get; private set; }
-
-        public Action<int> OnClicked { get; set; }
-        public Action<int, Vector2> OnBeginDragged { get; set; }
-        public Action<int, Vector2> OnDragged { get; set; }
-        public Action<int> OnEndDragged { get; set; }
-
-        public void Initialize(Image background, SectionShapeGraphic shape, TextMeshProUGUI label)
-        {
-            this.background = background;
-            this.shape = shape;
-            this.label = label;
-        }
-
-        /// <summary>
-        /// 形を描き直す (形も色も変わっていなければ、何もしない)
-        /// </summary>
-        public void SetShape(Vector2[] vertices, Color color)
-        {
-            if (IsSame(vertices, shownVertices) && color == shownColor) { return; }
-
-            shownVertices = vertices != null ? (Vector2[])vertices.Clone() : null;
-            shownColor = color;
-            shape.SetShape(shownVertices, color);
-        }
-
-        public void SetBackground(Color color)
-        {
-            if (background.color != color) { background.color = color; }
-        }
-
-        public void SetLabel(string text, Color color)
-        {
-            if (label.text != text) { label.text = text; }
-            if (label.color != color) { label.color = color; }
-        }
-
-        private static bool IsSame(Vector2[] a, Vector2[] b)
-        {
-            if (a == null || b == null) { return a == b; }
-            if (a.Length != b.Length) { return false; }
-            for (int i = 0; i < a.Length; i++)
-            {
-                if (a[i] != b[i]) { return false; }
-            }
-            return true;
-        }
-
-        void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
-        {
-            if (eventData.button != PointerEventData.InputButton.Left || isDragging) { return; }
-            OnClicked?.Invoke(Index);
-        }
-
-        void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
-        {
-            if (eventData.button != PointerEventData.InputButton.Left) { return; }
-            isDragging = true;
-            OnBeginDragged?.Invoke(Index, eventData.pressPosition);
-            OnDragged?.Invoke(Index, eventData.position);
-        }
-
-        void IDragHandler.OnDrag(PointerEventData eventData)
-        {
-            if (!isDragging) { return; }
-            OnDragged?.Invoke(Index, eventData.position);
-        }
-
-        void IEndDragHandler.OnEndDrag(PointerEventData eventData)
-        {
-            if (!isDragging) { return; }
-            isDragging = false;
-            OnEndDragged?.Invoke(Index);
-        }
-
-        void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData) { IsHovered = true; }
-
-        void IPointerExitHandler.OnPointerExit(PointerEventData eventData) { IsHovered = false; }
-
-        private void OnDisable()
-        {
-            IsHovered = false;
-            isDragging = false;
-        }
     }
 }

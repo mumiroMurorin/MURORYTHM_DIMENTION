@@ -18,28 +18,30 @@ namespace ChartEditor
     /// </summary>
     public class ChartSaveGuard : IStartable, ITickable, IDisposable
     {
-        // 自動保存 (バックアップ) の間隔 (分)。メニューの「設定」で変えられ、次に起動したときも同じになる
+        // 自動保存 (バックアップ) の間隔 (分)。メニューの「設定」で選び、次に起動したときも同じになる
+        // 選べるのは 3 / 5 / 10 / 30 分と、なし (0: 自動では保存しない) (録音 20261117_162641)
         public const int DEFAULT_AUTO_SAVE_INTERVAL_MINUTES = 3;
-        public const int MIN_AUTO_SAVE_INTERVAL_MINUTES = 1;
-        public const int MAX_AUTO_SAVE_INTERVAL_MINUTES = 30;
+        public static readonly int[] AUTO_SAVE_INTERVAL_CHOICES = { 3, 5, 10, 30, 0 };
         const string AUTO_SAVE_INTERVAL_PREFS_KEY = "ChartEditor.AutoSaveIntervalMinutes";
         static int autoSaveIntervalMinutes = -1;
 
-        /// <summary>自動保存 (バックアップ) の間隔 (分)</summary>
+        /// <summary>自動保存 (バックアップ) の間隔 (分)。0 のときは、自動では保存しない</summary>
         public static int AutoSaveIntervalMinutes
         {
             get
             {
                 if (autoSaveIntervalMinutes < 0)
                 {
-                    autoSaveIntervalMinutes = Mathf.Clamp(PlayerPrefs.GetInt(AUTO_SAVE_INTERVAL_PREFS_KEY, DEFAULT_AUTO_SAVE_INTERVAL_MINUTES),
-                        MIN_AUTO_SAVE_INTERVAL_MINUTES, MAX_AUTO_SAVE_INTERVAL_MINUTES);
+                    int saved = PlayerPrefs.GetInt(AUTO_SAVE_INTERVAL_PREFS_KEY, DEFAULT_AUTO_SAVE_INTERVAL_MINUTES);
+                    autoSaveIntervalMinutes = Array.IndexOf(AUTO_SAVE_INTERVAL_CHOICES, saved) >= 0 ? saved : DEFAULT_AUTO_SAVE_INTERVAL_MINUTES;
                 }
                 return autoSaveIntervalMinutes;
             }
             set
             {
-                autoSaveIntervalMinutes = Mathf.Clamp(value, MIN_AUTO_SAVE_INTERVAL_MINUTES, MAX_AUTO_SAVE_INTERVAL_MINUTES);
+                // 選べる値のほかは受け付けない
+                if (Array.IndexOf(AUTO_SAVE_INTERVAL_CHOICES, value) < 0) { return; }
+                autoSaveIntervalMinutes = value;
                 PlayerPrefs.SetInt(AUTO_SAVE_INTERVAL_PREFS_KEY, autoSaveIntervalMinutes);
                 PlayerPrefs.Save();
             }
@@ -87,6 +89,8 @@ namespace ChartEditor
         void ITickable.Tick()
         {
             if (!isDirtySinceAutoSave) { return; }
+            // 「なし」を選んでいるときは、自動では保存しない
+            if (AutoSaveIntervalMinutes <= 0) { return; }
             if (Time.realtimeSinceStartup - dirtyStartTime < AutoSaveIntervalMinutes * 60f) { return; }
 
             // 譜面の読み込み中は、読み込み途中の譜面を保存してしまうので見送る

@@ -21,14 +21,16 @@ namespace ChartEditor
         static readonly Color axisZColor = new Color(0.35f, 0.62f, 1f, 1f);
         static readonly Color vertexStartColor = new Color(0.3f, 1f, 0.65f, 1f);
         static readonly Color vertexEndColor = new Color(1f, 0.45f, 0.85f, 1f);
-        // 選んでいる頂点 (全画面プレビューと同じ橙色)
-        static readonly Color selectedVertexColor = new Color(1f, 0.55f, 0.1f, 1f);
 
         // 描くときに使う節 (制御点を動かしている間は、区間の中継点を、仮の中継点に入れ替えたもの)
         readonly List<SpaceHoldSection> drawnSections = new List<SpaceHoldSection>();
         // 0番の頂点の通り道 (帯を作るときに一緒に求める)
         readonly List<Vector3> seamPoints = new List<Vector3>();
-        int tunnelSignature;
+        // 帯を作ったときの数 (縮尺・奥行きの原点・節の奥行き・頂点の位置)。同じなら、作り直さない
+        // (前は数を混ぜた hash で比べていたが、符号だけが違う値 (+0.5 と -0.5) の並べ替えで同じ値になり、頂点スライドや反転のあとに
+        //  帯が作り直されなかった: 録音 20261117_185318。数そのものを比べる)
+        readonly List<float> tunnelKey = new List<float>();
+        readonly List<float> tunnelKeyBuffer = new List<float>();
 
         // ほかのスペースのノーツ (灰色)
         readonly List<Vector3> contextVertices = new List<Vector3>();
@@ -55,7 +57,9 @@ namespace ChartEditor
 
             BuildDrawnSections();
             UpdateTunnelMesh();
-            if (Time.unscaledTime >= nextContextRefreshTime) { RefreshContext(); }
+            // ほかのノーツ (灰色) を集め直すのは、ドラッグしていない間だけ (譜面のすべての SpaceHold を調べるので重い。
+            // ドラッグの途中で 0.5 秒ごとに止まって、頂点がカクッと飛んで見えていた: 録音 20261117_161312)
+            if (Time.unscaledTime >= nextContextRefreshTime && !IsDragging) { RefreshContext(); }
 
             float width = GetLineWidth();
             DrawGuides(width);
@@ -101,9 +105,10 @@ namespace ChartEditor
 
         private void UpdateTunnelMesh()
         {
-            int signature = ComputeSignature(drawnSections);
-            if (signature == tunnelSignature && meshVertices.Count > 0) { return; }
-            tunnelSignature = signature;
+            BuildTunnelKey(drawnSections, tunnelKeyBuffer);
+            if (meshVertices.Count > 0 && IsSameKey(tunnelKeyBuffer, tunnelKey)) { return; }
+            tunnelKey.Clear();
+            tunnelKey.AddRange(tunnelKeyBuffer);
 
             meshVertices.Clear();
             meshTriangles.Clear();
@@ -112,21 +117,34 @@ namespace ChartEditor
             view.SetTunnelMesh(meshVertices, meshTriangles);
         }
 
-        private int ComputeSignature(List<SpaceHoldSection> list)
+        private void BuildTunnelKey(List<SpaceHoldSection> list, List<float> key)
         {
-            unchecked
+            key.Clear();
+            key.Add(list.Count);
+            key.Add(depthScaleStep);
+            key.Add(depthOrigin);
+            foreach (var section in list)
             {
-                int hash = 17;
-                hash = hash * 31 + list.Count;
-                hash = hash * 31 + depthScaleStep;
-                hash = hash * 31 + depthOrigin.GetHashCode();
-                foreach (var section in list)
+                key.Add(section.Depth);
+                key.Add(section.Vertices != null ? section.Vertices.Length : -1);
+                if (section.Vertices == null) { continue; }
+                foreach (var vertex in section.Vertices)
                 {
-                    hash = hash * 31 + section.Depth.GetHashCode();
-                    foreach (var vertex in section.Vertices) { hash = hash * 31 + vertex.GetHashCode(); }
+                    key.Add(vertex.x);
+                    key.Add(vertex.y);
                 }
-                return hash;
             }
+        }
+
+        private static bool IsSameKey(List<float> a, List<float> b)
+        {
+            if (a.Count != b.Count) { return false; }
+            for (int i = 0; i < a.Count; i++)
+            {
+                // (NaN どうしは同じとみなす)
+                if (a[i] != b[i] && !(float.IsNaN(a[i]) && float.IsNaN(b[i]))) { return false; }
+            }
+            return true;
         }
 
         /// <summary>
@@ -206,7 +224,7 @@ namespace ChartEditor
 
                 if (data is NoteData_SpaceHold spaceHold)
                 {
-                    if (chain.Contains(spaceHold)) { continue; }
+                    if (chainSet.Contains(spaceHold)) { continue; }
 
                     int chainIndex = spaceHold.ChainIndex.Value;
                     if (chainIndex >= 0 && !visitedChains.Add(chainIndex)) { continue; }
@@ -443,12 +461,10 @@ namespace ChartEditor
                         break;
                     case HandleKind.Vertex:
                         {
+                            // (頂点は、見せるだけ: 点と番号。3D編集では、頂点を選んだり動かしたりしない)
                             int count = sections[handle.Section].Vertices.Length;
                             Color color = Color.Lerp(vertexStartColor, vertexEndColor, count <= 1 ? 0f : handle.Vertex / (float)(count - 1));
-                            var noteVertices = sections[handle.Section].Note.SpaceVertices.Vertices;
-                            bool isVertexSelected = handle.Vertex >= 0 && handle.Vertex < noteVertices.Count && IsVertexSelected(noteVertices[handle.Vertex]);
-                            if (isVertexSelected) { color = selectedVertexColor; }
-                            view.DrawHandle(handle.Local, (isVertexSelected ? 13f : 11f) * grow, isHovered ? Color.white : color, true);
+                            view.DrawHandle(handle.Local, 11f, color, true);
                             view.DrawLabel(handle.Local + new Vector2(7f, 4f), handle.Vertex.ToString(), 12f, new Color(1f, 1f, 1f, 0.85f));
                             break;
                         }
@@ -483,8 +499,7 @@ namespace ChartEditor
             {
                 view.InfoLabel.text =
                     $"選んでいる節: {SpaceHoldFilmStrip.GetTypeShortName(selected.Note.NoteType)}  {SpaceHoldFilmStrip.FormatLine(timeline, selected.Line)}" +
-                    $"   ({selectedIndex + 1} / {sections.Count})   頂点 {selected.Vertices.Length} 個" +
-                    (selectedVertices.Count > 0 ? $"   選んでいる頂点 {selectedVertices.Count} 個" : string.Empty);
+                    $"   ({selectedIndex + 1} / {sections.Count})   頂点 {selected.Vertices.Length} 個";
             }
             else
             {
@@ -493,7 +508,7 @@ namespace ChartEditor
 
             if (dragKind == DragKind.Control)
             {
-                view.StatusLabel.text = $"曲線: メッシュ中継点 {previewBaked.Count} 個 (離すと置き直します。手で置いたメッシュ中継点も置き直されます)";
+                view.StatusLabel.text = $"曲線: メッシュ中継点 {previewBaked.Count} 個 (離すと置き直します。中継点は、形を保ったまま動きます)";
             }
             else
             {

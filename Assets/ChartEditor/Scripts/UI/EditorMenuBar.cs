@@ -65,6 +65,13 @@ namespace ChartEditor
         static int overlayReleasedFrame = -1;
 
         /// <summary>
+        /// 裏の譜面へのキー操作 (ツールの切り替え、元に戻す、選択中のノーツの削除・コピー・反転など) を止めるか
+        /// 譜面を覆う窓 (SpaceHold の3D編集) か、ショートカット一覧を開いている間 (閉じたフレームも)
+        /// (マウスの操作は、IsBlockingChartInput で止まる。メニューの一覧を開いている間は、キー操作は止めない)
+        /// </summary>
+        public static bool IsBlockingChartKeys => IsBlockedByOverlay || ShortcutListView.IsOpenOrJustClosed;
+
+        /// <summary>
         /// メニューバーと同じキャンバス (MenuCanvas) に置いてある画面部品か
         /// (メニューバー、開いた一覧、譜面情報の欄、クイックメニュー。全画面プレビューでは、これらの上のクリックを、プレビューへの操作として扱わない)
         /// </summary>

@@ -106,9 +106,9 @@ namespace ChartEditor
                         || editMode == EditMode.Deploy || editMode == EditMode.Move || editMode == EditMode.Scale
                         || editMode == EditMode.SpaceDeploy || editMode == EditMode.SpaceMove;
 
-                // 頂点: 編集ツールを選んでいるとき (回転・拡大縮小のツールは、含めない)
+                // 頂点: 編集・配置ツールを選んでいるとき (回転・拡大縮小のツールは、含めない)
                 case EditNoteType.Vertices:
-                    return editMode == EditMode.VertexEdit;
+                    return editMode == EditMode.VertexEdit || editMode == EditMode.VertexPlace;
 
                 default:
                     return false;
@@ -128,8 +128,8 @@ namespace ChartEditor
             // 譜面の読み込み中と、入力欄に文字を打っている間は受け付けない
             if (dataGetter.IsLoadingChart.Value) { return false; }
             if (InputFieldFocus.IsTyping) { return false; }
-            // SpaceHold の3D編集を開いている間は、裏の譜面のノーツを消したり貼り付けたりしない
-            if (EditorMenuBar.IsBlockedByOverlay) { return false; }
+            // SpaceHold の3D編集・ショートカット一覧を開いている間は、裏の譜面のノーツを消したり貼り付けたりしない
+            if (EditorMenuBar.IsBlockingChartKeys) { return false; }
             // 右クリックのメニューを出している間も (メニューの項目が働くときは、メニューはもう閉じている)
             if (EditorContextMenuView.IsOpen) { return false; }
             // ホールドを曲げる制御点を動かしている間は受け付けない (置き直している最中の中継点が消えたりしないように)

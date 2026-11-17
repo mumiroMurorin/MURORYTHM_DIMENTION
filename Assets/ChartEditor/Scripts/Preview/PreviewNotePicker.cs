@@ -83,6 +83,9 @@ namespace ChartEditor
             EditMode.Preview,
         };
 
+        // ミニプレビューのダブルクリック (全画面プレビューにする)
+        readonly DoubleClickDetector miniDoubleClick = new DoubleClickDetector(DoubleClickDetector.MAX_INTERVAL, DoubleClickDetector.POINTER_MAX_DISTANCE);
+
         // 画面を覆う表示が出ていて、つまみを出さないモード (説明書や、小節・分線の設定の入力欄の上に重ならないように)
         static readonly EditMode[] handleHiddenEditModes =
         {
@@ -337,6 +340,19 @@ namespace ChartEditor
             toolPressCursor = EditMode.None;
             ReleaseCandidates(pressCandidates);
 
+            // SpaceHold の3D編集を開いている間: ミニプレビューのダブルクリックで、全画面プレビューにするだけ (録音 20261118_020809)
+            // (3D編集の間は、プレビューのほかの操作は止まっている: CanOperate)
+            if (SpaceHold3DEditor.IsOpen)
+            {
+                if (EditorMenuBar.IsMenuOpenOrJustClosed || dataGetter.ChartData.Value == null || dataGetter.IsLoadingChart.Value) { return; }
+                SearchSceneOnce();
+                if (TryGetPreviewRay(Input.mousePosition, out _, out var view3D) && !view3D.IsFullScreen && miniDoubleClick.Click(Input.mousePosition))
+                {
+                    if (previewUIPresenter != null) { previewUIPresenter.StartFullScreenPreview(); }
+                }
+                return;
+            }
+
             // ほかの操作の途中でないときだけ
             if (!CanOperate()) { return; }
 
@@ -345,6 +361,14 @@ namespace ChartEditor
 
             // クリック位置をプレビューの映像上の光線に変換する
             if (!TryGetPreviewRay(Input.mousePosition, out Ray ray, out var view)) { return; }
+
+            // ミニプレビューのダブルクリック: 全画面プレビューにする (「プレビュー」のボタンと同じ。録音 20261117_194938)
+            // (PreviewUIPresenter は、SearchSceneOnce が探してある)
+            if (!view.IsFullScreen && miniDoubleClick.Click(Input.mousePosition))
+            {
+                if (previewUIPresenter != null) { previewUIPresenter.StartFullScreenPreview(); }
+                return;
+            }
 
             // 編集した直後で、まだプレビューに反映されていない変更があれば、先に反映する
             // (古いプレビューを基準に位置を計算すると、動かし始めたときにノーツが飛ぶ)
@@ -1021,7 +1045,8 @@ namespace ChartEditor
             minLaneDelta = -MAX_LANE_INDEX;
             maxLaneDelta = MAX_LANE_INDEX;
 
-            foreach (var data in notesGetter.SelectingNotes)
+            // (ダイナミックノーツと下のノーツは、どちらを掴んでも一緒に動かす。譜面の上で動かすとき (NoteMoverBase) と同じ)
+            foreach (var data in DynamicNoteAttachments.WithPartners(notesGetter.SelectingNotes))
             {
                 // ロックしたノーツは動かさない
                 if (NoteLock.IsLocked(data)) { continue; }
@@ -1314,7 +1339,8 @@ namespace ChartEditor
             scaleTargets.Clear();
             if (IsPressedNoteLocked()) { return false; }
 
-            foreach (var data in notesGetter.SelectingNotes)
+            // (ダイナミックノーツと下のノーツは、どちらの幅を変えても一緒に変える。譜面の上で変えるとき (NoteScaler) と同じ)
+            foreach (var data in DynamicNoteAttachments.WithPartners(notesGetter.SelectingNotes))
             {
                 // ロックしたノーツの幅は変えない
                 if (NoteLock.IsLocked(data)) { continue; }

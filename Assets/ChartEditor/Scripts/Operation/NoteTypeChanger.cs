@@ -41,6 +41,14 @@ namespace ChartEditor
             // 先に変更し、実際に種類が変わったときだけUndo履歴に登録する
             // (変更先が無い種類のノートで、何も起きない操作を履歴に積まないため)
             var previousType = changableObject.NoteData.NoteTypeRP.Value;
+
+            // ダイナミックノーツが載っているノーツは HoldMeshRelay にできない。ルールに合わないダイナミックノーツは、種類を変えられない
+            if (!DynamicNoteAttachments.CanChangeType(changableObject.NoteData as IDeployableNoteData, NoteTypeCycle.NextNoteType(previousType), out string refusal))
+            {
+                DynamicNoteAttachments.LogRefused(1, refusal);
+                return;
+            }
+
             ChangeNoteType(changableObject);
             if (changableObject.NoteData.NoteTypeRP.Value == previousType) { return; }
 

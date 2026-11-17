@@ -24,12 +24,15 @@ namespace ChartEditor
             public readonly string Label;
             public readonly Action Action;
             public readonly bool IsEnabled;
+            /// <summary>同じ操作のキー (行の右端に、小さく出す。無ければ null)</summary>
+            public readonly string Shortcut;
 
-            public Item(string label, Action action, bool isEnabled = true)
+            public Item(string label, Action action, bool isEnabled = true, string shortcut = null)
             {
                 Label = label;
                 Action = action;
                 IsEnabled = isEnabled;
+                Shortcut = shortcut;
             }
         }
 
@@ -38,7 +41,12 @@ namespace ChartEditor
         {
             public Button button;
             public TextMeshProUGUI label;
+            [Tooltip("キーの名前 (行の右端に、小さく。録音 20261117_162236)")]
+            public TextMeshProUGUI key;
         }
+
+        // 項目の名前と、右端のキーの名前の間を、これだけ空ける
+        const float KEY_GAP = 10f;
 
         [Tooltip("メニューの外のクリックを受け取る、画面いっぱいの透明な板 (メニューを開いている間だけ出す)")]
         [SerializeField] GameObject blocker;
@@ -51,6 +59,8 @@ namespace ChartEditor
 
         Action[] actions;
         bool isOpen;
+        // 閉じたときに呼ぶ処理 (メニューと一緒に出した窓を、一緒に閉じる。録音 20261118_025337)
+        Action onClosed;
         // 開いたフレーム (このフレームの、外側の板へのクリックは、メニューを開いたクリックそのものなので、受け取らない)
         int openedFrame = -1;
 
@@ -64,6 +74,11 @@ namespace ChartEditor
         {
             instance = this;
             actions = new Action[rows != null ? rows.Length : 0];
+            labelRightMargins = new float[actions.Length];
+            for (int i = 0; i < labelRightMargins.Length; i++)
+            {
+                if (rows[i] != null && rows[i].label != null) { labelRightMargins[i] = rows[i].label.rectTransform.offsetMax.x; }
+            }
 
             for (int i = 0; i < actions.Length; i++)
             {
@@ -98,18 +113,42 @@ namespace ChartEditor
         {
             if (!isOpen) { return; }
 
-            if (Input.GetKeyDown(KeyCode.Escape)) { Close(); }
+            // (メニューと一緒に出した窓に打っている間の Esc は、打った値を取り消すだけ。メニューは、次の Esc で閉じる)
+            if (Input.GetKeyDown(KeyCode.Escape) && !InputFieldFocus.IsTyping) { Close(); }
         }
 
         /// <summary>
         /// メニューを出す (項目が1つも無いときは、出さない)
         /// </summary>
         /// <param name="screenPosition">カーソルの位置 (画面のピクセル)。メニューは、その右下に出る</param>
-        public static bool Show(Vector2 screenPosition, IReadOnlyList<Item> items)
+        /// <param name="onClosed">メニューが閉じたときに呼ぶ処理 (外のクリック・項目のクリック・Esc、どれで閉じても1回だけ)</param>
+        public static bool Show(Vector2 screenPosition, IReadOnlyList<Item> items, Action onClosed = null)
         {
             if (instance == null || items == null || items.Count == 0) { return false; }
 
-            return instance.Open(screenPosition, items);
+            // 開いたままのメニューを出し直すときは、前のメニューの「閉じたとき」の処理を先に済ませる
+            instance.InvokeOnClosed();
+            if (!instance.Open(screenPosition, items)) { return false; }
+
+            instance.onClosed = onClosed;
+            return true;
+        }
+
+        /// <summary>
+        /// 開いているメニューの、画面の上の四角 (画面のピクセル、左下が原点)。開いていなければ false
+        /// (メニューと一緒に出す窓を、メニューに重ならない所に置くため)
+        /// </summary>
+        public static bool TryGetScreenRect(out Rect rect)
+        {
+            rect = default;
+            if (instance == null || !instance.isOpen || instance.panel == null) { return false; }
+
+            Canvas canvas = instance.panel.GetComponentInParent<Canvas>();
+            float scale = canvas != null && canvas.scaleFactor > 0f ? canvas.scaleFactor : 1f;
+            Vector2 size = instance.panel.rect.size;
+            Vector2 topLeft = instance.panel.anchoredPosition;
+            rect = new Rect(topLeft.x * scale, (topLeft.y - size.y) * scale, size.x * scale, size.y * scale);
+            return true;
         }
 
         /// <summary>
@@ -138,6 +177,7 @@ namespace ChartEditor
                 }
 
                 rows[i].label.text = items[i].Label;
+                SetKey(i, items[i].Shortcut);
                 rows[i].button.interactable = items[i].IsEnabled;
                 actions[i] = items[i].Action;
                 shown++;
@@ -154,6 +194,27 @@ namespace ChartEditor
             return true;
         }
 
+        /// <summary>
+        /// 行の右端に、キーの名前を出す。項目の名前は、その手前までに収める
+        /// </summary>
+        private void SetKey(int index, string shortcut)
+        {
+            Row row = rows[index];
+            if (row.key == null || row.label == null) { return; }
+
+            bool hasKey = !string.IsNullOrEmpty(shortcut);
+            row.key.gameObject.SetActive(hasKey);
+            row.key.text = hasKey ? shortcut : string.Empty;
+
+            // 項目の名前の右端を、キーの名前の幅だけ左へ寄せる (重ならないように)
+            float keyWidth = hasKey ? row.key.GetPreferredValues(shortcut).x + KEY_GAP : 0f;
+            var labelRect = row.label.rectTransform;
+            labelRect.offsetMax = new Vector2(labelRightMargins[index] - keyWidth, labelRect.offsetMax.y);
+        }
+
+        // 項目の名前の、もともとの右の余白 (シーンに置いた値。キーの幅を引く前)
+        float[] labelRightMargins;
+
         private void Close()
         {
             if (!isOpen) { return; }
@@ -161,6 +222,15 @@ namespace ChartEditor
             isOpen = false;
             lastClosedFrame = Time.frameCount;
             SetShown(false);
+            InvokeOnClosed();
+        }
+
+        private void InvokeOnClosed()
+        {
+            Action callback = onClosed;
+            onClosed = null;
+            try { callback?.Invoke(); }
+            catch (Exception exception) { Debug.LogException(exception); }
         }
 
         private void OnRowClicked(int index)

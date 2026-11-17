@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
@@ -13,6 +14,8 @@ namespace ChartEditor
         [SerializeField] TMP_InputField speedRatioField;
         [Tooltip("どの分線の設定かを書く見出し")]
         [SerializeField] TextMeshProUGUI titleText;
+        [Tooltip("Cancel ボタン (Apply の右。押すと、入力した内容を適用せずに閉じる)")]
+        [SerializeField] Button cancelButton;
 
         public Action OnClickedApplyButtonListner { get; set; }
 
@@ -33,18 +36,21 @@ namespace ChartEditor
         /// </summary>
         public Action OnClickedCancelButtonListner { get; set; }
 
-        // Cancel ボタンを作り終えたか
-        bool hasCancelButton;
+        private void Awake()
+        {
+            if (cancelButton != null) { cancelButton.onClick.AddListener(OnClickedCancelButton); }
+        }
+
+        private void OnClickedCancelButton()
+        {
+            // 押したボタンが選択中のまま残らないようにする (残ると、Space キーや Enter キーでもう一度押されてしまう)
+            if (EventSystem.current != null) { EventSystem.current.SetSelectedGameObject(null); }
+
+            OnClickedCancelButtonListner?.Invoke();
+        }
 
         public void SetActive(bool value)
         {
-            // Cancel ボタンは、最初に開くときに Apply ボタンを複製して作る
-            if (value && !hasCancelButton)
-            {
-                hasCancelButton = true;
-                DialogCancelButton.Create(this.transform, () => OnClickedCancelButtonListner?.Invoke());
-            }
-
             this.gameObject.SetActive(value);
         }
 

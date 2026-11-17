@@ -106,7 +106,7 @@ namespace ChartEditor
         }
 
         // 画面の左端に寄せたときの、左端からの距離
-        const float LEFT_EDGE_X = 10f;
+        public const float LEFT_EDGE_X = 10f;
         // シーンに置いてある位置 (編集画面での位置。ノーツのボタンの列の右)
         Vector2 editorPosition;
         bool hasEditorPosition;

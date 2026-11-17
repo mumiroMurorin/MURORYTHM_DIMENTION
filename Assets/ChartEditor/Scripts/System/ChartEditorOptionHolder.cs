@@ -235,12 +235,9 @@ namespace ChartEditor
 
         #region NoteCurveRadius ノーツ軌道半径
 
-        const float MAX_NOTE_CURVE_RADIUS = 10000f;
-        const float MIN_NOTE_CURVE_RADIUS = 10f;
-        // メニューで変えられる範囲と、1回で変える量 (ゲーム本編の設定と同じ)
-        public const float MENU_MIN_NOTE_CURVE_RADIUS = 400f;
-        public const float MENU_MAX_NOTE_CURVE_RADIUS = 2000f;
-        public const float NOTE_CURVE_RADIUS_STEP = 200f;
+        // 変えられる範囲 (ゲーム本編の設定と同じ。メニューの [-][+] も、この範囲で止まる)
+        const float MAX_NOTE_CURVE_RADIUS = 2000f;
+        const float MIN_NOTE_CURVE_RADIUS = 400f;
 
         // 【ノーツ軌道】プレビューでもゲーム本編と同じ半径を使用する
         ReactiveProperty<float> noteCurveRadius = new ReactiveProperty<float>(2000f);
@@ -257,28 +254,16 @@ namespace ChartEditor
 
         const float MAX_NOTE_VISIBLE_DISTANCE = 200f;
         const float MIN_NOTE_VISIBLE_DISTANCE = 20f;
-        public const float NOTE_VISIBLE_DISTANCE_STEP = 10f;
 
-        // 判定位置より奥側に表示するノーツの距離
-        ReactiveProperty<float> noteVisibleDistance = new ReactiveProperty<float>(100f);
+        // 判定位置より奥側に表示するノーツの距離 (最初は 200: ゲーム本編と同じ。録音 20261117_162506)
+        ReactiveProperty<float> noteVisibleDistance = new ReactiveProperty<float>(200f);
         public IReadOnlyReactiveProperty<float> NoteVisibleDistance => noteVisibleDistance;
-        public int NoteVisibleDistanceDisplay => Mathf.RoundToInt(noteVisibleDistance.Value);
         public void SetNoteVisibleDistance(float distance)
         {
             noteVisibleDistance.Value = Mathf.Clamp(
                 distance,
                 MIN_NOTE_VISIBLE_DISTANCE,
                 MAX_NOTE_VISIBLE_DISTANCE);
-        }
-
-        bool AddNoteVisibleDistance(int delta)
-        {
-            if (delta == 0) { return false; }
-            if (noteVisibleDistance.Value >= MAX_NOTE_VISIBLE_DISTANCE && delta > 0) { return false; }
-            if (noteVisibleDistance.Value <= MIN_NOTE_VISIBLE_DISTANCE && delta < 0) { return false; }
-
-            SetNoteVisibleDistance(noteVisibleDistance.Value + delta * NOTE_VISIBLE_DISTANCE_STEP);
-            return true;
         }
 
         #endregion

@@ -181,7 +181,7 @@ namespace ChartEditor
         public float Depth;
 
         /// <summary>
-        /// 頂点の平均の位置 (頂点レイヤーの中心点と同じ)
+        /// 断面の中心 = 形の重心 (SpaceHoldSections.GetCenter。頂点の平均ではない)
         /// </summary>
         public Vector2 Center => SpaceHoldSections.GetCenter(Vertices);
     }
@@ -271,15 +271,53 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 頂点の平均の位置
+        /// 断面の中心 = 形の重心 (面積の中心)
+        ///
+        /// 頂点の平均ではない: ゲームと同じやり方で頂点の数をそろえた形 (辺の途中に点を足したもの) は、点の打ち方が辺ごとに
+        /// ばらつくので、頂点の平均が片側へずれる。同じ形でも、始点・終点 (頂点が少ない) と、間のメッシュ中継点 (そろえた形) で
+        /// 中心がずれ、軌跡が両端だけ斜めになっていた (録音 20261117_163212)。重心は、辺の途中の点で変わらない。
+        /// 面積がほとんど無い形 (点が2つ以下、一直線など) は、頂点の平均にする。
+        /// 8の字のように辺が交わっていて、面積が打ち消し合う形も、重心が形から遠くへ飛ぶので、頂点の平均にする
+        /// (打ち消したあとの面積が、打ち消す前の 1/4 より小さいとき。重心が、頂点の収まる範囲の外に出たとき)。
         /// </summary>
         public static Vector2 GetCenter(Vector2[] vertices)
         {
             if (vertices == null || vertices.Length == 0) { return Vector2.zero; }
 
             Vector2 sum = Vector2.zero;
-            foreach (var vertex in vertices) { sum += vertex; }
-            return sum / vertices.Length;
+            Vector2 min = vertices[0];
+            Vector2 max = vertices[0];
+            foreach (var vertex in vertices)
+            {
+                sum += vertex;
+                min = Vector2.Min(min, vertex);
+                max = Vector2.Max(max, vertex);
+            }
+            Vector2 average = sum / vertices.Length;
+            if (vertices.Length < 3) { return average; }
+
+            // (頂点の平均を原点にして計算する: 桁落ちを防ぐ)
+            double area2 = 0;
+            double absoluteArea2 = 0;
+            double cx = 0;
+            double cy = 0;
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                Vector2 a = vertices[i] - average;
+                Vector2 b = vertices[(i + 1) % vertices.Length] - average;
+                double cross = (double)a.x * b.y - (double)b.x * a.y;
+                area2 += cross;
+                absoluteArea2 += System.Math.Abs(cross);
+                cx += (a.x + b.x) * cross;
+                cy += (a.y + b.y) * cross;
+            }
+            if (System.Math.Abs(area2) < 1e-7 || System.Math.Abs(area2) < absoluteArea2 * 0.25) { return average; }
+
+            Vector2 center = average + new Vector2((float)(cx / (3.0 * area2)), (float)(cy / (3.0 * area2)));
+            const float MARGIN = 1e-4f;
+            if (center.x < min.x - MARGIN || center.x > max.x + MARGIN || center.y < min.y - MARGIN || center.y > max.y + MARGIN) { return average; }
+
+            return center;
         }
 
         /// <summary>

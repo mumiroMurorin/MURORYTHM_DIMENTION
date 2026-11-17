@@ -107,16 +107,27 @@ namespace ChartEditor
             EditMode.Explanation,
         };
 
+        /// <summary>
+        /// 選択中のノーツの反転 (Alt+M、メニューの「選択中のノーツを反転」) を、今受け付けるか
+        /// </summary>
+        /// <param name="isFromMenu">メニューの項目から行うとき true (キー操作のときは false)</param>
+        public static bool CanMirrorSelection(IChartEditorDataGetter dataGetter, bool isFromMenu)
+        {
+            // 読み込み中・文字の入力中・ほかの操作の途中は受け付けない
+            if (dataGetter.IsLoadingChart.Value || InputFieldFocus.IsTyping) { return false; }
+            // キーのときは、ドラッグの途中も受け付けない
+            // (メニューの項目は、押している間マウスのボタンが押されたままなので、ボタンは見ない)
+            if (!isFromMenu && Input.GetMouseButton(0)) { return false; }
+            // SpaceHold の3D編集・ショートカット一覧を開いている間は、裏の譜面のノーツを反転しない
+            if (EditorMenuBar.IsBlockingChartKeys) { return false; }
+            return !dataGetter.CurrentEditMode.Value.IsInEditModeList(mirrorIgnoreEditModes);
+        }
+
         void Update()
         {
             // Alt+M: 選択中のノーツを反転する (反転ボタンと同じ。グラウンド・スペースのレイヤーで)
             if (!ModifierKey.Alt || !Input.GetKeyDown(MIRROR_KEY)) { return; }
-
-            // 読み込み中・文字の入力中・ドラッグの途中・ほかの操作の途中は受け付けない
-            if (dataGetter_model.IsLoadingChart.Value || InputFieldFocus.IsTyping || Input.GetMouseButton(0)) { return; }
-            // SpaceHold の3D編集を開いている間は、裏の譜面のノーツを反転しない
-            if (EditorMenuBar.IsBlockedByOverlay) { return; }
-            if (dataGetter_model.CurrentEditMode.Value.IsInEditModeList(mirrorIgnoreEditModes)) { return; }
+            if (!CanMirrorSelection(dataGetter_model, false)) { return; }
 
             switch (dataGetter_model.EditNoteType.Value)
             {

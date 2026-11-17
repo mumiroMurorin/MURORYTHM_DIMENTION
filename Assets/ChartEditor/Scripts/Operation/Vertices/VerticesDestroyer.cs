@@ -42,8 +42,9 @@ namespace ChartEditor
             {
                 // 除外エディットモード中は返す
                 if (dataGetter.CurrentEditMode.Value.IsInEditModeList(ignoreEditModes)) { return; }
-                // SpaceHold の3D編集を開いている間は、頂点レイヤーで選んでいた頂点を消さない
-                if (EditorMenuBar.IsBlockedByOverlay) { return; }
+                // SpaceHold の3D編集・ショートカット一覧を開いている間は、頂点レイヤーで選んでいた頂点を消さない
+                if (EditorMenuBar.IsBlockingChartKeys) { return; }
+                if (InputFieldFocus.IsTyping) { return; }
 
                 DestroyVertices();
             }

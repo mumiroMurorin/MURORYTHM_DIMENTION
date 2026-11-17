@@ -26,9 +26,6 @@ namespace ChartEditor
     /// </summary>
     public class HoldIsolation : ITickable, IDisposable
     {
-        // 2回のクリックを、ダブルクリックとみなす間隔 (秒) と、カーソルのずれ (ピクセル)
-        const float DOUBLE_CLICK_SECONDS = 0.35f;
-        const float DOUBLE_CLICK_PIXELS = 12f;
         // 白黒の表示を、付け直す間隔 (秒)。ホールドの帯などは、形が変わるたびに作り直されるので、ときどき付け直す
         const float REFRESH_INTERVAL_SECONDS = 0.5f;
         // カーソルの下を調べる距離と、一度に調べる当たり判定の数
@@ -96,9 +93,8 @@ namespace ChartEditor
             OtherNote,
         }
 
-        // 前回のクリック
-        float lastClickTime = -10f;
-        Vector2 lastClickPosition;
+        // 前回のクリック (ダブルクリックを見分ける。2回のクリックの間隔は 0.35 秒まで、カーソルのずれは 12 ピクセルまで)
+        readonly DoubleClickDetector doubleClick = new DoubleClickDetector(DoubleClickDetector.MAX_INTERVAL, DoubleClickDetector.POINTER_MAX_DISTANCE);
         ClickTarget lastClickTarget;
         NoteData_Hold lastClickHold;
 
@@ -259,21 +255,18 @@ namespace ChartEditor
                 (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject());
             if (!isAcceptable)
             {
-                lastClickTime = -10f;
+                doubleClick.Reset();
                 return;
             }
 
             Vector2 position = Input.mousePosition;
             ClickTarget clickTarget = FindClickTarget(position, out NoteData_Hold hold);
 
-            bool isDoubleClick =
-                Time.unscaledTime - lastClickTime <= DOUBLE_CLICK_SECONDS &&
-                (position - lastClickPosition).sqrMagnitude <= DOUBLE_CLICK_PIXELS * DOUBLE_CLICK_PIXELS &&
+            bool isSameTarget =
                 clickTarget == lastClickTarget &&
                 (hold == null || lastClickHold == null || IsSameChain(hold, lastClickHold));
+            bool isDoubleClick = doubleClick.Click(position, isSameTarget);
 
-            lastClickTime = isDoubleClick ? -10f : Time.unscaledTime;
-            lastClickPosition = position;
             lastClickTarget = clickTarget;
             lastClickHold = hold;
 
@@ -418,7 +411,7 @@ namespace ChartEditor
             blocked.Clear();
             members.Clear();
             isolatedChart = null;
-            lastClickTime = -10f;
+            doubleClick.Reset();
 
             ClearGray();
             if (banner != null) { banner.SetVisible(false); }

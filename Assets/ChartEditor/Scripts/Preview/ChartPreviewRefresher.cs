@@ -78,7 +78,7 @@ namespace ChartEditor
                     .Subscribe(_ => RefreshFromEditorData(false, false))
                     .AddTo(this.gameObject);
 
-                // グラウンドのカーブ (半径) が変わると、ノーツの並ぶ曲線が変わるので、並べ直す (メニュー・クイックメニューから変えたとき)
+                // カーブの半径が変わると、ノーツの並ぶ曲線が変わるので、並べ直す (メニュー・クイックメニューから変えたとき)
                 optionHolder.NoteCurveRadius
                     .Skip(1)
                     .Subscribe(_ => RefreshFromEditorData(false, false))

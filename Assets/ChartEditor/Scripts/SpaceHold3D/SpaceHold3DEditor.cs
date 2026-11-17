@@ -19,38 +19,40 @@ namespace ChartEditor
     ///
     /// 見え方:
     /// ・帯 (半透明の青い面)、節の形 (始点: 緑、中継点: 水色、メッシュ中継点: 灰色、終点: 赤)
-    /// ・軌跡 (橙の線。各節の中心 = 頂点の平均の位置 を通る)、0番の頂点の通り道 (桃色の線。ねじれを見るため)
+    /// ・軌跡 (橙の線。各節の中心 = 形の重心 を通る)、0番の頂点の通り道 (桃色の線。ねじれを見るため)
     /// ・ノーツの面 (下半分の半円の筒) のレーンの線と、小節線の位置の弧
     /// ・ゲームと違い、軌道の曲がり (上り坂) は外して、奥行き (時間) をまっすぐに並べてある。奥行きの縮尺は変えられる
     ///
     /// 画面:
-    /// ・右上: 視点の欄。向きの印 (Unity のシーンビューと同じ。X・Y・Z の軸の先を押すと、その向きから見る。まんなかで透視と平行の切り替え)、
+    /// ・右上: 視点のウィンドウ。向きの印 (Unity のシーンビューと同じ。X・Y・Z の軸の先を押すと、その向きから見る。まんなかで透視と平行の切り替え)、
     ///   全体を映す、奥行きの縮尺 (正面・横・上・斜めのボタンは、向きの印で足りるので置かない。キーの 1〜4 は使える)
-    /// ・左上: 頂点レイヤーの道具の列と同じ見た目の列。節を1つだけ選んでいるときは、頂点の道具 (編集・回転・拡大縮小・
-    ///   頂点スライド・反転。全画面プレビューの列と同じ)、それ以外のときは、節の道具 (節を足す・頂点スライド・反転)
+    /// ・左上: 頂点レイヤーの道具の列と同じ見た目の、節の形の道具 (編集・回転・拡大縮小・頂点スライド・反転)。いつも出す (録音 20261117_201649)
+    ///   「編集」は、道具を選んでいない状態 (節を選ぶ・動かす。開いたときは、これ: 録音 20261117_204809)
+    ///   その右に、回転・拡大縮小の動かし方 (通常 / なめらか)、選択モード (通常 / 全体 / Nつおき)、節の選択を外すボタン
+    ///   (Nつおきの N は、設定メニューで 1〜4 から選ぶ: 録音 20261117_205010)
+    ///   (3D編集では、頂点を選んだり、足したり、動かしたり、消したりしない。頂点の編集は頂点レイヤーで: 録音 20261117_180313)
     /// ・右下: ミニプレビュー (編集画面のもの)。その左に「頂点レイヤーで編集」と「編集画面へ戻る」のボタン
-    ///   (この2つは、シーンに置いてある画面部品: SpaceHold3DOverlayView)
-    /// ・右: 操作説明の欄 (編集画面と同じ欄に、3D編集の操作の行を足して出す)
+    ///   (道具の列とボタンは、シーンに置いてある画面部品: SpaceHold3DOverlayView)
+    /// ・右: 操作説明 (編集画面と同じウィンドウに、3D編集の操作の行を出す。行はシーンに置いてある)
+    /// (3Dの絵・視点のウィンドウ・下の文字も、シーンに置いてある画面部品: SpaceHold3DViewUi)
     /// ・下のまんなか: 選んでいる節と、最後の操作
     ///
     /// 操作:
     /// ・カメラ: 右ドラッグ (または Alt+左ドラッグ、何も無い所の左ドラッグ) で回す、中ドラッグでずらす、ホイールで近づく・離れる、
     ///   F で全体 (節を選んでいれば、その節) を映す、1〜4 で 正面・横・上・斜め から見る
     /// ・節を選ぶ: 節の中心の点か、節の形の線を押す。↑↓で前後の節へ。選んだ節は、頂点レイヤーで編集する節にもなる
-    ///   Ctrl を押しながら押すと、選択に加える・外す (複数の節を選ぶと、節の道具が、選んだ節すべてに働く)
-    /// ・頂点を選ぶ: 選んだ節の頂点の点をクリック (Ctrl で加える・外す)。Delete で、選んだ頂点を消す。選んだ頂点をドラッグすると、まとめて動く
-    /// ・右クリック: 頂点 = 頂点を消すメニュー。◆ = 位置を数値で決める窓。節 (線・中心・選んでいる節) = 節のメニュー
+    ///   Ctrl+クリックで選択に加える・外す、Shift+クリックで間の節をまとめて選ぶ (節の道具は、選んだ節すべてに働く)
+    /// ・右クリック: ◆ = 位置を数値で決める窓。節 (線・中心・選んでいる節) = 節のメニュー
     ///   (頂点レイヤーで編集、この形をホールド全体に反映、節を足す、リレー / メッシュリレーにする、ロック、消す。録音 20261117_023636 / 023744)
-    /// ・Delete: 選んでいる頂点を消す。頂点を選んでいなければ、選んでいる節を消す (録音 20261117_023852)
-    /// ・選んだ節の、頂点の点をドラッグ: 頂点を動かす。中心の点をドラッグ: 節全体を動かす (どちらも節の面の中で)
+    /// ・Delete: 選んでいる節を消す (録音 20261117_023852)
+    /// ・節の中心の点をドラッグ: 節全体を動かす (節の面の中で)
     /// ・選んだ節の、矢印の先 (赤: 横、緑: 縦、青: 時間) をドラッグ: その向きにだけ動かす。時間は分線1本ずつ (前後の節は追い越さない)
-    /// ・頂点の道具: 編集 = 選んだ節の面の上を押すと、そこに頂点を置く (そのまま動かして調整できる。元に戻すのは1回ぶん)、
-    ///   回転 / 拡大縮小 = 頂点をドラッグすると、選んだ頂点 (2つ以上選んでいなければ、すべての頂点) を、その中心のまわりに回す / 拡大・縮小する
+    /// ・道具「回転」「拡大縮小」: 押したところから、選んでいる節の形を丸ごと回す / 拡大・縮小する (動かし方「なめらか」では、ねじれるように)
     /// ・◆ (制御点) をドラッグ: 2つの節 (メッシュ中継点を飛ばした、隣り合った節) の間を、ベジェ曲線で曲げる。
-    ///   離したときに、間にメッシュ中継点を置き直す (手で置いたものも含めて、間のメッシュ中継点はすべて置き直される)。
+    ///   離したときに、間のメッシュ中継点を、形を保ったまま曲線に合わせて動かす (曲線に近づけるのに要る分線には、中継点を足す: 録音 20261117_194644)。
     ///   ◆は、カメラに向いた面の中で動く (横から見ると、縦と時間の向きに動く)。時間の向きは、2つの節の間から出ない。
-    ///   ◆を右クリック・ダブルクリック: 横に小さい窓が出て、位置を数値で決められる (X・Y は断面の中の位置、Z は2つの節の間のどこか:
-    ///   0 = 前の節、1 = 次の節)。窓の「まっすぐに戻す」で、2つの節の間をまっすぐに戻す (録音 20261117_005036: メニューを挟まない)
+    ///   ◆を右クリック: 横に小さい窓が出て、位置を数値で決められる (X・Y は断面の中の位置、Z は2つの節の間のどこか:
+    ///   0 = 前の節、1 = 次の節)。窓の「まっすぐに戻す」で、2つの節の間をまっすぐに戻す (メッシュ中継点の形は残す)
     /// ・Esc: 閉じる (右下のボタンに Esc と書いてある)。どの操作も、元に戻せる (Ctrl+Z)。
     ///
     /// 制御点の位置は、編集している間だけ覚えている (譜面ファイルには保存しない)。
@@ -93,9 +95,20 @@ namespace ChartEditor
         bool isBuildFailed;
         ChartData openedChart;
         EditMode modeBeforeOpen;
+
+        // 全画面プレビューへ行くときに閉じた SpaceHold。プレビューから同じレイヤーへ戻ったら、また開く (録音 20261117_161438)
+        // (選んでいた節と、つながりの節すべてを覚える。プレビューで、選んでいた節を元に戻して消しても、残っている節で開けるように)
+        NoteData_SpaceHold reopenAfterPreview;
+        readonly List<NoteData_SpaceHold> reopenChain = new List<NoteData_SpaceHold>();
+        ChartData reopenChart;
+        EditNoteType reopenLayer;
+        // 開いている間の、編集画面のレイヤー (スペース、または頂点)
+        EditNoteType layerWhileOpen;
         // つながりを探す手がかり (開いた SpaceHold のノーツのどれか)
         NoteData_SpaceHold anchor;
         readonly List<NoteData_SpaceHold> chain = new List<NoteData_SpaceHold>();
+        // chain と同じ節 (毎フレーム「つながりの中にあるか」を調べるので、早く引けるように。RefreshChain で作り直す)
+        readonly HashSet<NoteData_SpaceHold> chainSet = new HashSet<NoteData_SpaceHold>();
         readonly List<SpaceHoldSection> sections = new List<SpaceHoldSection>();
         SpaceHoldTimeline timeline;
 
@@ -142,29 +155,60 @@ namespace ChartEditor
         TMPro.TextMeshProUGUI depthScaleLabel;
         SpaceHold3DViewGizmo gizmo;
 
-        // シーンに置いてある画面部品 (道具の列、前後の節、右下のボタン、◆ の位置の窓)
+        // シーンに置いてある画面部品 (道具の列、右下のボタン、◆ の位置の窓)
         SpaceHold3DOverlayView overlay;
         bool isOverlaySearched;
         // ◆ の位置の窓で見せている区間 (区間の2つの節。番号は、節が増えたり減ったりすると変わるので、ノーツで覚える)
         NoteData_SpaceHold controlPanelStart;
         NoteData_SpaceHold controlPanelEnd;
-        // ◆ のダブルクリック
-        float lastControlClickTime = -10f;
-        Vector2 lastControlClickPosition;
-        int lastControlClickSpan = -1;
+        // 窓で、中心の位置を出している節 (右クリックのメニューと一緒に出す。録音 20261118_020916)
+        NoteData_SpaceHold centerPanelNote;
         // ◆ を、窓のどれだけ右に出すか (画面部品の単位)
         const float CONTROL_PANEL_OFFSET = 24f;
 
         // 選んでいる節のほかに、選んでいる節 (Ctrl+クリックで加えたもの)
         readonly HashSet<NoteData_SpaceHold> extraSelected = new HashSet<NoteData_SpaceHold>();
-        // 選んでいる頂点 (節を1つだけ選んでいるときの、その節の頂点)
-        readonly List<VertexData> selectedVertices = new List<VertexData>();
-        NoteData_SpaceHold selectedVerticesOwner;
-        // 頂点の道具 (節を1つだけ選んでいる間だけ使える。Move = 道具を選んでいない)
+        // 選択から外す節か (PruneSelection が毎フレーム使う。そのたびに作らないように、1回だけ作っておく)
+        readonly Predicate<NoteData_SpaceHold> isStaleSelection;
+        // 節の道具 (回転・拡大縮小。Move = 道具を選んでいない)。節を選んでいなくても、選んだままにする (録音 20261117_201649)
         PreviewVertexTool vertexTool = PreviewVertexTool.Move;
-        // 頂点の道具「編集」で置いて、まだ元に戻す履歴に登録していない頂点 (離したときに、置いた操作として1回ぶん登録する)
-        SpaceVertices placedVertices;
-        VertexData placedVertex;
+        // 回転・拡大縮小の動かし方 (録音 20261117_180817 / 190722。閉じても覚えておく)
+        SectionTransformRange transformRange = SectionTransformRange.Single;
+        // 節をクリックしたときの選び方 (録音 20261117_190401。閉じても覚えておく)
+        SectionSelectMode selectMode = SectionSelectMode.Normal;
+
+        // 選択モード「Nつおき」の N (設定メニューで選ぶ。次に起動したときも同じにする: 録音 20261117_205010)
+        const string ALTERNATE_INTERVAL_PREFS_KEY = "ChartEditor.SpaceHold3D.AlternateInterval";
+        const int DEFAULT_ALTERNATE_INTERVAL = 1;
+        static readonly int[] ALTERNATE_INTERVAL_CHOICES = { 1, 2, 3, 4 };
+        static int alternateInterval = -1;
+
+        /// <summary>
+        /// 選択モード「Nつおき」の N (1 = 1つおき: クリックした節と、そこから2つ目ごとの節を選ぶ)。選べる値は 1〜4
+        /// </summary>
+        public static int AlternateInterval
+        {
+            get
+            {
+                if (alternateInterval < 0)
+                {
+                    int saved = PlayerPrefs.GetInt(ALTERNATE_INTERVAL_PREFS_KEY, DEFAULT_ALTERNATE_INTERVAL);
+                    alternateInterval = Array.IndexOf(ALTERNATE_INTERVAL_CHOICES, saved) >= 0 ? saved : DEFAULT_ALTERNATE_INTERVAL;
+                }
+                return alternateInterval;
+            }
+            set
+            {
+                // 選べる値のほかは受け付けない
+                if (Array.IndexOf(ALTERNATE_INTERVAL_CHOICES, value) < 0) { return; }
+                alternateInterval = value;
+                PlayerPrefs.SetInt(ALTERNATE_INTERVAL_PREFS_KEY, alternateInterval);
+                PlayerPrefs.Save();
+            }
+        }
+        // 道具「回転」「拡大縮小」のキー (頂点レイヤーの同じ道具と同じキー。Alt と一緒に押す)
+        KeyCode rotateKey = KeyCode.None;
+        KeyCode scaleKey = KeyCode.None;
 
         float DepthScale => depthScaleSteps[depthScaleStep];
 
@@ -174,6 +218,7 @@ namespace ChartEditor
             this.dataSetter = dataSetter;
             this.notesGetter = notesGetter;
             this.notesSetter = notesSetter;
+            isStaleSelection = note => !chainSet.Contains(note) || ReferenceEquals(note, selectedNote);
 
             Instance = this;
         }
@@ -187,8 +232,12 @@ namespace ChartEditor
 
         void ITickable.Tick()
         {
+            ForgetControlsOfOtherChart();
+
             if (!isOpen)
             {
+                TryReopenAfterPreview();
+                if (isOpen) { return; }
                 HandleOpenGesture();
                 return;
             }
@@ -197,14 +246,25 @@ namespace ChartEditor
             {
                 if (ShouldClose())
                 {
+                    RememberForPreview();
                     Close();
                     return;
                 }
+                layerWhileOpen = dataGetter.EditNoteType.Value;
 
                 RefreshChain();
                 if (sections.Count == 0)
                 {
                     Close();
+                    return;
+                }
+
+                // 説明書を開いている間は、何もしない (モードを戻すと、説明書がすぐ閉じてしまう: 録音 20261117_174214)
+                // 説明書を閉じると、モードが戻るので、次のフレームから、また3D編集のモードにする
+                if (dataGetter.CurrentEditMode.Value == EditMode.Explanation)
+                {
+                    if (IsDragging) { CancelDrag(); }
+                    SetCursor(EditMode.None);
                     return;
                 }
 
@@ -288,7 +348,7 @@ namespace ChartEditor
 
         private void ShowLockedStatus()
         {
-            ShowStatus("ロックした節は、動かせません (外すには、編集画面で右クリックのメニューの「ロックを外す」)");
+            ShowStatus("ロックした節は、動かせません (外すには、右クリックのメニューの「ロックを外す」)");
         }
 
         /// <summary>
@@ -309,7 +369,7 @@ namespace ChartEditor
                 try
                 {
                     view.Build();
-                    BuildPanels();
+                    ConnectViewPanel();
                 }
                 catch (Exception exception)
                 {
@@ -332,6 +392,8 @@ namespace ChartEditor
             anchor = note;
             selectedNote = note;
             openedChart = chartData;
+            layerWhileOpen = dataGetter.EditNoteType.Value;
+            ForgetReopen();
             isOpen = true;
             waitForMouseRelease = true;
             CancelDrag();
@@ -342,7 +404,7 @@ namespace ChartEditor
             RefreshChain();
             depthOrigin = sections.Count > 0 ? sections[0].Depth : 0f;
             nextContextRefreshTime = 0f;
-            tunnelSignature = 0;
+            tunnelKey.Clear();
 
             // 開いたノーツを選ぶ (頂点レイヤーで編集する節にもなる)
             lastEditing = notesGetter.EditingVertices.Value;
@@ -367,14 +429,15 @@ namespace ChartEditor
             if (!isOpen) { return; }
 
             // ドラッグの途中なら、そこまでの変更を記録してから閉じる
-            FinishDrag();
+            // (押しただけの右クリック・空いた所のクリックは、やめるだけ。終えると、メニューを出したり、選択を外したりしてしまう)
+            if (dragKind == DragKind.RightPress || dragKind == DragKind.EmptyPress) { CancelDrag(); }
+            else { FinishDrag(); }
             // ◆ の位置の窓で打っている途中の値も、反映してから閉じる
             CloseControlPanel();
             EditorContextMenuView.Hide();
             SetCursor(EditMode.None);
             if (overlay != null) { overlay.SetVisible(false); }
             extraSelected.Clear();
-            ClearVertexSelection();
             vertexTool = PreviewVertexTool.Move;
 
             // 頂点レイヤーを開いていて、編集する節が無くなっていたら (節を消した・元に戻したなど)、残っている節にする
@@ -404,10 +467,10 @@ namespace ChartEditor
             selectedIndex = -1;
             openedChart = null;
             chain.Clear();
+            chainSet.Clear();
             sections.Clear();
             spans.Clear();
             lastClickTime = -10f;
-            lastControlClickSpan = -1;
         }
 
         /// <summary>
@@ -418,12 +481,81 @@ namespace ChartEditor
             switch (modeBeforeOpen)
             {
                 case EditMode.VertexEdit:
+                case EditMode.VertexPlace:
                 case EditMode.VerticesRotate:
                 case EditMode.VerticesScale:
                     return dataGetter.EditNoteType.Value == EditNoteType.Vertices ? modeBeforeOpen : EditMode.None;
                 default:
                     return dataGetter.EditNoteType.Value == EditNoteType.Vertices ? EditMode.VertexEdit : EditMode.None;
             }
+        }
+
+        /// <summary>
+        /// 全画面プレビューへ行くので閉じるとき: 開いていた SpaceHold (選んでいた節と、つながりの節すべて) を覚えておく
+        /// </summary>
+        private void RememberForPreview()
+        {
+            ForgetReopen();
+            if (dataGetter.EditNoteType.Value != EditNoteType.Preview || dataGetter.IsLoadingChart.Value) { return; }
+
+            reopenAfterPreview = selectedNote ?? anchor;
+            if (reopenAfterPreview == null) { return; }
+            reopenChain.AddRange(chain);
+            reopenChart = openedChart;
+            reopenLayer = layerWhileOpen;
+        }
+
+        /// <summary>
+        /// 全画面プレビューから、3D編集を開いていたときのレイヤーへ戻ったら、また開く
+        /// 選んでいた節が無くなっていたら (プレビューで元に戻したなど)、つながりの節のうち、残っている最初の節で開く
+        /// (プレビューで別のレイヤーのノーツを選んで戻ったとき、譜面を読み込んだとき、その SpaceHold が無くなったときは開かない)
+        /// </summary>
+        private void TryReopenAfterPreview()
+        {
+            if (reopenAfterPreview == null) { return; }
+            // 別の譜面になったら、やめる (前の譜面のノーツを持ち続けないように、すぐ捨てる)
+            if (!ReferenceEquals(dataGetter.ChartData.Value, reopenChart)) { ForgetReopen(); return; }
+            if (dataGetter.EditNoteType.Value == EditNoteType.Preview) { return; }
+
+            bool canReopen = dataGetter.EditNoteType.Value == reopenLayer && !dataGetter.IsLoadingChart.Value;
+            NoteData_SpaceHold note = canReopen ? FindReopenNote() : null;
+            ForgetReopen();
+            if (note != null) { Open(note); }
+        }
+
+        /// <summary>
+        /// また開くときのノーツ: 選んでいた節。無くなっていたら、つながりの節のうち、残っている最初の節 (どれも無ければ null)
+        /// </summary>
+        private NoteData_SpaceHold FindReopenNote()
+        {
+            if (notesGetter.GetNoteObject(reopenAfterPreview) != null) { return reopenAfterPreview; }
+
+            foreach (var note in reopenChain)
+            {
+                if (note != null && notesGetter.GetNoteObject(note) != null) { return note; }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// プレビューのあとに開き直すために覚えていたものを捨てる
+        /// </summary>
+        private void ForgetReopen()
+        {
+            reopenAfterPreview = null;
+            reopenChain.Clear();
+            reopenChart = null;
+        }
+
+        /// <summary>
+        /// 別の譜面になったら、覚えている制御点を捨てる (前の譜面のノーツを持ち続けないように)
+        /// </summary>
+        private void ForgetControlsOfOtherChart()
+        {
+            if (controlsChart == null || ReferenceEquals(controlsChart, dataGetter.ChartData.Value)) { return; }
+
+            controls.Clear();
+            controlsChart = null;
         }
 
         private bool ShouldClose()
@@ -509,6 +641,7 @@ namespace ChartEditor
             if (anchor == null || timeline == null)
             {
                 chain.Clear();
+                chainSet.Clear();
                 sections.Clear();
                 spans.Clear();
                 selectedIndex = -1;
@@ -517,6 +650,8 @@ namespace ChartEditor
 
             // (譜面から消されたノーツは、つながりの一覧からも外れている。NoteObjectsBinder)
             SpaceHoldSections.GetChain(notesGetter, anchor, chain);
+            chainSet.Clear();
+            foreach (var note in chain) { chainSet.Add(note); }
             if (!SpaceHoldSections.TryBuildSections(timeline, chain, sections)) { sections.Clear(); }
 
             selectedIndex = selectedNote != null ? chain.IndexOf(selectedNote) : -1;
@@ -579,7 +714,7 @@ namespace ChartEditor
             if (ReferenceEquals(editing, lastEditing)) { return; }
 
             lastEditing = editing;
-            if (editing is NoteData_SpaceHold spaceHold && chain.Contains(spaceHold))
+            if (editing is NoteData_SpaceHold spaceHold && chainSet.Contains(spaceHold))
             {
                 selectedNote = spaceHold;
                 selectedIndex = chain.IndexOf(spaceHold);
@@ -645,6 +780,122 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 節をクリックしたとき (Ctrl なし): 選択モードと Shift に合わせて選ぶ (録音 20261117_190401)
+        /// ・Shift: 今の節 (いちばん手前に選んでいる節) から、クリックした節までを、まとめて選ぶ
+        /// ・通常: その節だけ / 全体: 節を全部 (クリックした節が、いちばん手前) / Nつおき: その節と、そこから N つおきの節 (前後どちらへも)
+        /// </summary>
+        private void ClickSelectSection(int index)
+        {
+            if (index < 0 || index >= sections.Count) { return; }
+
+            if (ModifierKey.Shift && selectedIndex >= 0)
+            {
+                // (SelectMany の中で、今の節が替わるので、先に覚えておく)
+                int anchorIndex = selectedIndex;
+                SelectMany(index, i => (i - anchorIndex) * (i - index) <= 0);
+                return;
+            }
+
+            switch (selectMode)
+            {
+                case SectionSelectMode.All:
+                    SelectMany(index, _ => true);
+                    break;
+                case SectionSelectMode.Alternate:
+                {
+                    // (N つおき = N+1 個ごと。1つおきなら 2 個ごと)
+                    int step = AlternateInterval + 1;
+                    SelectMany(index, i => (i - index) % step == 0);
+                    break;
+                }
+                default:
+                    Select(index);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 節を、いちばん手前に選んでいる節にする (選んでいるほかの節は、そのまま)。選んでいなければ、クリックしたときと同じに選ぶ
+        /// </summary>
+        private void MakePrimary(int index)
+        {
+            if (index < 0 || index >= sections.Count || index == selectedIndex) { return; }
+            if (!IsSectionSelected(sections[index].Note))
+            {
+                ClickSelectSection(index);
+                return;
+            }
+
+            var others = new List<NoteData_SpaceHold>(extraSelected);
+            if (selectedNote != null) { others.Add(selectedNote); }
+            Select(index);
+            foreach (var note in others)
+            {
+                if (!ReferenceEquals(note, selectedNote)) { extraSelected.Add(note); }
+            }
+        }
+
+        /// <summary>
+        /// 条件に合う節をまとめて選ぶ (primary が、いちばん手前に選んでいる節になる)
+        /// </summary>
+        private void SelectMany(int primary, Func<int, bool> isIncluded)
+        {
+            Select(primary);
+            for (int i = 0; i < sections.Count; i++)
+            {
+                if (i != primary && isIncluded(i)) { extraSelected.Add(sections[i].Note); }
+            }
+        }
+
+        /// <summary>
+        /// 選択モードのボタン (と Ctrl+A)
+        /// ・全体: 押したらすぐ、全部を選ぶ。もう全部を選んでいるときに押すと、選択を外して「通常」に戻す (録音 20261117_202034)
+        /// ・通常・Nつおき: 次にクリックした節から。「全体」から切り替えたときは、全部の選択を外す (録音 20261117_202034)
+        /// </summary>
+        private void ChooseSelectMode(SectionSelectMode mode)
+        {
+            if (mode == SectionSelectMode.All)
+            {
+                if (AreAllSectionsSelected())
+                {
+                    selectMode = SectionSelectMode.Normal;
+                    Select(-1);
+                    ShowStatus("節の選択を外しました");
+                }
+                else { SelectAllSections(); }
+                return;
+            }
+
+            if (selectMode == SectionSelectMode.All) { Select(-1); }
+            selectMode = mode;
+        }
+
+        /// <summary>
+        /// 選択モード「全体」: SpaceHold の節を全部選ぶ (いちばん手前は、今の節。無ければ最初の節)
+        /// </summary>
+        private void SelectAllSections()
+        {
+            if (sections.Count == 0) { return; }
+
+            selectMode = SectionSelectMode.All;
+            SelectMany(selectedIndex >= 0 ? selectedIndex : 0, _ => true);
+            ShowStatus($"節を全部選びました ({sections.Count} 個)");
+        }
+
+        /// <summary>
+        /// SpaceHold の節を、全部選んでいるか (節が無ければ false)
+        /// </summary>
+        private bool AreAllSectionsSelected()
+        {
+            if (sections.Count == 0) { return false; }
+            foreach (var section in sections)
+            {
+                if (!IsSectionSelected(section.Note)) { return false; }
+            }
+            return true;
+        }
+
+        /// <summary>
         /// その節を選んでいるか (Ctrl+クリックで加えた節も含む)
         /// </summary>
         private bool IsSectionSelected(NoteData_SpaceHold note)
@@ -653,7 +904,7 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 節を、1つだけ選んでいるか (頂点の道具・頂点の選択は、このときだけ使える)
+        /// 節を、1つだけ選んでいるか (「頂点レイヤーで編集」のボタンは、このときだけ出す)
         /// </summary>
         private bool IsSingleSectionSelected => selectedNote != null && selectedIndex >= 0 && extraSelected.Count == 0;
 
@@ -671,98 +922,12 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 無くなった節・頂点を、選択から外す。節を1つだけ選んでいないときは、頂点の選択と道具をやめる
+        /// 無くなった節を、選択から外す
+        /// (道具の列は、いつも出ている: 節を選んでいなくても、道具は選んだままにする。録音 20261117_201649)
         /// </summary>
         private void PruneSelection()
         {
-            extraSelected.RemoveWhere(note => !chain.Contains(note) || ReferenceEquals(note, selectedNote));
-
-            if (!IsSingleSectionSelected || !ReferenceEquals(selectedVerticesOwner, selectedNote))
-            {
-                ClearVertexSelection();
-                selectedVerticesOwner = IsSingleSectionSelected ? selectedNote : null;
-            }
-            else
-            {
-                var vertices = selectedNote.SpaceVertices.Vertices;
-                selectedVertices.RemoveAll(vertex => vertex.VertexIndex < 0 || vertex.VertexIndex >= vertices.Count || !ReferenceEquals(vertices[vertex.VertexIndex], vertex));
-            }
-
-            if (!IsSingleSectionSelected) { vertexTool = PreviewVertexTool.Move; }
-        }
-
-        private void ClearVertexSelection()
-        {
-            selectedVertices.Clear();
-        }
-
-        private bool IsVertexSelected(VertexData vertex)
-        {
-            foreach (var selected in selectedVertices)
-            {
-                if (ReferenceEquals(selected, vertex)) { return true; }
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// 頂点をクリックしたとき: その頂点を選ぶ (Ctrl を押していれば、加える・外す)
-        /// </summary>
-        private void ClickVertex(int sectionIndex, int vertexIndex)
-        {
-            if (!IsSingleSectionSelected || sectionIndex != selectedIndex) { return; }
-
-            var vertices = selectedNote.SpaceVertices.Vertices;
-            if (vertexIndex < 0 || vertexIndex >= vertices.Count) { return; }
-
-            VertexData vertex = vertices[vertexIndex];
-            selectedVerticesOwner = selectedNote;
-            if (ModifierKey.Ctrl)
-            {
-                if (!selectedVertices.Remove(vertex)) { selectedVertices.Add(vertex); }
-            }
-            else
-            {
-                selectedVertices.Clear();
-                selectedVertices.Add(vertex);
-            }
-        }
-
-        /// <summary>
-        /// 選んでいる頂点を消す (形を作るのに必要な数より少なくはならない。元に戻すのは1回ぶん)
-        /// </summary>
-        private void RemoveSelectedVertices()
-        {
-            if (!IsSingleSectionSelected || selectedVertices.Count == 0) { return; }
-            RemoveVertices(selectedNote.SpaceVertices, new List<VertexData>(selectedVertices));
-        }
-
-        private void RemoveVertices(SpaceVertices vertices, List<VertexData> targets)
-        {
-            for (int i = 0; i < sections.Count; i++)
-            {
-                if (ReferenceEquals(sections[i].Note.SpaceVertices, vertices) && IsLockedSection(i)) { ShowLockedStatus(); return; }
-            }
-
-            targets.RemoveAll(vertex => vertex.VertexIndex < 0 || vertex.VertexIndex >= vertices.Vertices.Count || !ReferenceEquals(vertices.Vertices[vertex.VertexIndex], vertex));
-            if (targets.Count == 0) { return; }
-            if (vertices.Vertices.Count - targets.Count < PreviewVertexTools.MIN_VERTEX_COUNT)
-            {
-                ShowStatus($"これ以上、頂点を消せません (形を作るには、頂点が {PreviewVertexTools.MIN_VERTEX_COUNT} つ以上必要です)");
-                return;
-            }
-
-            // 番号の大きい順に消して、小さい順に戻す (戻すとき、それぞれが、消したときの番号の場所へ入るように)
-            var ascending = new List<VertexData>(targets);
-            ascending.Sort((a, b) => a.VertexIndex.CompareTo(b.VertexIndex));
-            var descending = new List<VertexData>(ascending);
-            descending.Reverse();
-
-            Record(() => { foreach (var vertex in descending) { vertices.RemoveVertex(vertex); } },
-                   () => { foreach (var vertex in ascending) { vertices.AddVertex(vertex); } });
-
-            foreach (var vertex in targets) { selectedVertices.Remove(vertex); }
-            ShowStatus(targets.Count > 1 ? $"頂点を {targets.Count} 個消しました" : "頂点を消しました");
+            if (extraSelected.Count > 0) { extraSelected.RemoveWhere(isStaleSelection); }
         }
 
         #endregion
@@ -775,18 +940,27 @@ namespace ChartEditor
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                // ◆ の位置の窓を出しているときは、まず窓を閉じる。頂点の道具を選んでいるときは、まず道具をやめる
+                // ◆ の位置の窓を出しているときは、まず窓を閉じる。道具 (回転・拡大縮小) を選んでいるときは、まず「編集」に戻る
                 if (IsControlPanelShown) { CloseControlPanel(); }
                 else if (vertexTool != PreviewVertexTool.Move) { vertexTool = PreviewVertexTool.Move; }
                 else { Close(); }
                 return;
             }
 
-            // Delete: 選んでいる頂点を消す。頂点を選んでいなければ、選んでいる節を消す
+            // Delete: 選んでいる節を消す (3D編集では、頂点を選ばない)
             if (Input.GetKeyDown(KeyCode.Delete) && !IsDragging && !EditorContextMenuView.IsOpen)
             {
-                if (selectedVertices.Count > 0) { RemoveSelectedVertices(); }
-                else { DeleteSections(GetSelectedSectionIndices()); }
+                DeleteSections(GetSelectedSectionIndices());
+            }
+
+            // Ctrl+A: 選択モード「全体」のボタンと同じ (全部を選ぶ。全部を選んでいるときは、選択を外す。録音 20261117_190401 / 202034)
+            if (ModifierKey.Ctrl && Input.GetKeyDown(KeyCode.A) && !IsDragging) { ChooseSelectMode(SectionSelectMode.All); }
+
+            // Alt+キー: 道具「回転」「拡大縮小」を選ぶ / やめる (録音 20261117_180313)
+            if (ModifierKey.Alt && !IsDragging)
+            {
+                if (rotateKey != KeyCode.None && Input.GetKeyDown(rotateKey)) { ToggleTool(PreviewVertexTool.Rotate); }
+                else if (scaleKey != KeyCode.None && Input.GetKeyDown(scaleKey)) { ToggleTool(PreviewVertexTool.Scale); }
             }
 
             if (Input.GetKeyDown(KeyCode.F)) { FrameSelectionOrAll(); }
@@ -805,6 +979,61 @@ namespace ChartEditor
             }
         }
 
+        /// <summary>
+        /// 道具を選ぶ。選んでいる道具をもう一度選ぶと、やめる (全画面プレビューの列と同じ)
+        /// (「編集」(Move) を選ぶと、いつも道具をやめた状態になる: 録音 20261117_204809)
+        /// </summary>
+        private void ToggleTool(PreviewVertexTool tool)
+        {
+            vertexTool = vertexTool == tool ? PreviewVertexTool.Move : tool;
+        }
+
+        /// <summary>
+        /// 回転・拡大縮小で動かす節と、その効き方 (1 = 全部、0 と 1 の間 = その割合だけ)。選んでいる節だけを動かす。ロックした節は動かさない
+        /// ・通常: 選んでいる節を、全部同じだけ
+        /// ・なめらか: 掴んだ節 (grabbed) は全部、選んでいるほかの節は、選んでいる範囲のすぐ外の節に近いほど少し (録音 20261117_190722)
+        ///   (180度回すと、間の節は 170度、160度 … とねじれていく。範囲が SpaceHold の端まであるときは、端の節が 0)
+        /// </summary>
+        private List<(int Index, float Weight)> GetTransformTargets(int grabbed)
+        {
+            var selected = GetSelectedSectionIndices();
+            if (!selected.Contains(grabbed)) { selected.Add(grabbed); }
+            selected.RemoveAll(index => index != grabbed && IsLockedSection(index));
+
+            var targets = new List<(int Index, float Weight)>();
+            if (transformRange != SectionTransformRange.Smooth)
+            {
+                foreach (int index in selected) { targets.Add((index, 1f)); }
+                return targets;
+            }
+
+            int first = int.MaxValue;
+            int last = int.MinValue;
+            foreach (int index in selected)
+            {
+                first = Mathf.Min(first, index);
+                last = Mathf.Max(last, index);
+            }
+            // 動かさない端: 選んでいる範囲のすぐ外の節 (範囲が SpaceHold の端まであるときは、端の節)
+            int before = first > 0 ? first - 1 : first;
+            int after = last < sections.Count - 1 ? last + 1 : last;
+
+            foreach (int index in selected)
+            {
+                float weight = 1f;
+                if (index < grabbed && before < grabbed)
+                {
+                    weight = SpaceHoldSections.GetFraction(sections[before], sections[grabbed], sections[index].Time, sections[index].Depth);
+                }
+                else if (index > grabbed && after > grabbed)
+                {
+                    weight = 1f - SpaceHoldSections.GetFraction(sections[grabbed], sections[after], sections[index].Time, sections[index].Depth);
+                }
+                targets.Add((index, weight));
+            }
+            return targets;
+        }
+
         readonly KeyRepeat upKeyRepeat = new KeyRepeat(KeyCode.UpArrow);
         readonly KeyRepeat downKeyRepeat = new KeyRepeat(KeyCode.DownArrow);
 
@@ -818,91 +1047,37 @@ namespace ChartEditor
 
         #endregion
 
-        #region 欄 (視点の欄・節の欄・操作説明)
-
-        // 欄の幅と、画面の端からの距離 (1920×1080 基準)
-        const float VIEW_PANEL_WIDTH = 236f;
-        const float PANEL_MARGIN = 12f;
-        // 向きの印を置く場所の高さ
-        const float GIZMO_AREA_HEIGHT = 124f;
+        #region 画面 (視点のウィンドウ・操作説明・シーンの画面部品)
 
         /// <summary>
-        /// 欄を作る
-        /// ・右上: 視点の欄 (向きの印、透視と平行、全体を映す、奥行きの縮尺)
-        /// 節の操作 (節を足す、頂点スライド、反転、前後の節) と、右下のボタン (頂点レイヤーで編集、編集画面へ戻る) は、
-        /// シーンに置いてある画面部品 (SpaceHold3DOverlayView) を使う (ConnectOverlay)
-        /// 操作の説明は、画面の右の「操作説明」の欄に出す (BuildDescriptionRows)
-        /// (メニューの文字にない記号 (◀ ▶ など) は四角になるので、使わない)
+        /// 右上の視点のウィンドウ (シーンに置いてある: SpaceHold3DViewUi) のボタンと向きの印に、処理をつなぐ (最初に開いたときに1回だけ)
+        /// ・向きの印 (軸の先を押すと、その向きから見る。まんなかで透視と平行の切り替え)
+        /// ・透視 / 平行、全体を映す (F)、奥行きの縮尺 [-] [+]
+        /// 節の形の道具 (回転、拡大縮小、頂点スライド、反転)、動かし方と選択モード、右下のボタン (頂点レイヤーで編集、編集画面へ戻る) は、
+        /// シーンに置いてある別の画面部品 (SpaceHold3DOverlayView) を使う (ConnectOverlay)
+        /// 操作の説明は、画面の右の「操作説明」のウィンドウに出す (3D編集の行も、シーンに置いてある。エディットモード SpaceHoldView の行)
         /// </summary>
-        private void BuildPanels()
+        private void ConnectViewPanel()
         {
-            // 視点の欄 (右上)
-            var viewPanel = view.AddPanel("ViewPanel", new Vector2(1f, 1f), new Vector2(-PANEL_MARGIN, -PANEL_MARGIN), VIEW_PANEL_WIDTH);
-            view.AddPanelTitle(viewPanel, "視点");
+            var ui = view.Ui;
+            if (ui == null) { return; }
 
-            gizmo = new SpaceHold3DViewGizmo(view.AddPanelSpace(viewPanel, GIZMO_AREA_HEIGHT))
+            gizmo = ui.Gizmo;
+            if (gizmo != null)
             {
-                OnAxisClicked = SetViewFromAxis,
-                OnCenterClicked = ToggleProjection,
-            };
-
-            var axisCaption = view.AddPanelRow(viewPanel, 18f);
-            view.AddRowLabel(axisCaption, "X: 横    Y: 縦    Z: 時間 (奥)").fontSize = 12f;
-
-            var projectionRow = view.AddPanelRow(viewPanel);
-            projectionButton = view.AddRowButton(projectionRow, "透視", ToggleProjection);
-            view.AddRowButton(projectionRow, "全体を映す (F)", FrameSelectionOrAll, 2f);
-
-            var depthRow = view.AddPanelRow(viewPanel);
-            view.AddRowLabel(depthRow, "奥行き", 52f);
-            view.AddRowButton(depthRow, "-", () => ChangeDepthScale(-1));
-            depthScaleLabel = view.AddRowLabel(depthRow, "x1", 50f);
-            view.AddRowButton(depthRow, "+", () => ChangeDepthScale(1));
-
-            BuildDescriptionRows();
-        }
-
-        /// <summary>
-        /// 画面の右の「操作説明」の欄に、3D編集の操作の行を足す (シーンの行を複製して作る)
-        /// 元に戻す・再生は、編集画面と同じなので、シーンの行をそのまま3D編集でも出す
-        /// (ウィンドウの最小化と、Esc で閉じるの行は出さない (録音 20261117_005415)。Esc は、右下のボタンに書いてある)
-        /// </summary>
-        private void BuildDescriptionRows()
-        {
-            var description = UnityEngine.Object.FindObjectOfType<OperationDescriptionView>(true);
-            if (description == null) { return; }
-
-            var modes = new[] { EditMode.SpaceHoldView };
-            const DescriptionLayers LAYERS = DescriptionLayers.Ground | DescriptionLayers.Space | DescriptionLayers.Vertices;
-            const string TEMPLATE = "Undo";
-
-            (string key, string text)[] rows =
-            {
-                // (◆ のドラッグ・ダブルクリック・右クリックと、右上の XYZ の行は、出さない (録音 20261116_224815: いらない))
-                // (F は、右上の「全体を映す (F)」のボタンに書いてあるので出さない。ミニプレビューに重ならない行数にするため)
-                ("クリック", "節・頂点を選ぶ"),
-                // (キーの欄に収まる長さにする: 幅 114)
-                ("線をクリック×2", "節を頂点レイヤーで編集"),
-                ("Ctrl+クリック", "節・頂点を複数選択"),
-                ("ドラッグ", "頂点・節・矢印を動かす"),
-                ("Delete", "選択中の頂点・節を削除"),
-                ("右クリック", "メニューを出す"),
-                ("右 / Alt+ドラッグ", "視点を回す"),
-                ("中ドラッグ", "視点をずらす"),
-                ("ホイール", "近づく / 離れる"),
-                ("1 / 2 / 3 / 4", "正面 / 横 / 上 / 斜め"),
-                ("↑ / ↓", "前後の節を選ぶ"),
-            };
-
-            for (int i = 0; i < rows.Length; i++)
-            {
-                description.AddRuntimeRow(TEMPLATE, $"SpaceHold3D_{i}", rows[i].key, rows[i].text, modes, LAYERS);
+                gizmo.OnAxisClicked = SetViewFromAxis;
+                gizmo.OnCenterClicked = ToggleProjection;
             }
 
-            description.AddEditModeToRows(EditMode.SpaceHoldView, "Undo", "Play");
+            projectionButton = ui.ProjectionButton;
+            projectionButton?.SetOnClick(ToggleProjection);
+            ui.FrameButton?.SetOnClick(FrameSelectionOrAll);
+            ui.DepthDownButton?.SetOnClick(() => ChangeDepthScale(-1));
+            ui.DepthUpButton?.SetOnClick(() => ChangeDepthScale(1));
+            depthScaleLabel = ui.DepthScaleLabel;
         }
 
-        #region シーンの画面部品 (道具の列、前後の節、右下のボタン、◆ の位置の窓)
+        #region シーンの画面部品 (道具の列、右下のボタン、◆ の位置の窓)
 
         /// <summary>
         /// シーンに置いてある画面部品を探して、ボタンをつなぐ (最初に開いたときに1回だけ)
@@ -919,24 +1094,37 @@ namespace ChartEditor
                 return;
             }
 
-            overlay.OnAddSectionClicked += () => { if (isOpen) { InsertSectionsForSelection(); } };
             overlay.OnSlideClicked += delta => { if (isOpen) { SlideSelection(delta); } };
             overlay.OnMirrorClicked += isLeftRight => { if (isOpen) { MirrorSelection(isLeftRight); } };
             overlay.OnToolClicked += tool =>
             {
                 if (!isOpen) { return; }
-                // 選んでいる道具をもう一度押すと、道具をやめる (全画面プレビューの列と同じ)
-                vertexTool = vertexTool == tool ? PreviewVertexTool.Move : tool;
+                // 選んでいる道具をもう一度押すと、道具をやめる (全画面プレビューの列と同じ)。「編集」を押すと、道具をやめる
+                ToggleTool(tool);
             };
+            overlay.OnRangeClicked += range => { if (isOpen) { transformRange = range; } };
+            overlay.OnSelectModeClicked += mode => { if (isOpen) { ChooseSelectMode(mode); } };
+
+            // 道具のキー: 頂点レイヤーの「回転」「拡大縮小」と同じキー (ボタンの右下に出す)
+            var inputHandler = UnityEngine.Object.FindObjectOfType<InputHandler>(true);
+            if (inputHandler != null)
+            {
+                inputHandler.TryGetEditModeShortcutKey(EditMode.VerticesRotate, EditNoteType.Vertices, out rotateKey);
+                inputHandler.TryGetEditModeShortcutKey(EditMode.VerticesScale, EditNoteType.Vertices, out scaleKey);
+            }
+            overlay.SetToolShortcut(PreviewVertexTool.Rotate, ShortcutBadge.FormatAltKey(rotateKey));
+            overlay.SetToolShortcut(PreviewVertexTool.Scale, ShortcutBadge.FormatAltKey(scaleKey));
             overlay.OnVertexLayerClicked += () => { if (isOpen) { OpenSelectedInVerticesLayer(); } };
-            // 頂点の編集を終える: 節の選択を外す (左上の列は、節の道具に戻る)
-            overlay.OnEndVertexEditClicked += () =>
+            // 節の選択を外す (道具は、選んだままにする: 録音 20261117_201649)
+            overlay.OnEndVertexEditClicked += () => { if (isOpen) { Select(-1); } };
+            overlay.OnCloseClicked += () => { if (isOpen) { Close(); } };
+            // レイヤーのボタン: 3D編集を閉じて、スペースのレイヤーに戻る (録音 20261117_195031)
+            overlay.OnLayerClicked += () =>
             {
                 if (!isOpen) { return; }
-                vertexTool = PreviewVertexTool.Move;
-                Select(-1);
+                Close();
+                if (dataGetter.EditNoteType.Value != EditNoteType.Space) { dataSetter.SetEditNoteType(EditNoteType.Space); }
             };
-            overlay.OnCloseClicked += () => { if (isOpen) { Close(); } };
             overlay.OnControlValueEntered += OnControlValueEntered;
             overlay.OnControlPanelCloseClicked += CloseControlPanel;
             overlay.OnControlStraightClicked += () =>
@@ -950,56 +1138,37 @@ namespace ChartEditor
         bool IsControlPanelShown => overlay != null && overlay.IsControlPanelShown;
 
         /// <summary>
-        /// 左上の道具の列を、今の選択に合わせる (節を1つだけ選んでいれば、頂点の道具)
+        /// 左上の道具の列と右下のボタンを、今の道具・選択に合わせる
         /// </summary>
         private void RefreshOverlayTools()
         {
             if (overlay == null) { return; }
 
-            overlay.SetListMode(IsSingleSectionSelected);
+            overlay.SetListMode(selectedNote != null);
             overlay.SetTool(vertexTool);
+            overlay.SetRange(transformRange);
+            overlay.SetSelectMode(selectMode);
+            // 選択モードのボタンの「Nつおき」の文字 (設定メニューで変えたら、すぐ合わせる)
+            overlay.SetAlternateInterval(AlternateInterval);
             // 頂点レイヤーで編集: 節を1つだけ選んでいる間だけ出す (録音 20261117_024055)
             overlay.SetVertexLayerButtonVisible(IsSingleSectionSelected && !IsLockedSection(selectedIndex));
         }
 
         /// <summary>
-        /// 右クリックのメニューを出す (頂点・節の中心)。◆ は、位置を数値で決める窓を出す
+        /// つまみを右クリックしたとき: 節の中心 = 節のメニュー。◆ = 位置を数値で決める窓
         /// </summary>
         private void ShowHandleMenu(Handle handle)
         {
-            var items = new List<EditorContextMenuView.Item>();
             switch (handle.Kind)
             {
-                case HandleKind.Vertex:
-                {
-                    if (handle.Section < 0 || handle.Section >= sections.Count) { return; }
-                    var vertices = sections[handle.Section].Note.SpaceVertices;
-                    if (handle.Vertex < 0 || handle.Vertex >= vertices.Vertices.Count) { return; }
-
-                    VertexData vertex = vertices.Vertices[handle.Vertex];
-                    NoteData_SpaceHold owner = sections[handle.Section].Note;
-                    // ロックした節の頂点は消さない (メニューも出さない)
-                    if (IsLockedSection(handle.Section)) { ShowLockedStatus(); return; }
-                    items.Add(new EditorContextMenuView.Item("この頂点を消す", () => { if (IsLiveSection(owner)) { RemoveVertices(vertices, new List<VertexData> { vertex }); } }));
-                    if (selectedVertices.Count > 1 && IsVertexSelected(vertex))
-                    {
-                        items.Add(new EditorContextMenuView.Item($"選択中の頂点を消す ({selectedVertices.Count} 個) (Delete)", RemoveSelectedVertices));
-                    }
-                    break;
-                }
                 case HandleKind.Control:
-                {
-                    // ◆: メニューを挟まず、ダブルクリックと同じ窓を出す (まっすぐに戻すのは、窓のボタンで)
-                    if (handle.Span < 0 || handle.Span >= spans.Count) { return; }
-                    OpenControlPanel(handle.Span);
-                    return;
-                }
+                    // ◆: メニューを挟まず、位置を数値で決める窓を出す (まっすぐに戻すのは、窓のボタンで: 録音 20261117_005036)
+                    if (handle.Span >= 0 && handle.Span < spans.Count) { OpenControlPanel(handle.Span); }
+                    break;
                 case HandleKind.Center:
                     ShowSectionMenu(handle.Section);
-                    return;
+                    break;
             }
-
-            EditorContextMenuView.Show(Input.mousePosition, items);
         }
 
         /// <summary>
@@ -1024,7 +1193,9 @@ namespace ChartEditor
             items.Add(new EditorContextMenuView.Item("この形を、ホールド全体に反映", () => { if (IsLiveSection(note)) { ApplyShapeToAll(note); } }));
             if (!isLocked)
             {
-                items.Add(new EditorContextMenuView.Item("この節の後ろに節を足す (補間)", () => { if (IsLiveSection(note)) { InsertSectionAfter(chain.IndexOf(note)); } }));
+                // (最後の節のときは、前の節との間に足す: InsertSectionAfter)
+                string insertLabel = index == sections.Count - 1 ? "この節の前に節を足す (補間)" : "この節の後ろに節を足す (補間)";
+                items.Add(new EditorContextMenuView.Item(insertLabel, () => { if (IsLiveSection(note)) { InsertSectionAfter(chain.IndexOf(note)); } }));
             }
             if (!isLocked && !isEnd)
             {
@@ -1039,14 +1210,96 @@ namespace ChartEditor
                 : new EditorContextMenuView.Item("ロックする", () => { if (IsLiveSection(note)) { NoteLock.Lock(new[] { note }); RefreshSpans(); } }));
             if (!isLocked)
             {
-                items.Add(new EditorContextMenuView.Item("この節を消す (Delete)", () =>
+                items.Add(new EditorContextMenuView.Item("この節を消す", () =>
                 {
                     int current = chain.IndexOf(note);
                     if (current >= 0) { DeleteSections(new List<int> { current }); }
-                }));
+                }, shortcut: "Delete"));
             }
 
-            EditorContextMenuView.Show(Input.mousePosition, items);
+            // 節の中心の位置の窓も、メニューと一緒に出して、メニューと一緒に閉じる
+            // (メニューの外を1回クリックすれば、両方消える。録音 20261118_025337)
+            bool isShown = EditorContextMenuView.Show(Input.mousePosition, items, () =>
+            {
+                if (centerPanelNote == note) { CloseControlPanel(); }
+            });
+            if (isShown) { OpenCenterPanel(note); }
+        }
+
+        /// <summary>
+        /// 節の中心の位置の窓を、右クリックのメニューの上に出す (数値で、中心の位置を細かく決められる。録音 20261118_020916)
+        /// (窓は、メニューより手前のキャンバスにあるので、メニューを出したまま打てる)
+        /// </summary>
+        private void OpenCenterPanel(NoteData_SpaceHold note)
+        {
+            if (overlay == null || note == null) { return; }
+
+            controlPanelStart = null;
+            controlPanelEnd = null;
+            centerPanelNote = note;
+            overlay.SetControlPanelMode(true);
+
+            // メニューのすぐ上 (上に入らないときは、すぐ下)。窓の左の端の、高さのまんなかを合わせる
+            // (メニューは、画面の下の端の近くでは上へずれるので、カーソルではなく、出たメニューの四角から決める)
+            float scale = view.Canvas != null && view.Canvas.scaleFactor > 0f ? view.Canvas.scaleFactor : 1f;
+            Vector2 position = (Vector2)Input.mousePosition / scale + new Vector2(6f, CENTER_PANEL_RAISE);
+            if (EditorContextMenuView.TryGetScreenRect(out Rect menu))
+            {
+                float halfHeight = SpaceHold3DOverlayView.SECTION_CENTER_PANEL_HEIGHT * 0.5f;
+                float screenTop = Screen.height / scale;
+                float above = menu.yMax / scale + CENTER_PANEL_GAP + halfHeight;
+                float below = menu.yMin / scale - CENTER_PANEL_GAP - halfHeight;
+                bool fitsAbove = above + halfHeight <= screenTop - CENTER_PANEL_TOP_MARGIN;
+                position = new Vector2(menu.xMin / scale, fitsAbove ? above : below);
+            }
+            overlay.ShowControlPanel(position);
+            RefreshControlPanel();
+        }
+
+        // 節の中心の位置の窓と、メニューの間
+        const float CENTER_PANEL_GAP = 6f;
+        // 窓を置けない、画面の上の端の幅 (メニューバーと、少しの間。窓を動かすときの寄せ方と同じ)
+        const float CENTER_PANEL_TOP_MARGIN = 42f;
+
+        // 節の中心の位置の窓を、カーソルからどれだけ上に出すか (窓の高さの半分と、少しの間)
+        const float CENTER_PANEL_RAISE = SpaceHold3DOverlayView.SECTION_CENTER_PANEL_HEIGHT * 0.5f + 12f;
+
+        /// <summary>
+        /// 節の中心の位置の窓に、数値が入力されたとき: 節を、その位置へ動かす (選んでいるほかの節も、ドラッグと同じように動く。元に戻せる)
+        /// </summary>
+        private void OnCenterValueEntered(int axis, float value)
+        {
+            if (!isOpen || IsDragging || axis > 1) { return; }
+            int index = centerPanelNote != null ? chain.IndexOf(centerPanelNote) : -1;
+            if (index < 0 || index >= sections.Count || !IsLiveSection(centerPanelNote)) { return; }
+            if (IsLockedSection(index))
+            {
+                ShowLockedStatus();
+                return;
+            }
+
+            Vector2 center = sections[index].Center;
+            Vector2 delta = axis == 0 ? new Vector2(value - center.x, 0f) : new Vector2(0f, value - center.y);
+            if (delta.sqrMagnitude < 1e-12f) { return; }
+
+            var previous = new List<VertexDataToPos>();
+            var current = new List<VertexDataToPos>();
+            foreach (var target in GetTransformTargets(index))
+            {
+                if (target.Weight <= 0f) { continue; }
+                foreach (var vertex in sections[target.Index].Note.SpaceVertices.Vertices)
+                {
+                    Vector2 before = vertex.Position.Value;
+                    vertex.SetPosition(before + delta * target.Weight);
+                    if (vertex.Position.Value == before) { continue; }
+                    previous.Add(new VertexDataToPos(vertex, before));
+                    current.Add(new VertexDataToPos(vertex, vertex.Position.Value));
+                }
+            }
+            if (current.Count == 0) { return; }
+
+            UndoRedo.Vertices.VerticesMoveRecord.RecordVertcesMoving(previous, current);
+            ShowStatus("節の中心の位置を、数値で決めました");
         }
 
         /// <summary>
@@ -1054,7 +1307,7 @@ namespace ChartEditor
         /// </summary>
         private bool IsLiveSection(NoteData_SpaceHold note)
         {
-            return note != null && chain.Contains(note) && notesGetter.GetNoteObject(note) != null;
+            return note != null && chainSet.Contains(note) && notesGetter.GetNoteObject(note) != null;
         }
 
         /// <summary>
@@ -1071,17 +1324,17 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// その節の形を、ほかの節すべてに反映する (それぞれの節の位置 (頂点の中心) は、今のまま。ロックした節は変えない。元に戻すのは1回ぶん)
+        /// その節の形を、ほかの節すべてに反映する (それぞれの節の位置 (節の中心 = 形の重心) は、今のまま。ロックした節は変えない。元に戻すのは1回ぶん)
         /// (録音 20261117_023744: ハートの形の節から反映すると、ホールド全体がハートの形のトンネルになる)
         /// </summary>
         private void ApplyShapeToAll(NoteData_SpaceHold source)
         {
-            var sourceVertices = source.SpaceVertices.Vertices;
-            if (sourceVertices.Count < PreviewVertexTools.MIN_VERTEX_COUNT) { return; }
+            Vector2[] sourcePoints = SpaceHoldSections.GetVertices(source.SpaceVertices);
+            if (sourcePoints.Length < PreviewVertexTools.MIN_VERTEX_COUNT) { return; }
 
-            Vector2 sourceCenter = GetVertexCenter(source.SpaceVertices);
+            Vector2 sourceCenter = SpaceHoldSections.GetCenter(sourcePoints);
             var shape = new List<Vector2>();
-            foreach (var vertex in sourceVertices) { shape.Add(vertex.Position.Value - sourceCenter); }
+            foreach (var point in sourcePoints) { shape.Add(point - sourceCenter); }
 
             // 元に戻す・やり直すは、同じ頂点のオブジェクトを入れ替える (前の履歴 (頂点の移動など) が、その頂点を探せるように)
             var targets = new List<NoteData_SpaceHold>();
@@ -1095,7 +1348,7 @@ namespace ChartEditor
                 if (NoteLock.IsLocked(section.Note)) { lockedCount++; continue; }
 
                 var vertices = section.Note.SpaceVertices;
-                Vector2 center = GetVertexCenter(vertices);
+                Vector2 center = SpaceHoldSections.GetCenter(SpaceHoldSections.GetVertices(vertices));
                 // ノーツの面 (単位円) からはみ出す節は、形ごと縮めて収める (頂点ごとに寄せると、2つが同じ所に重なることがある)
                 float scale = GetFitScale(center, shape);
                 if (scale < 1f) { shrunkCount++; }
@@ -1114,7 +1367,6 @@ namespace ChartEditor
                 return;
             }
 
-            ClearVertexSelection();
             Record(() => { for (int i = 0; i < targets.Count; i++) { targets[i].SpaceVertices.ReplaceVertices(after[i]); } },
                    () => { for (int i = 0; i < targets.Count; i++) { targets[i].SpaceVertices.ReplaceVertices(before[i]); } });
 
@@ -1143,16 +1395,6 @@ namespace ChartEditor
                 scale = Mathf.Min(scale, s);
             }
             return Mathf.Max(scale, 0f);
-        }
-
-        private static Vector2 GetVertexCenter(SpaceVertices vertices)
-        {
-            int count = vertices.Vertices.Count;
-            if (count == 0) { return Vector2.zero; }
-
-            Vector2 sum = Vector2.zero;
-            foreach (var vertex in vertices.Vertices) { sum += vertex.Position.Value; }
-            return sum / count;
         }
 
         /// <summary>
@@ -1227,7 +1469,6 @@ namespace ChartEditor
             }
 
             Select(-1);
-            ClearVertexSelection();
             lastEditing = notesGetter.EditingVertices.Value;
             Record(() => { foreach (var note in notes) { chartData.RemoveNote(note, false); } },
                    () =>
@@ -1244,7 +1485,9 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 2つの節の間を、まっすぐに戻す (間のメッシュ中継点を消す)
+        /// 2つの節の間を、まっすぐに戻す (元に戻すのは1回ぶん)
+        /// 間のメッシュ中継点は残して、それぞれの形のまま、中心が2つの節の中心を結ぶ直線の上に来るように動かす
+        /// (回した・大きさを変えた形も、そのまま残す: 録音 20261117_194644。ノーツの面からはみ出す中継点は、形ごと縮めて収める)
         /// </summary>
         private void StraightenSpan(NoteData_SpaceHold start, NoteData_SpaceHold end)
         {
@@ -1253,8 +1496,60 @@ namespace ChartEditor
                 if (!ReferenceEquals(sections[spans[i].StartIndex].Note, start) || !ReferenceEquals(sections[spans[i].EndIndex].Note, end)) { continue; }
 
                 Span span = spans[i];
-                int count = CommitCurve(span.StartIndex, span.EndIndex, SpaceHoldCurveMath.GetStraightControl(sections[span.StartIndex], sections[span.EndIndex]));
-                if (count >= 0) { ShowStatus("2つの節の間を、まっすぐに戻しました"); }
+                SpaceHoldSection a = sections[span.StartIndex];
+                SpaceHoldSection b = sections[span.EndIndex];
+                Vector2 centerA = a.Center;
+                Vector2 centerB = b.Center;
+
+                var moved = new List<VertexData>();
+                var before = new List<Vector2>();
+                var after = new List<Vector2>();
+                for (int r = span.StartIndex + 1; r < span.EndIndex; r++)
+                {
+                    SpaceHoldSection relay = sections[r];
+                    var vertices = relay.Note.SpaceVertices.Vertices;
+                    Vector2[] points = SpaceHoldSections.GetVertices(relay.Note.SpaceVertices);
+                    Vector2 center = SpaceHoldSections.GetCenter(points);
+                    Vector2 target = Vector2.Lerp(centerA, centerB, SpaceHoldSections.GetFraction(a, b, relay.Time, relay.Depth));
+                    if ((target - center).sqrMagnitude <= 1e-12f) { continue; }
+
+                    var shape = new List<Vector2>(points.Length);
+                    foreach (var point in points) { shape.Add(point - center); }
+                    float scale = GetFitScale(target, shape);
+                    // (中心がノーツの面の端にあって収まらないときは、縮めずに置く。はみ出した頂点は、面の端に寄る)
+                    if (scale <= 0f) { scale = 1f; }
+
+                    for (int v = 0; v < vertices.Count; v++)
+                    {
+                        moved.Add(vertices[v]);
+                        before.Add(points[v]);
+                        after.Add(target + shape[v] * scale);
+                    }
+                }
+
+                NoteData_SpaceHold startNote = a.Note;
+                NoteData_SpaceHold endNote = b.Note;
+                Vector3 straight = SpaceHoldCurveMath.GetStraightControl(a, b);
+                if (moved.Count == 0)
+                {
+                    StoreControl(startNote, endNote, straight);
+                }
+                else
+                {
+                    Vector3? storedControl = GetStoredControl(startNote, endNote);
+                    Record(() =>
+                    {
+                        for (int k = 0; k < moved.Count; k++) { moved[k].SetPosition(after[k]); }
+                        StoreControl(startNote, endNote, straight);
+                    },
+                    () =>
+                    {
+                        for (int k = 0; k < moved.Count; k++) { moved[k].SetPosition(before[k]); }
+                        RestoreControl(startNote, endNote, storedControl);
+                    });
+                }
+
+                ShowStatus("2つの節の間を、まっすぐに戻しました");
                 return;
             }
         }
@@ -1279,6 +1574,60 @@ namespace ChartEditor
         {
             if (!CanOpenFromSpaceLayerSelection()) { return; }
             if (TryGetSelectedSpaceHold(out NoteData_SpaceHold target)) { Open(target); }
+        }
+
+        /// <summary>
+        /// スペースのレイヤーで、頂点を持つノーツ (SpaceHold・SpaceBreak) を選んでいれば、頂点レイヤーで開ける
+        /// (ミニプレビューの上の段の左の「頂点レイヤーで編集」。録音 20261117_195031)
+        /// </summary>
+        public bool CanOpenSpaceSelectionInVerticesLayer()
+        {
+            if (isOpen) { return false; }
+            if (dataGetter.ChartData.Value == null || dataGetter.IsLoadingChart.Value) { return false; }
+            if (dataGetter.EditNoteType.Value != EditNoteType.Space) { return false; }
+
+            // (毎フレーム呼ばれるので、ノーツのオブジェクトは探さない。1つ見つかれば十分)
+            foreach (var selecting in notesGetter.SelectingNotes)
+            {
+                if (selecting is IVerticesControlableNoteData && !NoteLock.IsLocked(selecting)) { return true; }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 選んでいる、頂点を持つノーツのうち、いちばん前のもの (つながった SpaceHold を全体で選んだときは、最初の部分) を、頂点レイヤーで開く
+        /// </summary>
+        public void OpenSpaceSelectionInVerticesLayer()
+        {
+            if (!CanOpenSpaceSelectionInVerticesLayer()) { return; }
+
+            var target = FindFirstSelectedShape();
+            if (target == null) { return; }
+
+            dataSetter.SetEditNoteType(EditNoteType.Vertices);
+            notesSetter.SetEditingVertices(target);
+        }
+
+        /// <summary>
+        /// 選んでいる、頂点を持つノーツ (ロックしていないもの) のうち、いちばん前のもの。無ければ null
+        /// </summary>
+        private IVerticesControlableNoteData FindFirstSelectedShape()
+        {
+            IVerticesControlableNoteData first = null;
+            foreach (var selecting in notesGetter.SelectingNotes)
+            {
+                if (selecting is not IVerticesControlableNoteData shape || NoteLock.IsLocked(selecting)) { continue; }
+                if (notesGetter.GetNoteObject(selecting) == null) { continue; }
+
+                if (first == null || IsEarlier(selecting, (IDeployableNoteData)first)) { first = shape; }
+            }
+            return first;
+        }
+
+        private static bool IsEarlier(IDeployableNoteData a, IDeployableNoteData b)
+        {
+            if (a.Address.BarIndex != b.Address.BarIndex) { return a.Address.BarIndex < b.Address.BarIndex; }
+            return a.Address.SubDivisionIndex < b.Address.SubDivisionIndex;
         }
 
         private bool TryGetSelectedSpaceHold(out NoteData_SpaceHold target)
@@ -1333,6 +1682,8 @@ namespace ChartEditor
             Span span = spans[spanIndex];
             controlPanelStart = sections[span.StartIndex].Note;
             controlPanelEnd = sections[span.EndIndex].Note;
+            centerPanelNote = null;
+            overlay.SetControlPanelMode(false);
 
             overlay.ShowControlPanel(GetControlPanelPosition(span));
             RefreshControlPanel();
@@ -1344,6 +1695,7 @@ namespace ChartEditor
             if (overlay != null) { overlay.HideControlPanel(); }
             controlPanelStart = null;
             controlPanelEnd = null;
+            centerPanelNote = null;
         }
 
         /// <summary>
@@ -1352,6 +1704,20 @@ namespace ChartEditor
         private void RefreshControlPanel()
         {
             if (!IsControlPanelShown) { return; }
+
+            // 節の中心の位置: 今の中心を出す (節が無くなったら、窓を閉じる)
+            if (centerPanelNote != null)
+            {
+                int centerIndex = chain.IndexOf(centerPanelNote);
+                if (centerIndex < 0 || centerIndex >= sections.Count || !IsLiveSection(centerPanelNote))
+                {
+                    CloseControlPanel();
+                    return;
+                }
+                Vector2 center = sections[centerIndex].Center;
+                overlay.SetControlValues(center.x, center.y, 0f);
+                return;
+            }
 
             if (!TryFindControlPanelSpan(out int spanIndex))
             {
@@ -1407,6 +1773,11 @@ namespace ChartEditor
         /// <param name="axis">0 = X (横)、1 = Y (縦)、2 = Z (2つの節の間のどこか。0〜1)</param>
         private void OnControlValueEntered(int axis, float value)
         {
+            if (centerPanelNote != null)
+            {
+                OnCenterValueEntered(axis, value);
+                return;
+            }
             if (!isOpen || IsDragging) { return; }
             if (!TryFindControlPanelSpan(out int spanIndex)) { return; }
 
@@ -1427,7 +1798,7 @@ namespace ChartEditor
                 }
             }
 
-            int count = CommitCurve(span.StartIndex, span.EndIndex, control);
+            int count = CommitCurve(span.StartIndex, span.EndIndex, control, span.Control);
             if (count >= 0) { ShowStatus($"◆ の位置を数値で決めました (メッシュ中継点 {count} 個)"); }
         }
 
@@ -1548,39 +1919,6 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 選んでいる節それぞれの後ろ (終点なら前) に、補間した形のメッシュ中継点を足す (元に戻すのは1回ぶん)
-        /// </summary>
-        private void InsertSectionsForSelection()
-        {
-            var indices = GetSelectedSectionIndices();
-            if (indices.Count == 0) { ShowStatus("節を選んでください"); return; }
-
-            // 後ろから足す (前の節の番号が、足したことで変わらないように)
-            var gaps = new SortedSet<int>();
-            foreach (int index in indices)
-            {
-                int gap = index < sections.Count - 1 ? index : index - 1;
-                if (gap >= 0) { gaps.Add(gap); }
-            }
-            if (gaps.Count == 0) { ShowStatus("つながっている節がありません"); return; }
-
-            int added = 0;
-            var ordered = new List<int>(gaps);
-            ordered.Reverse();
-            BeginTransaction();
-            try
-            {
-                foreach (int gap in ordered)
-                {
-                    if (SpaceHoldFilmStrip.TryInsertInterpolatedSection(dataGetter.ChartData.Value, timeline, sections, gap, out _)) { added++; }
-                }
-            }
-            finally { EndTransaction(); }
-
-            ShowStatus(added > 0 ? $"補間した形のメッシュ中継点を {added} 個足しました" : "足せる分線がありません (2つの節の間に、空いた分線が必要です)");
-        }
-
-        /// <summary>
         /// その節の後ろ (終点なら前) に、補間した形のメッシュ中継点を足す (右クリックのメニューから)
         /// </summary>
         private void InsertSectionAfter(int index)
@@ -1604,52 +1942,12 @@ namespace ChartEditor
             }
         }
 
-        private void SlideSelected(int delta)
-        {
-            if (!TryGetSelected(out var section)) { ShowStatus("節を選んでください"); return; }
-            PreviewVertexTools.Slide(section.Note.SpaceVertices, delta);
-        }
-
-        private void MirrorSelected(bool isLeftRight)
-        {
-            if (!TryGetSelected(out var section)) { ShowStatus("節を選んでください"); return; }
-            PreviewVertexTools.Mirror(section.Note.SpaceVertices, isLeftRight);
-        }
-
         /// <summary>
-        /// 選んだ節と次の節の間 (選んだ節が終点なら、前の節との間) に、補間した形のメッシュ中継点を足す
-        /// </summary>
-        private void InsertSectionAfterSelected()
-        {
-            if (!TryGetSelected(out _)) { ShowStatus("節を選んでください"); return; }
-
-            int gap = selectedIndex < sections.Count - 1 ? selectedIndex : selectedIndex - 1;
-            if (gap < 0) { ShowStatus("つながっている節がありません"); return; }
-
-            if (SpaceHoldFilmStrip.TryInsertInterpolatedSection(dataGetter.ChartData.Value, timeline, sections, gap, out NoteData_SpaceHold inserted))
-            {
-                selectedNote = inserted;
-                notesSetter.SetEditingVertices(inserted);
-                lastEditing = inserted;
-                ShowStatus("補間した形のメッシュ中継点を足しました");
-            }
-            else
-            {
-                ShowStatus("2つの節の間に分線が無いので、節を足せません");
-            }
-        }
-
-        /// <summary>
-        /// 閉じて、選んでいる節を頂点レイヤーで編集する
+        /// 閉じて、選んでいる節を頂点レイヤーで編集する (ロックした節は開かない)
         /// </summary>
         private void OpenSelectedInVerticesLayer()
         {
-            NoteData_SpaceHold target = selectedNote ?? anchor;
-            Close();
-            if (target == null) { return; }
-
-            dataSetter.SetEditNoteType(EditNoteType.Vertices);
-            notesSetter.SetEditingVertices(target);
+            OpenSectionInVerticesLayer(selectedNote ?? anchor);
         }
 
         #endregion
@@ -1697,9 +1995,12 @@ namespace ChartEditor
 
         /// <summary>
         /// 区間の間のメッシュ中継点を、制御点の曲線のとおりに置き直す (元に戻せる)
+        /// 今の帯の形 (回した・大きさを変えた中継点) は残して、曲線が動いた分だけ動かす (録音 20261117_194644)
+        /// 制御点が動いていないときは、制御点を覚えるだけ (元に戻す操作も、中継点の置き直しもしない)
         /// </summary>
+        /// <param name="previousControl">区間の今の制御点 (動かす前)</param>
         /// <returns>置いた中継点の数 (置き直さなかったときは -1)</returns>
-        private int CommitCurve(int startIndex, int endIndex, Vector3 control)
+        private int CommitCurve(int startIndex, int endIndex, Vector3 control, Vector3 previousControl)
         {
             var chartData = dataGetter.ChartData.Value;
             if (chartData == null || timeline == null) { return -1; }
@@ -1711,8 +2012,15 @@ namespace ChartEditor
             if (chainIndex < 0) { return -1; }
 
             control = SpaceHoldCurveMath.ClampControl(a, b, control);
+            if ((control - SpaceHoldCurveMath.ClampControl(a, b, previousControl)).sqrMagnitude <= 1e-10f)
+            {
+                StoreControl(a.Note, b.Note, control);
+                return 0;
+            }
+
             var baked = new List<SpaceHoldCurveMath.BakedSection>();
-            SpaceHoldCurveMath.Bake(timeline, a, b, control, SpaceHoldSections.GetNormalizedVertexCount(sections), baked);
+            SpaceHoldCurveMath.BakeKeepingShapes(timeline, sections.GetRange(startIndex, endIndex - startIndex + 1), previousControl, control,
+                                                 SpaceHoldSections.GetNormalizedVertexCount(sections), baked);
 
             // 外すもの: 2つの節の間のメッシュ中継点 (手で置いたものも含む)
             var removed = new List<NoteData_SpaceHold>();
@@ -1743,7 +2051,7 @@ namespace ChartEditor
 
             NoteData_SpaceHold startNote = a.Note;
             NoteData_SpaceHold endNote = b.Note;
-            Vector3? previousControl = controls.TryGetValue(startNote, out StoredControl stored) && ReferenceEquals(stored.End, endNote) ? stored.Control : (Vector3?)null;
+            Vector3? storedControl = GetStoredControl(startNote, endNote);
 
             Record(() =>
             {
@@ -1761,16 +2069,19 @@ namespace ChartEditor
                     chartData.AddNote(removed[i]);
                 }
 
-                if (previousControl.HasValue) { StoreControl(startNote, endNote, previousControl.Value); }
-                else { controls.Remove(startNote); }
+                RestoreControl(startNote, endNote, storedControl);
             });
 
             // 選んでいた節が外れたら、区間の始まりの節を選ぶ
+            // (ロックした節は、選んでも頂点レイヤーで編集する節にはしない: Select と同じ)
             if (selectedNote != null && removed.Contains(selectedNote))
             {
                 selectedNote = startNote;
-                notesSetter.SetEditingVertices(startNote);
-                lastEditing = startNote;
+                if (!NoteLock.IsLocked(startNote))
+                {
+                    notesSetter.SetEditingVertices(startNote);
+                    lastEditing = startNote;
+                }
             }
 
             return added.Count;
@@ -1779,6 +2090,23 @@ namespace ChartEditor
         private void StoreControl(NoteData_SpaceHold start, NoteData_SpaceHold end, Vector3 control)
         {
             controls[start] = new StoredControl { End = end, Control = control };
+        }
+
+        /// <summary>
+        /// その区間について覚えている制御点 (覚えていなければ null)
+        /// </summary>
+        private Vector3? GetStoredControl(NoteData_SpaceHold start, NoteData_SpaceHold end)
+        {
+            return controls.TryGetValue(start, out StoredControl stored) && ReferenceEquals(stored.End, end) ? stored.Control : (Vector3?)null;
+        }
+
+        /// <summary>
+        /// 元に戻すとき: 覚えていた制御点に戻す (覚えていなかったときは、忘れる)
+        /// </summary>
+        private void RestoreControl(NoteData_SpaceHold start, NoteData_SpaceHold end, Vector3? control)
+        {
+            if (control.HasValue) { StoreControl(start, end, control.Value); }
+            else { controls.Remove(start); }
         }
 
         #endregion

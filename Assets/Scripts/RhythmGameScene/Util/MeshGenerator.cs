@@ -562,7 +562,8 @@ namespace MeshGenerate
 
                     if (targetLength <= nextAccumulatedLength)
                     {
-                        float t = (targetLength - accumulatedLength) / segmentLengths[i];
+                        // 長さ 0 の辺 (同じ場所に頂点が2つ並んでいる) では、0 で割らない (NaN の頂点になり、メッシュが壊れていた)
+                        float t = segmentLengths[i] > 1e-6f ? (targetLength - accumulatedLength) / segmentLengths[i] : 0f;
                         Vector3 point = Vector2.Lerp(vertices[i], vertices[i + 1], t);
                         point = new Vector3(point.x, point.y, z);
                         result.Add(point);

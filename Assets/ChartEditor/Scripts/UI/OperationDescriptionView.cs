@@ -54,7 +54,7 @@ namespace ChartEditor
     /// 操作説明 (画面の右側の、今できる操作の一覧)
     ///
     /// 1行が1つの操作で、「押すもの」と「起こること」が並ぶ (例: Shift + ドラッグ → 範囲選択)。
-    /// 行は、はじめからシーンに置いてある。ここでは、今の状態で使える行だけを出す。
+    /// 行は、はじめからシーンに置いてある (SpaceHold の3D編集の行も: エディットモード SpaceHoldView の行)。ここでは、今の状態で使える行だけを出す。
     /// どの行をいつ出すかは、行ごとの「エディットモード」「レイヤー」「条件」で決まる。
     /// 全画面プレビューの行は、さらに「プレビューの状態」(頂点の道具の列が出ているか、どの道具を選んでいるか) でも決まる。
     /// (この欄は、全画面プレビューでも出しておくために、いつも手前に出すキャンバス (MenuCanvas) に置いてある)
@@ -179,114 +179,9 @@ namespace ChartEditor
             }
         }
 
-        #region 実行時に足す行
-
-        // 行の中の部品の名前 (シーンの行と同じ)
-        const string ROW_KEY_NAME = "Key0";
-        const string ROW_TEXT_NAME = "Text";
-        // キーの四角の、文字の左右の余白と、いちばん小さい幅
-        const float KEY_PADDING = 12f;
-        const float KEY_MIN_WIDTH = 24f;
-
-        /// <summary>
-        /// シーンにある行 (template) を複製して、行を足す (実行時に足す画面の操作の説明用。SpaceHold の3D編集など)
-        /// 複製した行は、キーの四角 (Key0) と説明 (Text) だけを残し、ほかの絵は消す
-        /// </summary>
-        /// <param name="templateRowName">複製する行の名前 (キーの四角と説明だけの行。例: Undo)</param>
-        /// <param name="rowName">足す行の名前</param>
-        /// <param name="keyText">キーの四角に書く文字</param>
-        /// <param name="description">説明</param>
-        /// <param name="editModes">この行を出すエディットモード</param>
-        /// <param name="layers">この行を出すレイヤー</param>
-        /// <returns>足せたか (複製する行が無いときは false)</returns>
-        public bool AddRuntimeRow(string templateRowName, string rowName, string keyText, string description, EditMode[] editModes, DescriptionLayers layers)
-        {
-            if (rows == null) { return false; }
-
-            DescriptionRow template = Array.Find(rows, row => row != null && row.Name == templateRowName);
-            if (template == null || template.Obj == null) { return false; }
-
-            GameObject clone = Instantiate(template.Obj, template.Obj.transform.parent);
-            clone.name = rowName;
-            clone.transform.SetAsLastSibling();
-
-            Transform key = clone.transform.Find(ROW_KEY_NAME);
-            Transform text = clone.transform.Find(ROW_TEXT_NAME);
-
-            // キーの四角と説明のほかの絵 (マウスの絵、×2 など) は消す
-            foreach (Transform child in clone.transform)
-            {
-                if (child != key && child != text) { Destroy(child.gameObject); }
-            }
-
-            if (text != null && text.TryGetComponent(out TMPro.TMP_Text descriptionLabel)) { descriptionLabel.text = description; }
-
-            if (key != null)
-            {
-                var keyLabel = key.GetComponentInChildren<TMPro.TMP_Text>(true);
-                if (keyLabel != null)
-                {
-                    keyLabel.text = keyText;
-                    // 文字が収まるように、キーの四角の幅を合わせる
-                    if (key is RectTransform keyRect)
-                    {
-                        float width = Mathf.Max(KEY_MIN_WIDTH, keyLabel.GetPreferredValues(keyText).x + KEY_PADDING);
-                        keyRect.sizeDelta = new Vector2(width, keyRect.sizeDelta.y);
-                    }
-                }
-            }
-
-            var added = new DescriptionRow(rowName, clone, editModes, layers);
-            var list = new System.Collections.Generic.List<DescriptionRow>(rows) { added };
-            rows = list.ToArray();
-
-            clone.SetActive(false);
-            Refresh();
-            return true;
-        }
-
-        /// <summary>
-        /// シーンにある行を、ほかのエディットモードでも出す (同じ操作を、別の画面でも使えるとき。元に戻す、再生など)
-        /// </summary>
-        public void AddEditModeToRows(EditMode editMode, params string[] rowNames)
-        {
-            if (rows == null || rowNames == null) { return; }
-
-            foreach (var row in rows)
-            {
-                if (row != null && Array.IndexOf(rowNames, row.Name) >= 0) { row.AddEditMode(editMode); }
-            }
-
-            Refresh();
-        }
-
-        #endregion
-
         [Serializable]
         class DescriptionRow
         {
-            public DescriptionRow() { }
-
-            public DescriptionRow(string name, GameObject obj, EditMode[] editModes, DescriptionLayers layers)
-            {
-                this.name = name;
-                this.obj = obj;
-                this.editModes = editModes;
-                this.layers = layers;
-                condition = DescriptionCondition.Always;
-            }
-
-            public string Name => name;
-            public GameObject Obj => obj;
-
-            public void AddEditMode(EditMode editMode)
-            {
-                if (editModes != null && Array.IndexOf(editModes, editMode) >= 0) { return; }
-
-                var list = new System.Collections.Generic.List<EditMode>(editModes ?? Array.Empty<EditMode>()) { editMode };
-                editModes = list.ToArray();
-            }
-
             [SerializeField] string name = "row";
             [SerializeField] GameObject obj;
             [Tooltip("この行を出すエディットモード")]
@@ -297,6 +192,9 @@ namespace ChartEditor
             [SerializeField] DescriptionCondition condition;
             [Tooltip("この行を出す、全画面プレビューの状態 (何も選ばなければ、どの状態でも出す)")]
             [SerializeField] DescriptionPreviewStates previewStates;
+
+            /// <summary>行の名前 (インスペクターで見分けるため)</summary>
+            public string Name => name;
 
             public bool IsShown(EditMode editMode, EditNoteType layer, bool isHoldIsolation, DescriptionPreviewStates previewState, bool hasVertexSelection)
             {

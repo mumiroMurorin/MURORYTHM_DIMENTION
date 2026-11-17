@@ -26,15 +26,22 @@ namespace ChartEditor
         // (最初に使うときに求める。型を読み込んだ時点では求めない: Unity の外で動かす確認用のプログラムでも、この型を使えるように)
         static int paleIdCache = -1;
         static int paleId => paleIdCache >= 0 ? paleIdCache : (paleIdCache = Shader.PropertyToID("_Pale"));
+        // ロックしたメッシュ中継点 (帯と同じ青で薄い) を、白くはっきり出す (録音 20261117_162135)
+        static int paleStrongIdCache = -1;
+        static int paleStrongId => paleStrongIdCache >= 0 ? paleStrongIdCache : (paleStrongIdCache = Shader.PropertyToID("_PaleStrong"));
 
         readonly IChartEditorDataGetter dataGetter;
         readonly INotesDataGetter notesGetter;
         readonly INotesDataSetter notesSetter;
 
         readonly HashSet<IDeployableNoteData> locked = new HashSet<IDeployableNoteData>();
+        // ロックしたノーツの相手 (ダイナミックノーツと下のノーツ)。相手がロックしているので、ロックして見えるもの
+        // (相手から外れたら、ロックも外れる。ロックの付け直しのたびに作り直す)
+        readonly HashSet<IDeployableNoteData> partnerLocked = new HashSet<IDeployableNoteData>();
         readonly HashSet<Renderer> grayRenderers = new HashSet<Renderer>();
         readonly List<Renderer> rendererBuffer = new List<Renderer>();
         readonly HashSet<IDeployableNoteData> liveNotes = new HashSet<IDeployableNoteData>();
+        readonly List<IDeployableNoteData> partnerBuffer = new List<IDeployableNoteData>();
         // 手前に描くようにした絵と、元の描く順番
         readonly Dictionary<Renderer, int> raisedRenderers = new Dictionary<Renderer, int>();
         // ロックしたノーツを、帯 (ホールドのメッシュ) より手前に描くために、描く順番に足す数
@@ -60,10 +67,14 @@ namespace ChartEditor
         /// <summary>ロックしているノーツが、1つでもあるか</summary>
         public static bool HasAny => instance != null && instance.locked.Count > 0;
 
-        /// <summary>そのノーツをロックしているか</summary>
+        /// <summary>そのノーツをロックしているか (ダイナミックノーツと下のノーツは、どちらかをロックしていれば、両方ロック)</summary>
         public static bool IsLocked(IDeployableNoteData note)
         {
-            return instance != null && note != null && instance.locked.Contains(note);
+            if (instance == null || note == null) { return false; }
+            if (instance.locked.Contains(note)) { return true; }
+
+            var partner = DynamicNoteAttachments.GetPartner(note);
+            return partner != null && instance.locked.Contains(partner);
         }
 
         /// <summary>ロックしているノーツの数</summary>
@@ -77,7 +88,11 @@ namespace ChartEditor
             if (instance == null || notes == null) { return; }
 
             instance.BindChart();
+            // ダイナミックノーツと下のノーツは、どちらをロックしても両方ロックして見える (相手のロックは partnerLocked で、組が外れたら外れる)
+            // ルールに合わないダイナミックノーツは、ロックしない
             var list = new List<IDeployableNoteData>(notes);
+            int looseCount = list.RemoveAll(DynamicNoteAttachments.IsViolation);
+            DynamicNoteAttachments.LogRefused(looseCount, "ルールに合わないダイナミックノーツは、ロックできません");
             foreach (var note in list)
             {
                 if (note == null) { continue; }
@@ -94,7 +109,13 @@ namespace ChartEditor
         {
             if (instance == null || notes == null) { return; }
 
-            foreach (var note in notes) { instance.locked.Remove(note); }
+            // ダイナミックノーツと下のノーツは、どちらのロックを外しても両方外す
+            foreach (var note in DynamicNoteAttachments.WithPartners(notes))
+            {
+                instance.locked.Remove(note);
+                instance.partnerLocked.Remove(note);
+            }
+            instance.RebuildPartnerLocked();
             instance.RestoreColors();
             instance.nextRefreshTime = 0f;
         }
@@ -144,7 +165,7 @@ namespace ChartEditor
             for (int i = 0; i < allNotes.Count; i++)
             {
                 var pair = allNotes[i];
-                if (pair.Object == null || !instance.locked.Contains(pair.Data)) { continue; }
+                if (pair.Object == null || !instance.IsShownLocked(pair.Data)) { continue; }
                 if (!pair.Object.gameObject.activeInHierarchy) { continue; }
                 results.Add(pair.Object);
             }
@@ -167,6 +188,7 @@ namespace ChartEditor
             if (instance == null) { return; }
 
             instance.locked.Clear();
+            instance.partnerLocked.Clear();
             instance.RestoreColors();
         }
 
@@ -178,6 +200,7 @@ namespace ChartEditor
             if (!ReferenceEquals(dataGetter.ChartData.Value, lockedChart) || dataGetter.IsLoadingChart.Value)
             {
                 locked.Clear();
+                partnerLocked.Clear();
                 RestoreColors();
                 lockedChart = dataGetter.ChartData.Value;
                 return;
@@ -197,18 +220,23 @@ namespace ChartEditor
             locked.RemoveWhere(note => !liveNotes.Contains(note));
             liveNotes.Clear();
 
+            // ダイナミックノーツと下のノーツは、片方だけロックしていても、両方を淡く表示する
+            // (元に戻す・やり直しで、ロックしていない方が載り直したときなど。組が外れたら、相手は元の色に戻す)
+            if (RebuildPartnerLocked()) { RestoreColors(); }
+
             // ロックしたノーツの絵を淡くする (絵が作り直されても、付け直す)
             grayRenderers.RemoveWhere(renderer => renderer == null);
             for (int i = 0; i < allNotes.Count; i++)
             {
                 var pair = allNotes[i];
-                if (pair.Object == null || !locked.Contains(pair.Data)) { continue; }
+                if (pair.Object == null || !IsShownLocked(pair.Data)) { continue; }
 
                 CollectBodyRenderers(pair.Object, rendererBuffer);
+                float strong = IsMeshRelay(pair.Data) ? 1f : 0f;
                 foreach (var renderer in rendererBuffer)
                 {
                     grayRenderers.Add(renderer);
-                    SetMonochrome(renderer, 1f);
+                    SetMonochrome(renderer, 1f, strong);
                     // 帯より手前に描く (淡い中継点が、帯の下に埋もれないように)
                     if (!raisedRenderers.ContainsKey(renderer))
                     {
@@ -220,11 +248,39 @@ namespace ChartEditor
             rendererBuffer.Clear();
         }
 
+        // ロックして見えるか (自分でロックした、または相手がロックした)
+        private bool IsShownLocked(IDeployableNoteData note) => locked.Contains(note) || partnerLocked.Contains(note);
+
+        /// <summary>
+        /// ロックしたノーツの相手を、作り直す
+        /// </summary>
+        /// <returns>前は相手としてロックして見えていたノーツが、外れたとき true (元の色に戻すため)</returns>
+        private bool RebuildPartnerLocked()
+        {
+            partnerBuffer.Clear();
+            foreach (var note in locked)
+            {
+                var partner = DynamicNoteAttachments.GetPartner(note);
+                if (partner != null && !locked.Contains(partner)) { partnerBuffer.Add(partner); }
+            }
+
+            bool isLost = false;
+            foreach (var old in partnerLocked)
+            {
+                if (!partnerBuffer.Contains(old)) { isLost = true; break; }
+            }
+            partnerLocked.Clear();
+            foreach (var partner in partnerBuffer) { partnerLocked.Add(partner); }
+            partnerBuffer.Clear();
+            return isLost;
+        }
+
         private void BindChart()
         {
             if (!ReferenceEquals(lockedChart, dataGetter.ChartData.Value))
             {
                 locked.Clear();
+                partnerLocked.Clear();
                 RestoreColors();
                 lockedChart = dataGetter.ChartData.Value;
             }
@@ -241,7 +297,7 @@ namespace ChartEditor
             {
                 var pair = allNotes[i];
                 if (pair.Object == null) { continue; }
-                if (!locked.Contains(pair.Data)) { continue; }
+                if (!IsShownLocked(pair.Data)) { continue; }
 
                 CollectBodyRenderers(pair.Object, rendererBuffer);
                 foreach (var renderer in rendererBuffer) { stillGray.Add(renderer); }
@@ -250,7 +306,7 @@ namespace ChartEditor
 
             foreach (var renderer in grayRenderers)
             {
-                if (renderer != null && !stillGray.Contains(renderer)) { SetMonochrome(renderer, 0f); }
+                if (renderer != null && !stillGray.Contains(renderer)) { SetMonochrome(renderer, 0f, 0f); }
             }
             grayRenderers.Clear();
 
@@ -269,13 +325,24 @@ namespace ChartEditor
             nextRefreshTime = 0f;
         }
 
-        private void SetMonochrome(Renderer renderer, float amount)
+        private void SetMonochrome(Renderer renderer, float amount, float strong)
         {
             propertyBlock ??= new MaterialPropertyBlock();
 
             renderer.GetPropertyBlock(propertyBlock);
             propertyBlock.SetFloat(paleId, amount);
+            propertyBlock.SetFloat(paleStrongId, strong);
             renderer.SetPropertyBlock(propertyBlock);
+        }
+
+        /// <summary>
+        /// メッシュ中継点か (いつもは帯と同じ青で薄く描くので、ロックしたときは、白くはっきり出す)
+        /// </summary>
+        private static bool IsMeshRelay(IDeployableNoteData note)
+        {
+            if (note is not ITypeChangableNoteData typed) { return false; }
+            var type = typed.NoteTypeRP.Value;
+            return type == DeploymentNoteType.HoldMeshRelay || type == DeploymentNoteType.SpaceHoldMeshRelay;
         }
     }
 }

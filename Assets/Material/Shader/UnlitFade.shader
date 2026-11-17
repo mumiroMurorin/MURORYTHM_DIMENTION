@@ -11,6 +11,10 @@
         // notes (NoteLock). Every material leaves it at 0. A body that is already faint (a mesh relay, alpha 0.39) is
         // raised to 0.45 instead of being made fainter (recording 20261117_012356: it was nearly invisible).
         _Pale("Pale", Range(0, 1)) = 0
+        // 0 = as it is, 1 = a locked mesh relay: nearly white and nearly opaque, so that it stands out on the blue hold
+        // band of the same colour (recording 20261117_162135: at alpha 0.45 it still could not be seen). Every material
+        // leaves it at 0; NoteLock sets it together with _Pale.
+        _PaleStrong("Pale Strong", Range(0, 1)) = 0
         [HideInInspector] _GroundClipEnabled("Ground Clip Enabled", Float) = 0
         [HideInInspector] _GroundVisibleDistance("Ground Visible Distance", Float) = 100
     }
@@ -38,6 +42,7 @@
                 fixed4 _Color;
                 fixed _Monochrome;
                 fixed _Pale;
+                fixed _PaleStrong;
                 float4 _MainTex_ST;
                 float _GroundClipEnabled;
                 float _GroundVisibleDistance;
@@ -81,6 +86,10 @@
                     // pale by _Pale (0 leaves the colour untouched)
                     col.rgb = lerp(col.rgb, fixed3(1, 1, 1), _Pale * 0.5);
                     col.a = lerp(col.a, min(col.a * 2, 0.45), _Pale);
+
+                    // a locked mesh relay: whiter, and nearly opaque
+                    col.rgb = lerp(col.rgb, fixed3(1, 1, 1), _PaleStrong * 0.6);
+                    col.a = lerp(col.a, max(col.a, 0.9), _PaleStrong);
                     return col;
                 }
                 ENDCG
