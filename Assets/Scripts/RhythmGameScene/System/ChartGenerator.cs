@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Deform;
 using UnityEngine;
@@ -103,12 +105,20 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
 
         if (chartDataGetter == null || chartDataGetter.Chart == null)
         {
-            Debug.LogWarning("[ChartGenerator] Chart data is null.");
+            // 次へ進まずにエラーを通知する (選曲画面へ戻る)
+            GameFlowError.Raise("[ChartGenerator] 譜面データが無いため、ノーツを生成できません");
             return;
         }
 
         if (noteFactories == null)
         {
+            // 判定のあるノーツを生成できないと曲が終わらないため、エラーにする
+            if (chartDataGetter.Chart.MaxCombo > 0)
+            {
+                GameFlowError.Raise("[ChartGenerator] ノーツの生成設定 (Note Factories) がありません");
+                return;
+            }
+
             callback?.Invoke();
             return;
         }
@@ -123,18 +133,80 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
             visibleBehindDistance,
             optionGetter?.NoteVisibleDistance.Value ?? 100f);
 
-        // 各ノーツについて生成
+        // 各ノーツについて生成 (判定のあるノーツで生成できなかった数を数える)
+        int failedJudgedNoteCount = 0;
         foreach (var binding in noteFactories)
         {
-            SpawnEachType(
+            failedJudgedNoteCount += SpawnEachType(
                 binding,
                 chartDataGetter.Chart,
                 chartDataGetter.Chart.PositionGraph,
                 spawned => noteVisibilityController.Register(spawned));
         }
 
+        // 生成設定 (Note Factories) に無い種類のノーツも、生成できなかった扱いにする
+        failedJudgedNoteCount += CountJudgedNotesWithoutFactory(chartDataGetter.Chart);
+
         noteVisibilityController.CompleteRegistration();
+
+        // 判定のあるノーツが1つでも欠けると、判定数が MaxCombo に届かず曲が終わらないため、次へ進まずにエラーにする
+        if (failedJudgedNoteCount > 0)
+        {
+            GameFlowError.Raise($"[ChartGenerator] 判定のあるノーツ {failedJudgedNoteCount} 個を生成できませんでした (このままでは曲が終わらないため中断します)");
+            return;
+        }
+
         callback?.Invoke();
+    }
+
+    /// <summary>
+    /// 判定数 (MaxCombo) に数えられるノーツか (ChartData.AddNoteData と同じ条件)
+    /// </summary>
+    private static bool IsJudgedNote(INoteData noteData)
+    {
+        return noteData is IJudgableNoteData || noteData is IClippedJudgableNote;
+    }
+
+    private static int CountJudgedNotes(IEnumerable<INoteData> noteDataList)
+    {
+        int count = 0;
+        foreach (INoteData noteData in noteDataList)
+        {
+            if (IsJudgedNote(noteData)) { count++; }
+        }
+
+        return count;
+    }
+
+    /// <summary>
+    /// 生成できる設定が無い種類の、判定のあるノーツの数
+    /// </summary>
+    private int CountJudgedNotesWithoutFactory(global::ChartData chartData)
+    {
+        HashSet<NoteType> spawnableTypes = new HashSet<NoteType>();
+        foreach (var binding in noteFactories)
+        {
+            if (binding == null || binding.Factory == null) { continue; }
+            if (FindSpawnMethod(binding.Factory.GetType()) == null) { continue; }
+
+            spawnableTypes.Add(binding.NoteType);
+        }
+
+        int count = 0;
+        foreach (IEnumerable<INoteData> noteDataList in chartData.AllNoteDataLists)
+        {
+            INoteData first = noteDataList.FirstOrDefault();
+            if (first == null || spawnableTypes.Contains(first.NoteType)) { continue; }
+
+            int judgedCount = CountJudgedNotes(noteDataList);
+            if (judgedCount > 0)
+            {
+                Debug.LogError($"[ChartGenerator] {first.NoteType} の生成設定がありません ({judgedCount} 個)");
+                count += judgedCount;
+            }
+        }
+
+        return count;
     }
 
     private static void InitializeFactory(NoteFactoryBinding binding, NoteFactoryInitializingData data)
@@ -151,17 +223,29 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
         initializeMethod.Invoke(binding.Factory, new object[] { data });
     }
 
-    private static void SpawnEachType(NoteFactoryBinding binding, global::ChartData chartData, INotePositionCalculator positionCalculator, Action<Component> onSpawned)
+    /// <summary>
+    /// 1種類のノーツを生成する。戻り値は、判定のあるノーツのうち生成できなかった数。
+    /// </summary>
+    private static int SpawnEachType(NoteFactoryBinding binding, global::ChartData chartData, INotePositionCalculator positionCalculator, Action<Component> onSpawned)
     {
-        if (binding == null || binding.Factory == null || chartData == null) { return; }
+        if (binding == null || chartData == null) { return 0; }
+
+        // 生成設定が壊れている種類は、ここでは数えない
+        // (他に使える生成設定が無ければ、CountJudgedNotesWithoutFactory で生成できなかった数に入る)
+        if (binding.Factory == null)
+        {
+            Debug.LogError($"[ChartGenerator] {binding.NoteType} の Factory が設定されていません");
+            return 0;
+        }
 
         MethodInfo spawnMethod = FindSpawnMethod(binding.Factory.GetType());
         if (spawnMethod == null)
         {
-            Debug.LogWarning($"[ChartGenerator] Spawn method not found: {binding.Factory.GetType().Name}");
-            return;
+            Debug.LogError($"[ChartGenerator] Spawn method not found: {binding.Factory.GetType().Name}");
+            return 0;
         }
 
+        int failedJudgedNoteCount = 0;
         foreach (INoteData noteData in chartData.GetNoteDataList(binding.NoteType))
         {
             try
@@ -174,9 +258,16 @@ public class ChartGenerator : MonoBehaviour, IChartGenerator
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"[ChartGenerator] Spawn failed ({binding.NoteType}): {ex.Message}");
+                // リフレクション経由の例外は TargetInvocationException に包まれるので、中身を出す
+                Exception cause = ex is TargetInvocationException && ex.InnerException != null ? ex.InnerException : ex;
+                Debug.LogError($"[ChartGenerator] Spawn failed ({binding.NoteType}, {noteData.Timing:F3}s): {cause.Message}");
+                Debug.LogException(cause);
+
+                if (IsJudgedNote(noteData)) { failedJudgedNoteCount++; }
             }
         }
+
+        return failedJudgedNoteCount;
     }
 
     private static MethodInfo FindSpawnMethod(Type factoryType)

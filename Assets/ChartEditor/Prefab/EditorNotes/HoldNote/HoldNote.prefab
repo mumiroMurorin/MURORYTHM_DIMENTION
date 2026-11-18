@@ -499,6 +499,7 @@ MonoBehaviour:
   relayMaterial: {fileID: 2100000, guid: ba085195bd480c04ca970305e72fe911, type: 2}
   endMaterial: {fileID: 2100000, guid: 2f53ffd128c8f7345aa1fdb26cfe1037, type: 2}
   meshMaterial: {fileID: 2100000, guid: 096c53fe127642e4fb33559b498a855c, type: 2}
+  divineStartMaterial: {fileID: 2100000, guid: c71717bb72bd4e76ae76b2c50d8a4a9d, type: 2}
   outlineColorOnAlone:
     color: {r: 1, g: 0, b: 0, a: 1}
     isBlinking: 1
@@ -523,7 +524,7 @@ MonoBehaviour:
   normalColor: {r: 0, g: 0.3137255, b: 1, a: 1}
   hiddenColor: {r: 0, g: 0.3137255, b: 1, a: 0.39215687}
   holdEndUnjudgeColor: {r: 0.6862745, g: 0, b: 1, a: 0.64705884}
-  holdStartDivineColor: {r: 1, g: 1, b: 0, a: 1}
+  holdStartDivineColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &7717249748962354947
 MonoBehaviour:
   m_ObjectHideFlags: 0

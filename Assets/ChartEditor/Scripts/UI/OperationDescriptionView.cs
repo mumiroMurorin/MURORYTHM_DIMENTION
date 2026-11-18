@@ -48,6 +48,12 @@ namespace ChartEditor
         OnlyWithPreviewVertexSelection = 3,
         /// <summary>全画面プレビューで、頂点を選んでいる間は出さない</summary>
         NotWithPreviewVertexSelection = 4,
+        /// <summary>SpaceHold の3D編集で、回転・拡大縮小の道具を選んでいる間だけ (録音 20261118_211557)</summary>
+        OnlyWithSpaceHoldTransformTool = 5,
+        /// <summary>SpaceHold の3D編集で、カーソルがミニプレビューの上にある間だけ (ホイールが譜面を送る: 録音 20261118_211837)</summary>
+        OnlyOnSpaceHoldMiniPreview = 6,
+        /// <summary>SpaceHold の3D編集で、カーソルがミニプレビューの上にある間は出さない</summary>
+        NotOnSpaceHoldMiniPreview = 7,
     }
 
     /// <summary>
@@ -73,6 +79,8 @@ namespace ChartEditor
         bool isHoldIsolation;
         DescriptionPreviewStates previewState = DescriptionPreviewStates.NoVertexNote;
         bool hasVertexSelection;
+        bool hasSpaceHoldTool;
+        bool isOnMiniPreview;
 
         private void Start()
         {
@@ -97,11 +105,16 @@ namespace ChartEditor
             bool isIsolation = HoldIsolation.IsActive;
             DescriptionPreviewStates state = GetPreviewState();
             bool hasSelection = PreviewVertexTools.HasSelectedVertices;
-            if (isIsolation == isHoldIsolation && state == previewState && hasSelection == hasVertexSelection) { return; }
+            bool hasTool = SpaceHold3DEditor.HasTransformTool;
+            bool isOnPreview = SpaceHold3DEditor.IsPointerOnMiniPreview;
+            if (isIsolation == isHoldIsolation && state == previewState && hasSelection == hasVertexSelection && hasTool == hasSpaceHoldTool &&
+                isOnPreview == isOnMiniPreview) { return; }
 
             isHoldIsolation = isIsolation;
             previewState = state;
             hasVertexSelection = hasSelection;
+            hasSpaceHoldTool = hasTool;
+            isOnMiniPreview = isOnPreview;
             Refresh();
         }
 
@@ -130,7 +143,7 @@ namespace ChartEditor
             {
                 if (row == null) { continue; }
 
-                bool isShown = row.IsShown(editMode, layer, isHoldIsolation, previewState, hasVertexSelection);
+                bool isShown = row.IsShown(editMode, layer, isHoldIsolation, previewState, hasVertexSelection, hasSpaceHoldTool, isOnMiniPreview);
                 row.SetActive(isShown);
                 isAnyShown |= isShown;
             }
@@ -146,9 +159,12 @@ namespace ChartEditor
         /// <param name="rowCondition">行を出す、追加の条件</param>
         /// <param name="rowPreviewStates">行を出す、全画面プレビューの状態 (0 のときは、どの状態でも出す)</param>
         /// <param name="hasVertexSelection">全画面プレビューで、頂点を選んでいるか</param>
+        /// <param name="hasSpaceHoldTool">SpaceHold の3D編集で、回転・拡大縮小の道具を選んでいるか</param>
+        /// <param name="isOnMiniPreview">SpaceHold の3D編集で、カーソルがミニプレビューの上にあるか</param>
         public static bool IsRowShown(
             EditMode[] rowEditModes, DescriptionLayers rowLayers, DescriptionCondition rowCondition, DescriptionPreviewStates rowPreviewStates,
-            EditMode editMode, EditNoteType layer, bool isHoldIsolation, DescriptionPreviewStates previewState, bool hasVertexSelection)
+            EditMode editMode, EditNoteType layer, bool isHoldIsolation, DescriptionPreviewStates previewState, bool hasVertexSelection,
+            bool hasSpaceHoldTool = false, bool isOnMiniPreview = false)
         {
             if (rowEditModes == null || !editMode.IsInEditModeList(rowEditModes)) { return false; }
             if ((rowLayers & ToDescriptionLayer(layer)) == 0) { return false; }
@@ -160,6 +176,9 @@ namespace ChartEditor
                 case DescriptionCondition.NotInHoldIsolation: return !isHoldIsolation;
                 case DescriptionCondition.OnlyWithPreviewVertexSelection: return hasVertexSelection;
                 case DescriptionCondition.NotWithPreviewVertexSelection: return !hasVertexSelection;
+                case DescriptionCondition.OnlyWithSpaceHoldTransformTool: return hasSpaceHoldTool;
+                case DescriptionCondition.OnlyOnSpaceHoldMiniPreview: return isOnMiniPreview;
+                case DescriptionCondition.NotOnSpaceHoldMiniPreview: return !isOnMiniPreview;
                 default: return true;
             }
         }
@@ -196,9 +215,11 @@ namespace ChartEditor
             /// <summary>行の名前 (インスペクターで見分けるため)</summary>
             public string Name => name;
 
-            public bool IsShown(EditMode editMode, EditNoteType layer, bool isHoldIsolation, DescriptionPreviewStates previewState, bool hasVertexSelection)
+            public bool IsShown(EditMode editMode, EditNoteType layer, bool isHoldIsolation, DescriptionPreviewStates previewState, bool hasVertexSelection,
+                                bool hasSpaceHoldTool, bool isOnMiniPreview)
             {
-                return IsRowShown(editModes, layers, condition, previewStates, editMode, layer, isHoldIsolation, previewState, hasVertexSelection);
+                return IsRowShown(editModes, layers, condition, previewStates, editMode, layer, isHoldIsolation, previewState, hasVertexSelection,
+                                  hasSpaceHoldTool, isOnMiniPreview);
             }
 
             public void SetActive(bool isActive)

@@ -68,8 +68,8 @@ namespace ChartEditor
         private static void ClearChoice()
         {
             if (DeploymentNoteChoice.IsNone) { return; }
+            // (ログは出さない: 録音 20261118_221247)
             DeploymentNoteChoice.SetNone(true);
-            Debug.Log("【配置】置くノーツの選択を外しました (ノーツを置かず、動かす・選ぶだけになります。一覧のボタンで、また選べます)");
         }
 
         void OnDestroy()

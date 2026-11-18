@@ -29,12 +29,8 @@ namespace ChartEditor
             dataGetter.GetInteractableCollider<ISelectableVertexCollider>() != null ||
             dataGetter.GetInteractableCollider<IPointMovableCollider>() != null;
 
-        // 配置ツールでは、頂点を置ける所を押すと頂点が置かれるので、そこからのドラッグでは範囲選択を始めない
-        // (Shift を押しながらのドラッグで始める。頂点を置けない所 (円の外) からのドラッグと、
-        //  編集・回転・拡大縮小のツールでは、Shift 無しで始まる)
-        protected override bool StartsOnPlainPress =>
-            dataGetter.CurrentEditMode.Value != EditMode.VertexPlace ||
-            dataGetter.GetInteractableCollider<IPointDeployableCollider>() == null;
+        // 空いた所からのドラッグは、どのツールでも範囲選択 (配置ツールの頂点は、動かさずに離したときに置く: 録音 20261118_201736)
+        protected override bool StartsOnPlainPress => true;
 
         protected override void SelectObjectUnderCursor()
         {

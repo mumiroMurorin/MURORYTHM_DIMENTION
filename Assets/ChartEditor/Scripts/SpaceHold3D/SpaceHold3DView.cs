@@ -234,7 +234,26 @@ namespace ChartEditor
         public Ray GetRay(Vector2 local)
         {
             Vector2 size = ViewportSize;
-            return Camera.ViewportPointToRay(new Vector3(local.x / Mathf.Max(1f, size.x), local.y / Mathf.Max(1f, size.y), 0f));
+            // 映している範囲の中の位置を、-1〜1 にする
+            float x = local.x / Mathf.Max(1f, size.x) * 2f - 1f;
+            float y = local.y / Mathf.Max(1f, size.y) * 2f - 1f;
+
+            // カメラの位置と向きから、光線を求める (Camera.ViewportPointToRay は使わない)。
+            // ViewportPointToRay は、カメラのすぐ前 (手前の面: 0.02〜) の点の座標から向きを求める。3Dのものは遠い所 (y -20000) にあるので、
+            // その点の y が 0.002 刻みでしか表せず、光線の上下の向きが刻み状になって、縦のドラッグがカクカク動いていた
+            // (横は x が 0 の近くなので、なめらかだった: 録音 20261117_161312 / 20261118_202109 / 231857 の記録で確かめた)
+            Transform cameraTransform = Camera.transform;
+            if (Camera.orthographic)
+            {
+                float halfHeight = Camera.orthographicSize;
+                float halfWidth = halfHeight * Camera.aspect;
+                Vector3 origin = cameraTransform.position + cameraTransform.right * (x * halfWidth) + cameraTransform.up * (y * halfHeight);
+                return new Ray(origin, cameraTransform.forward);
+            }
+
+            float tangent = Mathf.Tan(Camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
+            var direction = new Vector3(x * tangent * Camera.aspect, y * tangent, 1f);
+            return new Ray(cameraTransform.position, cameraTransform.rotation * direction.normalized);
         }
 
         /// <summary>

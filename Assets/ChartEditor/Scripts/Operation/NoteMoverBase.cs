@@ -21,6 +21,11 @@ namespace ChartEditor
         readonly List<NoteDataToAddress> previousAddress = new List<NoteDataToAddress>();
         object lastLocation;
         bool isDragging;
+        // 押した所 (画面のピクセル)。ここから MOVE_START_PIXELS より動かすまでは、ノーツを動かさない
+        // (分線の間が狭いと、ノーツの下の方を押しただけで、1つ前の分線へ動いてしまっていた: 録音 20261118_231547)
+        Vector2 pressScreenPosition;
+        bool hasMovedEnough;
+        const float MOVE_START_PIXELS = 5f;
 
         /// <summary>
         /// 操作待ちのエディットモード
@@ -98,6 +103,8 @@ namespace ChartEditor
         {
             if (isDragging) { EndDrag(); }
             Initialize();
+            pressScreenPosition = Input.mousePosition;
+            hasMovedEnough = false;
 
             // 動かせるオブジェクトでなければ返す
             if (!TryGetClickedNote(out var clickedNote)) { return; }
@@ -138,6 +145,13 @@ namespace ChartEditor
         private void Drag()
         {
             if (!isDragging || targets.Count == 0) { return; }
+
+            // 押したまま少し動かすまでは、動かさない (クリックしただけでは、選ぶだけ)
+            if (!hasMovedEnough)
+            {
+                if (((Vector2)Input.mousePosition - pressScreenPosition).magnitude <= MOVE_START_PIXELS) { return; }
+                hasMovedEnough = true;
+            }
 
             // カーソル下の親取得
             if (!TryGetDropLocation(out var location, out var dropAddress)) { return; }

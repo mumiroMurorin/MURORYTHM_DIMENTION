@@ -22,8 +22,12 @@ namespace TransitionerInSelectScene
 
         void IPhaseTransitionerInSelectScene.Transition()
         {
+            // シーン遷移の二重実行を防ぐ (別の遷移が始まっていれば何もしない)
+            if (!SceneTransitionGate.TryBegin(nextSceneName)) { return; }
+
             Debug.Log("【Transition】Transition to \"TransitionRootScene\"");
             var async = SceneManager.LoadSceneAsync(nextSceneName);
+            if (async == null) { SceneTransitionGate.Abort(); return; }
         }
     }
 

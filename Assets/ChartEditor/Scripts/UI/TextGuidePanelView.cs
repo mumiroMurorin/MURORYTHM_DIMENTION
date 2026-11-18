@@ -65,11 +65,17 @@ namespace ChartEditor
                 inputFieldText.onEndEdit.AddListener(_ => InputFieldFocus.Release(inputFieldText));
             }
 
-            inputX = new NumberInputField(inputFieldX, value => OnXValueChangedListener?.Invoke(value));
-            inputY = new NumberInputField(inputFieldY, value => OnYValueChangedListener?.Invoke(value));
-            inputScale = new NumberInputField(inputFieldScale, value => OnScaleValueChangedListener?.Invoke(value));
-            inputRotation = new NumberInputField(inputFieldRotation, value => OnRotationValueChangedListener?.Invoke(value));
-            inputAlpha = new NumberInputField(inputFieldAlpha, value => OnAlphaValueChangedListener?.Invoke(value));
+            // (欄の名前を左右にドラッグしても、値を動かせる: 録音 20261118_162040)
+            inputX = new NumberInputField(inputFieldX, value => OnXValueChangedListener?.Invoke(value))
+                .EnableScrub(NumberScrubHandle.Settings.Float(0.01f));
+            inputY = new NumberInputField(inputFieldY, value => OnYValueChangedListener?.Invoke(value))
+                .EnableScrub(NumberScrubHandle.Settings.Float(0.01f));
+            inputScale = new NumberInputField(inputFieldScale, value => OnScaleValueChangedListener?.Invoke(value))
+                .EnableScrub(NumberScrubHandle.Settings.Float(0.01f, 0.01f));
+            inputRotation = new NumberInputField(inputFieldRotation, value => OnRotationValueChangedListener?.Invoke(value))
+                .EnableScrub(NumberScrubHandle.Settings.Float(0.5f));
+            inputAlpha = new NumberInputField(inputFieldAlpha, value => OnAlphaValueChangedListener?.Invoke(value))
+                .EnableScrub(NumberScrubHandle.Settings.Float(0.005f, 0f, 1f));
 
             if (fontDropdown != null)
             {

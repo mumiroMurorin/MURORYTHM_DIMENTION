@@ -118,5 +118,11 @@ public class NoteData_HoldMesh : INoteData
     public INoteSpawnDataOptionGetter OptionGetter { get; set; }
 
     public float GroundEndZ { get; set; }
+
+    /// <summary>
+    /// 帯を終点に向けてフェードアウトさせるか
+    /// (判定なしの終点の上に、ダイナミックノーツが無いとき true。そのときは終点のノーツを出さない)
+    /// </summary>
+    public bool FadeOutAtEnd { get; set; }
 }
 

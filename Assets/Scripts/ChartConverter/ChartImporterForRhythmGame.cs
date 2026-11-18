@@ -20,6 +20,8 @@ namespace ChartConvert
         Dictionary<int, List<TimeToVertices>> chainNumberToVertices = new Dictionary<int, List<TimeToVertices>>();
         // 分線のデータを、順番どおりに読める形に分けたもの (作業用)
         readonly List<SubDivisionDataOrigin> subDivisionParts = new List<SubDivisionDataOrigin>();
+        // 判定なしのホールド終点の上に、ダイナミックノーツが載っているか (分線ごとに調べ直す)
+        readonly HoldEndDynamicCover holdEndDynamicCover = new HoldEndDynamicCover();
 
 
         public ChartData Import(ChartDataOrigin originData, INoteSpawnDataOptionGetter optionHolder)
@@ -57,7 +59,7 @@ namespace ChartConvert
                 new DynamicRightwardConverter(),
                 new DynamicLeftwardConverter(),
 
-                new HoldMeshConverter(),
+                new HoldMeshConverter(holdEndDynamicCover),
                 new HoldJudgementPointConverter(),
 
                 new SpaceHoldMeshConverter(),
@@ -71,7 +73,7 @@ namespace ChartConvert
                 new DivineHoldStartConverter(),
                 new HoldRelayConverter(),
                 new HoldEndConverter(),
-                new HoldEndUnjudgeConverter(),
+                new HoldEndUnjudgeConverter(holdEndDynamicCover),
                 new HoldMeshRelayConverter(),
             };
 
@@ -146,6 +148,10 @@ namespace ChartConvert
         private bool SetDataFromSubDivisionData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float secondsPassed)
         {
             bool isSucceed = true;
+
+            // 判定なしのホールド終点の上にダイナミックノーツがあるかを、分ける前の分線全体で調べておく
+            // (分けると、ダイナミックノーツは先頭のデータにしか入らないため)
+            holdEndDynamicCover.Prepare(dataOrigin);
 
             // 同じ分線に、同じホールドのノーツが2つ以上あるときは、決まった順番で1つずつ変換する
             // (ほとんどの分線は分ける必要が無く、そのまま1回で変換される。規則は ChainOrderResolver を参照)

@@ -25,6 +25,9 @@ namespace TransitionerInRhythmGameScene
 
         void IPhaseTransitionerInRhythmGameScene.Transition()
         {
+            // シーン遷移の二重実行を防ぐ (別の遷移が始まっていれば何もしない)
+            if (!SceneTransitionGate.TryBegin(NEXT_SCENE_NAME)) { return; }
+
             Debug.Log("【Transition】Transition to \"TransitionResultScene\"");
             LoadSceneAsync(cts.Token).Forget();
         }
@@ -32,6 +35,7 @@ namespace TransitionerInRhythmGameScene
         private async UniTaskVoid LoadSceneAsync(CancellationToken token)
         {
             var async = SceneManager.LoadSceneAsync(NEXT_SCENE_NAME);
+            if (async == null) { SceneTransitionGate.Abort(); return; }
 
             async.allowSceneActivation = false;
             await UniTask.WaitForSeconds(waitTime, cancellationToken: token);

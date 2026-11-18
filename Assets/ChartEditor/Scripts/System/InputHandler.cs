@@ -97,10 +97,12 @@ namespace ChartEditor
             if (!isTyping && Input.GetKeyDown(playKey)) { OperateMusicPlay(); }
             // メニューの一覧を開いている間は、ホイールで裏の譜面を動かさない
             bool isWheelAccepted = !EditorMenuBar.IsBlockingChartInput;
+            // SpaceHold の3D編集を開いている間も、ミニプレビューの上のホイールは、再生位置を動かす (録音 20261118_211837)
+            bool isMiniPreviewWheel = !isWheelAccepted && !EditorMenuBar.IsMenuOpenOrJustClosed && SpaceHold3DEditor.IsPointerOnMiniPreview;
             // スケール変更
             if (isWheelAccepted && ctrl && Mathf.Abs(scroll) > 0.01f) { OperateChartViewScale(scroll); }
             // 譜面スクロール
-            if (isWheelAccepted && !ctrl && Mathf.Abs(scroll) > 0.01f) { OperatePlaybackProgress(scroll); }
+            if ((isWheelAccepted || isMiniPreviewWheel) && !ctrl && Mathf.Abs(scroll) > 0.01f) { OperatePlaybackProgress(scroll); }
             // 保存
             if (ctrl && Input.GetKeyDown(KeyCode.S)) { SaveChart(); }
             // Undo
@@ -182,8 +184,8 @@ namespace ChartEditor
             if (!paletteDoubleClick.Click(Input.mousePosition)) { return; }
             if (DeploymentNoteChoice.IsNone) { return; }
 
+            // (ログは出さない: 録音 20261118_221247)
             DeploymentNoteChoice.SetNone(true);
-            Debug.Log("【配置】置くノーツの選択を外しました (ノーツを置かず、動かす・選ぶだけになります。一覧のボタンで、また選べます)");
         }
 
         /// <summary>

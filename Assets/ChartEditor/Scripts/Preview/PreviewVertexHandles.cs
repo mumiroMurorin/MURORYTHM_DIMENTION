@@ -691,6 +691,43 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// 画面上の位置にある、頂点・中心点のつまみを探す
+        /// </summary>
+        /// <param name="vertices">そのつまみのノーツの、頂点の並び</param>
+        /// <param name="vertex">頂点 (中心点のつまみでは null)</param>
+        public bool TryFindHandle(PreviewView view, Vector2 screenPosition, out SpaceVertices vertices, out VertexData vertex)
+        {
+            vertices = null;
+            vertex = null;
+
+            int index = FindNearestHandleIndex(view, screenPosition);
+            if (index < 0) { return false; }
+
+            vertices = handles[index].Vertices;
+            vertex = handles[index].Vertex;
+            return true;
+        }
+
+        /// <summary>
+        /// そのつまみの、今の画面の位置 (つまみが出ていなければ false)
+        /// </summary>
+        /// <param name="vertex">頂点 (null = 中心点)</param>
+        public bool TryGetHandleScreenPosition(SpaceVertices vertices, VertexData vertex, out Vector2 screenPosition)
+        {
+            screenPosition = default;
+            if (vertices == null) { return false; }
+
+            for (int i = 0; i < handles.Count; i++)
+            {
+                if (!ReferenceEquals(handles[i].Vertices, vertices) || !ReferenceEquals(handles[i].Vertex, vertex)) { continue; }
+
+                screenPosition = handles[i].ScreenPosition;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// 画面上の位置にある、頂点のつまみを探す (中心点のつまみは含めない)
         /// </summary>
         /// <param name="vertices">その頂点を持つノーツの、頂点の並び</param>

@@ -35,12 +35,11 @@ public class TimelinePlayer : MonoBehaviour, ITimelinePlayer
     {
         if (playableDirector == null)
         {
-            callback.Invoke();
+            callback?.Invoke();
             return;
         }
 
         playableDirector.gameObject.SetActive(true);
-        playableDirector.Play();
 
         try
         {
@@ -51,7 +50,10 @@ public class TimelinePlayer : MonoBehaviour, ITimelinePlayer
         }
         catch (OperationCanceledException)
         {
+            // キャンセル (もう一度再生された / シーンが破棄された) のときはコールバックを呼ばない。
+            // 呼ぶと、同じ次フェーズへの遷移が二重に走ったり、破棄後に遷移が走ったりする。
             Debug.Log("【System】タイムラインの再生がキャンセルされました");
+            return;
         }
 
         callback?.Invoke();

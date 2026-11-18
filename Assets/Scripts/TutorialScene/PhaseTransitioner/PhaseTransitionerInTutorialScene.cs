@@ -14,13 +14,40 @@ namespace TransitionerInTutorialScene
 
         List<CancellationTokenSource> ctsList = new List<CancellationTokenSource>();
 
+        // エラー時に移るフェーズ (チュートリアルを飛ばして選曲画面へ進む)
+        const PhaseStatusInTutorialScene PHASE_ON_ERROR = PhaseStatusInTutorialScene.TransitionSelectScene;
+
         ReactiveProperty<PhaseStatusInTutorialScene> phaseStatus = new ReactiveProperty<PhaseStatusInTutorialScene>(FIRST_STATUS);
         IReadOnlyReactiveProperty<PhaseStatusInTutorialScene> IPhaseStatusGetterInTutorialScene.PhaseStatus => phaseStatus;
+
+        bool isReturningOnError;
 
         void Start()
         {
             Initialize();
             TransitionPhase(FIRST_STATUS);
+        }
+
+        void OnEnable()
+        {
+            GameFlowError.OnRaised += OnGameFlowError;
+        }
+
+        void OnDisable()
+        {
+            GameFlowError.OnRaised -= OnGameFlowError;
+        }
+
+        /// <summary>
+        /// 先へ進めないエラーが起きたときは、チュートリアルを中断して選曲画面へ進む
+        /// </summary>
+        private void OnGameFlowError(string message)
+        {
+            if (isReturningOnError) { return; }
+            isReturningOnError = true;
+
+            Debug.LogWarning($"【Transition】エラーが起きたため {PHASE_ON_ERROR} へ移ります: {message}");
+            TransitionPhase(PHASE_ON_ERROR);
         }
 
         private void Initialize()

@@ -100,7 +100,12 @@ namespace ChartEditor
 
         protected override bool DeployOnHost(IDeployableNoteData host, IDeployableNoteData noteData)
         {
-            return DynamicNoteAttachments.Attach(dataGetter.ChartData.Value, host, noteData);
+            if (!DynamicNoteAttachments.Attach(dataGetter.ChartData.Value, host, noteData)) { return false; }
+
+            // 載せたノーツは、押したときに選ばれているので、選択を外す
+            // (選んだままだと、続けて Delete を押したときに、下のノーツまで消えてしまう)
+            notesSetter.ClearSelectingNotes();
+            return true;
         }
 
         protected override void SetupNoteData(IDeployableNoteData noteData)

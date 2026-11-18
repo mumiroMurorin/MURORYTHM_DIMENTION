@@ -187,39 +187,35 @@ public class DifficultyToJudgementWindow
 
 public class DynamicJudgementHandler
 {
-    List<Vector3> judgeVectors;
+    // ノーツが乗っているレーンごとの判定の向き (入力空間での単位ベクトル)
+    readonly List<Vector2> judgeDirections = new List<Vector2>();
+    readonly float magnitude;
 
+    /// <param name="range">ノーツが乗っているレーン番号</param>
+    /// <param name="rotationVector">ノーツの向き (上 (0,1) = 半円の中心へ、右 (1,0) = レーン番号が増える向き)</param>
+    /// <param name="magnitude">成功に必要な、判定の向きへの手の速さ</param>
     public DynamicJudgementHandler(int[] range, Vector3 rotationVector, float magnitude)
     {
-        judgeVectors = new List<Vector3>();
+        this.magnitude = magnitude;
+        if (range == null) { return; }
 
-        // それぞれの判定ベクトルを調べる
-        for (int i = 0; i < range.Length; i++)
+        foreach (int laneIndex in range)
         {
-            Vector3 vector = DynamicJudgement.CalcJudgementThresHold(10, range[i], rotationVector);
+            Vector2 direction = DynamicJudgement.GetLaneJudgeDirection(laneIndex, rotationVector);
+            if (direction == Vector2.zero || judgeDirections.Contains(direction)) { continue; }
 
-            // 各要素が0でないか調べてmagnitudeを代入
-            if (vector.x > 0) { vector.x = magnitude; }
-            else if (vector.x < 0) { vector.x = -magnitude; }
-
-            if (vector.y > 0) { vector.y = magnitude; }
-            else if (vector.y < 0) { vector.y = -magnitude; }
-
-            if (vector.z > 0) { vector.z = magnitude; }
-            else if (vector.z < 0) { vector.z = -magnitude; }
-
-            judgeVectors.Add(vector);
+            judgeDirections.Add(direction);
         }
-
-        judgeVectors = judgeVectors.Distinct().ToList();
-        // Debug.Log($"List: {string.Join(", ", judgeVectors)}");
     }
 
+    /// <summary>
+    /// どれかのレーンの判定の向きに、magnitude 以上の速さで手が動いていれば成功
+    /// </summary>
     public bool Judge(Vector3 velocity)
     {
-        foreach (Vector3 threshold in judgeVectors)
+        foreach (Vector2 direction in judgeDirections)
         {
-            if (DynamicJudgement.JudgeThreshold(threshold, velocity)) { return true; }
+            if (DynamicJudgement.JudgeDirection(direction, velocity, magnitude)) { return true; }
         }
 
         return false;

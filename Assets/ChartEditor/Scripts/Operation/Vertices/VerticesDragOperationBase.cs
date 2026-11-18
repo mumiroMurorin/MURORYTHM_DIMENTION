@@ -126,9 +126,8 @@ namespace ChartEditor
                 // (中心の位置を数値で決める窓の上を押したときは、窓の裏の頂点を掴まない: VertexCenterPanel)
                 bool isOnCenterPanel = VertexCenterPanel.IsPointerOverPanel;
                 targetCollider = isOnCenterPanel ? null : dataGetter.GetInteractableCollider<IPointMovableCollider>();
-                canFindTargetLater = !isOnCenterPanel && targetCollider == null && currentEditMode == EditMode.VertexPlace &&
-                                     !ModifierKey.Shift && !ModifierKey.Ctrl &&
-                                     dataGetter.GetInteractableCollider<IPointDeployableCollider>() != null;
+                // (配置ツールの頂点は、押したときではなく離したときに置くので、置いた頂点をあとで探すことはない: 録音 20261118_201736)
+                canFindTargetLater = false;
             }
 
             if (isWaitingForRelease)

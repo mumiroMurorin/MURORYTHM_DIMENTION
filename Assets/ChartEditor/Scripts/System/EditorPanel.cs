@@ -17,6 +17,8 @@
         Log = 3,
         /// <summary>操作説明 (画面の右側の、今できる操作の一覧)</summary>
         OperationDescription = 4,
+        /// <summary>楽曲の音声波形 (グラウンドの上に緑で。録音 20261118_221639。はじめは出さない)</summary>
+        AudioWaveform = 5,
 
         // ---- クイックメニュー (編集画面の左下の設定欄) のセクション (メニューの「クイックメニュー」で切り替える)
         // 101 (楽曲選択)、104 (レーン分割数)、110 (ウィンドウサイズ)、111 (インポート・エクスポート) は、
@@ -52,6 +54,8 @@
         /// </summary>
         public static bool IsVisibleByDefault(this EditorPanel panel)
         {
+            // 音声波形は、チェックを入れたときだけ出す (録音 20261118_221639)
+            if (panel == EditorPanel.AudioWaveform) { return false; }
             if (!panel.IsQuickMenuSection()) { return true; }
 
             return panel == EditorPanel.QuickChartLength ||

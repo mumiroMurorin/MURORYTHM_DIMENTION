@@ -38,6 +38,9 @@ namespace ChartEditor
 
         private void Awake()
         {
+            // 欄の名前を左右にドラッグしても、値を動かせる (決定ボタンで読むので、欄の文字だけ変える: 録音 20261118_162040)
+            NumberScrubHandle.AttachToField(bpmField, NumberScrubHandle.Settings.Float(0.25f, 1f), false);
+            NumberScrubHandle.AttachToField(speedRatioField, NumberScrubHandle.Settings.Float(0.01f, 0f), false);
             if (cancelButton != null) { cancelButton.onClick.AddListener(OnClickedCancelButton); }
         }
 

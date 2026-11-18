@@ -70,6 +70,9 @@ namespace UndoRedo
                 };
             }
 
+            /// <summary>まとめたコマンドの数</summary>
+            public int Count => CommandSet.Count;
+
             public void AddCommand(Command cmd)
             {
                 if (cmd == null)
@@ -142,6 +145,9 @@ namespace UndoRedo
             }
         }
         static bool _Transacting = false;
+
+        // 開いているまとめの数 (まとめの中で、さらにまとめを開いてもよい。いちばん外のまとめを閉じたときに、1回の操作として登録する)
+        static int TransactionDepth = 0;
 
         #endregion
 
@@ -244,8 +250,13 @@ namespace UndoRedo
         {
             lock (Lock)
             {
-                TransCommand = new TransactionCommand();
-                Transacting = true;
+                // (すでに開いているまとめの中では、新しく作らない。中の操作も、外のまとめに入る)
+                if (TransactionDepth == 0)
+                {
+                    TransCommand = new TransactionCommand();
+                    Transacting = true;
+                }
+                TransactionDepth++;
             }
         }
 
@@ -254,14 +265,26 @@ namespace UndoRedo
         /// </summary>
         static public void EndTransaction()
         {
+            bool isAdded = false;
             lock (Lock)
             {
+                if (TransactionDepth == 0) { return; }
+                TransactionDepth--;
+                if (TransactionDepth > 0) { return; }
+
                 Transacting = false;
-                var newState = new State();
-                newState.PrevCommand = TransCommand;
-                AddNewState(newState);
+                // 何も記録しなかったまとめは、元に戻す操作として登録しない (何も起きない「元に戻す」ができないように)
+                if (TransCommand != null && TransCommand.Count > 0)
+                {
+                    var newState = new State();
+                    newState.PrevCommand = TransCommand;
+                    AddNewState(newState);
+                    isAdded = true;
+                }
                 TransCommand = null;
             }
+
+            if (isAdded) { OnChanged?.Invoke(); }
         }
 
         static public void ResetStates()
@@ -274,6 +297,7 @@ namespace UndoRedo
 
                 TransCommand = new TransactionCommand();
                 Transacting = false;
+                TransactionDepth = 0;
 
                 CurrentStateIndex = 0;
             }

@@ -53,20 +53,43 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
         }
 
+        // 押したまま、この距離 (画面のピクセル) より動かしたら、クリックではない (範囲選択の始まりと同じ)
+        const float CLICK_MOVE_LIMIT = 5f;
+        // 置く操作として押したか (離したときに、動かしていなければ置く)
+        bool isClickPending;
+        Vector2 pressScreenPosition;
+
         void Update()
         {
             // 頂点の配置ツールの、操作待ちのときだけ (編集ツールでは置かない。録音 20261118_030551)
             var currentEditMode = dataGetter.CurrentEditMode.Value;
-            if (currentEditMode != EditMode.VertexPlace) { return; }
+            if (currentEditMode != EditMode.VertexPlace)
+            {
+                isClickPending = false;
+                return;
+            }
 
-            // 頂点オブジェクトの配置
-            if (Input.GetMouseButtonDown(0)) 
+            // 頂点オブジェクトの配置: 押したまま動かさずに離したとき (録音 20261118_201736: 押したときに置くと、
+            // 範囲選択のドラッグでも置かれてしまう。ドラッグは範囲選択・頂点の移動にだけ使う)
+            if (Input.GetMouseButtonDown(0))
             {
                 // 範囲選択 (Shift を押しながらドラッグ) と、複数選択 (Ctrl を押しながらクリック) の操作では置かない
-                if (ModifierKey.Shift || ModifierKey.Ctrl) { return; }
                 // ボタンなどの画面部品を押したときは、裏に置かない
-                if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) { return; }
+                bool isOnUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+                isClickPending = !ModifierKey.Shift && !ModifierKey.Ctrl && !isOnUI &&
+                                 dataGetter.GetInteractableCollider<IPointDeployableCollider>() != null;
+                pressScreenPosition = Input.mousePosition;
+            }
+            if (!isClickPending) { return; }
 
+            if (((Vector2)Input.mousePosition - pressScreenPosition).magnitude > CLICK_MOVE_LIMIT)
+            {
+                isClickPending = false;
+                return;
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                isClickPending = false;
                 DeployVertex();
             }
         }

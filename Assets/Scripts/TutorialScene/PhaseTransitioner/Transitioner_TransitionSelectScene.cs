@@ -27,6 +27,9 @@ namespace TransitionerInTutorialScene
 
         void IPhaseTransitionerInTutorialScene.Transition()
         {
+            // シーン遷移の二重実行を防ぐ (別の遷移が始まっていれば何もしない)
+            if (!SceneTransitionGate.TryBegin(nextSceneName)) { return; }
+
             Debug.Log("【Transition】Transition to \"TransitionSelectScene\"");
 
             optionDataSetter?.SetOption(initializingOption);
@@ -37,6 +40,7 @@ namespace TransitionerInTutorialScene
         private async UniTaskVoid LoadSceneAsync(CancellationToken token)
         {
             var async = SceneManager.LoadSceneAsync(nextSceneName);
+            if (async == null) { SceneTransitionGate.Abort(); return; }
 
             async.allowSceneActivation = false;
             await UniTask.WaitForSeconds(waitTime, cancellationToken: token);

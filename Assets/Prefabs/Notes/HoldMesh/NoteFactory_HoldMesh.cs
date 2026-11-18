@@ -26,6 +26,14 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>, IOrderDepend
     [Header("mesh1単位の最大長さ")]
     [SerializeField] float maxTriangleLength = 0.5f;
 
+    [Header("終点のフェードアウトの長さ (判定なしの終点に、ダイナミックノーツが無いとき)")]
+    [Tooltip("ホールドの長さに関係なく、終点からこの距離の手前で消え始める。ホールドがこれより短いときは、ホールド全体で消える")]
+    [SerializeField] float endFadeOutLength = 16f;
+
+    static readonly int EndFadeEnabledId = Shader.PropertyToID("_EndFadeEnabled");
+    static readonly int EndFadeEndId = Shader.PropertyToID("_EndFadeEnd");
+    static readonly int EndFadeLengthId = Shader.PropertyToID("_EndFadeLength");
+
     INoteSpawnDataOptionGetter optionHolder;
     ISliderInputGetter sliderInputGetter;
     IJudgementRecorder judgementRecorder;
@@ -63,10 +71,36 @@ public class NoteFactory_HoldMesh : NoteFactory<NoteData_HoldMesh>, IOrderDepend
             positionCalculator,
             optionHolder.NoteSpeed.Value);
 
+        // 判定なしの終点にダイナミックノーツが無いときは、終点のノーツを出さない代わりに、帯を終点に向けて消す
+        // (帯を分割したあとに設定する。分割した部品すべてに付ける)
+        if (data.FadeOutAtEnd) { ApplyEndFadeOut(note, endDistance - startDistance); }
+
         // 初期化
         note.Initialize(data);
 
         return note;
+    }
+
+    /// <summary>
+    /// 帯を、終点に向けてだんだん透明にする (シェーダーに、終点までの距離とフェードの長さを渡す)
+    /// フェードの長さはホールドの長さに関係なく同じ。ホールドがそれより短いときは、ホールド全体で消える
+    /// </summary>
+    /// <param name="holdLength">始点から終点までの、ノーツ軌道上の距離 (帯の頂点に入っている距離と同じ基準)</param>
+    private void ApplyEndFadeOut(NoteObject<NoteData_HoldMesh> note, float holdLength)
+    {
+        if (holdLength <= 0f) { return; }
+
+        float fadeLength = Mathf.Min(Mathf.Max(endFadeOutLength, 0.01f), holdLength);
+        MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
+        foreach (MeshRenderer meshRenderer in note.GetComponentsInChildren<MeshRenderer>(true))
+        {
+            // ほかの設定 (表示範囲など) を消さないよう、今の値を読んでから足す
+            meshRenderer.GetPropertyBlock(propertyBlock);
+            propertyBlock.SetFloat(EndFadeEnabledId, 1f);
+            propertyBlock.SetFloat(EndFadeEndId, holdLength);
+            propertyBlock.SetFloat(EndFadeLengthId, fadeLength);
+            meshRenderer.SetPropertyBlock(propertyBlock);
+        }
     }
 
     private int GetSortingOrder(List<TimeToRange> timeToRanges)

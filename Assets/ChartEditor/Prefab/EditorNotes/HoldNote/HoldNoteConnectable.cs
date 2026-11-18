@@ -19,6 +19,8 @@ namespace ChartEditor
         [SerializeField] Material relayMaterial;
         [SerializeField] Material endMaterial;
         [SerializeField] Material meshMaterial;
+        [Tooltip("神ホールドの始点 (ふつうの神ノーツと同じ見た目: 白地に黄色の縁。録音 20261118_230019)")]
+        [SerializeField] Material divineStartMaterial;
 
         [Header("中継点の大きさ")]
         [Tooltip("中継点のノーツを、時間方向(画面では縦)に縮める割合。1 で始点・終点と同じ大きさ")]
@@ -269,8 +271,10 @@ namespace ChartEditor
             switch (noteType)
             {
                 case DeploymentNoteType.HoldStart:
-                case DeploymentNoteType.DivineHoldStart:
                     NoteMaterialUtil.ReplaceKeepingColor(noteMeshRenderer, startMaterial);
+                    break;
+                case DeploymentNoteType.DivineHoldStart:
+                    NoteMaterialUtil.ReplaceKeepingColor(noteMeshRenderer, divineStartMaterial != null ? divineStartMaterial : startMaterial);
                     break;
                 case DeploymentNoteType.HoldRelay:
                 case DeploymentNoteType.HoldMeshRelay:

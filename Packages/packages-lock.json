@@ -8,11 +8,11 @@
       "url": "https://packages.unity.com"
     },
     "com.devfeedback.recorder": {
-      "version": "https://github.com/mumiroMurorin/DevFeedbackRecorder.git#v0.1.0",
+      "version": "https://github.com/mumiroMurorin/DevFeedbackRecorder.git#main",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a1ad636787091e264c1d83623e98164fc237d454"
+      "hash": "c955933195edc3805a4d8ce425540c9d6fa2729f"
     },
     "com.github.homuler.mediapipe": {
       "version": "file:com.github.homuler.mediapipe",

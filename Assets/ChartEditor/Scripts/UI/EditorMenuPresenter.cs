@@ -166,7 +166,9 @@ namespace ChartEditor
             // オフセットの入力欄 (入力を終えたときに反映する)
             if (offsetField_view != null)
             {
-                offsetField = new NumberInputField(offsetField_view, value => dataSetter.SetOffset(value));
+                // (欄の名前を左右にドラッグしても、値を動かせる: 録音 20261118_162040。1ピクセルで 1 ms)
+                offsetField = new NumberInputField(offsetField_view, value => dataSetter.SetOffset(value))
+                    .EnableScrub(NumberScrubHandle.Settings.Float(1f));
                 // オフセットが変わったら (この欄やクイックメニューの欄に入力した、譜面を読み込んだ)、今の値を表示する
                 // (入力を終えたときも、ここで新しい値を指定し直す。指定しないと、欄は前の値の表示に戻ってしまう)
                 dataGetter.Offset

@@ -190,9 +190,8 @@ namespace ChartEditor
             if(hitObject == null) { return EditMode.None; }
             // ロックしたノーツの上: 選ぶことだけできる (移動・幅を変える などのモードにしない)
             if (IsLockedNoteObject(hitObject)) { return EditMode.None; }
-            // ダイナミックノーツを置く道具のとき: 地上のノーツの上は、ダイナミックノーツを載せる場所 (移動・幅を変える のモードにしない)
-            // (ホールドを1本だけ編集している間は置けないので、いつものモード。ルールに合わないダイナミックノーツも、今までどおり動かせるように、いつものモード)
-            if (!HoldIsolation.IsActive && DynamicNoteAttachments.IsPlacingDynamic(chartEditorDataGetter) && IsDynamicPlacementTarget(hitObject)) { return EditMode.Deploy; }
+            // (ダイナミックノーツを選んでいるときも、ノーツの上はいつものモード (移動・幅を変える)。ドラッグすればノーツを動かせ、
+            //  動かさずに離せば、そのノーツにダイナミックノーツを載せる (NoteDeployerBase): 録音 20261118_221348)
             if(!hitObject.TryGetComponent(out IInteractableCollider interactable)) { return EditMode.None; }
 
             return interactable.EditMode;

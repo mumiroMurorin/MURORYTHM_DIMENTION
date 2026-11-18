@@ -105,6 +105,15 @@ namespace ChartEditor
         // 「まっすぐに戻す」を隠したときの、窓の高さ
         const float COMPACT_HEIGHT = 96f;
 
+        /// <summary>
+        /// 欄の名前のドラッグで、値をどう動かすか (複製した窓を、ほかの値に使うとき)
+        /// </summary>
+        public void SetScrubSettings(NumberScrubHandle.Settings first, NumberScrubHandle.Settings second)
+        {
+            side?.EnableScrub(first);
+            time?.EnableScrub(second);
+        }
+
         void SetText(string path, string text)
         {
             var child = panel.Find(path);
@@ -119,8 +128,11 @@ namespace ChartEditor
 
         void Awake()
         {
-            side = new NumberInputField(inputSide, value => OnValueEntered?.Invoke(0, value));
-            time = new NumberInputField(inputTime, value => OnValueEntered?.Invoke(1, value));
+            // (欄の名前を左右にドラッグしても、値を動かせる: 録音 20261118_162040。横はレーンの数、時間は前後の節の間の割合)
+            side = new NumberInputField(inputSide, value => OnValueEntered?.Invoke(0, value))
+                .EnableScrub(NumberScrubHandle.Settings.Float(0.02f));
+            time = new NumberInputField(inputTime, value => OnValueEntered?.Invoke(1, value))
+                .EnableScrub(NumberScrubHandle.Settings.Float(0.002f, 0f, 1f));
             if (closeButton != null)
             {
                 closeButton.onClick.AddListener(() =>

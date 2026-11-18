@@ -418,6 +418,14 @@ namespace ChartConvert
     /// </summary>
     public class HoldEndUnjudgeConverter : IHoldDataToRhythmGameConvertable, IChainNoteConvertable
     {
+        // ゲーム用の変換で、上にダイナミックノーツが無い終点を出さないために使う (null のときは、すべての終点を出す)
+        readonly HoldEndDynamicCover dynamicCover;
+
+        public HoldEndUnjudgeConverter(HoldEndDynamicCover dynamicCover = null)
+        {
+            this.dynamicCover = dynamicCover;
+        }
+
         public bool AddDataForOrigin(IDeployableNoteData noteDataInEditor, SubDivisionDataOrigin dataOrigin)
         {
             if (noteDataInEditor.NoteType != DeploymentNoteType.HoldEndUnjudge) { return false; }
@@ -483,6 +491,9 @@ namespace ChartConvert
 
                 holdNumberToRanges[noteOrigin.HoldNumber].Add(new TimeToRange(timing, noteOrigin.Range.Select(x => (float)x).ToArray()));
 
+                // 上にダイナミックノーツが無い終点は出さない (代わりに、帯が終点に向けてフェードアウトする。HoldMeshConverter を参照)
+                if (dynamicCover != null && !dynamicCover.HasDynamicOn(noteOrigin.Range)) { continue; }
+
                 NoteData_HoldEndUnjudge noteData = new NoteData_HoldEndUnjudge
                 {
                     Range = (int[])noteOrigin.Range.Clone(),
@@ -503,6 +514,14 @@ namespace ChartConvert
     public class HoldMeshConverter : IUnchainDataToRhythmGameConvertable
     {
         Dictionary<int, List<TimeToRange>> numberToHoldMeshDataOrigin = new Dictionary<int, List<TimeToRange>>();
+
+        // 判定なしの終点の上にダイナミックノーツが無いとき、帯をフェードアウトさせるために使う (null のときは、フェードしない)
+        readonly HoldEndDynamicCover dynamicCover;
+
+        public HoldMeshConverter(HoldEndDynamicCover dynamicCover = null)
+        {
+            this.dynamicCover = dynamicCover;
+        }
 
         public bool AddDataForGameData(SubDivisionDataOrigin dataOrigin, Action<INoteData> onAddNoteData, float timing)
         {
@@ -638,7 +657,11 @@ namespace ChartConvert
                 }
 
                 numberToHoldMeshDataOrigin[noteOrigin.HoldNumber].Add(new TimeToRange(timing,noteOrigin.Range.Select(x => (float)x).ToArray()));
-                onAddNoteData(GenerateNoteData_HoldMesh(numberToHoldMeshDataOrigin[noteOrigin.HoldNumber]));
+
+                // 上にダイナミックノーツが無い終点は出さないので、代わりに帯を終点に向けてフェードアウトさせる
+                NoteData_HoldMesh holdMesh = GenerateNoteData_HoldMesh(numberToHoldMeshDataOrigin[noteOrigin.HoldNumber]);
+                holdMesh.FadeOutAtEnd = dynamicCover != null && !dynamicCover.HasDynamicOn(noteOrigin.Range);
+                onAddNoteData(holdMesh);
             }
 
             return true;

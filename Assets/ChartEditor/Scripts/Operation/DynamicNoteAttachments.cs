@@ -278,7 +278,8 @@ namespace ChartEditor
             }
             if (next == DeploymentNoteType.HoldEnd && GetDynamicOn(note) != null)
             {
-                refusal = "ダイナミックノーツが載っている終点は、判定なしのままにします (判定ありにするには、先にダイナミックノーツを消してください)";
+                // (何もしない。ログも出さない: 録音 20261118_221247)
+                refusal = string.Empty;
                 return false;
             }
             if (IsViolation(note))

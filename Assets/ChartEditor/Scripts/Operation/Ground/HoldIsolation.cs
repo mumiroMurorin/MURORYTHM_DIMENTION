@@ -374,6 +374,13 @@ namespace ChartEditor
                 for (int i = 0; i < chain.Count; i++) { members.Add(chain[i]); }
             }
             if (!members.Contains(hold)) { members.Add(hold); }
+            // ホールドのノーツに載っているダイナミックノーツも、そのホールドの一部 (灰色にしない: 録音 20261118_221440)
+            int nodeCount = members.Count;
+            for (int i = 0; i < nodeCount; i++)
+            {
+                var dynamic = DynamicNoteAttachments.GetDynamicOn(members[i]);
+                if (dynamic != null && !members.Contains(dynamic)) { members.Add(dynamic); }
+            }
 
             // それ以外の、今あるノーツを、触れなくする
             blocked.Clear();

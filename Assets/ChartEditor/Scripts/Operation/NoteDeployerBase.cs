@@ -27,6 +27,9 @@ namespace ChartEditor
         bool isDeployedTentative;
         // ノーツの上に置く種類 (ダイナミックノーツ) で、今、仮ノーツを出しているノーツ
         IDeployableNoteData hostUnderCursor;
+        // ノーツの上で押したときの、そのノーツ (押すと、ノーツを動かす処理が「動かしている」のモードにするので、
+        // 動かさずに離したときは、押したときのノーツに載せる: 録音 20261118_225710)
+        IDeployableNoteData pressedHost;
 
         /// <summary>
         /// 配置を受け付けるエディットモード
@@ -93,7 +96,9 @@ namespace ChartEditor
         {
             // ノーツの削除
             dataGetter.CurrentEditMode
-                .Where(editMode => editMode != DeployMode)
+                .Where(editMode => editMode != DeployMode && !(IsHostPlacement(dataGetter.DeploymentNoteType.Value) &&
+                                                             (editMode == EditMode.Move || editMode == EditMode.Scale ||
+                                                              (isClickPending && (editMode == EditMode.Moving || editMode == EditMode.Scaling)))))
                 .Subscribe(editMode => DestroyNote())
                 .AddTo(this.gameObject);
 
@@ -121,15 +126,79 @@ namespace ChartEditor
                 .AddTo(this.gameObject);
         }
 
+        // 押したまま、この距離 (画面のピクセル) より動かしたら、クリックではない (範囲選択など)。範囲選択の始まりと同じ
+        const float CLICK_MOVE_LIMIT = 5f;
+        // 置く操作として押したか (離したときに、動かしていなければ置く)
+        bool isClickPending;
+        Vector2 pressScreenPosition;
+
+        /// <summary>
+        /// 置くクリックか: 押したまま動かさずに離したとき true (録音 20261118_201736: 押したときに置くと、範囲選択のドラッグでも
+        /// 押した所に置かれてしまう。離したときに、動かしていない・範囲選択でないときだけ置く)
+        /// </summary>
+        private bool IsPlacingClickReleased()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                // Shift を押しながらのドラッグは範囲選択、画面部品の上は、ボタンやプレビューの操作
+                bool isOnUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+                isClickPending = !RangeSelectGesture.IsForced(dataGetter) && !isOnUI;
+                pressScreenPosition = Input.mousePosition;
+            }
+
+            if (!isClickPending) { return false; }
+
+            bool isMoved = ((Vector2)Input.mousePosition - pressScreenPosition).magnitude > CLICK_MOVE_LIMIT;
+            if (isMoved)
+            {
+                isClickPending = false;
+                return false;
+            }
+            if (!Input.GetMouseButtonUp(0)) { return false; }
+
+            isClickPending = false;
+            return true;
+        }
+
         void Update()
         {
             // 配置モードでない際は返す
-            if (dataGetter.CurrentEditMode.Value != DeployMode) { return; }
+            // (ノーツの上に置く種類 (ダイナミックノーツ) は、ノーツの上 (移動・幅を変えるのモード) でも、クリックで載せる: 録音 20261118_221348)
+            var editMode = dataGetter.CurrentEditMode.Value;
+            bool isHostType = IsHostPlacement(dataGetter.DeploymentNoteType.Value);
+            bool isHostHover = isHostType && (editMode == EditMode.Move || editMode == EditMode.Scale);
+            // ノーツの上で押して、ノーツを動かす処理が「動かしている」のモードにした: 離すまで、クリックかどうかを見続ける
+            bool isHostPress = isHostType && isClickPending && pressedHost != null && (editMode == EditMode.Moving || editMode == EditMode.Scaling);
+            if (editMode != DeployMode && !isHostHover && !isHostPress)
+            {
+                isClickPending = false;
+                return;
+            }
+
+            if (isHostPress)
+            {
+                // 動かした (クリックではない): ノーツを動かすだけ。仮ノーツは消す
+                bool isReleasedClick = IsPlacingClickReleased();
+                if (!isClickPending && !isReleasedClick)
+                {
+                    pressedHost = null;
+                    DestroyNote();
+                    return;
+                }
+                if (isReleasedClick)
+                {
+                    var host = pressedHost;
+                    pressedHost = null;
+                    DeployOnHostOnClick(host);
+                }
+                return;
+            }
 
             // ホールドを1本だけ編集している間は、どのノーツも置けない
             // (配置のツールを、ボタンやショートカットキーで選んだときも同じ。出ている仮ノーツは消す)
             if (HoldIsolation.IsActive)
             {
+                isClickPending = false;
                 DestroyNote();
                 return;
             }
@@ -137,20 +206,28 @@ namespace ChartEditor
             // 置くノーツを選んでいない間は、何も置かない (仮ノーツも消す。録音 20261118_010533)
             if (DeploymentNoteChoice.IsNone)
             {
+                isClickPending = false;
                 DestroyNote();
                 return;
             }
 
             // ノーツの上に置く種類 (ダイナミックノーツ): カーソルの下のノーツに仮ノーツを出し、クリックでそのノーツに載せる
-            if (IsHostPlacement(dataGetter.DeploymentNoteType.Value))
+            bool isClick = IsPlacingClickReleased();
+            if (isHostType)
             {
                 UpdateHostGhost();
-                if (Input.GetMouseButtonDown(0) && !RangeSelectGesture.IsForced(dataGetter)) { DeployOnHostOnClick(); }
+                // 押したときのノーツを覚えておく (ノーツの上で押すと、次のフレームから「動かしている」のモードになる)
+                if (Input.GetMouseButtonDown(0)) { pressedHost = isClickPending ? hostUnderCursor : null; }
+                if (isClick)
+                {
+                    pressedHost = null;
+                    DeployOnHostOnClick();
+                }
                 return;
             }
 
-            // 左クリックで配置 (Shift を押しながらのドラッグは範囲選択なので、置かない)
-            if (Input.GetMouseButtonDown(0) && !RangeSelectGesture.IsForced(dataGetter)) { DeployNoteOnClick(); }
+            // 左クリック (動かさずに離した) で配置。ドラッグ (範囲選択など) では置かない
+            if (isClick) { DeployNoteOnClick(); }
         }
 
         /// <summary>
@@ -182,12 +259,14 @@ namespace ChartEditor
         /// <summary>
         /// ノーツの上に置く種類: クリックしたノーツに載せる
         /// </summary>
-        private void DeployOnHostOnClick()
+        /// <param name="pressedHost">押したときのノーツ (動かしているあいだは、カーソルの下のノーツを探せないので、それを使う)</param>
+        private void DeployOnHostOnClick(IDeployableNoteData pressedHost = null)
         {
             // カーソルがUI上にあるときは配置しない
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) { return; }
 
-            var host = FindHostUnderCursor(out string refusal);
+            string refusal = null;
+            var host = pressedHost ?? FindHostUnderCursor(out refusal);
             if (host == null)
             {
                 // ノーツの上だが置けない (HoldMeshRelay など) ときは、その理由。何も無いレーンのマスのときは、置ける場所

@@ -19,8 +19,9 @@ namespace ChartEditor
     {
         static readonly Color previousColor = new Color(0.35f, 0.75f, 1f, 1f);
         static readonly Color nextColor = new Color(1f, 0.62f, 0.25f, 1f);
-        const float NEAREST_ALPHA = 0.8f;
-        const float FARTHEST_ALPHA = 0.2f;
+        // (録音 20261118_202528: 濃すぎたので、半分ほどに)
+        const float NEAREST_ALPHA = 0.4f;
+        const float FARTHEST_ALPHA = 0.1f;
         // 線の太さ (頂点を置ける範囲の横幅に対する割合)
         const float LINE_WIDTH_RATIO = 0.006f;
         // ほかのもの (頂点・面) よりも後に描く

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ChartEditor
 {
@@ -17,6 +18,7 @@ namespace ChartEditor
     /// ・ほかの場所をクリックして入力を終えたときは、そのクリックでほかの処理が動く前に、打った値を知らせる
     ///   (CommitIfClickedElsewhere を、ほかのスクリプトより先に毎フレーム呼ぶ。呼ばないと、クリックで頂点の選択などが先に変わり、
     ///    打った値は「前の対象のためのもの」として捨てられてしまう)
+    /// ・EnableScrub を呼ぶと、欄の名前の文字を左右にドラッグして、値を増やす・減らすこともできる (NumberScrubHandle。録音 20261118_162040)
     /// </summary>
     public class NumberInputField
     {
@@ -41,6 +43,27 @@ namespace ChartEditor
             shownText = field.text ?? string.Empty;
             writtenText = shownText;
             field.onEndEdit.AddListener(OnEndEdit);
+        }
+
+        /// <summary>
+        /// 欄の名前の文字を左右にドラッグして、値を増やす・減らすことができるようにする (ドラッグしている間は、その場で反映する。
+        /// 押してから離すまでの変化は、1回の「元に戻す」にまとまる)
+        /// </summary>
+        /// <param name="label">欄の名前の文字 (null のときは、同じ親の中で、欄のすぐ前にある文字)</param>
+        public NumberInputField EnableScrub(NumberScrubHandle.Settings settings, Graphic label = null)
+        {
+            if (field == null) { return this; }
+
+            label ??= NumberScrubHandle.FindLabel(field);
+            NumberScrubHandle.Attach(field, label, settings, ApplyScrubbedValue);
+            return this;
+        }
+
+        void ApplyScrubbedValue(float value)
+        {
+            onValueEntered?.Invoke(value);
+            // 知らせた先が、今の値の表示を指定し直している
+            Write();
         }
 
         /// <summary>

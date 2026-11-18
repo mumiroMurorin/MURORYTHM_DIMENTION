@@ -87,6 +87,8 @@ namespace ChartEditor
                 // 入力を終えたら、入力欄を「選択中」のままにしない
                 InputFieldFocus.Release(field);
             });
+            // 欄の名前を左右にドラッグしても、値を動かせる (整数だけ。1 より小さくはしない: 録音 20261118_162040)
+            NumberScrubHandle.AttachToField(field, NumberScrubHandle.Settings.Integer(8f, 1), true);
         }
 
         private void SetText(TMP_InputField field, string text)

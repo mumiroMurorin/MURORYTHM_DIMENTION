@@ -9,6 +9,9 @@ using UniRx;
 
 public class MusicPlayerInRhythmGameScene : MonoBehaviour, IMusicPlayerInRhythmGameScene
 {
+    // 楽曲データの読み込みをこれ以上待たない時間 (秒)
+    const float AUDIO_LOAD_TIMEOUT_SECONDS = 30f;
+
     [SerializeField] SerializeInterface<ITimeGetter> timer;
 
     IMusicDataGetter musicDataGetter;
@@ -46,21 +49,51 @@ public class MusicPlayerInRhythmGameScene : MonoBehaviour, IMusicPlayerInRhythmG
     {
         cts = new CancellationTokenSource();
 
-        LoadMusicAsync(musicDataGetter.Music.Value.MusicClip, onEndLoading, cts.Token).Forget();
+        MusicData musicData = musicDataGetter?.Music?.Value;
+        if (musicData == null)
+        {
+            // 次へ進まずにエラーを通知する (元のシーンへ戻る)
+            GameFlowError.Raise("楽曲が選ばれていないため、曲を読み込めません");
+            return;
+        }
+
+        LoadMusicAsync(musicData.MusicClip, onEndLoading, cts.Token).Forget();
     }
 
     private async UniTask LoadMusicAsync(AudioClip clip, Action onEndLoading, CancellationToken token)
-    { 
-        // ない場合は返す
-        if(clip == null) { onEndLoading.Invoke(); }
+    {
+        // 音源が無い (読み込みに失敗した) ときは、曲が鳴らず譜面も進まないため、次へ進まずにエラーを通知する
+        if (clip == null)
+        {
+            GameFlowError.Raise("楽曲の音源がありません (音源ファイルの読み込みに失敗した可能性があります)");
+            return;
+        }
 
-        // 楽曲の事前読み込み
+        // 楽曲の事前読み込み (失敗やタイムアウトもエラーにする)
         clip.LoadAudioData();
-        await UniTask.WaitUntil(() => clip.loadState == AudioDataLoadState.Loaded, cancellationToken: token);
+
+        float elapsedSeconds = 0f;
+        while (clip.loadState != AudioDataLoadState.Loaded)
+        {
+            if (clip.loadState == AudioDataLoadState.Failed)
+            {
+                GameFlowError.Raise($"楽曲の音源を読み込めませんでした: {clip.name}");
+                return;
+            }
+
+            if (elapsedSeconds >= AUDIO_LOAD_TIMEOUT_SECONDS)
+            {
+                GameFlowError.Raise($"楽曲の音源の読み込みが {AUDIO_LOAD_TIMEOUT_SECONDS} 秒以内に終わりませんでした: {clip.name}");
+                return;
+            }
+
+            await UniTask.Yield(PlayerLoopTiming.Update, token);
+            elapsedSeconds += Time.unscaledDeltaTime;
+        }
 
         SoundManager.Instance.SetBGM(clip, BGM_Type.MusicTrack);
 
-        onEndLoading.Invoke();
+        onEndLoading?.Invoke();
     }
 
     /// <summary>

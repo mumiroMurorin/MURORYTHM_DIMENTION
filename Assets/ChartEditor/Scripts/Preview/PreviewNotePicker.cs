@@ -306,8 +306,8 @@ namespace ChartEditor
                 Release();
             }
 
-            // 全画面プレビューの頂点の道具で「編集」を選んでいる間は、頂点を右クリックすると、その頂点を消す
-            if (Input.GetMouseButtonDown(1)) { TryRemoveVertexWithVertexTool(); }
+            // 全画面プレビューで、頂点・中心点のつまみを右クリックすると、位置を数値で決める窓を出す (録音 20261118_162441)
+            if (Input.GetMouseButtonDown(1)) { TryOpenVertexNumberPanel(); }
 
             UpdateCursor();
         }
@@ -486,38 +486,10 @@ namespace ChartEditor
 
             switch (tool)
             {
+                // 編集: 頂点は置かない (録音 20261118_162441: プレビューで面を押して頂点が置かれるのは変)。
+                // つまみを掴んで動かす・選ぶのは、ふつうのクリックとして扱う
                 case PreviewVertexTool.Edit:
-                {
-                    // つまみの上を押したときは、ふつうに掴んで動かす
-                    if (vertexHandles.IsOverHandle(view, screenPosition)) { return false; }
-                    // 選択中のノーツが、プレビューに映っているときだけ
-                    if (!TryGetVisibleNoteDistance(note, out float distance)) { return false; }
-                    if (!vertexHandles.TryGetVertexPoint(ray, noteParent, distance, out Vector2 point)) { return false; }
-                    // ノーツの面の外や、ほかの頂点の上には置かない (面の外を押したときは、ふつうのクリックとして扱う)
-                    if (!PreviewVertexTools.CanPlaceAt(vertices, point)) { return false; }
-
-                    // 頂点を置くと、頂点の選択は外れる (頂点レイヤーと同じ)
-                    vertexHandles.ClearSelection();
-
-                    // 置いて、位置を調整し終えたときに、1回の操作として履歴に登録する (置いた・動かした、の2回に分けない)
-                    VertexData added = PreviewVertexTools.AddVertexWithoutRecord(vertices, point);
-                    if (previewRefresher != null) { previewRefresher.RefreshImmediately(); }
-
-                    // 置いた頂点を、そのまま掴む (ボタンを離さずに動かすと、位置を調整できる)
-                    RefreshVertexHandles();
-                    isHandlePress = vertexHandles.TryGrab(view, screenPosition, ray, noteParent);
-                    if (isHandlePress)
-                    {
-                        placedVertices = vertices;
-                        placedVertex = added;
-                    }
-                    else
-                    {
-                        // 掴めなかったとき: 置いただけで終わり
-                        PreviewVertexTools.RecordAddedVertex(vertices, added);
-                    }
-                    break;
-                }
+                    return false;
                 case PreviewVertexTool.Rotate:
                 case PreviewVertexTool.Scale:
                 {
@@ -576,31 +548,28 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 全画面プレビューの頂点の道具で「編集」を選んでいる間に、頂点を右クリックしたとき: その頂点を消す
+        /// 全画面プレビューで、頂点・中心点のつまみを右クリックしたとき: その位置を数値で決める窓を、つまみの右に出す (録音 20261118_162441)
+        /// (右クリックで頂点を消すのは、やめた。頂点を消すのは、選んで Delete)
         /// </summary>
-        private void TryRemoveVertexWithVertexTool()
+        private void TryOpenVertexNumberPanel()
         {
-            if (PreviewVertexTools.Current != PreviewVertexTool.Edit) { return; }
             // ほかの操作の途中 (左ボタンで何かを掴んでいる間など) は、受け付けない
             if (isPressing || !CanOperate()) { return; }
 
             SearchSceneOnce();
             if (previewGenerator == null) { return; }
             if (!TryGetPreviewRay(Input.mousePosition, out _, out var view) || !view.IsFullScreen) { return; }
-            if (!PreviewVertexTools.TryGetTarget(dataGetter, notesGetter, out _, out SpaceVertices vertices)) { return; }
+            if (!PreviewVertexTools.TryGetTarget(dataGetter, notesGetter, out IDeployableNoteData note, out SpaceVertices vertices)) { return; }
+            if (note is not IVerticesControlableNoteData target) { return; }
 
-            // 選択中のノーツの、頂点のつまみの上だけ
-            if (!vertexHandles.TryFindVertex(view, Input.mousePosition, out SpaceVertices owner, out VertexData vertex)) { return; }
+            // 選択中のノーツの、頂点・中心点のつまみの上だけ
+            if (!vertexHandles.TryFindHandle(view, Input.mousePosition, out SpaceVertices owner, out VertexData vertex)) { return; }
             if (!ReferenceEquals(owner, vertices)) { return; }
 
-            if (PreviewVertexTools.RemoveVertex(vertices, vertex))
-            {
-                if (previewRefresher != null) { previewRefresher.RefreshImmediately(); }
-            }
-            else
-            {
-                Debug.Log($"【頂点】これ以上、頂点を消せません。形を作るには、頂点が {PreviewVertexTools.MIN_VERTEX_COUNT} つ以上必要です");
-            }
+            VertexCenterPanel.OpenForPreview(target, vertex,
+                () => PreviewVertexTools.TryGetTarget(dataGetter, notesGetter, out _, out SpaceVertices current) && ReferenceEquals(current, vertices),
+                () => vertexHandles.TryGetHandleScreenPosition(vertices, vertex, out Vector2 screen) ? screen : (Vector2?)null,
+                () => { if (previewRefresher != null) { previewRefresher.RefreshImmediately(); } });
         }
 
         /// <summary>
@@ -1563,12 +1532,7 @@ namespace ChartEditor
                     if (!vertexHandles.TryFindVertex(view, screenPosition, out SpaceVertices owner, out _)) { return false; }
                     if (!ReferenceEquals(owner, vertices)) { return false; }
                     break;
-                case PreviewVertexTool.Edit:
-                    // つまみの上では、置かずに掴む (移動のカーソルのまま)
-                    if (vertexHandles.IsOverHandle(view, screenPosition)) { return false; }
-                    if (!TryGetVisibleNoteDistance(note, out float distance)) { return false; }
-                    if (!vertexHandles.TryGetVertexPoint(ray, previewGenerator.NoteParent, distance, out _)) { return false; }
-                    break;
+                // 編集: 頂点を置かないので、置くカーソルは出さない (つまみの上は、移動のカーソル)
                 default:
                     return false;
             }

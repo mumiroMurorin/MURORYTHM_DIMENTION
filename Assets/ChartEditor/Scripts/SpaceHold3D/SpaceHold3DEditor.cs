@@ -30,7 +30,7 @@ namespace ChartEditor
     ///   全体を映す、奥行きの縮尺 (正面・横・上・斜めのボタンは、向きの印で足りるので置かない。キーの 1〜4 は使える)
     /// ・左上: 頂点レイヤーの道具の列と同じ見た目の、節の形の道具 (編集・回転・拡大縮小・頂点スライド・反転)。いつも出す (録音 20261117_201649)
     ///   「編集」は、道具を選んでいない状態 (節を選ぶ・動かす。開いたときは、これ: 録音 20261117_204809)
-    ///   その右に、回転・拡大縮小の動かし方 (通常 / なめらか)、選択モード (通常 / 全体 / Nつおき)、節の選択を外すボタン
+    ///   その右に、回転・拡大縮小の動かし方 (通常 / なめらか)、選択モード (通常 / 全体 / Nつおき)。節の選択は、空いた所のダブルクリックで外す
     ///   (Nつおきの N は、設定メニューで 1〜4 から選ぶ: 録音 20261117_205010)
     ///   (3D編集では、頂点を選んだり、足したり、動かしたり、消したりしない。頂点の編集は頂点レイヤーで: 録音 20261117_180313)
     /// ・右下: ミニプレビュー (編集画面のもの)。その左に「頂点レイヤーで編集」と「編集画面へ戻る」のボタン
@@ -84,6 +84,16 @@ namespace ChartEditor
         /// 3D編集を開いているか
         /// </summary>
         public static bool IsOpen => Instance != null && Instance.isOpen;
+
+        /// <summary>開いていて、回転・拡大縮小の道具を選んでいるか (操作説明の行を出し分ける: 録音 20261118_211557)</summary>
+        public static bool HasTransformTool =>
+            IsOpen && (Instance.vertexTool == PreviewVertexTool.Rotate || Instance.vertexTool == PreviewVertexTool.Scale);
+
+        /// <summary>
+        /// 開いていて、カーソルがミニプレビューの上にあるか (そこでのホイールは、3Dの視点ではなく、譜面の再生位置を動かす: 録音 20261118_211837)
+        /// </summary>
+        public static bool IsPointerOnMiniPreview =>
+            IsOpen && Instance.overlay != null && Instance.overlay.IsPointerOnMiniPreview(Input.mousePosition);
 
         readonly IChartEditorDataGetter dataGetter;
         readonly IChartEditorDataSetter dataSetter;
@@ -1130,8 +1140,6 @@ namespace ChartEditor
             overlay.SetToolShortcut(PreviewVertexTool.Rotate, ShortcutBadge.FormatAltKey(rotateKey));
             overlay.SetToolShortcut(PreviewVertexTool.Scale, ShortcutBadge.FormatAltKey(scaleKey));
             overlay.OnVertexLayerClicked += () => { if (isOpen) { OpenSelectedInVerticesLayer(); } };
-            // 節の選択を外す (道具は、選んだままにする: 録音 20261117_201649)
-            overlay.OnEndVertexEditClicked += () => { if (isOpen) { Select(-1); } };
             overlay.OnCloseClicked += () => { if (isOpen) { Close(); } };
             // レイヤーのボタン: 3D編集を閉じて、グラウンドのレイヤーに戻る
             // (編集画面のレイヤーのボタンと同じ Alt+L でも働く: EditorUIPresenter)
@@ -1296,16 +1304,24 @@ namespace ChartEditor
 
             var previous = new List<VertexDataToPos>();
             var current = new List<VertexDataToPos>();
+            var origins = new List<Vector2>();
             foreach (var target in GetTransformTargets(index))
             {
                 if (target.Weight <= 0f) { continue; }
-                foreach (var vertex in sections[target.Index].Note.SpaceVertices.Vertices)
+
+                // 節ごとに、形のまま円の中に収まるところまで (ドラッグと同じ: 録音 20261118_221940)
+                var vertices = sections[target.Index].Note.SpaceVertices.Vertices;
+                origins.Clear();
+                foreach (var vertex in vertices) { origins.Add(vertex.Position.Value); }
+                Vector2 translation = VerticesDragOperationBase.LimitTranslationInsideCircle(origins, delta * target.Weight);
+
+                for (int i = 0; i < vertices.Count; i++)
                 {
-                    Vector2 before = vertex.Position.Value;
-                    vertex.SetPosition(before + delta * target.Weight);
-                    if (vertex.Position.Value == before) { continue; }
-                    previous.Add(new VertexDataToPos(vertex, before));
-                    current.Add(new VertexDataToPos(vertex, vertex.Position.Value));
+                    Vector2 before = origins[i];
+                    vertices[i].SetPosition(before + translation);
+                    if (vertices[i].Position.Value == before) { continue; }
+                    previous.Add(new VertexDataToPos(vertices[i], before));
+                    current.Add(new VertexDataToPos(vertices[i], vertices[i].Position.Value));
                 }
             }
             if (current.Count == 0) { return; }

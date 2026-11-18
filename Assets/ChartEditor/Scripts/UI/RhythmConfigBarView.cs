@@ -38,6 +38,9 @@ namespace ChartEditor
 
         private void Awake()
         {
+            // 欄の名前を左右にドラッグしても、値を動かせる (拍子の分子・分線の数は整数だけ。決定ボタンで読むので、欄の文字だけ変える: 録音 20261118_162040)
+            NumberScrubHandle.AttachToField(beatCountField, NumberScrubHandle.Settings.Integer(8f, 1), false);
+            NumberScrubHandle.AttachToField(divisionNumField, NumberScrubHandle.Settings.Integer(8f, 1), false);
             if (cancelButton != null) { cancelButton.onClick.AddListener(OnClickedCancelButton); }
         }
 

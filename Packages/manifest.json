@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.devfeedback.recorder": "https://github.com/mumiroMurorin/DevFeedbackRecorder.git#v0.1.0",
+    "com.devfeedback.recorder": "https://github.com/mumiroMurorin/DevFeedbackRecorder.git#main",
     "com.ultraleap.tracking": "7.3.0",
     "com.unity.2d.pixel-perfect": "5.0.3",
     "com.unity.2d.sprite": "1.0.0",

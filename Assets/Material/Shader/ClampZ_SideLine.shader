@@ -13,6 +13,10 @@
         [HideInInspector] _TrackClipEnabled("Track Clip Enabled", Float) = 0.0
         [HideInInspector] _TrackVisibleMin("Track Visible Min", Float) = 0.0
         [HideInInspector] _TrackVisibleMax("Track Visible Max", Float) = 100.0
+        // 終点に向けたフェードアウト (NoteFactory_HoldMesh がホールドごとに設定する。値はノーツ軌道上の距離)
+        [HideInInspector] _EndFadeEnabled("End Fade Enabled", Float) = 0.0
+        [HideInInspector] _EndFadeEnd("End Fade End", Float) = 0.0
+        [HideInInspector] _EndFadeLength("End Fade Length", Float) = 1.0
 
         _LineColor("Line Color", Color) = (1,1,1,1)
         _LineDistanceFromEdge("Line Distance From Edge", Range(0,0.5)) = 0.08
@@ -54,6 +58,9 @@
             float _TrackClipEnabled;
             float _TrackVisibleMin;
             float _TrackVisibleMax;
+            float _EndFadeEnabled;
+            float _EndFadeEnd;
+            float _EndFadeLength;
             float _LineDistanceFromEdge;
             float _LineWidth;
             float _LineIntensity;
@@ -102,6 +109,12 @@
 
                 fixed4 tint = lerp(_SecondaryColor, _Color, inRange);
                 fixed4 c = tex2D(_MainTex, i.uv) * tint;
+
+                // 終点に近づくほど透明にする (終点から _EndFadeLength 手前で消え始め、終点で消える)
+                if (_EndFadeEnabled > 0.5)
+                {
+                    c.a *= saturate((_EndFadeEnd - i.trackDistance) / max(_EndFadeLength, 0.0001));
+                }
 
                 float leftLine = GetLineMask(i.uv.x, _LineDistanceFromEdge, _LineWidth);
                 float rightLine = GetLineMask(i.uv.x, 1.0 - _LineDistanceFromEdge, _LineWidth);

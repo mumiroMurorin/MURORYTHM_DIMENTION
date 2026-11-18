@@ -91,6 +91,9 @@ namespace ChartEditor
         // 回す・拡大縮小する節の、頂点ごとの中心 (その頂点の節の中心) と、効き方 (1 = 全部、0 = 動かさない。「なめらか」のとき)
         readonly List<Vector2> dragCenters = new List<Vector2>();
         readonly List<float> dragWeights = new List<float>();
+        // 動かす頂点の並びの中で、節ごとの始まり (節ごとに、形のまま円の中で止めるため)
+        readonly List<int> dragGroupStarts = new List<int>();
+        readonly List<Vector2> dragGroupBuffer = new List<Vector2>();
         // 回した角度 (度。180度を超えても続けて回せるように、少しずつ足していく)
         float transformAngle;
         float lastRawAngle;
@@ -167,8 +170,9 @@ namespace ChartEditor
 
             if (isOnViewport)
             {
+                // (ミニプレビューの上のホイールは、譜面の再生位置を動かす。InputHandler が受け取る: 録音 20261118_211837)
                 float wheel = Input.mouseScrollDelta.y;
-                if (Mathf.Abs(wheel) > 0.01f) { rig.Zoom(wheel); }
+                if (Mathf.Abs(wheel) > 0.01f && (overlay == null || !overlay.IsPointerOnMiniPreview(mouse))) { rig.Zoom(wheel); }
 
                 // ◆ の位置の窓を出しているとき: 3Dの画面のクリックは、窓を閉じるだけ (打っている途中の値は、反映してから閉じる)
                 if (IsControlPanelShown && (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)))
@@ -491,11 +495,13 @@ namespace ChartEditor
             dragStartPositions.Clear();
             dragCenters.Clear();
             dragWeights.Clear();
+            dragGroupStarts.Clear();
             transformSectionCount = 0;
             foreach (var target in GetTransformTargets(sectionIndex))
             {
                 if (target.Weight <= 0f) { continue; }
 
+                dragGroupStarts.Add(dragVertices.Count);
                 foreach (var vertex in sections[target.Index].Note.SpaceVertices.Vertices)
                 {
                     dragVertices.Add(vertex);
@@ -546,10 +552,19 @@ namespace ChartEditor
                 deltaUnit = ToUnit(hit) - ToUnit(dragStartHit);
             }
 
-            for (int i = 0; i < dragVertices.Count; i++)
+            // 節ごとに、形のまま円の中に収まるところまで動かす (頂点ごとに円の中へ押し戻すと、形がゆがむ。頂点レイヤーの中心点のドラッグと同じ)
+            for (int group = 0; group < dragGroupStarts.Count; group++)
             {
-                float weight = i < dragWeights.Count ? dragWeights[i] : 1f;
-                dragVertices[i].SetPosition(dragStartPositions[i] + deltaUnit * weight);
+                int start = dragGroupStarts[group];
+                int end = group + 1 < dragGroupStarts.Count ? dragGroupStarts[group + 1] : dragVertices.Count;
+                if (start >= end) { continue; }
+
+                float weight = start < dragWeights.Count ? dragWeights[start] : 1f;
+                dragGroupBuffer.Clear();
+                for (int i = start; i < end; i++) { dragGroupBuffer.Add(dragStartPositions[i]); }
+                Vector2 translation = VerticesDragOperationBase.LimitTranslationInsideCircle(dragGroupBuffer, deltaUnit * weight);
+
+                for (int i = start; i < end; i++) { dragVertices[i].SetPosition(dragStartPositions[i] + translation); }
             }
         }
 

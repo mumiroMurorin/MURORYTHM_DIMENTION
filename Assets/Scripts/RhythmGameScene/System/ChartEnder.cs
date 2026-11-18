@@ -29,6 +29,7 @@ public class ChartEnder : MonoBehaviour, IChartEnder
             .ObserveCountChanged()
             .Delay(System.TimeSpan.FromSeconds(delaySeconds))
             .Where(count => count >= chartDataGetter.Chart.MaxCombo)
+            .Take(1)    // 譜面の終了は1回だけ (二重に終了処理へ進まないようにする)
             .Subscribe(count =>
             {
                 callback?.Invoke();

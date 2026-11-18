@@ -79,8 +79,6 @@ namespace ChartEditor
         [SerializeField] VertexIndicesSliderButtonView vertexSlideCounterclockwiseButton;
         [SerializeField] VerticesMirrorButtonView vertexMirrorXAxisButton;
         [SerializeField] VerticesMirrorButtonView vertexMirrorYAxisButton;
-        [Tooltip("節の選択を外す (選択モードの下。録音 20261117_201748)")]
-        [SerializeField] Button endVertexEditButton;
         [Tooltip("回転・拡大縮小の動かし方 (道具の列の右。どちらか1つを選ぶ)")]
         [SerializeField] RangeButton[] rangeButtons;
         [Tooltip("選択モード (動かし方の下。どれか1つを選ぶ)")]
@@ -117,8 +115,6 @@ namespace ChartEditor
         /// <summary>頂点の道具のボタン</summary>
         public event Action<PreviewVertexTool> OnToolClicked;
         public event Action OnVertexLayerClicked;
-        /// <summary>節の選択を外す</summary>
-        public event Action OnEndVertexEditClicked;
         /// <summary>回転・拡大縮小の動かし方のボタン</summary>
         public event Action<SectionTransformRange> OnRangeClicked;
         /// <summary>選択モードのボタン</summary>
@@ -163,9 +159,13 @@ namespace ChartEditor
         void Awake()
         {
             if (layerButton != null) { layerButton.onClick.AddListener(() => { ReleaseSelection(); OnLayerClicked?.Invoke(); }); }
-            inputX = new NumberInputField(controlInputX, value => OnControlValueEntered?.Invoke(0, value));
-            inputY = new NumberInputField(controlInputY, value => OnControlValueEntered?.Invoke(1, value));
-            inputZ = new NumberInputField(controlInputZ, value => OnControlValueEntered?.Invoke(2, value));
+            // (欄の名前を左右にドラッグしても、値を動かせる: 録音 20261118_162040。X・Y は円の中、Z は前後の節の間の割合)
+            inputX = new NumberInputField(controlInputX, value => OnControlValueEntered?.Invoke(0, value))
+                .EnableScrub(NumberScrubHandle.Settings.Float(0.005f, -1f, 1f));
+            inputY = new NumberInputField(controlInputY, value => OnControlValueEntered?.Invoke(1, value))
+                .EnableScrub(NumberScrubHandle.Settings.Float(0.005f, -1f, 1f));
+            inputZ = new NumberInputField(controlInputZ, value => OnControlValueEntered?.Invoke(2, value))
+                .EnableScrub(NumberScrubHandle.Settings.Float(0.002f, 0f, 1f));
 
             // (向きは、頂点レイヤーのボタンと同じ: 時計回り = -1)
             ConnectSlide(vertexSlideClockwiseButton, -1);
@@ -214,7 +214,6 @@ namespace ChartEditor
             }
 
             if (vertexLayerButton != null) { vertexLayerButton.onClick.AddListener(() => { ReleaseSelection(); OnVertexLayerClicked?.Invoke(); }); }
-            if (endVertexEditButton != null) { endVertexEditButton.onClick.AddListener(() => { ReleaseSelection(); OnEndVertexEditClicked?.Invoke(); }); }
             if (closeButton != null) { closeButton.onClick.AddListener(() => { ReleaseSelection(); OnCloseClicked?.Invoke(); }); }
             if (controlCloseButton != null) { controlCloseButton.onClick.AddListener(() => { ReleaseSelection(); OnControlPanelCloseClicked?.Invoke(); }); }
             if (controlStraightButton != null) { controlStraightButton.onClick.AddListener(() => { ReleaseSelection(); OnControlStraightClicked?.Invoke(); }); }
@@ -251,15 +250,62 @@ namespace ChartEditor
                 miniPreviewCanvas.overrideSorting = isVisible;
                 if (isVisible) { miniPreviewCanvas.sortingOrder = MINI_PREVIEW_ORDER; }
             }
+            LiftLogWindow(isVisible);
+        }
+
+        // ログのウィンドウ (GeneralCanvas/LogWindow: ログと、しまったときの小さい四角)
+        RectTransform logWindow;
+        Canvas logWindowCanvas;
+        bool isLogWindowSearched;
+        // 3D編集の間の、ログのウィンドウの重なりの順番 (3D編集の部品 6 より手前、メニュー 10 より奥。ミニプレビューと同じ)
+        const int LOG_WINDOW_ORDER = 7;
+        // 3D編集の間に、ログのウィンドウを左へずらす量 (右上の視点のウィンドウ (幅 236、右の余白 12) の左へ: 右の端を 45 から 260 へ)
+        const float LOG_WINDOW_SHIFT_X = -215f;
+
+        /// <summary>
+        /// 3D編集の間は、ログのウィンドウを手前に出して、視点のウィンドウの左に寄せる (録音 20261118_230249: 3D編集の間はログが見えなかった)
+        /// 閉じるときは、ふだんと同じ: ダブルクリックで小さくしまう、メニューの「表示」→「ログ」
+        /// (ログのウィンドウは、ほかの生成スクリプトが作るので、手前に出すためのキャンバスは、ここで足す)
+        /// </summary>
+        private void LiftLogWindow(bool isLifted)
+        {
+            if (!isLogWindowSearched)
+            {
+                isLogWindowSearched = true;
+                var found = GameObject.Find("LogWindow");
+                logWindow = found != null ? found.transform as RectTransform : null;
+            }
+            if (logWindow == null) { return; }
+
+            if (logWindowCanvas == null)
+            {
+                if (!isLifted) { return; }
+                if (!logWindow.TryGetComponent(out logWindowCanvas)) { logWindowCanvas = logWindow.gameObject.AddComponent<Canvas>(); }
+                if (!logWindow.TryGetComponent(out GraphicRaycaster _)) { logWindow.gameObject.AddComponent<GraphicRaycaster>(); }
+            }
+
+            logWindowCanvas.overrideSorting = isLifted;
+            if (isLifted) { logWindowCanvas.sortingOrder = LOG_WINDOW_ORDER; }
+            logWindow.anchoredPosition = isLifted ? new Vector2(LOG_WINDOW_SHIFT_X, 0f) : Vector2.zero;
         }
 
         /// <summary>
-        /// 節を選んでいるかに合わせる: 道具の列はいつも出す (録音 20261117_201649)。「節の選択を外す」は、選んでいるときだけ出す
+        /// 節を選んでいるかに合わせる: 道具の列はいつも出す (録音 20261117_201649)
+        /// (「節の選択を外す」のボタンは、なくした。空いた所のダブルクリックで外れる: 録音 20261118_211627)
         /// </summary>
         public void SetListMode(bool hasSelection)
         {
             if (vertexList != null && !vertexList.activeSelf) { vertexList.SetActive(true); }
-            if (endVertexEditButton != null && endVertexEditButton.gameObject.activeSelf != hasSelection) { endVertexEditButton.gameObject.SetActive(hasSelection); }
+        }
+
+        /// <summary>
+        /// 画面の位置が、ミニプレビューの窓の上か (しまっているときは false)
+        /// </summary>
+        public bool IsPointerOnMiniPreview(Vector2 screenPosition)
+        {
+            if (miniPreviewCanvas == null || !miniPreviewCanvas.gameObject.activeInHierarchy) { return false; }
+            var rect = miniPreviewCanvas.transform as RectTransform;
+            return rect != null && RectTransformUtility.RectangleContainsScreenPoint(rect, screenPosition, null);
         }
 
         /// <summary>

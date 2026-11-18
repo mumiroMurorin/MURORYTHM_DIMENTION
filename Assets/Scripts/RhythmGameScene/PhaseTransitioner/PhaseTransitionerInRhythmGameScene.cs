@@ -11,13 +11,40 @@ namespace TransitionerInRhythmGameScene
 
         [SerializeReference,SubclassSelector] List<IPhaseTransitionerInRhythmGameScene> transitioners;
 
+        // エラー時に戻る先のフェーズ (譜面・音源の読み込みやノーツの生成に失敗したとき)
+        const PhaseStatusInRhythmGame PHASE_ON_ERROR = PhaseStatusInRhythmGame.TransitionSelectScene;
+
         ReactiveProperty<PhaseStatusInRhythmGame> phaseStatus = new ReactiveProperty<PhaseStatusInRhythmGame>(FIRST_STATUS);
         IReadOnlyReactiveProperty<PhaseStatusInRhythmGame> IPhaseStatusGetterInRhythmGameScene.PhaseStatus => phaseStatus;
+
+        bool isReturningOnError;
 
         void Start()
         {
             Initialize();
             TransitionPhase(FIRST_STATUS);
+        }
+
+        void OnEnable()
+        {
+            GameFlowError.OnRaised += OnGameFlowError;
+        }
+
+        void OnDisable()
+        {
+            GameFlowError.OnRaised -= OnGameFlowError;
+        }
+
+        /// <summary>
+        /// 先へ進めないエラーが起きたときは、選曲画面へ戻る
+        /// </summary>
+        private void OnGameFlowError(string message)
+        {
+            if (isReturningOnError) { return; }
+            isReturningOnError = true;
+
+            Debug.LogWarning($"【Transition】エラーが起きたため {PHASE_ON_ERROR} へ移ります: {message}");
+            TransitionPhase(PHASE_ON_ERROR);
         }
 
         private void Initialize()
