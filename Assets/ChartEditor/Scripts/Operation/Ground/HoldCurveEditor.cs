@@ -263,7 +263,8 @@ namespace ChartEditor
 
             if (controlPanel == null)
             {
-                controlPanel = UnityEngine.Object.FindObjectOfType<HoldCurveControlPanelView>(true);
+                // (同じ見た目の窓を複製して、ほかの値にも使っている。シーンに置いてある元の窓を使う)
+                controlPanel = HoldCurveControlPanelView.FindOriginal();
                 if (controlPanel == null)
                 {
                     Debug.LogWarning("【ホールドの曲線】位置を数値で決める窓 (HoldCurveControlPanelView) がシーンにありません");

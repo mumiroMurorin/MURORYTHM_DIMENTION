@@ -211,20 +211,17 @@ namespace ChartEditor
         }
 
         /// <summary>
-        /// 頂点の平均位置
+        /// 中心点の位置 = 形の重心 (面積の中心。3D編集の「節の中心」と同じ: SpaceHoldSections.GetCenter)
+        /// (中心点の位置を数値で決める窓も、この位置を出す: VertexCenterPanel)
+        ///
+        /// 以前は頂点の平均だった。頂点の平均は、辺の途中に頂点を足すと、そちらへずれる (同じ形でも、3D編集の中心と値が合わなかった)。
+        /// 面積がほとんど無い形・辺が交わっている形は、頂点の平均になる (GetCenter)。
         /// </summary>
-        private static Vector2 CalcCenter(SpaceVertices vertices)
+        public static Vector2 CalcCenter(SpaceVertices vertices)
         {
-            int count = vertices.Vertices.Count;
-            if (count == 0) { return Vector2.zero; }
+            if (vertices == null || vertices.Vertices.Count == 0) { return Vector2.zero; }
 
-            Vector2 sum = Vector2.zero;
-            for (int i = 0; i < count; i++)
-            {
-                sum += vertices.Vertices[i].Position.Value;
-            }
-
-            return sum / count;
+            return SpaceHoldSections.GetCenter(SpaceHoldSections.GetVertices(vertices));
         }
 
         #endregion

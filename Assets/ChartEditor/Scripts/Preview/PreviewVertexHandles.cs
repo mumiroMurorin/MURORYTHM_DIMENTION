@@ -361,16 +361,13 @@ namespace ChartEditor
             if (vertices == null || vertices.Vertices.Count == 0) { return false; }
             if (!getDistance(note, out float distance)) { return false; }
 
-            Vector2 sum = Vector2.zero;
             foreach (var vertex in vertices.Vertices)
             {
-                Vector2 position = vertex.Position.Value;
-                sum += position;
-                AddHandle(note, vertices, vertex, position, distance, view, noteParent, curveRadius);
+                AddHandle(note, vertices, vertex, vertex.Position.Value, distance, view, noteParent, curveRadius);
             }
 
-            // 中心点 (頂点の平均の位置)
-            AddHandle(note, vertices, null, sum / vertices.Vertices.Count, distance, view, noteParent, curveRadius);
+            // 中心点 (形の重心。頂点のレイヤーの中心点・3D編集の節の中心と同じ位置: VertexObjectsController.CalcCenter)
+            AddHandle(note, vertices, null, VertexObjectsController.CalcCenter(vertices), distance, view, noteParent, curveRadius);
             return true;
         }
 

@@ -1763,14 +1763,11 @@ namespace ChartEditor
                 return PreviewTrackSurface.GetLanePoint(distance, lane, curveRadius);
             }
 
-            // スペースのノーツ: 頂点の平均の位置 (頂点・中心点のつまみの「中心点」と同じ場所)
+            // スペースのノーツ: 形の重心 (頂点・中心点のつまみの「中心点」と同じ場所)
             Vector2 center = Vector2.zero;
-            if (note is IVerticesControlableNoteData verticesNote &&
-                verticesNote.SpaceVertices != null &&
-                verticesNote.SpaceVertices.Vertices.Count > 0)
+            if (note is IVerticesControlableNoteData verticesNote)
             {
-                foreach (var vertex in verticesNote.SpaceVertices.Vertices) { center += vertex.Position.Value; }
-                center /= verticesNote.SpaceVertices.Vertices.Count;
+                center = VertexObjectsController.CalcCenter(verticesNote.SpaceVertices);
             }
 
             return PreviewTrackSurface.GetPoint(

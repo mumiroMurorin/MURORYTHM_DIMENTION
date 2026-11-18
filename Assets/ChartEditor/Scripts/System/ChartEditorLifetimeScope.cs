@@ -62,6 +62,8 @@ namespace ChartEditor
             builder.RegisterEntryPoint<NoteContextMenu>();
             // 頂点レイヤーから、来る前のレイヤーへ戻る (ミニプレビューの上のボタン)
             builder.RegisterEntryPoint<VerticesLayerReturn>();
+            // 頂点レイヤーの中心点を右クリックすると、中心の位置を数値で決める窓を出す (窓は、ホールドの曲線の窓を複製して作る)
+            builder.RegisterEntryPoint<VertexCenterPanel>();
             // 全画面プレビューの再生中は、まわりの画面部品を隠す
             builder.RegisterEntryPoint<PreviewPlaybackUi>();
 

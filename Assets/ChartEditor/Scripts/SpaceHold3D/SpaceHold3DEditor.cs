@@ -14,6 +14,8 @@ namespace ChartEditor
     /// ・スペースのレイヤーで、SpaceHold のノーツを Alt を押しながらダブルクリック
     /// ・頂点レイヤーのフィルムストリップの「3Dで編集」
     /// ・メニューの「表示」→「SpaceHoldを3Dで編集」(選んでいる SpaceHold、または頂点を編集している SpaceHold)
+    /// ・頂点のレイヤーで SpaceHold の形を編集しているときに、レイヤーのボタン (Alt+L) を押す (EditorUIPresenter)
+    ///   (3D編集の画面のレイヤーのボタンで、グラウンドのレイヤーに戻る: SwitchLayerFromButton)
     /// 開いている間は、画面全体 (メニューバーより下) が3Dの画面になり、裏の譜面は操作できない (EditMode.SpaceHoldView)。
     /// 開いた SpaceHold は色付きで、ほかのスペースのノーツは灰色で表示する。
     ///
@@ -471,6 +473,19 @@ namespace ChartEditor
             sections.Clear();
             spans.Clear();
             lastClickTime = -10f;
+        }
+
+        /// <summary>
+        /// レイヤーのボタン (3D編集の画面のもの。Alt+L も): 3D編集を閉じて、グラウンドのレイヤーに戻る
+        /// SpaceHold を選んでいるときのレイヤーの順番 (グラウンド → スペース → 頂点 → 3D → グラウンド …) の、最後の一歩
+        /// (以前は、スペースのレイヤーに戻していた: 録音 20261117_195031)
+        /// </summary>
+        public void SwitchLayerFromButton()
+        {
+            if (!isOpen) { return; }
+
+            Close();
+            if (dataGetter.EditNoteType.Value != EditNoteType.Ground) { dataSetter.SetEditNoteType(EditNoteType.Ground); }
         }
 
         /// <summary>
@@ -1118,13 +1133,10 @@ namespace ChartEditor
             // 節の選択を外す (道具は、選んだままにする: 録音 20261117_201649)
             overlay.OnEndVertexEditClicked += () => { if (isOpen) { Select(-1); } };
             overlay.OnCloseClicked += () => { if (isOpen) { Close(); } };
-            // レイヤーのボタン: 3D編集を閉じて、スペースのレイヤーに戻る (録音 20261117_195031)
-            overlay.OnLayerClicked += () =>
-            {
-                if (!isOpen) { return; }
-                Close();
-                if (dataGetter.EditNoteType.Value != EditNoteType.Space) { dataSetter.SetEditNoteType(EditNoteType.Space); }
-            };
+            // レイヤーのボタン: 3D編集を閉じて、グラウンドのレイヤーに戻る
+            // (編集画面のレイヤーのボタンと同じ Alt+L でも働く: EditorUIPresenter)
+            overlay.OnLayerClicked += SwitchLayerFromButton;
+            overlay.SetLayerShortcut(ShortcutBadge.FormatAltKey(EditorUIPresenter.SWITCH_LAYER_KEY));
             overlay.OnControlValueEntered += OnControlValueEntered;
             overlay.OnControlPanelCloseClicked += CloseControlPanel;
             overlay.OnControlStraightClicked += () =>
