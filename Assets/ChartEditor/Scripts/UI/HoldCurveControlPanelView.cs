@@ -15,6 +15,10 @@ namespace ChartEditor
     /// 数値は、入力を終えたとき (Enter、ほかの場所をクリック) に反映する (NumberInputField)。
     /// 入力の下の「まっすぐに戻す」で、2つの節の間をまっすぐに戻す (録音 20261117_005036)。
     /// 画面部品はシーンに置いてある (いつも手前に出すキャンバス)。
+    ///
+    /// 同じ見た目の窓を、ほかの値にも使う (CreateCopy で複製して、Configure で見出しや欄の名前を替える)。
+    /// ・頂点のレイヤーの中心点の位置 (VertexCenterPanel)
+    /// ホールドの曲線が使うのは、シーンに置いてある元の窓 (FindOriginal)。
     /// </summary>
     // ほかの場所のクリックで入力を終えたとき、そのクリックが処理される前に、打った値を反映するため、先に動かす
     [DefaultExecutionOrder(-1000)]
@@ -35,7 +39,83 @@ namespace ChartEditor
         NumberInputField side;
         NumberInputField time;
 
+        // 欄に出す数の書き方 (Configure で替える)
+        string valueFormat = "0.##";
+
+        /// <summary>CreateCopy で作った窓か (シーンに置いてある元の窓は false)</summary>
+        public bool IsCopy { get; private set; }
+
         public bool IsShown => panel != null && panel.gameObject.activeSelf;
+
+        /// <summary>
+        /// シーンに置いてある、元の窓 (ホールドの曲線のもの。複製した窓は除く)
+        /// </summary>
+        public static HoldCurveControlPanelView FindOriginal()
+        {
+            foreach (var view in FindObjectsOfType<HoldCurveControlPanelView>(true))
+            {
+                if (view != null && !view.IsCopy) { return view; }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 同じ見た目の窓を、もう1つ作る (隠した状態で。シーンの終わりに一緒に消える)
+        /// </summary>
+        public HoldCurveControlPanelView CreateCopy(string objectName)
+        {
+            var copiedObject = Instantiate(gameObject);
+            copiedObject.name = objectName;
+            if (!copiedObject.TryGetComponent(out HoldCurveControlPanelView copied))
+            {
+                Destroy(copiedObject);
+                return null;
+            }
+
+            copied.IsCopy = true;
+            copied.Hide();
+            return copied;
+        }
+
+        /// <summary>
+        /// 窓の見出し・欄の名前・説明を替える (複製した窓を、ほかの値に使うとき)
+        /// 「まっすぐに戻す」のボタンを隠すときは、その分だけ窓を詰める (説明は1行だけにする)
+        /// </summary>
+        /// <param name="title">見出し</param>
+        /// <param name="firstLabel">1つめの欄 (元は「横」) の名前</param>
+        /// <param name="secondLabel">2つめの欄 (元は「時間」) の名前</param>
+        /// <param name="hint">窓の下の説明 (1行)</param>
+        /// <param name="format">欄に出す数の書き方</param>
+        public void Configure(string title, string firstLabel, string secondLabel, string hint, string format)
+        {
+            if (panel == null) { return; }
+
+            SetText("Title", title);
+            SetText("Row/Text_X", firstLabel);
+            SetText("Row/Text_Y", secondLabel);
+            SetText("Hint0", hint);
+            SetActive("Hint1", false);
+            if (straightButton != null) { straightButton.gameObject.SetActive(false); }
+            valueFormat = string.IsNullOrEmpty(format) ? valueFormat : format;
+
+            // 見出し・欄の行・説明1行の高さ (「まっすぐに戻す」と、説明の2行めの分を詰める)
+            panel.sizeDelta = new Vector2(panel.sizeDelta.x, COMPACT_HEIGHT);
+        }
+
+        // 「まっすぐに戻す」を隠したときの、窓の高さ
+        const float COMPACT_HEIGHT = 96f;
+
+        void SetText(string path, string text)
+        {
+            var child = panel.Find(path);
+            if (child != null && child.TryGetComponent(out TextMeshProUGUI tmp)) { tmp.text = text; }
+        }
+
+        void SetActive(string path, bool isActive)
+        {
+            var child = panel.Find(path);
+            if (child != null && child.gameObject.activeSelf != isActive) { child.gameObject.SetActive(isActive); }
+        }
 
         void Awake()
         {
@@ -111,8 +191,8 @@ namespace ChartEditor
         /// </summary>
         public void SetValues(float sideValue, float timeValue)
         {
-            side?.SetText(sideValue.ToString("0.##"));
-            time?.SetText(timeValue.ToString("0.##"));
+            side?.SetText(sideValue.ToString(valueFormat));
+            time?.SetText(timeValue.ToString(valueFormat));
         }
 
         /// <summary>

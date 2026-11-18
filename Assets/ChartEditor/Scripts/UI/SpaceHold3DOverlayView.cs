@@ -85,7 +85,7 @@ namespace ChartEditor
         [SerializeField] RangeButton[] rangeButtons;
         [Tooltip("選択モード (動かし方の下。どれか1つを選ぶ)")]
         [SerializeField] SelectModeButton[] selectModeButtons;
-        [Tooltip("レイヤーのボタン (編集画面のレイヤーのボタンと同じ場所。押すと、3D編集を閉じてスペースのレイヤーに戻る: 録音 20261117_195031)")]
+        [Tooltip("レイヤーのボタン (編集画面のレイヤーのボタンと同じ場所。押すと、3D編集を閉じてグラウンドのレイヤーに戻る)")]
         [SerializeField] Button layerButton;
 
         [Header("右下")]
@@ -351,6 +351,25 @@ namespace ChartEditor
             {
                 if (button != null && button.view != null && button.tool == tool) { button.view.SetShortcutText(text); }
             }
+        }
+
+        // レイヤーのボタンの、ショートカットキーの表示 (実行時に作る)
+        TextMeshProUGUI layerShortcutText;
+
+        /// <summary>
+        /// レイヤーのボタンのショートカットキーを、ボタンの左上に小さく表示する
+        /// (編集画面のレイヤーのボタン (SwitchLayerButtonView) と同じ。右下には、レイヤーの名前がある)
+        /// </summary>
+        public void SetLayerShortcut(string text)
+        {
+            if (string.IsNullOrEmpty(text) || layerButton == null) { return; }
+
+            if (layerShortcutText == null)
+            {
+                var template = layerButton.GetComponentInChildren<TextMeshProUGUI>(true);
+                layerShortcutText = ShortcutBadge.Create(layerButton.transform, template, ShortcutBadge.Corner.TopLeft);
+            }
+            if (layerShortcutText != null) { layerShortcutText.text = text; }
         }
 
         /// <summary>

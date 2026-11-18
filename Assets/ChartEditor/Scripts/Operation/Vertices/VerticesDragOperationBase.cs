@@ -123,8 +123,10 @@ namespace ChartEditor
                 isPressForRangeSelect = RangeSelectGesture.IsForced(dataGetter);
 
                 // 掴むもの: 押した時点でカーソルの下にあるもの。配置ツールで頂点を置ける所を押したときだけ、置いた頂点をあとで探す
-                targetCollider = dataGetter.GetInteractableCollider<IPointMovableCollider>();
-                canFindTargetLater = targetCollider == null && currentEditMode == EditMode.VertexPlace &&
+                // (中心の位置を数値で決める窓の上を押したときは、窓の裏の頂点を掴まない: VertexCenterPanel)
+                bool isOnCenterPanel = VertexCenterPanel.IsPointerOverPanel;
+                targetCollider = isOnCenterPanel ? null : dataGetter.GetInteractableCollider<IPointMovableCollider>();
+                canFindTargetLater = !isOnCenterPanel && targetCollider == null && currentEditMode == EditMode.VertexPlace &&
                                      !ModifierKey.Shift && !ModifierKey.Ctrl &&
                                      dataGetter.GetInteractableCollider<IPointDeployableCollider>() != null;
             }
@@ -288,7 +290,27 @@ namespace ChartEditor
         /// </summary>
         private Vector2 LimitTranslation(Vector2 translation)
         {
-            if (IsAllTargetsInsideAfter(translation)) { return translation; }
+            // 中心点そのものは頂点ではないので対象外
+            limitOrigins.Clear();
+            foreach (var target in targets)
+            {
+                if (!target.IsCenterHandle) { limitOrigins.Add(target.OriginPos); }
+            }
+
+            return LimitTranslationInsideCircle(limitOrigins, translation);
+        }
+
+        readonly List<Vector2> limitOrigins = new List<Vector2>();
+
+        /// <summary>
+        /// 頂点すべてを同じだけ動かすとき、どの頂点も配置できる範囲(単位円)の外に出ないよう、移動量を縮める
+        /// (頂点は範囲の外に出ると個別に縁へ押し戻されるので、そのまま動かすと形が崩れる)
+        /// 中心点のドラッグと、中心点の位置を数値で決める窓 (VertexCenterPanel) で使う
+        /// </summary>
+        /// <param name="origins">動かす前の、頂点の位置 (正規化済み)</param>
+        public static Vector2 LimitTranslationInsideCircle(IReadOnlyList<Vector2> origins, Vector2 translation)
+        {
+            if (IsAllInsideAfter(origins, translation)) { return translation; }
 
             // 収まる最大の割合を二分探索で求める
             float low = 0f;
@@ -296,24 +318,22 @@ namespace ChartEditor
             for (int i = 0; i < 16; i++)
             {
                 float middle = (low + high) * 0.5f;
-                if (IsAllTargetsInsideAfter(translation * middle)) { low = middle; }
+                if (IsAllInsideAfter(origins, translation * middle)) { low = middle; }
                 else { high = middle; }
             }
 
             return translation * low;
         }
 
-        private bool IsAllTargetsInsideAfter(Vector2 translation)
+        private static bool IsAllInsideAfter(IReadOnlyList<Vector2> origins, Vector2 translation)
         {
-            foreach (var target in targets)
+            for (int i = 0; i < origins.Count; i++)
             {
-                // 中心点そのものは頂点ではないので対象外
-                if (target.IsCenterHandle) { continue; }
-
                 // 縁の上にある頂点は、計算の誤差でわずかに範囲の外にいることがある
                 // 「今より外へは出さない」という条件にして、縁に接した多角形でも内側へは動かせるようにする
-                float limit = Mathf.Max(1f, target.OriginPos.sqrMagnitude) + 0.0001f;
-                if ((target.OriginPos + translation).sqrMagnitude > limit) { return false; }
+                Vector2 origin = origins[i];
+                float limit = Mathf.Max(1f, origin.sqrMagnitude) + 0.0001f;
+                if ((origin + translation).sqrMagnitude > limit) { return false; }
             }
 
             return true;
