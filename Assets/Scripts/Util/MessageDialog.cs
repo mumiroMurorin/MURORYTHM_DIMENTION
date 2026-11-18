@@ -19,6 +19,7 @@ public static class MessageDialog
     const uint MB_YESNO = 0x00000004;
     // アイコン
     const uint MB_ICONERROR = 0x00000010;
+    const uint MB_ICONQUESTION = 0x00000020;
     const uint MB_ICONWARNING = 0x00000030;
     // 最初から選ばれているボタン (2番目 = いいえ)
     const uint MB_DEFBUTTON2 = 0x00000100;
@@ -53,6 +54,29 @@ public static class MessageDialog
 #else
         Debug.LogWarning($"[MessageDialog] {title}: {message}");
         return true;
+#endif
+    }
+
+    /// <summary>
+    /// はい/いいえ のたずね (? の印。最初から「はい」が選ばれている)。「はい」が選ばれたとき true
+    /// (Confirm は、取り返しのつかない操作の確認なので、注意の印で「いいえ」が最初に選ばれている)
+    /// </summary>
+    public static bool Ask(string title, string message)
+    {
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+        try
+        {
+            int result = NativeMessageBox(GetActiveWindow(), message, title, MB_YESNO | MB_ICONQUESTION | MB_TASKMODAL);
+            return result == IDYES;
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[MessageDialog] たずねるダイアログを表示できませんでした: {ex.Message}");
+            return false;
+        }
+#else
+        Debug.Log($"[MessageDialog] {title}: {message}");
+        return false;
 #endif
     }
 
