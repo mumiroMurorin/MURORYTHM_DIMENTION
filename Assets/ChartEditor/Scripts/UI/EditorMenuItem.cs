@@ -23,6 +23,8 @@ namespace ChartEditor
         SaveChartAs = 102,
         /// <summary>新しい譜面を作る (保存していない変更があれば、確かめてから)</summary>
         NewChart = 103,
+        /// <summary>アプリケーションを終了する (保存していない変更があれば、確かめてから。録音 20261119_161332)</summary>
+        QuitApplication = 104,
         SelectMusic = 110,
         /// <summary>値 = バックアップの一覧の何番目か (0 が、いちばん新しいもの)</summary>
         RestoreBackup = 120,

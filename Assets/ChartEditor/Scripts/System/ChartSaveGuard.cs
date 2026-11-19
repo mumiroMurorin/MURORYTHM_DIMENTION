@@ -176,6 +176,22 @@ namespace ChartEditor
         }
 
         /// <summary>
+        /// アプリケーションを終了する (メニューの「ファイル → アプリケーションを終了」。録音 20261119_161332)
+        /// 保存していない変更があるときは、ウィンドウの × で閉じるときと同じ確認を出し、「いいえ」なら編集に戻る
+        /// </summary>
+        public void RequestQuit()
+        {
+#if UNITY_EDITOR
+            // Unity エディタでは Application.Quit が効かず、wantsToQuit も呼ばれないので、ここで確かめてから再生を止める
+            if (!ConfirmDiscardChanges("終了")) { return; }
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            // 確認は、終了の求めを受けた OnWantsToQuit が出す (ここで確かめると、2回聞いてしまう)
+            Application.Quit();
+#endif
+        }
+
+        /// <summary>
         /// バックアップを自動保存する
         /// </summary>
         private void AutoSave()

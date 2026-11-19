@@ -93,6 +93,8 @@ namespace ChartEditor
         INoteSpawnDataOptionGetter noteSpawnDataOptionGetter;
         INoteSpawnDataOptionSetter noteSpawnDataOptionSetter;
         INotesDataGetter notesGetter;
+        // 終了するときの、保存していない変更の確認 (メニューの「アプリケーションを終了」)
+        ChartSaveGuard saveGuard;
 
         // 復元できるバックアップ (新しい順。メニューを開いたときに調べ直す)
         readonly List<ChartBackups.Entry> backups = new List<ChartBackups.Entry>();
@@ -117,9 +119,11 @@ namespace ChartEditor
             IChartEditorOptionSetter optionSetter,
             INoteSpawnDataOptionGetter noteSpawnDataOptionGetter,
             INoteSpawnDataOptionSetter noteSpawnDataOptionSetter,
-            INotesDataGetter notesGetter)
+            INotesDataGetter notesGetter,
+            ChartSaveGuard saveGuard)
         {
             this.notesGetter = notesGetter;
+            this.saveGuard = saveGuard;
             this.dataGetter = dataGetter;
             this.dataSetter = dataSetter;
             this.optionGetter = optionGetter;
@@ -319,6 +323,10 @@ namespace ChartEditor
                     break;
                 case EditorMenuCommand.RestoreBackupFromFolder:
                     chartDataImporter_model?.ImportBackupFromDialog();
+                    break;
+                case EditorMenuCommand.QuitApplication:
+                    if (saveGuard != null) { saveGuard.RequestQuit(); }
+                    else { Application.Quit(); }
                     break;
                 case EditorMenuCommand.ToggleBackupList:
                     SetBackupListOpen(!IsBackupListOpen);
